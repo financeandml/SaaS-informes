@@ -205,6 +205,7 @@ class Informe:
     salidas_13g: List[str] = field(default_factory=list)
     clases_acciones: List[str] = field(default_factory=list)
     parte_d: Optional[object] = None                                 # F3 · parte_d.ParteD (motor de valoración)
+    parte_e: Optional[object] = None                                 # F4 · parte_e.ParteE (mercado, competencia, foso)
 
 
 # ---------------------------------------------------------------------------
@@ -762,13 +763,26 @@ def construir(ticker: str, hoy: date, emisor: Emisor, exp: Expediente, tab: Tabl
         cuadros_dcf = secciones_mod.cuadros_dcf(n, modelo_dcf, cuadres, precio if precio.hay_dato else None, mercado, multiplos)
         cuadros_dcf["cuadres"] = cuadres
     # Los cuadros se numeran por orden de impresión, que es el del índice (A–I).
-    # E · 21 y 22 con lo que declara la compañía y lo que asigna la bolsa
-    mercado_cuadro = secciones_mod.cuadro_mercado_objetivo(n, mercado_objetivo) if mercado_objetivo is not None else None
-    mercado_faltan = dict(mercado_objetivo.faltan) if mercado_objetivo is not None else {"fuente": "no se pidió la lectura del tamaño de mercado"}
-    comparables_cuadro = secciones_mod.cuadros_comparables(n, comparables) if comparables is not None else None
-    comparables_sic_cuadro = secciones_mod.cuadro_comparables_sic(n, comparables) if comparables is not None else None
-    comparables_faltan = dict(comparables.faltan) if comparables is not None else {"fuente": "no se pidieron los comparables a la bolsa"}
-    faltan += [f"Comparables · {k}: {v}" for k, v in comparables_faltan.items()] + [f"Mercado objetivo · {k}: {v}" for k, v in mercado_faltan.items()]
+    # E · 21–23: con la parte B, las entradas del analista (paso 5) verificadas y los datos del sistema (parte_e)
+    parte_e = None
+    mercado_cuadro = comparables_cuadro = comparables_sic_cuadro = None
+    mercado_faltan: Dict[str, str] = {}
+    comparables_faltan: Dict[str, str] = {}
+    if parte_b is not None:
+        from . import parte_e as parte_e_mod
+        from .umbrales import umbral
+        parte_e = parte_e_mod.construir(n, parte_b.entradas, parte_b.textos, float(umbral("cita_similitud_min")), hechos, anuales,
+                                        lambda p: _etiqueta(p, anuales, tab), motor=motor, alias=parte_b.alias,
+                                        nombre=ficha.nombre_presentacion or emisor.nombre, ticker=ticker.upper())
+        faltan += [f"Parte E · {x}" for x in parte_e.faltas]
+    else:
+        # camino antiguo (sin parte B): lo que declara la compañía y lo que asigna la bolsa; se retira en F7
+        mercado_cuadro = secciones_mod.cuadro_mercado_objetivo(n, mercado_objetivo) if mercado_objetivo is not None else None
+        mercado_faltan = dict(mercado_objetivo.faltan) if mercado_objetivo is not None else {"fuente": "no se pidió la lectura del tamaño de mercado"}
+        comparables_cuadro = secciones_mod.cuadros_comparables(n, comparables) if comparables is not None else None
+        comparables_sic_cuadro = secciones_mod.cuadro_comparables_sic(n, comparables) if comparables is not None else None
+        comparables_faltan = dict(comparables.faltan) if comparables is not None else {"fuente": "no se pidieron los comparables a la bolsa"}
+        faltan += [f"Comparables · {k}: {v}" for k, v in comparables_faltan.items()] + [f"Mercado objetivo · {k}: {v}" for k, v in mercado_faltan.items()]
     # G · riesgos e historial
     riesgos_cuadros = secciones_mod.cuadros_riesgos(n, riesgos) if riesgos is not None else {}
     riesgos_recortes = secciones_mod.recortes_riesgos(exp, riesgos, salida_recortes) if riesgos is not None else []
@@ -872,7 +886,7 @@ def construir(ticker: str, hoy: date, emisor: Emisor, exp: Expediente, tab: Tabl
         comparables_cuadro=comparables_cuadro, comparables_faltan=comparables_faltan, mercado_cuadro=mercado_cuadro, mercado_faltan=mercado_faltan,
         comparables_sic_cuadro=comparables_sic_cuadro, rentabilidad_ttm=rentabilidad_ttm, proxima_bolsa=proxima, potencial=potencial,
         recomendacion=(posicion.recomendacion if posicion is not None and posicion.recomendacion else (parte_d.recomendacion_regla if parte_d is not None else "")),
-        documentacion=documentacion, cuadres_apendice=cuadres_apendice, parte_d=parte_d,
+        documentacion=documentacion, cuadres_apendice=cuadres_apendice, parte_d=parte_d, parte_e=parte_e,
         textos_b=parte_b_mod.textos(parte_b.entradas, parte_b.alias) if parte_b is not None else None, segmentos=segmentos_c, geografia=geografia_c,
         grafico_mezcla=svg_mezcla, fechas_clave=fechas_c, catalizadores=catalizadores_c,
         salidas_13g=list(getattr(gobierno, "salidas_13g", [])), clases_acciones=list(parte_b.clases) if parte_b is not None else [],

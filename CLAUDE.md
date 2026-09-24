@@ -47,10 +47,12 @@ sensibilidad, reverse, multiplos, sotp, objetivo, excel, validacion) · `tesis/p
 - Dependencias: `jinja2`, `pypdfium2`, `playwright`, `matplotlib`, `pillow`, `openpyxl` y `pyyaml`. LibreOffice (opcional) solo para la prueba de recálculo del Excel exportado.
 
 ## Estado
-F0 ☑ · F1 ☑ esqueleto + C · F2 ☑ B · F3 ☑ D (24/09/2026) · F4 ☐ E · F5 ☐ F · F6 ☐ G + portada + asistente · F7 ☐ A + H + I + cierre
-Protocolo: en cada sesión nueva el analista escribe «sigue» → `docs/fases/00_protocolo.md`. Siguiente: F4 (`docs/fases/F4.md`).
+F0 ☑ · F1 ☑ esqueleto + C · F2 ☑ B · F3 ☑ D · F4 ☑ E (24/09/2026) · F5 ☐ F · F6 ☐ G + portada + asistente · F7 ☐ A + H + I + cierre
+Protocolo: en cada sesión nueva el analista escribe «sigue» → `docs/fases/00_protocolo.md`. Siguiente: F5 (`docs/fases/F5.md`).
 «confirmo borrar» (analista, 24/09/2026): hecho en F1 (sin `narrativa.py`, SDK `anthropic`, `--redactar`, `narrativas/` ni restos).
-Batería: 199 en verde y 34 omitidas sin los adjuntos de NFLX/QCOM. `python -m tesis regresiones` → **25 de 33** (F1, F2 y F3).
+Batería: 210 en verde y 34 omitidas sin los adjuntos de NFLX/QCOM. `python -m tesis regresiones` → **25 de 33** (F1, F2 y F3; F4 no tiene regresiones propias).
 F2: segmentos (XBRL inline), accionistas/13G/ejecutivos/retribución/filiales de EDGAR, guía de los Ex. 99.1 confirmada, fechas de Nasdaq.
 F3: `tesis/motor/` (supuestos, proyeccion con periodo parcial, terminal, puente, wacc con beta frente a SPY y rf del Tesoro, escenarios,
 sensibilidad e inverso, comparables del analista, excel con fórmulas vivas e importación por mapa), `parte_d.py`; precio único = cierre oficial.
+F4: citas con página (folio impreso del documento de EDGAR), `tarjetas.py` + `config/evidencias.yaml`, `entradas.comprobar_paso5`,
+`parte_e.py` (TAM/SAM/SOM con SOM por defecto y cuota implícita, competidores, comparables con gráfico, foso y datos de apoyo).

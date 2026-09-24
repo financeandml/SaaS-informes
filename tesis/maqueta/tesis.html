@@ -287,6 +287,19 @@
 <!-- ============================== E ============================== -->
 <section class="hoja">
 <h2 id="parte-{{ i.indice[4].letra }}">{{ i.indice[4].letra }}. {{ i.indice[4].titulo }}</h2>
+{% if i.parte_e %}{% set pe = i.parte_e %}
+<h3 id="ap-{{ i.numeros['21'] }}">{{ i.numeros['21'] }}. {{ i.titulos['21'] }}</h3>
+{% if pe.texto_21 %}<p>{{ pe.texto_21 }}</p>{% endif %}
+{% if pe.cuadros.mercado %}{{ cuadro(pe.cuadros.mercado, True) }}{% else %}<div class="pendiente">{{ pe.pendientes['21'] }}</div>{% endif %}
+<h3 id="ap-{{ i.numeros['22'] }}">{{ i.numeros['22'] }}. {{ i.titulos['22'] }}</h3>
+{% if pe.cuadros.competidores %}{{ cuadro(pe.cuadros.competidores, True) }}{% else %}<div class="pendiente">{{ pe.pendientes['22'] }}</div>{% endif %}
+{% if pe.cuadros.comparables %}{{ cuadro(pe.cuadros.comparables) }}{% endif %}
+{% if pe.grafico %}<div class="grafico estrecho"><div class="rotulo">Crecimiento frente a margen EBIT · último ejercicio</div>{{ pe.grafico|safe }}<div class="fuente">{{ pe.grafico_fuente }}</div></div>{% endif %}
+<h3 id="ap-{{ i.numeros['23'] }}">{{ i.numeros['23'] }}. {{ i.titulos['23'] }}</h3>
+{% if pe.cuadros.foso %}{{ cuadro(pe.cuadros.foso, True) }}{% else %}<div class="pendiente">{{ pe.pendientes['23'] }}</div>{% endif %}
+{% if pe.cuadros.apoyo %}{{ cuadro(pe.cuadros.apoyo) }}{% endif %}
+{% if pe.amenazas %}<p><strong>Amenazas.</strong> {{ pe.amenazas }}</p>{% else %}<div class="pendiente">{{ pe.pendientes['amenazas'] }}</div>{% endif %}
+{% else %}
 <h3 id="ap-{{ i.numeros['21'] }}">{{ i.numeros['21'] }}. {{ i.titulos['21'] }}</h3>
 {{ bloque_texto('21') }}
 {% if i.mercado_cuadro %}{{ cuadro(i.mercado_cuadro, True) }}{% else %}<p class="na">TAM · SAM · SOM: N/A — {{ i.mercado_faltan.values()|join('; ') }}</p>{% endif %}
@@ -297,6 +310,7 @@
 <p class="muted" style="font-size:7.5pt">Las dos fuentes oficiales clasifican por industria (bolsa) o por actividad (SIC de la SEC), no por competencia: los cuadros dicen con quién agrupa cada una a la compañía, y el texto de arriba lo que el 10-K dice de sus competidores. Las cuotas de mercado de terceros no están en ningún documento oficial adjunto.</p>
 <h3 id="ap-{{ i.numeros['23'] }}">{{ i.numeros['23'] }}. {{ i.titulos['23'] }}</h3>
 {{ bloque_texto('23') }}
+{% endif %}
 </section>
 
 <!-- ============================== G ============================== -->

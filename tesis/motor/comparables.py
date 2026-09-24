@@ -27,6 +27,12 @@ class Comparable:
     valores: Dict[str, Optional[float]] = field(default_factory=dict)
     excluido: str = ""                       # motivo por el que no entra en las medianas
     motivos: Dict[str, str] = field(default_factory=dict)
+    # cifras del último ejercicio (apartado 22): capitalización, ingresos, crecimiento y margen EBIT
+    capitalizacion: Optional[float] = None
+    ejercicio: str = ""
+    ingresos: Optional[float] = None
+    crecimiento: Optional[float] = None
+    margen_ebit: Optional[float] = None
     atipicos: List[str] = field(default_factory=list)
 
 
@@ -98,6 +104,21 @@ def _uno(ticker: str, fecha: date, umbrales: dict) -> Comparable:
             c.motivos["acciones"] = "sin portada vigente en companyfacts: diluidas medias del último trimestre"
     p = de_valor("precio", Periodo.instante(c.fecha_precio), c.precio, Capa.SEC, Origen(documento="Nasdaq"), unidad="USD/acción")
     m = multiplos.construir(hechos, per["trimestres"], per["anuales"], p, acciones, None, facts, obtenido, no_aplican=tab.no_aplican)
+    if acciones:
+        c.capitalizacion = c.precio * acciones
+    anuales = sorted(per["anuales"], key=lambda a: a.fin)
+    if anuales:
+        u = anuales[-1]
+        ing, eb = hechos.get(("ingresos", u)), hechos.get(("ebit", u))
+        c.ejercicio = u.fin.strftime("%m/%Y")
+        if ing is not None and ing.hay_dato:
+            c.ingresos = ing.valor
+            if eb is not None and eb.hay_dato and ing.valor:
+                c.margen_ebit = eb.valor / ing.valor
+            if len(anuales) > 1:
+                prev = hechos.get(("ingresos", anuales[-2]))
+                if prev is not None and prev.hay_dato and prev.valor:
+                    c.crecimiento = ing.valor / prev.valor - 1
     for clave, rotulo in MULTIPLOS:
         linea = m.linea(rotulo)
         c.valores[clave] = linea.valor if linea is not None else None

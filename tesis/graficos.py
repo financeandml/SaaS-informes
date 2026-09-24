@@ -21,7 +21,7 @@ from typing import Dict, List, Optional, Sequence, Tuple
 
 from .hechos import Hecho, Periodo
 
-__all__ = ["barras_con_linea", "tarta", "PALETA", "MARINO", "OCRE", "ESCALA"]
+__all__ = ["barras_con_linea", "tarta", "dispersion", "PALETA", "MARINO", "OCRE", "ESCALA"]
 
 TINTA = "#1a1a1a"
 TINTA_SUAVE = "#4a4a4a"
@@ -154,3 +154,25 @@ def tarta(partes: Sequence[Tuple[str, Hecho]], titulo: str = "") -> Tuple[str, L
            wedgeprops={"edgecolor": PAPEL, "linewidth": 1.2}, textprops={"fontsize": 6.5, "color": TINTA})
     ax.set_aspect("equal")
     return _svg(fig), avisos
+
+
+def dispersion(puntos: Sequence[Tuple[str, float, float, bool]], rotulo_x: str, rotulo_y: str) -> str:
+    """Dispersión rotulada (crecimiento frente a margen): cada punto con su nombre; la compañía, en marino y mayor.
+    `puntos`: (nombre, x, y, es_la_compania) en tanto por uno. Sin dos puntos, no se dibuja."""
+    if len(puntos) < 2:
+        return ""
+    plt = _matplotlib()
+    fig, ax = plt.subplots(figsize=(4.2, 2.6), dpi=100)
+    for nombre, x, y, propia in puntos:
+        ax.scatter([x * 100], [y * 100], s=46 if propia else 26, color=MARINO if propia else ESCALA[2], zorder=3,
+                   edgecolors=PAPEL, linewidths=0.6)
+        ax.annotate(nombre, (x * 100, y * 100), textcoords="offset points", xytext=(4, 3), fontsize=6.5,
+                    color=TINTA if propia else TINTA_SUAVE, fontweight="bold" if propia else "normal")
+    ax.axhline(0, color=GRIS_CLARO, linewidth=0.6, zorder=1)
+    ax.axvline(0, color=GRIS_CLARO, linewidth=0.6, zorder=1)
+    ax.set_xlabel(rotulo_x)
+    ax.set_ylabel(rotulo_y)
+    ax.xaxis.set_major_formatter(lambda v, _: f"{v:.0f} %")
+    ax.yaxis.set_major_formatter(lambda v, _: f"{v:.0f} %")
+    ax.grid(color=GRIS_CLARO, linewidth=0.4, zorder=0)
+    return _svg(fig)

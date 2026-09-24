@@ -99,6 +99,7 @@ class _Informes(unittest.TestCase):
         mult = multiplos.construir(hechos, per["trimestres"], per["anuales"], precio, acc, None, facts, obt, no_aplican=tab.no_aplican)
         g = gobierno.construir(exp, None, e)
         pb = parte_b.construir(e, hoy, facts, portada, cls.ent, g)
+        cls.pb, cls.hechos, cls.anuales = pb, hechos, per["anuales"]         # F4 reconstruye la parte E con otras entradas
         x = cls.ent.datos.get("excel")
         cls.libro = excel.importar(RAIZ / x["archivo"], x.get("mapa"), RAIZ / x["recalculado"]) if x else None
         cls.inf = informe.construir(T, hoy, e, exp, tab, per, fi, g, guidance.construir(exp, e.depositos, hoy), regiones.construir(exp, tab),

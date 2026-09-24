@@ -30,6 +30,7 @@ class ParteB:
     splits: Sequence[Tuple[date, float]] = ()
     clases: List[str] = field(default_factory=list)          # clases de acciones registradas (portada del 10-K), en español
     alias: Dict[str, str] = field(default_factory=dict)      # «10-K» → «10-K 2025»: cómo se cita cada documento en el cuerpo
+    textos: Dict[str, str] = field(default_factory=dict)     # documento (y «documento#página») → texto: verifica las citas
 
     @property
     def confirmadas(self) -> Set[str]:
@@ -283,20 +284,32 @@ def construir(emisor, hoy: date, facts: dict, portada=None, entradas: Optional[E
     pb.splits = [(f, r) for f, r, _ in sec.splits(facts)]
     if portada is not None and portada.dei.get("Security12bTitle"):
         pb.clases = [clase_de_accion(portada.dei["Security12bTitle"])]
-    textos = {}
+    textos: Dict[str, str] = {}
+
+    def con_paginas(doc: str, html: str) -> None:
+        textos.update({f"{doc}#{k}": v for k, v in tablas_html.folios(tablas_html.paginas(html)).items()})
+
     if portada is not None:
         textos["10-K"] = portada.texto
+        try:
+            con_paginas("10-K", sec.descargar_texto(portada.deposito.url)[0])
+        except (RuntimeError, sec.SinContacto):
+            pass
         if portada.deposito.periodo:
             pb.alias["10-K"] = f"10-K {etiqueta(hechos_mod.Periodo(fin=portada.deposito.periodo, inicio=portada.deposito.periodo.replace(year=portada.deposito.periodo.year - 1)))}"
     p = emisor.ultimo("DEF 14A")
     if p is not None:
         try:
-            textos["DEF 14A"] = tablas_html.texto_plano(sec.descargar_texto(p.url)[0])
+            crudo = sec.descargar_texto(p.url)[0]
+            textos["DEF 14A"] = tablas_html.texto_plano(crudo)
+            con_paginas("DEF 14A", crudo)
             pb.alias["DEF 14A"] = f"DEF 14A {p.presentado.year}"
         except (RuntimeError, sec.SinContacto):
             pass
     for nota in pb.notas:
         textos[f"8-K {nota.presentado.isoformat()}"] = nota.texto
+        textos.update({f"8-K {nota.presentado.isoformat()}#{k}": v for k, v in nota.paginas.items()})
+    pb.textos = textos
     pb.faltas += ent.comprobar_paso4(pb.entradas, textos, float(umbral("cita_similitud_min")), hoy)
     if pb.entradas.de_prueba:
         pb.faltas.append("entradas de PRUEBA (fixture), no del analista: no se puede emitir con ellas")

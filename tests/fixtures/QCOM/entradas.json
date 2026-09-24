@@ -1,5 +1,5 @@
 {
- "_prueba": "Entradas de PRUEBA para las regresiones de F2 y F3: no son del analista y el informe no se puede emitir con ellas.",
+ "_prueba": "Entradas de PRUEBA para las regresiones de F2, F3 y F4: no son del analista y el informe no se puede emitir con ellas.",
  "perfil": {
   "descripcion": {
    "texto": "Qualcomm diseña semiconductores y licencia la propiedad intelectual de sus tecnologías inalámbricas. Se organiza en tres segmentos: QCT, que vende plataformas y circuitos integrados para teléfonos móviles, automoción e internet de las cosas; QTL, que cobra regalías por su cartera de patentes de comunicaciones móviles; y QSI, que agrupa inversiones estratégicas. La mayor parte de los ingresos procede de fabricantes de teléfonos, con fuerte concentración en clientes de China y Corea del Sur, mientras la compañía intenta diversificarse hacia automoción, ordenadores personales y centros de datos. Su posición se apoya en la investigación en conectividad y en computación de bajo consumo, y en una cartera de patentes que licencia a buena parte del sector.",
@@ -317,5 +317,150 @@
    "justificacion": "Equipos de red y licencias de patentes móviles",
    "usar_en_multiplos": true
   }
- ]
+ ],
+ "mercado": {
+  "cifras": [
+   {
+    "etiqueta": "Semiconductores y licencias para móviles, automoción e IoT (cifra de prueba)",
+    "clase": "TAM",
+    "valor": 800000,
+    "unidad": "millones USD",
+    "anio": 2029,
+    "metodo": "top_down",
+    "evidencia": [
+     {
+      "doc": "10-K",
+      "pag": "4",
+      "texto": "Our platforms help power intelligent devices that people and businesses rely on every day across industries and applications from handsets to other areas, including automotive and the internet of things (IoT).",
+      "texto_es": "Sus plataformas impulsan dispositivos inteligentes en sectores y aplicaciones que van de los teléfonos a otras áreas, como la automoción y el internet de las cosas (IoT)."
+     }
+    ]
+   },
+   {
+    "etiqueta": "Circuitos para móviles, automoción e IoT que hoy vende QCT (cifra de prueba)",
+    "clase": "SAM",
+    "valor": 180000,
+    "unidad": "millones USD",
+    "anio": 2025,
+    "metodo": "top_down",
+    "evidencia": [
+     {
+      "doc": "10-K",
+      "pag": "5",
+      "texto": "QCT develops and supplies integrated circuit platforms and system software with advanced connectivity and high-performance, low-power computing technologies for use in mobile devices; automotive systems for connectivity, digital cockpit and ADAS/AD; and IoT including consumer electronic devices, industrial devices and edge networking products.",
+      "texto_es": "QCT desarrolla y suministra plataformas de circuitos integrados y software para móviles, sistemas de automoción (conectividad, cabina digital y asistencia a la conducción) e IoT."
+     }
+    ]
+   },
+   {
+    "etiqueta": "Ingresos fuera de los teléfonos que la compañía se fija para el FY29",
+    "clase": "SOM",
+    "valor": 40000,
+    "unidad": "millones USD",
+    "anio": 2029,
+    "metodo": "declarado_compania",
+    "evidencia": [
+     {
+      "doc": "8-K 2026-07-29",
+      "pag": "1",
+      "texto": "We are well positioned to execute on the vision we outlined at our recent Investor Day, with total non-handset revenues growing to $40 billion by fiscal 2029 – nearly double the target we shared in November 2024.",
+      "texto_es": "La compañía se ve bien situada para que sus ingresos fuera de los teléfonos lleguen a 40.000 millones USD en el ejercicio fiscal 2029, casi el doble del objetivo de noviembre de 2024."
+     }
+    ]
+   }
+  ]
+ },
+ "competencia": {
+  "competidores": [
+   {
+    "nombre": "Broadcom",
+    "ticker": "AVGO",
+    "por_que": "Compite en circuitos de conectividad inalámbrica y radiofrecuencia para móviles y redes.",
+    "evidencia": [
+     {
+      "doc": "10-K",
+      "pag": "28",
+      "texto": "Examples (some of which are strategic partners of ours in other areas) include Broadcom, HiSilicon, MediaTek, Mobileye, Nvidia, NXP Semiconductors, Qorvo, Samsung, Skyworks, Texas Instruments and UNISOC.",
+      "texto_es": "Entre sus competidores (algunos, socios estratégicos en otras áreas) están Broadcom, HiSilicon, MediaTek, Mobileye, Nvidia, NXP Semiconductors, Qorvo, Samsung, Skyworks, Texas Instruments y UNISOC."
+     }
+    ]
+   },
+   {
+    "nombre": "MediaTek",
+    "por_que": "Compite con procesadores y módems para teléfonos de gama media y alta.",
+    "evidencia": [
+     {
+      "doc": "10-K",
+      "pag": "28",
+      "texto": "Examples (some of which are strategic partners of ours in other areas) include Broadcom, HiSilicon, MediaTek, Mobileye, Nvidia, NXP Semiconductors, Qorvo, Samsung, Skyworks, Texas Instruments and UNISOC.",
+      "texto_es": "Entre sus competidores (algunos, socios estratégicos en otras áreas) están Broadcom, HiSilicon, MediaTek, Mobileye, Nvidia, NXP Semiconductors, Qorvo, Samsung, Skyworks, Texas Instruments y UNISOC."
+     }
+    ]
+   },
+   {
+    "nombre": "Nvidia",
+    "ticker": "NVDA",
+    "por_que": "Compite en computación de alto rendimiento e inteligencia artificial para automoción y centros de datos.",
+    "evidencia": [
+     {
+      "doc": "10-K",
+      "pag": "28",
+      "texto": "Examples (some of which are strategic partners of ours in other areas) include Broadcom, HiSilicon, MediaTek, Mobileye, Nvidia, NXP Semiconductors, Qorvo, Samsung, Skyworks, Texas Instruments and UNISOC.",
+      "texto_es": "Entre sus competidores (algunos, socios estratégicos en otras áreas) están Broadcom, HiSilicon, MediaTek, Mobileye, Nvidia, NXP Semiconductors, Qorvo, Samsung, Skyworks, Texas Instruments y UNISOC."
+     }
+    ]
+   },
+   {
+    "nombre": "NXP Semiconductors",
+    "ticker": "NXPI",
+    "por_que": "Compite en circuitos para automoción e internet de las cosas.",
+    "evidencia": [
+     {
+      "doc": "10-K",
+      "pag": "28",
+      "texto": "Examples (some of which are strategic partners of ours in other areas) include Broadcom, HiSilicon, MediaTek, Mobileye, Nvidia, NXP Semiconductors, Qorvo, Samsung, Skyworks, Texas Instruments and UNISOC.",
+      "texto_es": "Entre sus competidores (algunos, socios estratégicos en otras áreas) están Broadcom, HiSilicon, MediaTek, Mobileye, Nvidia, NXP Semiconductors, Qorvo, Samsung, Skyworks, Texas Instruments y UNISOC."
+     }
+    ]
+   },
+   {
+    "nombre": "Samsung",
+    "por_que": "Diseña sus propios procesadores y módems para teléfonos, algunos en sustitución de los de la compañía.",
+    "evidencia": [
+     {
+      "doc": "10-K",
+      "pag": "28",
+      "texto": "Examples (some of which are strategic partners of ours in other areas) include Broadcom, HiSilicon, MediaTek, Mobileye, Nvidia, NXP Semiconductors, Qorvo, Samsung, Skyworks, Texas Instruments and UNISOC.",
+      "texto_es": "Entre sus competidores (algunos, socios estratégicos en otras áreas) están Broadcom, HiSilicon, MediaTek, Mobileye, Nvidia, NXP Semiconductors, Qorvo, Samsung, Skyworks, Texas Instruments y UNISOC."
+     }
+    ]
+   }
+  ]
+ },
+ "moat": {
+  "fuentes": [
+   {
+    "tipo": "intangibles",
+    "durabilidad_anios": 10,
+    "tendencia": "estable",
+    "evidencias": [
+     {
+      "doc": "10-K",
+      "pag": "10",
+      "texto": "We grant licenses or otherwise provide rights to use our cellular standard-essential patents (including 3G, 4G and 5G) for cellular devices on a worldwide basis.",
+      "texto_es": "Licencia en todo el mundo sus patentes esenciales de los estándares celulares (3G, 4G y 5G) para dispositivos móviles."
+     },
+     {
+      "doc": "10-K",
+      "pag": "7",
+      "texto": "This intellectual property has been incorporated into the most widely accepted and deployed cellular wireless communications technology standards, and we have licensed it to hundreds of companies.",
+      "texto_es": "Su propiedad intelectual está incorporada en los estándares celulares más extendidos y la ha licenciado a cientos de compañías."
+     }
+    ]
+   }
+  ],
+  "amenazas": {
+   "texto": "Los grandes clientes que diseñan sus propios módems y procesadores reducen la demanda de circuitos de QCT; los competidores con más escala o con apoyo estatal presionan los precios, y los litigios y la regulación sobre las patentes esenciales pueden rebajar lo que cobra QTL por sus licencias."
+  }
+ }
 }

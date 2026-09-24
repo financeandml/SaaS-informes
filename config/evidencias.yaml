@@ -1,0 +1,14 @@
+# Tarjetas de evidencia (03 §6): palabras clave de cada apartado, en inglés como los documentos de EDGAR. Una tarjeta es
+# la frase que las contiene, con documento y página; el sistema la propone y el analista la elige, la traduce y la cita.
+# Nunca se imprimen solas. Sin nombres de emisores ni giros de un documento concreto (CLAUDE.md, regla 3).
+largo_frase: [60, 600]           # caracteres: fuera de este rango no es una frase citable (epígrafes, tablas)
+apartados:
+  TAM: [addressable, market size, total market, market opportunit, serviceable, industry is expected, industry growth]
+  competencia: [compet, rival, market share, alternative technolog, new entrant]
+  moat: [patent, licens, brand, network effect, switching cost, economies of scale, proprietary, barrier, intellectual property, standard-essential]
+  estrategia: [strategy, strategic, diversif, priorit, long-term growth]
+  catalizadores: [expect to, we plan, launch, anticipate, upcoming]
+  empleados: [employees, headcount, workforce]
+  fundacion: [incorporated in, founded in, organized in, was founded]
+  dividendos: [dividend]
+  segmentos: [reportable segment, operating segment, segment]

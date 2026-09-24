@@ -56,6 +56,9 @@ _ESTADOS = {"AL": "Alabama", "AK": "Alaska", "AZ": "Arizona", "AR": "Arkansas", 
             "VA": "Virginia", "WA": "Washington", "WV": "Virginia Occidental", "WI": "Wisconsin", "WY": "Wyoming"}
 
 
+_FORMAS = {"INC": "Inc.", "CORP": "Corp.", "LTD": "Ltd.", "CO": "Co."}
+
+
 def nombre_presentacion(portada: str, registral: str) -> str:
     """El nombre con que se titula el informe: el de la portada del 10-K («QUALCOMM Incorporated»), sin el sufijo de
     estado del nombre registral de EDGAR («/DE») y sin las mayúsculas de registro en palabras largas. Es una propuesta:
@@ -68,6 +71,9 @@ def nombre_presentacion(portada: str, registral: str) -> str:
         if len(letras) > 4 and letras.isupper() and "&" not in w:
             w = w[0] + w[1:].lower()
         palabras.append(w)
+    # la forma jurídica en mayúsculas de registro («TEXAS INSTRUMENTS INC»): como se escribe
+    if len(palabras) > 1 and palabras[-1].rstrip(".") in _FORMAS:
+        palabras[-1] = _FORMAS[palabras[-1].rstrip(".")]
     return " ".join(palabras)
 
 

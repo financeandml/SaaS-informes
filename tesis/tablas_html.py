@@ -13,7 +13,12 @@ from dataclasses import dataclass
 from html.parser import HTMLParser
 from typing import Dict, List, Optional
 
-__all__ = ["Tabla", "tablas", "texto_plano", "buscar", "numero", "limpiar"]
+__all__ = ["Tabla", "tablas", "texto_plano", "paginas", "folios", "buscar", "numero", "limpiar"]
+
+# saltos de página del HTML de EDGAR: marcan las páginas físicas del documento (las de su PDF)
+_SALTO_ANTES = re.compile(r"(?:page-)?break-before:(?:always|page)")
+_SALTO_DESPUES = re.compile(r"(?:page-)?break-after:(?:always|page)")
+_FOLIO = re.compile(r"(?:[A-Z]{1,2}-)?(?:\d{1,3}|[ivx]{1,5})")
 
 _INVISIBLES = dict.fromkeys(map(ord, "​‌‍﻿"), None)
 
@@ -42,8 +47,21 @@ class _Lector(HTMLParser):
         self._celda: Optional[list] = None
         self._fuera: List[str] = []
         self.texto: List[str] = []
+        self._div = 0
+        self._cortes_div: List[int] = []        # profundidad de los div con salto de página detrás
 
     def handle_starttag(self, tag, attrs):
+        estilo = "".join((dict(attrs).get("style") or "").lower().split())
+        if _SALTO_ANTES.search(estilo):
+            self.texto.append("\f")
+        despues = bool(_SALTO_DESPUES.search(estilo))
+        if tag == "div":
+            self._div += 1
+            if despues:
+                self._cortes_div.append(self._div)
+                despues = False
+        if despues:
+            self.texto.append("\f")
         if tag == "table":
             self._pila.append([])
         elif tag == "tr" and self._pila:
@@ -54,6 +72,11 @@ class _Lector(HTMLParser):
             self._celda.append(" ")
 
     def handle_endtag(self, tag):
+        if tag == "div":
+            if self._cortes_div and self._cortes_div[-1] == self._div:
+                self._cortes_div.pop()
+                self.texto.append("\f")
+            self._div = max(0, self._div - 1)
         if tag in ("td", "th"):
             self.texto.append(" ")          # en el texto plano, las celdas de una fila no se pegan
         if tag in ("td", "th") and self._celda is not None and self._fila is not None:
@@ -115,6 +138,35 @@ def texto_plano(html: str) -> str:
     lector.feed(html)
     lineas = (limpiar(l) for l in "".join(lector.texto).split("\n"))
     return "\n".join(l for l in lineas if l)
+
+
+def paginas(html: str) -> List[str]:
+    """El documento en texto, página a página (índice físico desde 1 = posición en la lista + 1), según los saltos de
+    página del HTML. Sin saltos, una sola página."""
+    lector = _Lector()
+    lector.feed(html)
+    trozos = "".join(lector.texto).split("\f")
+    salida = ["\n".join(l for l in (limpiar(x) for x in t.split("\n")) if l) for t in trozos]
+    while len(salida) > 1 and not salida[-1]:
+        salida.pop()
+    return salida
+
+
+def folios(lista: List[str]) -> Dict[str, str]:
+    """Página → texto, con la página que ve el lector: el folio impreso al pie (una de las tres últimas líneas: «28»,
+    «F-12», «ii»). Si lo lleva menos de la mitad de las páginas o los folios no crecen, el índice físico («1», «2»…).
+    Las páginas sin folio (portada, índice) solo están en el texto completo del documento."""
+    hallados = []
+    for t in lista:
+        hallados.append(next((l for l in reversed(t.split("\n")[-3:]) if _FOLIO.fullmatch(l)), None))
+    numeros = [int(f) for f in hallados if f and f.isdigit()]
+    if sum(1 for f in hallados if f) * 2 < len(lista) or numeros != sorted(numeros):
+        return {str(k): t for k, t in enumerate(lista, 1)}
+    salida: Dict[str, str] = {}
+    for f, t in zip(hallados, lista):
+        if f:
+            salida[f] = f"{salida[f]}\n{t}" if f in salida else t
+    return salida
 
 
 def buscar(lista: List[Tabla], pesos: Dict[str, float], minimo: float, en_antes: Optional[Dict[str, float]] = None) -> Optional[Tabla]:

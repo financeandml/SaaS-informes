@@ -141,6 +141,7 @@ class Nota:
     candidatos: List[Candidato] = field(default_factory=list)
     reales: List[Real] = field(default_factory=list)
     texto: str = ""                     # la nota en texto plano, para verificar las citas del analista
+    paginas: Dict[str, str] = field(default_factory=dict)     # página → texto (citas con página)
 
     @property
     def publicado(self) -> Optional[str]:
@@ -158,7 +159,8 @@ def _cabecera(t: tablas_html.Tabla) -> Optional[Tuple[int, List[Optional[str]], 
 
 
 def leer_nota(html: str, presentado: date, url: str) -> Nota:
-    nota = Nota(presentado=presentado, url=url, texto=tablas_html.texto_plano(html))
+    nota = Nota(presentado=presentado, url=url, texto=tablas_html.texto_plano(html),
+                paginas=tablas_html.folios(tablas_html.paginas(html)))
     for t in tablas_html.tablas(html):
         cab = _cabecera(t)
         if cab is None:
