@@ -98,6 +98,7 @@ sup.capa { font-size: 5.5pt; color: var(--acento); margin-left: .3mm; }
 .grafico .rotulo { color: var(--acento); font-weight: 600; font-size: 8.5pt; }
 .grafico svg { width: 100%; height: auto; }
 .grafico.estrecho { width: 50%; }
+.grafico.cuadrado svg { max-width: 62mm; display: block; }
 .grafico .fuente { font-size: 6.8pt; color: var(--gris); }
 .recorte { break-inside: avoid; margin: 2mm 0 3mm; border: 1px solid var(--gris-claro); padding: 1.5mm; }
 .recorte img { width: 100%; height: auto; display: block; }

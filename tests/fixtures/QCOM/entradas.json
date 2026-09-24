@@ -1,5 +1,5 @@
 {
- "_prueba": "Entradas de PRUEBA para las regresiones de F2, F3 y F4: no son del analista y el informe no se puede emitir con ellas.",
+ "_prueba": "Entradas de PRUEBA para las regresiones de F2 a F5: no son del analista y el informe no se puede emitir con ellas.",
  "perfil": {
   "descripcion": {
    "texto": "Qualcomm diseña semiconductores y licencia la propiedad intelectual de sus tecnologías inalámbricas. Se organiza en tres segmentos: QCT, que vende plataformas y circuitos integrados para teléfonos móviles, automoción e internet de las cosas; QTL, que cobra regalías por su cartera de patentes de comunicaciones móviles; y QSI, que agrupa inversiones estratégicas. La mayor parte de los ingresos procede de fabricantes de teléfonos, con fuerte concentración en clientes de China y Corea del Sur, mientras la compañía intenta diversificarse hacia automoción, ordenadores personales y centros de datos. Su posición se apoya en la investigación en conectividad y en computación de bajo consumo, y en una cartera de patentes que licencia a buena parte del sector.",
@@ -461,6 +461,125 @@
   ],
   "amenazas": {
    "texto": "Los grandes clientes que diseñan sus propios módems y procesadores reducen la demanda de circuitos de QCT; los competidores con más escala o con apoyo estatal presionan los precios, y los litigios y la regulación sobre las patentes esenciales pueden rebajar lo que cobra QTL por sus licencias."
+  }
+ },
+ "riesgos": {
+  "top": [
+   {
+    "origen": {
+     "epigrafe": "Our business, particularly our semiconductor business, may suffer as a result of our customers vertically integrating"
+    },
+    "texto_es": "Los grandes clientes de teléfonos diseñan sus propios módems y procesadores y dejan de comprar los de la compañía.",
+    "familia": "competitivo",
+    "probabilidad": 4,
+    "impacto": 4,
+    "mitigante": "Diversificación hacia automoción, IoT y PC, donde la integración vertical de los clientes es menor.",
+    "senal": "Ingresos de QCT por teléfonos en cada nota trimestral"
+   },
+   {
+    "origen": {
+     "epigrafe": "A significant portion of our business is concentrated in China"
+    },
+    "texto_es": "Buena parte del negocio depende de China, expuesta a tensiones comerciales, controles de exportación y fabricantes locales que integran sus propios circuitos.",
+    "familia": "regulatorio",
+    "probabilidad": 3,
+    "impacto": 5,
+    "mitigante": "Clientes y fábricas repartidos fuera de China y licencias con fabricantes de todo el mundo.",
+    "senal": "Peso de China en los ingresos del 10-K y licencias de exportación"
+   },
+   {
+    "origen": {
+     "epigrafe": "We derive a significant portion of our revenues from a small number of customers and licensees"
+    },
+    "texto_es": "Unos pocos clientes y licenciatarios concentran gran parte de los ingresos y perder uno rebajaría ventas y márgenes.",
+    "familia": "ejecucion",
+    "probabilidad": 3,
+    "impacto": 4,
+    "mitigante": "Contratos de licencia de varios años y una base de clientes que crece fuera de los teléfonos.",
+    "senal": "Peso de los mayores clientes en los ingresos del 10-K"
+   },
+   {
+    "origen": {
+     "epigrafe": "Efforts by some OEMs to avoid paying fair and reasonable royalties"
+    },
+    "texto_es": "Fabricantes que discuten o dejan de pagar las regalías de las licencias de patentes, con litigios largos y cobros aplazados.",
+    "familia": "regulatorio",
+    "probabilidad": 3,
+    "impacto": 3,
+    "mitigante": "Cartera de patentes esenciales renovada con cada estándar y acuerdos de licencia de varios años.",
+    "senal": "Ingresos de QTL y litigios nuevos en cada 10-Q"
+   },
+   {
+    "origen": {
+     "epigrafe": "We operate in the highly cyclical semiconductor industry"
+    },
+    "texto_es": "El sector de semiconductores es cíclico y una caída de la demanda de dispositivos reduciría los ingresos y el margen de QCT.",
+    "familia": "financiero",
+    "probabilidad": 3,
+    "impacto": 3,
+    "mitigante": "Balance con caja neta y fabricación externa, que hace más flexibles los costes.",
+    "senal": "Inventarios de los clientes y guía de ingresos de QCT"
+   }
+  ]
+ },
+ "bear": {
+  "disparadores": [
+   {
+    "descripcion": "Los ingresos de QCT por teléfonos caen dos trimestres seguidos por la salida de un gran cliente.",
+    "metrica": "ingresos de QCT por teléfonos, interanual",
+    "umbral": -10,
+    "unidad": "%",
+    "plazo": "4T FY27",
+    "driver": "esc.pesimista.crecimiento_ingresos"
+   },
+   {
+    "descripcion": "El margen operativo no se recupera por la presión de precios y el coste de la diversificación.",
+    "metrica": "margen EBIT del ejercicio",
+    "umbral": 22,
+    "unidad": "%",
+    "plazo": "FY27",
+    "driver": "esc.pesimista.margen_ebit"
+   },
+   {
+    "descripcion": "Un litigio o una decisión regulatoria rebaja las regalías que cobra QTL.",
+    "metrica": "ingresos de QTL, interanual",
+    "umbral": -15,
+    "unidad": "%",
+    "plazo": "FY27",
+    "driver": "esc.pesimista.crecimiento_ingresos"
+   }
+  ]
+ },
+ "pilares": [
+  {
+   "titulo": "Diversificación fuera del teléfono",
+   "riesgo_1a": "Our growth depends in part on our ability to extend our technologies and products into new and expanded product areas",
+   "riesgo_es": "Que automoción, IoT y PC no crezcan al ritmo del objetivo y no compensen la caída del teléfono."
+  },
+  {
+   "titulo": "Licencias de patentes esenciales",
+   "riesgo_1a": "Changes in our patent licensing practices, whether due to governmental investigations",
+   "riesgo_es": "Que investigaciones o litigios obliguen a cambiar el modelo de licencias y rebajen las regalías."
+  },
+  {
+   "titulo": "Liderazgo en procesadores de gama alta",
+   "riesgo_1a": "Our industry is subject to intense competition in an environment of rapid technological change",
+   "riesgo_es": "Que la competencia o la integración vertical de los clientes le quiten cuota en la gama alta."
+  },
+  {
+   "titulo": "Retorno al accionista sostenido",
+   "riesgo_1a": "There are risks associated with our debt.",
+   "riesgo_es": "Que la deuda y los compromisos de caja limiten las recompras y el dividendo."
+  },
+  {
+   "titulo": "Valoración frente al ciclo",
+   "riesgo_1a": "We operate in the highly cyclical semiconductor industry",
+   "riesgo_es": "Que una caída del ciclo de semiconductores rebaje los beneficios cuando la valoración descuenta crecimiento."
+  }
+ ],
+ "historial": {
+  "causas": {
+   "texto": "El BPA GAAP del 4T FY25 quedó muy por debajo de la guía por un cargo contable sin salida de caja: la provisión de valoración sobre los activos fiscales diferidos federales tras la entrada en vigor de la ley fiscal OBBB. El BPA no GAAP y los ingresos de ese trimestre superaron la guía. Aprendizaje: la guía GAAP no anticipa cargos fiscales extraordinarios, así que el seguimiento se hace con el BPA no GAAP y el flujo de caja libre."
   }
  }
 }

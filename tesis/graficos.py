@@ -21,7 +21,7 @@ from typing import Dict, List, Optional, Sequence, Tuple
 
 from .hechos import Hecho, Periodo
 
-__all__ = ["barras_con_linea", "tarta", "dispersion", "PALETA", "MARINO", "OCRE", "ESCALA"]
+__all__ = ["barras_con_linea", "tarta", "dispersion", "matriz_riesgos", "PALETA", "MARINO", "OCRE", "ESCALA"]
 
 TINTA = "#1a1a1a"
 TINTA_SUAVE = "#4a4a4a"
@@ -175,4 +175,30 @@ def dispersion(puntos: Sequence[Tuple[str, float, float, bool]], rotulo_x: str, 
     ax.xaxis.set_major_formatter(lambda v, _: f"{v:.0f} %")
     ax.yaxis.set_major_formatter(lambda v, _: f"{v:.0f} %")
     ax.grid(color=GRIS_CLARO, linewidth=0.4, zorder=0)
+    return _svg(fig)
+
+
+def matriz_riesgos(puntos: Sequence[Tuple[int, int, int]]) -> str:
+    """Matriz probabilidad × impacto (1–5 × 1–5): cada riesgo, su número en la celda; las celdas, más oscuras cuanto
+    mayor el producto. `puntos`: (número del riesgo, probabilidad, impacto)."""
+    if not puntos:
+        return ""
+    plt = _matplotlib()
+    fig, ax = plt.subplots(figsize=(2.6, 2.4), dpi=100)
+    for p in range(1, 6):
+        for i in range(1, 6):
+            ax.add_patch(plt.Rectangle((p - 0.5, i - 0.5), 1, 1, facecolor=ESCALA[4 - min(4, (p * i - 1) // 5)], alpha=0.45,
+                                       edgecolor=PAPEL, linewidth=1))
+    por_celda: Dict[Tuple[int, int], List[int]] = {}
+    for n, p, i in puntos:
+        por_celda.setdefault((p, i), []).append(n)
+    for (p, i), numeros in por_celda.items():
+        ax.text(p, i, " · ".join(str(x) for x in numeros), ha="center", va="center", fontsize=7, color=TINTA, fontweight="bold")
+    ax.set_xlim(0.5, 5.5)
+    ax.set_ylim(0.5, 5.5)
+    ax.set_xticks(range(1, 6))
+    ax.set_yticks(range(1, 6))
+    ax.set_xlabel("Probabilidad")
+    ax.set_ylabel("Impacto")
+    ax.set_aspect("equal")
     return _svg(fig)

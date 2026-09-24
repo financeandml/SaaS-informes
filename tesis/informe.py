@@ -206,6 +206,7 @@ class Informe:
     clases_acciones: List[str] = field(default_factory=list)
     parte_d: Optional[object] = None                                 # F3 · parte_d.ParteD (motor de valoración)
     parte_e: Optional[object] = None                                 # F4 · parte_e.ParteE (mercado, competencia, foso)
+    parte_f: Optional[object] = None                                 # F5 · parte_f.ParteF (riesgos, caso bajista, historial)
 
 
 # ---------------------------------------------------------------------------
@@ -783,18 +784,26 @@ def construir(ticker: str, hoy: date, emisor: Emisor, exp: Expediente, tab: Tabl
         comparables_sic_cuadro = secciones_mod.cuadro_comparables_sic(n, comparables) if comparables is not None else None
         comparables_faltan = dict(comparables.faltan) if comparables is not None else {"fuente": "no se pidieron los comparables a la bolsa"}
         faltan += [f"Comparables · {k}: {v}" for k, v in comparables_faltan.items()] + [f"Mercado objetivo · {k}: {v}" for k, v in mercado_faltan.items()]
-    # G · riesgos e historial
-    riesgos_cuadros = secciones_mod.cuadros_riesgos(n, riesgos) if riesgos is not None else {}
-    riesgos_recortes = secciones_mod.recortes_riesgos(exp, riesgos, salida_recortes) if riesgos is not None else []
-    historial_cuadros = secciones_mod.cuadros_historial(n, historial) if historial is not None else {}
-    if parte_b is not None and parte_b.notas:
-        from . import guia as guia_mod
+    parte_f = None
+    riesgos_cuadros, riesgos_recortes, historial_cuadros = {}, [], {}
+    if parte_b is None:
+        # camino antiguo (sin parte B): riesgos e historial de los adjuntos en PDF; se retira en F7
+        riesgos_cuadros = secciones_mod.cuadros_riesgos(n, riesgos) if riesgos is not None else {}
+        riesgos_recortes = secciones_mod.recortes_riesgos(exp, riesgos, salida_recortes) if riesgos is not None else []
+        historial_cuadros = secciones_mod.cuadros_historial(n, historial) if historial is not None else {}
+    else:
+        # F · 24–26 con las entradas del paso 6, el Item 1A de EDGAR, la guía confirmada (F2) y las sorpresas de la bolsa
+        from . import guia as guia_mod, parte_f as parte_f_mod
+        from .umbrales import umbral
         xbrl = {}
         for (campo, p), h in hechos.items():
             if h.hay_dato and p.meses == 3 and campo in ("ingresos", "bpa_diluido"):
                 xbrl[(campo, _etiqueta(p, anuales, tab))] = h.valor
-        comparaciones = guia_mod.frente_a_real(parte_b.notas, parte_b.confirmadas, xbrl, splits=parte_b.splits)
-        historial_cuadros["guias"] = parte_b_mod.cuadro_guia_real(n, comparaciones)
+        comparaciones = guia_mod.frente_a_real(parte_b.notas, parte_b.confirmadas, xbrl, splits=parte_b.splits) if parte_b.notas else []
+        trimestres = sorted({p for (_, p) in hechos if p.meses == 3 and not p.es_instante}, key=lambda p: p.fin)
+        parte_f = parte_f_mod.construir(n, parte_b, motor, comparaciones, hechos, trimestres, lambda p: _etiqueta(p, anuales, tab),
+                                        float(umbral("cita_similitud_min")), float(umbral("fallo_guia_obliga_causas")))
+        faltan += [f"Parte F · {x}" for x in parte_f.faltas]
     historial_recorte = None
     if historial is not None and historial.fuente is not None:
         historial_recorte = secciones_mod.recorte_texto(exp, historial.fuente.documento, historial.fuente.pagina, ["CONSENSUS ACTUAL SURPRISE", "EPS Normalized", "Revenue (mm)"], salida_recortes, "32")
@@ -810,9 +819,9 @@ def construir(ticker: str, hoy: date, emisor: Emisor, exp: Expediente, tab: Tabl
             if any(numero == numeros["24"] for numero, _ in s.apartados):      # la parte de la cadena de opciones
                 s.estado = "parcial" if "iv" not in f_cuadros else ""
     faltan += [f"F · {k}: {v}" for k, v in f_faltan.items()]
-    if riesgos is not None:
+    if riesgos is not None and parte_b is None:
         faltan += [f"Riesgos · {k}: {v}" for k, v in riesgos.faltan.items()]
-    if historial is not None:
+    if historial is not None and parte_b is None:
         faltan += [f"Historial · {k}: {v}" for k, v in historial.faltan.items()]
     if gobierno.faltan.get("retratos"):
         faltan.append(f"Gobierno · retratos: {gobierno.faltan['retratos']}")
@@ -886,7 +895,7 @@ def construir(ticker: str, hoy: date, emisor: Emisor, exp: Expediente, tab: Tabl
         comparables_cuadro=comparables_cuadro, comparables_faltan=comparables_faltan, mercado_cuadro=mercado_cuadro, mercado_faltan=mercado_faltan,
         comparables_sic_cuadro=comparables_sic_cuadro, rentabilidad_ttm=rentabilidad_ttm, proxima_bolsa=proxima, potencial=potencial,
         recomendacion=(posicion.recomendacion if posicion is not None and posicion.recomendacion else (parte_d.recomendacion_regla if parte_d is not None else "")),
-        documentacion=documentacion, cuadres_apendice=cuadres_apendice, parte_d=parte_d, parte_e=parte_e,
+        documentacion=documentacion, cuadres_apendice=cuadres_apendice, parte_d=parte_d, parte_e=parte_e, parte_f=parte_f,
         textos_b=parte_b_mod.textos(parte_b.entradas, parte_b.alias) if parte_b is not None else None, segmentos=segmentos_c, geografia=geografia_c,
         grafico_mezcla=svg_mezcla, fechas_clave=fechas_c, catalizadores=catalizadores_c,
         salidas_13g=list(getattr(gobierno, "salidas_13g", [])), clases_acciones=list(parte_b.clases) if parte_b is not None else [],

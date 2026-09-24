@@ -147,9 +147,9 @@ class Qualcomm(_ConFixtures):
         self.assertTrue(t3.dentro)
         inf, html = self._informe()
         self.assertEqual(len(inf.objetivos.filas), 5)
-        self.assertEqual(len(inf.historial_cuadros["guias"].filas), 24)        # 8 trimestres × ingresos, BPA GAAP y no GAAP
+        self.assertEqual(len(inf.parte_f.cuadros["guias"].filas), 24)        # 8 trimestres × ingresos, BPA GAAP y no GAAP
         # el real GAAP de la nota se cuadra con el hecho XBRL del trimestre cuando el informe lo tiene
-        self.assertTrue(any("coincide con el hecho XBRL" in c.nota for f in inf.historial_cuadros["guias"].filas for c in f.celdas))
+        self.assertTrue(any("coincide con el hecho XBRL" in c.nota for f in inf.parte_f.cuadros["guias"].filas for c in f.celdas))
 
     @pytest.mark.regresion("R10")
     def test_proximos_resultados_posteriores_al_informe(self):

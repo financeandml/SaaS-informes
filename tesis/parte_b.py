@@ -31,6 +31,8 @@ class ParteB:
     clases: List[str] = field(default_factory=list)          # clases de acciones registradas (portada del 10-K), en español
     alias: Dict[str, str] = field(default_factory=dict)      # «10-K» → «10-K 2025»: cómo se cita cada documento en el cuerpo
     textos: Dict[str, str] = field(default_factory=dict)     # documento (y «documento#página») → texto: verifica las citas
+    item1a: Optional[object] = None                          # item1a.Item1A del último 10-K (parte F)
+    sorpresas: List = field(default_factory=list)            # calendario.Sorpresa: consenso frente a BPA de la bolsa (26)
 
     @property
     def confirmadas(self) -> Set[str]:
@@ -217,7 +219,8 @@ def cuadro_guia_real(n, comparaciones: Sequence[guia_mod.Comparacion]):
         elif c.unidad == "%":
             desvio = Celda(f"{'+' if d > 0 else ''}{numero(d, 1)} p. p.", "", "D", "negativo" if d < 0 else "valor", "real − punto medio de la guía")
         else:
-            desvio = Celda(f"{'+' if d > 0 else ''}{numero(d * 100, 1)} %", "", "D", "negativo" if d < 0 else "valor", "(real − punto medio) / punto medio")
+            v = round(d * 100, 1) + 0.0                     # sin «-0,0 %»
+            desvio = Celda(f"{'+' if v > 0 else ''}{numero(v, 1)} %", "", "D", "negativo" if v < 0 else "valor", "(real − punto medio) / punto medio")
         dentro = "punto" if c.bajo == c.alto else ("dentro" if x.dentro else ("por encima" if r.valor > c.alto else "por debajo"))
         glifo = "✓" if x.nota.startswith("✓") or "✓" in x.nota else ("≠" if "≠" in x.nota else "")
         filas.append(FilaCuadro(f"{c.trimestre} · {c.rotulo}", [
@@ -225,7 +228,7 @@ def cuadro_guia_real(n, comparaciones: Sequence[guia_mod.Comparacion]):
             Celda(real, glifo, "H", "valor", f"nota del {f_fecha(r.presentado)}: {r.fila}" + (f" · {x.nota}" if x.nota else "")),
             desvio, Celda(dentro, "", "D", "negativo" if dentro == "por debajo" else "valor", "")], capa="H"))
     fuente = ("Fuente: SEC EDGAR, notas de resultados (8-K, Ex. 99.1): la guía de cada nota y el real de la nota que publica ese "
-              "trimestre; el real GAAP se cuadra con el hecho XBRL cuando el informe lo tiene. Guía confirmada por el analista.")
+              "trimestre; el real GAAP se cuadra con la cifra contrastada de la SEC (sección C) cuando el informe la tiene. Guía confirmada por el analista.")
     return Cuadro(n.siguiente(), "Guía de la compañía frente a lo publicado", ["Guía", "Real", "Desvío", "Frente al rango"], filas,
                   fuente if filas else "Pendiente: sin guía confirmada de trimestres ya publicados.", partible=True)
 
@@ -264,7 +267,7 @@ def textos(e: Entradas, alias: Optional[Dict[str, str]] = None) -> Textos:
 def construir(emisor, hoy: date, facts: dict, portada=None, entradas: Optional[Entradas] = None, gobierno=None) -> ParteB:
     """Todo lo de la parte B que no es el gobierno corporativo: segmentos, guía, dividendos, clases de acciones y las
     faltas del paso 4 (entradas del analista verificadas contra el texto de los documentos)."""
-    from . import calendario, entradas as ent, guia, hechos as hechos_mod, sec, segmentos as seg_mod, tablas_html
+    from . import calendario, entradas as ent, guia, hechos as hechos_mod, item1a, sec, segmentos as seg_mod, tablas_html
     from .umbrales import umbral
     pb = ParteB(entradas=entradas or Entradas())
     anuales = sec.calendario(facts, 12)
@@ -281,6 +284,7 @@ def construir(emisor, hoy: date, facts: dict, portada=None, entradas: Optional[E
     if pb.notas and pb.notas[-1].candidatos and not (pb.confirmadas & {c.id for c in pb.notas[-1].candidatos}):
         pb.faltas.append("guía: el analista no ha confirmado los candidatos de la última nota de resultados (Cuadro 2)")
     pb.dividendos, pb.dividendos_url = calendario.dividendos(emisor.ticker)
+    pb.sorpresas, _ = calendario.sorpresas(emisor.ticker)
     pb.splits = [(f, r) for f, r, _ in sec.splits(facts)]
     if portada is not None and portada.dei.get("Security12bTitle"):
         pb.clases = [clase_de_accion(portada.dei["Security12bTitle"])]
@@ -292,7 +296,9 @@ def construir(emisor, hoy: date, facts: dict, portada=None, entradas: Optional[E
     if portada is not None:
         textos["10-K"] = portada.texto
         try:
-            con_paginas("10-K", sec.descargar_texto(portada.deposito.url)[0])
+            crudo = sec.descargar_texto(portada.deposito.url)[0]
+            con_paginas("10-K", crudo)
+            pb.item1a = item1a.leer(crudo, pb.entradas.valor("riesgos.familias") or [])
         except (RuntimeError, sec.SinContacto):
             pass
         if portada.deposito.periodo:

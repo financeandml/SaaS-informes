@@ -16,7 +16,7 @@ from typing import List, Optional, Tuple
 
 from .hechos import Contraste
 
-__all__ = ["Proxima", "proxima", "Dividendo", "dividendos"]
+__all__ = ["Proxima", "proxima", "Dividendo", "dividendos", "Sorpresa", "sorpresas"]
 
 _FECHA_US = re.compile(r"(\d{1,2})/(\d{1,2})/(20\d\d)")
 _TRIMESTRE = re.compile(r"Quarter ending ([A-Z][a-z]{2}) (20\d\d)")
@@ -113,4 +113,45 @@ def dividendos(ticker: str) -> Tuple[List[Dividendo], str]:
         salida.append(Dividendo(ex=_fecha_us(f.get("exOrEffDate")), pago=_fecha_us(f.get("paymentDate")),
                                 declarado=_fecha_us(f.get("declarationDate")), importe=float(importe) if importe else None,
                                 texto=" · ".join(f"{k}: {v}" for k, v in f.items())))
+    return salida, url
+
+
+_MESES_EN = {m: k for k, m in enumerate(("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"), 1)}
+
+
+@dataclass
+class Sorpresa:
+    """Consenso frente a BPA publicado, tal como lo publica la bolsa (01 › 26): su definición de BPA es la suya."""
+    mes: Optional[date]                  # primer día del mes en que cierra el trimestre («Jun 2026»)
+    publicado: Optional[date]
+    consenso: float
+    real: float
+    sorpresa: Optional[float]            # fracción con signo, la de la bolsa
+    texto: str
+
+
+def sorpresas(ticker: str) -> Tuple[List[Sorpresa], str]:
+    """Los últimos trimestres de consenso frente a BPA publicado de la bolsa (más antiguo primero) y la URL consultada."""
+    from .precio import pedir_crudo
+    url = f"https://api.nasdaq.com/api/company/{ticker}/earnings-surprise"
+    try:
+        datos, _, _ = pedir_crudo(url)
+    except Exception:
+        return [], url
+    filas = (((datos or {}).get("data") or {}).get("earningsSurpriseTable") or {}).get("rows") or []
+    salida = []
+    for f in filas:
+        try:
+            consenso, real = float(f.get("consensusForecast")), float(f.get("eps"))
+        except (TypeError, ValueError):
+            continue
+        try:
+            sorpresa = float(f.get("percentageSurprise")) / 100
+        except (TypeError, ValueError):
+            sorpresa = None
+        m = re.match(r"([A-Z][a-z]{2}) (20\d\d)", str(f.get("fiscalQtrEnd") or ""))
+        mes = date(int(m.group(2)), _MESES_EN[m.group(1)], 1) if m and m.group(1) in _MESES_EN else None
+        salida.append(Sorpresa(mes, _fecha_us(f.get("dateReported")), consenso, real, sorpresa,
+                               " · ".join(f"{k}: {v}" for k, v in f.items())))
+    salida.sort(key=lambda s: s.mes or date.min)
     return salida, url

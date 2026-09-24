@@ -1,0 +1,25 @@
+# Familias de los riesgos del Item 1A (01 › 24): reglas del sistema, corregibles por el analista (`riesgos.familias`).
+# Primero la cabecera del 10-K («Risks Related to …»); si es genérica, la primera palabra del epígrafe que case, en el
+# orden de abajo. Palabras en inglés, como los documentos; sin nombres de emisores (CLAUDE.md, regla 3). Nada de
+# «financial condition» o «results of operations»: casi todos los epígrafes los dicen.
+por_cabecera:
+  regulat: regulatorio
+  legal: regulatorio
+  government: regulatorio
+  litigation: regulatorio
+  tax: regulatorio
+  privacy: regulatorio
+  compliance: regulatorio
+  compet: competitivo
+  industry: competitivo
+  financ: financiero
+  indebtedness: financiero
+  liquidity: financiero
+  common stock: financiero
+  our stock: financiero
+  securities: financiero
+por_palabra:
+  regulatorio: [regulat, law, legal, litigation, government, tax, privacy, sanction, export control, antitrust, investigation, tariff, trade polic, compliance]
+  financiero: [indebtedness, debt, liquidity, stock price, price of our common stock, dilution, interest rate, foreign currency, exchange rate, impairment, credit rating, dividend, capital return]
+  competitivo: [compet, market share, pricing, vertically integrat, consolidation, substitute, alternative technolog, new entrant]
+defecto: ejecucion

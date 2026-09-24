@@ -18,9 +18,9 @@ from dataclasses import dataclass, field
 from datetime import date
 from difflib import SequenceMatcher
 from pathlib import Path
-from typing import Any, Dict, List, Mapping, Optional, Tuple
+from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
 
-__all__ = ["Entradas", "cargar", "normalizar", "verificar_cita", "comprobar_paso4", "comprobar_paso5", "palabras"]
+__all__ = ["Entradas", "cargar", "normalizar", "verificar_cita", "comprobar_paso4", "comprobar_paso5", "comprobar_paso6", "palabras"]
 
 
 @dataclass
@@ -228,4 +228,54 @@ def comprobar_paso5(e: Entradas, textos: Mapping[str, str], umbral: float) -> Li
         faltas.append("moat.amenazas: falta el texto del analista (20–80 palabras)")
     else:
         _rango("moat.amenazas", texto, "20-80", faltas)
+    return faltas
+
+
+_FAMILIAS_RIESGO = ("regulatorio", "financiero", "competitivo", "ejecucion")
+
+
+def comprobar_paso6(e: Entradas, textos: Mapping[str, str], umbral: float, es_epigrafe, fallos: Sequence[str] = ()) -> List[str]:
+    """Las faltas del paso 6 (apartados 24–26). `es_epigrafe(comienzo)`: si es un epígrafe del Item 1A. `fallos`: los
+    trimestres que fallan por más de `umbrales.fallo_guia_obliga_causas` (con ellos, las causas son obligatorias)."""
+    faltas: List[str] = []
+    top = e.valor("riesgos.top") or []
+    if len(top) != 5:
+        faltas.append(f"riesgos.top: {len(top)} (se piden 5)")
+    for i, r in enumerate(top, 1):
+        id_ = f"riesgos.top[{i}]"
+        origen = r.get("origen") or {}
+        if origen.get("epigrafe"):
+            if not es_epigrafe(origen["epigrafe"]):
+                faltas.append(f"{id_}.origen: «{origen['epigrafe'][:60]}» no es el comienzo de un epígrafe del Item 1A")
+        else:
+            _citas(f"{id_}.origen", origen.get("evidencia"), textos, umbral, faltas)
+        _rango(f"{id_}.texto_es", r.get("texto_es", ""), "8-40", faltas)
+        if r.get("familia") not in _FAMILIAS_RIESGO:
+            faltas.append(f"{id_}.familia: «{r.get('familia')}» ({', '.join(_FAMILIAS_RIESGO)})")
+        for k in ("probabilidad", "impacto"):
+            v = r.get(k)
+            if not isinstance(v, int) or not 1 <= v <= 5:
+                faltas.append(f"{id_}.{k}: entero de 1 a 5")
+        _rango(f"{id_}.mitigante", r.get("mitigante", ""), "5-40", faltas)
+        if not r.get("senal"):
+            faltas.append(f"{id_}.senal: falta la señal temprana")
+    disparadores = e.valor("bear.disparadores") or []
+    if len(disparadores) < 3:
+        faltas.append(f"bear.disparadores: {len(disparadores)} (mínimo 3)")
+    for i, d in enumerate(disparadores, 1):
+        id_ = f"bear.disparadores[{i}]"
+        _rango(f"{id_}.descripcion", d.get("descripcion", ""), "5-30", faltas)
+        if not d.get("metrica") or not isinstance(d.get("umbral"), (int, float)) or not d.get("plazo"):
+            faltas.append(f"{id_}: métrica, umbral numérico y plazo son obligatorios")
+        driver = str(d.get("driver", ""))
+        if not driver.startswith("esc.pesimista.") or e.valor(driver) is None:
+            faltas.append(f"{id_}.driver: «{driver}» no es un supuesto del escenario pesimista")
+    for i, g in enumerate(e.valor("historial.guia_manual") or [], 1):
+        _citas(f"historial.guia_manual[{i}]", g.get("evidencia"), textos, umbral, faltas)
+    causas = e.valor("historial.causas")
+    texto = causas.get("texto", "") if isinstance(causas, dict) else (causas or "")
+    if fallos and not texto:
+        faltas.append(f"historial.causas: obligatorias por {len(fallos)} fallo(s) por encima del umbral ({'; '.join(fallos)})")
+    elif texto:
+        _rango("historial.causas", texto, "30-150", faltas)
     return faltas

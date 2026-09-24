@@ -13,7 +13,7 @@ from dataclasses import dataclass
 from html.parser import HTMLParser
 from typing import Dict, List, Optional
 
-__all__ = ["Tabla", "tablas", "texto_plano", "paginas", "folios", "buscar", "numero", "limpiar"]
+__all__ = ["Tabla", "tablas", "texto_plano", "paginas", "folios", "folios_por_pagina", "buscar", "numero", "limpiar"]
 
 # saltos de página del HTML de EDGAR: marcan las páginas físicas del documento (las de su PDF)
 _SALTO_ANTES = re.compile(r"(?:page-)?break-before:(?:always|page)")
@@ -152,18 +152,21 @@ def paginas(html: str) -> List[str]:
     return salida
 
 
-def folios(lista: List[str]) -> Dict[str, str]:
-    """Página → texto, con la página que ve el lector: el folio impreso al pie (una de las tres últimas líneas: «28»,
-    «F-12», «ii»). Si lo lleva menos de la mitad de las páginas o los folios no crecen, el índice físico («1», «2»…).
-    Las páginas sin folio (portada, índice) solo están en el texto completo del documento."""
-    hallados = []
-    for t in lista:
-        hallados.append(next((l for l in reversed(t.split("\n")[-3:]) if _FOLIO.fullmatch(l)), None))
+def folios_por_pagina(lista: List[str]) -> List[Optional[str]]:
+    """La página que ve el lector de cada página física: el folio impreso al pie (una de las tres últimas líneas: «28»,
+    «F-12», «ii») o None si no lo lleva. Si lo lleva menos de la mitad de las páginas o los folios no crecen, el índice
+    físico («1», «2»…)."""
+    hallados = [next((l for l in reversed(t.split("\n")[-3:]) if _FOLIO.fullmatch(l)), None) for t in lista]
     numeros = [int(f) for f in hallados if f and f.isdigit()]
     if sum(1 for f in hallados if f) * 2 < len(lista) or numeros != sorted(numeros):
-        return {str(k): t for k, t in enumerate(lista, 1)}
+        return [str(k) for k in range(1, len(lista) + 1)]
+    return hallados
+
+
+def folios(lista: List[str]) -> Dict[str, str]:
+    """Página que ve el lector → texto. Las páginas sin folio (portada, índice) solo están en el texto completo."""
     salida: Dict[str, str] = {}
-    for f, t in zip(hallados, lista):
+    for f, t in zip(folios_por_pagina(lista), lista):
         if f:
             salida[f] = f"{salida[f]}\n{t}" if f in salida else t
     return salida
