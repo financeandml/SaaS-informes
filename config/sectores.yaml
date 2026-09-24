@@ -1,0 +1,17 @@
+# Paquetes sectoriales v1 (05 §2). Propuesta por SIC: los códigos concretos antes que los rangos; el analista confirma.
+bloqueo_v1:
+  sic: [[6000, 6799]]
+  motivo: "bancos, aseguradoras, REIT, BDC y SPAC quedan fuera de la v1 (motor de flujos de la empresa, no de los accionistas)"
+paquetes:
+  general:      {periodo: [5, 10], drivers: [], comprobaciones: []}
+  software:     {sic: [[7370, 7374]], periodo: [10, 10], drivers: [], comprobaciones: [regla_40, sbc_ingresos]}
+  semiconductores: {sic: [[3674, 3674]], periodo: [7, 10], drivers: [], comprobaciones: [ciclo]}
+  consumo_retail: {sic: [[5200, 5999], [2000, 2399]], periodo: [5, 10], drivers: [], comprobaciones: [arrendamientos]}
+  industrial:   {sic: [[3400, 3899]], periodo: [5, 10], drivers: [], comprobaciones: []}
+  energia_materias: {sic: [[1000, 1499], [2900, 2999]], periodo: [5, 10], drivers: [], comprobaciones: []}
+  utilities:    {sic: [[4900, 4949]], periodo: [10, 10], drivers: [], comprobaciones: []}
+  telecom:      {sic: [[4800, 4899]], periodo: [7, 10], drivers: [], comprobaciones: [arrendamientos]}
+  media_contenido: {sic: [[7810, 7849], [4833, 4833], [4841, 4841]], periodo: [10, 10], drivers: [desfase_contenido], comprobaciones: []}
+  salud_madura: {sic: [[2834, 2836], [3841, 3851]], periodo: [10, 10], drivers: [], comprobaciones: []}
+drivers:   # partidas propias del paquete que restan del FCFF (serie en % de ingresos)
+  desfase_contenido: "Desfase de contenido (gasto en caja − amortización)"

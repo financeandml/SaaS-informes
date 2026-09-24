@@ -531,6 +531,13 @@ def acciones_portada(facts: dict) -> Optional[Tuple[float, date, Origen]]:
     if not filas:
         return None
     ultimo = max(f["filed"] for f in filas)
+    # companyfacts omite la cifra cuando la compañía la etiqueta por clases: la última sin clases puede ser de hace años
+    # (Comcast: 2009). Una portada anterior en más de 400 días al último depósito con cuentas no es la vigente.
+    gaap = (facts.get("facts") or {}).get("us-gaap") or {}
+    presentados = [f["filed"] for c in ("NetIncomeLoss", "Assets") for u in ((gaap.get(c) or {}).get("units") or {}).values() for f in u
+                   if f.get("form") in ("10-K", "10-Q", "10-K/A", "10-Q/A")]
+    if presentados and (date.fromisoformat(max(presentados)) - date.fromisoformat(ultimo)).days > 400:
+        return None
     # una compañía con varias clases declara una fila por clase en el mismo formulario: se suman
     del_ultimo = [f for f in filas if f["filed"] == ultimo]
     f = del_ultimo[0]

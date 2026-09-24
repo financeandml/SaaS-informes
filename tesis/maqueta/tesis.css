@@ -78,6 +78,7 @@ p { margin: 0 0 2mm; text-align: justify; }
 .cuadro tr.sangria td:first-child { padding-left: 4mm; color: var(--tinta-suave); }
 .cuadro td.na { color: var(--na); font-style: italic; }
 .cuadro td.negativo { color: var(--tinta); }
+.cuadro td.bajo { color: var(--acento); font-weight: bold; }
 .cuadro td.cero { color: var(--tinta-suave); }
 .cuadro .fuente { font-size: 6.8pt; color: var(--gris); margin-top: 1mm; }
 .cuadro .notas { font-size: 6.8pt; color: var(--tinta-suave); margin-top: .5mm; }

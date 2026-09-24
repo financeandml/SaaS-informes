@@ -155,7 +155,8 @@ def _cierre_de_hace_un_anio(facts: Optional[dict], fin: Periodo) -> date:
 
 
 def construir(hechos: Dict[Tuple[str, Periodo], Hecho], trimestres: List[Periodo], anuales: List[Periodo], precio: Optional[Hecho],
-              acciones: Optional[float], agregador=None, facts: Optional[dict] = None, obtenido: Optional[date] = None) -> Multiplos:
+              acciones: Optional[float], agregador=None, facts: Optional[dict] = None, obtenido: Optional[date] = None,
+              no_aplican: Optional[Dict[str, str]] = None) -> Multiplos:
     """Los múltiplos y rentabilidades TTM; cada línea con su fórmula, sus componentes y su contraste."""
     ultimos = sorted(trimestres, key=lambda p: p.fin)[-4:]
     fin = ultimos[-1] if ultimos else None
@@ -183,6 +184,10 @@ def construir(hechos: Dict[Tuple[str, Periodo], Hecho], trimestres: List[Periodo
     cierre = Periodo.instante(fin.fin)
     deuda = _instante(hechos, "deuda_bruta", cierre)
     caja, inv = _instante(hechos, "caja", cierre), _instante(hechos, "inversiones_cp", cierre)
+    # «no es una partida de esta empresa» no es un hueco (regla 10): quien nunca publica inversiones a corto no las tiene
+    if inv is None and no_aplican and "inversiones_cp" in no_aplican:
+        inv = 0.0
+        m.faltan["inversiones_cp"] = f"inversiones a corto plazo = 0: {no_aplican['inversiones_cp']}"
     ebitda = v["ebit"] + v["amortizacion"] if v["ebit"] is not None and v["amortizacion"] is not None else None
     fcf = v["cfo"] - v["capex"] if v["cfo"] is not None and v["capex"] is not None else None
     cap = m.precio * acciones if m.precio is not None and acciones else None

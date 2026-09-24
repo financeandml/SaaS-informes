@@ -55,8 +55,12 @@
         <tr><td>Precio objetivo</td><td class="v {% if not objetivo %}na{% endif %}" title="{% if objetivo %}{{ objetivo[0] }} · {{ objetivo[2] }}{% endif %}">{% if objetivo %}{{ usd(objetivo[1]) }}{% else %}N/A{% endif %}</td></tr>
         <tr><td>Precio actual</td><td class="v {% if not i.precio.hay_dato %}na{% endif %}" title="{{ i.precio.nota|e }}">{% if i.precio.hay_dato %}{{ usd(i.precio.valor) }}{% else %}N/A{% endif %}</td></tr>
         <tr><td>Potencial</td><td class="v {% if i.potencial is none %}na{% endif %}" title="precio objetivo / precio actual − 1">{% if i.potencial is not none %}{{ pct(i.potencial) }}{% else %}N/A{% endif %}</td></tr>
+        {% if i.parte_d is not none and i.parte_d.po is not none %}<tr><td>Margen de seguridad</td><td class="v">{{ pct(i.parte_d.margen_seguridad) }}</td></tr>
+        <tr><td>Recorrido / riesgo</td><td class="v">{% if i.parte_d.recorrido_riesgo is not none %}{{ '%.2f'|format(i.parte_d.recorrido_riesgo)|replace('.', ',') }}{% else %}sin pérdida{% endif %}</td></tr>
+        <tr><td>Horizonte</td><td class="v">{{ i.parte_d.horizonte_meses }} meses</td></tr>{% endif %}
       </table>
-      <div class="muted" style="font-size:6.8pt">Recomendación y precio objetivo: del analista ({% if i.posicion and i.posicion.fichero %}fichero de posición{% if objetivo and 'libro' in objetivo[2] %} y libro de valoración{% endif %}{% elif objetivo %}libro de valoración{% else %}pendientes de su fichero de posición{% endif %}). {% if i.precio.hay_dato %}Precio: {{ i.precio.nota }}.{% else %}Precio: {{ i.precio.motivo }}.{% endif %}</div>
+      {% if i.parte_d is not none and i.parte_d.po is not none %}<div class="muted" style="font-size:6.8pt">Precio objetivo: motor de valoración, a {{ i.parte_d.horizonte_meses }} meses (apartado {{ i.numeros['20'] }}). Recomendación: {% if i.posicion and i.posicion.recomendacion %}del analista{% else %}la que sugiere la regla (el analista aún no ha fijado la suya){% endif %}. Precio: {{ i.precio.nota }}.</div>
+      {% else %}<div class="muted" style="font-size:6.8pt">Recomendación y precio objetivo: del analista ({% if i.posicion and i.posicion.fichero %}fichero de posición{% if objetivo and 'libro' in objetivo[2] %} y libro de valoración{% endif %}{% elif objetivo %}libro de valoración{% else %}pendientes de su fichero de posición{% endif %}). {% if i.precio.hay_dato %}Precio: {{ i.precio.nota }}.{% else %}Precio: {{ i.precio.motivo }}.{% endif %}</div>{% endif %}
     </div>
     <table class="mini">
       <tr><th colspan="2">{{ i.ticker }} · {{ i.emisor.bolsa }}</th></tr>
@@ -200,6 +204,47 @@
 </section>
 
 <!-- ============================== D ============================== -->
+{% set pd = i.parte_d %}
+{% if pd is not none and pd.po is not none %}
+<section class="hoja">
+<h2 id="parte-{{ i.indice[3].letra }}">{{ i.indice[3].letra }}. {{ i.indice[3].titulo }}</h2>
+<h3 id="ap-{{ i.numeros['12'] }}">{{ i.numeros['12'] }}. {{ i.titulos['12'] }}</h3>
+{% if pd.bloqueos %}<div class="aviso"><b>Bloqueos del motor (no se puede emitir):</b> {{ pd.bloqueos|join('; ') }}.</div>{% endif %}
+{{ cuadro(pd.cuadros['escenarios']) }}
+{{ cuadro(pd.cuadros['wacc'], True) }}
+{{ cuadro(pd.cuadros['puente'], True) }}
+{{ cuadro(pd.cuadros['entradas'], True) }}
+{{ cuadro(pd.cuadros['supuestos'], True) }}
+{% if pd.cuadros.get('libro') %}{{ cuadro(pd.cuadros['libro'], True) }}{% endif %}
+</section>
+{% for nombre, narrativa, c in pd.escenarios %}
+<section class="hoja">
+{% set clave = '13' if nombre == 'pesimista' else ('14' if nombre == 'base' else '15') %}
+<h3 id="ap-{{ i.numeros[clave] }}">{{ i.numeros[clave] }}. {{ i.titulos[clave] }}</h3>
+{% if narrativa %}<p>{{ narrativa }}</p>{% else %}<div class="pendiente">Pendiente del analista: narrativa del escenario (15–50 palabras).</div>{% endif %}
+{{ cuadro(c) }}
+</section>
+{% endfor %}
+<section class="hoja">
+<h3 id="ap-{{ i.numeros['16'] }}">{{ i.numeros['16'] }}. {{ i.titulos['16'] }}</h3>
+{% if pd.cuadros.get('sensibilidad') %}{{ cuadro(pd.cuadros['sensibilidad']) }}{% else %}<p class="na">N/A — sin escenario base valorado.</p>{% endif %}
+<h3 id="ap-{{ i.numeros['17'] }}">{{ i.numeros['17'] }}. {{ i.titulos['17'] }}</h3>
+{% if pd.cuadros.get('multiplos_sec') %}{{ cuadro(pd.cuadros['multiplos_sec'], True) }}{% endif %}
+{% if pd.cuadros.get('ntm') %}{{ cuadro(pd.cuadros['ntm'], True) }}{% endif %}
+{% if pd.cuadros.get('historico') %}{{ cuadro(pd.cuadros['historico']) }}{% endif %}
+{% if pd.cuadros.get('comparables') %}{{ cuadro(pd.cuadros['comparables'], True) }}{% else %}<div class="pendiente">Pendiente del analista: lista de comparables (de 3 a 10).</div>{% endif %}
+{% if pd.cuadros.get('implicito') %}{{ cuadro(pd.cuadros['implicito'], True) }}{% endif %}
+<h3 id="ap-{{ i.numeros['18'] }}">{{ i.numeros['18'] }}. {{ i.titulos['18'] }}</h3>
+{% if pd.cuadros.get('inverso') %}{{ cuadro(pd.cuadros['inverso'], True) }}{% else %}<p class="na">N/A — sin escenario base valorado.</p>{% endif %}
+<h3 id="ap-{{ i.numeros['19'] }}">{{ i.numeros['19'] }}. {{ i.titulos['19'] }}</h3>
+{% if pd.cuadros.get('sotp') %}{{ cuadro(pd.cuadros['sotp'], True) }}{% else %}<p>{{ pd.sotp }}</p>{% endif %}
+<h3 id="ap-{{ i.numeros['20'] }}">{{ i.numeros['20'] }}. {{ i.titulos['20'] }}</h3>
+{{ cuadro(pd.cuadros['objetivo'], True) }}
+{% if pd.cuadros.get('consenso') %}{{ cuadro(pd.cuadros['consenso'], True) }}{% endif %}
+{% for x in pd.lectura_20 %}<div class="aviso">{{ x }}</div>{% endfor %}
+{% if pd.avisos %}<p class="muted" style="font-size:7pt">Avisos del motor: {{ pd.avisos|join('; ') }}.</p>{% endif %}
+</section>
+{% else %}
 <section class="hoja">
 <h2 id="parte-{{ i.indice[3].letra }}">{{ i.indice[3].letra }}. {{ i.indice[3].titulo }}</h2>
 <p class="muted" style="font-size:7.5pt">Fuente de la sección: el libro de valoración del analista{% if i.dcf.get('modelo') %} (<b>{{ i.dcf['modelo'].nombre }}</b>; hojas: {{ i.dcf['modelo'].hojas|join(', ') }}){% endif %}. El sistema lo lee por rótulo, imprime cada cifra con su celda de origen y cuadra sus entradas con el dato oficial más reciente; no recalcula la valoración.</p>
@@ -235,6 +280,8 @@
 <div class="conclusion"><span class="ante">Lectura:</span> las columnas «sobre precio de entrada» y «sobre precio de mercado del libro» son las que calcula el libro con el precio que el analista tecleó en él{% if i.dcf['modelo'].supuesto('precio de mercado') %} ({{ usd(i.dcf['modelo'].supuesto('precio de mercado').valor) }}; origen según el libro: «{{ i.dcf['modelo'].supuesto('precio de mercado').origen }}»){% endif %}. {% if i.precio.hay_dato %}La cotización oficial del informe es {{ usd(i.precio.valor) }} (apartado 1) y la última columna es el recorrido de cada valor sobre ella.{% else %}La cotización oficial del informe es N/A ({{ i.precio.motivo }}): el margen de seguridad frente al precio oficial queda pendiente de configurar la fuente de cotización.{% endif %} Las filas de consenso son, primero, el que el analista anotó en su libro y, después, el que publica la bolsa (precio objetivo medio, recuento de recomendaciones y rango) junto al «1 Year Target» de su ficha del valor: dos cifras de la misma bolsa para el mismo hecho, y se imprimen las dos. El consenso de estimaciones de la portada de la transcripción está en el apartado {{ i.numeros['32'] }}.</div>
 {% if i.posicion and (i.posicion.precio_entrada is not none or i.posicion.precio_objetivo is not none) %}<p><b>Posición del analista</b> (fichero {{ i.posicion.fichero.name }}): entrada {% if i.posicion.precio_entrada is not none %}{{ usd(i.posicion.precio_entrada) }}{% else %}N/A{% endif %}{% if i.posicion.fecha_entrada %} el {{ i.posicion.fecha_entrada.strftime('%d/%m/%Y') }}{% endif %} · tamaño {{ texto_s(i.posicion.tamano, 'sin rellenar') }} · horizonte {{ texto_s(i.posicion.horizonte, 'sin rellenar') }} · objetivo {% if i.posicion.precio_objetivo is not none %}{{ usd(i.posicion.precio_objetivo) }}{% else %}N/A{% endif %}.</p>{% endif %}
 </section>
+{% endif %}
+
 {% endif %}
 
 <!-- ============================== E ============================== -->
@@ -285,7 +332,7 @@
 <h3 id="ap-{{ i.numeros['33'] }}">{{ i.numeros['33'] }}. {{ i.titulos['33'] }}</h3>
 {% if pos %}<p>{{ texto_s(pos.argumento, i.posicion_faltan.get('33 · argumento', '')) }}</p>
 <h4>Asunciones clave</h4><ul class="compacta">{% for a in pos.asunciones %}<li>{{ a }}</li>{% else %}<li class="na">N/A — {{ i.posicion_faltan.get('33 · asunciones clave', '') }}</li>{% endfor %}</ul>
-<p>Horizonte temporal: {{ texto_s(pos.horizonte, i.posicion_faltan.get('33 · horizonte temporal', '')) }}</p>
+<p>Horizonte temporal: {% if i.parte_d is not none and i.parte_d.po is not none %}{{ i.parte_d.horizonte_meses }} meses (el del precio objetivo){% else %}{{ texto_s(pos.horizonte, i.posicion_faltan.get('33 · horizonte temporal', '')) }}{% endif %}</p>
 {% else %}<p class="na">N/A — {{ i.posicion_faltan.get('fichero', '') }}</p>{% endif %}
 <h3 id="ap-{{ i.numeros['34'] }}">{{ i.numeros['34'] }}. {{ i.titulos['34'] }}</h3>
 {% if pos and pos.checklist %}<div class="cuadro"><table class="texto-tabla"><thead><tr><th>Criterio</th><th>¿Cumplido?</th><th>Evidencia (del analista)</th></tr></thead><tbody>

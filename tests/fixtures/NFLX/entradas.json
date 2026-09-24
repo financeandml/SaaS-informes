@@ -1,0 +1,344 @@
+{
+ "_prueba": "Entradas de PRUEBA para las regresiones de F3 (docs/fases/F3.md): drivers copiados del libro dcf/NFLX.xlsx; no son del analista.",
+ "val": {
+  "fecha_valoracion": "2026-09-17",
+  "anio_base": "ultimo_ejercicio",
+  "periodo_explicito": 10,
+  "mitad_de_anio": false,
+  "horizonte_meses": 24,
+  "sbc": "coste_de_caja",
+  "arrendamientos": "fuera_de_deuda",
+  "paquete": "media_contenido"
+ },
+ "wacc": {
+  "erp": 5.5,
+  "erp_fuente": "entrada de prueba: la prima del libro del analista (5,5 %)",
+  "beta_metodo": "regresion",
+  "prima": 0,
+  "kd_metodo": "rendimiento_bonos",
+  "kd": 5.0,
+  "kd_fuente": "entrada de prueba",
+  "tipo_marginal": 21
+ },
+ "tv": {
+  "metodo": "gordon"
+ },
+ "esc": {
+  "pesimista": {
+   "probabilidad": 25,
+   "narrativa": "Crecimiento que se frena al saturarse los mercados y la publicidad no compensa; márgenes que apenas suben y un coste de capital penalizado.",
+   "crecimiento_ingresos": [
+    13.3,
+    7.5,
+    5.5,
+    4.5,
+    3.8,
+    3.2,
+    2.8,
+    2.5,
+    2.2,
+    2.0
+   ],
+   "margen_ebit": [
+    31.5,
+    32.2,
+    33.0,
+    33.6,
+    34.0,
+    34.4,
+    34.7,
+    35.0,
+    35.0,
+    35.0
+   ],
+   "impuesto_caja": [
+    14.0,
+    15.0,
+    16.0,
+    17.0,
+    17.0,
+    18.0,
+    18.0,
+    18.0,
+    18.0,
+    18.0
+   ],
+   "da_pct": [
+    1.2,
+    1.2,
+    1.2,
+    1.2,
+    1.2,
+    1.2,
+    1.2,
+    1.2,
+    1.2,
+    1.2
+   ],
+   "capex_pct": [
+    1.6,
+    1.6,
+    1.6,
+    1.6,
+    1.6,
+    1.6,
+    1.6,
+    1.6,
+    1.6,
+    1.6
+   ],
+   "fm_pct_incremental": -1.0,
+   "sbc_pct": [
+    2.3,
+    2.3,
+    2.3,
+    2.2,
+    2.2,
+    2.2,
+    2.1,
+    2.1,
+    2.1,
+    2.1
+   ],
+   "paquete": {
+    "desfase_contenido": [
+     6.6,
+     4.8,
+     3.8,
+     3.2,
+     3.0,
+     2.8,
+     2.7,
+     2.6,
+     2.6,
+     2.6
+    ]
+   },
+   "wacc_ajuste_pp": 1.0,
+   "g": 2.5,
+   "wacc_ajuste_justificacion": "Mismo diferencial entre escenarios que el libro del analista (entrada de prueba)."
+  },
+  "base": {
+   "probabilidad": 50,
+   "narrativa": "La compañía mantiene un crecimiento de dos dígitos unos años, amplía márgenes con la publicidad y reduce el desfase de inversión en contenido.",
+   "crecimiento_ingresos": [
+    13.3,
+    11.5,
+    10.5,
+    9.5,
+    8.5,
+    7.5,
+    6.5,
+    5.5,
+    5.0,
+    4.5
+   ],
+   "margen_ebit": [
+    31.5,
+    33.5,
+    35.5,
+    37.0,
+    38.5,
+    39.5,
+    40.0,
+    40.5,
+    41.0,
+    41.0
+   ],
+   "impuesto_caja": [
+    14.0,
+    15.0,
+    16.0,
+    16.0,
+    17.0,
+    17.0,
+    17.0,
+    18.0,
+    18.0,
+    18.0
+   ],
+   "da_pct": [
+    1.2,
+    1.2,
+    1.2,
+    1.2,
+    1.2,
+    1.2,
+    1.2,
+    1.2,
+    1.2,
+    1.2
+   ],
+   "capex_pct": [
+    1.5,
+    1.5,
+    1.5,
+    1.5,
+    1.5,
+    1.5,
+    1.5,
+    1.5,
+    1.5,
+    1.5
+   ],
+   "fm_pct_incremental": -1.0,
+   "sbc_pct": [
+    2.2,
+    2.1,
+    2.0,
+    1.9,
+    1.8,
+    1.7,
+    1.6,
+    1.5,
+    1.5,
+    1.5
+   ],
+   "paquete": {
+    "desfase_contenido": [
+     6.6,
+     5.0,
+     4.0,
+     3.2,
+     2.6,
+     2.2,
+     1.8,
+     1.5,
+     1.2,
+     1.0
+    ]
+   },
+   "wacc_ajuste_pp": 0.0,
+   "g": 3.25
+  },
+  "optimista": {
+   "probabilidad": 25,
+   "narrativa": "La publicidad y los precios sostienen crecimientos altos más tiempo y el margen operativo se acerca al de un negocio de software maduro.",
+   "crecimiento_ingresos": [
+    13.5,
+    13.5,
+    12.8,
+    11.8,
+    10.8,
+    9.8,
+    8.8,
+    7.8,
+    6.8,
+    6.0
+   ],
+   "margen_ebit": [
+    31.8,
+    34.5,
+    37.0,
+    39.0,
+    40.5,
+    41.8,
+    42.8,
+    43.5,
+    44.0,
+    44.3
+   ],
+   "impuesto_caja": [
+    14.0,
+    14.0,
+    15.0,
+    16.0,
+    16.0,
+    16.0,
+    17.0,
+    17.0,
+    17.0,
+    17.0
+   ],
+   "da_pct": [
+    1.2,
+    1.2,
+    1.2,
+    1.2,
+    1.2,
+    1.2,
+    1.2,
+    1.2,
+    1.2,
+    1.2
+   ],
+   "capex_pct": [
+    1.4,
+    1.4,
+    1.4,
+    1.4,
+    1.4,
+    1.4,
+    1.4,
+    1.4,
+    1.4,
+    1.4
+   ],
+   "fm_pct_incremental": -1.0,
+   "sbc_pct": [
+    2.1,
+    2.0,
+    1.8,
+    1.7,
+    1.6,
+    1.5,
+    1.4,
+    1.3,
+    1.3,
+    1.3
+   ],
+   "paquete": {
+    "desfase_contenido": [
+     6.4,
+     4.4,
+     3.2,
+     2.2,
+     1.6,
+     1.2,
+     1.0,
+     0.8,
+     0.6,
+     0.5
+    ]
+   },
+   "wacc_ajuste_pp": -0.5,
+   "g": 3.5,
+   "wacc_ajuste_justificacion": "Mismo diferencial entre escenarios que el libro del analista (entrada de prueba)."
+  }
+ },
+ "comparables": [
+  {
+   "ticker": "DIS",
+   "justificacion": "Estudio y plataforma de vídeo por suscripción con escala mundial",
+   "usar_en_multiplos": true
+  },
+  {
+   "ticker": "WBD",
+   "justificacion": "Catálogo propio y plataforma de vídeo en competencia directa",
+   "usar_en_multiplos": true
+  },
+  {
+   "ticker": "ROKU",
+   "justificacion": "Plataforma de distribución de vídeo con ingresos publicitarios",
+   "usar_en_multiplos": true
+  },
+  {
+   "ticker": "SPOT",
+   "justificacion": "Suscripción de contenido digital a escala mundial",
+   "usar_en_multiplos": true
+  },
+  {
+   "ticker": "CMCSA",
+   "justificacion": "Grupo de medios con plataforma de vídeo propia",
+   "usar_en_multiplos": true
+  }
+ ],
+ "excel": {
+  "archivo": "tests/fixtures/NFLX/libro_nflx.xlsx",
+  "recalculado": "tests/fixtures/NFLX/libro_nflx.recalculado.xlsx",
+  "mapa": "NFLX"
+ },
+ "guia": {
+  "confirmadas": []
+ }
+}

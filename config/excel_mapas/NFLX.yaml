@@ -1,0 +1,22 @@
+# Mapa explícito de celdas del libro «Modelo DCF — Netflix, Inc.» (dcf/NFLX.xlsx), que no define rangos con nombre.
+# Solo para comparar con el motor (05 §9). Nunca se lee por rótulo.
+libro: dcf/NFLX.xlsx
+celdas:
+  precio: Supuestos!C8
+  acciones_diluidas: Supuestos!C12
+  deuda_neta: Supuestos!C25
+  ingresos_base: Supuestos!C15
+  wacc_pes: Supuestos!C32
+  wacc_base: Supuestos!C33
+  wacc_opt: Supuestos!C34
+  g_pes: Supuestos!D32
+  g_base: Supuestos!D33
+  g_opt: Supuestos!D34
+  peso_pes: Supuestos!E32
+  peso_base: Supuestos!E33
+  peso_opt: Supuestos!E34
+  valor_accion_pes: Pesimista!C37
+  valor_accion_base: Base!C37
+  valor_accion_opt: Optimista!C37
+  valor_razonable: Resumen!E9
+  po: Resumen!C14

@@ -43,14 +43,14 @@ sensibilidad, reverse, multiplos, sotp, objetivo, excel, validacion) · `tesis/p
 - Lo antiguo sigue valiendo y manda: `servir` es `tesis.saas` y `generar` es `emitir.py`, con sus mismas opciones pasadas tal cual.
 - `pytest -q` y `python -m unittest discover -s tests -p "prueba_*.py"` recorren la misma batería (`pytest.ini`).
 - Datos pesados fuera de la copia de trabajo: `WC_DATOS` sitúa `adjuntos/` y `salida/`. Sin la variable, vuelven a la raíz.
-- Fixtures sin red (versionados): `tests/fixtures/cache_sec/` (QCOM, NFLX, WMT, JPM; 10-K, 10-Q, DEF 14A, Ex. 21, 13G y notas de QCOM y NFLX: apunta `sec.CACHE` ahí), `tests/fixtures/cache_bolsa/` (Nasdaq: `precio.CACHE_BOLSA` y `precio.SOLO_CACHE = True`) y `tests/fixtures/<TICKER>/entradas.json` (entradas de prueba).
-- Dependencias: `jinja2`, `pypdfium2`, `playwright`, `matplotlib`, `pillow` y `pyyaml` (el índice y los umbrales son YAML).
+- Fixtures sin red (versionados): `tests/fixtures/cache_sec/` (QCOM, NFLX, WMT, JPM; 10-K, 10-Q, DEF 14A, Ex. 21, 13G y notas de QCOM y NFLX: apunta `sec.CACHE` ahí), `tests/fixtures/cache_bolsa/` (Nasdaq: `precio.CACHE_BOLSA` y `precio.SOLO_CACHE = True`) y `tests/fixtures/<TICKER>/entradas.json` (entradas de prueba) y `tests/fixtures/NFLX/libro_nflx*.xlsx` (copia congelada de `dcf/NFLX.xlsx`, solo lectura).
+- Dependencias: `jinja2`, `pypdfium2`, `playwright`, `matplotlib`, `pillow`, `openpyxl` y `pyyaml`. LibreOffice (opcional) solo para la prueba de recálculo del Excel exportado.
 
 ## Estado
-F0 ☑ · F1 ☑ esqueleto + C · F2 ☑ B (24/09/2026) · F3 ☐ D · F4 ☐ E · F5 ☐ F · F6 ☐ G + portada + asistente · F7 ☐ A + H + I + cierre
-Protocolo: en cada sesión nueva el analista escribe «sigue» → `docs/fases/00_protocolo.md`. Siguiente: F3 (`docs/fases/F3.md`).
+F0 ☑ · F1 ☑ esqueleto + C · F2 ☑ B · F3 ☑ D (24/09/2026) · F4 ☐ E · F5 ☐ F · F6 ☐ G + portada + asistente · F7 ☐ A + H + I + cierre
+Protocolo: en cada sesión nueva el analista escribe «sigue» → `docs/fases/00_protocolo.md`. Siguiente: F4 (`docs/fases/F4.md`).
 «confirmo borrar» (analista, 24/09/2026): hecho en F1 (sin `narrativa.py`, SDK `anthropic`, `--redactar`, `narrativas/` ni restos).
-Batería: 183 en verde y 34 omitidas sin los adjuntos de NFLX/QCOM. `python -m tesis regresiones` → **17 de 33** (F1 y F2).
-F2: segmentos, líneas y geografía del XBRL inline (`ixbrl`, `segmentos`, UDM con el 10-Q); accionistas, 13G, ejecutivos, retribución y
-filiales de EDGAR (`proxy`, `gobierno`); guía de los Ex. 99.1 como candidatos confirmados en `entradas.json` (`guia`: Cuadro 2 y 26);
-fechas clave de Nasdaq con caché (`calendario`); entradas del paso 4 verificadas contra el documento (`entradas`, `parte_b`).
+Batería: 199 en verde y 34 omitidas sin los adjuntos de NFLX/QCOM. `python -m tesis regresiones` → **25 de 33** (F1, F2 y F3).
+F2: segmentos (XBRL inline), accionistas/13G/ejecutivos/retribución/filiales de EDGAR, guía de los Ex. 99.1 confirmada, fechas de Nasdaq.
+F3: `tesis/motor/` (supuestos, proyeccion con periodo parcial, terminal, puente, wacc con beta frente a SPY y rf del Tesoro, escenarios,
+sensibilidad e inverso, comparables del analista, excel con fórmulas vivas e importación por mapa), `parte_d.py`; precio único = cierre oficial.

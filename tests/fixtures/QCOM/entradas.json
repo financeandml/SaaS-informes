@@ -1,5 +1,5 @@
 {
- "_prueba": "Entradas de PRUEBA para las regresiones de F2 (docs/fases/F2.md): no son del analista y el informe no se puede emitir con ellas.",
+ "_prueba": "Entradas de PRUEBA para las regresiones de F2 y F3: no son del analista y el informe no se puede emitir con ellas.",
  "perfil": {
   "descripcion": {
    "texto": "Qualcomm diseña semiconductores y licencia la propiedad intelectual de sus tecnologías inalámbricas. Se organiza en tres segmentos: QCT, que vende plataformas y circuitos integrados para teléfonos móviles, automoción e internet de las cosas; QTL, que cobra regalías por su cartera de patentes de comunicaciones móviles; y QSI, que agrupa inversiones estratégicas. La mayor parte de los ingresos procede de fabricantes de teléfonos, con fuerte concentración en clientes de China y Corea del Sur, mientras la compañía intenta diversificarse hacia automoción, ordenadores personales y centros de datos. Su posición se apoya en la investigación en conectividad y en computación de bajo consumo, y en una cartera de patentes que licencia a buena parte del sector.",
@@ -155,5 +155,167 @@
    "2026-07-29|4T FY26|bpa_diluido",
    "2026-07-29|4T FY26|bpa_no_gaap"
   ]
- }
+ },
+ "val": {
+  "fecha_valoracion": "2026-09-22",
+  "anio_base": "ultimo_ejercicio",
+  "periodo_explicito": 10,
+  "mitad_de_anio": true,
+  "horizonte_meses": 12,
+  "sbc": "coste_de_caja",
+  "arrendamientos": "fuera_de_deuda",
+  "paquete": "semiconductores"
+ },
+ "wacc": {
+  "erp": 5.0,
+  "erp_fuente": "entrada de prueba",
+  "beta_metodo": "regresion",
+  "prima": 0,
+  "kd_metodo": "rendimiento_bonos",
+  "kd": 5.2,
+  "kd_fuente": "entrada de prueba",
+  "tipo_marginal": 21
+ },
+ "tv": {
+  "metodo": "value_driver"
+ },
+ "esc": {
+  "pesimista": {
+   "impuesto_caja": {
+    "1": 14,
+    "5": 16,
+    "N": 18
+   },
+   "da_pct": 4.0,
+   "capex_pct": {
+    "1": 4.9,
+    "2": 4.5,
+    "3": 3.8,
+    "5": 3.4,
+    "N": 3.4
+   },
+   "fm_pct_incremental": 5.0,
+   "probabilidad": 25,
+   "narrativa": "El teléfono móvil sigue cayendo, la diversificación llega tarde y el margen operativo se queda en la parte baja del ciclo.",
+   "crecimiento_ingresos": {
+    "1": -3.1,
+    "2": -2.0,
+    "3": 3.0,
+    "5": 3.0,
+    "N": 2.25
+   },
+   "margen_ebit": {
+    "1": 21.0,
+    "3": 22.0,
+    "N": 24.0
+   },
+   "sbc_pct": 7.0,
+   "wacc_ajuste_pp": 1.0,
+   "wacc_ajuste_justificacion": "Más riesgo de ejecución en la diversificación (entrada de prueba).",
+   "g": 2.25,
+   "ronic": 20
+  },
+  "base": {
+   "impuesto_caja": {
+    "1": 14,
+    "5": 16,
+    "N": 18
+   },
+   "da_pct": 4.0,
+   "capex_pct": {
+    "1": 4.9,
+    "2": 4.5,
+    "3": 3.8,
+    "5": 3.4,
+    "N": 3.4
+   },
+   "fm_pct_incremental": 5.0,
+   "probabilidad": 50,
+   "narrativa": "Los ingresos ajenos al móvil compensan la caída del teléfono y el margen vuelve a niveles de mitad de ciclo.",
+   "crecimiento_ingresos": {
+    "1": -3.1,
+    "2": 4.7,
+    "3": 12.1,
+    "5": 8.3,
+    "N": 3.0
+   },
+   "margen_ebit": {
+    "1": 21.1,
+    "3": 23.6,
+    "5": 26.0,
+    "N": 27.0
+   },
+   "sbc_pct": 6.6,
+   "g": 3.0,
+   "ronic": 30
+  },
+  "optimista": {
+   "impuesto_caja": {
+    "1": 14,
+    "5": 16,
+    "N": 18
+   },
+   "da_pct": 4.0,
+   "capex_pct": {
+    "1": 4.9,
+    "2": 4.5,
+    "3": 3.8,
+    "5": 3.4,
+    "N": 3.4
+   },
+   "fm_pct_incremental": 5.0,
+   "probabilidad": 25,
+   "narrativa": "Centros de datos y automoción crecen como anticipa la compañía y el margen supera el máximo del último ciclo.",
+   "crecimiento_ingresos": {
+    "1": -3.1,
+    "2": 8.0,
+    "3": 15.0,
+    "5": 11.0,
+    "N": 3.5
+   },
+   "margen_ebit": {
+    "1": 21.1,
+    "3": 26.0,
+    "5": 29.0,
+    "N": 30.0
+   },
+   "sbc_pct": 6.3,
+   "wacc_ajuste_pp": -0.5,
+   "wacc_ajuste_justificacion": "Menor riesgo con la diversificación confirmada (entrada de prueba).",
+   "g": 3.5,
+   "ronic": 35
+  }
+ },
+ "comparables": [
+  {
+   "ticker": "AVGO",
+   "justificacion": "Semiconductores de conectividad y centros de datos",
+   "usar_en_multiplos": true
+  },
+  {
+   "ticker": "TXN",
+   "justificacion": "Semiconductores analógicos y de sistemas integrados",
+   "usar_en_multiplos": true
+  },
+  {
+   "ticker": "NXPI",
+   "justificacion": "Semiconductores para automoción e internet de las cosas",
+   "usar_en_multiplos": true
+  },
+  {
+   "ticker": "MRVL",
+   "justificacion": "Semiconductores de infraestructura de datos",
+   "usar_en_multiplos": true
+  },
+  {
+   "ticker": "NOK",
+   "justificacion": "Equipos de red y cartera de patentes de comunicaciones móviles",
+   "usar_en_multiplos": true
+  },
+  {
+   "ticker": "ERIC",
+   "justificacion": "Equipos de red y licencias de patentes móviles",
+   "usar_en_multiplos": true
+  }
+ ]
 }

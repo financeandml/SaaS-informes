@@ -113,6 +113,28 @@ def _ruta_bolsa(url: str, dia: date):
     return carpeta, carpeta / f"{nombre}__{dia.isoformat()}.json.gz"
 
 
+def texto_con_cache(url: str, cabeceras: Optional[dict] = None) -> str:
+    """Un CSV o un texto de una fuente pública (el Tesoro), con la misma caché por URL y día que la bolsa."""
+    import gzip
+    import hashlib
+    carpeta, ruta = _ruta_bolsa(url, date.today())
+    if not ruta.exists() and SOLO_CACHE:
+        previas = sorted(carpeta.glob(ruta.name.rsplit("__", 1)[0] + "__*.json.gz"))
+        if not previas:
+            raise URLError(f"sin respuesta guardada de {url}")
+        ruta = previas[-1]
+    if ruta.exists():
+        with gzip.open(ruta, "rt", encoding="utf-8") as f:
+            return json.load(f)["cuerpo"]
+    with urlopen(Request(url, headers=cabeceras or {"User-Agent": "Mozilla/5.0"}), timeout=60) as r:
+        cuerpo = r.read().decode("utf-8", errors="replace")
+    carpeta.mkdir(parents=True, exist_ok=True)
+    with gzip.open(ruta, "wt", encoding="utf-8") as f:
+        json.dump({"url": url, "obtenido": datetime.now().isoformat(timespec="seconds"),
+                   "sha256": hashlib.sha256(cuerpo.encode("utf-8")).hexdigest(), "cuerpo": cuerpo}, f, ensure_ascii=False)
+    return cuerpo
+
+
 def _json(url: str, cabeceras: dict) -> dict:
     """Respuesta de la bolsa, guardada entera con URL, hora y sha256 (03 §7); caché por URL y día."""
     import gzip
@@ -230,10 +252,11 @@ def _nasdaq(ticker: str) -> Optional[Cotizacion]:
                       rango_52s=rango, fuera_de_sesion=fuera, **extra)
 
 
-def cierres_nasdaq(ticker: str, desde: date, hasta: date) -> Dict[date, float]:
-    """Cierres oficiales por fecha del histórico de Nasdaq; vacío si la bolsa no responde."""
-    url = (f"https://api.nasdaq.com/api/quote/{ticker}/historical?assetclass=stocks"
-           f"&fromdate={desde:%Y-%m-%d}&todate={hasta:%Y-%m-%d}&limit=400")
+def cierres_nasdaq(ticker: str, desde: date, hasta: date, limite: int = 400, clase: str = "stocks") -> Dict[date, float]:
+    """Cierres oficiales por fecha del histórico de Nasdaq; vacío si la bolsa no responde. `clase`: «stocks» o «etf»
+    (SPY, el mercado de la beta)."""
+    url = (f"https://api.nasdaq.com/api/quote/{ticker}/historical?assetclass={clase}"
+           f"&fromdate={desde:%Y-%m-%d}&todate={hasta:%Y-%m-%d}&limit={limite}")
     datos = _json(url, _CABECERAS_NASDAQ)
     filas = (((datos or {}).get("data") or {}).get("tradesTable") or {}).get("rows") or []
     salida: Dict[date, float] = {}

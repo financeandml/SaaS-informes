@@ -204,6 +204,7 @@ class Informe:
     catalizadores: Optional[Cuadro] = None
     salidas_13g: List[str] = field(default_factory=list)
     clases_acciones: List[str] = field(default_factory=list)
+    parte_d: Optional[object] = None                                 # F3 · parte_d.ParteD (motor de valoración)
 
 
 # ---------------------------------------------------------------------------
@@ -647,7 +648,7 @@ def construir(ticker: str, hoy: date, emisor: Emisor, exp: Expediente, tab: Tabl
               ficha: Ficha, gobierno: Gobierno, guidance: Guidance, regiones: Regiones, precio: Hecho,
               recortes: Dict[Tuple[str, int], Recorte], modelo_dcf=None, posicion=None, riesgos=None, historial=None,
               salida_recortes: Optional[Path] = None, mercado=None, posicionamiento=None, comparables=None, mercado_objetivo=None,
-              agregador=None, multiplos=None, proxima=None, parte_b=None) -> Informe:
+              agregador=None, multiplos=None, proxima=None, parte_b=None, motor=None, libro=None) -> Informe:
     from . import secciones as secciones_mod
     from . import parte_b as parte_b_mod
     anuales, trimestres, instantes = periodos["anuales"], periodos["trimestres"], periodos["instantes"]
@@ -747,8 +748,19 @@ def construir(ticker: str, hoy: date, emisor: Emisor, exp: Expediente, tab: Tabl
     from . import dcf as dcf_mod
     cierres = mercado.cierres if mercado is not None else {}
     cuadres = dcf_mod.cuadrar(modelo_dcf, hechos, cierres=cierres, agregador=agregador) if modelo_dcf is not None else []
-    cuadros_dcf = secciones_mod.cuadros_dcf(n, modelo_dcf, cuadres, precio if precio.hay_dato else None, mercado, multiplos)
-    cuadros_dcf["cuadres"] = cuadres
+    parte_d = None
+    if motor is not None:
+        from . import parte_d as parte_d_mod
+        cuadros_dcf = {"faltan": {}, "cuadres": []}
+        parte_d = parte_d_mod.construir(n, motor, lambda p: _etiqueta(p, anuales, tab), hechos, anuales,
+                                        consenso=getattr(mercado, "consenso", None) if mercado is not None else getattr(motor, "consenso", None),
+                                        libro=libro, recomendacion_analista=(posicion.recomendacion if posicion is not None else ""),
+                                        segmento_unico=_segmento_unico(exp) is not None, multiplos=multiplos)
+        if parte_d.cuadros.get("multiplos_sec") is not None:
+            cuadros_dcf["multiplos_sec"] = parte_d.cuadros["multiplos_sec"]
+    else:
+        cuadros_dcf = secciones_mod.cuadros_dcf(n, modelo_dcf, cuadres, precio if precio.hay_dato else None, mercado, multiplos)
+        cuadros_dcf["cuadres"] = cuadres
     # Los cuadros se numeran por orden de impresión, que es el del índice (A–I).
     # E · 21 y 22 con lo que declara la compañía y lo que asigna la bolsa
     mercado_cuadro = secciones_mod.cuadro_mercado_objetivo(n, mercado_objetivo) if mercado_objetivo is not None else None
@@ -798,7 +810,12 @@ def construir(ticker: str, hoy: date, emisor: Emisor, exp: Expediente, tab: Tabl
         fuentes.append(f"{posicion.fichero.name} — fichero de posición y tesis del analista")
     # el precio objetivo de la portada es del analista: el de su fichero de posición o, si no, el «objetivo calculado» de su libro
     objetivo_portada = None
-    if posicion is not None and posicion.precio_objetivo is not None:
+    if parte_d is not None and parte_d.po is not None:
+        objetivo_portada = (f"precio objetivo del motor a {parte_d.horizonte_meses} meses", parte_d.po, "motor de valoración (05 §7)")
+    # un solo PO (regla 4): con el motor, el suyo; el del analista o el de su libro solo sin motor (camino antiguo)
+    if objetivo_portada is not None:
+        pass
+    elif posicion is not None and posicion.precio_objetivo is not None:
         objetivo_portada = ("precio objetivo del analista", posicion.precio_objetivo, f"fichero de posición {posicion.fichero.name if posicion.fichero else ''}")
     elif modelo_dcf is not None:
         for rotulo, valor, celda in modelo_dcf.anclajes_objetivo:
@@ -807,6 +824,8 @@ def construir(ticker: str, hoy: date, emisor: Emisor, exp: Expediente, tab: Tabl
                 break
     # el potencial es el objetivo del analista sobre la cotización oficial: las dos cifras están en la portada y su cociente también
     potencial = objetivo_portada[1] / precio.valor - 1 if objetivo_portada is not None and precio.hay_dato and precio.valor else None
+    if parte_d is not None and parte_d.po is not None:
+        potencial = parte_d.potencial
     if proxima is not None:
         faltan.append(f"Fechas clave · próxima presentación: la compañía no la anuncia en ningún adjunto ni en la SEC; se imprime la que publica la bolsa "
                       f"({proxima.fecha:%d/%m/%Y}, {'esperada' if proxima.esperada else 'anunciada'}) y su cuadre con el agregador: {proxima.nota_contraste}")
@@ -852,7 +871,8 @@ def construir(ticker: str, hoy: date, emisor: Emisor, exp: Expediente, tab: Tabl
         segmento_unico=_segmento_unico(exp), objetivo_portada=objetivo_portada, f_cuadros=f_cuadros, f_faltan=f_faltan,
         comparables_cuadro=comparables_cuadro, comparables_faltan=comparables_faltan, mercado_cuadro=mercado_cuadro, mercado_faltan=mercado_faltan,
         comparables_sic_cuadro=comparables_sic_cuadro, rentabilidad_ttm=rentabilidad_ttm, proxima_bolsa=proxima, potencial=potencial,
-        recomendacion=posicion.recomendacion if posicion is not None else "", documentacion=documentacion, cuadres_apendice=cuadres_apendice,
+        recomendacion=(posicion.recomendacion if posicion is not None and posicion.recomendacion else (parte_d.recomendacion_regla if parte_d is not None else "")),
+        documentacion=documentacion, cuadres_apendice=cuadres_apendice, parte_d=parte_d,
         textos_b=parte_b_mod.textos(parte_b.entradas, parte_b.alias) if parte_b is not None else None, segmentos=segmentos_c, geografia=geografia_c,
         grafico_mezcla=svg_mezcla, fechas_clave=fechas_c, catalizadores=catalizadores_c,
         salidas_13g=list(getattr(gobierno, "salidas_13g", [])), clases_acciones=list(parte_b.clases) if parte_b is not None else [],

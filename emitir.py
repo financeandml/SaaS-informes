@@ -163,7 +163,32 @@ def main(argv=None) -> int:
     prox = calendario.proxima(args.ticker, agr, hoy)
     print("  próxima presentación: " + (f"{prox.fecha:%d/%m/%Y} {prox.momento} ({'esperada' if prox.esperada else 'anunciada'} según la bolsa) · {prox.contraste.value or '—'} {prox.nota_contraste}" if prox else "N/A"))
     acc_portada = f.citas.get("acciones_portada")
-    mult = multiplos.construir(hechos, periodos["trimestres"], periodos["anuales"], pr, acc_portada.valor if acc_portada is not None else None, agr, facts, obtenido)
+    # F3: el motor de valoración. Precio único = cierre oficial de Nasdaq en la fecha de valoración (nunca el intradía)
+    ent = entradas.cargar(args.ticker, hoy, Path(args.entradas) if args.entradas else None)
+    from tesis.motor import datos as motor_datos, excel as motor_excel
+    from tesis.umbrales import _datos as umbrales_todos
+    dividendos_bolsa, _ = calendario.dividendos(args.ticker)
+    mot = motor_datos.ejecutar(emisor, facts, hechos, periodos, ent.datos, hoy, acc_portada.valor if acc_portada is not None else None,
+                               umbrales_todos(), tab.desfase_fiscal, dividendos_bolsa) if ent.datos.get("esc") else None
+    libro_analista = None
+    if mot is not None and mot.precio is not None:
+        from tesis.hechos import Capa as _Capa, Origen as _Origen, Periodo as _Periodo, de_valor as _de_valor
+        pr = _de_valor("precio", _Periodo.instante(mot.fecha_precio), mot.precio, _Capa.SEC, _Origen(documento="Nasdaq"), unidad="USD/acción",
+                       nota=f"cierre oficial de Nasdaq del {mot.fecha_precio:%d/%m/%Y}")
+        mot.consenso = mer.consenso
+        v = mot.valoracion
+        print(f"  motor: precio {mot.precio:.2f} ({mot.fecha_precio:%d/%m/%Y}) · " + (f"WACC {v.wacc.wacc:.2%} · PO {v.po:.2f} a {v.parametros.horizonte_meses} meses · "
+              f"{v.recomendacion}" if v else "sin valoración") + (f" · bloqueos: {'; '.join(mot.bloqueos)}" if mot.bloqueos else ""))
+        if v is not None:
+            ruta_libro = motor_excel.exportar(v, mot.ingresos_base, salida / f"{nombre_base}.motor.xlsx", umbrales_todos())
+            print(f"  motor: libro con fórmulas vivas en {ruta_libro.name}")
+        x = ent.datos.get("excel") or {}
+        if x.get("archivo") and Path(x["archivo"]).exists():
+            libro_analista = motor_excel.importar(Path(x["archivo"]), x.get("mapa"), Path(x["recalculado"]) if x.get("recalculado") else None)
+    elif mot is not None:
+        print(f"  motor: {'; '.join(mot.bloqueos)}")
+    mult = multiplos.construir(hechos, periodos["trimestres"], periodos["anuales"], pr, acc_portada.valor if acc_portada is not None else None, agr, facts, obtenido,
+                               no_aplican=tab.no_aplican)
     print("  múltiplos TTM: " + " · ".join(f"{l.rotulo.split(' (')[0]} {l.valor:.2f}{l.contraste.value}" if l.valor is not None else f"{l.rotulo.split(' (')[0]} N/A" for l in mult.lineas if l.unidad == "x"))
     if modelo is not None:
         cuadres = dcf.cuadrar(modelo, hechos, cierres=mer.cierres, agregador=agr)
@@ -178,7 +203,6 @@ def main(argv=None) -> int:
     else:
         print(f"  posición: sin {ruta_posicion} (la sección H y la recomendación de la portada salen N/A; se rellena con «python -m tesis.formulario {args.ticker.upper()}»)")
 
-    ent = entradas.cargar(args.ticker, hoy, Path(args.entradas) if args.entradas else None)
     pb = parte_b.construir(emisor, hoy, facts, portada, ent, g)
     print(f"  parte B: entradas {'de PRUEBA ' if ent.de_prueba else ''}{ent.ruta or 'sin fichero'} · {len(pb.notas)} notas de resultados · "
           f"{sum(len(n.candidatos) for n in pb.notas)} candidatos de guía ({len(pb.confirmadas)} confirmados) · {len(pb.faltas)} faltas")
@@ -188,7 +212,7 @@ def main(argv=None) -> int:
     print("[7/8] Informe")
     inf = informe.construir(args.ticker, hoy, emisor, exp, tab, periodos, f, g, gu, reg, pr, recs, modelo_dcf=modelo, posicion=pos,
                             riesgos=ri, historial=hi, salida_recortes=carpeta_recortes, mercado=mer, posicionamiento=posi, comparables=comp, mercado_objetivo=merc,
-                            agregador=agr, multiplos=mult, proxima=prox, parte_b=pb)
+                            agregador=agr, multiplos=mult, proxima=prox, parte_b=pb, motor=mot, libro=libro_analista)
     n_evid = sum(len(lista) for _, _, lista in inf.documentacion)
     print(f"  documentación complementaria: {n_evid} piezas en {len(inf.documentacion)} apartados · {len(recs)} recortes de estados junto a sus cuadros · "
           f"{len([x for x in inf.fotos_ejecutivos + inf.fotos_consejo if x.ruta])} retratos")
