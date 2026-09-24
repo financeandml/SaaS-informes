@@ -21,8 +21,7 @@ Hereda `../../CLAUDE.md`; donde choquen, manda este fichero.
 16. **Una prueba nueva no vale hasta haberla visto fallar**: reintroduce el fallo que dice cazar y comprueba que lo caza.
 
 ## Idioma
-Código en español (ficheros, funciones, variables, comentarios: el porqué, no el qué). Interfaz bilingüe ES/EN por
-diccionario. Qué se traduce y qué se queda en inglés: la tabla de `../../CLAUDE.md`. Las siglas nunca se traducen.
+Todo en español: informe, interfaz (sin interruptor ES/EN), documentación y respuestas. Código en español (comentarios: el porqué, no el qué). En inglés solo las siglas y términos admitidos en `docs/spec/02` › Lenguaje, y los identificadores de las fuentes, que nunca se imprimen. Donde choque con `../../CLAUDE.md`, manda esto.
 
 ## Tokens
 - Lee solo el spec de la tarea. No vuelques PDFs, HTML ni JSON: `head -c`, `jq`, `rg`.
@@ -47,8 +46,10 @@ sensibilidad, reverse, multiplos, sotp, objetivo, excel, validacion) · `tesis/p
 - Fixtures sin red en `tests/fixtures/cache_sec/`: QCOM, NFLX, WMT y JPM (apunta `sec.CACHE` ahí).
 
 ## Estado
-F0 ☑ (24/09/2026, `docs/estado.md`) · F1 ▶ · F2 ☐ · F3 ☐ · F4 ☐ · F5 ☐
+F0 ☑ (24/09/2026, `docs/estado.md`) · F1 ▶ esqueleto + C · F2 ☐ B · F3 ☐ D · F4 ☐ E · F5 ☐ F · F6 ☐ G + portada · F7 ☐ A + H + I + cierre
 Protocolo: en cada sesión nueva el analista escribe «sigue» → `docs/fases/00_protocolo.md`. Fase en curso: F1 (`docs/fases/F1.md`).
+«confirmo borrar» (analista, 24/09/2026): se retiran `narrativa.py`, el SDK `anthropic`, `emitir.py --redactar`, `narrativas/` y los restos (`o.json`, `q.json`, `prueba_nflx/`, `docs/PLANTILLA_TESIS.md`).
+Plan cambiado el 24/09: 7 fases, una por parte del informe (`docs/fases/`). F1 suma el esqueleto desde `01_indice.yaml` (R19) y los pasos 1–2 del asistente; los títulos del índice pasan a español.
 Batería: 214 pruebas en verde con los dos corredores, sin red. `python -m tesis regresiones` → **3 de 33** (R3, R4, R6).
 Retorno F1: hechas las alternativas de etiqueta XBRL (`campos.py`) y el saldo medio de 52/53 semanas (`derivados.py`).
 Siguiente: R1 (4T = FY − 9M en `contraste.periodos_del_informe`), R2 (SG&A en una línea, hoy dos filas vacías) y

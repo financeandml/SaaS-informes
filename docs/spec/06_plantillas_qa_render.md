@@ -8,7 +8,7 @@
 - Los textos del analista se imprimen literales después de pasar el linter.
 
 ## 2. Linter de textos del analista (bloquea)
-Cifras del texto = Hechos (con tolerancia) o enlazadas a una evidencia · límites de palabras · palabras vetadas · inglés solo entre «» · sin «N/A», «pendiente» ni cifras sin unidad.
+Cifras del texto = Hechos (con tolerancia) o enlazadas a una evidencia · límites de palabras · palabras vetadas · sin inglés salvo las siglas y términos admitidos en 02 · sin «N/A», «pendiente» ni cifras sin unidad.
 
 ## 3. Puerta de calidad
 Bloqueos (impiden emitir):

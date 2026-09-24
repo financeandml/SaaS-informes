@@ -33,7 +33,8 @@ Mismo tema: barras `--azul` con etiqueta de valor, línea `--ocre` con marcadore
 ## Lenguaje
 - Español de España, formal, impersonal y factual. Sin adjetivos valorativos ni tono comercial; palabras vetadas en `config/estilo.yaml`.
 - Una cita por frase con hechos, tras el punto, en gris pequeño: «[10-K 2025, pág. 23]»; varias: «[Carta 2T26, pág. 2; 10-Q 2T26, pág. 27]». Los alias de documento se definen en 37.
-- Literales en su idioma, entre «», con página. Fuera de «» no hay inglés: países, industrias, cargos e ítems de 8-K se traducen con `config/traducciones.yaml`, y los nombres se limpian («Qualcomm Incorporated», no «Qualcomm Inc./De»; sin «Common Stock»).
+- Todo en español: informe, interfaz y documentación. Solo se mantienen siglas y términos técnicos de uso común en español (DCF, WACC, EBITDA, EBIT, FCF, ROE, ROIC, PER, PEG, KPI, TAM/SAM/SOM, CEO, CFO, 13F, capex, put/call). Países, industrias, cargos, tipos de operación e ítems de 8-K se traducen con `config/traducciones.yaml`; los nombres se limpian («Qualcomm Incorporated», no «Qualcomm Inc./De»; sin «Common Stock»).
+- Citas de documentos en inglés: en el cuerpo va la versión en español que escribe o valida el analista, con su página; el literal original solo aparece en el HTML al pasar el ratón y como recorte en 39.
 - Lo que dice la compañía, atribuido («la compañía prevé…»); lo que opina el analista, marcado como tal.
 - Prohibido en el cuerpo: «pendiente», rutas, comandos, etiquetas XBRL, nombres de APIs y mensajes de parser.
 - Frases ≤ 35 palabras (aviso desde 40); párrafos ≤ 6 frases.

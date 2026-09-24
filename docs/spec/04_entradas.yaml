@@ -8,6 +8,7 @@ convenciones:
   persistencia: "tesis/<TICKER>/<AAAA-MM-DD>/entradas.json, versionado; al emitir se guarda su huella"
   actualizacion: "un informe nuevo del mismo valor precarga el anterior y marca todo «revisar»"
   duplicados: "horizonte y tamaño se piden una sola vez"
+  idioma: "toda evidencia que se imprime lleva texto_es (versión en español del analista); el literal original, solo en el HTML y en 39"
 
 pasos:
   - paso: "1 · Metadatos y clasificación"
@@ -40,6 +41,7 @@ pasos:
           - {id: evidencias, tipo: evidencia, min: 2}
           - {id: kpi, tipo: ref, a: pos.kpis}
           - {id: riesgo_1a, tipo: ref, a: "epígrafes del Item 1A"}
+          - {id: riesgo_es, tipo: texto, palabras: "8-40", nota: "versión en español que se imprime"}
           - {id: catalizador, tipo: ref, a: catalizadores, oblig: false}
 
   - paso: "4 · Perfil, equipo y catalizadores (4–7)"
@@ -119,6 +121,7 @@ pasos:
         n: 5
         campos:
           - {id: origen, tipo: ref, a: "epígrafe del Item 1A o riesgo propio con evidencia"}
+          - {id: texto_es, tipo: texto, palabras: "8-40", nota: "versión en español que se imprime"}
           - {id: familia, tipo: enum, valores: [regulatorio, financiero, competitivo, ejecucion]}
           - {id: probabilidad, tipo: numero, rango: "1-5"}
           - {id: impacto, tipo: numero, rango: "1-5"}

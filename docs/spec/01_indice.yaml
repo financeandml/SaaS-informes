@@ -4,22 +4,22 @@
 version: 1
 reglas:
   - "Letras A–I consecutivas en orden de impresión; anclas parte-<letra> y ap-<n>."
-  - "Títulos literales. El formulario usa esta misma numeración (27–30)."
+  - "Títulos literales, en español. El formulario usa esta misma numeración (27–30)."
   - "Salto de página solo antes de cada parte. Sin notas sobre el orden de las partes."
   - "Fila o bloque que no aplica al sector o que la compañía no publica: no se imprime (no N/A)."
   - "Apartado que no aplica: «No aplica: <motivo>» con cita. Nunca vacío ni «pendiente»."
   - "Cuadros numerados correlativamente en orden de impresión («Cuadro N.»)."
 
 partes:
-  A: {titulo: "Resumen ejecutivo & contexto de la tesis"}
-  B: {titulo: "Perfil corporativo & modelo de negocio"}
-  C: {titulo: "Análisis fundamental & métricas financieras"}
-  D: {titulo: "Valoración & precio objetivo"}
-  E: {titulo: "Mercado objetivo & posicionamiento competitivo"}
-  F: {titulo: "Riesgos & due diligence"}
-  G: {titulo: "Tesis de inversión & gestión de la posición", subtitulo: "lo rellena el analista (formulario de posición)"}
-  H: {titulo: "Opciones, derivados & posicionamiento institucional", subtitulo: "bolsa (Nasdaq) y, para la IV, Yahoo Finance"}
-  I: {titulo: "Apéndices & herramientas"}
+  A: {titulo: "Resumen ejecutivo y contexto de la tesis"}
+  B: {titulo: "Perfil corporativo y modelo de negocio"}
+  C: {titulo: "Análisis fundamental y métricas financieras"}
+  D: {titulo: "Valoración y precio objetivo"}
+  E: {titulo: "Mercado objetivo y posicionamiento competitivo"}
+  F: {titulo: "Riesgos y diligencia debida"}
+  G: {titulo: "Tesis de inversión y gestión de la posición", subtitulo: "lo rellena el analista (formulario de posición)"}
+  H: {titulo: "Opciones, derivados y posicionamiento institucional", subtitulo: "bolsa (Nasdaq) y, para la volatilidad implícita, Yahoo Finance"}
+  I: {titulo: "Apéndices y herramientas"}
 
 portada:
   izquierda:
@@ -41,7 +41,7 @@ apartados:
       - "Cuadro Ficha (dato · valor · fuente): nombre de presentación y registral, ticker · bolsa, CIK · SIC, sector del analista y paquete DCF, constitución, sede, cierre fiscal descrito (p. ej. «último domingo de septiembre, 52/53 semanas»), fundación, empleados, auditor, acciones en circulación, free float, precio y cierre anterior, capitalización, rango 52 semanas, volumen medio 3 meses, últimas presentaciones"
   2:
     parte: A
-    titulo: "Resumen ejecutivo & contexto de la tesis"
+    titulo: "Resumen ejecutivo y contexto de la tesis"
     resp: mixto
     fuentes: [sec, nasdaq, motor, analista]
     entradas: [tesis.resumen, tesis.por_que_ahora, tesis.vision_vs_mercado]
@@ -53,12 +53,12 @@ apartados:
       - "Hitos: 8-K de los últimos 12 meses con los ítems traducidos"
   3:
     parte: A
-    titulo: "Investment case — los 5 pilares de la tesis"
+    titulo: "Caso de inversión — los 5 pilares de la tesis"
     resp: analista
     fuentes: [analista, sec]
     entradas: [pilares]
     bloques:
-      - "Exactamente 5 pilares: título, argumento con citas, KPI de seguimiento y recuadro «Riesgo (10-K, Item 1A): «literal»» con página"
+      - "Exactamente 5 pilares: título, argumento con citas, KPI de seguimiento y recuadro «Riesgo (10-K, Item 1A)» con la versión en español del analista y su página (literal, en el HTML)"
   4:
     parte: B
     titulo: "¿Qué hace la empresa? — Productos, servicios y mercados"
@@ -79,7 +79,7 @@ apartados:
       - "Clases de acciones y participaciones relevantes, si existen"
   6:
     parte: B
-    titulo: "Equipo directivo — CEO, CFO y principales ejecutivos; track record"
+    titulo: "Equipo directivo — CEO, CFO y principales ejecutivos; trayectoria"
     resp: mixto
     fuentes: [sec, analista]
     entradas: [equipo.track_record, equipo.asignacion_capital]
@@ -89,17 +89,17 @@ apartados:
       - "Track record y asignación de capital: juicio del analista con evidencias"
   7:
     parte: B
-    titulo: "Pipeline & catalizadores — Hoja de ruta, fechas clave y palancas de la tesis"
+    titulo: "Proyectos y catalizadores — Hoja de ruta, fechas clave y palancas de la tesis"
     resp: mixto
     fuentes: [nasdaq, sec, analista]
     entradas: [catalizadores, direccion.citas]
     bloques:
       - "Cuadro fechas clave: próximos resultados (Nasdaq, anunciada o estimada, siempre ≥ fecha del informe), junta, dividendo"
       - "Cuadro catalizadores: fecha o ventana, evento, pilar, impacto, probabilidad, fuente"
-      - "Lo que dijo la dirección: citas de la última call elegidas por el analista"
+      - "Lo que dijo la dirección: citas de la última call elegidas por el analista, en español (literal, en el HTML)"
   8:
     parte: C
-    titulo: "Estado de resultados — Ingresos, EBITDA, EBIT, margen operativo, margen neto y EPS"
+    titulo: "Estado de resultados — Ingresos, EBITDA, EBIT, margen operativo, margen neto y BPA"
     resp: sistema
     fuentes: [sec]
     entradas: [val.normalizaciones]
@@ -126,7 +126,7 @@ apartados:
       - "Recortes del estado de flujos"
   11:
     parte: C
-    titulo: "Rentabilidad & eficiencia — ROE, ROIC, ROA y márgenes"
+    titulo: "Rentabilidad y eficiencia — ROE, ROIC, ROA y márgenes"
     resp: sistema
     fuentes: [sec, motor]
     bloques:
@@ -135,7 +135,7 @@ apartados:
       - "ROIC frente a WACC, 5 años"
   12:
     parte: D
-    titulo: "Valoración intrínseca — DCF (Discounted Cash Flow)"
+    titulo: "Valoración intrínseca — DCF (descuento de flujos de caja)"
     resp: motor
     fuentes: [motor, sec, nasdaq, tesoro, analista]
     entradas: ["val.*", "wacc.*", "tv.*"]
@@ -168,7 +168,7 @@ apartados:
     bloques: ["Igual que 13"]
   16:
     parte: D
-    titulo: "Análisis de sensibilidad — WACC & crecimiento terminal"
+    titulo: "Análisis de sensibilidad — WACC y crecimiento terminal"
     resp: motor
     bloques:
       - "Matriz 5×5 WACC × g del escenario base (05 §8), celda base marcada y color frente al precio"
@@ -186,22 +186,22 @@ apartados:
       - "Valor implícito por acción (mediana de comparables y múltiplos objetivo justificados), solo como contraste"
   18:
     parte: D
-    titulo: "Reverse DCF — Expectativas implícitas en el precio actual"
+    titulo: "DCF inverso — Expectativas implícitas en el precio actual"
     resp: motor
     bloques:
       - "Crecimiento de ingresos implícito, margen terminal implícito y crecimiento constante del FCFF implícito, frente al escenario base y al histórico de 5 años"
   19:
     parte: D
-    titulo: "Valoración por SOTP — Sum-of-the-Parts (cuando aplique)"
+    titulo: "Valoración por suma de partes (SOTP, cuando aplique)"
     resp: mixto
     entradas: [sotp.aplica, sotp.segmentos]
     aplica: "≥ 2 segmentos con resultado operativo en XBRL y sotp.aplica"
-    si_no_aplica: "Motivo y cita literal de la nota de segmentos (p. ej. «one operating segment»)"
+    si_no_aplica: "Motivo en español con la cita de la nota de segmentos (literal, en el HTML)"
     bloques:
       - "Cuadro por segmento: métrica, múltiplo o método, justificación, valor; costes corporativos; puente; por acción; frente al DCF"
   20:
     parte: D
-    titulo: "Precio objetivo & margen de seguridad — Valor razonable, upside/downside y consenso"
+    titulo: "Precio objetivo y margen de seguridad — Valor razonable, potencial alcista y bajista, y consenso"
     resp: motor
     fuentes: [motor, nasdaq]
     bloques:
@@ -228,7 +228,7 @@ apartados:
       - "Gráfico crecimiento frente a margen"
   23:
     parte: E
-    titulo: "Ventajas competitivas & moat — Barreras de entrada y sostenibilidad"
+    titulo: "Ventajas competitivas y foso defensivo — Barreras de entrada y sostenibilidad"
     resp: analista
     entradas: [moat.fuentes, moat.amenazas]
     bloques:
@@ -242,10 +242,10 @@ apartados:
     entradas: [riesgos.top]
     bloques:
       - "Matriz probabilidad × impacto de los 5 riesgos del analista, con mitigante y señal temprana"
-      - "Cuadros por familia con los epígrafes literales del Item 1A y su página (clasificación por reglas, corregible)"
+      - "Recuento por familia de los riesgos del Item 1A (clasificación por reglas, corregible); epígrafes literales solo en el HTML y en 39"
   25:
     parte: F
-    titulo: "Bear case — Qué tendría que salir mal para invalidar la tesis"
+    titulo: "Caso bajista — Qué tendría que salir mal para invalidar la tesis"
     resp: mixto
     entradas: [bear.disparadores]
     bloques:
@@ -270,7 +270,7 @@ apartados:
     bloques: ["Argumento literal, asunciones con su driver y umbral, horizonte"]
   28:
     parte: G
-    titulo: "Checklist de entrada — Criterios mínimos antes de abrir posición"
+    titulo: "Lista de comprobación de entrada — Criterios mínimos antes de abrir posición"
     resp: mixto
     entradas: [pos.checklist]
     bloques: ["Cuadro criterio · tipo · ¿cumplido? · evidencia, con recuento sí/no/parcial sin maquillar"]
@@ -285,13 +285,13 @@ apartados:
       - "Volatilidad: realizada 1 año, IV ATM 30 días, máximo drawdown 1 y 3 años, beta"
   30:
     parte: G
-    titulo: "Seguimiento post-entrada — KPIs, fechas de revisión y criterios de salida"
+    titulo: "Seguimiento tras la entrada — KPI, fechas de revisión y criterios de salida"
     resp: mixto
     entradas: [pos.kpis, pos.fechas_revision, pos.salida]
     bloques: ["Cuadro KPIs (actual, verde, rojo, fuente, frecuencia); fechas de revisión; criterios de salida"]
   31:
     parte: H
-    titulo: "Cadena de opciones — Put/Call Ratio, volumen y sesgo implícito"
+    titulo: "Cadena de opciones — Ratio put/call, volumen y sesgo implícito"
     resp: sistema
     fuentes: [nasdaq]
     bloques:
@@ -299,7 +299,7 @@ apartados:
       - "Strikes con más OI y max pain del vencimiento mensual más próximo"
   32:
     parte: H
-    titulo: "Posicionamiento en derivados — IV, Open Interest (Put/Call ratio), volumen y sesgo implícito"
+    titulo: "Posicionamiento en derivados — Volatilidad implícita, interés abierto (ratio put/call), volumen y sesgo implícito"
     resp: sistema
     fuentes: [nasdaq, yahoo_iv]
     bloques:
@@ -317,7 +317,7 @@ apartados:
       - "Titulares ≥ 5 % según 13D/13G"
   34:
     parte: H
-    titulo: "Insider activity — Compras, ventas y participación del management"
+    titulo: "Operaciones de directivos — Compras, ventas y participación de la dirección"
     resp: sistema
     fuentes: [nasdaq, sec]
     bloques:
@@ -326,13 +326,13 @@ apartados:
       - "Participación del management (proxy)"
   35:
     parte: H
-    titulo: "Posicionamiento en corto — Short Interest & Days to Cover"
+    titulo: "Posicionamiento en corto — Interés en corto y días para cubrir"
     resp: sistema
     fuentes: [nasdaq]
     bloques: ["12 fechas de liquidación: interés en corto, volumen medio, días para cubrir, % de acciones en circulación; tendencia"]
   36:
     parte: I
-    titulo: "Modelo financiero & supuestos detallados"
+    titulo: "Modelo financiero y supuestos detallados"
     resp: motor
     bloques:
       - "Todas las entradas: valor, unidad, origen y autor"
@@ -340,12 +340,12 @@ apartados:
       - "Excel exportado (nombre y huella) y, si lo hubo, comparación con el del analista"
   37:
     parte: I
-    titulo: "Fuentes & referencias"
+    titulo: "Fuentes y referencias"
     resp: sistema
     bloques: ["Documentos (tipo, periodo, fecha, nº de registro, verificado en EDGAR, huella), APIs (URL, hora, huella) y versión del fichero de entradas"]
   38:
     parte: I
-    titulo: "Datos complementarios & notas metodológicas"
+    titulo: "Datos complementarios y notas metodológicas"
     resp: sistema
     bloques:
       - "Recuento por estado de verificación"
@@ -358,4 +358,4 @@ apartados:
     resp: sistema
     bloques:
       - "Recortes por apartado, en el orden del índice"
-      - "Extractos literales de las APIs limitados a los campos usados, con URL, hora y huella del cuerpo completo guardado en disco"
+      - "Por cada fuente consultada: URL, hora, huella y campos usados con su valor, en un cuadro en español (la respuesta completa queda en disco)"
