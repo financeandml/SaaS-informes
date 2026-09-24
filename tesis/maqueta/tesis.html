@@ -84,23 +84,23 @@
 <h2>Índice</h2>
 <ol>
 {% for s in i.indice %}
-  <li class="parte"><a href="#parte-{{ s.letra }}">{{ s.letra }}. {{ s.titulo }}</a>{% if s.estado %}<span class="estado">{% if s.estado == 'pendiente' %}pendiente{% elif s.estado == 'parcial' %}parcial: lo que publica la bolsa{% elif s.estado == 'bolsa' %}bolsa (Nasdaq) y, para la IV, Yahoo Finance{% elif s.estado == 'analista' %}lo rellena el analista (formulario de posición){% endif %}</span>{% endif %}</li>
+  <li class="parte"><a href="#parte-{{ s.letra }}">{{ s.letra }}. {{ s.titulo }}</a>{% if s.estado == 'parcial' %}<span class="estado">parcial: lo que publica la bolsa</span>{% elif s.subtitulo %}<span class="estado">{{ s.subtitulo }}</span>{% endif %}</li>
   {% for numero, nombre in s.apartados %}<li class="sub"><a href="#ap-{{ numero }}">{{ numero }}. {{ nombre }}</a></li>{% endfor %}
 {% endfor %}
 </ol>
-<p class="muted" style="font-size:7.5pt">Cada entrada enlaza con su apartado. La sección F se imprime penúltima por decisión del analista (17/09/2026) y los apartados se numeran por orden de impresión; la documentación complementaria (recortes de las páginas citadas y respuestas literales de las fuentes) va al final, salvo las cuentas de los estados financieros, que acompañan a sus cuadros.</p>
+<p class="muted" style="font-size:7.5pt">Cada entrada enlaza con su apartado; la documentación complementaria (recortes de las páginas citadas y respuestas literales de las fuentes) va al final, salvo las cuentas de los estados financieros, que acompañan a sus cuadros.</p>
 </section>
 
 <!-- ============================== A ============================== -->
 <section class="hoja">
-<h2 id="parte-A">A. Resumen ejecutivo &amp; contexto de la tesis</h2>
-<h3 id="ap-1">1. Ficha de empresa</h3>
+<h2 id="parte-{{ i.indice[0].letra }}">{{ i.indice[0].letra }}. {{ i.indice[0].titulo }}</h2>
+<h3 id="ap-{{ i.numeros['1'] }}">{{ i.numeros['1'] }}. {{ i.titulos['1'] }}</h3>
 <div class="cuadro"><div class="rotulo">Ficha</div>
 <table class="texto-tabla"><thead><tr><th>Dato</th><th>Valor</th><th>Fuente</th></tr></thead><tbody>
 {% for d in i.ficha %}<tr><td>{{ d.rotulo }}</td><td class="{{ d.clase }}">{{ d.texto }}</td><td class="muted">{{ d.fuente }}</td></tr>{% endfor %}
 </tbody></table><div class="fuente">Identidad: SEC EDGAR (submissions). Cifras de portada y texto: 10-K adjunto, con página. El valor en manos de no afiliados es el de la portada del 10-K a su fecha; no es la capitalización. Recortes de las páginas citadas: apartado {{ i.numeros['40'] }}.</div></div>
 
-<h3 id="ap-2">2. Resumen ejecutivo &amp; contexto de la tesis</h3>
+<h3 id="ap-{{ i.numeros['2'] }}">{{ i.numeros['2'] }}. {{ i.titulos['2'] }}</h3>
 {% if i.narrativa %}
 {% for parrafo in i.narrativa.resumen %}<p>{% for f in parrafo %}{{ f.texto }} <span class="cita">[{{ f.cita }}]</span> {% endfor %}</p>{% else %}<p class="na">Ningún párrafo del resumen superó la verificación (apéndice {{ i.numeros['39'] }}).</p>{% endfor %}
 {% else %}
@@ -110,7 +110,7 @@
 <h4>Contexto: últimos hitos (8-K de los últimos doce meses)</h4>
 <ul class="compacta">{% for h in i.hitos %}<li>{{ h.fecha.strftime("%d/%m/%Y") }} · 8-K · {{ h.descripcion }} <span class="muted">({{ h.epigrafes }})</span></li>{% else %}<li class="na">Ningún 8-K en los últimos doce meses.</li>{% endfor %}</ul>
 
-<h3 id="ap-3">3. Investment case — los 5 pilares de la tesis</h3>
+<h3 id="ap-{{ i.numeros['3'] }}">{{ i.numeros['3'] }}. {{ i.titulos['3'] }}</h3>
 {% if i.narrativa and i.narrativa.pilares %}{% for p in i.narrativa.pilares %}<div class="bloque"><span class="ante">{{ loop.index }}. {{ p.titulo }}</span><p>{% for f in p.frases %}{{ f.texto }} <span class="cita">[{{ f.cita }}]</span> {% endfor %}</p>{% if p.riesgo %}<p class="riesgo">{{ p.riesgo.texto }} <span class="cita">[{{ p.riesgo.cita }}]</span></p>{% else %}<p class="na">Riesgo del Item 1A: N/A (no citado o retirado; apéndice {{ i.numeros['39'] }}).</p>{% endif %}</div>{% endfor %}
 {% if i.narrativa.pilares|length != 5 %}<p class="na">El índice pide 5 pilares; se imprimen {{ i.narrativa.pilares|length }} (apéndice {{ i.numeros['39'] }}).</p>{% endif %}
 {% else %}
@@ -119,19 +119,19 @@
 
 <!-- ============================== B ============================== -->
 <section class="hoja">
-<h2 id="parte-B">B. Perfil corporativo &amp; modelo de negocio</h2>
-<h3 id="ap-4">4. ¿Qué hace la empresa? — Productos, servicios y mercados</h3>
+<h2 id="parte-{{ i.indice[1].letra }}">{{ i.indice[1].letra }}. {{ i.indice[1].titulo }}</h2>
+<h3 id="ap-{{ i.numeros['4'] }}">{{ i.numeros['4'] }}. {{ i.titulos['4'] }}</h3>
 {% if i.descripcion %}<p>{{ i.descripcion.texto }} <span class="muted">[{{ i.descripcion.origen.documento }}, pág. {{ i.descripcion.origen.pagina }}]</span></p>{% endif %}
 <div class="dos">
   <div>{{ cuadro(i.regiones) }}</div>
   <div class="grafico"><div class="rotulo">{{ i.regiones.titulo }}</div>{% if i.grafico_regiones %}{{ i.grafico_regiones|safe }}{% else %}<p class="na">N/A</p>{% endif %}<div class="fuente">{{ i.regiones.fuente }}</div></div>
 </div>
 
-<h3 id="ap-5">5. Estructura corporativa — Accionariado, filiales y participaciones</h3>
+<h3 id="ap-{{ i.numeros['5'] }}">{{ i.numeros['5'] }}. {{ i.titulos['5'] }}</h3>
 {{ cuadro(i.accionistas, True) }}
 {{ cuadro(i.filiales, True) }}
 
-<h3 id="ap-6">6. Equipo directivo — CEO, CFO y principales ejecutivos; track record</h3>
+<h3 id="ap-{{ i.numeros['6'] }}">{{ i.numeros['6'] }}. {{ i.titulos['6'] }}</h3>
 {{ cuadro(i.ejecutivos, True) }}
 {{ cuadro(i.retribucion) }}
 <h4>Ejecutivos: retrato y trayectoria (fichas biográficas de la proxy, literales)</h4>
@@ -149,7 +149,7 @@
 </div>{% endfor %}</div>{% else %}<p class="na">N/A — sin fichas de consejeros en la proxy adjunta.</p>{% endif %}
 <p class="muted" style="font-size:7.5pt">Track record como juicio (aciertos y errores de gestión): del analista, en su fichero de posición. Operaciones de insiders (Form 4): apartado {{ i.numeros['28'] }}.</p>
 
-<h3 id="ap-7">7. Pipeline &amp; catalizadores — Hoja de ruta, fechas clave y palancas de la tesis</h3>
+<h3 id="ap-{{ i.numeros['7'] }}">{{ i.numeros['7'] }}. {{ i.titulos['7'] }}</h3>
 <p>Objetivos vigentes de la compañía: véase el <b>Cuadro {{ i.objetivos.numero }}</b> (apartado 2). Palancas de la tesis: juicio del analista, enlazadas a los pilares del apartado 3.</p>
 <h4>Lo que la dirección dijo en la conferencia de resultados</h4>
 <ul class="compacta">{% for c in i.citas_call %}<li>«{{ c.texto }}» <span class="muted">[{{ c.origen.documento }}, pág. {{ c.origen.pagina }}; {{ c.nota }}]</span></li>{% else %}<li class="na">N/A — sin transcripción en el expediente o sin frases de previsión reconocibles.</li>{% endfor %}</ul>
@@ -160,32 +160,32 @@
 
 <!-- ============================== C ============================== -->
 <section class="hoja">
-<h2 id="parte-C">C. Análisis fundamental &amp; métricas financieras</h2>
+<h2 id="parte-{{ i.indice[2].letra }}">{{ i.indice[2].letra }}. {{ i.indice[2].titulo }}</h2>
 <div class="dos">
   <div class="grafico"><div class="rotulo">Ingresos y margen operativo</div>{{ i.grafico_ingresos|safe }}<div class="fuente">Fuente: SEC EDGAR y adjuntos, contrastados. Los mismos hechos que el cuadro {{ i.resultados.numero }}.</div></div>
   <div class="grafico"><div class="rotulo">Deuda neta y deuda neta / EBITDA</div>{{ i.grafico_deuda|safe }}<div class="fuente">Fuente: cuadros {{ i.balance.numero }} y {{ i.resultados.numero }}.</div></div>
 </div>
-<h3 id="ap-8">8. Estado de resultados — Ingresos, EBITDA, EBIT, margen operativo, margen neto y EPS</h3>
+<h3 id="ap-{{ i.numeros['8'] }}">{{ i.numeros['8'] }}. {{ i.titulos['8'] }}</h3>
 {{ cuadro(i.resultados) }}
-<h3 id="ap-9">9. Balance de situación — Activos, deuda neta, caja, patrimonio neto</h3>
+<h3 id="ap-{{ i.numeros['9'] }}">{{ i.numeros['9'] }}. {{ i.titulos['9'] }}</h3>
 {{ cuadro(i.balance) }}
-<h3 id="ap-10">10. Flujo de caja — FCF, capex, dividendos y recompras</h3>
+<h3 id="ap-{{ i.numeros['10'] }}">{{ i.numeros['10'] }}. {{ i.titulos['10'] }}</h3>
 {{ cuadro(i.flujo) }}
-<h3 id="ap-11">11. Rentabilidad &amp; eficiencia — ROE, ROIC, ROA y márgenes</h3>
+<h3 id="ap-{{ i.numeros['11'] }}">{{ i.numeros['11'] }}. {{ i.titulos['11'] }}</h3>
 {{ cuadro(i.rentabilidad) }}
 {% if i.rentabilidad_ttm %}{{ cuadro(i.rentabilidad_ttm, True) }}{% endif %}
 </section>
 
 <!-- ============================== D ============================== -->
 <section class="hoja">
-<h2 id="parte-D">D. Valoración &amp; precio objetivo</h2>
+<h2 id="parte-{{ i.indice[3].letra }}">{{ i.indice[3].letra }}. {{ i.indice[3].titulo }}</h2>
 <p class="muted" style="font-size:7.5pt">Fuente de la sección: el libro de valoración del analista{% if i.dcf.get('modelo') %} (<b>{{ i.dcf['modelo'].nombre }}</b>; hojas: {{ i.dcf['modelo'].hojas|join(', ') }}){% endif %}. El sistema lo lee por rótulo, imprime cada cifra con su celda de origen y cuadra sus entradas con el dato oficial más reciente; no recalcula la valoración.</p>
 {% if not i.dcf.get('modelo') %}
 <div class="pendiente"><b>Sin libro de valoración.</b> {{ i.dcf['faltan'].get('libro', 'El analista no ha adjuntado su DCF.') }} Cuando lo adjunte (<code>--dcf modelo.xlsx</code>), los apartados {{ i.numeros['12'] }}–{{ i.numeros['20'] }} se rellenan solos con este esquema: hoja de supuestos (rótulo · valor · origen), una hoja por escenario con la fila de años y las filas de proyección y valoración, sensibilidad WACC × g, reverse DCF y resumen (escenarios, referencias de precio, múltiplos, precio objetivo).</div>
-<h3 id="ap-{{ i.numeros['17'] }}">{{ i.numeros['17'] }}. Valoración por múltiplos — PER, EV/EBITDA, EV/Ventas, P/FCF, PEG</h3>
+<h3 id="ap-{{ i.numeros['17'] }}">{{ i.numeros['17'] }}. {{ i.titulos['17'] }}</h3>
 {% if i.dcf.get('multiplos_sec') %}{{ cuadro(i.dcf['multiplos_sec'], True) }}{% else %}<p class="na">N/A — sin cifras TTM o sin cotización oficial.</p>{% endif %}
 {% else %}
-<h3 id="ap-{{ i.numeros['12'] }}">{{ i.numeros['12'] }}. Valoración intrínseca — DCF (Discounted Cash Flow)</h3>
+<h3 id="ap-{{ i.numeros['12'] }}">{{ i.numeros['12'] }}. {{ i.titulos['12'] }}</h3>
 {{ cuadro(i.dcf['escenarios']) }}
 {{ cuadro(i.dcf['cuadre'], True) }}
 {% if i.dcf['cuadres']|selectattr('contraste.value', 'equalto', '≠')|list %}<div class="aviso"><b>Entradas del libro que difieren del dato oficial más reciente:</b> {% for c in i.dcf['cuadres'] if c.contraste.value == '≠' %}{{ c.rotulo_modelo }} — {{ c.nota }}{% if not loop.last %}; {% endif %}{% endfor %}. El informe se rige por el dato oficial (columna «Rige en el informe» del cuadro {{ i.dcf['cuadre'].numero }}) en la capitalización y en los múltiplos del apartado {{ i.numeros['17'] }}; las valoraciones que siguen son las del libro tal cual las entregó el analista.</div>{% endif %}
@@ -193,21 +193,21 @@
 </section>
 {% for nombre, c in i.dcf.get('detalle_escenarios', []) %}
 <section class="hoja">
-<h3 id="ap-{{ i.numeros['13'] if nombre == 'pesimista' else (i.numeros['14'] if nombre == 'base' else i.numeros['15']) }}">{{ i.numeros['13'] if nombre == 'pesimista' else (i.numeros['14'] if nombre == 'base' else i.numeros['15']) }}. Escenario {{ nombre }} — Supuestos, FCF y valoración</h3>
+<h3 id="ap-{{ i.numeros['13'] if nombre == 'pesimista' else (i.numeros['14'] if nombre == 'base' else i.numeros['15']) }}">{{ i.numeros['13'] if nombre == 'pesimista' else (i.numeros['14'] if nombre == 'base' else i.numeros['15']) }}. {{ i.titulos['13'] if nombre == 'pesimista' else (i.titulos['14'] if nombre == 'base' else i.titulos['15']) }}</h3>
 {{ cuadro(c) }}
 </section>
 {% endfor %}
 <section class="hoja">
-<h3 id="ap-{{ i.numeros['16'] }}">{{ i.numeros['16'] }}. Análisis de sensibilidad — WACC &amp; crecimiento terminal</h3>
+<h3 id="ap-{{ i.numeros['16'] }}">{{ i.numeros['16'] }}. {{ i.titulos['16'] }}</h3>
 {% if i.dcf.get('sensibilidad') %}{{ cuadro(i.dcf['sensibilidad']) }}{% else %}<p class="na">N/A — {{ i.dcf['faltan'].get('sensibilidad', 'el libro no trae la matriz') }}</p>{% endif %}
-<h3 id="ap-{{ i.numeros['17'] }}">{{ i.numeros['17'] }}. Valoración por múltiplos — PER, EV/EBITDA, EV/Ventas, P/FCF, PEG</h3>
+<h3 id="ap-{{ i.numeros['17'] }}">{{ i.numeros['17'] }}. {{ i.titulos['17'] }}</h3>
 {% if i.dcf.get('multiplos') %}{{ cuadro(i.dcf['multiplos'], True) }}{% else %}<p class="na">Múltiplos del libro: N/A — {{ i.dcf['faltan'].get('multiplos', 'el libro no trae el bloque de múltiplos') }}</p>{% endif %}
 {% if i.dcf.get('multiplos_sec') %}{{ cuadro(i.dcf['multiplos_sec'], True) }}{% else %}<p class="na">Múltiplos sobre la SEC: N/A — sin cifras TTM o sin cotización oficial.</p>{% endif %}
-<h3 id="ap-{{ i.numeros['18'] }}">{{ i.numeros['18'] }}. Reverse DCF — Expectativas implícitas en el precio actual</h3>
+<h3 id="ap-{{ i.numeros['18'] }}">{{ i.numeros['18'] }}. {{ i.titulos['18'] }}</h3>
 {% if i.dcf.get('reverse') %}{{ cuadro(i.dcf['reverse'], True) }}{% if i.dcf.get('reverse_flujos') %}{{ cuadro(i.dcf['reverse_flujos']) }}{% endif %}{% else %}<p class="na">N/A — {{ i.dcf['faltan'].get('reverse', 'el libro no trae reverse DCF') }}</p>{% endif %}
-<h3 id="ap-{{ i.numeros['19'] }}">{{ i.numeros['19'] }}. Valoración por SOTP — Sum-of-the-Parts (cuando aplique)</h3>
+<h3 id="ap-{{ i.numeros['19'] }}">{{ i.numeros['19'] }}. {{ i.titulos['19'] }}</h3>
 {% if i.segmento_unico %}<p>No aplica: el 10-K declara un único segmento operativo — «{{ i.segmento_unico.texto }}» <span class="cita">[{{ i.segmento_unico.origen.documento }}, pág. {{ i.segmento_unico.origen.pagina }}]</span>. Sin partes separables no hay suma de partes que valorar.</p>{% else %}<p class="na">N/A — el 10-K adjunto no declara el número de segmentos operativos con una frase reconocible; el analista decide si aplica.</p>{% endif %}
-<h3 id="ap-{{ i.numeros['20'] }}">{{ i.numeros['20'] }}. Precio objetivo &amp; margen de seguridad — Valor razonable, upside/downside y consenso</h3>
+<h3 id="ap-{{ i.numeros['20'] }}">{{ i.numeros['20'] }}. {{ i.titulos['20'] }}</h3>
 {{ cuadro(i.dcf['objetivo'], True) }}
 <div class="conclusion"><span class="ante">Lectura:</span> las columnas «sobre precio de entrada» y «sobre precio de mercado del libro» son las que calcula el libro con el precio que el analista tecleó en él{% if i.dcf['modelo'].supuesto('precio de mercado') %} ({{ usd(i.dcf['modelo'].supuesto('precio de mercado').valor) }}; origen según el libro: «{{ i.dcf['modelo'].supuesto('precio de mercado').origen }}»){% endif %}. {% if i.precio.hay_dato %}La cotización oficial del informe es {{ usd(i.precio.valor) }} (apartado 1) y la última columna es el recorrido de cada valor sobre ella.{% else %}La cotización oficial del informe es N/A ({{ i.precio.motivo }}): el margen de seguridad frente al precio oficial queda pendiente de configurar la fuente de cotización.{% endif %} Las filas de consenso son, primero, el que el analista anotó en su libro y, después, el que publica la bolsa (precio objetivo medio, recuento de recomendaciones y rango) junto al «1 Year Target» de su ficha del valor: dos cifras de la misma bolsa para el mismo hecho, y se imprimen las dos. El consenso de estimaciones de la portada de la transcripción está en el apartado {{ i.numeros['32'] }}.</div>
 {% if i.posicion and (i.posicion.precio_entrada is not none or i.posicion.precio_objetivo is not none) %}<p><b>Posición del analista</b> (fichero {{ i.posicion.fichero.name }}): entrada {% if i.posicion.precio_entrada is not none %}{{ usd(i.posicion.precio_entrada) }}{% else %}N/A{% endif %}{% if i.posicion.fecha_entrada %} el {{ i.posicion.fecha_entrada.strftime('%d/%m/%Y') }}{% endif %} · tamaño {{ texto_s(i.posicion.tamano, 'sin rellenar') }} · horizonte {{ texto_s(i.posicion.horizonte, 'sin rellenar') }} · objetivo {% if i.posicion.precio_objetivo is not none %}{{ usd(i.posicion.precio_objetivo) }}{% else %}N/A{% endif %}.</p>{% endif %}
@@ -216,34 +216,34 @@
 
 <!-- ============================== E ============================== -->
 <section class="hoja">
-<h2 id="parte-E">E. Mercado objetivo &amp; posicionamiento competitivo</h2>
-<h3 id="ap-{{ i.numeros['21'] }}">{{ i.numeros['21'] }}. Tamaño de mercado — TAM / SAM / SOM</h3>
+<h2 id="parte-{{ i.indice[4].letra }}">{{ i.indice[4].letra }}. {{ i.indice[4].titulo }}</h2>
+<h3 id="ap-{{ i.numeros['21'] }}">{{ i.numeros['21'] }}. {{ i.titulos['21'] }}</h3>
 {{ bloque_texto('21') }}
 {% if i.mercado_cuadro %}{{ cuadro(i.mercado_cuadro, True) }}{% else %}<p class="na">TAM · SAM · SOM: N/A — {{ i.mercado_faltan.values()|join('; ') }}</p>{% endif %}
-<h3 id="ap-{{ i.numeros['22'] }}">{{ i.numeros['22'] }}. Análisis competitivo — Competidores, cuotas de mercado y comparables</h3>
+<h3 id="ap-{{ i.numeros['22'] }}">{{ i.numeros['22'] }}. {{ i.titulos['22'] }}</h3>
 {{ bloque_texto('22') }}
 {% if i.comparables_cuadro %}{{ cuadro(i.comparables_cuadro) }}{% else %}<p class="na">Comparables según la bolsa: N/A — {{ i.comparables_faltan.values()|join('; ') }}</p>{% endif %}
 {% if i.comparables_sic_cuadro %}{{ cuadro(i.comparables_sic_cuadro) }}{% elif i.comparables_faltan.get('sic') or i.comparables_faltan.get('sic_comparables') %}<p class="na">Comparables según la SEC: N/A — {{ i.comparables_faltan.get('sic', i.comparables_faltan.get('sic_comparables')) }}</p>{% endif %}
 <p class="muted" style="font-size:7.5pt">Las dos fuentes oficiales clasifican por industria (bolsa) o por actividad (SIC de la SEC), no por competencia: los cuadros dicen con quién agrupa cada una a la compañía, y el texto de arriba lo que el 10-K dice de sus competidores. Las cuotas de mercado de terceros no están en ningún documento oficial adjunto.</p>
-<h3 id="ap-{{ i.numeros['23'] }}">{{ i.numeros['23'] }}. Ventajas competitivas &amp; moat — Barreras de entrada y sostenibilidad</h3>
+<h3 id="ap-{{ i.numeros['23'] }}">{{ i.numeros['23'] }}. {{ i.titulos['23'] }}</h3>
 {{ bloque_texto('23') }}
 </section>
 
 <!-- ============================== G ============================== -->
 <section class="hoja">
-<h2 id="parte-G">G. Riesgos &amp; due diligence</h2>
-<h3 id="ap-{{ i.numeros['30'] }}">{{ i.numeros['30'] }}. Riesgos principales — Regulatorio, financiero, competitivo y ejecución</h3>
+<h2 id="parte-{{ i.indice[5].letra }}">{{ i.indice[5].letra }}. {{ i.indice[5].titulo }}</h2>
+<h3 id="ap-{{ i.numeros['30'] }}">{{ i.numeros['30'] }}. {{ i.titulos['30'] }}</h3>
 {% if i.riesgos_cuadros %}
 <p class="muted" style="font-size:7.5pt">Los epígrafes son los del Item 1A del 10-K, literales y completos, leídos por su tipografía (negrita) y con su página. La familia (regulatorio · financiero · competitivo · ejecución) es clasificación del sistema; su motivo y su certeza, en el atributo de cada epígrafe del HTML emitido junto a este PDF. Un epígrafe rotulado «superado» se refiere a una operación que un 10-Q posterior da por terminada.</p>
 {% for fam in ('regulatorio', 'financiero', 'competitivo', 'ejecución') %}{{ cuadro(i.riesgos_cuadros[fam], True) }}{% endfor %}
 {% else %}<p class="na">N/A — {{ i.riesgos_faltan.values()|join('; ') }}</p>{% endif %}
 </section>
 <section class="hoja">
-<h3 id="ap-{{ i.numeros['31'] }}">{{ i.numeros['31'] }}. Bear case — Qué tendría que salir mal para invalidar la tesis</h3>
+<h3 id="ap-{{ i.numeros['31'] }}">{{ i.numeros['31'] }}. {{ i.titulos['31'] }}</h3>
 {% if i.narrativa and i.narrativa.pilares %}<p class="muted" style="font-size:7.5pt">Primero, el riesgo del Item 1A que el apartado {{ i.numeros['3'] }} asocia a cada pilar; después, lo que los adjuntos dicen sobre lo que podría salir mal.</p>
 <ul class="compacta">{% for p in i.narrativa.pilares %}<li><b>{{ p.titulo }}</b> — {% if p.riesgo %}{{ p.riesgo.texto }} <span class="cita">[{{ p.riesgo.cita }}]</span>{% else %}<span class="na">sin riesgo citado</span>{% endif %}</li>{% endfor %}</ul>{% endif %}
 {{ bloque_texto('31') }}
-<h3 id="ap-{{ i.numeros['32'] }}">{{ i.numeros['32'] }}. Historial de resultados — ¿Ha fallado antes? Causas y aprendizajes</h3>
+<h3 id="ap-{{ i.numeros['32'] }}">{{ i.numeros['32'] }}. {{ i.titulos['32'] }}</h3>
 {% if i.historial_cuadros.get('guias') %}{{ cuadro(i.historial_cuadros['guias'], True) }}{% else %}<p class="na">Previsión de la compañía frente a real, trimestres anteriores: N/A — {{ i.historial_faltan.get('guias_anteriores', 'sin cartas anteriores') }}</p>{% endif %}
 {% if i.historial_cuadros %}
 {{ cuadro(i.historial_cuadros['sorpresas'], True) }}
@@ -256,60 +256,60 @@
 
 <!-- ============================== H ============================== -->
 <section class="hoja">
-<h2 id="parte-H">H. Tesis de inversión &amp; gestión de la posición</h2>
+<h2 id="parte-{{ i.indice[6].letra }}">{{ i.indice[6].letra }}. {{ i.indice[6].titulo }}</h2>
 <p class="muted" style="font-size:7.5pt">Esta sección la escribe el analista en el formulario de posición (<code>python -m tesis.formulario {{ i.ticker }}</code>, que guarda <code>posiciones/{{ i.ticker }}.json</code>); el informe la imprime tal cual y rotula N/A lo que falte.{% if i.posicion and i.posicion.analista %} Analista: <b>{{ i.posicion.analista }}</b>{% if i.posicion.fecha %}, {{ i.posicion.fecha.strftime('%d/%m/%Y') }}{% endif %}.{% endif %}</p>
 {% set pos = i.posicion %}
-<h3 id="ap-{{ i.numeros['33'] }}">{{ i.numeros['33'] }}. Tesis de inversión consolidada — Argumento, asunciones clave y horizonte temporal</h3>
+<h3 id="ap-{{ i.numeros['33'] }}">{{ i.numeros['33'] }}. {{ i.titulos['33'] }}</h3>
 {% if pos %}<p>{{ texto_s(pos.argumento, i.posicion_faltan.get('33 · argumento', '')) }}</p>
 <h4>Asunciones clave</h4><ul class="compacta">{% for a in pos.asunciones %}<li>{{ a }}</li>{% else %}<li class="na">N/A — {{ i.posicion_faltan.get('33 · asunciones clave', '') }}</li>{% endfor %}</ul>
 <p>Horizonte temporal: {{ texto_s(pos.horizonte, i.posicion_faltan.get('33 · horizonte temporal', '')) }}</p>
 {% else %}<p class="na">N/A — {{ i.posicion_faltan.get('fichero', '') }}</p>{% endif %}
-<h3 id="ap-{{ i.numeros['34'] }}">{{ i.numeros['34'] }}. Checklist de entrada — Criterios mínimos antes de abrir posición</h3>
+<h3 id="ap-{{ i.numeros['34'] }}">{{ i.numeros['34'] }}. {{ i.titulos['34'] }}</h3>
 {% if pos and pos.checklist %}<div class="cuadro"><table class="texto-tabla"><thead><tr><th>Criterio</th><th>¿Cumplido?</th><th>Evidencia (del analista)</th></tr></thead><tbody>
 {% for c in pos.checklist %}<tr><td>{{ c.criterio }}</td><td>{% if c.cumplido is none %}<span class="na">sin evaluar</span>{% elif c.cumplido %}sí{% else %}no{% endif %}</td><td class="muted">{{ c.evidencia or '—' }}</td></tr>{% endfor %}
 </tbody></table><div class="fuente">Fuente: fichero de posición del analista.</div></div>{% else %}<p class="na">N/A — {{ i.posicion_faltan.get('34 · checklist de entrada', i.posicion_faltan.get('fichero', '')) }}</p>{% endif %}
-<h3 id="ap-{{ i.numeros['35'] }}">{{ i.numeros['35'] }}. Gestión del riesgo — Invalidación de tesis, tamaño de posición y volatilidad</h3>
+<h3 id="ap-{{ i.numeros['35'] }}">{{ i.numeros['35'] }}. {{ i.titulos['35'] }}</h3>
 {% if pos %}<h4>Qué invalida la tesis</h4><ul class="compacta">{% for x in pos.invalidacion %}<li>{{ x }}</li>{% else %}<li class="na">N/A — {{ i.posicion_faltan.get('35 · invalidación de la tesis', '') }}</li>{% endfor %}</ul>
 <p>Tamaño de posición: {{ texto_s(pos.tamano_posicion, i.posicion_faltan.get('35 · tamaño de posición', '')) }} · Volatilidad: {{ texto_s(pos.volatilidad, i.posicion_faltan.get('35 · volatilidad', '')) }}</p>
 {% else %}<p class="na">N/A — {{ i.posicion_faltan.get('fichero', '') }}</p>{% endif %}
-<h3 id="ap-{{ i.numeros['36'] }}">{{ i.numeros['36'] }}. Seguimiento post-entrada — KPIs, fechas de revisión y criterios de salida</h3>
+<h3 id="ap-{{ i.numeros['36'] }}">{{ i.numeros['36'] }}. {{ i.titulos['36'] }}</h3>
 {% if pos %}<h4>KPIs</h4><ul class="compacta">{% for x in pos.kpis %}<li>{{ x }}</li>{% else %}<li class="na">N/A — {{ i.posicion_faltan.get('36 · KPIs', '') }}</li>{% endfor %}</ul>
 <h4>Fechas de revisión</h4><p>{% for f in pos.fechas_revision %}{{ f.strftime('%d/%m/%Y') }}{% if not loop.last %} · {% endif %}{% else %}<span class="na">N/A — {{ i.posicion_faltan.get('36 · fechas de revisión', '') }}</span>{% endfor %}</p>
 <h4>Criterios de salida</h4><ul class="compacta">{% for x in pos.criterios_salida %}<li>{{ x }}</li>{% else %}<li class="na">N/A — {{ i.posicion_faltan.get('36 · criterios de salida', '') }}</li>{% endfor %}</ul>
 {% else %}<p class="na">N/A — {{ i.posicion_faltan.get('fichero', '') }}</p>{% endif %}
 </section>
 
-<!-- ============================== F (penúltima) ============================== -->
+<!-- ============================== H · opciones y posicionamiento ============================== -->
 <section class="hoja">
-<h2 id="parte-F">F. Opciones, derivados &amp; posicionamiento institucional</h2>
+<h2 id="parte-{{ i.indice[7].letra }}">{{ i.indice[7].letra }}. {{ i.indice[7].titulo }}</h2>
 {% if i.f_cuadros %}
-<p class="muted" style="font-size:7.5pt">Sección penúltima por decisión del analista (17/09/2026). Fuente: la bolsa de cotización (Nasdaq), la misma que la cotización del apartado {{ i.numeros['1'] }}; para la volatilidad implícita, que la bolsa no publica, Yahoo Finance como excepción autorizada{% if i.f_cuadros.get('iv') %}, con su interés abierto cuadrado con el de la bolsa{% else %} (en este informe queda N/A: {{ i.f_faltan.get('iv', 'sin cadena del agregador') }}){% endif %}. Las respuestas literales de cada fuente están en el apartado {{ i.numeros['40'] }}.</p>
+<p class="muted" style="font-size:7.5pt">Fuente: la bolsa de cotización (Nasdaq), la misma que la cotización del apartado {{ i.numeros['1'] }}; para la volatilidad implícita, que la bolsa no publica, Yahoo Finance como excepción autorizada{% if i.f_cuadros.get('iv') %}, con su interés abierto cuadrado con el de la bolsa{% else %} (en este informe queda N/A: {{ i.f_faltan.get('iv', 'sin cadena del agregador') }}){% endif %}. Las respuestas literales de cada fuente están en el apartado {{ i.numeros['40'] }}.</p>
 {% else %}
-<div class="pendiente"><b>Pendiente de la API de datos de derivados</b> (decisión del analista, 17/09/2026): esta sección se reclasifica como penúltima y se rellenará cuando el analista adjunte la API. {{ i.f_faltan.values()|join('; ') }}</div>
+<div class="pendiente"><b>Sin datos de la bolsa para esta parte.</b> {{ i.f_faltan.values()|join('; ') }}</div>
 {% endif %}
-<h3 id="ap-{{ i.numeros['24'] }}">{{ i.numeros['24'] }}. Cadena de opciones — Put/Call Ratio, volumen y sesgo implícito</h3>
+<h3 id="ap-{{ i.numeros['24'] }}">{{ i.numeros['24'] }}. {{ i.titulos['24'] }}</h3>
 {% if i.f_cuadros.get('cadena') %}{{ cuadro(i.f_cuadros['cadena']) }}<p class="muted" style="font-size:7.5pt">Sesgo implícito: la bolsa no publica volatilidad implícita por strike; con sus datos el único sesgo afirmable es el reparto de volumen e interés abierto entre puts y calls. La volatilidad implícita por vencimiento y su sesgo put − call están en el apartado {{ i.numeros['25'] }}.</p>{% else %}<p class="na">N/A — {{ i.f_faltan.get('cadena', i.f_faltan.get('fuente', 'pendiente de la API')) }}</p>{% endif %}
-<h3 id="ap-{{ i.numeros['25'] }}">{{ i.numeros['25'] }}. Posicionamiento en derivados — IV, Open Interest (Put/Call ratio), volumen y sesgo implícito</h3>
+<h3 id="ap-{{ i.numeros['25'] }}">{{ i.numeros['25'] }}. {{ i.titulos['25'] }}</h3>
 {% if i.f_cuadros.get('cadena') %}<p>Interés abierto y volumen, call frente a put, con el Put/Call ratio por vencimiento y total: Cuadro {{ i.f_cuadros['cadena'].numero }} (bolsa).</p>{% endif %}
 {% if i.f_cuadros.get('iv') %}{{ cuadro(i.f_cuadros['iv']) }}<p class="muted" style="font-size:7.5pt">Lectura del sesgo: un sesgo positivo (la put fuera del dinero más cara que la call fuera del dinero) es el habitual en renta variable; el signo y la magnitud por vencimiento son los del cuadro, sin interpretación añadida. El coste de cobertura es la prima de la put, que el agregador trae por contrato (cuerpo guardado) y no se resume aquí.</p>{% else %}<p class="na">Volatilidad implícita: N/A — {{ i.f_faltan.get('iv', 'la bolsa no la publica') }}.</p>{% endif %}
-<h3 id="ap-{{ i.numeros['27'] }}">{{ i.numeros['27'] }}. Posicionamiento institucional — 13F, fondos y principales accionistas</h3>
+<h3 id="ap-{{ i.numeros['27'] }}">{{ i.numeros['27'] }}. {{ i.titulos['27'] }}</h3>
 {% if i.f_cuadros.get('institucional') %}{{ cuadro(i.f_cuadros['institucional']) }}{{ cuadro(i.f_cuadros['mayores']) }}<p class="muted" style="font-size:7.5pt">Los accionistas de más del 5 % que declara la proxy están en el apartado {{ i.numeros['5'] }} con su fecha; las cifras 13F llevan la suya y no se comparan entre sí.</p>{% else %}<p class="na">N/A — {{ i.f_faltan.get('institucional', i.f_faltan.get('fuente', 'pendiente de la API')) }}</p>{% endif %}
 </section>
 <section class="hoja">
-<h3 id="ap-{{ i.numeros['28'] }}">{{ i.numeros['28'] }}. Insider activity — Compras, ventas y participación del management</h3>
+<h3 id="ap-{{ i.numeros['28'] }}">{{ i.numeros['28'] }}. {{ i.titulos['28'] }}</h3>
 {% if i.f_cuadros.get('insiders') %}{{ cuadro(i.f_cuadros['insiders']) }}{{ cuadro(i.f_cuadros['insiders_ultimas']) }}<p class="muted" style="font-size:7.5pt">La participación del management según la proxy (acciones de cada consejero y ejecutivo a la fecha de la proxy) está en el apartado {{ i.numeros['5'] }}.</p>{% else %}<p class="na">N/A — {{ i.f_faltan.get('insiders', i.f_faltan.get('fuente', 'pendiente de la API')) }}</p>{% endif %}
-<h3 id="ap-{{ i.numeros['29'] }}">{{ i.numeros['29'] }}. Posicionamiento en corto — Short Interest &amp; Days to Cover</h3>
+<h3 id="ap-{{ i.numeros['29'] }}">{{ i.numeros['29'] }}. {{ i.titulos['29'] }}</h3>
 {% if i.f_cuadros.get('short') %}{{ cuadro(i.f_cuadros['short']) }}{% else %}<p class="na">N/A — {{ i.f_faltan.get('short', i.f_faltan.get('fuente', 'pendiente de la API')) }}</p>{% endif %}
 </section>
 
 <!-- ============================== I ============================== -->
 <section class="hoja">
-<h2 id="parte-I">I. Apéndices &amp; herramientas</h2>
-<h3 id="ap-{{ i.numeros['37'] }}">{{ i.numeros['37'] }}. Modelo financiero &amp; supuestos detallados</h3>
+<h2 id="parte-{{ i.indice[8].letra }}">{{ i.indice[8].letra }}. {{ i.indice[8].titulo }}</h2>
+<h3 id="ap-{{ i.numeros['37'] }}">{{ i.numeros['37'] }}. {{ i.titulos['37'] }}</h3>
 <div class="pendiente">Pendiente (decisión del analista, 17/09/2026). {% if i.dcf.get('modelo') %}El libro del analista está leído e impreso en la sección D (cuadros {{ i.dcf['supuestos'].numero }} a {{ i.dcf['objetivo'].numero }}); el detalle celda a celda irá aquí cuando se cierre el formato.{% endif %}</div>
-<h3 id="ap-{{ i.numeros['38'] }}">{{ i.numeros['38'] }}. Fuentes &amp; referencias</h3>
+<h3 id="ap-{{ i.numeros['38'] }}">{{ i.numeros['38'] }}. {{ i.titulos['38'] }}</h3>
 <ul class="compacta">{% for f in i.fuentes %}<li>{{ f }}</li>{% endfor %}</ul>
-<h3 id="ap-{{ i.numeros['39'] }}">{{ i.numeros['39'] }}. Datos complementarios &amp; notas metodológicas — contraste con la SEC, huecos y verificación</h3>
+<h3 id="ap-{{ i.numeros['39'] }}">{{ i.numeros['39'] }}. {{ i.titulos['39'] }}</h3>
 <p>Contraste de cada cifra de la sección C entre los adjuntos y la SEC: {{ i.resumen_contraste.get('confirmado', 0) }} confirmadas · {{ i.resumen_contraste.get('derivado', 0) }} calculadas con fórmula · {{ i.resumen_contraste.get('discrepante', 0) }} discrepantes · {{ i.resumen_contraste.get('solo_sec', 0) }} solo en la SEC · {{ i.resumen_contraste.get('solo_documento', 0) }} solo en los adjuntos · {{ i.resumen_contraste.get('hueco', 0) }} sin dato. En el HTML, cada celda muestra al pasar el ratón su contraste, su fuente o su fórmula.</p>
 <h4>Discrepancias (bloquean la emisión hasta que el analista decida)</h4>
 <ul class="compacta">{% for d in i.discrepancias %}<li>{{ d }}</li>{% else %}<li>Ninguna.</li>{% endfor %}</ul>
@@ -329,7 +329,7 @@
 <ul class="compacta">{% for a in i.avisos %}<li>{{ a }}</li>{% else %}<li>Ninguno.</li>{% endfor %}</ul>
 </section>
 <section class="hoja">
-<h3 id="ap-{{ i.numeros['40'] }}">{{ i.numeros['40'] }}. Documentación complementaria — recortes de las páginas citadas y respuestas literales de las fuentes</h3>
+<h3 id="ap-{{ i.numeros['40'] }}">{{ i.numeros['40'] }}. {{ i.titulos['40'] }}</h3>
 <p class="muted" style="font-size:7.5pt">Por apartado y en el orden del índice: cada recorte es la región de la página citada que contiene el texto en que se apoya el apartado, ampliada una línea por arriba y por abajo, tal cual está en el documento; cada respuesta de una API es el extracto literal de lo que devolvió el servidor, con la URL, la hora y la huella del cuerpo completo (guardado al lado). El pie de cada pieza da fichero, página y huella. Las cuentas de los estados financieros acompañan a sus cuadros en la sección C.</p>
 {% for numero, nombre, lista in i.documentacion %}
 <div class="evidencias"><div class="rotulo">Apartado {{ numero }}. {{ nombre }}</div>

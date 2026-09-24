@@ -99,6 +99,10 @@ class Tablero:
     avisos: List[str] = field(default_factory=list)
     # campos que no son una línea de las cuentas de esta compañía (clave → por qué se dice)
     no_aplican: Dict[str, str] = field(default_factory=dict)
+    # desdoblamientos que registra la SEC (fecha, razón): las notas de los cuadros salen de aquí, no escritas a mano
+    splits: List[Tuple[date, float]] = field(default_factory=list)
+    # cuánto se aparta la numeración del ejercicio del año en que cierra (sec.desfase_fiscal)
+    desfase_fiscal: int = 0
 
     def de(self, campo: str, periodo: Periodo) -> Optional[Resultado]:
         for r in self.resultados:
@@ -161,7 +165,7 @@ def _mismo_periodo(a: Periodo, b: Periodo) -> bool:
 
 
 def periodos_del_informe(exp: Expediente, ejercicios: int = 5, trimestres: int = 4,
-                         facts: Optional[dict] = None) -> Dict[str, List[Periodo]]:
+                         facts: Optional[dict] = None, hasta: Optional[date] = None) -> Dict[str, List[Periodo]]:
     """5 ejercicios cerrados + últimos 4 trimestres, con sus instantes de balance y
     los acumulados que hacen falta para derivar el 4T. Todo sale de las fechas que
     declaran los adjuntos, no de la fecha de hoy.
@@ -173,10 +177,20 @@ def periodos_del_informe(exp: Expediente, ejercicios: int = 5, trimestres: int =
     from datetime import timedelta
     k = exp.de_tipo(Tipo.K10)
     q = exp.de_tipo(Tipo.Q10) + exp.de_tipo(Tipo.FINWEB) + exp.de_tipo(Tipo.XLSX) + exp.de_tipo(Tipo.TABLAS)
-    if not k:
+    if k:
+        fin_fy = max(a.periodo_fin for a in k if a.periodo_fin)
+        ultimo_q = max((a.periodo_fin for a in q if a.periodo_fin), default=fin_fy)
+    elif facts:
+        # sin adjuntos, el calendario de la SEC hasta la fecha pedida: sirve para las pruebas y para ver los datos antes
+        # de que el analista suba los PDF
+        corte = hasta or date.max
+        cierres = [p.fin for p in sec_mod.calendario(facts, 12) if p.fin <= corte]
+        if not cierres:
+            raise ValueError("Sin ejercicios cerrados en la SEC antes de la fecha pedida.")
+        fin_fy = cierres[-1]
+        ultimo_q = max([p.fin for p in sec_mod.calendario(facts, 3) if p.fin <= corte] + [fin_fy])
+    else:
         raise ValueError("Sin cuentas anuales (10-K) en el expediente no hay ejercicio base.")
-    fin_fy = max(a.periodo_fin for a in k if a.periodo_fin)
-    ultimo_q = max((a.periodo_fin for a in q if a.periodo_fin), default=fin_fy)
     anuales, trims = [], []
     if facts:
         anuales = [p for p in sec_mod.calendario(facts, 12) if p.fin <= fin_fy][-ejercicios:]
@@ -414,6 +428,41 @@ def _cero_declarado(c: Campo, p: Periodo, exp: Expediente) -> Optional[Hecho]:
     return None
 
 
+def _q4_por_accion(clave: str, p: Periodo, serie) -> Optional[Hecho]:
+    """El 4T fiscal de las acciones medias y del BPA, que nadie publica suelto.
+
+    Acciones medias del 4T = 4 × media del ejercicio − 3 × media de los nueve meses (las medias ponderan por días). BPA
+    del 4T = beneficio del 4T / esas acciones. Sale como derivado con su fórmula: nunca como hecho publicado.
+    """
+    from .hechos import derivar
+    fin_9m = p.inicio - timedelta(days=1)
+
+    def par(campo: str):
+        s = serie(campo)
+        fy = next((h for q, h in s.items() if q.meses == 12 and q.fin == p.fin and h.hay_dato), None)
+        nm = next((h for q, h in s.items() if q.meses == 9 and q.fin == fin_9m and h.hay_dato), None)
+        return fy, nm
+
+    tipo = "diluidas" if clave.endswith("diluidas") or clave.endswith("diluido") else "basicas"
+    s_fy, s_9m = par(f"acciones_{tipo}")
+    if s_fy is None or s_9m is None:
+        return None
+    if clave.startswith("acciones"):
+        return derivar(clave, p, f"4 × {s_fy.periodo.clave} − 3 × 9M (acciones medias del 4T)", {"fy": s_fy, "nueve_meses": s_9m},
+                       lambda fy, nueve_meses: 4 * fy - 3 * nueve_meses, unidad="acciones")
+    b_fy, b_9m = par("beneficio_neto")
+    if b_fy is None or b_9m is None:
+        return None
+    if tipo == "diluidas" and b_fy.valor - b_9m.valor < 0:
+        # con pérdidas la dilución es antidilutiva: el BPA diluido del trimestre es el básico (ASC 260)
+        s_fy, s_9m = par("acciones_basicas")
+        if s_fy is None or s_9m is None:
+            return None
+    return derivar(clave, p, f"(beneficio {b_fy.periodo.clave} − 9M) / (4 × acciones {s_fy.periodo.clave} − 3 × 9M)",
+                   {"b_fy": b_fy, "b_9m": b_9m, "s_fy": s_fy, "s_9m": s_9m},
+                   lambda b_fy, b_9m, s_fy, s_9m: (b_fy - b_9m) / (4 * s_fy - 3 * s_9m), unidad="USD/acción")
+
+
 def contrastar(exp: Expediente, facts: dict, obtenido_en: date, periodos: Dict[str, List[Periodo]],
                decisiones: Optional[Path] = None, paginas: Optional[Dict[str, List[PaginaLeida]]] = None) -> Tablero:
     paginas = paginas if paginas is not None else _leer_todo(exp)
@@ -423,6 +472,18 @@ def contrastar(exp: Expediente, facts: dict, obtenido_en: date, periodos: Dict[s
     avisos: List[str] = []
     flujos = periodos["anuales"] + periodos["trimestres"]
     ajustes = sec_mod.splits(facts)
+    cierres_fy = {p.fin for p in periodos["anuales"]}
+    por_campo_sec: Dict[str, Dict[Periodo, Hecho]] = {}
+
+    def serie(clave: str) -> Dict[Periodo, Hecho]:
+        # los hechos de otro campo, con los mismos ajustes por split, para derivar el 4T por acción
+        if clave not in por_campo_sec:
+            cc = campo_de(clave)
+            hs = sec_mod.hechos_xbrl(facts, cc, obtenido_en) if cc.conceptos else {}
+            if cc.unidad in ("USD/acción", "acciones") and ajustes:
+                hs = {q: sec_mod.ajustar_por_split(h, ajustes, cc.unidad == "USD/acción") for q, h in hs.items()}
+            por_campo_sec[clave] = hs
+        return por_campo_sec[clave]
     for c in CAMPOS:
         pedidos = periodos["instantes"] if c.tipo == "instante" else flujos
         hechos_sec = sec_mod.hechos_xbrl(facts, c, obtenido_en) if c.conceptos else {}
@@ -458,6 +519,12 @@ def contrastar(exp: Expediente, facts: dict, obtenido_en: date, periodos: Dict[s
                         r.hecho = q4
                     resultados.append(r)
                     continue
+            if ((h_sec is None or not h_sec.hay_dato) and p.meses == 3 and p.fin in cierres_fy
+                    and c.clave in ("acciones_basicas", "acciones_diluidas", "bpa_basico", "bpa_diluido")):
+                q4 = _q4_por_accion(c.clave, p, serie)
+                if q4 is not None:
+                    resultados.append(_contrastar_celda(c, p, q4, pares, decs.get((c.clave, p.clave))))
+                    continue
             if (h_sec is None or not h_sec.hay_dato) and p.meses == 3 and c.conceptos and c.unidad == "USD":
                 # el trimestre que no se publica suelto se saca de los acumulados, que sí se publican
                 por_acumulados = sec_mod.trimestre_por_acumulados(facts, c, hechos_sec, p)
@@ -479,4 +546,5 @@ def contrastar(exp: Expediente, facts: dict, obtenido_en: date, periodos: Dict[s
         if clave == "hueco" and r.campo.clave in no_aplican:
             clave = "no_aplica"
         resumen[clave] = resumen.get(clave, 0) + 1
-    return Tablero(resultados=resultados, paginas=paginas, resumen=resumen, avisos=avisos, no_aplican=no_aplican)
+    return Tablero(resultados=resultados, paginas=paginas, resumen=resumen, avisos=avisos, no_aplican=no_aplican,
+                   splits=[(fecha, razon) for fecha, razon, _ in ajustes], desfase_fiscal=sec_mod.desfase_fiscal(facts))

@@ -1,20 +1,18 @@
 """Línea de órdenes: del expediente del analista al informe.
 
     python emitir.py NFLX --adjuntos ruta1.pdf ruta2.pdf … [--carpeta ./adjuntos/NFLX]
-                     [--narrativa narrativas/NFLX_2026-09-17.json | --redactar]
                      [--dcf modelo_dcf.xlsx] [--posicion posiciones/NFLX.json]
                      [--decisiones decisiones_nflx.json] [--fecha 2026-09-16] [--salida ./salida]
 
 Pasos, en el orden de la tubería: emisor en EDGAR → expediente clasificado y en
 orden cronológico → hechos XBRL → extracción con coordenadas → contraste campo ×
-periodo → recortes de evidencia → ficha, gobierno, objetivos, regiones → narrativa
-(apartados 2 y 3, verificada frase a frase) → informe → HTML y PDF. Deja en
+periodo → recortes de evidencia → ficha, gobierno, objetivos, regiones → informe →
+HTML y PDF. Deja en
 `salida/` el PDF, el HTML autocontenido, los recortes y un registro de contraste
 (`.contraste.txt`) que es el cuaderno del generador, no del cliente.
 
-La narrativa viene de un JSON ya redactado (`--narrativa`) o se pide al modelo con
-`--redactar` (exige el SDK de Claude y `ANTHROPIC_API_KEY`); en ambos casos se
-verifica igual y el JSON que se usó queda junto al PDF para que el analista lo revise.
+Sin IA en tiempo de ejecución: los textos de la tesis los escribe el analista y el
+sistema los verifica (docs/fases).
 
 Exige `WC_SEC_CONTACTO` (entorno o `.env`). Sin cotización configurada
 (`WC_PRECIO_FUENTE`), todo lo que depende del precio sale N/A y el informe lo dice.
@@ -30,7 +28,7 @@ from pathlib import Path
 sys.stdout.reconfigure(encoding="utf-8")
 
 from tesis import (agregador, auditor, calendario, comparables, contraste, dcf, derivados, entorno, expediente, ficha, gobierno, guidance, historial, informe,  # noqa: E402
-                   mercado_objetivo, multiplos, narrativa, posicion, posicionamiento, precio, recortes, regiones, render, revision, riesgos, sec)
+                   mercado_objetivo, multiplos, posicion, posicionamiento, precio, recortes, regiones, render, revision, riesgos, sec)
 from tesis.hechos import Contraste  # noqa: E402
 
 
@@ -39,8 +37,6 @@ def main(argv=None) -> int:
     ap.add_argument("ticker")
     ap.add_argument("--adjuntos", nargs="*", default=[], help="rutas de los adjuntos (PDF, XLSX)")
     ap.add_argument("--carpeta", help="carpeta con los adjuntos (se toman todos los PDF y XLSX)")
-    ap.add_argument("--narrativa", help="JSON con la narrativa ya redactada (apartados 2 y 3); se verifica frase a frase")
-    ap.add_argument("--redactar", action="store_true", help="pedir la narrativa al modelo (SDK de Claude y ANTHROPIC_API_KEY)")
     ap.add_argument("--dcf", help="libro Excel con el DCF del analista (sección D: apartados 12–20)")
     ap.add_argument("--posicion", help="JSON con la posición y la tesis del analista (sección H); por defecto posiciones/<TICKER>.json si existe "
                                        "(se rellena con «python -m tesis.formulario TICKER»)")
@@ -91,7 +87,12 @@ def main(argv=None) -> int:
 
     print("[6/8] Ficha, gobierno (con retratos), objetivos, regiones, riesgos, historial, precio, DCF, posición")
     carpeta_recortes = salida / f"{nombre_base}_recortes"
-    f = ficha.construir(emisor, exp)
+    try:
+        portada = sec.portada_10k(emisor)
+    except (sec.SinContacto, RuntimeError) as e:
+        portada = None
+        print(f"  sin el 10-K de EDGAR ({e}): auditor, nombre y propuestas salen del adjunto")
+    f = ficha.construir(emisor, exp, portada, facts)
     g = gobierno.construir(exp, carpeta_recortes)
     print(f"  retratos: {sum(1 for e in g.ejecutivos if e.foto)} de {len(g.ejecutivos)} ejecutivos · {sum(1 for c in g.consejeros if c.foto)} de {len(g.consejeros)} consejeros")
     gu = guidance.construir(exp, emisor.depositos, hoy)
@@ -174,32 +175,13 @@ def main(argv=None) -> int:
     else:
         print(f"  posición: sin {ruta_posicion} (la sección H y la recomendación de la portada salen N/A; se rellena con «python -m tesis.formulario {args.ticker.upper()}»)")
 
-    print("[7/8] Narrativa e informe")
-    narr = None
-    if args.narrativa:
-        narr = narrativa.cargar(Path(args.narrativa))
-        print(f"  narrativa: {args.narrativa} (redactor: {narr.redactor})")
-    elif args.redactar:
-        try:
-            narr, rondas = narrativa.redactar_verificada(exp, hechos)
-            ruta_narr = Path("narrativas") / f"{args.ticker.upper()}_{hoy.isoformat()}.json"
-            narrativa.guardar(narr, ruta_narr)
-            print(f"  narrativa redactada por {narr.redactor} en {rondas} ronda(s) y guardada en {ruta_narr} para revisión del analista")
-        except narrativa.SinRedactor as e:
-            print(f"  sin narrativa: {e}")
-    if narr is not None:
-        narrativa.guardar(narr, salida / f"{nombre_base}.narrativa.json")
-    inf = informe.construir(args.ticker, hoy, emisor, exp, tab, periodos, f, g, gu, reg, pr, recs, narr, modelo_dcf=modelo, posicion=pos,
+    print("[7/8] Informe")
+    inf = informe.construir(args.ticker, hoy, emisor, exp, tab, periodos, f, g, gu, reg, pr, recs, modelo_dcf=modelo, posicion=pos,
                             riesgos=ri, historial=hi, salida_recortes=carpeta_recortes, mercado=mer, posicionamiento=posi, comparables=comp, mercado_objetivo=merc,
                             agregador=agr, multiplos=mult, proxima=prox)
     n_evid = sum(len(lista) for _, _, lista in inf.documentacion)
     print(f"  documentación complementaria: {n_evid} piezas en {len(inf.documentacion)} apartados · {len(recs)} recortes de estados junto a sus cuadros · "
           f"{len([x for x in inf.fotos_ejecutivos + inf.fotos_consejo if x.ruta])} retratos")
-    if inf.narrativa is not None:
-        n = inf.narrativa
-        print(f"  narrativa verificada: {len(n.documentos)} documentos citados · certeza {n.certeza} · {n.retiradas} frases retiradas · {len(n.reparos)} reparos")
-        for r in n.reparos:
-            print(f"    · {r}")
 
     print("[8/8] Doble comprobación, HTML y PDF")
     html = render.a_html(inf, casa=args.casa)

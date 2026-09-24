@@ -12,7 +12,7 @@ Sirve en 127.0.0.1 cuatro páginas estáticas (`tesis/tablero/`, CSP estricta, s
   3. `/formulario`  la posición y la tesis (sección H y portada), a `posiciones/<TICKER>.json`.
   4. `/informe`     lanza `emitir.py` como proceso aparte (registro en `salida/<TICKER>/emision.log`) y muestra el HTML y el PDF.
 
-El servidor solo escribe en `adjuntos/`, `dcf/`, `posiciones/`, `narrativas/` (vía emitir.py) y `salida/`. Escucha solo en
+El servidor solo escribe en `adjuntos/`, `dcf/`, `posiciones/` (vía emitir.py) y `salida/`. Escucha solo en
 127.0.0.1 y rechaza las escrituras que no vengan de sus propias páginas (cabecera propia + origen local), como el formulario.
 """
 
@@ -41,7 +41,7 @@ __all__ = ["Servidor", "servir", "main"]
 
 RAIZ = Path(__file__).resolve().parents[1]
 ADJUNTOS, SALIDA = entorno.carpeta("adjuntos"), entorno.carpeta("salida")   # pesan cientos de megas: fuera del repositorio
-DCF, POSICIONES, NARRATIVAS = RAIZ / "dcf", RAIZ / "posiciones", RAIZ / "narrativas"
+DCF, POSICIONES = RAIZ / "dcf", RAIZ / "posiciones"
 ADMITIDOS = {".pdf", ".xlsx", ".xlsm", ".docx"}
 LIBROS = {".xlsx", ".xlsm"}
 MAXIMO_CUERPO = 400_000_000
@@ -257,16 +257,6 @@ def resumen_dcf(ticker: str) -> dict:
 
 # ---------------------------------------------------------------- emisión
 
-def hay_redactor() -> bool:
-    """Si hay con qué redactar la narrativa (SDK y clave); si no, se emite sin ella y los apartados 2 y 3 salen N/A."""
-    try:
-        import anthropic  # noqa: F401
-    except ImportError:
-        return False
-    from .entorno import variable
-    return bool(variable("ANTHROPIC_API_KEY") or os.environ.get("ANTHROPIC_AUTH_TOKEN"))
-
-
 def entradas(ticker: str) -> List[Path]:
     """Todo lo que alimenta al informe: adjuntos, libro y posición del analista."""
     fuentes = _rutas(ticker) + [DCF / f"{ticker}.xlsx", ruta_posicion(ticker)]
@@ -305,11 +295,6 @@ def emitir(ticker: str) -> dict:
         orden += ["--dcf", str(DCF / f"{ticker}.xlsx")]
     if (POSICIONES / f"{ticker}.json").exists():
         orden += ["--posicion", str(POSICIONES / f"{ticker}.json")]
-    narrativas = sorted(NARRATIVAS.glob(f"{ticker}_*.json"))
-    if narrativas:
-        orden += ["--narrativa", str(narrativas[-1])]
-    elif hay_redactor():
-        orden += ["--redactar"]      # sin clave no se pide: el informe sale con 2 y 3 en N/A y su motivo
     registro = salida / "emision.log"
     fh = registro.open("w", encoding="utf-8")
     proceso = subprocess.Popen(orden, cwd=str(RAIZ), stdout=fh, stderr=subprocess.STDOUT,
@@ -338,7 +323,7 @@ def estado_emision(ticker: str) -> Optional[dict]:
     return {"estado": estado_actual, "codigo": codigo,
             "empezado": em["empezado"].strftime("%d/%m/%Y %H:%M:%S"), "registro": lineas[-80:], "orden": " ".join(Path(x).name if os.sep in x else x for x in em["orden"] if x != "-u"),
             "pdf": f"/informes/{ticker}/{pdf.name}" if pdf else None, "html": f"/informes/{ticker}/{pdf.with_suffix('.html').name}" if pdf and pdf.with_suffix(".html").exists() else None,
-            "borrador": codigo == 1 and pdf is not None, "redactor": hay_redactor()}
+            "borrador": codigo == 1 and pdf is not None}
 
 
 def resumen_ticker(ticker: str) -> dict:
@@ -364,7 +349,7 @@ def resumen_ticker(ticker: str) -> dict:
                          "sin_rellenar": sorted(pos.faltan()) if pos is not None else None,
                          "analista": pos.analista if pos is not None else "", "recomendacion": pos.recomendacion if pos is not None else "",
                          "precio_objetivo": pos.precio_objetivo if pos is not None else None},
-            "informe": informe_en_disco(ticker), "emision": estado_emision(ticker), "redactor": hay_redactor()}
+            "informe": informe_en_disco(ticker), "emision": estado_emision(ticker)}
 
 
 # ---------------------------------------------------------------- HTTP

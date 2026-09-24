@@ -119,7 +119,8 @@ class Seccion:
     letra: str
     titulo: str
     apartados: List[Tuple[int, str]]
-    estado: str = ""                   # «pendiente» cuando la sección entera espera algo (API, analista)
+    estado: str = ""                   # «parcial» cuando la bolsa no da todo lo de la parte (sin IV cuadrada)
+    subtitulo: str = ""                # el de `01_indice.yaml` (G y H)
 
 
 @dataclass
@@ -164,6 +165,7 @@ class Informe:
     # secciones D–I y evidencia visual (17/09/2026)
     indice: List[Seccion] = field(default_factory=list)
     numeros: Dict[str, int] = field(default_factory=dict)          # clave del apartado («30») → número impreso
+    titulos: Dict[str, str] = field(default_factory=dict)          # clave del apartado → título de `01_indice.yaml`
     evidencias: Dict[str, List[Recorte]] = field(default_factory=dict)   # por apartado (ficha, gobierno, guidance, regiones…)
     fotos_ejecutivos: List = field(default_factory=list)
     fotos_consejo: List = field(default_factory=list)
@@ -199,12 +201,16 @@ class Informe:
 # Cuadros de la sección C
 # ---------------------------------------------------------------------------
 
-def _etiqueta(p: Periodo) -> str:
-    if p.meses == 12:
-        return str(p.fin.year)
-    if p.meses == 3:
-        return f"{(p.fin.month - 1) // 3 + 1}T{p.fin.year % 100:02d}"
-    return p.clave
+_FISCAL = {"cierre": None, "desfase": 0}   # lo fija `construir` con el calendario de la compañía
+
+
+def _etiqueta(p: Periodo, anuales=None, tab: Optional[Tablero] = None) -> str:
+    """El trimestre por su número en el ejercicio fiscal de la compañía («4T FY25»), nunca por el natural. Con `anuales`
+    y `tab` el cuadro se rotula solo; sin ellos, con el calendario que fijó `construir`."""
+    from .hechos import etiqueta_fiscal
+    if anuales:
+        return etiqueta_fiscal(p, anuales[-1].fin, tab.desfase_fiscal if tab is not None else 0)
+    return etiqueta_fiscal(p, _FISCAL["cierre"], _FISCAL["desfase"])
 
 
 def _fila(hechos, clave: str, rotulo: str, periodos: Sequence[Periodo], instante: bool = False, unidad: Optional[str] = None,
@@ -232,16 +238,43 @@ def _fuente_tablero(tab: Tablero, claves: Sequence[str], periodos: Sequence[Peri
     return "Fuente: " + "; ".join(partes) + "."
 
 
+def _filas_de_la_compania(filas: List[FilaCuadro], tab: Tablero) -> List[FilaCuadro]:
+    """Fuera las líneas que no son de las cuentas de esta compañía: ni un «Activos de contenido» en un fabricante de
+    chips ni «Ventas y marketing» vacío en quien publica una sola línea de gastos generales. Una línea que la compañía
+    sí tiene y falta se queda, con su N/A y su motivo: ese hueco hay que verlo."""
+    from .campos import CAMPOS
+    solo_documento = {c.clave for c in CAMPOS if c.solo_documento}
+    salida = []
+    for f in filas:
+        clave = f.origen.split(":", 1)[1] if f.origen.startswith("hecho:") else ""
+        vacia = all(c.clase == "na" for c in f.celdas)
+        if clave in tab.no_aplican or (vacia and clave in solo_documento):
+            continue
+        salida.append(f)
+    return salida
+
+
+def _nota_splits(tab: Tablero, anuales) -> str:
+    """La nota de reexpresión, de los splits que registra la SEC dentro de la ventana; sin split, nada que decir."""
+    desde = anuales[0].inicio if anuales and anuales[0].inicio else None
+    dentro = [(fecha, razon) for fecha, razon in tab.splits if desde is None or fecha >= desde]
+    if not dentro:
+        return ""
+    return "; las presentadas antes de " + " y de ".join(f"el split {razon:g}:1 del {fecha:%d/%m/%Y}" for fecha, razon in dentro) \
+        + " se reexpresan con su razón"
+
+
 def _cuadro_resultados(n: Cuadros, hechos, tab: Tablero, anuales, trimestres) -> Cuadro:
     periodos = list(anuales) + list(trimestres)
-    columnas = [_etiqueta(p) for p in periodos]
+    columnas = [_etiqueta(p, anuales, tab) for p in periodos]
     filas = [
         _fila(hechos, "ingresos", "Ingresos", periodos, destacada=True),
         _fila(hechos, "coste_ingresos", "Coste de los ingresos", periodos, sangria=True),
         _fila(hechos, "margen_bruto", "Margen bruto", periodos, unidad="%", sangria=True, formula="(Ingresos − Coste) / Ingresos"),
         _fila(hechos, "marketing", "Ventas y marketing", periodos, sangria=True),
-        _fila(hechos, "tecnologia", "Tecnología y desarrollo", periodos, sangria=True),
+        _fila(hechos, "tecnologia", "Investigación y desarrollo", periodos, sangria=True),
         _fila(hechos, "generales", "Generales y administrativos", periodos, sangria=True),
+        _fila(hechos, "sga", "Ventas, generales y administrativos", periodos, sangria=True),
         _fila(hechos, "ebitda", "EBITDA", periodos, destacada=True, formula="EBIT + Amortización del inmovilizado"),
         _fila(hechos, "margen_ebitda", "Margen EBITDA", periodos, unidad="%", sangria=True),
         _fila(hechos, "amortizacion", "Amortización del inmovilizado", periodos, sangria=True),
@@ -258,15 +291,18 @@ def _cuadro_resultados(n: Cuadros, hechos, tab: Tablero, anuales, trimestres) ->
         _fila(hechos, "bpa_diluido", "BPA diluido (USD)", periodos, unidad="USD/acción"),
         _fila(hechos, "acciones_diluidas", "Acciones medias diluidas (mln)", periodos, unidad="acciones", sangria=True),
     ]
-    notas = ["EBITDA = EBIT + amortización del inmovilizado material e intangible; la amortización de contenido es coste de los ingresos y no se devuelve.",
-             "4T: ejercicio − nueve meses acumulados (la SEC no presenta el cuarto trimestre). Las filas sin fuente directa (EBITDA, márgenes) se calculan de las anteriores; al pasar el ratón, la fórmula."]
+    filas = _filas_de_la_compania(filas, tab)
+    notas = ["EBITDA = EBIT + amortización del inmovilizado material e intangible"
+             + ("; la amortización de contenido es coste de los ingresos y no se devuelve." if "amortizacion_contenido" not in tab.no_aplican else "."),
+             "Trimestres fiscales de la compañía; el 4T es el ejercicio menos los nueve meses acumulados (la SEC no presenta el cuarto trimestre). "
+             "Las filas sin fuente directa (EBITDA, márgenes) se calculan de las anteriores; al pasar el ratón, la fórmula."]
     return Cuadro(n.siguiente(), "Estado de resultados (mln USD)", columnas, filas,
                   _fuente_tablero(tab, [c.clave for c in por_seccion(8)], periodos), notas)
 
 
 def _cuadro_balance(n: Cuadros, hechos, tab: Tablero, anuales, trimestres) -> Cuadro:
     periodos = list(anuales) + [t for t in trimestres if t.fin != anuales[-1].fin]
-    columnas = [_etiqueta(p) for p in periodos]
+    columnas = [_etiqueta(p, anuales, tab) for p in periodos]
     filas = [
         _fila(hechos, "caja", "Tesorería y equivalentes", periodos, instante=True),
         _fila(hechos, "inversiones_cp", "Inversiones a corto plazo", periodos, instante=True),
@@ -285,21 +321,22 @@ def _cuadro_balance(n: Cuadros, hechos, tab: Tablero, anuales, trimestres) -> Cu
         _fila(hechos, "fondo_maniobra", "Fondo de maniobra", periodos, instante=True, formula="Activo corriente − Pasivo corriente"),
         _fila(hechos, "acciones_circulacion", "Acciones en circulación (mln)", periodos, instante=True, unidad="acciones"),
     ]
+    filas = _filas_de_la_compania(filas, tab)
     notas = ["Deuda neta sin pasivos por arrendamiento; se imprimen aparte.",
-             "Acciones en circulación: dei:EntityCommonStockSharesOutstanding, a la fecha de portada de cada formulario; las anteriores al 14/11/2025 no están reexpresadas por el split 10:1."]
+             "Acciones en circulación: las de la portada de cada formulario, a su fecha" + _nota_splits(tab, anuales) + "."]
     return Cuadro(n.siguiente(), "Balance de situación (mln USD)", columnas, filas,
                   _fuente_tablero(tab, [c.clave for c in por_seccion(9)], periodos, True), notas)
 
 
 def _cuadro_flujo(n: Cuadros, hechos, tab: Tablero, anuales, trimestres) -> Cuadro:
     periodos = list(anuales) + list(trimestres)
-    columnas = [_etiqueta(p) for p in periodos]
+    columnas = [_etiqueta(p, anuales, tab) for p in periodos]
     filas = [
         _fila(hechos, "cfo", "Flujo de caja operativo", periodos, destacada=True),
         _fila(hechos, "capex", "Capex", periodos, sangria=True),
         _fila(hechos, "fcf", "Flujo de caja libre (FCF)", periodos, destacada=True, formula="Flujo operativo − Capex"),
         _fila(hechos, "capex_ventas", "Capex / Ingresos", periodos, unidad="%", sangria=True),
-        _fila(hechos, "fcf_compania", "Free cash flow (definición de la compañía)", periodos, sangria=True),
+        _fila(hechos, "fcf_compania", "Flujo de caja libre (definición de la compañía)", periodos, sangria=True),
         _fila(hechos, "cfi", "Flujo de caja de inversión", periodos),
         _fila(hechos, "adquisiciones", "Adquisiciones (caja)", periodos, sangria=True),
         _fila(hechos, "cff", "Flujo de caja de financiación", periodos),
@@ -310,15 +347,17 @@ def _cuadro_flujo(n: Cuadros, hechos, tab: Tablero, anuales, trimestres) -> Cuad
         _fila(hechos, "emision_deuda", "Emisión de deuda", periodos, sangria=True),
         _fila(hechos, "amortizacion_deuda", "Amortización de deuda", periodos, sangria=True),
     ]
-    notas = ["FCF del informe = flujo operativo − capex. El «free cash flow» de la compañía es no-GAAP y se imprime aparte, tal como ella lo define.",
-             "Dividendos: cero declarado por el 10-K («never declared or paid») en los ejercicios que cubre; N/A fuera de ellos."]
+    filas = _filas_de_la_compania(filas, tab)
+    notas = ["FCF del informe = flujo operativo − capex. El flujo de caja libre que publique la compañía es no-GAAP y se imprime aparte, tal como ella lo define."]
+    if any(r.campo.clave == "dividendos" and r.hecho.hay_dato and r.hecho.valor == 0 and r.hecho.nota for r in tab.resultados):
+        notas.append("Dividendos: cero declarado por la compañía en el 10-K (al pasar el ratón, su frase y página).")
     return Cuadro(n.siguiente(), "Flujo de caja (mln USD)", columnas, filas,
                   _fuente_tablero(tab, [c.clave for c in por_seccion(10)], periodos), notas)
 
 
 def _cuadro_rentabilidad(n: Cuadros, hechos, tab: Tablero, anuales) -> Cuadro:
     periodos = list(anuales)
-    columnas = [_etiqueta(p) for p in periodos]
+    columnas = [_etiqueta(p, anuales, tab) for p in periodos]
     filas = [
         _fila(hechos, "roe", "ROE", periodos, unidad="%", formula="Beneficio neto / Patrimonio neto medio"),
         _fila(hechos, "roa", "ROA", periodos, unidad="%", formula="Beneficio neto / Total activo medio"),
@@ -341,7 +380,7 @@ def _cuadro_rentabilidad(n: Cuadros, hechos, tab: Tablero, anuales) -> Cuadro:
 def _cuadro_cifras_resumen(n: Cuadros, hechos, anuales, trimestres) -> Cuadro:
     """La caja del apartado 2: los mismos objetos que la sección C (regla 9)."""
     periodos = list(anuales)
-    columnas = [_etiqueta(p) for p in periodos]
+    columnas = [_etiqueta(p, anuales) for p in periodos]
     filas = [
         _fila(hechos, "ingresos", "Ingresos", periodos, destacada=True),
         _fila(hechos, "ebitda", "EBITDA", periodos),
@@ -362,19 +401,23 @@ def _cuadro_cifras_resumen(n: Cuadros, hechos, anuales, trimestres) -> Cuadro:
 
 def _ficha(emisor: Emisor, f: Ficha, precio: Hecho, exp: Expediente, hechos, mercado=None) -> List[Dato]:
     datos: List[Dato] = [
+        Dato("Nombre", f.nombre_presentacion or emisor.nombre, "portada del 10-K (propuesta; la confirma el analista)"),
         Dato("Nombre registral", emisor.nombre, "SEC EDGAR (submissions)"),
         Dato("Ticker · bolsa", f"{emisor.ticker} · {emisor.bolsa}", "SEC EDGAR"),
-        Dato("CIK · SIC", f"{int(emisor.cik)} · {emisor.sic} ({emisor.descripcion_sic})", "SEC EDGAR"),
-        Dato("Constitución", emisor.estado_constitucion, "SEC EDGAR"),
-        Dato("Sede", emisor.direccion.title(), "SEC EDGAR"),
-        Dato("Cierre fiscal", f"{emisor.cierre_fiscal[2:]}/{emisor.cierre_fiscal[:2]}" if len(emisor.cierre_fiscal) == 4 else emisor.cierre_fiscal, "SEC EDGAR"),
+        Dato("CIK · SIC", f"{int(emisor.cik)} · {emisor.sic}", "SEC EDGAR"),
+        Dato("Constitución", f.constitucion or emisor.estado_constitucion, "SEC EDGAR"),
+        Dato("Sede", f.sede or emisor.direccion.title(), "SEC EDGAR"),
+        Dato("Cierre fiscal", f.cierre_descrito or (f"{emisor.cierre_fiscal[2:]}/{emisor.cierre_fiscal[:2]}" if len(emisor.cierre_fiscal) == 4 else emisor.cierre_fiscal),
+             "SEC EDGAR (cierres de los cinco últimos ejercicios)"),
     ]
     def cita(clave, rotulo, fmt):
         c = f.citas.get(clave)
         if c is None:
             datos.append(Dato(rotulo, "N/A", f.faltan.get(clave, ""), "na"))
         else:
-            datos.append(Dato(rotulo, fmt(c), f"{c.origen.documento}, pág. {c.origen.pagina}" + (f" · a {f_fecha(c.fecha)}" if c.fecha else "")))
+            donde = f"pág. {c.origen.pagina}" if c.origen.pagina else (c.origen.concepto or c.origen.formulario)
+            datos.append(Dato(rotulo, fmt(c), f"{c.origen.documento}, {donde}" + (f" · a {f_fecha(c.fecha)}" if c.fecha else "")
+                              + (f" · {c.nota}" if c.nota.startswith("propuesta") else "")))
     cita("fundacion", "Fundación", lambda c: f"{int(c.valor)}")
     cita("empleados", "Empleados", lambda c: numero(c.valor))
     cita("auditor", "Auditor", lambda c: c.texto + (f" ({c.nota})" if c.nota else ""))
@@ -508,91 +551,11 @@ def _graficos_evolucion(hechos, anuales) -> Tuple[str, str, List[str]]:
 # Narrativa (apartados 2 y 3): verificar contra los mismos hechos e imprimir solo lo que pasa
 # ---------------------------------------------------------------------------
 
-def _narrativa_impresa(narr, exp: Expediente, hechos, salida_recortes: Optional[Path] = None) -> NarrativaImpresa:
-    from . import narrativa as narrativa_mod
-    v = narrativa_mod.verificar(narr, exp, hechos)
-    retiradas = set(v.retiradas)
-
-    def cita(fr) -> str:
-        partes = []
-        for a in fr.apoyos:
-            adj = narrativa_mod._adjunto(exp, a.documento)
-            etiqueta = narrativa_mod.etiqueta(adj) if adj else a.documento
-            texto = f"{etiqueta}, pág. {a.pagina}"
-            if texto not in partes:
-                partes.append(texto)
-        return "; ".join(partes)
-
-    def frase(fr, donde: str) -> Optional[FraseImpresa]:
-        return None if donde in retiradas else FraseImpresa(fr.texto, cita(fr))
-
-    resumen = []
-    for i, parrafo in enumerate(narr.resumen, 1):
-        frases = [f for j, fr in enumerate(parrafo, 1) if (f := frase(fr, f"resumen §{i} frase {j}")) is not None]
-        if frases:
-            resumen.append(frases)
-    pilares = []
-    for i, p in enumerate(narr.pilares, 1):
-        frases = [f for j, fr in enumerate(p.frases, 1) if (f := frase(fr, f"pilar {i} frase {j}")) is not None]
-        riesgo = frase(p.riesgo, f"pilar {i} riesgo") if p.riesgo else None
-        # la maqueta no imprime un pilar sin evidencia: un pilar cuyas frases se retiraron todas no sale
-        if frases:
-            pilares.append(PilarImpreso(p.titulo, frases, riesgo))
-    reparos = [f"{r.donde}: {r.motivo}" + (f" — «{r.texto[:90]}…»" if r.texto else "") for r in v.reparos]
-    bloques = {}
-    for clave, parrafos in narr.bloques.items():
-        impresos = []
-        for i, parrafo in enumerate(parrafos, 1):
-            frases = [f for j, fr in enumerate(parrafo, 1) if (f := frase(fr, f"apartado {clave} §{i} frase {j}")) is not None]
-            if frases:
-                impresos.append(frases)
-        bloques[clave] = impresos
-    # evidencia visual: las páginas citadas por las frases que se imprimen, un recorte por página y apartado
-    evidencias: Dict[str, List[Recorte]] = {}
-    if salida_recortes is not None:
-        def vivas(pares):
-            return [fr for fr, donde in pares if donde not in retiradas]
-        pares_2 = [(fr, f"resumen §{i} frase {j}") for i, parrafo in enumerate(narr.resumen, 1) for j, fr in enumerate(parrafo, 1)]
-        pares_3 = [(fr, f"pilar {i} frase {j}") for i, p in enumerate(narr.pilares, 1) for j, fr in enumerate(p.frases, 1)] +                   [(p.riesgo, f"pilar {i} riesgo") for i, p in enumerate(narr.pilares, 1) if p.riesgo]
-        evidencias["2"] = narrativa_mod.evidencias(vivas(pares_2), exp, salida_recortes, "2")
-        evidencias["3"] = narrativa_mod.evidencias(vivas(pares_3), exp, salida_recortes, "3")
-        for clave, parrafos in narr.bloques.items():
-            pares = [(fr, f"apartado {clave} §{i} frase {j}") for i, parrafo in enumerate(parrafos, 1) for j, fr in enumerate(parrafo, 1)]
-            evidencias[clave] = narrativa_mod.evidencias(vivas(pares), exp, salida_recortes, clave)
-    return NarrativaImpresa(resumen=resumen, pilares=pilares, redactor=narr.redactor, documentos=v.documentos,
-                            certeza=v.certeza.value, retiradas=len(v.retiradas), reparos=reparos, bloques=bloques, evidencias=evidencias)
-
-
 # ---------------------------------------------------------------------------
 # Ensamblado
 # ---------------------------------------------------------------------------
 
-# El índice completo (17/09/2026). F se imprime penúltima a petición del analista (irá con la API de derivados);
-# los números se reparten por orden de impresión, como los cuadros. La clave de cada apartado es su nombre en el
-# índice original, para que la maqueta y los recortes no dependan del número.
-INDICE = [
-    ("A", "Resumen ejecutivo & contexto de la tesis", [("1", "Ficha de empresa"), ("2", "Resumen ejecutivo & contexto de la tesis"), ("3", "Investment case — los 5 pilares de la tesis")], ""),
-    ("B", "Perfil corporativo & modelo de negocio", [("4", "¿Qué hace la empresa? — Productos, servicios y mercados"), ("5", "Estructura corporativa — Accionariado, filiales y participaciones"),
-                                                     ("6", "Equipo directivo — CEO, CFO y principales ejecutivos; track record"), ("7", "Pipeline & catalizadores — Hoja de ruta, fechas clave y palancas de la tesis")], ""),
-    ("C", "Análisis fundamental & métricas financieras", [("8", "Estado de resultados — Ingresos, EBITDA, EBIT, margen operativo, margen neto y EPS"), ("9", "Balance de situación — Activos, deuda neta, caja, patrimonio neto"),
-                                                          ("10", "Flujo de caja — FCF, capex, dividendos y recompras"), ("11", "Rentabilidad & eficiencia — ROE, ROIC, ROA y márgenes")], ""),
-    ("D", "Valoración & precio objetivo", [("12", "Valoración intrínseca — DCF (Discounted Cash Flow)"), ("13", "Escenario pesimista — Supuestos, FCF y valoración"), ("14", "Escenario base — Supuestos, FCF y valoración"),
-                                           ("15", "Escenario optimista — Supuestos, FCF y valoración"), ("16", "Análisis de sensibilidad — WACC & crecimiento terminal"),
-                                           ("17", "Valoración por múltiplos — PER, EV/EBITDA, EV/Ventas, P/FCF, PEG"), ("18", "Reverse DCF — Expectativas implícitas en el precio actual"),
-                                           ("19", "Valoración por SOTP — Sum-of-the-Parts (cuando aplique)"), ("20", "Precio objetivo & margen de seguridad — Valor razonable, upside/downside y consenso")], ""),
-    ("E", "Mercado objetivo & posicionamiento competitivo", [("21", "Tamaño de mercado — TAM / SAM / SOM"), ("22", "Análisis competitivo — Competidores, cuotas de mercado y comparables"),
-                                                             ("23", "Ventajas competitivas & moat — Barreras de entrada y sostenibilidad")], ""),
-    ("G", "Riesgos & due diligence", [("30", "Riesgos principales — Regulatorio, financiero, competitivo y ejecución"), ("31", "Bear case — Qué tendría que salir mal para invalidar la tesis"),
-                                      ("32", "Historial de resultados — ¿Ha fallado antes? Causas y aprendizajes")], ""),
-    ("H", "Tesis de inversión & gestión de la posición", [("33", "Tesis de inversión consolidada — Argumento, asunciones clave y horizonte temporal"), ("34", "Checklist de entrada — Criterios mínimos antes de abrir posición"),
-                                                          ("35", "Gestión del riesgo — Invalidación de tesis, tamaño de posición y volatilidad"), ("36", "Seguimiento post-entrada — KPIs, fechas de revisión y criterios de salida")], "analista"),
-    ("F", "Opciones, derivados & posicionamiento institucional", [("24", "Cadena de opciones — Put/Call Ratio, volumen y sesgo implícito"),
-                                                                  ("25", "Posicionamiento en derivados — IV, Open Interest (Put/Call ratio), volumen y sesgo implícito"),
-                                                                  ("27", "Posicionamiento institucional — 13F, fondos y principales accionistas"),
-                                                                  ("28", "Insider activity — Compras, ventas y participación del management"), ("29", "Posicionamiento en corto — Short Interest & Days to Cover")], "pendiente"),
-    ("I", "Apéndices & herramientas", [("37", "Modelo financiero & supuestos detallados"), ("38", "Fuentes & referencias"), ("39", "Datos complementarios & notas metodológicas"),
-                                        ("40", "Documentación complementaria — recortes de las páginas citadas y respuestas literales de las fuentes")], ""),
-]
+# El índice sale de `docs/spec/01_indice.yaml` (tesis/indice.py): letras, títulos, números y anclas.
 _GLIFOS_CUADRE = ("✓", "≠", "◐", "◑", "—", "∑")
 
 
@@ -631,15 +594,17 @@ def _mover_cuadres(cuadros) -> List[str]:
 
 
 def _indice() -> Tuple[List[Seccion], Dict[str, int]]:
-    secciones, numeros, k = [], {}, 0
-    for letra, titulo, apartados, estado in INDICE:
-        lista = []
-        for clave, nombre in apartados:
-            k += 1
-            numeros[clave] = k
-            lista.append((k, nombre))
-        secciones.append(Seccion(letra, titulo, lista, estado))
+    from . import indice as indice_mod
+    secciones, numeros = [], {}
+    for parte in indice_mod.partes():
+        for a in parte.apartados:
+            numeros[a.clave] = a.numero
+        secciones.append(Seccion(parte.letra, parte.titulo, [(a.numero, a.titulo) for a in parte.apartados], "", parte.subtitulo))
     return secciones, numeros
+
+
+def _titulo(indice: List[Seccion], numero: int) -> str:
+    return next(nombre for s in indice for n, nombre in s.apartados if n == numero)
 
 
 def _segmento_unico(exp: Expediente) -> Optional[Cita]:
@@ -656,13 +621,14 @@ def _segmento_unico(exp: Expediente) -> Optional[Cita]:
 
 def construir(ticker: str, hoy: date, emisor: Emisor, exp: Expediente, tab: Tablero, periodos: Dict[str, List[Periodo]],
               ficha: Ficha, gobierno: Gobierno, guidance: Guidance, regiones: Regiones, precio: Hecho,
-              recortes: Dict[Tuple[str, int], Recorte], narrativa=None, modelo_dcf=None, posicion=None, riesgos=None, historial=None,
+              recortes: Dict[Tuple[str, int], Recorte], modelo_dcf=None, posicion=None, riesgos=None, historial=None,
               salida_recortes: Optional[Path] = None, mercado=None, posicionamiento=None, comparables=None, mercado_objetivo=None,
               agregador=None, multiplos=None, proxima=None) -> Informe:
     from . import secciones as secciones_mod
     anuales, trimestres, instantes = periodos["anuales"], periodos["trimestres"], periodos["instantes"]
+    _FISCAL.update(cierre=anuales[-1].fin if anuales else None, desfase=tab.desfase_fiscal)
     hechos = derivados_mod.calcular(tab.hechos(), anuales + trimestres, instantes)
-    narrativa_impresa = _narrativa_impresa(narrativa, exp, hechos, salida_recortes) if narrativa is not None else None
+    narrativa_impresa = None    # sin IA: los textos los escribe el analista (docs/fases)
     n = Cuadros()
     cifras = _cuadro_cifras_resumen(n, hechos, anuales, trimestres)
     objetivos = _cuadro_objetivos(n, guidance)
@@ -741,7 +707,7 @@ def construir(ticker: str, hoy: date, emisor: Emisor, exp: Expediente, tab: Tabl
     cuadres = dcf_mod.cuadrar(modelo_dcf, hechos, cierres=cierres, agregador=agregador) if modelo_dcf is not None else []
     cuadros_dcf = secciones_mod.cuadros_dcf(n, modelo_dcf, cuadres, precio if precio.hay_dato else None, mercado, multiplos)
     cuadros_dcf["cuadres"] = cuadres
-    # Los cuadros se numeran por orden de impresión, que es el del índice: D, E, G y, penúltima, F.
+    # Los cuadros se numeran por orden de impresión, que es el del índice (A–I).
     # E · 21 y 22 con lo que declara la compañía y lo que asigna la bolsa
     mercado_cuadro = secciones_mod.cuadro_mercado_objetivo(n, mercado_objetivo) if mercado_objetivo is not None else None
     mercado_faltan = dict(mercado_objetivo.faltan) if mercado_objetivo is not None else {"fuente": "no se pidió la lectura del tamaño de mercado"}
@@ -765,8 +731,8 @@ def construir(ticker: str, hoy: date, emisor: Emisor, exp: Expediente, tab: Tabl
         evidencias.setdefault(clave, []).extend(lista)
     if f_cuadros:
         for s in indice:
-            if s.letra == "F":
-                s.estado = "parcial" if "iv" not in f_cuadros else "bolsa"
+            if any(numero == numeros["24"] for numero, _ in s.apartados):      # la parte de la cadena de opciones
+                s.estado = "parcial" if "iv" not in f_cuadros else ""
     faltan += [f"F · {k}: {v}" for k, v in f_faltan.items()]
     if riesgos is not None:
         faltan += [f"Riesgos · {k}: {v}" for k, v in riesgos.faltan.items()]
@@ -815,7 +781,7 @@ def construir(ticker: str, hoy: date, emisor: Emisor, exp: Expediente, tab: Tabl
     documentacion = _documentacion(indice, numeros, por_clave)
 
     return Informe(
-        ticker=ticker.upper(), nombre=emisor.nombre.title().replace("Inc", "Inc."), fecha_emision=hoy, emisor=emisor, expediente=exp, tablero=tab,
+        ticker=ticker.upper(), nombre=ficha.nombre_presentacion or emisor.nombre, fecha_emision=hoy, emisor=emisor, expediente=exp, tablero=tab,
         hechos=hechos, ficha=_ficha(emisor, ficha, precio, exp, hechos, mercado), precio=precio, cifras_resumen=cifras, objetivos=objetivos,
         hitos=guidance.hitos, narrativa=narrativa_impresa, descripcion=ficha.citas.get("descripcion"),
         regiones=regiones_c, grafico_regiones=svg_regiones, grafico_ingresos=svg_ingresos, grafico_deuda=svg_deuda,
@@ -825,7 +791,7 @@ def construir(ticker: str, hoy: date, emisor: Emisor, exp: Expediente, tab: Tabl
         resumen_contraste=tab.resumen, discrepancias=discrepancias, solo_sec=solo_sec, huecos=huecos,
         avisos=[a.texto for a in exp.avisos] + tab.avisos + avisos_graficos, fuentes=fuentes, faltan=faltan,
         periodos_anuales=anuales, periodos_trimestres=trimestres,
-        indice=indice, numeros=numeros, evidencias=evidencias, fotos_ejecutivos=fotos_ejecutivos, fotos_consejo=fotos_consejo,
+        indice=indice, numeros=numeros, titulos={clave: _titulo(indice, numero) for clave, numero in numeros.items()}, evidencias=evidencias, fotos_ejecutivos=fotos_ejecutivos, fotos_consejo=fotos_consejo,
         dcf=cuadros_dcf, riesgos_cuadros=riesgos_cuadros, riesgos_recortes=riesgos_recortes, riesgos_faltan=riesgos.faltan if riesgos is not None else {"item_1a": "no se pidió la lectura del Item 1A"},
         historial_cuadros=historial_cuadros, historial_frases=historial.frases_guia if historial is not None else [],
         historial_faltan=historial.faltan if historial is not None else {"historial": "no se pidió"}, historial_recorte=historial_recorte,

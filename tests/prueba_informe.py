@@ -10,11 +10,10 @@ from types import SimpleNamespace
 from unittest import mock
 
 from tests import contacto_sec_de_prueba, hay_cache_sec, rutas_nflx
-from tesis import contraste, derivados, expediente, ficha, formato, gobierno, graficos, guidance, historial, informe, mercado_objetivo, narrativa, precio, regiones, render, riesgos, sec
+from tesis import contraste, derivados, expediente, ficha, formato, gobierno, graficos, guidance, historial, informe, mercado_objetivo, precio, regiones, render, riesgos, sec
 from tesis.hechos import Capa, Certeza, Contraste, Estado, Hecho, Origen, Periodo, na
 
 RUTAS = rutas_nflx()
-NARRATIVA_NFLX = Path(__file__).resolve().parents[1] / "narrativas" / "NFLX_2026-09-17.json"
 
 
 class Formato(unittest.TestCase):
@@ -41,7 +40,6 @@ class Concordancia(unittest.TestCase):
         periodos = contraste.periodos_del_informe(cls.exp)
         tab = contraste.contrastar(cls.exp, facts, obtenido, periodos)
         hoy = date(2026, 9, 16)
-        narr = narrativa.cargar(NARRATIVA_NFLX) if NARRATIVA_NFLX.exists() else None
         # la prueba afirma lo que pasa SIN fuente de cotización: se aísla del .env de la máquina y no toca la red
         with mock.patch.object(precio, "variable", lambda nombre: ""):
             sin_precio = precio.obtener("NFLX", hoy)
@@ -49,21 +47,9 @@ class Concordancia(unittest.TestCase):
         # E y G salen de los adjuntos, sin red: bastan para afirmar el orden de numeración de los cuadros
         cls.entradas = ("NFLX", hoy, emisor, cls.exp, tab, periodos, ficha.construir(emisor, cls.exp), gobierno.construir(cls.exp),
                         guidance.construir(cls.exp, emisor.depositos, hoy), regiones.construir(cls.exp, tab), sin_precio, {})
-        cls.inf = informe.construir(*cls.entradas, narr, riesgos=riesgos.construir(cls.exp), historial=historial.construir(cls.exp, hechos),
+        cls.inf = informe.construir(*cls.entradas, riesgos=riesgos.construir(cls.exp), historial=historial.construir(cls.exp, hechos),
                                     mercado_objetivo=mercado_objetivo.construir(cls.exp, hechos))
         cls.html = render.a_html(cls.inf)
-
-    def test_narrativa_y_cuadro_imprimen_la_misma_cifra(self):
-        """Falla si la frase de ingresos del 2T26 y la celda del Cuadro de resultados dejan de salir del mismo hecho:
-        la cifra escrita en la narrativa («12.560 M USD») debe ser la que imprime la celda (mismo redondeo, mismo hecho)."""
-        i = self.inf
-        if i.narrativa is None:
-            self.skipTest("sin narrativa")
-        celda_2t26 = next(f for f in i.resultados.filas if f.rotulo == "Ingresos").celdas[len(i.periodos_anuales) + i.periodos_trimestres.index(
-            next(p for p in i.periodos_trimestres if p.clave == "2T26"))]
-        frase = next(f for parrafo in i.narrativa.resumen for f in parrafo if "2T26" in f.texto and "ingresos" in f.texto)
-        self.assertIn(celda_2t26.texto, frase.texto)
-        self.assertEqual(i.narrativa.retiradas, 0)
 
     def test_caja_de_cifras_y_seccion_c_son_el_mismo_hecho(self):
         """Falla si el apartado 2 y el cuadro de resultados dejan de construirse del mismo diccionario de hechos:

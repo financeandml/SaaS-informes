@@ -38,7 +38,6 @@ const D = {
     al_dia: "El informe está al día con lo adjuntado.", nunca: "Aún no has emitido el informe de esta empresa.",
     pend_posicion: "Sin la posición del analista (paso 3), la sección H y la recomendación de portada salen N/A.",
     pend_dcf: "Sin libro DCF (paso 2), los apartados 12 a 20 salen N/A con su motivo.",
-    pend_clave: "Sin ANTHROPIC_API_KEY en .env no se redacta la narrativa: los apartados 2 y 3 salen N/A con su motivo.",
     emitido_el: "emitido el", ficheros_usados: "documentos", cifras: "cifras",
     edgar_si: "EDGAR", edgar_no: "no casa con EDGAR",
   },
@@ -75,7 +74,6 @@ const D = {
     al_dia: "The report is up to date with what you attached.", nunca: "You have not emitted this company's report yet.",
     pend_posicion: "Without the analyst position (step 3), section H and the cover recommendation are N/A.",
     pend_dcf: "Without a DCF workbook (step 2), sections 12 to 20 are N/A with their reason.",
-    pend_clave: "Without ANTHROPIC_API_KEY in .env the narrative is not written: sections 2 and 3 are N/A with their reason.",
     emitido_el: "emitted on", ficheros_usados: "documents", cifras: "figures",
     edgar_si: "EDGAR", edgar_no: "no EDGAR match",
   },
@@ -367,7 +365,6 @@ function pintarInforme(d) {
   if (!d.adjuntos.adjuntos.length) pend.appendChild(elemento("li", {}, [t("sin_adjuntos")]));
   if (!d.posicion.existe) pend.appendChild(elemento("li", {}, [t("pend_posicion")]));
   if (!d.dcf.existe) pend.appendChild(elemento("li", {}, [t("pend_dcf")]));
-  if (d.redactor === false) pend.appendChild(elemento("li", {}, [t("pend_clave")]));
 
   boton.disabled = emitiendo || !d.adjuntos.adjuntos.length;
   boton.textContent = inf && inf.al_dia ? t("reemitir") : t("emitir");

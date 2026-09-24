@@ -48,9 +48,9 @@ from .campos import Campo
 from .hechos import Capa, Contraste, Estado, Hecho, Origen, Periodo, de_valor, na
 
 __all__ = [
-    "Deposito", "Emisor", "FORMULARIOS_ESTADOS", "SinContacto",
-    "ajustar_por_split", "cik_de", "companyfacts", "contacto", "depositos", "emisor", "hechos_xbrl",
-    "periodos_de", "q4_derivado", "splits", "submissions",
+    "Deposito", "Emisor", "FORMULARIOS_ESTADOS", "Portada10K", "SinContacto",
+    "acciones_portada", "ajustar_por_split", "cik_de", "companyfacts", "contacto", "depositos", "desfase_fiscal", "emisor", "float_publico",
+    "hechos_xbrl", "periodos_de", "portada_10k", "q4_derivado", "splits", "submissions",
 ]
 
 RAIZ = Path(__file__).resolve().parent.parent
@@ -357,12 +357,16 @@ def hechos_xbrl(facts: dict, campo: Campo, obtenido_en: date,
         salida[p] = h
     if periodos is not None:
         pedidos = {}
+        cierres_fiscales = None
         for p in periodos:
             if p in salida:
                 pedidos[p] = salida[p]
             else:
-                motivo = ("la SEC no presenta el cuarto trimestre como tal"
-                          if (p.meses == 3 and p.fin.month == 12) else
+                if cierres_fiscales is None and p.meses == 3:
+                    cierres_fiscales = {a.fin for a in calendario(facts, 12)}
+                # el 4T es el trimestre que acaba con el ejercicio fiscal, no el de octubre a diciembre
+                motivo = ("la SEC no presenta el cuarto trimestre fiscal como tal"
+                          if (p.meses == 3 and p.fin in (cierres_fiscales or ())) else
                           f"companyfacts no trae {campo.clave} para {p.clave} en ningún 10-K/10-Q"
                           + ("" if campo.conceptos else " (la compañía no lo declara con un concepto us-gaap)"))
                 pedidos[p] = na(campo.clave, p, motivo, unidad=campo.unidad)
@@ -386,7 +390,14 @@ def splits(facts: dict) -> List[Tuple[date, float, Origen]]:
         if fecha not in vistos:
             vistos[fecha] = (float(f["val"]), Origen(documento="SEC companyfacts", formulario=f["form"], presentado=date.fromisoformat(f["filed"]),
                                                      concepto="us-gaap:StockholdersEquityNoteStockSplitConversionRatio1", referencia=f["accn"]))
-    return sorted((fecha, razon, origen) for fecha, (razon, origen) in vistos.items())
+    # la misma operación llega declarada en varias fechas (anuncio, efectividad, cierre del trimestre): un split de la
+    # misma razón a menos de 90 días del anterior es el mismo split, no otro; contarlo dos veces multiplicaría el ajuste
+    salida: List[Tuple[date, float, Origen]] = []
+    for fecha, (razon, origen) in sorted(vistos.items()):
+        if salida and salida[-1][1] == razon and (fecha - salida[-1][0]).days <= 90:
+            continue
+        salida.append((fecha, razon, origen))
+    return salida
 
 
 def ajustar_por_split(h: Hecho, ajustes: Sequence[Tuple[date, float, Origen]], por_accion: bool) -> Hecho:
@@ -454,17 +465,110 @@ def trimestre_por_acumulados(facts: dict, campo: Campo, hechos: Dict[Periodo, He
     from .hechos import derivar
     if p.es_instante or p.meses != 3 or campo.unidad != "USD":
         return None
-    fy = next((a for a in calendario(facts, 12) if a.inicio <= p.inicio and p.fin <= a.fin), None)
-    if fy is None or fy.inicio == p.inicio:      # el primer trimestre ya es el acumulado: no hay nada que restar
+    anuales = calendario(facts, 12)
+    fy = next((a for a in anuales if a.inicio <= p.inicio and p.fin <= a.fin), None)
+    if fy is not None:
+        inicio_fy = fy.inicio
+    else:
+        # el ejercicio en curso aún no tiene 10-K: empieza el día siguiente al último cierre anual. Sin esto, el 2T y
+        # el 3T del ejercicio abierto —los que más pesan en el TTM— se quedaban sin amortización ni flujo de caja.
+        previos = [a for a in anuales if a.fin < p.inicio]
+        if not previos:
+            return None
+        inicio_fy = previos[-1].fin + timedelta(days=1)
+    if inicio_fy == p.inicio:      # el primer trimestre ya es el acumulado: no hay nada que restar
         return None
-    hasta = hechos.get(Periodo(fin=p.fin, inicio=fy.inicio))
-    hasta_antes = hechos.get(Periodo(fin=p.inicio - timedelta(days=1), inicio=fy.inicio))
+    hasta = hechos.get(Periodo(fin=p.fin, inicio=inicio_fy))
+    hasta_antes = hechos.get(Periodo(fin=p.inicio - timedelta(days=1), inicio=inicio_fy))
     if hasta is None or hasta_antes is None or not hasta.hay_dato or not hasta_antes.hay_dato:
         return None
     return derivar(campo.clave, p, f"{hasta.periodo.clave} − {hasta_antes.periodo.clave} (la compañía publica el flujo "
                                    f"acumulado del ejercicio, no el del trimestre)",
                    {"acumulado": hasta, "acumulado_anterior": hasta_antes},
                    lambda acumulado, acumulado_anterior: acumulado - acumulado_anterior, unidad=campo.unidad)
+
+
+def desfase_fiscal(facts: dict) -> int:
+    """Cuánto se aparta la numeración del ejercicio de la compañía del año en que acaba (0 casi siempre).
+
+    La SEC guarda en cada hecho el `fy` del formulario que lo presenta. En el último 10-K, el ejercicio que cierra
+    es el suyo: si la compañía lo numera por el año en que empieza (un minorista que cierra el 1 de febrero de 2025 y
+    lo llama 2024), `fy` − año de cierre da −1 y los rótulos lo respetan.
+    """
+    from datetime import timedelta
+    mejor: Optional[Tuple[str, int]] = None
+    for conceptos in (facts.get("facts") or {}).values():
+        for datos in conceptos.values():
+            for filas in (datos.get("units") or {}).values():
+                for f in filas:
+                    if f.get("form") != "10-K" or f.get("fp") != "FY" or not f.get("start") or not f.get("fy"):
+                        continue
+                    p = Periodo(fin=date.fromisoformat(f["end"]), inicio=date.fromisoformat(f["start"]))
+                    if p.meses != 12:
+                        continue
+                    clave = (f["filed"], p.fin.isoformat())
+                    if mejor is None or clave > mejor[0]:
+                        mejor = (clave, int(f["fy"]) - (p.fin - timedelta(days=7)).year)
+    return mejor[1] if mejor and mejor[1] in (-1, 0, 1) else 0
+
+
+def float_publico(facts: dict) -> Optional[Tuple[float, date, Origen]]:
+    """Valor en manos de no afiliados de la portada del último 10-K (dei:EntityPublicFloat), con su fecha."""
+    filas = [f for f in (((facts.get("facts") or {}).get("dei") or {}).get("EntityPublicFloat") or {}).get("units", {}).get("USD", [])
+             if f.get("form") in ("10-K", "10-K/A")]
+    if not filas:
+        return None
+    f = max(filas, key=lambda f: (f["filed"], f["end"]))
+    return (float(f["val"]), date.fromisoformat(f["end"]),
+            Origen(documento="SEC companyfacts", formulario=f["form"], presentado=date.fromisoformat(f["filed"]),
+                   concepto="dei:EntityPublicFloat", referencia=f["accn"]))
+
+
+def acciones_portada(facts: dict) -> Optional[Tuple[float, date, Origen]]:
+    """Acciones en circulación de la portada del último 10-K o 10-Q (dei:EntityCommonStockSharesOutstanding)."""
+    filas = [f for f in (((facts.get("facts") or {}).get("dei") or {}).get("EntityCommonStockSharesOutstanding") or {}).get("units", {}).get("shares", [])
+             if f.get("form") in ("10-K", "10-Q", "10-K/A", "10-Q/A")]
+    if not filas:
+        return None
+    ultimo = max(f["filed"] for f in filas)
+    # una compañía con varias clases declara una fila por clase en el mismo formulario: se suman
+    del_ultimo = [f for f in filas if f["filed"] == ultimo]
+    f = del_ultimo[0]
+    return (float(sum(x["val"] for x in del_ultimo)), date.fromisoformat(f["end"]),
+            Origen(documento="SEC companyfacts", formulario=f["form"], presentado=date.fromisoformat(f["filed"]),
+                   concepto="dei:EntityCommonStockSharesOutstanding", referencia=f["accn"]))
+
+
+@dataclass
+class Portada10K:
+    """Lo que el 10-K declara en texto y la SEC no sirve en companyfacts: DEI no numéricas y el texto del documento."""
+    deposito: Deposito
+    obtenido_en: date
+    dei: Dict[str, str]
+    nombre_portada: str       # la línea encima de «(Exact name of registrant as specified in its charter)»
+    texto: str                # el documento en texto plano, para proponer citas (empleados, fundación…)
+
+
+def portada_10k(e: Emisor) -> Optional[Portada10K]:
+    """El documento principal del último 10-K, de EDGAR: sus hechos DEI en XBRL inline y su texto plano.
+
+    El auditor sale de `dei:AuditorName`, que la SEC exige desde 2021; leerlo de la firma «/s/» del PDF confundía al
+    consejero delegado con la firma de auditoría.
+    """
+    import html as html_mod
+    d = e.ultimo("10-K")
+    if d is None:
+        return None
+    crudo, obtenido = descargar_texto(d.url)
+    dei: Dict[str, str] = {}
+    for m in re.finditer(r'<ix:nonNumeric[^>]*\bname="dei:([A-Za-z]+)"[^>]*>(.*?)</ix:nonNumeric>', crudo, re.S):
+        valor = " ".join(html_mod.unescape(re.sub(r"<[^>]+>", " ", m.group(2))).split())
+        dei.setdefault(m.group(1), valor)
+    texto = " ".join(html_mod.unescape(re.sub(r"<[^>]+>", " ", crudo)).split())
+    m = re.search(r"([A-Z0-9][A-Za-z0-9&.,'’\- ]{1,80}?)\s*\(\s*Exact name of registrant as specified in its charter\s*\)", texto)
+    nombre = m.group(1).strip() if m else ""
+    nombre = re.sub(r"^.*Commission [Ff]ile [Nn]umber\s*[\d-]+\s*", "", nombre).strip()
+    return Portada10K(deposito=d, obtenido_en=obtenido, dei=dei, nombre_portada=nombre, texto=texto)
 
 
 def q4_derivado(fy: Hecho, nueve_meses: Hecho) -> Hecho:

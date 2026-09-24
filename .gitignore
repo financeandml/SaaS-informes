@@ -1,4 +1,4 @@
-cache_sec/
+/cache_sec/
 .env
 __pycache__/
 salida/

@@ -62,12 +62,17 @@ CAMPOS: Tuple[Campo, ...] = (
     Campo("marketing", "Ventas y marketing", "Sales and marketing", 8, signo_informe=-1,
           conceptos=("SellingAndMarketingExpense", "MarketingExpense"),
           filas=(r"^Sales and marketing$", r"^Marketing$")),
-    Campo("tecnologia", "Tecnología y desarrollo", "Technology and development", 8, signo_informe=-1,
+    Campo("tecnologia", "Investigación y desarrollo", "Technology and development", 8, signo_informe=-1,
           conceptos=("ResearchAndDevelopmentExpense", "TechnologyAndDevelopmentExpense"),
           filas=(r"^Technology and development$", r"^Research and development$")),
     Campo("generales", "Generales y administrativos", "General and administrative", 8, signo_informe=-1,
           conceptos=("GeneralAndAdministrativeExpense",),
           filas=(r"^General and administrative$",)),
+    # Quien publica ventas, generales y administrativos en una sola línea (Qualcomm) no tiene «ventas y marketing»
+    # ni «generales» sueltos: se imprime su línea, y las otras dos no salen vacías, sino que no salen.
+    Campo("sga", "Ventas, generales y administrativos", "Selling, general and administrative", 8, signo_informe=-1,
+          conceptos=("SellingGeneralAndAdministrativeExpense",),
+          filas=(r"^Selling, general and administrative$",)),
     Campo("ebit", "EBIT (resultado operativo)", "Operating income (EBIT)", 8,
           conceptos=("OperatingIncomeLoss",),
           filas=(r"^Operating income$", r"^Income from operations$")),

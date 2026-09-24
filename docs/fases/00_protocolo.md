@@ -13,7 +13,7 @@ El analista abre una sesión nueva y escribe solo: «sigue».
 5. Prohibido dar algo por hecho sin la salida del comando que lo demuestra.
 
 ## Reglas de todas las fases
-- Una fase = una parte del informe terminada de verdad: sus datos, su paso del asistente (04), sus plantillas de frases (06 §1), sus comprobaciones en la puerta de calidad (06 §3) y sus regresiones (07).
+- Una fase = una parte del informe terminada de verdad: sus datos, sus entradas (04; hasta F6, en `tests/fixtures/<TICKER>/entradas.json`), sus plantillas de frases (06 §1), sus comprobaciones en la puerta de calidad (06 §3) y sus regresiones (07).
 - Todo lo que se imprime o se ve en la interfaz, en español (02 › Lenguaje).
 - Las partes aún no rehechas se imprimen con el código antiguo a través del adaptador del esqueleto (F1); cada fase retira el suyo.
 - Entradas de prueba de QCOM y NFLX en `tests/fixtures/<TICKER>/entradas.json`, marcadas como de prueba.

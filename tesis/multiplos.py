@@ -204,9 +204,17 @@ def construir(hechos: Dict[Tuple[str, Periodo], Hecho], trimestres: List[Periodo
     l = linea("EBITDA TTM (M USD)", ebitda, "musd", f"EBIT + amortización del inmovilizado, {rango}", f"{mln(v['ebit'])} + {mln(v['amortizacion'])}" if ebitda is not None else "",
               sumas["ebit"][1] or sumas["amortizacion"][1])
     _cuadrar(l, agregador.ebitda_ttm if agregador is not None else None, "el EBITDA TTM")
-    per = m.precio / v["bpa_diluido"] if m.precio is not None and v["bpa_diluido"] and v["bpa_diluido"] > 0 else None   # con BPA negativo no hay PER, como en comparables
-    linea("PER (TTM)", per, "x", "cotización oficial / BPA diluido TTM", f"{dos(m.precio)} / {dos(v['bpa_diluido'])}" if per is not None else "",
-          m.faltan.get("precio") or sumas["bpa_diluido"][1] or ("BPA TTM negativo: PER no definido" if v["bpa_diluido"] else "BPA TTM nulo"))
+    bpa, formula_per = v["bpa_diluido"], "cotización oficial / BPA diluido TTM"
+    if bpa is None and v["beneficio_neto"] is not None:
+        # el BPA del trimestre que nadie publica (el 4T fiscal) no se resta; el TTM se saca del beneficio TTM entre las
+        # acciones medias diluidas del último trimestre, y la fórmula lo dice
+        acc_diluidas = hechos.get(("acciones_diluidas", fin))
+        if acc_diluidas is not None and acc_diluidas.hay_dato and acc_diluidas.valor:
+            bpa = v["beneficio_neto"] / acc_diluidas.valor
+            formula_per = f"cotización oficial / (beneficio neto TTM / acciones medias diluidas del {fin.clave})"
+    per = m.precio / bpa if m.precio is not None and bpa and bpa > 0 else None   # con BPA negativo no hay PER, como en comparables
+    linea("PER (TTM)", per, "x", formula_per, f"{dos(m.precio)} / {dos(bpa)}" if per is not None else "",
+          m.faltan.get("precio") or ("" if bpa is not None else sumas["bpa_diluido"][1]) or ("BPA TTM negativo: PER no definido" if bpa else "BPA TTM nulo"))
     l = linea("EV / EBITDA (TTM)", ev / ebitda if ev is not None and ebitda else None, "x", "EV / EBITDA TTM", f"{mln(ev)} / {mln(ebitda)}" if ev is not None and ebitda else "",
               "sin EV o sin EBITDA")
     _cuadrar(l, agregador.ev_ebitda if agregador is not None else None, "EV/EBITDA")

@@ -21,7 +21,7 @@ from typing import Callable, Dict, Mapping, Optional, Tuple
 
 __all__ = [
     "Capa", "Certeza", "Cita", "Contraste", "Estado", "Hecho", "Origen", "Periodo",
-    "de_valor", "derivar", "na",
+    "de_valor", "derivar", "etiqueta_fiscal", "na",
 ]
 
 
@@ -117,6 +117,28 @@ class Periodo:
 def _un_dia():
     from datetime import timedelta
     return timedelta(days=1)
+
+
+def etiqueta_fiscal(p: Periodo, cierre: Optional[date] = None, desfase: int = 0) -> str:
+    """El rótulo que imprime el informe: el ejercicio por su año («2025») y el trimestre por su número dentro del
+    ejercicio fiscal de la compañía («4T FY25»), nunca por el trimestre natural.
+
+    Qualcomm cierra el último domingo de septiembre: su trimestre de julio a septiembre es su 4T, no un «3T25», y
+    el de octubre a diciembre es el 1T del ejercicio siguiente. `cierre` es el cierre de cualquier ejercicio de la
+    compañía; quien cierra por semanas acaba a veces en los primeros días del mes siguiente, así que las fechas se
+    cuentan retrasadas una semana. `desfase` corrige a quien numera su ejercicio por el año en que empieza (la SEC
+    lo da en `fy`: −1 para un ejercicio que acaba el 1 de febrero de 2025 y la compañía llama 2024).
+    """
+    from datetime import timedelta
+    if p.meses == 12:
+        return str((p.fin - timedelta(days=7)).year + desfase)
+    if p.meses != 3 or cierre is None:
+        return p.clave
+    mes_cierre = (cierre - timedelta(days=7)).month
+    fin = p.fin - timedelta(days=7)
+    trimestre = ((fin.month - mes_cierre - 1) % 12) // 3 + 1
+    ejercicio = fin.year + (1 if fin.month > mes_cierre else 0) + desfase
+    return f"{trimestre}T FY{ejercicio % 100:02d}"
 
 
 @dataclass(frozen=True)
