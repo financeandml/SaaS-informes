@@ -47,6 +47,9 @@ sensibilidad, reverse, multiplos, sotp, objetivo, excel, validacion) · `tesis/p
 - Fixtures sin red en `tests/fixtures/cache_sec/`: QCOM, NFLX, WMT y JPM (apunta `sec.CACHE` ahí).
 
 ## Estado
-F0 ☑ (24/09/2026, `docs/estado.md`) · F1 ▶ (R3, R4, R6 en verde) · F2 ☐ · F3 ☐ · F4 ☐ · F5 ☐
-Protocolo: en cada sesión nueva el analista escribe «sigue» → `docs/fases/00_protocolo.md`. Siguiente: F1 (`docs/fases/F1.md`).
-Batería actual: 214 pruebas en verde con los dos corredores, sin red externa.
+F0 ☑ (24/09/2026, `docs/estado.md`) · F1 ▶ · F2 ☐ · F3 ☐ · F4 ☐ · F5 ☐
+Protocolo: en cada sesión nueva el analista escribe «sigue» → `docs/fases/00_protocolo.md`. Fase en curso: F1 (`docs/fases/F1.md`).
+Batería: 214 pruebas en verde con los dos corredores, sin red. `python -m tesis regresiones` → **3 de 33** (R3, R4, R6).
+Retorno F1: hechas las alternativas de etiqueta XBRL (`campos.py`) y el saldo medio de 52/53 semanas (`derivados.py`).
+Siguiente: R1 (4T = FY − 9M en `contraste.periodos_del_informe`), R2 (SG&A en una línea, hoy dos filas vacías) y
+R7/R8/R12, que piden el XBRL inline del 10-K: companyfacts no trae hechos de texto (`AuditorName`, `EntityRegistrantName`).
