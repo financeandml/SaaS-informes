@@ -68,7 +68,8 @@ class FotoImpresa:
 
 def fotos(g: Gobierno) -> Tuple[List[FotoImpresa], List[FotoImpresa]]:
     ejecutivos = []
-    for e in g.ejecutivos:
+    # sin la proxy en PDF no hay retratos ni trayectorias: la tarjeta repetiría el cuadro de ejecutivos
+    for e in (g.ejecutivos if any(x.foto or x.trayectoria for x in g.ejecutivos) else []):
         pie = f"Proxy, pág. {e.pagina_ficha or e.pagina}" + (f" · retrato huella {e.foto.huella}" if e.foto else " · sin retrato en la proxy")
         ejecutivos.append(FotoImpresa(e.nombre, e.cargo, f"{e.edad} años", e.foto.ruta if e.foto else None, pie, e.trayectoria))
     consejo = []

@@ -30,6 +30,7 @@ import json
 import re
 from dataclasses import dataclass, field
 from datetime import date, datetime, timedelta
+from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
@@ -101,11 +102,44 @@ class Mercado:
 _CRUDOS: Dict[str, Tuple[str, datetime]] = {}      # url → (cuerpo literal, hora): lo que se pinta como evidencia
 
 
+CACHE_BOLSA: Optional[Path] = None   # por defecto <raíz>/cache_bolsa; las pruebas la apuntan a sus fixtures
+SOLO_CACHE = False                     # pruebas: nunca a la red, la última respuesta guardada de esa URL
+
+
+def _ruta_bolsa(url: str, dia: date):
+    from . import entorno
+    carpeta = CACHE_BOLSA or Path(entorno.RAIZ) / "cache_bolsa"
+    nombre = re.sub(r"[^A-Za-z0-9]+", "_", url.split("://", 1)[-1]).strip("_")
+    return carpeta, carpeta / f"{nombre}__{dia.isoformat()}.json.gz"
+
+
 def _json(url: str, cabeceras: dict) -> dict:
+    """Respuesta de la bolsa, guardada entera con URL, hora y sha256 (03 §7); caché por URL y día."""
+    import gzip
+    import hashlib
+    carpeta, ruta = _ruta_bolsa(url, date.today())
+    if not ruta.exists() and SOLO_CACHE:
+        previas = sorted(carpeta.glob(ruta.name.rsplit("__", 1)[0] + "__*.json.gz"))
+        if not previas:
+            raise URLError(f"sin respuesta guardada de {url}")
+        ruta = previas[-1]
+    if ruta.exists():
+        with gzip.open(ruta, "rt", encoding="utf-8") as f:
+            envoltorio = json.load(f)
+        _CRUDOS[url] = (envoltorio["cuerpo"], datetime.fromisoformat(envoltorio["obtenido"]))
+        return json.loads(envoltorio["cuerpo"])
     peticion = Request(url, headers=cabeceras)
     with urlopen(peticion, timeout=30) as r:
         cuerpo = r.read().decode("utf-8")
-    _CRUDOS[url] = (cuerpo, datetime.now())
+    ahora = datetime.now()
+    _CRUDOS[url] = (cuerpo, ahora)
+    try:
+        carpeta.mkdir(parents=True, exist_ok=True)
+        with gzip.open(ruta, "wt", encoding="utf-8") as f:
+            json.dump({"url": url, "obtenido": ahora.isoformat(timespec="seconds"),
+                       "sha256": hashlib.sha256(cuerpo.encode("utf-8")).hexdigest(), "cuerpo": cuerpo}, f, ensure_ascii=False)
+    except OSError:
+        pass
     return json.loads(cuerpo)
 
 

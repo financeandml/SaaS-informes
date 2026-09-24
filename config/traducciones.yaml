@@ -1,0 +1,270 @@
+# Traducciones (02 › Lenguaje): miembros XBRL estándar, países, jurisdicciones, cargos y vocabulario genérico.
+# Nada de un emisor concreto: los miembros propios de una compañía («xxx:FooMember») los rotula el analista
+# (entradas: perfil.rotulos) o, si su nombre es una expresión genérica, el glosario de abajo.
+# Un acrónimo (QCT, EMEA, IoT…) se imprime tal cual.
+
+miembros:
+  us-gaap:SegmentReconcilingItemsMember: Partidas de conciliación
+  us-gaap:CorporateNonSegmentMember: Corporativo (fuera de segmentos)
+  us-gaap:IntersegmentEliminationMember: Eliminaciones entre segmentos
+  us-gaap:AllOtherSegmentsMember: Resto de segmentos
+  us-gaap:OperatingSegmentsMember: Segmentos operativos
+  us-gaap:MaterialReconcilingItemsMember: Partidas de conciliación
+  us-gaap:EMEAMember: Europa, Oriente Medio y África
+  us-gaap:NonUsMember: Fuera de EE. UU.
+  srt:AmericasMember: América
+  srt:NorthAmericaMember: Norteamérica
+  srt:LatinAmericaMember: Latinoamérica
+  srt:SouthAmericaMember: Sudamérica
+  srt:EuropeMember: Europa
+  srt:EuropeMiddleEastAndAfricaMember: Europa, Oriente Medio y África
+  srt:AsiaMember: Asia
+  srt:AsiaPacificMember: Asia-Pacífico
+  srt:AfricaMember: África
+  srt:MiddleEastMember: Oriente Medio
+  srt:ScenarioUnspecifiedDomain: Sin especificar
+
+paises:   # country:XX (ISO 3166-1)
+  US: Estados Unidos
+  CA: Canadá
+  MX: México
+  BR: Brasil
+  AR: Argentina
+  CL: Chile
+  CO: Colombia
+  PE: Perú
+  GB: Reino Unido
+  IE: Irlanda
+  FR: Francia
+  DE: Alemania
+  IT: Italia
+  ES: España
+  PT: Portugal
+  NL: Países Bajos
+  BE: Bélgica
+  LU: Luxemburgo
+  CH: Suiza
+  AT: Austria
+  SE: Suecia
+  NO: Noruega
+  DK: Dinamarca
+  FI: Finlandia
+  PL: Polonia
+  CZ: Chequia
+  HU: Hungría
+  RO: Rumanía
+  GR: Grecia
+  TR: Turquía
+  RU: Rusia
+  UA: Ucrania
+  IL: Israel
+  AE: Emiratos Árabes Unidos
+  SA: Arabia Saudí
+  ZA: Sudáfrica
+  EG: Egipto
+  NG: Nigeria
+  IN: India
+  CN: China
+  HK: Hong Kong
+  TW: Taiwán
+  JP: Japón
+  KR: Corea del Sur
+  SG: Singapur
+  MY: Malasia
+  TH: Tailandia
+  VN: Vietnam
+  ID: Indonesia
+  PH: Filipinas
+  AU: Australia
+  NZ: Nueva Zelanda
+  KY: Islas Caimán
+  BM: Bermudas
+  VG: Islas Vírgenes Británicas
+  JE: Jersey
+  GG: Guernsey
+  IM: Isla de Man
+  MT: Malta
+  CY: Chipre
+  PR: Puerto Rico
+
+jurisdicciones:   # nombres de EDGAR y del Exhibit 21 que no se escriben igual en español
+  United States: Estados Unidos
+  United Kingdom: Reino Unido
+  England and Wales: Inglaterra y Gales
+  England: Inglaterra
+  Scotland: Escocia
+  Netherlands: Países Bajos
+  The Netherlands: Países Bajos
+  Germany: Alemania
+  France: Francia
+  Italy: Italia
+  Spain: España
+  Switzerland: Suiza
+  Sweden: Suecia
+  Norway: Noruega
+  Denmark: Dinamarca
+  Finland: Finlandia
+  Belgium: Bélgica
+  Luxembourg: Luxemburgo
+  Austria: Austria
+  Ireland: Irlanda
+  Poland: Polonia
+  Czech Republic: Chequia
+  Hungary: Hungría
+  Romania: Rumanía
+  Greece: Grecia
+  Turkey: Turquía
+  Türkiye: Turquía
+  Russia: Rusia
+  Israel: Israel
+  India: India
+  China: China
+  People's Republic of China: China
+  Hong Kong: Hong Kong
+  Taiwan: Taiwán
+  Japan: Japón
+  Korea: Corea del Sur
+  South Korea: Corea del Sur
+  Republic of Korea: Corea del Sur
+  Singapore: Singapur
+  Malaysia: Malasia
+  Thailand: Tailandia
+  Vietnam: Vietnam
+  Indonesia: Indonesia
+  Philippines: Filipinas
+  Australia: Australia
+  New Zealand: Nueva Zelanda
+  Canada: Canadá
+  Mexico: México
+  Brazil: Brasil
+  Argentina: Argentina
+  Chile: Chile
+  Colombia: Colombia
+  Peru: Perú
+  South Africa: Sudáfrica
+  United Arab Emirates: Emiratos Árabes Unidos
+  Saudi Arabia: Arabia Saudí
+  Cayman Islands: Islas Caimán
+  Bermuda: Bermudas
+  British Virgin Islands: Islas Vírgenes Británicas
+  Isle of Man: Isla de Man
+  Cyprus: Chipre
+  Malta: Malta
+  New York: Nueva York
+  New Jersey: Nueva Jersey
+  New Mexico: Nuevo México
+  North Carolina: Carolina del Norte
+  South Carolina: Carolina del Sur
+  North Dakota: Dakota del Norte
+  South Dakota: Dakota del Sur
+  West Virginia: Virginia Occidental
+  Pennsylvania: Pensilvania
+  Hawaii: Hawái
+  Louisiana: Luisiana
+  District of Columbia: Distrito de Columbia
+
+glosario:   # expresiones genéricas (minúsculas) que aparecen en nombres de miembros propios
+  handsets: Teléfonos móviles
+  reportable segment: Segmento operativo
+  mobile handsets: Teléfonos móviles
+  licensing agreements: Acuerdos de licencia
+  automotive: Automoción
+  internet of things: Internet de las cosas
+  licensing: Licencias
+  services: Servicios
+  service: Servicios
+  products: Productos
+  product: Productos
+  hardware: Hardware
+  software: Software
+  cloud: Nube
+  advertising: Publicidad
+  subscription: Suscripciones
+  subscriptions: Suscripciones
+  streaming: Streaming
+  dvd: DVD
+  other: Otros
+  others: Otros
+  all other: Resto
+  corporate: Corporativo
+  consumer: Consumo
+  enterprise: Empresas
+  commercial: Comercial
+  government: Administraciones públicas
+  industrial: Industrial
+  healthcare: Salud
+  data center: Centros de datos
+  gaming: Videojuegos
+  networking: Redes
+  semiconductors: Semiconductores
+  royalties: Regalías
+  royalty: Regalías
+  maintenance: Mantenimiento
+  wholesale: Mayorista
+  retail: Minorista
+  international: Internacional
+  domestic: Nacional
+  united states: Estados Unidos
+  united states and canada: Estados Unidos y Canadá
+  europe middle east and africa: Europa, Oriente Medio y África
+  latin america: Latinoamérica
+  asia pacific: Asia-Pacífico
+  china: China
+  china including hong kong: China (con Hong Kong)
+  south korea: Corea del Sur
+  korea: Corea del Sur
+  taiwan: Taiwán
+  japan: Japón
+  vietnam: Vietnam
+  rest of world: Resto del mundo
+  rest of the world: Resto del mundo
+  foreign: Resto del mundo
+  other foreign: Resto del mundo
+  other countries: Otros países
+  americas: América
+
+cargos:   # de más largo a más corto; se aplican como frases completas (sin distinguir mayúsculas)
+  - [Chief Executive Officer-elect, consejero delegado designado]
+  - [Chief Executive Officer, consejero delegado (CEO)]
+  - [Chief Financial Officer, director financiero (CFO)]
+  - [Chief Operating Officer, director de operaciones (COO)]
+  - [Chief Technology Officer, director de tecnología (CTO)]
+  - [Chief Human Resources Officer, director de recursos humanos]
+  - [Chief People Officer, director de personas]
+  - [Chief Legal Officer, director jurídico]
+  - [Chief Accounting Officer, director de contabilidad]
+  - [Chief Marketing Officer, director de marketing (CMO)]
+  - [Chief Product Officer, director de producto]
+  - [Chief Content Officer, director de contenidos]
+  - [Chief Commercial Officer, director comercial]
+  - [Chief Information Officer, director de sistemas (CIO)]
+  - [Chief Strategy Officer, director de estrategia]
+  - [Chief Global Affairs Officer, director de asuntos globales]
+  - [Chief Communications Officer, director de comunicación]
+  - [Chief Revenue Officer, director de ingresos]
+  - [Principal Accounting Officer, responsable principal de contabilidad]
+  - [Principal Financial Officer, responsable financiero principal]
+  - [Executive Vice President, vicepresidente ejecutivo]
+  - [Senior Vice President, vicepresidente sénior]
+  - [Group President, presidente de grupo]
+  - [Vice President, vicepresidente]
+  - [Executive Chairman of the Board, presidente ejecutivo del consejo]
+  - [Executive Chair of the Board, presidente ejecutivo del consejo]
+  - [Chairman of the Board, presidente del consejo]
+  - [Chair of the Board, presidente del consejo]
+  - [Executive Chairman, presidente ejecutivo]
+  - [Executive Chair, presidente ejecutivo]
+  - [Chairman, presidente del consejo]
+  - [Chairwoman, presidenta del consejo]
+  - [General Counsel, director jurídico]
+  - [Corporate Secretary, secretario del consejo]
+  - [Secretary, secretario]
+  - [Treasurer, tesorero]
+  - [Controller, interventor]
+  - [Global Affairs, asuntos globales]
+  - [Founder, fundador]
+  - [President, presidente]
+  - [Former, antiguo]
+  - [Interim, interino]
+  - [member of the Board of Directors, consejero]
+  - [Director, consejero]

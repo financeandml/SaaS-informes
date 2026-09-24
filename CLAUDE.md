@@ -43,14 +43,14 @@ sensibilidad, reverse, multiplos, sotp, objetivo, excel, validacion) · `tesis/p
 - Lo antiguo sigue valiendo y manda: `servir` es `tesis.saas` y `generar` es `emitir.py`, con sus mismas opciones pasadas tal cual.
 - `pytest -q` y `python -m unittest discover -s tests -p "prueba_*.py"` recorren la misma batería (`pytest.ini`).
 - Datos pesados fuera de la copia de trabajo: `WC_DATOS` sitúa `adjuntos/` y `salida/`. Sin la variable, vuelven a la raíz.
-- Fixtures sin red en `tests/fixtures/cache_sec/` (versionados): QCOM, NFLX, WMT y JPM, con el 10-K de QCOM y NFLX (apunta `sec.CACHE` ahí).
+- Fixtures sin red (versionados): `tests/fixtures/cache_sec/` (QCOM, NFLX, WMT, JPM; 10-K, 10-Q, DEF 14A, Ex. 21, 13G y notas de QCOM y NFLX: apunta `sec.CACHE` ahí), `tests/fixtures/cache_bolsa/` (Nasdaq: `precio.CACHE_BOLSA` y `precio.SOLO_CACHE = True`) y `tests/fixtures/<TICKER>/entradas.json` (entradas de prueba).
 - Dependencias: `jinja2`, `pypdfium2`, `playwright`, `matplotlib`, `pillow` y `pyyaml` (el índice y los umbrales son YAML).
 
 ## Estado
-F0 ☑ · F1 ☑ esqueleto + C (24/09/2026) · F2 ☐ B · F3 ☐ D · F4 ☐ E · F5 ☐ F · F6 ☐ G + portada + asistente · F7 ☐ A + H + I + cierre
-Protocolo: en cada sesión nueva el analista escribe «sigue» → `docs/fases/00_protocolo.md`. Siguiente: F2 (`docs/fases/F2.md`).
+F0 ☑ · F1 ☑ esqueleto + C · F2 ☑ B (24/09/2026) · F3 ☐ D · F4 ☐ E · F5 ☐ F · F6 ☐ G + portada + asistente · F7 ☐ A + H + I + cierre
+Protocolo: en cada sesión nueva el analista escribe «sigue» → `docs/fases/00_protocolo.md`. Siguiente: F3 (`docs/fases/F3.md`).
 «confirmo borrar» (analista, 24/09/2026): hecho en F1 (sin `narrativa.py`, SDK `anthropic`, `--redactar`, `narrativas/` ni restos).
-Batería: 176 en verde y 34 omitidas sin los adjuntos de NFLX/QCOM. `python -m tesis regresiones` → **12 de 33** (todas las de F1).
-F1: índice desde `01_indice.yaml` (`tesis/indice.py`), trimestres fiscales («4T FY25»), 4T por acción derivado, SG&A en una línea,
-filas que la compañía no tiene fuera, notas de split y dividendos desde los datos, ficha con DEI del 10-K de EDGAR (auditor, nombre,
-free float, acciones) y propuestas de plantilla y fundación con cita. El asistente web pasa entero a F6.
+Batería: 183 en verde y 34 omitidas sin los adjuntos de NFLX/QCOM. `python -m tesis regresiones` → **17 de 33** (F1 y F2).
+F2: segmentos, líneas y geografía del XBRL inline (`ixbrl`, `segmentos`, UDM con el 10-Q); accionistas, 13G, ejecutivos, retribución y
+filiales de EDGAR (`proxy`, `gobierno`); guía de los Ex. 99.1 como candidatos confirmados en `entradas.json` (`guia`: Cuadro 2 y 26);
+fechas clave de Nasdaq con caché (`calendario`); entradas del paso 4 verificadas contra el documento (`entradas`, `parte_b`).

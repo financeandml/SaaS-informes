@@ -40,19 +40,20 @@ __all__ = ["Accionista", "Consejero", "Ejecutivo", "Filial", "Gobierno", "Retrib
 @dataclass
 class Accionista:
     nombre: str
-    acciones: float
+    acciones: Optional[float]
     porcentaje: Optional[float]      # None = «*» (menos del 1 %)
     direccion: str
-    pagina: int
+    pagina: Optional[int]
     nota: str = ""
+    fuente: str = ""                 # «DEF 14A a 15/12/2025» · «13G/A del 07/08/2026 (a 30/06/2026)»
 
 
 @dataclass
 class Ejecutivo:
     nombre: str
-    edad: int
+    edad: Optional[int]
     cargo: str
-    pagina: int
+    pagina: Optional[int]
     foto: object = None                          # Recorte del retrato, si la proxy lo trae
     trayectoria: List[str] = field(default_factory=list)   # viñetas literales de «Career Snapshot» y «Prior»
     pagina_ficha: Optional[int] = None
@@ -75,7 +76,8 @@ class Retribucion:
     anio: int
     cifras: List[Optional[float]]    # columnas tal cual; None donde el documento pone «—»
     total: Optional[float]
-    pagina: int
+    pagina: Optional[int]
+    cargo: str = ""
 
 
 @dataclass
@@ -83,7 +85,7 @@ class Filial:
     nombre: str
     jurisdiccion: str
     porcentaje: Optional[float]
-    pagina: int
+    pagina: Optional[int]
 
 
 @dataclass
@@ -99,6 +101,9 @@ class Gobierno:
     nota_filiales: str = ""
     origenes: dict = field(default_factory=dict)      # clave → Origen
     faltan: dict = field(default_factory=dict)
+    junta: Optional[date] = None                          # próxima junta de accionistas (DEF 14A)
+    salidas_13g: List[str] = field(default_factory=list)   # quién dejó de declarar ≥ 5 % después de la proxy
+    sin_traducir: List[str] = field(default_factory=list)  # cargos o jurisdicciones que el analista debe revisar
 
 
 # El número de acciones lleva separador de miles (así no se confunde con un código postal de la dirección);
@@ -347,10 +352,141 @@ def _fichas_y_retratos(proxy: Adjunto, g: Gobierno, salida_fotos: Optional[Path]
         g.faltan["consejo"] = "no se hallaron fichas de consejeros («Nombre CARGO», «DIRECTOR SINCE», «AGE») en la proxy"
 
 
-def construir(exp: Expediente, salida_fotos: Optional[Path] = None) -> Gobierno:
+def _de_edgar(emisor, g: Gobierno) -> None:
+    """Apartados 5 y 6 desde EDGAR (03 §6): proxy, 10-K, Exhibit 21 y Schedule 13G/13D en XML. Lo que no se encuentra
+    queda en `faltan` con el motivo, para que el asistente lo pida con cita."""
+    from . import proxy as px, rotulos, sec
+    from .formato import fecha as f_fecha, numero
+    def texto(d):
+        return sec.descargar_texto(d.url)[0]
+    p = emisor.ultimo("DEF 14A")
+    conocidos: List[str] = []
+    if p is None:
+        g.faltan["proxy"] = "EDGAR no tiene DEF 14A de la compañía"
+    else:
+        html = texto(p)
+        filas, fecha, seccion = px.leer_propiedad(html)
+        g.fecha_accionistas = fecha
+        conocidos = [f.nombre for f in filas]
+        if filas:
+            g.origenes["accionistas"] = px.origen("DEF 14A", "DEF 14A", p.presentado, p.url, seccion)
+        fuente_proxy = f"DEF 14A{' a ' + f_fecha(fecha) if fecha else ''}"
+        grandes = [f for f in filas if f.porcentaje is not None and f.porcentaje >= 5 and not f.es_grupo]
+        grupo = next((f for f in filas if f.es_grupo), None)
+        # 13G/13D posteriores a la proxy: la última declaración de cada declarante manda
+        declaraciones = []
+        for d in emisor.depositos:
+            # todos los 13G/13D en XML (desde dic. 2024): la proxy copia los suyos de ellos, a veces con años de retraso
+            if ("13G" in d.formulario or "13D" in d.formulario) and d.documento.endswith(".xml"):
+                url = f"https://www.sec.gov/Archives/edgar/data/{int(emisor.cik)}/{d.accession.replace('-', '')}/primary_doc.xml"
+                try:
+                    x = px.leer_13g(sec.descargar_texto(url)[0], d.presentado, d.formulario, url, emisor.nombre)
+                except (RuntimeError, sec.SinContacto):
+                    x = None
+                if x is not None:
+                    declaraciones.append(x)
+        dentro, fuera = px.vigentes(declaraciones)
+        por_clave = {px.clave_nombre(f.nombre): f for f in grandes}
+        for x in dentro:
+            por_clave.pop(px.clave_nombre(x.declarante), None)
+        salen = {px.clave_nombre(x.declarante): x for x in fuera}
+        for clave, f in list(por_clave.items()):
+            if clave in salen:
+                x = salen[clave]
+                g.salidas_13g.append(f"{f.nombre}: {numero(f.porcentaje, 2)} % en la proxy; su {x.formulario.replace('SCHEDULE ', '')} del "
+                                     f"{f_fecha(x.presentado)} declara {numero(x.porcentaje, 2)} %")
+                por_clave.pop(clave)
+        for f in por_clave.values():
+            g.accionistas.append(Accionista(nombre=f.nombre, acciones=f.acciones, porcentaje=f.porcentaje, direccion="",
+                                            pagina=None, fuente=fuente_proxy))
+        for x in dentro:
+            g.accionistas.append(Accionista(nombre=x.declarante.title() if x.declarante.isupper() else x.declarante,
+                                            acciones=x.acciones, porcentaje=x.porcentaje, direccion="", pagina=None,
+                                            fuente=f"{x.formulario} del {f_fecha(x.presentado)}"
+                                                   + (f" (a {f_fecha(x.fecha_evento)})" if x.fecha_evento else "")))
+        g.accionistas.sort(key=lambda a: -(a.porcentaje or 0))
+        if grupo is not None:
+            g.accionistas.append(Accionista(nombre=re.sub(r"All current (executive officers and directors|directors and executive officers)",
+                                                          "Consejeros y directivos actuales", grupo.nombre).replace("as a group", "en conjunto")
+                                            .replace("persons", "personas"),
+                                            acciones=grupo.acciones, porcentaje=grupo.porcentaje, direccion="", pagina=None,
+                                            nota="menos del 1 %" if grupo.menos_de_uno else "", fuente=fuente_proxy))
+        if not filas:
+            g.faltan["accionistas"] = "no se reconoció la tabla de propiedad en la DEF 14A de EDGAR: pídasela al analista con cita"
+        r, columnas = px.leer_retribucion(html, conocidos)
+        if r:
+            ultimo = max(x.anio for x in r)
+            femeninas = set()
+            k = emisor.ultimo("10-K")
+            if k is not None:
+                femeninas = {d.nombre for d in px.leer_ejecutivos(texto(k))[0] if d.femenino}
+            for x in r:
+                if x.anio != ultimo:
+                    continue
+                cargo, ok = rotulos.cargo(x.cargo, femenino=x.nombre in femeninas)
+                if not ok:
+                    g.sin_traducir.append(f"cargo «{x.cargo}»")
+                g.retribucion.append(Retribucion(nombre=x.nombre, anio=x.anio, cifras=x.cifras[:-1] if x.total is not None else x.cifras,
+                                                 total=x.total, pagina=None, cargo=cargo))
+            g.cabecera_retribucion = ["Año"] + columnas
+            g.origenes["retribucion"] = px.origen("DEF 14A", "DEF 14A", p.presentado, p.url, "Summary Compensation Table")
+        else:
+            g.faltan["retribucion"] = "no se reconoció la Summary Compensation Table en la DEF 14A de EDGAR"
+        m = re.search(r"(?:annual meeting of (?:stockholders|shareholders|shareowners)[^.]{0,80}?(?:will be held|to be held) on\s+"
+                      r"(?:\w+,\s+)?([A-Z][a-z]+ \d{1,2}, \d{4}))", px.tablas_html.texto_plano(html)[:60000], re.I)
+        if m:
+            g.origenes["junta"] = px.origen("DEF 14A", "DEF 14A", p.presentado, p.url, m.group(0)[:160])
+            g.junta = px.fecha_as_of("as of " + m.group(1))
+    k = emisor.ultimo("10-K")
+    if k is not None:
+        ejecutivos, fecha = px.leer_ejecutivos(texto(k))
+        origen = px.origen("10-K", "10-K", k.presentado, k.url, "Information about our Executive Officers")
+        if not ejecutivos and p is not None:
+            ejecutivos, fecha = px.leer_ejecutivos(texto(p))
+            origen = px.origen("DEF 14A", "DEF 14A", p.presentado, p.url, "Executive Officers")
+        for e in ejecutivos:
+            cargo, ok = rotulos.cargo(e.cargo, femenino=e.femenino)
+            if not ok:
+                g.sin_traducir.append(f"cargo «{e.cargo}»")
+            g.ejecutivos.append(Ejecutivo(nombre=e.nombre, edad=e.edad, cargo=cargo, pagina=None))
+        if ejecutivos:
+            g.fecha_ejecutivos = fecha
+            g.origenes["ejecutivos"] = origen
+        else:
+            g.faltan["ejecutivos"] = "ni el 10-K ni la DEF 14A traen la lista de ejecutivos con edad y cargo reconocible"
+        base = k.url.rsplit("/", 1)[0]
+        try:
+            indice, _ = sec._descargar(base + "/index.json")
+            nombres = [it["name"] for it in indice.get("directory", {}).get("item", [])]
+        except (RuntimeError, sec.SinContacto):
+            nombres = []
+        ex21 = next((n for n in nombres if re.search(r"ex-?21", n, re.I)), None)
+        if ex21 is None:
+            g.faltan["filiales"] = "el índice del último 10-K no incluye el Exhibit 21"
+        else:
+            for f in px.leer_filiales(sec.descargar_texto(f"{base}/{ex21}")[0]):
+                if not f.traducida:
+                    g.sin_traducir.append(f"jurisdicción «{f.jurisdiccion}»")
+                g.filiales.append(Filial(nombre=f.nombre, jurisdiccion=f.jurisdiccion, porcentaje=None, pagina=None))
+            g.origenes["filiales"] = px.origen("Exhibit 21 del 10-K", "10-K", k.presentado, f"{base}/{ex21}", "Subsidiaries")
+
+
+def construir(exp: Expediente, salida_fotos: Optional[Path] = None, emisor=None) -> Gobierno:
+    """Con `emisor`, todo sale de EDGAR (HTML y XML); el PDF de la proxy, si está en el expediente, solo aporta retratos,
+    trayectorias y consejo. Sin `emisor` (o sin contacto con la SEC), la lectura antigua de los PDF adjuntos."""
     g = Gobierno()
     proxy = max(exp.de_tipo(Tipo.DEF14A), key=lambda a: a.fecha or date.min, default=None)
     k10 = max(exp.de_tipo(Tipo.K10), key=lambda a: a.periodo_fin or date.min, default=None)
+    if emisor is not None:
+        from . import sec
+        try:
+            _de_edgar(emisor, g)
+            if proxy is not None:
+                _fichas_y_retratos(proxy, g, salida_fotos)
+            return g
+        except (RuntimeError, sec.SinContacto) as e:
+            g = Gobierno()
+            g.faltan["edgar"] = f"EDGAR no respondió ({e}); se leen los PDF adjuntos"
     if proxy is None:
         g.faltan["proxy"] = "sin DEF 14A en el expediente: accionariado, ejecutivos y retribución quedan sin fuente"
     else:

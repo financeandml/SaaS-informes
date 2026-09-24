@@ -121,19 +121,32 @@
 <section class="hoja">
 <h2 id="parte-{{ i.indice[1].letra }}">{{ i.indice[1].letra }}. {{ i.indice[1].titulo }}</h2>
 <h3 id="ap-{{ i.numeros['4'] }}">{{ i.numeros['4'] }}. {{ i.titulos['4'] }}</h3>
+{% set tb = i.textos_b %}
+{% if tb is not none %}
+{% if tb.descripcion %}<p>{{ tb.descripcion }}</p>{% else %}<div class="pendiente">Pendiente del analista: descripción del negocio en español (80–200 palabras), apoyada en las tarjetas del Item 1 del 10-K.</div>{% endif %}
+{% if i.segmentos %}{{ cuadro(i.segmentos) }}
+<div class="dos">
+  <div>{{ cuadro(i.geografia) }}</div>
+  <div class="grafico"><div class="rotulo">Mezcla de ingresos · {{ i.segmentos.columnas[-1] }}</div>{% if i.grafico_mezcla %}{{ i.grafico_mezcla|safe }}{% else %}<p class="na">N/A — sin dos o más líneas con dato</p>{% endif %}<div class="fuente">Los mismos hechos que el cuadro {{ i.segmentos.numero }}.</div></div>
+</div>{% else %}<p class="na">N/A — el 10-K no etiqueta ingresos por segmento, producto ni geografía en XBRL inline.</p>{% endif %}
+{% else %}
 {% if i.descripcion %}<p>{{ i.descripcion.texto }} <span class="muted">[{{ i.descripcion.origen.documento }}, pág. {{ i.descripcion.origen.pagina }}]</span></p>{% endif %}
 <div class="dos">
   <div>{{ cuadro(i.regiones) }}</div>
   <div class="grafico"><div class="rotulo">{{ i.regiones.titulo }}</div>{% if i.grafico_regiones %}{{ i.grafico_regiones|safe }}{% else %}<p class="na">N/A</p>{% endif %}<div class="fuente">{{ i.regiones.fuente }}</div></div>
 </div>
+{% endif %}
 
 <h3 id="ap-{{ i.numeros['5'] }}">{{ i.numeros['5'] }}. {{ i.titulos['5'] }}</h3>
 {{ cuadro(i.accionistas, True) }}
+{% if i.salidas_13g %}<p class="muted" style="font-size:7.5pt">Ya no superan el 5 % según su última declaración: {{ i.salidas_13g|join('; ') }}.</p>{% endif %}
 {{ cuadro(i.filiales, True) }}
+{% if i.clases_acciones %}<p>Clases de acciones registradas: {{ i.clases_acciones|join('; ') }} <span class="muted">[10-K, portada]</span>.</p>{% endif %}
 
 <h3 id="ap-{{ i.numeros['6'] }}">{{ i.numeros['6'] }}. {{ i.titulos['6'] }}</h3>
 {{ cuadro(i.ejecutivos, True) }}
 {{ cuadro(i.retribucion) }}
+{% if tb is none or i.fotos_ejecutivos or i.fotos_consejo %}
 <h4>Ejecutivos: retrato y trayectoria (fichas biográficas de la proxy, literales)</h4>
 {% if i.fotos_ejecutivos %}<div class="fotos">{% for f in i.fotos_ejecutivos %}<div class="ficha-persona">
   {% if f.ruta %}<img src="{{ recortes_datos[f.ruta|string] }}" alt="Retrato de {{ f.nombre }}">{% else %}<div class="sin-foto">sin retrato en la proxy</div>{% endif %}
@@ -147,15 +160,25 @@
   <div class="nombre">{{ f.nombre }}</div><div class="cargo">{{ f.cargo }}{% if f.detalle %} · {{ f.detalle }}{% endif %}</div>
   {% if f.nota %}<div class="nota-persona">⚠ {{ f.nota }}</div>{% endif %}<div class="pie">{{ f.pie }}</div>
 </div>{% endfor %}</div>{% else %}<p class="na">N/A — sin fichas de consejeros en la proxy adjunta.</p>{% endif %}
-<p class="muted" style="font-size:7.5pt">Track record como juicio (aciertos y errores de gestión): del analista, en su fichero de posición. Operaciones de insiders (Form 4): apartado {{ i.numeros['28'] }}.</p>
+{% endif %}
+{% if tb is not none %}
+<h4>Trayectoria y asignación de capital (juicio del analista)</h4>
+{% if tb.track_record %}<ul class="compacta">{% for t in tb.track_record %}<li><b>{{ t.persona }}</b> ({{ t.juicio }}): {{ t.texto }} <span class="cita">[{% for ev in t.evidencias %}{{ ev.doc }}{% if not loop.last %}; {% endif %}{% endfor %}]</span></li>{% endfor %}</ul>{% else %}<div class="pendiente">Pendiente del analista: track record de, al menos, CEO y CFO, con evidencia.</div>{% endif %}
+{% if tb.asignacion_capital %}<p>{{ tb.asignacion_capital }}</p>{% else %}<div class="pendiente">Pendiente del analista: asignación de capital (recompras, dividendos y adquisiciones de cinco años; apartado {{ i.numeros['10'] }}).</div>{% endif %}
+{% else %}<p class="muted" style="font-size:7.5pt">Track record como juicio (aciertos y errores de gestión): del analista. Operaciones de insiders (Form 4): apartado {{ i.numeros['28'] }}.</p>{% endif %}
 
 <h3 id="ap-{{ i.numeros['7'] }}">{{ i.numeros['7'] }}. {{ i.titulos['7'] }}</h3>
+{% if tb is not none %}
+{{ cuadro(i.fechas_clave, True) }}
+{{ cuadro(i.catalizadores, True) }}
+<p>Objetivos vigentes de la compañía: <b>Cuadro {{ i.objetivos.numero }}</b> (apartado {{ i.numeros['2'] }}).</p>
+<h4>Lo que dijo la dirección en la última presentación de resultados</h4>
+{% if tb.citas_direccion %}<ul class="compacta">{% for c in tb.citas_direccion %}<li title="{{ c.texto|e }}">«{{ c.texto_es }}» <span class="cita">[{{ c.doc }}]</span></li>{% endfor %}</ul>{% else %}<div class="pendiente">Pendiente del analista: de dos a cinco citas de la dirección, elegidas de la última presentación, con su versión en español.</div>{% endif %}
+{% else %}
 <p>Objetivos vigentes de la compañía: véase el <b>Cuadro {{ i.objetivos.numero }}</b> (apartado 2). Palancas de la tesis: juicio del analista, enlazadas a los pilares del apartado 3.</p>
 <h4>Lo que la dirección dijo en la conferencia de resultados</h4>
 <ul class="compacta">{% for c in i.citas_call %}<li>«{{ c.texto }}» <span class="muted">[{{ c.origen.documento }}, pág. {{ c.origen.pagina }}; {{ c.nota }}]</span></li>{% else %}<li class="na">N/A — sin transcripción en el expediente o sin frases de previsión reconocibles.</li>{% endfor %}</ul>
-<h4>Fechas clave</h4>
-{% set px = i.proxima_bolsa %}
-<p>Próxima presentación de resultados: {% if i.proxima_presentacion %}{{ i.proxima_presentacion.texto }} <span class="muted">[{{ i.proxima_presentacion.origen.documento }}, pág. {{ i.proxima_presentacion.origen.pagina }}]</span>{% elif px %}<b>{{ px.fecha.strftime('%d/%m/%Y') }}</b>{% if px.momento %}, {{ px.momento }}{% endif %}{% if px.trimestre %} (resultados del {{ px.trimestre }}){% endif %}{% if px.consenso_bpa is not none %}; la bolsa cifra el consenso de BPA para ese trimestre en {{ '%.2f'|format(px.consenso_bpa)|replace('.', ',') }} USD{% endif %}. <span class="muted">Fecha {% if px.esperada %}esperada{% else %}anunciada{% endif %} según la bolsa ({{ px.fuente }}); {{ px.nota_contraste }}. La compañía no la anuncia en ningún adjunto ni en la SEC; se actualizará cuando lo haga.</span>{% else %}<span class="na">N/A — ningún adjunto la anuncia, la SEC no publica calendario y la bolsa no respondió.</span>{% endif %}</p>
+{% endif %}
 </section>
 
 <!-- ============================== C ============================== -->
@@ -245,7 +268,7 @@
 {{ bloque_texto('31') }}
 <h3 id="ap-{{ i.numeros['32'] }}">{{ i.numeros['32'] }}. {{ i.titulos['32'] }}</h3>
 {% if i.historial_cuadros.get('guias') %}{{ cuadro(i.historial_cuadros['guias'], True) }}{% else %}<p class="na">Previsión de la compañía frente a real, trimestres anteriores: N/A — {{ i.historial_faltan.get('guias_anteriores', 'sin cartas anteriores') }}</p>{% endif %}
-{% if i.historial_cuadros %}
+{% if i.historial_cuadros.get('sorpresas') %}
 {{ cuadro(i.historial_cuadros['sorpresas'], True) }}
 {% if i.historial_cuadros.get('bolsa') %}{{ cuadro(i.historial_cuadros['bolsa']) }}{% endif %}
 {{ cuadro(i.historial_cuadros['consenso'], True) }}

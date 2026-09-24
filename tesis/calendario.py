@@ -12,11 +12,11 @@ from __future__ import annotations
 import re
 from dataclasses import dataclass
 from datetime import date, datetime
-from typing import Optional, Tuple
+from typing import List, Optional, Tuple
 
 from .hechos import Contraste
 
-__all__ = ["Proxima", "proxima"]
+__all__ = ["Proxima", "proxima", "Dividendo", "dividendos"]
 
 _FECHA_US = re.compile(r"(\d{1,2})/(\d{1,2})/(20\d\d)")
 _TRIMESTRE = re.compile(r"Quarter ending ([A-Z][a-z]{2}) (20\d\d)")
@@ -35,6 +35,7 @@ class Proxima:
     respuesta: Tuple[str, str, datetime]
     contraste: Contraste = Contraste.SIN_CONTRASTAR
     nota_contraste: str = ""
+    estimada: bool = False               # la calcula el algoritmo del proveedor de la bolsa: nadie la ha anunciado
 
 
 def _leer_nasdaq(ticker: str) -> Optional[Proxima]:
@@ -58,14 +59,16 @@ def _leer_nasdaq(ticker: str) -> Optional[Proxima]:
         mes, anio = _MESES[t.group(1)], t.group(2)
         trimestre = f"{(mes - 1) // 3 + 1}T{anio[2:]}"
     c = re.search(r"consensus EPS forecast for the quarter is \$(\d+(?:\.\d+)?)", texto)
-    return Proxima(fecha=fecha, momento=momento, esperada="expected" in texto, trimestre=trimestre,
+    return Proxima(fecha=fecha, momento=momento, esperada="expected" in texto or "estimated" in texto,
+                   estimada="estimated" in texto or "algorithm" in texto, trimestre=trimestre,
                    consenso_bpa=float(c.group(1)) if c else None, texto=texto, fuente=FUENTE_NASDAQ, respuesta=(url, cuerpo, obtenido))
 
 
-def proxima(ticker: str, agregador=None) -> Optional[Proxima]:
-    """La fecha que publica la bolsa, cuadrada con la del agregador si se le pasa su resumen."""
+def proxima(ticker: str, agregador=None, hoy: Optional[date] = None) -> Optional[Proxima]:
+    """La fecha que publica la bolsa, cuadrada con la del agregador si se le pasa su resumen. Con `hoy`, una fecha
+    anterior (la bolsa aún no ha pasado página tras la última presentación) no vale: None."""
     p = _leer_nasdaq(ticker)
-    if p is None:
+    if p is None or (hoy is not None and p.fecha < hoy):
         return None
     if agregador is not None and agregador.fecha_resultados is not None:
         if agregador.fecha_resultados == p.fecha:
@@ -78,3 +81,36 @@ def proxima(ticker: str, agregador=None) -> Optional[Proxima]:
     else:
         p.nota_contraste = "sin segunda fuente con que cuadrarla"
     return p
+
+
+@dataclass
+class Dividendo:
+    ex: Optional[date]
+    pago: Optional[date]
+    declarado: Optional[date]
+    importe: Optional[float]
+    texto: str
+
+
+def _fecha_us(texto) -> Optional[date]:
+    m = _FECHA_US.search(str(texto or ""))
+    return date(int(m.group(3)), int(m.group(1)), int(m.group(2))) if m else None
+
+
+def dividendos(ticker: str) -> Tuple[List[Dividendo], str]:
+    """El historial de dividendos que publica la bolsa (más reciente primero) y la URL consultada.
+    Sin filas: la compañía no paga dividendo (no es un hueco)."""
+    from .precio import pedir_crudo
+    url = f"https://api.nasdaq.com/api/quote/{ticker}/dividends?assetclass=stocks"
+    try:
+        datos, _, _ = pedir_crudo(url)
+    except Exception:
+        return [], url
+    filas = (((datos or {}).get("data") or {}).get("dividends") or {}).get("rows") or []
+    salida = []
+    for f in filas:
+        importe = re.sub(r"[^\d.]", "", str(f.get("amount") or ""))
+        salida.append(Dividendo(ex=_fecha_us(f.get("exOrEffDate")), pago=_fecha_us(f.get("paymentDate")),
+                                declarado=_fecha_us(f.get("declarationDate")), importe=float(importe) if importe else None,
+                                texto=" · ".join(f"{k}: {v}" for k, v in f.items())))
+    return salida, url

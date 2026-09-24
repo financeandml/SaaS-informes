@@ -195,6 +195,15 @@ class Informe:
     recomendacion: str = ""                                          # del fichero de posición del analista
     documentacion: List[Tuple[int, str, List[Recorte]]] = field(default_factory=list)   # apartado final: (número, título, recortes) por apartado
     cuadres_apendice: List[str] = field(default_factory=list)        # las notas de cuadre que ya no se imprimen bajo cada cuadro
+    # F2 · parte B rehecha (EDGAR, Nasdaq y entradas del analista)
+    textos_b: Optional[object] = None                                # parte_b.Textos
+    segmentos: Optional[Cuadro] = None
+    geografia: Optional[Cuadro] = None
+    grafico_mezcla: str = ""
+    fechas_clave: Optional[Cuadro] = None
+    catalizadores: Optional[Cuadro] = None
+    salidas_13g: List[str] = field(default_factory=list)
+    clases_acciones: List[str] = field(default_factory=list)
 
 
 # ---------------------------------------------------------------------------
@@ -503,32 +512,47 @@ def _cuadros_gobierno(n: Cuadros, g: Gobierno) -> Tuple[Cuadro, Cuadro, Cuadro, 
     def _pct_accionista(a) -> Celda:
         if a.porcentaje is not None:
             return Celda(f"{numero(a.porcentaje, 2)} %", "", "H", "valor", "")
-        if a.nota == "menos del 1 %":
+        if a.nota.startswith("menos del 1"):
             return Celda("< 1 %", "", "H", "valor", "«*» en la proxy: menos del 1 %")
         return Celda("N/A", "", "H", "na", a.nota or "sin porcentaje en la proxy")
-    filas = [FilaCuadro(a.nombre, [Celda(numero(a.acciones), "", "H", "valor", ""), _pct_accionista(a),
-                                   Celda(a.direccion or "c/o la compañía", "", "", "valor", "")]) for a in g.accionistas]
+    def _fuente(o, seccion: str) -> str:
+        if o is None:
+            return ""
+        if o.pagina:
+            return f"Fuente: {o.documento}, pág. {o.pagina} ({seccion})."
+        return f"Fuente: SEC EDGAR, {o.documento}{' del ' + f_fecha(o.presentado) if o.presentado else ''} ({seccion})."
+    edgar = any(a.fuente for a in g.accionistas)
+    filas = [FilaCuadro(a.nombre, [Celda(numero(a.acciones) if a.acciones is not None else "N/A", "", "H", "valor" if a.acciones is not None else "na", ""),
+                                   _pct_accionista(a),
+                                   Celda((a.fuente or a.direccion or "c/o la compañía").replace("SCHEDULE ", "").replace("SC ", ""), "", "", "valor", "")],
+                        destacada=a.nombre.startswith("Consejeros y directivos")) for a in g.accionistas]
     o = g.origenes.get("accionistas")
-    accionistas = Cuadro(n.siguiente(), f"Principales accionistas, consejeros y directivos{' a ' + f_fecha(g.fecha_accionistas) if g.fecha_accionistas else ''}",
-                         ["Acciones", "% del capital", "Dirección"], filas,
-                         f"Fuente: {o.documento}, pág. {o.pagina} (Security Ownership)." if o else "Fuente: " + g.faltan.get("accionistas", "—"))
-    filas = [FilaCuadro(x.nombre, [Celda(x.jurisdiccion, "", "H", "valor", ""), Celda(f"{numero(x.porcentaje)} %", "", "H", "valor", "")]) for x in g.filiales]
+    accionistas = Cuadro(n.siguiente(), "Accionistas con 5 % o más, y consejeros y directivos en conjunto" if edgar else
+                         f"Principales accionistas, consejeros y directivos{' a ' + f_fecha(g.fecha_accionistas) if g.fecha_accionistas else ''}",
+                         ["Acciones", "% del capital", "Fuente y fecha" if edgar else "Dirección"], filas,
+                         (_fuente(o, "tabla de propiedad") + (" Participaciones posteriores: Schedule 13G/13D en XML de EDGAR; la última declaración de cada declarante manda." if edgar else ""))
+                         if o else "Fuente: " + g.faltan.get("accionistas", "—"))
+    con_pct = any(x.porcentaje is not None for x in g.filiales)
+    filas = [FilaCuadro(x.nombre, [Celda(x.jurisdiccion, "", "H", "valor", "")] +
+                        ([Celda(f"{numero(x.porcentaje)} %" if x.porcentaje is not None else "N/A", "", "H", "valor" if x.porcentaje is not None else "na", "")] if con_pct else []))
+             for x in g.filiales]
     o = g.origenes.get("filiales")
-    filiales = Cuadro(n.siguiente(), "Filiales significativas (Exhibit 21)", ["Jurisdicción", "% participación"], filas,
-                      (f"Fuente: {o.documento}, pág. {o.pagina}." if o else "Fuente: " + g.faltan.get("filiales", "—")), [g.nota_filiales] if g.nota_filiales else [])
-    filas = [FilaCuadro(e.nombre, [Celda(str(e.edad), "", "H", "valor", ""), Celda(e.cargo, "", "H", "valor", "")]) for e in g.ejecutivos]
+    filiales = Cuadro(n.siguiente(), "Filiales significativas (Exhibit 21)", ["Jurisdicción"] + (["% participación"] if con_pct else []), filas,
+                      (_fuente(o, "lista de filiales") if o else "Fuente: " + g.faltan.get("filiales", "—")), [g.nota_filiales] if g.nota_filiales else [])
+    filas = [FilaCuadro(e.nombre, [Celda(str(e.edad) if e.edad else "N/A", "", "H", "valor" if e.edad else "na", ""), Celda(e.cargo, "", "H", "valor", "")]) for e in g.ejecutivos]
     o = g.origenes.get("ejecutivos")
-    ejecutivos = Cuadro(n.siguiente(), f"Ejecutivos{' a ' + f_fecha(g.fecha_ejecutivos) if g.fecha_ejecutivos else ''}", ["Edad", "Cargo"], filas,
-                        f"Fuente: {o.documento}, pág. {o.pagina}." if o else "Fuente: " + g.faltan.get("ejecutivos", "—"))
+    ejecutivos = Cuadro(n.siguiente(), f"Ejecutivos{' (edad a ' + f_fecha(g.fecha_ejecutivos) + ')' if g.fecha_ejecutivos else ''}", ["Edad", "Cargo"], filas,
+                        _fuente(o, "ejecutivos") if o else "Fuente: " + g.faltan.get("ejecutivos", "—"))
     filas = []
     for r in g.retribucion:
-        celdas = [Celda(str(r.anio), "", "H", "valor", "")] + [Celda(numero(c) if c is not None else "—", "", "H", "valor" if c else "cero", "") for c in r.cifras]
-        filas.append(FilaCuadro(r.nombre, celdas, destacada=(r.anio == max(x.anio for x in g.retribucion))))
+        cifras = list(r.cifras) + ([r.total] if r.total is not None and len(g.cabecera_retribucion) > len(r.cifras) + 1 else [])
+        celdas = [Celda(str(r.anio), "", "H", "valor", "")] + [Celda(numero(c) if c else "—", "", "H", "valor" if c else "cero", "") for c in cifras]
+        filas.append(FilaCuadro(r.nombre + (f" · {r.cargo}" if getattr(r, "cargo", "") else ""), celdas))
     o = g.origenes.get("retribucion")
-    ancho = max((len(r.cifras) for r in g.retribucion), default=7)
-    cab = ["Año", "Salario", "Bonus", "Acciones", "Opciones", "Incentivo no accionarial", "Otros", "Total"][:ancho + 1]
-    retribucion = Cuadro(n.siguiente(), "Retribución de los principales ejecutivos (USD, Summary Compensation Table)", cab, filas,
-                         f"Fuente: {o.documento}, pág. {o.pagina}. Columnas tal como las publica la proxy; el total es la última." if o else "Fuente: " + g.faltan.get("retribucion", "—"))
+    ancho = max((len(f.celdas) for f in filas), default=8)
+    cab = g.cabecera_retribucion[:ancho] if g.cabecera_retribucion else ["Año", "Salario", "Bonus", "Acciones", "Opciones", "Incentivo no accionarial", "Otros", "Total"][:ancho]
+    retribucion = Cuadro(n.siguiente(), "Retribución de los ejecutivos nombrados (USD, último ejercicio de la Summary Compensation Table)", cab, filas,
+                         (_fuente(o, "Summary Compensation Table") + " Columnas tal como las publica la proxy; «—» es cero en la tabla.") if o else "Fuente: " + g.faltan.get("retribucion", "—"))
     return accionistas, filiales, ejecutivos, retribucion
 
 
@@ -623,18 +647,36 @@ def construir(ticker: str, hoy: date, emisor: Emisor, exp: Expediente, tab: Tabl
               ficha: Ficha, gobierno: Gobierno, guidance: Guidance, regiones: Regiones, precio: Hecho,
               recortes: Dict[Tuple[str, int], Recorte], modelo_dcf=None, posicion=None, riesgos=None, historial=None,
               salida_recortes: Optional[Path] = None, mercado=None, posicionamiento=None, comparables=None, mercado_objetivo=None,
-              agregador=None, multiplos=None, proxima=None) -> Informe:
+              agregador=None, multiplos=None, proxima=None, parte_b=None) -> Informe:
     from . import secciones as secciones_mod
+    from . import parte_b as parte_b_mod
     anuales, trimestres, instantes = periodos["anuales"], periodos["trimestres"], periodos["instantes"]
     _FISCAL.update(cierre=anuales[-1].fin if anuales else None, desfase=tab.desfase_fiscal)
     hechos = derivados_mod.calcular(tab.hechos(), anuales + trimestres, instantes)
     narrativa_impresa = None    # sin IA: los textos los escribe el analista (docs/fases)
     n = Cuadros()
     cifras = _cuadro_cifras_resumen(n, hechos, anuales, trimestres)
-    objetivos = _cuadro_objetivos(n, guidance)
-    regiones_c, svg_regiones = _cuadro_regiones(n, regiones, anuales, trimestres)
+    segmentos_c = geografia_c = fechas_c = catalizadores_c = None
+    svg_mezcla = ""
+    if parte_b is not None:
+        from . import guia as guia_mod
+        vigentes = guia_mod.vigentes(parte_b.notas, parte_b.confirmadas)
+        objetivos = parte_b_mod.cuadro_objetivos(n, vigentes, bool(parte_b.notas and parte_b.notas[-1].candidatos))
+    else:
+        objetivos = _cuadro_objetivos(n, guidance)
+    if parte_b is not None and parte_b.segmentos is not None and parte_b.segmentos.periodos:
+        segmentos_c, geografia_c, svg_mezcla, sin_traducir = parte_b_mod.cuadro_segmentos(n, parte_b.segmentos, lambda p: _etiqueta(p, anuales, tab))
+        regiones_c, svg_regiones = geografia_c, ""
+        parte_b.faltas += [f"rótulo sin traducir en el cuadro de segmentos: {m}" for m in sin_traducir]
+    else:
+        regiones_c, svg_regiones = _cuadro_regiones(n, regiones, anuales, trimestres)
     svg_ingresos, svg_deuda, avisos_graficos = _graficos_evolucion(hechos, anuales)
     accionistas, filiales, ejecutivos, retribucion = _cuadros_gobierno(n, gobierno)
+    if parte_b is not None:
+        publicado = parte_b.notas[-1].publicado if parte_b.notas else None
+        fechas_c = parte_b_mod.cuadro_fechas(n, hoy, proxima, parte_b.dividendos, getattr(gobierno, "junta", None),
+                                             gobierno.origenes.get("junta"), parte_b_mod.siguiente_trimestre(publicado), parte_b.dividendos_url)
+        catalizadores_c = parte_b_mod.cuadro_catalizadores(n, parte_b.entradas)
     resultados = _cuadro_resultados(n, hechos, tab, anuales, trimestres)
     balance = _cuadro_balance(n, hechos, tab, anuales, trimestres)
     flujo = _cuadro_flujo(n, hechos, tab, anuales, trimestres)
@@ -719,6 +761,14 @@ def construir(ticker: str, hoy: date, emisor: Emisor, exp: Expediente, tab: Tabl
     riesgos_cuadros = secciones_mod.cuadros_riesgos(n, riesgos) if riesgos is not None else {}
     riesgos_recortes = secciones_mod.recortes_riesgos(exp, riesgos, salida_recortes) if riesgos is not None else []
     historial_cuadros = secciones_mod.cuadros_historial(n, historial) if historial is not None else {}
+    if parte_b is not None and parte_b.notas:
+        from . import guia as guia_mod
+        xbrl = {}
+        for (campo, p), h in hechos.items():
+            if h.hay_dato and p.meses == 3 and campo in ("ingresos", "bpa_diluido"):
+                xbrl[(campo, _etiqueta(p, anuales, tab))] = h.valor
+        comparaciones = guia_mod.frente_a_real(parte_b.notas, parte_b.confirmadas, xbrl, splits=parte_b.splits)
+        historial_cuadros["guias"] = parte_b_mod.cuadro_guia_real(n, comparaciones)
     historial_recorte = None
     if historial is not None and historial.fuente is not None:
         historial_recorte = secciones_mod.recorte_texto(exp, historial.fuente.documento, historial.fuente.pagina, ["CONSENSUS ACTUAL SURPRISE", "EPS Normalized", "Revenue (mm)"], salida_recortes, "32")
@@ -740,6 +790,8 @@ def construir(ticker: str, hoy: date, emisor: Emisor, exp: Expediente, tab: Tabl
         faltan += [f"Historial · {k}: {v}" for k, v in historial.faltan.items()]
     if gobierno.faltan.get("retratos"):
         faltan.append(f"Gobierno · retratos: {gobierno.faltan['retratos']}")
+    if parte_b is not None:
+        faltan += [f"Parte B · {x}" for x in parte_b.faltas] + [f"Gobierno · traducir {x}" for x in getattr(gobierno, "sin_traducir", [])]
     if modelo_dcf is not None:
         fuentes.append(f"{modelo_dcf.nombre} — libro de valoración del analista · sha256 {modelo_dcf.huella[:12]}")
     if posicion is not None and posicion.fichero is not None:
@@ -766,7 +818,8 @@ def construir(ticker: str, hoy: date, emisor: Emisor, exp: Expediente, tab: Tabl
         fuentes.append(f"SEC EDGAR — {len(historial.cartas)} cartas a accionistas (Exhibit 99.1 de los 8-K de resultados, "
                        f"{f_fecha(min(c.presentado for c in historial.cartas))} a {f_fecha(max(c.presentado for c in historial.cartas))})")
     # los números se imprimen limpios: las notas de cuadre bajo los cuadros van al apéndice
-    todos_los_cuadros = [cifras, objetivos, regiones_c, accionistas, filiales, ejecutivos, retribucion, resultados, balance, flujo, rentabilidad, rentabilidad_ttm,
+    todos_los_cuadros = [cifras, objetivos, segmentos_c, regiones_c, accionistas, filiales, ejecutivos, retribucion, fechas_c, catalizadores_c,
+                         resultados, balance, flujo, rentabilidad, rentabilidad_ttm,
                          mercado_cuadro, comparables_cuadro, comparables_sic_cuadro] + [c for c in cuadros_dcf.values() if isinstance(c, Cuadro)] \
         + [c for _, c in cuadros_dcf.get("detalle_escenarios", [])] + list(riesgos_cuadros.values()) + list(historial_cuadros.values()) + list(f_cuadros.values())
     cuadres_apendice = _mover_cuadres(todos_los_cuadros)
@@ -800,4 +853,7 @@ def construir(ticker: str, hoy: date, emisor: Emisor, exp: Expediente, tab: Tabl
         comparables_cuadro=comparables_cuadro, comparables_faltan=comparables_faltan, mercado_cuadro=mercado_cuadro, mercado_faltan=mercado_faltan,
         comparables_sic_cuadro=comparables_sic_cuadro, rentabilidad_ttm=rentabilidad_ttm, proxima_bolsa=proxima, potencial=potencial,
         recomendacion=posicion.recomendacion if posicion is not None else "", documentacion=documentacion, cuadres_apendice=cuadres_apendice,
+        textos_b=parte_b_mod.textos(parte_b.entradas, parte_b.alias) if parte_b is not None else None, segmentos=segmentos_c, geografia=geografia_c,
+        grafico_mezcla=svg_mezcla, fechas_clave=fechas_c, catalizadores=catalizadores_c,
+        salidas_13g=list(getattr(gobierno, "salidas_13g", [])), clases_acciones=list(parte_b.clases) if parte_b is not None else [],
     )

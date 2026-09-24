@@ -1,0 +1,159 @@
+{
+ "_prueba": "Entradas de PRUEBA para las regresiones de F2 (docs/fases/F2.md): no son del analista y el informe no se puede emitir con ellas.",
+ "perfil": {
+  "descripcion": {
+   "texto": "Qualcomm diseña semiconductores y licencia la propiedad intelectual de sus tecnologías inalámbricas. Se organiza en tres segmentos: QCT, que vende plataformas y circuitos integrados para teléfonos móviles, automoción e internet de las cosas; QTL, que cobra regalías por su cartera de patentes de comunicaciones móviles; y QSI, que agrupa inversiones estratégicas. La mayor parte de los ingresos procede de fabricantes de teléfonos, con fuerte concentración en clientes de China y Corea del Sur, mientras la compañía intenta diversificarse hacia automoción, ordenadores personales y centros de datos. Su posición se apoya en la investigación en conectividad y en computación de bajo consumo, y en una cartera de patentes que licencia a buena parte del sector.",
+   "evidencias": [
+    {
+     "doc": "10-K",
+     "texto": "We develop and commercialize foundational technologies and products used across industries and applications from mobile devices to other areas including automotive and the internet of things (IoT)."
+    }
+   ]
+  },
+  "segmentos_ok": true,
+  "fundacion": 1985,
+  "empleados": 52000
+ },
+ "equipo": {
+  "track_record": [
+   {
+    "persona": "Cristiano R. Amon",
+    "juicio": "mixto",
+    "texto": "Al frente de la compañía desde 2021, ha impulsado la diversificación hacia automoción e internet de las cosas, que ya pesan en los ingresos de QCT, aunque la dependencia del teléfono móvil y de pocos clientes sigue siendo alta.",
+    "evidencias": [
+     {
+      "doc": "10-K",
+      "texto": "Cristiano R. Amon, age 55, has served as President and Chief Executive Officer and as a member of the Board of Directors since June 2021."
+     }
+    ]
+   },
+   {
+    "persona": "Akash Palkhiwala",
+    "juicio": "positivo",
+    "texto": "Director financiero desde 2019 y de operaciones desde 2024; ha mantenido una política estable de retorno al accionista mediante dividendos y recompras, con disciplina de costes en los ciclos bajistas del mercado de teléfonos.",
+    "evidencias": [
+     {
+      "doc": "10-K",
+      "texto": "Akash Palkhiwala, age 50, has served as Chief Financial Officer since November 2019 and as Chief Operating Officer since January 2024."
+     }
+    ]
+   }
+  ],
+  "asignacion_capital": {
+   "texto": "La compañía devuelve a sus accionistas la mayor parte del flujo de caja libre mediante un dividendo trimestral y recompras de acciones, y lo combina con adquisiciones selectivas para ampliar su oferta de software y de centros de datos, como la compra de Modular completada en el tercer trimestre fiscal de 2026.",
+   "evidencias": [
+    {
+     "doc": "8-K 2026-07-29",
+     "texto": "Completed Acquisition of Modular Inc Creating an Open Software Foundation for Generative and Agentic AI"
+    }
+   ]
+  }
+ },
+ "catalizadores": [
+  {
+   "fecha": "2026-11-04",
+   "evento": "Resultados del cuarto trimestre fiscal de 2026 y guía del primero de 2027",
+   "tipo": "resultados",
+   "pilar": "1",
+   "impacto": "positivo",
+   "probabilidad": 90,
+   "evidencia": [
+    {
+     "doc": "8-K 2026-07-29",
+     "texto": "The following table summarizes GAAP and Non-GAAP guidance based on the current outlook."
+    }
+   ]
+  },
+  {
+   "fecha": "2027-T4",
+   "evento": "Aceleración de los ingresos ajenos al móvil, centros de datos incluidos, en el ejercicio fiscal 2027",
+   "tipo": "producto",
+   "pilar": "2",
+   "impacto": "positivo",
+   "probabilidad": 60,
+   "evidencia": [
+    {
+     "doc": "8-K 2026-07-29",
+     "texto": "In the near term, we expect year-over-year growth in non-handset revenues, including Data Center, to accelerate from 24% in fiscal 2026 to greater than 60% in fiscal 2027"
+    }
+   ]
+  },
+  {
+   "fecha": "2026-T4",
+   "evento": "Subida de precios para trasladar el encarecimiento de obleas, encapsulado y memoria",
+   "tipo": "corporativo",
+   "pilar": "3",
+   "impacto": "positivo",
+   "probabilidad": 70,
+   "evidencia": [
+    {
+     "doc": "8-K 2026-07-29",
+     "texto": "We are taking concrete actions to reflect the higher input costs in our product pricing and expect these actions to benefit our gross margins over time as the pricing changes gradually come into effect."
+    }
+   ]
+  }
+ ],
+ "direccion": {
+  "citas": [
+   {
+    "doc": "8-K 2026-07-29",
+    "texto": "Despite a challenging memory and supply environment, our third quarter results reflect solid execution of our growth strategy, with quarterly revenues at the high end of guidance",
+    "texto_es": "Pese a un entorno difícil de memoria y suministro, los resultados del tercer trimestre reflejan una ejecución sólida de nuestra estrategia de crecimiento, con ingresos en la parte alta de la guía"
+   },
+   {
+    "doc": "8-K 2026-07-29",
+    "texto": "We are well positioned to execute on the vision we outlined at our recent Investor Day, with total non-handset revenues growing to $40 billion by fiscal 2029",
+    "texto_es": "Estamos bien situados para ejecutar la visión que presentamos en nuestro reciente día del inversor, con unos ingresos ajenos al móvil que llegarán a 40.000 millones de dólares en el ejercicio fiscal 2029"
+   }
+  ]
+ },
+ "guia": {
+  "confirmadas": [
+   "2024-07-31|4T FY24|ingresos",
+   "2024-07-31|4T FY24|ingresos_segmento:QCT",
+   "2024-07-31|4T FY24|ingresos_segmento:QTL",
+   "2024-07-31|4T FY24|bpa_diluido",
+   "2024-07-31|4T FY24|bpa_no_gaap",
+   "2024-11-06|1T FY25|ingresos",
+   "2024-11-06|1T FY25|ingresos_segmento:QCT",
+   "2024-11-06|1T FY25|ingresos_segmento:QTL",
+   "2024-11-06|1T FY25|bpa_diluido",
+   "2024-11-06|1T FY25|bpa_no_gaap",
+   "2025-02-05|2T FY25|ingresos",
+   "2025-02-05|2T FY25|ingresos_segmento:QCT",
+   "2025-02-05|2T FY25|ingresos_segmento:QTL",
+   "2025-02-05|2T FY25|bpa_diluido",
+   "2025-02-05|2T FY25|bpa_no_gaap",
+   "2025-04-30|3T FY25|ingresos",
+   "2025-04-30|3T FY25|ingresos_segmento:QCT",
+   "2025-04-30|3T FY25|ingresos_segmento:QTL",
+   "2025-04-30|3T FY25|bpa_diluido",
+   "2025-04-30|3T FY25|bpa_no_gaap",
+   "2025-07-30|4T FY25|ingresos",
+   "2025-07-30|4T FY25|ingresos_segmento:QCT",
+   "2025-07-30|4T FY25|ingresos_segmento:QTL",
+   "2025-07-30|4T FY25|bpa_diluido",
+   "2025-07-30|4T FY25|bpa_no_gaap",
+   "2025-11-05|1T FY26|ingresos",
+   "2025-11-05|1T FY26|ingresos_segmento:QCT",
+   "2025-11-05|1T FY26|ingresos_segmento:QTL",
+   "2025-11-05|1T FY26|bpa_diluido",
+   "2025-11-05|1T FY26|bpa_no_gaap",
+   "2026-02-04|2T FY26|ingresos",
+   "2026-02-04|2T FY26|ingresos_segmento:QCT",
+   "2026-02-04|2T FY26|ingresos_segmento:QTL",
+   "2026-02-04|2T FY26|bpa_diluido",
+   "2026-02-04|2T FY26|bpa_no_gaap",
+   "2026-04-29|3T FY26|ingresos",
+   "2026-04-29|3T FY26|ingresos_segmento:QCT",
+   "2026-04-29|3T FY26|ingresos_segmento:QTL",
+   "2026-04-29|3T FY26|bpa_diluido",
+   "2026-04-29|3T FY26|bpa_no_gaap",
+   "2026-07-29|4T FY26|ingresos",
+   "2026-07-29|4T FY26|ingresos_segmento:QCT",
+   "2026-07-29|4T FY26|ingresos_segmento:QTL",
+   "2026-07-29|4T FY26|bpa_diluido",
+   "2026-07-29|4T FY26|bpa_no_gaap"
+  ]
+ }
+}

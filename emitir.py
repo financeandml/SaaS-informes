@@ -27,8 +27,8 @@ from pathlib import Path
 
 sys.stdout.reconfigure(encoding="utf-8")
 
-from tesis import (agregador, auditor, calendario, comparables, contraste, dcf, derivados, entorno, expediente, ficha, gobierno, guidance, historial, informe,  # noqa: E402
-                   mercado_objetivo, multiplos, posicion, posicionamiento, precio, recortes, regiones, render, revision, riesgos, sec)
+from tesis import (agregador, auditor, calendario, comparables, contraste, dcf, derivados, entorno, entradas, expediente, ficha, gobierno, guidance, historial, informe,  # noqa: E402
+                   mercado_objetivo, multiplos, parte_b, posicion, posicionamiento, precio, recortes, regiones, render, revision, riesgos, sec)
 from tesis.hechos import Contraste  # noqa: E402
 
 
@@ -41,6 +41,7 @@ def main(argv=None) -> int:
     ap.add_argument("--posicion", help="JSON con la posición y la tesis del analista (sección H); por defecto posiciones/<TICKER>.json si existe "
                                        "(se rellena con «python -m tesis.formulario TICKER»)")
     ap.add_argument("--decisiones", help="JSON con las decisiones del analista sobre discrepancias")
+    ap.add_argument("--entradas", help="JSON con las entradas del analista (04_entradas.yaml); por defecto <datos>/entradas/<TICKER>/<fecha>/entradas.json")
     ap.add_argument("--fecha", help="fecha de emisión (AAAA-MM-DD); por defecto, hoy")
     ap.add_argument("--salida", default=str(entorno.carpeta("salida")))
     ap.add_argument("--casa", default="Warrants & Co.")
@@ -93,7 +94,9 @@ def main(argv=None) -> int:
         portada = None
         print(f"  sin el 10-K de EDGAR ({e}): auditor, nombre y propuestas salen del adjunto")
     f = ficha.construir(emisor, exp, portada, facts)
-    g = gobierno.construir(exp, carpeta_recortes)
+    g = gobierno.construir(exp, carpeta_recortes, emisor)
+    for k, v in g.faltan.items():
+        print(f"    gobierno · falta {k}: {v}")
     print(f"  retratos: {sum(1 for e in g.ejecutivos if e.foto)} de {len(g.ejecutivos)} ejecutivos · {sum(1 for c in g.consejeros if c.foto)} de {len(g.consejeros)} consejeros")
     gu = guidance.construir(exp, emisor.depositos, hoy)
     reg = regiones.construir(exp, tab)
@@ -157,7 +160,7 @@ def main(argv=None) -> int:
     _o = lambda v, f="{}": f.format(v) if v is not None else "N/A"        # el agregador puede omitir cualquier campo
     print("  agregador: " + (f"ROE {_o(agr.roe, '{:.2%}')} · ROA {_o(agr.roa, '{:.2%}')} · deuda total {_o(agr.deuda_total and agr.deuda_total / 1e6, '{:,.0f}')} M · EV/EBITDA {_o(agr.ev_ebitda)} · PEG {_o(agr.peg)} · resultados {_o(agr.fecha_resultados)}"
                              if agr is not None else "sin respuesta (todo lo que dependa de él sale N/A)"))
-    prox = calendario.proxima(args.ticker, agr)
+    prox = calendario.proxima(args.ticker, agr, hoy)
     print("  próxima presentación: " + (f"{prox.fecha:%d/%m/%Y} {prox.momento} ({'esperada' if prox.esperada else 'anunciada'} según la bolsa) · {prox.contraste.value or '—'} {prox.nota_contraste}" if prox else "N/A"))
     acc_portada = f.citas.get("acciones_portada")
     mult = multiplos.construir(hechos, periodos["trimestres"], periodos["anuales"], pr, acc_portada.valor if acc_portada is not None else None, agr, facts, obtenido)
@@ -175,10 +178,17 @@ def main(argv=None) -> int:
     else:
         print(f"  posición: sin {ruta_posicion} (la sección H y la recomendación de la portada salen N/A; se rellena con «python -m tesis.formulario {args.ticker.upper()}»)")
 
+    ent = entradas.cargar(args.ticker, hoy, Path(args.entradas) if args.entradas else None)
+    pb = parte_b.construir(emisor, hoy, facts, portada, ent, g)
+    print(f"  parte B: entradas {'de PRUEBA ' if ent.de_prueba else ''}{ent.ruta or 'sin fichero'} · {len(pb.notas)} notas de resultados · "
+          f"{sum(len(n.candidatos) for n in pb.notas)} candidatos de guía ({len(pb.confirmadas)} confirmados) · {len(pb.faltas)} faltas")
+    for x in pb.faltas:
+        print(f"    falta {x}")
+
     print("[7/8] Informe")
     inf = informe.construir(args.ticker, hoy, emisor, exp, tab, periodos, f, g, gu, reg, pr, recs, modelo_dcf=modelo, posicion=pos,
                             riesgos=ri, historial=hi, salida_recortes=carpeta_recortes, mercado=mer, posicionamiento=posi, comparables=comp, mercado_objetivo=merc,
-                            agregador=agr, multiplos=mult, proxima=prox)
+                            agregador=agr, multiplos=mult, proxima=prox, parte_b=pb)
     n_evid = sum(len(lista) for _, _, lista in inf.documentacion)
     print(f"  documentación complementaria: {n_evid} piezas en {len(inf.documentacion)} apartados · {len(recs)} recortes de estados junto a sus cuadros · "
           f"{len([x for x in inf.fotos_ejecutivos + inf.fotos_consejo if x.ruta])} retratos")

@@ -6,3 +6,4 @@ adjuntos/
 datos-tesis/
 .pytest_cache/
 .venv/
+/cache_bolsa/
