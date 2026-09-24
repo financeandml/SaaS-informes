@@ -46,7 +46,7 @@ ADMITIDOS = {".pdf", ".xlsx", ".xlsm", ".docx"}
 LIBROS = {".xlsx", ".xlsm"}
 MAXIMO_CUERPO = 400_000_000
 CSP_SAAS = CSP + "; frame-src 'self'"          # el paso 4 enmarca el informe emitido, servido por este mismo servidor
-PAGINAS = {"/": "inicio.html", "/dcf": "dcf.html", "/formulario": "formulario.html", "/informe": "informe.html"}
+PAGINAS = {"/": "inicio.html", "/dcf": "dcf.html", "/formulario": "formulario.html", "/informe": "informe.html", "/asistente": "asistente.html"}
 _NOMBRE = re.compile(r"[^A-Za-z0-9._\- ]+")
 
 DECLARADO = "declarado.json"       # en la carpeta del ticker: fichero → casilla en la que lo adjuntó el analista
@@ -368,6 +368,16 @@ def _nombre_seguro(nombre: str) -> str:
     return base[:120] or "fichero"
 
 
+def _fecha(qs: Dict[str, List[str]]):
+    """La fecha del informe de la consulta («2026-09-23»); hoy si no viene; None si no es una fecha."""
+    from datetime import date
+    texto = (qs.get("fecha") or [""])[0].strip()
+    try:
+        return date.fromisoformat(texto) if texto else date.today()
+    except ValueError:
+        return None
+
+
 class _Manejador(BaseHTTPRequestHandler):
     def log_message(self, formato, *args):  # silencio: la consola es del analista
         return
@@ -428,6 +438,17 @@ class _Manejador(BaseHTTPRequestHandler):
                 self._json(400, {"error": "ticker no válido"})
                 return
             self._json(200, resumen_ticker(t))
+            return
+        if camino == "/api/asistente":
+            t, fecha = self._ticker(qs), _fecha(qs)
+            if t is None or fecha is None:
+                self._json(400, {"error": "ticker o fecha no válidos"})
+                return
+            from . import asistente
+            datos, notas = asistente.cargar(t, fecha)
+            faltas, avisos = asistente.validar(t, fecha, datos)
+            self._json(200, {"ticker": t, "fecha": fecha.isoformat(), "fechas": asistente.fechas(t), "esquema": asistente.esquema(),
+                             "entradas": datos, "notas": notas, "faltas": faltas, "avisos": avisos})
             return
         if camino == "/api/posicion":
             t = self._ticker(qs)
@@ -557,6 +578,21 @@ class _Manejador(BaseHTTPRequestHandler):
                 e = estado(t)
                 e["dcf"] = resumen_dcf(t)
                 self._json(200, e["dcf"])
+                return
+            if camino == "/api/asistente":
+                if not self._es_propia(("application/json",)):
+                    self._tragar(); self._json(403, {"error": "solo desde la propia página del asistente"}); return
+                fecha = _fecha(qs)
+                if fecha is None:
+                    self._tragar(); self._json(400, {"error": "fecha no válida"}); return
+                from . import asistente
+                datos = json.loads(self._cuerpo().decode("utf-8") or "{}").get("entradas")
+                if not isinstance(datos, dict):
+                    self._json(400, {"error": "faltan las entradas"}); return
+                datos.setdefault("meta", {})["fecha_informe"] = fecha.isoformat()
+                guardado = asistente.guardar(t, fecha, datos)
+                faltas, avisos = asistente.validar(t, fecha, datos)
+                self._json(200, {"guardado": guardado.name, "carpeta": f"entradas/{t}/{fecha.isoformat()}", "faltas": faltas, "avisos": avisos})
                 return
             if camino == "/api/posicion":
                 if not self._es_propia(("application/json",)):

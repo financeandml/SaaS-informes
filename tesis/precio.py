@@ -252,14 +252,22 @@ def _nasdaq(ticker: str) -> Optional[Cotizacion]:
                       rango_52s=rango, fuera_de_sesion=fuera, **extra)
 
 
-def cierres_nasdaq(ticker: str, desde: date, hasta: date, limite: int = 400, clase: str = "stocks") -> Dict[date, float]:
-    """Cierres oficiales por fecha del histórico de Nasdaq; vacío si la bolsa no responde. `clase`: «stocks» o «etf»
-    (SPY, el mercado de la beta)."""
+@dataclass(frozen=True)
+class Sesion:
+    apertura: Optional[float]
+    maximo: Optional[float]
+    minimo: Optional[float]
+    cierre: float
+    volumen: Optional[float]
+
+
+def sesiones_nasdaq(ticker: str, desde: date, hasta: date, limite: int = 400, clase: str = "stocks") -> Dict[date, Sesion]:
+    """Las sesiones oficiales del histórico de Nasdaq (apertura, máximo, mínimo, cierre y volumen) por fecha."""
     url = (f"https://api.nasdaq.com/api/quote/{ticker}/historical?assetclass={clase}"
            f"&fromdate={desde:%Y-%m-%d}&todate={hasta:%Y-%m-%d}&limit={limite}")
     datos = _json(url, _CABECERAS_NASDAQ)
     filas = (((datos or {}).get("data") or {}).get("tradesTable") or {}).get("rows") or []
-    salida: Dict[date, float] = {}
+    salida: Dict[date, Sesion] = {}
     for fila in filas:
         c = _num(fila.get("close"))
         try:
@@ -267,8 +275,19 @@ def cierres_nasdaq(ticker: str, desde: date, hasta: date, limite: int = 400, cla
         except ValueError:
             continue
         if c is not None:
-            salida[f] = c
+            salida[f] = Sesion(_num(fila.get("open")), _num(fila.get("high")), _num(fila.get("low")), c, _num(fila.get("volume")))
     return salida
+
+
+def desde_5a(hasta: date) -> date:
+    """El inicio del histórico de 5 años que piden el motor (beta), el asistente y la parte G: una sola petición en caché."""
+    return date(hasta.year - 5, hasta.month, min(hasta.day, 28)) - timedelta(days=10)
+
+
+def cierres_nasdaq(ticker: str, desde: date, hasta: date, limite: int = 400, clase: str = "stocks") -> Dict[date, float]:
+    """Cierres oficiales por fecha del histórico de Nasdaq; vacío si la bolsa no responde. `clase`: «stocks» o «etf»
+    (SPY, el mercado de la beta)."""
+    return {f: s.cierre for f, s in sesiones_nasdaq(ticker, desde, hasta, limite, clase).items()}
 
 
 def _polygon(ticker: str, clave: str) -> Optional[Cotizacion]:

@@ -1,5 +1,5 @@
 {
- "_prueba": "Entradas de PRUEBA para las regresiones de F2 a F5: no son del analista y el informe no se puede emitir con ellas.",
+ "_prueba": "Entradas de PRUEBA para las regresiones de F2 a F6: no son del analista y el informe no se puede emitir con ellas.",
  "perfil": {
   "descripcion": {
    "texto": "Qualcomm diseña semiconductores y licencia la propiedad intelectual de sus tecnologías inalámbricas. Se organiza en tres segmentos: QCT, que vende plataformas y circuitos integrados para teléfonos móviles, automoción e internet de las cosas; QTL, que cobra regalías por su cartera de patentes de comunicaciones móviles; y QSI, que agrupa inversiones estratégicas. La mayor parte de los ingresos procede de fabricantes de teléfonos, con fuerte concentración en clientes de China y Corea del Sur, mientras la compañía intenta diversificarse hacia automoción, ordenadores personales y centros de datos. Su posición se apoya en la investigación en conectividad y en computación de bajo consumo, y en una cartera de patentes que licencia a buena parte del sector.",
@@ -581,5 +581,104 @@
   "causas": {
    "texto": "El BPA GAAP del 4T FY25 quedó muy por debajo de la guía por un cargo contable sin salida de caja: la provisión de valoración sobre los activos fiscales diferidos federales tras la entrada en vigor de la ley fiscal OBBB. El BPA no GAAP y los ingresos de ese trimestre superaron la guía. Aprendizaje: la guía GAAP no anticipa cargos fiscales extraordinarios, así que el seguimiento se hace con el BPA no GAAP y el flujo de caja libre."
   }
+ },
+ "pos": {
+  "recomendacion": "Mantener",
+  "recomendacion_justificacion": {
+   "texto": "Con las entradas de prueba el motor da un potencial negativo, pero la posición ya está abierta y se mantiene hasta los resultados del cuarto trimestre, cuando se revisarán la guía y la diversificación."
+  },
+  "precio_entrada": 195.0,
+  "fecha_entrada": "2026-09-22",
+  "tamano_pct": 2,
+  "drawdown_tolerado": 40,
+  "tamano_porque": {
+   "texto": "Posición media: la diversificación está a medio camino y el drawdown tolerado limita el tamaño por debajo del máximo de la cartera."
+  },
+  "argumento": {
+   "texto": "Qualcomm combina un negocio de licencias con márgenes muy altos y una división de semiconductores que diversifica sus ingresos fuera del teléfono. La tesis es que automoción, IoT y PC compensan la pérdida gradual de un gran cliente de módems y que la caja generada sostiene recompras y dividendo. El precio actual descuenta un crecimiento bajo; si la diversificación cumple el objetivo declarado de ingresos fuera del teléfono, los beneficios crecerán más de lo que espera el mercado. El riesgo principal es la integración vertical de los clientes y la dependencia de China, que se siguen trimestre a trimestre con los ingresos por segmento."
+  },
+  "asunciones": [
+   {
+    "texto": "Los ingresos fuera del teléfono crecen a doble dígito hasta 2029.",
+    "driver": "esc.base.crecimiento_ingresos",
+    "umbral_invalidacion": "crecimiento de automoción e IoT < 10 % interanual dos trimestres seguidos"
+   },
+   {
+    "texto": "El margen operativo se mantiene cerca de su media de cinco años.",
+    "driver": "esc.base.margen_ebit",
+    "umbral_invalidacion": "margen EBIT < 22 % en un ejercicio"
+   },
+   {
+    "texto": "Las licencias de patentes conservan sus regalías sin litigios que las rebajen.",
+    "driver": "esc.base.crecimiento_ingresos",
+    "umbral_invalidacion": "ingresos de QTL −15 % interanual"
+   }
+  ],
+  "checklist": [
+   {
+    "id": "variante",
+    "criterio": "Visión propia distinta de lo que descuenta el precio (reverse DCF), en dos frases",
+    "tipo": "manual",
+    "cumplido": "parcial",
+    "evidencia": "El DCF inverso descuenta un crecimiento bajo; la tesis espera más por la diversificación, pero con entradas de prueba."
+   }
+  ],
+  "invalidacion": [
+   {
+    "metrica": "ingresos de QCT por teléfonos, interanual",
+    "umbral": "< −10 % dos trimestres seguidos",
+    "plazo": "hasta el 4T FY27"
+   },
+   {
+    "metrica": "ingresos de automoción e IoT, interanual",
+    "umbral": "< +10 %",
+    "plazo": "FY27"
+   },
+   {
+    "metrica": "margen EBIT del ejercicio",
+    "umbral": "< 22 %",
+    "plazo": "FY27"
+   }
+  ],
+  "stop": {
+   "texto": "Stop de tesis: se revisa la posición si se cumple cualquiera de las invalidaciones."
+  },
+  "kpis": [
+   {
+    "kpi": "Ingresos de QCT por teléfonos",
+    "actual": "",
+    "verde": "≥ 0 % interanual",
+    "rojo": "< −10 % interanual",
+    "fuente": "nota de resultados (8-K)",
+    "frecuencia": "trimestral"
+   },
+   {
+    "kpi": "Ingresos de automoción",
+    "actual": "",
+    "verde": "≥ +15 % interanual",
+    "rojo": "< +5 % interanual",
+    "fuente": "nota de resultados (8-K)",
+    "frecuencia": "trimestral"
+   },
+   {
+    "kpi": "Margen EBIT",
+    "actual": "",
+    "verde": "≥ 27 %",
+    "rojo": "< 22 %",
+    "fuente": "10-Q y 10-K",
+    "frecuencia": "trimestral"
+   }
+  ],
+  "fechas_revision": [
+   "2026-11-04",
+   "2027-02-03",
+   "2027-09-22"
+  ],
+  "salida": [
+   "Objetivo alcanzado: se revalúa la tesis con el motor.",
+   "Tesis invalidada por cualquiera de las invalidaciones.",
+   "Horizonte vencido sin catalizador.",
+   "Una oportunidad mejor con el mismo riesgo."
+  ]
  }
 }

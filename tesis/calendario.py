@@ -16,7 +16,7 @@ from typing import List, Optional, Tuple
 
 from .hechos import Contraste
 
-__all__ = ["Proxima", "proxima", "Dividendo", "dividendos", "Sorpresa", "sorpresas"]
+__all__ = ["Proxima", "proxima", "Dividendo", "dividendos", "Sorpresa", "sorpresas", "cortos"]
 
 _FECHA_US = re.compile(r"(\d{1,2})/(\d{1,2})/(20\d\d)")
 _TRIMESTRE = re.compile(r"Quarter ending ([A-Z][a-z]{2}) (20\d\d)")
@@ -155,3 +155,18 @@ def sorpresas(ticker: str) -> Tuple[List[Sorpresa], str]:
                                " · ".join(f"{k}: {v}" for k, v in f.items())))
     salida.sort(key=lambda s: s.mes or date.min)
     return salida, url
+
+
+def cortos(ticker: str) -> Optional[Tuple[date, float]]:
+    """El último interés en corto que publica la bolsa: (fecha de liquidación, acciones en corto); None sin respuesta."""
+    from .precio import pedir_crudo
+    try:
+        datos, _, _ = pedir_crudo(f"https://api.nasdaq.com/api/quote/{ticker}/short-interest?assetclass=stocks")
+    except Exception:
+        return None
+    filas = []
+    for f in (((datos or {}).get("data") or {}).get("shortInterestTable") or {}).get("rows") or []:
+        dia, interes = _fecha_us(f.get("settlementDate")), re.sub(r"[^\d.]", "", str(f.get("interest") or ""))
+        if dia and interes:
+            filas.append((dia, float(interes)))
+    return max(filas) if filas else None

@@ -1,0 +1,22 @@
+/* Asistente de 9 pasos: se apoya en formulario.css (paleta, tarjetas, botones) y solo añade lo suyo. */
+.pasos-asistente { display: flex; flex-wrap: wrap; gap: 4px; padding: 8px 16px; border-bottom: 1px solid var(--gris-claro); }
+.pasos-asistente button { font-size: 12px; padding: 4px 8px; background: var(--papel); color: var(--tinta); border: 1px solid var(--gris-claro); cursor: pointer; }
+.pasos-asistente button.actual { border-color: var(--acento); color: var(--acento); font-weight: 600; }
+.pasos-asistente .cuenta { margin-left: 4px; color: var(--error); }
+.pasos-asistente .cuenta.cero { color: var(--ok); }
+.campo { margin: 10px 0 14px; }
+.campo > .rotulo { display: block; font-weight: 600; margin-bottom: 3px; }
+.campo .pista { display: block; font-size: 12px; color: var(--tinta-suave); margin-bottom: 4px; }
+.campo input[type=text], .campo input[type=number], .campo input[type=date], .campo select, .campo textarea { width: 100%; box-sizing: border-box; }
+.campo textarea { min-height: 70px; }
+.campo .falta { color: var(--error); font-size: 12px; margin-top: 3px; }
+.fila-lista { border: 1px solid var(--gris-claro); padding: 8px; margin: 6px 0; background: var(--gris-fondo); }
+.fila-lista > .cabecera-fila { display: flex; justify-content: space-between; font-size: 12px; color: var(--tinta-suave); }
+.serie { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+.serie label { font-size: 12px; }
+.contador { font-size: 11px; color: var(--tinta-suave); }
+.contador.fuera { color: var(--error); }
+.escenario { border-left: 3px solid var(--acento); padding-left: 10px; margin: 10px 0; }
+.acciones { display: flex; gap: 8px; align-items: center; margin-top: 10px; flex-wrap: wrap; }
+.notas-asistente { margin: 0; padding-left: 18px; color: var(--ocre); }
+.enlaces-asistente { display: flex; gap: 12px; font-size: 13px; }

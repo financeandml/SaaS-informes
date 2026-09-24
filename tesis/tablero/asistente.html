@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Asistente del analista — Warrants &amp; Co.</title>
+<link rel="stylesheet" href="formulario.css">
+<link rel="stylesheet" href="asistente.css">
+</head>
+<body data-pagina="asistente">
+<header class="cabecera">
+  <div class="casa">Warrants &amp; Co.</div>
+  <div class="titulo"><span id="empresa">Asistente del analista</span> <span class="cik" id="fecha-informe"></span></div>
+  <nav class="enlaces-asistente"><a id="a-expediente" href="/">← Expediente</a> <a id="a-informe" href="/informe">Informe →</a></nav>
+</header>
+<nav id="pasos-asistente" class="pasos-asistente" aria-label="Pasos del asistente"></nav>
+<main>
+  <section class="tarjeta" id="avisos-tarjeta" hidden>
+    <ul id="notas" class="notas-asistente"></ul>
+  </section>
+  <form id="asistente" novalidate>
+    <section class="tarjeta">
+      <h2 id="titulo-paso">Cargando…</h2>
+      <div id="campos"></div>
+    </section>
+    <section class="tarjeta">
+      <h2>Lo que falta en este paso</h2>
+      <ul id="faltas" class="errores"></ul>
+      <div class="acciones">
+        <button type="button" id="anterior" class="secundario">← Paso anterior</button>
+        <button type="submit" id="guardar">Guardar</button>
+        <button type="button" id="siguiente" class="secundario">Paso siguiente →</button>
+        <span id="estado-guardado" class="apunte" role="status"></span>
+      </div>
+    </section>
+  </form>
+</main>
+<script src="asistente.js"></script>
+</body>
+</html>

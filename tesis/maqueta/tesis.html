@@ -58,8 +58,11 @@
         {% if i.parte_d is not none and i.parte_d.po is not none %}<tr><td>Margen de seguridad</td><td class="v">{{ pct(i.parte_d.margen_seguridad) }}</td></tr>
         <tr><td>Recorrido / riesgo</td><td class="v">{% if i.parte_d.recorrido_riesgo is not none %}{{ '%.2f'|format(i.parte_d.recorrido_riesgo)|replace('.', ',') }}{% else %}sin pérdida{% endif %}</td></tr>
         <tr><td>Horizonte</td><td class="v">{{ i.parte_d.horizonte_meses }} meses</td></tr>{% endif %}
+        {% if i.parte_g %}{% if i.parte_g.entrada.precio %}<tr><td>Entrada</td><td class="v">{{ i.parte_g.entrada.precio }} ({{ i.parte_g.entrada.fecha }})</td></tr>{% endif %}
+        {% if i.parte_g.entrada.tamano %}<tr><td>Tamaño</td><td class="v">{{ i.parte_g.entrada.tamano }} de la cartera</td></tr>{% endif %}
+        {% if i.parte_g.entrada.stop %}<tr><td>Stop</td><td class="v">{{ i.parte_g.entrada.stop }}</td></tr>{% endif %}{% endif %}
       </table>
-      {% if i.parte_d is not none and i.parte_d.po is not none %}<div class="muted" style="font-size:6.8pt">Precio objetivo: motor de valoración, a {{ i.parte_d.horizonte_meses }} meses (apartado {{ i.numeros['20'] }}). Recomendación: {% if i.posicion and i.posicion.recomendacion %}del analista{% else %}la que sugiere la regla (el analista aún no ha fijado la suya){% endif %}. Precio: {{ i.precio.nota }}.</div>
+      {% if i.parte_d is not none and i.parte_d.po is not none %}<div class="muted" style="font-size:6.8pt">Precio objetivo: motor de valoración, a {{ i.parte_d.horizonte_meses }} meses (apartado {{ i.numeros['20'] }}). Recomendación: {% if i.parte_g and i.parte_g.recomendacion %}del analista{% if i.parte_g.regla and i.parte_g.regla != i.parte_g.recomendacion %} (la regla sugiere «{{ i.parte_g.regla }}», apartado {{ i.numeros['33'] }}){% endif %}{% elif i.posicion and i.posicion.recomendacion %}del analista{% else %}la que sugiere la regla (el analista aún no ha fijado la suya){% endif %}. Precio: {{ i.precio.nota }}.</div>
       {% else %}<div class="muted" style="font-size:6.8pt">Recomendación y precio objetivo: del analista ({% if i.posicion and i.posicion.fichero %}fichero de posición{% if objetivo and 'libro' in objetivo[2] %} y libro de valoración{% endif %}{% elif objetivo %}libro de valoración{% else %}pendientes de su fichero de posición{% endif %}). {% if i.precio.hay_dato %}Precio: {{ i.precio.nota }}.{% else %}Precio: {{ i.precio.motivo }}.{% endif %}</div>{% endif %}
     </div>
     <table class="mini">
@@ -358,6 +361,23 @@
 <!-- ============================== H ============================== -->
 <section class="hoja">
 <h2 id="parte-{{ i.indice[6].letra }}">{{ i.indice[6].letra }}. {{ i.indice[6].titulo }}</h2>
+{% if i.parte_g %}{% set pg = i.parte_g %}
+<p class="muted" style="font-size:7.5pt">Esta parte es del analista (paso 8 del asistente) y se imprime tal cual; los criterios automáticos, el tamaño que sugiere el drawdown, la volatilidad y la beta los pone el sistema.</p>
+<h3 id="ap-{{ i.numeros['33'] }}">{{ i.numeros['33'] }}. {{ i.titulos['33'] }}</h3>
+{% if pg.argumento %}<p>{{ pg.argumento }}</p>{% else %}<div class="pendiente">{{ pg.pendientes['argumento'] }}</div>{% endif %}
+{% if pg.cuadros.asunciones %}{{ cuadro(pg.cuadros.asunciones, True) }}{% endif %}
+{% if pg.recomendacion %}<p>Recomendación del analista: <b>{{ pg.recomendacion }}</b>{% if pg.horizonte_meses %}, a {{ pg.horizonte_meses }} meses (el horizonte del precio objetivo del motor, apartado {{ i.numeros['20'] }}){% endif %}.{% if pg.regla and pg.regla != pg.recomendacion %} La regla sugiere «{{ pg.regla }}»{% if pg.justificacion %}; justificación del analista: {{ pg.justificacion }}{% endif %}{% endif %}</p>{% else %}<div class="pendiente">{{ pg.pendientes['recomendacion'] }}</div>{% endif %}
+<h3 id="ap-{{ i.numeros['34'] }}">{{ i.numeros['34'] }}. {{ i.titulos['34'] }}</h3>
+{{ cuadro(pg.cuadros.checklist, True) }}
+<h3 id="ap-{{ i.numeros['35'] }}">{{ i.numeros['35'] }}. {{ i.titulos['35'] }}</h3>
+{% if pg.cuadros.invalidacion %}{{ cuadro(pg.cuadros.invalidacion, True) }}{% else %}<div class="pendiente">{{ pg.pendientes['invalidacion'] }}</div>{% endif %}
+{% if pg.pendientes.get('tamano') %}<div class="pendiente">{{ pg.pendientes['tamano'] }}</div>{% endif %}
+{% if pg.cuadros.riesgo %}{{ cuadro(pg.cuadros.riesgo, True) }}{% endif %}
+<h3 id="ap-{{ i.numeros['36'] }}">{{ i.numeros['36'] }}. {{ i.titulos['36'] }}</h3>
+{% if pg.cuadros.kpis %}{{ cuadro(pg.cuadros.kpis, True) }}{% else %}<div class="pendiente">{{ pg.pendientes['kpis'] }}</div>{% endif %}
+{% if pg.fechas_revision %}<p><b>Fechas de revisión:</b> {{ pg.fechas_revision|join(' · ') }}</p>{% endif %}
+{% if pg.salida|length >= 3 %}<h4>Criterios de salida</h4><ul class="compacta">{% for x in pg.salida %}<li>{{ x }}</li>{% endfor %}</ul>{% else %}<div class="pendiente">{{ pg.pendientes['salida'] }}</div>{% endif %}
+{% else %}
 <p class="muted" style="font-size:7.5pt">Esta sección la escribe el analista en el formulario de posición (<code>python -m tesis.formulario {{ i.ticker }}</code>, que guarda <code>posiciones/{{ i.ticker }}.json</code>); el informe la imprime tal cual y rotula N/A lo que falte.{% if i.posicion and i.posicion.analista %} Analista: <b>{{ i.posicion.analista }}</b>{% if i.posicion.fecha %}, {{ i.posicion.fecha.strftime('%d/%m/%Y') }}{% endif %}.{% endif %}</p>
 {% set pos = i.posicion %}
 <h3 id="ap-{{ i.numeros['33'] }}">{{ i.numeros['33'] }}. {{ i.titulos['33'] }}</h3>
@@ -378,6 +398,7 @@
 <h4>Fechas de revisión</h4><p>{% for f in pos.fechas_revision %}{{ f.strftime('%d/%m/%Y') }}{% if not loop.last %} · {% endif %}{% else %}<span class="na">N/A — {{ i.posicion_faltan.get('36 · fechas de revisión', '') }}</span>{% endfor %}</p>
 <h4>Criterios de salida</h4><ul class="compacta">{% for x in pos.criterios_salida %}<li>{{ x }}</li>{% else %}<li class="na">N/A — {{ i.posicion_faltan.get('36 · criterios de salida', '') }}</li>{% endfor %}</ul>
 {% else %}<p class="na">N/A — {{ i.posicion_faltan.get('fichero', '') }}</p>{% endif %}
+{% endif %}
 </section>
 
 <!-- ============================== H · opciones y posicionamiento ============================== -->

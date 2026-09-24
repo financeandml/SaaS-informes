@@ -20,7 +20,7 @@ from difflib import SequenceMatcher
 from pathlib import Path
 from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
 
-__all__ = ["Entradas", "cargar", "normalizar", "verificar_cita", "comprobar_paso4", "comprobar_paso5", "comprobar_paso6", "palabras"]
+__all__ = ["Entradas", "cargar", "normalizar", "verificar_cita", "comprobar_paso4", "comprobar_paso5", "comprobar_paso6", "comprobar_paso8", "palabras"]
 
 
 @dataclass
@@ -279,3 +279,94 @@ def comprobar_paso6(e: Entradas, textos: Mapping[str, str], umbral: float, es_ep
     elif texto:
         _rango("historial.causas", texto, "30-150", faltas)
     return faltas
+
+
+def _es(v: float, decimales: int = 2) -> str:
+    """Un número con coma decimal y punto de millares, como en el informe."""
+    return f"{v:,.{decimales}f}".replace(",", " ").replace(".", ",").replace(" ", ".")
+
+
+def _texto_de(v) -> str:
+    return (v.get("texto", "") if isinstance(v, dict) else (v or "")).strip() if v is not None else ""
+
+
+def comprobar_paso8(e: Entradas, fecha_informe: date, rango_sesion, regla: Optional[str] = None, potencial: Optional[float] = None,
+                    recorrido_riesgo: Optional[float] = None, escala: Sequence[str] = ("Comprar", "Mantener", "Vender"),
+                    tamano_max: float = 0.10, riesgo_max: float = 0.01) -> Tuple[List[str], List[str]]:
+    """(faltas, avisos) del paso 8 (apartados 27–30). `rango_sesion(fecha)` → (mínimo, máximo) de esa sesión de Nasdaq o
+    None; `regla`: la recomendación que sugiere la regla de `umbrales.recomendacion` con el potencial y el recorrido/riesgo
+    del motor. Tamaño y horizonte se piden una sola vez: el horizonte es el de la valoración (`val.horizonte_meses`)."""
+    faltas: List[str] = []
+    avisos: List[str] = []
+    rec = e.valor("pos.recomendacion")
+    if rec not in escala:
+        faltas.append(f"pos.recomendacion: una de {', '.join(escala)}")
+    elif regla and rec != regla and palabras(_texto_de(e.valor("pos.recomendacion_justificacion"))) < 20:
+        datos = []
+        if potencial is not None:
+            datos.append(f"potencial {_es(potencial * 100, 1)} %")
+        if recorrido_riesgo is not None:
+            datos.append(f"recorrido/riesgo {_es(recorrido_riesgo)}")
+        faltas.append(f"pos.recomendacion: «{rec}» difiere de la regla («{regla}»{': ' + ', '.join(datos) if datos else ''}); "
+                      "exige una justificación de 20 palabras o más")
+    precio, fecha = e.valor("pos.precio_entrada"), e.valor("pos.fecha_entrada")
+    try:
+        dia = date.fromisoformat(str(fecha)) if fecha else None
+    except ValueError:
+        dia = None
+    if not isinstance(precio, (int, float)) or precio <= 0:
+        faltas.append("pos.precio_entrada: obligatorio, en USD")
+    if dia is None:
+        faltas.append("pos.fecha_entrada: obligatoria (AAAA-MM-DD)")
+    elif dia > fecha_informe:
+        avisos.append(f"pos.fecha_entrada: fecha futura ({dia:%d/%m/%Y}): orden límite")
+    elif isinstance(precio, (int, float)):
+        rango = rango_sesion(dia)
+        if rango is None:
+            faltas.append(f"pos.fecha_entrada: no hay sesión de Nasdaq el {dia:%d/%m/%Y}")
+        elif not rango[0] <= precio <= rango[1]:
+            faltas.append(f"pos.precio_entrada: {_es(precio)} USD fuera del rango de la sesión del {dia:%d/%m/%Y} "
+                          f"({_es(rango[0])}–{_es(rango[1])})")
+        if dia < fecha_informe:
+            avisos.append("pos.fecha_entrada: posición ya abierta; la lista de comprobación se evalúa a posteriori")
+    tam, dd = e.valor("pos.tamano_pct"), e.valor("pos.drawdown_tolerado")
+    if not isinstance(tam, (int, float)) or not 0.5 <= tam <= tamano_max * 100:
+        faltas.append(f"pos.tamano_pct: entre 0,5 y {_es(tamano_max * 100, 0)} %")
+    if not isinstance(dd, (int, float)) or not 0 < dd <= 100:
+        faltas.append("pos.drawdown_tolerado: obligatorio, en %")
+    if isinstance(tam, (int, float)) and isinstance(dd, (int, float)) and tam * dd / 1e4 > riesgo_max + 1e-12:
+        faltas.append(f"pos.tamano_pct: {_es(tam, 1)} % × drawdown {_es(dd, 0)} % = {_es(tam * dd / 100)} % de la cartera, por encima "
+                      f"del riesgo máximo por posición ({_es(riesgo_max * 100, 0)} %)")
+    _rango("pos.tamano_porque", _texto_de(e.valor("pos.tamano_porque")), "10-40", faltas)
+    _rango("pos.argumento", _texto_de(e.valor("pos.argumento")), "80-150", faltas)
+    asunciones = e.valor("pos.asunciones") or []
+    if not 3 <= len(asunciones) <= 7:
+        faltas.append(f"pos.asunciones: {len(asunciones)} (entre 3 y 7)")
+    for i, a in enumerate(asunciones, 1):
+        _rango(f"pos.asunciones[{i}].texto", a.get("texto", ""), "5-30", faltas)
+        if not a.get("driver") or not a.get("umbral_invalidacion"):
+            faltas.append(f"pos.asunciones[{i}]: supuesto de valoración y umbral de invalidación obligatorios")
+    for i, c in enumerate(e.valor("pos.checklist") or [], 1):
+        if c.get("cumplido") not in ("si", "no", "parcial"):
+            faltas.append(f"pos.checklist[{i}]: ¿cumplido? sí, no o parcial")
+    invalidacion = e.valor("pos.invalidacion") or []
+    if len([x for x in invalidacion if x.get("metrica") and x.get("umbral") and x.get("plazo")]) < 3:
+        faltas.append("pos.invalidacion: mínimo 3, con métrica, umbral y plazo")
+    kpis = e.valor("pos.kpis") or []
+    if len(kpis) < 3:
+        faltas.append(f"pos.kpis: {len(kpis)} (mínimo 3)")
+    for i, k in enumerate(kpis, 1):
+        if not all(k.get(x) for x in ("kpi", "verde", "rojo", "fuente")) or k.get("frecuencia") not in ("trimestral", "anual", "mensual", "evento"):
+            faltas.append(f"pos.kpis[{i}]: indicador, verde, rojo, fuente y frecuencia (trimestral, anual, mensual o evento)")
+    fechas = e.valor("pos.fechas_revision") or []
+    if not fechas:
+        faltas.append("pos.fechas_revision: al menos una")
+    for f in fechas:
+        try:
+            if date.fromisoformat(str(f)) <= fecha_informe:
+                faltas.append(f"pos.fechas_revision: {f} no es futura")
+        except ValueError:
+            faltas.append(f"pos.fechas_revision: «{f}» (AAAA-MM-DD)")
+    if len(e.valor("pos.salida") or []) < 3:
+        faltas.append("pos.salida: mínimo 3 criterios de salida")
+    return faltas, avisos

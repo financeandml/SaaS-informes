@@ -207,6 +207,7 @@ class Informe:
     parte_d: Optional[object] = None                                 # F3 · parte_d.ParteD (motor de valoración)
     parte_e: Optional[object] = None                                 # F4 · parte_e.ParteE (mercado, competencia, foso)
     parte_f: Optional[object] = None                                 # F5 · parte_f.ParteF (riesgos, caso bajista, historial)
+    parte_g: Optional[object] = None                                 # F6 · parte_g.ParteG (tesis, lista, riesgo, seguimiento)
 
 
 # ---------------------------------------------------------------------------
@@ -804,6 +805,32 @@ def construir(ticker: str, hoy: date, emisor: Emisor, exp: Expediente, tab: Tabl
         parte_f = parte_f_mod.construir(n, parte_b, motor, comparaciones, hechos, trimestres, lambda p: _etiqueta(p, anuales, tab),
                                         float(umbral("cita_similitud_min")), float(umbral("fallo_guia_obliga_causas")))
         faltan += [f"Parte F · {x}" for x in parte_f.faltas]
+    parte_g = None
+    if parte_b is not None:
+        # G · 27–30: la posición del analista (paso 8) con los criterios automáticos, el riesgo y el seguimiento
+        from . import entradas as entradas_mod, parte_g as parte_g_mod, precio as precio_mod
+        from .umbrales import umbral
+        fv = motor.parametros.fecha_valoracion if motor is not None else hoy
+        try:
+            sesiones = precio_mod.sesiones_nasdaq(ticker.upper(), precio_mod.desde_5a(fv), fv, limite=2000)
+        except Exception:
+            sesiones = {}
+        acc = ficha.citas.get("acciones_portada")
+        parte_g = parte_g_mod.construir(n, parte_b.entradas, motor, hechos, anuales, lambda p: _etiqueta(p, anuales, tab), sesiones,
+                                        proxima.fecha if proxima is not None else None, parte_b.cortos,
+                                        acc.valor if acc is not None else None, hoy, umbral("recomendacion")["escala"])
+        v = motor.valoracion if motor is not None else None
+
+        def rango(dia):
+            s = sesiones.get(dia)
+            return (s.minimo, s.maximo) if s is not None and s.minimo is not None and s.maximo is not None else None
+        cl = parte_g_mod.checklist()
+        f8, a8 = entradas_mod.comprobar_paso8(parte_b.entradas, hoy, rango, v.recomendacion if v is not None else None,
+                                              v.potencial if v is not None else None, v.recorrido_riesgo if v is not None else None,
+                                              umbral("recomendacion")["escala"], cl["tamano_max"], cl["riesgo_max_posicion"])
+        parte_g.faltas += f8
+        parte_g.avisos += a8
+        faltan += [f"Parte G · {x}" for x in parte_g.faltas]
     historial_recorte = None
     if historial is not None and historial.fuente is not None:
         historial_recorte = secciones_mod.recorte_texto(exp, historial.fuente.documento, historial.fuente.pagina, ["CONSENSUS ACTUAL SURPRISE", "EPS Normalized", "Revenue (mm)"], salida_recortes, "32")
@@ -875,6 +902,10 @@ def construir(ticker: str, hoy: date, emisor: Emisor, exp: Expediente, tab: Tabl
         por_clave.setdefault("32", []).append(historial_recorte)
     documentacion = _documentacion(indice, numeros, por_clave)
 
+    if parte_g is not None:
+        # «0 discrepancias y 0 bloqueos» se evalúa con la puerta de calidad ya completa (sin contar lo de la propia parte G)
+        nuevas = parte_g.cerrar(len([f for f in faltan if not f.startswith("Parte G")]), len(tab.bloquea))
+        faltan += [f"Parte G · {x}" for x in nuevas]
     return Informe(
         ticker=ticker.upper(), nombre=ficha.nombre_presentacion or emisor.nombre, fecha_emision=hoy, emisor=emisor, expediente=exp, tablero=tab,
         hechos=hechos, ficha=_ficha(emisor, ficha, precio, exp, hechos, mercado), precio=precio, cifras_resumen=cifras, objetivos=objetivos,
@@ -894,8 +925,10 @@ def construir(ticker: str, hoy: date, emisor: Emisor, exp: Expediente, tab: Tabl
         segmento_unico=_segmento_unico(exp), objetivo_portada=objetivo_portada, f_cuadros=f_cuadros, f_faltan=f_faltan,
         comparables_cuadro=comparables_cuadro, comparables_faltan=comparables_faltan, mercado_cuadro=mercado_cuadro, mercado_faltan=mercado_faltan,
         comparables_sic_cuadro=comparables_sic_cuadro, rentabilidad_ttm=rentabilidad_ttm, proxima_bolsa=proxima, potencial=potencial,
-        recomendacion=(posicion.recomendacion if posicion is not None and posicion.recomendacion else (parte_d.recomendacion_regla if parte_d is not None else "")),
-        documentacion=documentacion, cuadres_apendice=cuadres_apendice, parte_d=parte_d, parte_e=parte_e, parte_f=parte_f,
+        recomendacion=((parte_g.recomendacion if parte_g is not None and parte_g.recomendacion else "")
+                       or (posicion.recomendacion if posicion is not None and posicion.recomendacion else "")
+                       or (parte_d.recomendacion_regla if parte_d is not None else "")),
+        documentacion=documentacion, cuadres_apendice=cuadres_apendice, parte_d=parte_d, parte_e=parte_e, parte_f=parte_f, parte_g=parte_g,
         textos_b=parte_b_mod.textos(parte_b.entradas, parte_b.alias) if parte_b is not None else None, segmentos=segmentos_c, geografia=geografia_c,
         grafico_mezcla=svg_mezcla, fechas_clave=fechas_c, catalizadores=catalizadores_c,
         salidas_13g=list(getattr(gobierno, "salidas_13g", [])), clases_acciones=list(parte_b.clases) if parte_b is not None else [],

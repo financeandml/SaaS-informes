@@ -33,6 +33,7 @@ class ParteB:
     textos: Dict[str, str] = field(default_factory=dict)     # documento (y «documento#página») → texto: verifica las citas
     item1a: Optional[object] = None                          # item1a.Item1A del último 10-K (parte F)
     sorpresas: List = field(default_factory=list)            # calendario.Sorpresa: consenso frente a BPA de la bolsa (26)
+    cortos: Optional[Tuple[date, float]] = None              # último interés en corto de la bolsa (28)
 
     @property
     def confirmadas(self) -> Set[str]:
@@ -285,6 +286,7 @@ def construir(emisor, hoy: date, facts: dict, portada=None, entradas: Optional[E
         pb.faltas.append("guía: el analista no ha confirmado los candidatos de la última nota de resultados (Cuadro 2)")
     pb.dividendos, pb.dividendos_url = calendario.dividendos(emisor.ticker)
     pb.sorpresas, _ = calendario.sorpresas(emisor.ticker)
+    pb.cortos = calendario.cortos(emisor.ticker)
     pb.splits = [(f, r) for f, r, _ in sec.splits(facts)]
     if portada is not None and portada.dei.get("Security12bTitle"):
         pb.clases = [clase_de_accion(portada.dei["Security12bTitle"])]

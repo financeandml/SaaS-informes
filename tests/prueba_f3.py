@@ -88,7 +88,7 @@ class _Informes(unittest.TestCase):
         hechos = derivados.calcular(tab.hechos(), per["anuales"] + per["trimestres"], per["instantes"])
         portada = sec.portada_10k(e)
         fi = ficha.construir(e, exp, portada, facts)
-        cls.ent = entradas.cargar(T, ruta=F / T / "entradas.json")
+        cls.ent = entradas.cargar(T, ruta=getattr(cls, "RUTA_ENTRADAS", None) or F / T / "entradas.json")
         div, _ = calendario.dividendos(T)
         acc = fi.citas["acciones_portada"].valor
         cls.motor = motor_datos.ejecutar(e, facts, hechos, per, cls.ent.datos, hoy, acc, umbrales(), tab.desfase_fiscal, div)

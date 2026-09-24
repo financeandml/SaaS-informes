@@ -15,7 +15,7 @@ from typing import Callable, Dict, List, Sequence
 from .entradas import Entradas, comprobar_paso6, verificar_cita
 from .formato import Celda, fecha as f_fecha, numero, pct
 
-__all__ = ["ParteF", "construir", "fallos"]
+__all__ = ["ParteF", "construir", "fallos", "rotulo_supuesto"]
 
 FAMILIAS = {"regulatorio": "Regulatorio", "financiero": "Financiero", "competitivo": "Competitivo", "ejecucion": "Ejecución"}
 _SUPUESTOS = {"crecimiento_ingresos": "crecimiento de ingresos", "margen_ebit": "margen EBIT", "impuesto_caja": "impuesto en caja",
@@ -58,6 +58,14 @@ def fallos(comparaciones: Sequence, sorpresas: Sequence, umbral: float, etiqueta
         if s.sorpresa is not None and s.sorpresa < -umbral:
             salida.append(f"{etiqueta_mes(s.mes)} · BPA de la bolsa: {pct(s.sorpresa)} frente al consenso")
     return salida
+
+
+def rotulo_supuesto(driver: str) -> str:
+    """«esc.base.margen_ebit» → «margen EBIT (escenario base)»: el supuesto de valoración, sin su identificador."""
+    partes = str(driver).split(".")
+    if len(partes) == 3 and partes[0] == "esc":
+        return f"{_SUPUESTOS.get(partes[2], partes[2].replace('_', ' '))} (escenario {partes[1]})"
+    return str(driver).replace("_", " ")
 
 
 def _supuesto(e: Entradas, driver: str) -> str:

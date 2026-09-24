@@ -118,7 +118,7 @@ function enviarFicheros(ruta, ficheros) {
 }
 
 // ---------------------------------------------------------------- pasos y cabecera
-const PASOS = [["/", "p_expediente", "inicio"], ["/dcf", "p_dcf", "dcf"], ["/formulario", "p_analista", "formulario"], ["/informe", "p_informe", "informe"]];
+const PASOS = [["/", "p_expediente", "inicio"], ["/dcf", "p_dcf", "dcf"], ["/asistente", "p_analista", "formulario"], ["/informe", "p_informe", "informe"]];
 
 function pintarPasos(d) {
   const nav = document.getElementById("pasos");
@@ -503,10 +503,10 @@ if (PAGINA === "inicio") {
 } else if (PAGINA === "dcf") {
   zona("zona-dcf", "fichero", subirDcf);
   document.getElementById("anterior").setAttribute("href", con("/"));
-  document.getElementById("siguiente").setAttribute("href", con("/formulario"));
+  document.getElementById("siguiente").setAttribute("href", con("/asistente"));
   sondear();
 } else if (PAGINA === "informe") {
-  document.getElementById("anterior").setAttribute("href", con("/formulario"));
+  document.getElementById("anterior").setAttribute("href", con("/asistente"));
   document.getElementById("emitir").addEventListener("click", lanzarEmision);
   sondear();
 }
