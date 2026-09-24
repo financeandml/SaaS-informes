@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Expediente — Warrants &amp; Co.</title>
+<link rel="stylesheet" href="formulario.css">
+</head>
+<body data-pagina="inicio">
+<header class="cabecera">
+  <div class="casa">Warrants &amp; Co.</div>
+  <div class="titulo"><span class="empresa" id="empresa">—</span> <span class="cik" id="cik"></span></div>
+  <button type="button" id="idioma" class="secundario" aria-label="Cambiar idioma">EN</button>
+</header>
+<nav id="pasos" class="pasos" aria-label="Pasos"></nav>
+<main>
+  <section class="tarjeta">
+    <h2><span class="num">1</span> <span data-i18n="empresa">Empresa</span></h2>
+    <div class="buscador">
+      <input type="text" id="busqueda" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="candidatos" aria-autocomplete="list" placeholder="ORCL · Oracle…">
+      <ul id="candidatos" role="listbox" hidden></ul>
+    </div>
+    <p id="carga" class="ayuda"></p>
+  </section>
+
+  <fieldset id="bloque-adjuntos" disabled>
+    <section class="tarjeta">
+      <h2><span class="num">2</span> <span data-i18n="necesarios">Documentos necesarios</span> <span class="apunte" id="cuenta-documentos"></span></h2>
+      <table class="documentos" id="requeridos">
+        <thead><tr>
+          <th data-i18n="documento">Documento</th><th data-i18n="estado_doc">Estado</th>
+          <th data-i18n="ficheros_adj">Ficheros adjuntados</th><th></th>
+        </tr></thead>
+        <tbody></tbody>
+      </table>
+      <div class="acciones-fila">
+        <button type="button" id="traer-todo" class="secundario" data-i18n="traer_todo">Traer de la SEC lo que falte</button>
+        <span id="traida" class="ayuda"></span>
+      </div>
+      <ul id="traida-lineas" class="registro-traida"></ul>
+      <p id="subida" class="ayuda"></p>
+      <details class="otros">
+        <summary data-i18n="otros_t">Otros documentos que no están en la lista</summary>
+        <label class="zona" id="zona" for="ficheros">
+          <span class="grande" data-i18n="soltar">Suelta aquí los ficheros o pulsa para elegirlos</span>
+          <span class="chica" data-i18n="formatos">PDF · XLSX · DOCX — varios a la vez</span>
+          <input type="file" id="ficheros" multiple accept=".pdf,.xlsx,.xlsm,.docx">
+        </label>
+      </details>
+    </section>
+
+    <section class="tarjeta" id="tarjeta-expediente" hidden>
+      <h2><span class="num">3</span> <span data-i18n="expediente">Expediente en orden cronológico</span> <span class="apunte" id="cuenta-adjuntos"></span></h2>
+      <table class="lista" id="adjuntos" hidden>
+        <thead><tr>
+          <th data-i18n="fichero">Fichero</th><th data-i18n="tipo">Tipo</th><th data-i18n="periodo">Periodo</th>
+          <th data-i18n="fecha_doc">Fecha</th><th>EDGAR</th><th data-i18n="certeza">Certeza</th><th data-i18n="destino">Dónde va en el informe</th><th></th>
+        </tr></thead>
+        <tbody></tbody>
+      </table>
+      <ul id="avisos" class="errores"></ul>
+    </section>
+
+    <section class="tarjeta" id="tarjeta-contraste" hidden>
+      <h2><span class="num">4</span> <span data-i18n="contraste_t">Contraste con la SEC</span></h2>
+      <dl class="cifras" id="cifras-contraste"></dl>
+      <p id="contraste" class="ayuda"></p>
+    </section>
+  </fieldset>
+
+  <div class="acciones">
+    <span class="separador"></span>
+    <span id="mensaje"></span>
+    <a id="siguiente" class="boton" data-i18n="siguiente_dcf">Siguiente: DCF →</a>
+  </div>
+</main>
+<script src="saas.js"></script>
+</body>
+</html>

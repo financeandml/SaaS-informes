@@ -1,0 +1,55 @@
+Table of Contents
+8. Derivative Financial Instruments and Hedging Activities
+The Company uses derivative and non-derivative instruments to manage foreign exchange risk related to its ongoing business operations with the primary
+objective of reducing earnings and cash flow volatility associated with fluctuations in foreign exchange rates.
+Notional Amount of Derivative Contracts
+The net notional amounts of the Company’s outstanding derivative instruments were as follows:
+As of December 31,
+2025 2024
+(in thousands)
+Derivatives designated as hedging instruments:
+Foreign exchange contracts
+Cash flow hedges $ 21,066,760 $ 18,508,390
+Fair value hedges 2,884,792 3,819,817
+Derivatives not designated as hedging instruments:
+Foreign exchange contracts 1,555,502 1,432,136
+Total $ 25,507,054 $ 23,760,343
+As of December 31, 2025 and December 31, 2024, approximately $1.9 billion and $1.0 billion, respectively, of the Company’s Euro–denominated Senior
+Notes were designated as hedges of the foreign exchange risk of the Company’s net investment in certain foreign subsidiaries.
+As of December 31, 2025 and December 31, 2024, the carrying amount of the Company's Euro-denominated Senior Notes (included in “Long-term debt”
+on the Company's Consolidated Balance Sheets), which were designated as the hedged items in fair value hedges, was approximately $2.9 billion and
+$3.6 billion, respectively.
+See Note 7 Debt for further information on the Company’s debt obligations.
+Fair Value of Derivative Contracts
+The fair value of the Company’s outstanding derivative instruments was as follows:
+As of December 31, 2025
+Derivative Assets Derivative Liabilities
+Other current assets
+Other non-current
+assets
+Accrued expenses
+and other liabilities
+Other non-current
+liabilities
+(in thousands)
+Derivatives designated as hedging instruments:
+Foreign exchange contracts $ 192,828 $ 88,985 $ 426,341 $ 214,574
+Derivatives not designated as hedging instruments:
+Foreign exchange contracts 3,463 — 11,704 —
+Total $ 196,291 $ 88,985 $ 438,045 $ 214,574
+As of December 31, 2024
+Derivative Assets Derivative Liabilities
+Other current assets
+Other non-current
+assets
+Accrued expenses
+and other liabilities
+Other non-current
+liabilities
+(in thousands)
+Derivatives designated as hedging instruments:
+Foreign exchange contracts $ 580,065 $ 406,677 $ 303,425 $ 83
+Derivatives not designated as hedging instruments:
+Foreign exchange contracts 16,211 — 14,492 —
+Total $ 596,276 $ 406,677 $ 317,917 $ 83
+56

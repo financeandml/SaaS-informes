@@ -1,0 +1,51 @@
+Table of Contents
+Cost of Revenues
+Cost of revenues primarily consists of the amortization of content assets. Other costs of revenues include expenses associated with the acquisition,
+licensing and production of content, streaming delivery costs, and other operating costs.
+Expenses related to the acquisition, licensing and production of content not included in content amortization may include payroll, stock-based
+compensation, facilities, and other personnel-related expenses, costs associated with obtaining rights to music included in our content, overall deals with talent,
+miscellaneous production-related costs and participations and residuals. Streaming delivery costs are primarily related to our global content delivery network
+(“Open Connect”). We have built our own Open Connect network to help us efficiently stream a high volume of content to our members over the internet.
+Delivery expenses, therefore, include equipment costs related to Open Connect, payroll and related personnel expenses and all third-party costs, such as cloud
+computing costs, associated with delivering content over the internet. Other operating costs include customer service and payment processing fees, including
+those we pay to our integrated payment partners, as well as other costs incurred in making our content available to members.
+Three months ended June 30, 2026 as compared to the three months ended June 30, 2025
+Three Months Ended Change
+June 30,
+2026
+June 30,
+2025 Q2’26 vs. Q2’25
+(in thousands, except percentages)
+Cost of revenues $ 6,036,965 $ 5,325,311 $ 711,654 13 %
+As a percentage of revenues 48 % 48 %
+The increase in cost of revenues was primarily due to a $479 million increase in content amortization relating to our existing and new content. No
+individual component of the remaining increase in cost of revenues was material.
+Six months ended June 30, 2026 as compared to the six months ended June 30, 2025
+Six Months Ended Change
+June 30,
+2026
+June 30,
+2025 YTD’26 vs. YTD’25
+(in thousands, except percentages)
+Cost of revenues $ 11,925,203 $ 10,588,458 $ 1,336,745 13 %
+As a percentage of revenues 48 % 49 %
+The increase in cost of revenues was primarily due to an $874 million increase in content amortization relating to our existing and new content. No
+individual component of the remaining increase in cost of revenues was material.
+Sales and Marketing
+Sales and marketing expenses consist primarily of expenses for promotional activities such as digital and television advertising, and certain payments
+made to marketing and advertising sales partners. Our marketing partners include consumer electronics manufacturers, multichannel video programming
+distributors, mobile operators, and internet service providers. Our advertising sales partners include advertising technology providers and advertising agencies.
+Sales and marketing expenses also include payroll, stock-based compensation, facilities, and other related expenses for personnel that support advertising sales
+and marketing activities.
+Three months ended June 30, 2026 as compared to the three months ended June 30, 2025
+Three Months Ended Change
+June 30,
+2026
+June 30,
+2025 Q2’26 vs. Q2’25
+(in thousands, except percentages)
+Sales and marketing $ 823,838 $ 713,265 $ 110,573 16 %
+As a percentage of revenues 7 % 6 %
+The increase in sales and marketing expenses was primarily driven by a $71 million increase in marketing expenses, coupled with a $47 million increase
+in personnel-related costs, primarily due to the growth in advertising sales headcount.
+30

@@ -1,0 +1,95 @@
+Table of Contents
+Foreign
+Currency
+Translation
+Adjustments
+Net Investment
+Hedge Gains
+(Losses)
+Change in
+Unrealized
+Gains (Losses)
+on Cash Flow
+Hedges
+Change in
+Unrealized
+Gains (Losses)
+on Excluded
+Component of
+Fair Value
+Hedges
+Change in
+Unrealized
+Gains (Losses)
+on AFS
+Securities
+Tax (Expense)
+Benefit Total
+(in thousands)
+Balances as of December 31, 2025 $ (193,615) $ (112,256) $ (389,289) $ (3,565) $ — $ 118,343 $ (580,382)
+Other comprehensive income (loss) before
+reclassifications (80,940) 36,503 385,230 (12,094) — (94,723) 233,976
+Amounts reclassified from accumulated other
+comprehensive income (loss) — — 131,613 13,263 — (33,501) 111,375
+Net change in accumulated other comprehensive
+income (loss) (80,940) 36,503 516,843 1,169 — (128,224) 345,351
+Balances as of March 31, 2026 $ (274,555) $ (75,753) $ 127,554 $ (2,396) $ — $ (9,881) $ (235,031)
+Foreign
+Currency
+Translation
+Adjustments
+Net
+Investment
+Hedge Gains
+(Losses)
+Change in
+Unrealized
+Gains (Losses)
+on Cash Flow
+Hedges
+Change in
+Unrealized
+Gains (Losses)
+on Excluded
+Component of
+Fair Value
+Hedges
+Change in
+Unrealized
+Gains (Losses)
+on AFS
+Securities
+Tax (Expense)
+Benefit Total
+(in thousands)
+Balances as of December 31, 2024 $ (376,833) $ 32,400 $ 914,369 $ 9,233 $ 3,260 $ (220,267) $ 362,162
+Other comprehensive income (loss) before
+reclassifications 91,276 (44,600) (486,967) (18,031) (2,232) 126,687 (333,867)
+Amounts reclassified from accumulated other
+comprehensive income (loss) — — (162,457) 14,569 (121) 33,979 (114,030)
+Net change in accumulated other comprehensive
+income (loss) 91,276 (44,600) (649,424) (3,462) (2,353) 160,666 (447,897)
+Balances as of March 31, 2025 $ (285,557) $ (12,200) $ 264,945 $ 5,771 $ 907 $ (59,601) $ (85,735)
+The following tables summarize the amounts reclassified from AOCI to the Consolidated Statements of Operations for the three months ended March 31,
+2026 and 2025:
+Three Months Ended
+March 31, 2026
+Revenues Cost of Revenues
+Interest and Other
+Income (Expense)
+Provision for
+Income Taxes
+Total
+Reclassifications
+(in thousands)
+Gains (losses) on available-for-sale securities
+Amount of gains (losses) reclassified from AOCI $ — $ — $ — $ — $ —
+Gains (losses) on derivatives in cash flow hedging relationship
+Foreign exchange contracts
+Amount of gains (losses) reclassified from AOCI (132,517) 904 — 30,434 (101,179)
+Gains (losses) on derivatives in fair value hedging relationship
+Foreign exchange contracts
+Amount excluded from assessment of effectiveness and
+recognized in earnings based on amortization approach — — (13,263) 3,067 (10,196)
+Total $ (132,517) $ 904 $ (13,263) $ 33,501 $ (111,375)
+20

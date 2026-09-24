@@ -1,0 +1,31 @@
+Table of Contents
+3. Earnings per Share
+On November 14, 2025, the Company completed the Stock Split to all shareholders of record as of November 10, 2025.
+Outstanding share and per-share amounts disclosed for all periods provided have been retroactively adjusted to reflect the effects of the Stock Split.
+Basic earnings per share is computed using the weighted-average number of outstanding shares of common stock during the period. Diluted earnings per
+share is computed using the weighted-average number of outstanding shares of common stock and, when dilutive, potential outstanding shares of common
+stock during the period. Potential outstanding shares of common stock are calculated using the treasury-stock method and consist of incremental shares issuable
+upon the assumed exercise of stock options and vesting of time-based and performance-based restricted stock units. The computation of earnings per share, as
+adjusted for the Stock Split, is as follows:
+Year Ended December 31,
+2025 2024 2023
+(in thousands, except per share data)
+Basic earnings per share:
+Net income $ 10,981,201 $ 8,711,631 $ 5,407,990
+Shares used in computation:
+Weighted-average shares of common stock outstanding 4,249,512 4,295,191 4,415,712
+Basic earnings per share $ 2.58 $ 2.03 $ 1.22
+Diluted earnings per share:
+Net income $ 10,981,201 $ 8,711,631 $ 5,407,990
+Shares used in computation:
+Weighted-average shares of common stock outstanding 4,249,512 4,295,191 4,415,712
+Effect of dilutive stock-based awards 94,351 97,417 79,254
+Weighted-average number of shares 4,343,863 4,392,608 4,494,966
+Diluted earnings per share $ 2.53 $ 1.98 $ 1.20
+The following table summarizes the potential shares of common stock excluded from the diluted calculation, as adjusted for the Stock Split, as their
+inclusion would have been anti-dilutive:
+Year Ended December 31,
+2025 2024 2023
+(in thousands)
+Stock-based awards 818 2,432 41,091
+49

@@ -1,0 +1,47 @@
+Table of Contents
+NETFLIX, INC.
+Consolidated Statements of Cash Flows
+(unaudited)
+(in thousands)
+Three Months Ended
+March 31,
+2026
+March 31,
+2025
+Cash flows from operating activities:
+Net income $ 5,282,791 $ 2,890,351
+Adjustments to reconcile net income to net cash provided by operating activities:
+Additions to content assets (4,846,917) (3,549,657)
+Change in content liabilities 45,216 (411,253)
+Amortization of content assets 4,217,900 3,823,112
+Depreciation and amortization of property, equipment and intangibles 98,575 80,067
+Stock-based compensation expense 140,405 71,977
+Foreign currency remeasurement loss (gain) on debt (10,110) 28,547
+Other non-cash items 198,227 114,730
+Deferred income taxes 58,819 (163,928)
+Changes in operating assets and liabilities:
+Other current assets (704,640) (131,367)
+Accounts payable 154 (276,426)
+Accrued expenses and other liabilities 1,295,904 306,413
+Deferred revenue (32,282) 88,913
+Other non-current assets and liabilities (453,837) (82,280)
+Net cash provided by operating activities 5,290,205 2,789,199
+Cash flows from investing activities:
+Purchases of property and equipment (196,130) (128,277)
+Acquisitions (585,744) —
+Purchases of investments — (156,015)
+Proceeds from maturities and sales of investments — 769,954
+Net cash provided by (used in) investing activities (781,874) 485,662
+Cash flows from financing activities:
+Repayments of debt — (800,000)
+Proceeds from issuance of common stock 49,310 351,602
+Repurchases of common stock (1,270,588) (3,536,396)
+Taxes paid related to net share settlement of equity awards (29,230) (27,870)
+Other financing activities 19,694 (15,652)
+Net cash used in financing activities (1,230,814) (4,028,316)
+Effect of exchange rate changes on cash, cash equivalents and restricted cash (49,838) 150,146
+Net increase (decrease) in cash, cash equivalents and restricted cash 3,227,679 (603,309)
+Cash, cash equivalents and restricted cash at beginning of period 9,039,194 7,807,337
+Cash, cash equivalents and restricted cash at end of period $ 12,266,873 $ 7,204,028
+See accompanying notes to the consolidated financial statements.
+5

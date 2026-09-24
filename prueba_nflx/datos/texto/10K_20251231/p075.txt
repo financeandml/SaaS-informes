@@ -1,0 +1,21 @@
+Table of Contents
+Exhibit
+Number Exhibit Description
+Incorporated by Reference Filed
+Form File No. Exhibit Filing Date Herewith
+101 The following financial statements from the Company's Annual
+Report on Form 10-K for the year ended December 31, 2025,
+formatted in Inline XBRL: (i) Consolidated Statements of
+Operations, (ii) Consolidated Statements of Comprehensive
+Income, (iii) Consolidated Statements of Cash Flows, (iv)
+Consolidated Balance Sheets, (v) Consolidated Statements of
+Stockholders' Equity and (vi) Notes to Consolidated Financial
+Statements, tagged as blocks of text and including detailed tags X
+104 The cover page from the Company's Annual Report on Form 10-K
+for the year ended December 31, 2025, formatted in Inline XBRL X
+* These certifications are not deemed filed by the SEC and are not to be incorporated by reference in any filing we make under the Securities Act of 1933 or the
+Securities Exchange Act of 1934, irrespective of any general incorporation language in any filings.
+† Indicates a management contract or compensatory plan
++ Annexes, schedules and/or exhibits have been omitted pursuant to Item 601(a)(5) of Regulation S-K promulgated by the SEC. Netflix agrees to furnish
+supplementally a copy of any omitted annexes, schedules or exhibits to the SEC upon request.
+72

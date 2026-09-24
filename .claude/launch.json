@@ -1,0 +1,7 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    { "name": "saas", "runtimeExecutable": "python", "runtimeArgs": ["-m", "tesis.saas", "--puerto", "8770", "--sin-navegador"], "port": 8770 },
+    { "name": "formulario-nflx", "runtimeExecutable": "python", "runtimeArgs": ["-m", "tesis.formulario", "NFLX", "--puerto", "8765", "--sin-navegador"], "port": 8765 }
+  ]
+}

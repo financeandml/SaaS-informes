@@ -1,0 +1,64 @@
+Table of Contents
+The Company classifies derivative instruments in the Level 2 category within the fair value hierarchy. These instruments are valued using industry
+standard valuation models that use observable inputs such as interest rate yield curves, and forward and spot prices for currencies.
+As of December 31, 2025, the pre-tax net accumulated loss on our foreign currency cash flow hedges included in AOCI on the Consolidated Balance
+Sheets expected to be recognized in earnings within the next 12 months is $275 million.
+Master Netting Agreements
+In order to mitigate counterparty credit risk, the Company enters into master netting agreements with its counterparties for its foreign currency exchange
+contracts which permit the parties to settle amounts on a net basis under certain conditions. The Company has elected to present its derivative assets and
+liabilities on a gross basis on its Consolidated Balance Sheets.
+The Company also enters into collateral security arrangements with its counterparties that require the parties to post cash collateral when certain
+contractual thresholds are met. Cash collateral received is presented in “Accrued expenses and other liabilities” representing the Company’s obligation to return
+counterparty cash collateral. Cash collateral posted is presented in “Other current assets” representing the Company’s right to reclaim the cash collateral. The
+Company does not offset the fair value of its derivative instruments against the fair value of cash collateral posted or received.
+The potential offsetting effect to the Company’s derivative assets and liabilities under its master netting agreements and collateral security agreements
+were as follows:
+As of December 31, 2025
+Gross Amount Not Offset in the
+Consolidated Balance Sheets
+Gross Amount
+Recognized in the
+Consolidated
+Balance Sheets
+Gross Amount
+Offset in the
+Consolidated
+Balance Sheets
+Net Amount
+Presented in the
+Consolidated
+Balance Sheets
+Financial
+Instruments
+Collateral
+Received and
+Posted Net Amount
+(in thousands)
+Derivative assets $ 285,276 $ — $ 285,276 $ (282,469) $ — $ 2,807
+Derivative liabilities 652,619 — 652,619 (282,469) — 370,150
+As of December 31, 2024
+Gross Amount Not Offset in the
+Consolidated Balance Sheets
+Gross Amount
+Recognized in the
+Consolidated
+Balance Sheets
+Gross Amount
+Offset in the
+Consolidated
+Balance Sheets
+Net Amount
+Presented in the
+Consolidated
+Balance Sheets
+Financial
+Instruments
+Collateral
+Received and
+Posted Net Amount
+(in thousands)
+Derivative assets $ 1,002,953 $ — $ 1,002,953 $ (316,320) $ (1,800) $ 684,833
+Derivative liabilities 318,000 — 318,000 (316,320) — 1,680
+Ef ect of Derivative and Non-Derivative Instruments on Consolidated Financial Statements
+The pre-tax gains (losses) on the Company’s cash flow hedges, fair value hedges, and net investment hedges recognized in AOCI were as follows:
+57

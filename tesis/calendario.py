@@ -1,0 +1,80 @@
+"""La próxima presentación de resultados (apartados 2 y 7), de las fuentes que la publican.
+
+Ningún adjunto ni la SEC anuncian la fecha de los próximos resultados (la compañía no
+la deposita). La bolsa la publica en su ficha del valor —como fecha «esperada», según
+su proveedor de estimaciones— y el agregador también, con la marca de si es estimada.
+El informe imprime la fecha de la bolsa con su calificativo y la cuadra con la del
+agregador (regla 9): coinciden o no, y se dice.
+"""
+
+from __future__ import annotations
+
+import re
+from dataclasses import dataclass
+from datetime import date, datetime
+from typing import Optional, Tuple
+
+from .hechos import Contraste
+
+__all__ = ["Proxima", "proxima"]
+
+_FECHA_US = re.compile(r"(\d{1,2})/(\d{1,2})/(20\d\d)")
+_TRIMESTRE = re.compile(r"Quarter ending ([A-Z][a-z]{2}) (20\d\d)")
+_MESES = {"Jan": 1, "Feb": 2, "Mar": 3, "Apr": 4, "May": 5, "Jun": 6, "Jul": 7, "Aug": 8, "Sep": 9, "Oct": 10, "Nov": 11, "Dec": 12}
+
+
+@dataclass
+class Proxima:
+    fecha: date
+    momento: str                         # «tras el cierre» · «antes de la apertura» · ""
+    esperada: bool                       # la bolsa la califica de esperada (no confirmada por la compañía)
+    trimestre: str                       # «3T26» según la bolsa, o ""
+    consenso_bpa: Optional[float]        # lo que la bolsa dice que espera el consenso para ese trimestre
+    texto: str                           # la frase literal de la bolsa
+    fuente: str
+    respuesta: Tuple[str, str, datetime]
+    contraste: Contraste = Contraste.SIN_CONTRASTAR
+    nota_contraste: str = ""
+
+
+def _leer_nasdaq(ticker: str) -> Optional[Proxima]:
+    from .posicionamiento import FUENTE as FUENTE_NASDAQ
+    from .precio import pedir_crudo
+    url = f"https://api.nasdaq.com/api/analyst/{ticker}/earnings-date"
+    try:
+        datos, cuerpo, obtenido = pedir_crudo(url)
+    except Exception:
+        return None
+    d = (datos or {}).get("data") or {}
+    texto = " ".join(str(d.get("reportText") or "").split())
+    m = _FECHA_US.search(texto)
+    if not m:
+        return None
+    fecha = date(int(m.group(3)), int(m.group(1)), int(m.group(2)))
+    momento = "tras el cierre" if "after market close" in texto else ("antes de la apertura" if "before market open" in texto else "")
+    t = _TRIMESTRE.search(texto)
+    trimestre = ""
+    if t:
+        mes, anio = _MESES[t.group(1)], t.group(2)
+        trimestre = f"{(mes - 1) // 3 + 1}T{anio[2:]}"
+    c = re.search(r"consensus EPS forecast for the quarter is \$(\d+(?:\.\d+)?)", texto)
+    return Proxima(fecha=fecha, momento=momento, esperada="expected" in texto, trimestre=trimestre,
+                   consenso_bpa=float(c.group(1)) if c else None, texto=texto, fuente=FUENTE_NASDAQ, respuesta=(url, cuerpo, obtenido))
+
+
+def proxima(ticker: str, agregador=None) -> Optional[Proxima]:
+    """La fecha que publica la bolsa, cuadrada con la del agregador si se le pasa su resumen."""
+    p = _leer_nasdaq(ticker)
+    if p is None:
+        return None
+    if agregador is not None and agregador.fecha_resultados is not None:
+        if agregador.fecha_resultados == p.fecha:
+            p.contraste = Contraste.CONFIRMADO
+            p.nota_contraste = (f"el agregador publica la misma fecha ({agregador.fecha_resultados:%d/%m/%Y}"
+                                + (", que no marca como estimada)" if agregador.fecha_resultados_estimada is False else ")"))
+        else:
+            p.contraste = Contraste.DISCREPANTE
+            p.nota_contraste = f"el agregador publica otra fecha: {agregador.fecha_resultados:%d/%m/%Y}"
+    else:
+        p.nota_contraste = "sin segunda fuente con que cuadrarla"
+    return p

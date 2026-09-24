@@ -1,0 +1,44 @@
+Table of Contents
+Revenues
+We primarily derive revenues from monthly membership fees for services related to streaming content to our members. We offer a variety of streaming
+membership plans, the price of which varies by country and the features of the plan. As of March 31, 2026, pricing on our plans ranged from the U.S. dollar
+equivalent of $1 to $39 per month, and pricing on our extra member sub accounts ranged from the U.S. dollar equivalent of $2 to $10 per month. We expect
+that from time to time the prices of our membership plans in each country may change and we may test other plan and price variations.
+We also earn revenues from advertisements presented on our streaming service, consumer products and experiences, and various other sources. Revenues
+earned from sources other than monthly membership fees were not a material component of revenues for the three months ended March 31, 2026 and
+March 31, 2025.
+Three Months Ended Change
+March 31,
+2026
+March 31,
+2025 Q1'26 vs. Q1'25
+(in thousands, except percentages)
+Revenues $ 12,249,757 $ 10,542,801 $ 1,706,956 16 %
+Revenues for the three months ended March 31, 2026 increased 16% as compared to the three months ended March 31, 2025, primarily due to the growth
+in memberships, price increases, and increased advertising revenue.
+The following table summarizes revenues by region for the three months ended March 31, 2026 and 2025. Total revenues are inclusive of hedging gains
+(losses) of $(133) million and $165 million for the three months ended March 31, 2026 and 2025, respectively. See Note 8 Derivative Financial Instruments
+and Hedging Activities to the consolidated financial statements for further information regarding the Company’s derivative and non-derivative financial
+instruments.
+Three Months Ended Change
+March 31,
+2026
+March 31,
+2025 Q1'26 vs. Q1'25
+(in thousands, except percentages)
+United States and Canada (UCAN) $ 5,245,298 $ 4,617,098 $ 628,200 14 %
+Europe, Middle East, and Africa (EMEA) 3,998,419 3,404,676 593,743 17 %
+Latin America (LATAM) 1,497,058 1,261,934 235,124 19 %
+Asia-Pacific (APAC) 1,508,982 1,259,093 249,889 20 %
+Total Revenues $ 12,249,757 $ 10,542,801 $ 1,706,956 16 %
+Non-GAAP Constant Currency Information
+We believe the non-GAAP financial measure of constant currency revenue is useful in analyzing period-to-period comparisons in revenues absent foreign
+currency fluctuations. However, this non-GAAP financial measure should be considered in addition to, not as a substitute for, or superior to other financial
+measures prepared in accordance with GAAP.
+In order to exclude the effect of foreign currency rate fluctuations on revenue, we calculate current period revenue assuming foreign exchange rates had
+remained constant with foreign exchange rates from each of the corresponding months of the prior-year period and exclude the impact of hedging gains or
+losses realized as revenues. Constant currency percentage change in revenues is calculated as the percentage change between current period constant currency
+revenue and the prior comparative period revenue. The impact of hedging gains or losses is excluded from both the current and prior periods.
+The table below summarizes constant currency revenues by region for the three months ended March 31, 2026 and the constant currency percentage
+change in revenues by region for the three months ended March 31, 2026 as compared to the three months ended March 31, 2025:
+24

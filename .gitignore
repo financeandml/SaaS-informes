@@ -1,0 +1,8 @@
+cache_sec/
+.env
+__pycache__/
+salida/
+adjuntos/
+datos-tesis/
+.pytest_cache/
+.venv/

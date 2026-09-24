@@ -1,0 +1,151 @@
+[
+  {
+    "fichero": "99482238-46b2-4d0d-b292-40e6781bdf03.pdf",
+    "tamano": 1406925,
+    "sha256": "081fbe847afdee5ce4f522e4b89f2bf482c6a8992adfc509aec0c9106c31101f",
+    "paginas": 122,
+    "metadatos_pdf": {
+      "Title": "0001065280-26-000034",
+      "CreationDate": "D:20260123160724-05'00'",
+      "ModDate": "D:20260123160734-05'00'",
+      "Producer": "EDGRpdf Service w/ EO.Pdf 22.0.40.0"
+    },
+    "fecha_portada": "2025-12-31",
+    "fecha_firma": "2026-01-23",
+    "tipo": "10-K",
+    "apartado": "anuales",
+    "periodo_fin": "2025-12-31",
+    "accession": "0001065280-26-000034",
+    "certeza": "alta",
+    "motivo": "La portada dice «FORM 10-K» y declara el ejercicio fiscal cerrado.",
+    "clave": "10K_20251231"
+  },
+  {
+    "fichero": "13fce243-80be-4f3a-9033-bf415d3cc71f.pdf",
+    "tamano": 409636,
+    "sha256": "11d28c1c40b3468f6882b2d5e5bc005c5608d4cd7cd06fc0ad9e71d73f573a23",
+    "paginas": 38,
+    "metadatos_pdf": {
+      "Title": "0001065280-26-000138",
+      "CreationDate": "D:20260417160245-04'00'",
+      "ModDate": "D:20260417160255-04'00'",
+      "Producer": "EDGRpdf Service w/ EO.Pdf 26.1.34.0"
+    },
+    "fecha_portada": "2026-03-31",
+    "fecha_firma": "2026-04-17",
+    "tipo": "10-Q",
+    "apartado": "trimestrales",
+    "periodo_fin": "2026-03-31",
+    "accession": "0001065280-26-000138",
+    "certeza": "alta",
+    "motivo": "La portada dice «FORM 10-Q» y declara el trimestre cerrado.",
+    "clave": "10Q_20260331"
+  },
+  {
+    "fichero": "65ef36cc-6598-4deb-a42b-8c59a8e31fd3.pdf",
+    "tamano": 470336,
+    "sha256": "9206309e3e4d5630b5968b7e00828060d5aa3d2c8bb1ae253eb5c21a90409021",
+    "paginas": 44,
+    "metadatos_pdf": {
+      "Title": "0001065280-26-000212",
+      "CreationDate": "D:20260717160334-04'00'",
+      "ModDate": "D:20260717160343-04'00'",
+      "Producer": "EDGRpdf Service w/ EO.Pdf 26.1.34.0"
+    },
+    "fecha_portada": "2026-06-30",
+    "fecha_firma": "2026-07-17",
+    "tipo": "10-Q",
+    "apartado": "trimestrales",
+    "periodo_fin": "2026-06-30",
+    "accession": "0001065280-26-000212",
+    "certeza": "alta",
+    "motivo": "La portada dice «FORM 10-Q» y declara el trimestre cerrado.",
+    "clave": "10Q_20260630"
+  },
+  {
+    "fichero": "Netflix-2026-Proxy-Statement.pdf",
+    "tamano": 4173326,
+    "sha256": "83548a91ed159e06f69c9fe1700187b9cac93a08d401b12e0d2b1990a65b4bfe",
+    "paginas": 100,
+    "metadatos_pdf": {
+      "Title": "Netflix 2026 Proxy Statement",
+      "CreationDate": "D:20260413215942-04'00'",
+      "ModDate": "D:20260416091747-07'00'",
+      "Producer": "Acrobat Distiller 8.1.0 (Windows)"
+    },
+    "fecha_portada": null,
+    "fecha_firma": null,
+    "tipo": "DEF 14A",
+    "apartado": "anuales",
+    "periodo_fin": "2026-06-04",
+    "accession": null,
+    "certeza": "alta",
+    "motivo": "La portada dice «Proxy Statement and Notice of Annual Meeting». Va con las cuentas anuales: accionariado, consejo y retribución.",
+    "clave": "PROXY_20260604"
+  },
+  {
+    "fichero": "FINAL-Q2-26-Shareholder-Letter.pdf",
+    "tamano": 294574,
+    "sha256": "8441bb4517a6c37a25495bbf189a8d3f6ca1958b4764bb64bdf646e29b9e9241",
+    "paginas": 14,
+    "metadatos_pdf": {
+      "Title": "",
+      "CreationDate": "D:20260716104058-07'00'",
+      "ModDate": "D:20260716104138-07'00'",
+      "Producer": "Adobe Acrobat 26.1.21662"
+    },
+    "fecha_portada": "2026-07-16",
+    "fecha_firma": null,
+    "tipo": "Carta a accionistas",
+    "apartado": "guidance",
+    "periodo_fin": null,
+    "trimestre": "Q2 2026",
+    "accession": null,
+    "certeza": "alta",
+    "motivo": "Empieza «Fellow shareholders» y trae la tabla de resultados y previsión. Es el anexo 99.1 del 8-K de resultados: contiene el guidance.",
+    "clave": "CARTA_Q2_2026"
+  },
+  {
+    "fichero": "Netflix-Inc-_Earnings-Call_2026-07-16T00_00_00_English-1.pdf",
+    "tamano": 382801,
+    "sha256": "1b31d57116f0446bf161f7d76dbfc1e2f0eb994e0f245558e7b499400f47aaf3",
+    "paginas": 14,
+    "metadatos_pdf": {
+      "Title": "",
+      "CreationDate": "D:20260716190759Z",
+      "ModDate": "D:20260716190800",
+      "Producer": "Aspose.Pdf for .NET 7.0"
+    },
+    "fecha_portada": "2026-07-16",
+    "fecha_firma": null,
+    "tipo": "Transcripción de la conferencia de resultados",
+    "apartado": "guidance",
+    "periodo_fin": null,
+    "trimestre": "Q2 2026",
+    "accession": null,
+    "certeza": "alta",
+    "motivo": "La cabecera dice «Earnings Call Transcripts». Guidance verbal de la dirección. No está depositado en la SEC: es un documento de un tercero (S&P Global).",
+    "clave": "CALL_Q2_2026"
+  },
+  {
+    "fichero": "Q2-26-Website-Financials.pdf",
+    "tamano": 289228,
+    "sha256": "c0b921b1e73f2e3e680f3b2e4c415817725bf60b20ce2d987c26b1ac1a72728e",
+    "paginas": 5,
+    "metadatos_pdf": {
+      "Title": "",
+      "CreationDate": "D:20260916035209-07'00'",
+      "ModDate": "D:20260916035209-07'00'",
+      "Producer": ""
+    },
+    "fecha_portada": "2025-06-30",
+    "fecha_firma": null,
+    "tipo": "Estados financieros trimestrales (web del emisor)",
+    "apartado": "trimestrales",
+    "periodo_fin": "2026-06-30",
+    "accession": null,
+    "certeza": "media",
+    "motivo": "No tiene portada: empieza directamente por la cuenta de resultados trimestral «(unaudited)». Coincide con el fichero de financials que Netflix publica en su web de IR.",
+    "clave": "FINWEB_20260630"
+  }
+]

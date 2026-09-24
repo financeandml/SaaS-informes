@@ -1,0 +1,43 @@
+Table of Contents
+NETFLIX, INC.
+Consolidated Balance Sheets
+(in thousands, except share and par value data)
+As of
+June 30,
+2026
+December 31,
+2025
+(unaudited)
+Assets
+Current assets:
+Cash and cash equivalents $ 9,099,232 $ 9,033,681
+Short-term investments 28,678 28,678
+Other current assets 4,725,393 3,957,832
+Total current assets 13,853,303 13,020,191
+Content assets, net 33,837,573 32,778,392
+Property and equipment, net 2,398,848 2,004,350
+Other non-current assets 8,360,717 7,794,060
+Total assets $ 58,450,441 $ 55,596,993
+Liabilities and Stockholders’ Equity
+Current liabilities:
+Current content liabilities $ 3,866,522 $ 4,084,854
+Accounts payable 814,551 900,612
+Accrued expenses and other liabilities 3,172,611 3,220,869
+Deferred revenue 1,797,456 1,775,730
+Short-term debt 2,483,758 998,865
+Total current liabilities 12,134,898 10,980,930
+Non-current content liabilities 1,625,600 1,579,476
+Long-term debt 11,825,548 13,463,971
+Other non-current liabilities 2,712,343 2,957,128
+Total liabilities 28,298,389 28,981,505
+Commitments and contingencies (Note 9)
+Stockholders’ equity:
+Common stock, $0.001 par value; 49,900,000,000 shares authorized at June 30, 2026 and December 31, 2025;
+4,163,939,676 and 4,222,162,150 issued and outstanding at June 30, 2026 and December 31, 2025, respectively 7,670,503 7,286,410
+Treasury stock at cost (413,373,678 and 346,541,145 shares at June 30, 2026 and December 31, 2025, respectively) (28,387,657) (22,372,658)
+Accumulated other comprehensive loss (97,117) (580,382)
+Retained earnings 50,966,323 42,282,118
+Total stockholders’ equity 30,152,052 26,615,488
+Total liabilities and stockholders’ equity $ 58,450,441 $ 55,596,993
+See accompanying notes to the consolidated financial statements.
+6

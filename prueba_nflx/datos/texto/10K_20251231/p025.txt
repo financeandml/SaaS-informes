@@ -1,0 +1,40 @@
+Table of Contents
+Cost of Revenues
+Cost of revenues primarily consists of the amortization of content assets. Other costs of revenues include expenses associated with the acquisition,
+licensing and production of content, streaming delivery costs, and other operating costs.
+Expenses related to the acquisition, licensing and production of content not included in content amortization may include payroll, stock-based
+compensation, facilities, and other personnel-related expenses, costs associated with obtaining rights to music included in our content, overall deals with talent,
+miscellaneous production-related costs and participations and residuals. Streaming delivery costs are primarily related to our global content delivery network
+(“Open Connect”). We have built our own Open Connect network to help us efficiently stream a high volume of content to our members over the internet.
+Delivery expenses, therefore, include equipment costs related to Open Connect, payroll and related personnel expenses and all third-party costs, such as cloud
+computing costs, associated with delivering content over the internet. Other operating costs include customer service and payment processing fees, including
+those we pay to our integrated payment partners, as well as other costs incurred in making our content available to members.
+Year Ended December 31, Change
+2025 2024 2023 2025 vs. 2024
+(in thousands, except percentages)
+Cost of revenues $ 23,275,329 $ 21,038,464 $ 19,715,368 $ 2,236,865 11 %
+As a percentage of revenues 52 % 54 % 58 %
+The increase in cost of revenues for the year ended December 31, 2025 as compared to the year ended December 31, 2024 was primarily due to a
+$1,121 million increase in content amortization relating to our existing and new content, coupled with a $1,116 million increase in other cost of revenues,
+primarily driven by non-income tax assessments in Brazil. We do not expect that non-income taxes incurred in Brazil will materially impact our results of
+operations in future periods. See Note 9 Commitments and Contingencies in the accompanying notes to our consolidated financial statements for further detail
+on our non-income tax matters.
+Sales and Marketing
+Sales and marketing expenses consist primarily of expenses for promotional activities such as digital and television advertising, and certain payments
+made to marketing and advertising sales partners. Our marketing partners include consumer electronics (“CE”) manufacturers, multichannel video
+programming distributors (“MVPDs”), mobile operators, and ISPs. Our advertising sales partners include advertising technology providers and advertising
+agencies. Sales and marketing expenses also include payroll, stock-based compensation, facilities, and other related expenses for personnel that support
+advertising sales and marketing activities.
+Year Ended December 31, Change
+2025 2024 2023 2025 vs. 2024
+(in thousands, except percentages)
+Sales and marketing $ 3,301,306 $ 2,917,554 $ 2,657,883 $ 383,752 13 %
+As a percentage of revenues 7 % 7 % 8 %
+The increase in sales and marketing expenses for the year ended December 31, 2025 as compared to the year ended December 31, 2024 was primarily
+driven by a $222 million increase in marketing expenses, coupled with a $149 million increase in personnel-related costs due to the growth in advertising sales
+headcount.
+Technology and Development
+Technology and development expenses consist primarily of payroll, stock-based compensation, facilities, and other related expenses for technology
+personnel responsible for making improvements to our service offerings, including testing, maintaining and modifying our user interface, our recommendations
+and infrastructure. Technology and development expenses also include costs associated with general use computer hardware and software.
+22

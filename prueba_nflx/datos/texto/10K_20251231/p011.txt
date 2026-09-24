@@ -1,0 +1,52 @@
+Table of Contents
+• the availability, accuracy, utility, and security of analytics and measurement solutions offered by us or third parties that demonstrate the value of our
+ads to marketers, or our ability to further improve such tools;
+• changes in the way advertising on devices, connected TVs or on personal computers is measured or priced;
+• adverse legal developments relating to advertising, targeting, or measurement tools;
+• changes in third-party policies, which may negatively impact the ability to measure, deliver and select ads to be served;
+• regulatory, legislative and industry developments relating to the collection and use of information and other privacy considerations, including
+regulations related to ad targeting and measurement tools;
+• any liability or reputational harm from advertisements shown on our service;
+• our relationship with third-party service providers for the management, operation, sale and technology to support advertisements on our service;
+• our ability to develop and expand an advertising sales and advertising technology organization team;
+• our ability to develop the technology, data, and related infrastructure to support advertising and drive value to advertisers;
+• the impact of our content and reputation on advertisers’ willingness to spend with us; and
+• any member dissatisfaction due to advertisements.
+Risks Related to Intellectual Property
+If studios, content providers or other rights holders refuse to license streaming content or other rights upon terms acceptable to us, our business could
+be adversely affected.
+Our ability to provide our members with content they can enjoy depends on obtaining various rights from third parties upon terms acceptable to us,
+including necessary distribution rights, to such content and certain related elements thereof, such as the public performance of music contained within the
+content we distribute. The license periods and the terms and conditions of such rights vary. As content providers develop their own streaming services, they
+may be unwilling to provide us with access to certain content, including popular series or movies. If the studios, content providers and other rights holders are
+not or are no longer willing or able to license us content upon terms acceptable to us, our ability to stream content to our members may be adversely affected
+and/or our costs could increase. Certain licenses for content provide for the studios or other content providers to withdraw content from our service relatively
+quickly. Because of these provisions and other actions we may take, content available through our service can be withdrawn on short notice. As competition
+increases, we see the cost of certain programming increase. As we seek to differentiate our service, we are often focused on securing certain exclusive rights
+when obtaining content, including original content. We are also focused on programming an overall mix of content that delights our members in a cost efficient
+manner. Within this context, we are selective about the titles we add and renew to our service. If we do not maintain a compelling mix of content, our member
+acquisition and retention may be adversely affected.
+Music and certain authors’ performances contained within content we distribute may require us to obtain licenses for such distribution. In this regard, we
+engage in negotiations with collection management organizations (“CMOs”) and similar entities that hold certain rights to music and/or other interests in
+intellectual property (e.g., remuneration rights) in connection with streaming content into various territories. If we are unable to reach mutually acceptable
+terms with these organizations, we could become involved in litigation and/or could be enjoined from distributing certain content, which could adversely
+impact our business. Additionally, pending and ongoing litigation and negotiations between certain CMOs and other third parties in various territories could
+adversely impact our negotiations with CMOs, or result in music publishers represented by certain CMOs unilaterally withdrawing rights, and thereby
+adversely impact our ability to reach licensing agreements reasonably acceptable to us. Failure to reach such licensing agreements could expose us to potential
+liability for copyright infringement or otherwise increase our costs. Additionally, as the market for the digital distribution of content grows, a broader role for
+CMOs in the remuneration of authors, performers and other beneficiaries of neighboring rights is likely to expose us to greater distribution expenses in certain
+markets.
+If our trademarks and other proprietary rights are not adequately protected to prevent use or appropriation by third parties, the value of our brand
+and other intangible assets may be diminished, and our business may be adversely affected.
+We rely and expect to continue to rely on a combination of confidentiality and license agreements with our employees, consultants and third parties with
+whom we have relationships, as well as trademark, copyright, patent and trade secret protection laws, to protect our proprietary rights. We may also seek to
+enforce our proprietary rights through court proceedings or other legal actions. We have filed and we expect to file from time to time for trademark, copyright,
+and patent applications. Nevertheless, these applications may not be approved, third parties may challenge any copyrights, patents or trademarks issued to or
+held by us, third parties may knowingly or unknowingly infringe our intellectual property rights, and we may not be able to prevent infringement or
+misappropriation without substantial expense to us. If the protection of our intellectual property rights is inadequate to prevent use or misappropriation by third
+parties, the value of our brand, content, and other intangible assets may be diminished, competitors may be able to more effectively mimic our service and
+methods of operations, the perception of our business and service to members and potential members may become confused in the marketplace, and our ability
+to attract members may be adversely affected.
+We currently hold various domain names relating to our brand, including Netflix.com. Failure to protect our domain names could adversely affect our
+reputation and brand and make it more difficult for users to find our website and our service. We may be unable, without
+8

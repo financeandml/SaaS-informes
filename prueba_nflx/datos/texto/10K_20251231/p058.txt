@@ -1,0 +1,49 @@
+Table of Contents
+The borrowings under the Revolving Credit Agreement bear interest, at the Company’s option, of either (i) a floating rate per annum equal to a base rate
+(the “Alternate Base Rate”) plus an applicable margin or (ii) a per annum rate equal to an adjusted term SOFR rate (the “Adjusted Term SOFR Rate”) plus an
+applicable margin. The applicable margin for Alternate Base Rate loans will range from 0.00% to 0.25%, and the applicable margin for Adjusted Term SOFR
+Rate loans will range from 0.75% to 1.25%, each based on the Company’s credit ratings.
+The Revolving Credit Agreement contains customary affirmative covenants and negative covenants (and customary baskets and exceptions with respect
+thereto) for a credit facility of this size and type and requires the Company to maintain a minimum ratio of consolidated EBITDA to consolidated interest
+expense of 3.0 to 1.0 as of the last day of each fiscal quarter. As of December 31, 2025 and December 31, 2024, the Company was in compliance with all
+related covenants and ratios.
+Commercial Paper Program
+In May 2025, the Company established a $3 billion commercial paper program (the “Commercial Paper Program”) under which it may issue short-term
+unsecured commercial paper notes. Net proceeds from this program may be used for general corporate purposes. There were no borrowings outstanding under
+the Commercial Paper Program as of December 31, 2025.
+WBD Financing
+On December 4, 2025, the Company entered into a bridge commitment letter pursuant to which the commitment parties agreed to provide, subject to the
+satisfaction of customary closing conditions, a $59 billion senior unsecured bridge term loan facility to finance the purchase price for the WBD transaction, to
+pay fees, costs and expenses incurred in connection with the WBD transaction and, at the Company’s option, to refinance certain indebtedness (the “Bridge
+Facility Commitments”). As of December 31, 2025, no amounts have been utilized under the Bridge Facility Commitments and the Bridge Facility
+Commitments have been reduced on a dollar-for-dollar basis by the amounts of the Transactions Revolving Credit Agreement and the DDTL Credit Agreement
+described below to $34 billion.
+On December 19, 2025, the Company entered into a $5 billion senior unsecured revolving credit facility (the “Transactions Revolving Credit
+Agreement”). Borrowings under the Transactions Revolving Credit Agreement may be used for working capital and general corporate purposes and to finance
+the purchase price for the WBD transaction, to pay fees, costs and expenses incurred in connection with the WBD transaction and, at the Company’s option, to
+refinance certain indebtedness. Revolving loans under the Transactions Revolving Credit Agreement may be borrowed, repaid and reborrowed until the date
+that is the earliest of (i) the date that is the third anniversary of the date of the consummation of the WBD transaction, (ii) the date the Amended and Restated
+Merger Agreement is terminated in accordance with its terms and (iii) December 19, 2030, at which time all amounts borrowed must be repaid. Borrowings
+under the Transactions Revolving Credit Agreement bear interest, at the Company’s option, at either (i) the Alternate Base Rate plus an applicable margin or
+(ii) a per annum rate equal to a term SOFR rate (the “Term SOFR Rate”) plus an applicable margin. The applicable margin for Alternate Base Rate loans will
+range from 0% to 0.10%, and the applicable margin for Term SOFR Rate loans will range from 0.60% to 1.10%, each based on the Company’s credit ratings.
+The Transactions Revolving Credit Agreement contains customary affirmative covenants and negative covenants (and customary baskets and exceptions with
+respect thereto) for a credit facility of this size and type. The Transactions Revolving Credit Agreement requires the Company to maintain a minimum ratio of
+consolidated EBITDA to consolidated interest expense of 3.0 to 1.0 as of the last day of each fiscal quarter. As of December 31, 2025, the Company was in
+compliance with all related covenants and ratios and no amounts have been borrowed under the Transactions Revolving Credit Agreement.
+On December 19, 2025, the Company entered into a senior unsecured delayed draw credit facility (the “DDTL Credit Agreement”). The DDTL Credit
+Agreement provides for a two-year $10 billion unsecured delayed draw term loan credit facility (the “2Y DDTL Facility”) and a three-year $10 billion
+unsecured delayed draw term loan credit facility (the “3Y DDTL Facility”). Borrowings under each of the 2Y DDTL Facility and the 3Y DDTL Facility may be
+used to finance the purchase price for the WBD transaction, to pay fees, costs and expenses incurred in connection with the WBD transaction and, at the
+Company’s option, to refinance certain indebtedness. Delayed draw term loans under the DDTL Credit Agreement will bear interest, at the Company’s option,
+at either (i) the Alternate Base Rate plus an applicable margin or (ii) the Term SOFR Rate plus an applicable margin. For the 2Y DDTL Facility, the applicable
+margin for Alternate Base Rate loans will range from 0% to 0.125%, and the applicable margin for Term SOFR Rate loans will range from 0.850% to 1.125%,
+each based on the Company’s credit ratings. For the 3Y DDTL Facility, the applicable margin for Alternate Base Rate loans will range from 0% to 0.25%, and
+the applicable margin for Term SOFR Rate loans will range from 0.95% to 1.25%, each based on the Company’s credit ratings. The DDTL Credit Agreement
+contains customary affirmative covenants and negative covenants (and customary baskets and exceptions with respect thereto) for a credit facility of this size
+and type. The DDTL Credit Agreement requires the Company to maintain a minimum ratio of consolidated EBITDA to consolidated interest expense of 3.0 to
+1.0 as of the last day of each fiscal quarter. As of December 31, 2025, the Company was in compliance with all related covenants and ratios and no amounts
+have been borrowed under the DDTL Credit Agreement.
+See Note 9 Commitments and Contingencies and Note 14 Subsequent Event for further information on the financing arrangements the Company has
+entered into in connection with the WBD transaction.
+55

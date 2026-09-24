@@ -1,0 +1,47 @@
+Table of Contents
+NETFLIX, INC.
+NOTES TO CONSOLIDATED FINANCIAL STATEMENTS
+1. Organization and Summary of Significant Accounting Policies
+Description of Business
+Netflix, Inc. (the “Company”) was incorporated on August 29, 1997 and began operations on April 14, 1998. The Company is one of the world’s leading
+entertainment services offering TV series, films, games and live programming across a wide variety of genres and languages. Members can play, pause and
+resume watching as much as they want, anytime, anywhere, and can change their plans at any time.
+Basis of Presentation
+The consolidated financial statements include the accounts of the Company and its wholly-owned subsidiaries. Intercompany balances and transactions
+have been eliminated.
+Stock Split
+On November 14, 2025, the Company completed a ten-for-one forward stock split of the Company's issued common stock (the “Stock Split”). Each
+shareholder as of the record date of November 10, 2025 received nine additional shares of common stock for every share held. References made to share or per
+share amounts in the accompanying consolidated financial statements and applicable disclosures have been retroactively adjusted to reflect the Stock Split. See
+Note 10 Stockholders' Equity for additional information.
+Use of Estimates
+The preparation of consolidated financial statements in conformity with generally accepted accounting principles (“GAAP”) in the United States of
+America requires management to make estimates and assumptions that affect the reported amounts of assets and liabilities, disclosure of contingent assets and
+liabilities at the date of the financial statements, and the reported amounts of revenues and expenses during the reporting periods. Significant items subject to
+such estimates and assumptions include the content asset amortization policy and the recognition and measurement of income tax assets and liabilities. The
+Company bases its estimates on historical experience and on various other assumptions that the Company believes to be reasonable under the circumstances.
+On an ongoing basis, the Company evaluates these assumptions, judgments and estimates. Actual results may differ from these estimates.
+Recently issued accounting pronouncements not yet adopted
+In November 2024, the Financial Accounting Standards Board (“FASB”) issued Accounting Standards Update (“ASU”) 2024-03, Income Statement￾Reporting Comprehensive Income-Expense Disaggregation Disclosures (Subtopic 220-40): Disaggregation of Income Statement Expenses, requiring public
+entities to disclose additional information about specific expense categories in the notes to the financial statements on an interim and annual basis. ASU 2024-
+03 is effective for fiscal years beginning after December 15, 2026, and for interim periods beginning after December 15, 2027, with early adoption permitted.
+The Company is currently evaluating the impact of adopting ASU 2024-03.
+In December 2025, the FASB issued ASU 2025-10, Government Grants (Topic 832): Accounting for Government Grants Received by Business Entities,
+which establishes authoritative guidance on the recognition, measurement, presentation, and disclosure of government grants. Under ASU 2025-10,
+government grants are recognized when it is probable that the entity will both comply with the conditions of the grant and the grant will be received. The ASU
+provides specific accounting models for grants related to assets and grants related to income, including options to recognize government grants as deferred
+income or as a reduction of the asset’s cost basis. The ASU also requires enhanced disclosures regarding the nature of government grants, significant terms and
+conditions, accounting policies applied, and amounts recognized in the financial statements. ASU 2025-10 is effective for fiscal years beginning after
+December 15, 2028, including interim periods within those fiscal years, with early adoption permitted. The Company is currently evaluating the impact of
+adopting ASU 2025-10.
+In December 2025, the FASB issued ASU 2025-11, Interim Reporting (Topic 270): Narrow-Scope Improvements, which clarifies the guidance in Topic
+270 to improve the consistency of interim financial reporting. The ASU provides a comprehensive list of required interim disclosures and introduces a
+disclosure principle requiring entities to disclose events since the end of the last annual reporting period that have a material impact on the entity. ASU 2025-11
+is effective for fiscal years beginning after December 15, 2027, including interim periods within those fiscal years, with early adoption permitted. The
+Company is currently evaluating the impact of adopting ASU 2025-11.
+Recently adopted accounting pronouncements
+In December 2023, the FASB issued ASU 2023-09, Income Taxes (Topic 740): Improvements to Income Tax Disclosures, which requires public entities,
+on an annual basis, to provide disclosure of specific categories in the rate reconciliation, as well as disclosure of income taxes paid disaggregated by
+jurisdiction. ASU 2023-09 is effective for fiscal years beginning after December 15, 2024, with early adoption permitted. The Company adopted ASU 2023-09
+for the year ended December 31, 2025, and applied the new disclosure requirements
+44

@@ -1,0 +1,39 @@
+EXHIBIT 10.2
+consummation of such merger or Change in Control; (iii) outstanding Awards will vest and become exercisable, realizable, or payable, or restrictions applicable
+to an Award will lapse, in whole or in part prior to or upon consummation of such merger or Change in Control, and, to the extent the Administrator determines,
+terminate upon the effectiveness of such merger of Change in Control; (iv) (A) the termination of an Award in exchange for an amount of cash and/or property,
+if any, equal to the amount that would have been attained upon the exercise of such Award or realization of the Participant’s rights as of the date of the
+occurrence of the transaction (and, for the avoidance of doubt, if as of the date of the occurrence of the transaction the Administrator determines in good faith
+that no amount would have been attained upon the exercise of such Award or realization of the Participant’s rights, then such Award may be terminated by the
+Company without payment), or (B) the replacement of such Award with other rights or property selected by the Administrator in its sole discretion; or (v) any
+combination of the foregoing. In taking any of the actions permitted under this subsection 13(c), the Administrator will not be obligated to treat all Awards, all
+Awards held by a Participant, or all Awards of the same type, similarly.
+In the event that the successor corporation does not assume or substitute for the Award, the Participant will fully vest in and have the right to
+exercise all of his or her outstanding Options and Stock Appreciation Rights, including Shares as to which such Awards would not otherwise be vested or
+exercisable, all restrictions on Restricted Stock and Restricted Stock Units will lapse, and, with respect to Awards with performance-based vesting, all
+performance goals or other vesting criteria will be deemed achieved at one hundred percent (100%) of target levels and all other terms and conditions met. In
+addition, if an Option or Stock Appreciation Right is not assumed or substituted in the event of a Change in Control, the Administrator will notify the
+Participant in writing or electronically that the Option or Stock Appreciation Right will be exercisable for a period of time determined by the Administrator in
+its sole discretion, and the Option or Stock Appreciation Right will terminate upon the expiration of such period.
+For the purposes of this subsection (c), an Award will be considered assumed if, following the Change in Control, the Award confers the right
+to purchase or receive, for each Share subject to the Award immediately prior to the Change in Control, the consideration (whether stock, cash, or other
+securities or property) received in the Change in Control by holders of Common Stock for each Share held on the effective date of the transaction (and if
+holders were offered a choice of consideration, the type of consideration chosen by the holders of a majority of the outstanding Shares); provided, however,
+that if such consideration received in the Change in Control is not solely common stock of the successor corporation or its Parent, the Administrator may, with
+the consent of the successor corporation, provide for the consideration to be received upon the exercise of an Option or Stock Appreciation Right or upon the
+payout of a Restricted Stock Unit, for each Share subject to such Award, to be solely common stock of the successor corporation or its Parent equal in fair
+market value to the per share consideration received by holders of Common Stock in the Change in Control.
+Notwithstanding anything in this Section 13(c) to the contrary, an Award that vests, is earned or paid-out upon the satisfaction of one or more
+performance goals will not be considered assumed if the Company or its successor modifies any of such performance goals without the Participant’s consent;
+provided, however, a modification to such performance goals only to reflect the successor corporation’s post-Change in Control corporate structure will not be
+deemed to invalidate an otherwise valid Award assumption.
+14. Tax Withholding.
+(a) Withholding Requirements. Prior to the delivery of any Shares or cash pursuant to an Award (or exercise thereof), the Company will
+have the power and the right to deduct or withhold, or require a Participant to remit to the Company, an amount sufficient to satisfy an amount sufficient to
+satisfy all Tax Obligations with respect to such Award (or exercise thereof).
+(b) Withholding Arrangements. The Administrator, in its sole discretion and pursuant to such procedures as it may specify from time to
+time, may permit a Participant to satisfy such Tax Withholding obligation, in whole or in part by (without limitation) (a) paying cash, (b) electing to have the
+Company withhold otherwise deliverable cash or Shares having a Fair Market Value equal to the minimum statutory amount required to be withheld, or (c)
+delivering to the Company already-owned Shares having a Fair Market Value equal to the minimum statutory amount required to be withheld. The Fair Market
+Value of the Shares to be withheld or delivered will be determined as of the date that the taxes are required to be withheld.
+-12-

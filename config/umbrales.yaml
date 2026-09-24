@@ -1,0 +1,26 @@
+# umbrales.yaml · Umbrales editables. Los specs los citan por clave; ningún umbral en código.
+recomendacion:
+  escala: [Comprar, Mantener, Vender]
+  comprar: {potencial_min: 0.15, recorrido_riesgo_min: 1.5}
+  vender: {potencial_max: -0.10}
+  # el resto → Mantener
+horizonte_meses_defecto: 12
+prob_base_min: 0.40
+divergencia_multiplos_aviso: 0.20
+fallo_guia_obliga_causas: 0.02
+g_max: 0.04
+wacc_menos_g_min_pp: 2.0
+ronic_defecto_pp: 2.0
+ronic_max_x_wacc: 3
+peso_vt_aviso: 0.75
+vt_contraste_aviso: 0.15
+beta_r2_min: 0.10
+atipicos_iqr: 3
+comparables_antiguedad_max_meses: 15
+tolerancia_oi_yahoo_nasdaq: 0.02
+reexpresion_nota: 0.005
+pdf_vs_edgar_similitud_min: 0.98
+cita_similitud_min: 0.90
+biotech_ingresos_min_musd: 50
+relleno_pagina_min: 0.25
+frase_palabras_aviso: 40

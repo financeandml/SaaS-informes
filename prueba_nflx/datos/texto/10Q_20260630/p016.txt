@@ -1,0 +1,52 @@
+Table of Contents
+Foreign Exchange Contracts
+As of both June 30, 2026 and December 31, 2025, approximately $1.9 billion of the Company’s Euro-denominated Senior Notes were designated as
+hedges of the foreign exchange risk of the Company’s net investment in certain foreign subsidiaries.
+As of June 30, 2026 and December 31, 2025, the carrying amount of the Company’s Euro-denominated Senior Notes (included in “Short-term debt” and
+“Long-term debt” on the Company’s Consolidated Balance Sheets), which was designated as the hedged items in fair value hedges, was approximately
+$2.8 billion and $2.9 billion, respectively.
+See Note 7 Debt for further information on the Company’s debt obligations.
+Interest Rate Contracts
+As of June 30, 2026, the carrying amount of the Company’s Senior Notes (included in “Long-term debt” on the Company’s Consolidated Balance
+Sheets), which was designated as the hedged items in fair value hedges of interest rate risk was approximately $1.4 billion. The related cumulative fair value
+hedging adjustments included in the carrying amount of the hedged Senior Notes was approximately $(14) million. No Senior Notes were designated as the
+hedged items in fair value hedges of interest rate risk as of December 31, 2025.
+Fair Value of Derivative Contracts
+The fair value of the Company’s outstanding derivative instruments was as follows:
+As of June 30, 2026
+Derivative Assets Derivative Liabilities
+Other current assets
+Other non-current
+assets
+Accrued expenses
+and other liabilities
+Other non-current
+liabilities
+(in thousands)
+Derivatives designated as hedging instruments:
+Foreign exchange contracts $ 343,187 $ 268,219 $ 320,393 $ 86,175
+Interest rate contracts 236 1,124 — 14,934
+Derivatives not designated as hedging instruments:
+Foreign exchange contracts 19,949 — 12,361 —
+Total $ 363,372 $ 269,343 $ 332,754 $ 101,109
+As of December 31, 2025
+Derivative Assets Derivative Liabilities
+Other current assets
+Other non-current
+assets
+Accrued expenses
+and other liabilities
+Other non-current
+liabilities
+(in thousands)
+Derivatives designated as hedging instruments:
+Foreign exchange contracts $ 192,828 $ 88,985 $ 426,341 $ 214,574
+Interest rate contracts — — — —
+Derivatives not designated as hedging instruments:
+Foreign exchange contracts 3,463 — 11,704 —
+Total $ 196,291 $ 88,985 $ 438,045 $ 214,574
+The Company classifies derivative instruments in the Level 2 category within the fair value hierarchy. These instruments are valued using industry
+standard valuation models that use observable inputs such as interest rate yield curves, and forward and spot prices for currencies.
+As of June 30, 2026, the pre-tax net accumulated gain on our foreign currency cash flow hedges included in accumulated other comprehensive income
+(“AOCI”) on the Consolidated Balance Sheets expected to be recognized in earnings within the next 12 months is $159 million.
+16

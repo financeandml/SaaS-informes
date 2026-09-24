@@ -1,0 +1,51 @@
+Table of Contents
+Three Months Ended
+March 31, 2026 March 31, 2025
+Revenues Cost of Revenues
+Interest and Other
+Income (Expense) Revenues Cost of Revenues
+Interest and Other
+Income (Expense)
+(in thousands)
+Total amounts presented in the Consolidated
+Statements of Operations
+$ 12,249,757 $ 5,888,238 $ 2,852,166 $ 10,542,801 $ 5,263,147 $ 50,899
+Gains (losses) on derivatives in cash flow hedging
+relationship
+Foreign exchange contracts
+Amount of gains (losses) reclassified from
+AOCI
+(132,517) 904 — 164,796 (2,339) —
+Gains (losses) on derivatives in fair value hedging
+relationship
+Foreign exchange contracts
+Hedged items — — 55,901 — — (153,825)
+Derivatives designated as hedging instruments — — (59,085) — — 157,435
+Amount excluded from assessment of
+effectiveness and recognized in earnings based
+on amortization approach
+— — (13,263) — — (14,569)
+Gains (losses) on derivatives not designated as
+hedging instruments
+Foreign exchange contracts — — 8,135 — — (20,950)
+9. Commitments and Contingencies
+Content
+As of March 31, 2026, the Company had $24.1 billion of obligations comprised of $4.1 billion included in “Current content liabilities” and $1.6 billion of
+“Non-current content liabilities” on the Consolidated Balance Sheets and $18.5 billion of obligations that are not reflected on the Consolidated Balance Sheets
+as they did not yet meet the criteria for recognition.
+As of December 31, 2025, the Company had $24.0 billion of obligations comprised of $4.1 billion included in “Current content liabilities” and $1.6
+billion of “Non-current content liabilities” on the Consolidated Balance Sheets and $18.4 billion of obligations that are not reflected on the Consolidated
+Balance Sheets as they did not yet meet the criteria for recognition.
+The expected timing of payments for these content obligations is as follows:
+As of
+March 31,
+2026
+December 31,
+2025
+(in thousands)
+Less than one year $ 11,779,222 $ 11,528,030
+Due after one year and through three years 8,611,852 8,376,160
+Due after three years and through five years 2,825,509 3,041,538
+Due after five years 922,848 1,093,500
+Total content obligations $ 24,139,431 $ 24,039,228
+17

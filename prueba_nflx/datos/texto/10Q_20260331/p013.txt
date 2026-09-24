@@ -1,0 +1,57 @@
+Table of Contents
+7. Debt
+As of March 31, 2026, the Company had aggregate outstanding notes of $14,361 million, net of $52 million of issuance costs and discounts, with varying
+maturities (the “Notes”). Of the outstanding balance, $999 million, net of issuance costs, is classified as short-term debt on the Consolidated Balance Sheets. As
+of December 31, 2025, the Company had aggregate outstanding notes of $14,463 million, net of $56 million of issuance costs and discounts. Each of the Notes
+are senior unsecured obligations of the Company. Interest is payable semi-annually at fixed rates.
+A portion of the outstanding Notes is denominated in foreign currency (comprised of €4,700 million) and is remeasured into U.S. dollars at each balance
+sheet date (with remeasurement gain, net of hedging impacts, totaling $10 million for the three months ended March 31, 2026). See Note 8 Derivative
+Financial Instruments and Hedging Activities to the consolidated financial statements for further information regarding the Company’s derivative and non￾derivative financial instruments.
+The following table provides a summary of the Company's outstanding debt and the fair values based on quoted market prices in less active markets as of
+March 31, 2026 and December 31, 2025:
+Principal Amount at Par Level 2 Fair Value as of
+March 31,
+2026
+December 31,
+2025
+Issuance Date Maturity
+March 31,
+2026
+December 31,
+2025
+(in millions) (in millions)
+4.375% Senior Notes 1,000 1,000 October 2016 November 2026 1,002 1,006
+3.625% Senior Notes 1,497 1,526 May 2017 May 2027 1,508 1,550
+4.875% Senior Notes 1,600 1,600 October 2017 April 2028 1,621 1,634
+5.875% Senior Notes 1,900 1,900 April 2018 November 2028 1,978 1,998
+4.625% Senior Notes 1,267 1,292 October 2018 May 2029 1,313 1,363
+6.375% Senior Notes 800 800 October 2018 May 2029 848 857
+3.875% Senior Notes 1,382 1,409 April 2019 November 2029 1,404 1,455
+5.375% Senior Notes 900 900 April 2019 November 2029 929 939
+3.625% Senior Notes 1,267 1,292 October 2019 June 2030 1,277 1,322
+4.875% Senior Notes 1,000 1,000 October 2019 June 2030 1,015 1,025
+4.900% Senior Notes 1,000 1,000 August 2024 August 2034 1,008 1,025
+5.400% Senior Notes 800 800 August 2024 August 2054 775 777
+$ 14,413 $ 14,519 $ 14,678 $ 14,951
+(1) The following Senior Notes have a principal amount denominated in Euro: 3.625% Senior Notes for €1,300 million, 4.625% Senior Notes for €1,100
+million, 3.875% Senior Notes for €1,200 million, and 3.625% Senior Notes for €1,100 million.
+Each of the Notes are repayable in whole or in part upon the occurrence of a change of control, at the option of the holders, at a purchase price in cash
+equal to 101% of the principal plus accrued interest. The Company may redeem the Notes prior to maturity in whole or in part at an amount equal to the
+principal amount thereof plus accrued and unpaid interest and an applicable premium. The Notes include, among other terms and conditions, limitations on the
+Company's ability to create, incur or allow certain liens, and consolidate or merge with, or convey, transfer or lease all or substantially all of the Company's and
+its subsidiaries assets, to another person. Certain of the Notes additionally limit the ability to enter into sale and lease-back transactions and create, assume,
+incur or guarantee additional indebtedness of certain of the Company's subsidiaries. As of March 31, 2026 and December 31, 2025, the Company was in
+compliance with all related covenants.
+Revolving Credit Facility
+On April 12, 2024, the Company entered into a five-year, $3 billion unsecured revolving credit facility that matures on April 12, 2029 (the “Revolving
+Credit Agreement”), to replace its previous $1 billion unsecured revolving credit facility. As of March 31, 2026, no amounts have been borrowed under the
+Revolving Credit Agreement.
+The borrowings under the Revolving Credit Agreement bear interest, at the Company’s option, of either (i) a floating rate per annum equal to a base rate
+(the “Alternate Base Rate”) plus an applicable margin or (ii) a per annum rate equal to an adjusted term SOFR rate (the “Adjusted Term SOFR Rate”) plus an
+applicable margin. The applicable margin for Alternate Base Rate loans will range from 0.00% to 0.25%, and the applicable margin for Adjusted Term SOFR
+Rate loans will range from 0.75% to 1.25%, each based on the Company’s credit ratings.
+(1)
+(1)
+(1)
+(1)
+13

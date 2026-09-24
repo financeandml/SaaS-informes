@@ -1,0 +1,28 @@
+Table of Contents
+NETFLIX, INC.
+CONSOLIDATED STATEMENTS OF COMPREHENSIVE INCOME
+(in thousands)
+Year ended December 31,
+2025 2024 2023
+Net income $ 10,981,201 $ 8,711,631 $ 5,407,990
+Other comprehensive income (loss):
+Foreign currency translation adjustments, net of income tax benefit (expense) of $33 million, $(7)
+million, and $0, respectively
+72,011 (247,949) 113,384
+Net change in unrealized gains (losses) on available-for-sale securities, net of income tax benefit
+(expense) of $1 million, $(1) million, and $0, respectively
+(2,511) 2,511 —
+Cash flow hedges:
+Net unrealized gains (losses) (1,071,168) 921,227 (120,023)
+Reclassification of net (gains) losses included in net income 68,962 (96,795) —
+Net change, net of income tax benefit (expense) of $301 million, $(246) million, and $36 million,
+respectively
+(1,002,206) 824,432 (120,023)
+Fair value hedges:
+Net change in unrealized gains (losses) excluded from the assessment of effectiveness, net of
+income tax benefit (expense) of $3 million, $(2) million, and $0, respectively
+(9,838) 7,113 —
+Total other comprehensive income (loss) (942,544) 586,107 (6,639)
+Comprehensive income $ 10,038,657 $ 9,297,738 $ 5,401,351
+See accompanying notes to consolidated financial statements.
+40

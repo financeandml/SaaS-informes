@@ -1,0 +1,52 @@
+44 
+Amounts earned were paid in 2026 following the completion of the 2025 performance period and the Compensation 
+Committee’s certification of the 2025 Bonus Program’s results. In connection with Mr. Hastings’ transition to a non-executive 
+director role, he forfeited his opportunity to earn a bonus award for the 2025 performance period. Mr. Willems’ bonus actually 
+paid, as reflected in the Summary Compensation Table, was prorated to reflect his April 2025 start date. 
+Long-Term Equity Incentive Awards and Results 
+The Compensation Committee established the following target values for each Named Executive Officer’s equity awards, which 
+were flat relative to 2024 for continuing Named Executive Officers, based on the considerations discussed in “Determining 
+Executive Compensation” above. The value of the target PSU awards and target RSU awards differs from the value of stock 
+awards reported in the Summary Compensation Table because the Summary Compensation Table reflects the grant date fair 
+value of the awards measured in accordance with ASC 718. 
+Named Executive Officer 
+Target PSU Value ($) 
+Target RSU Value ($) 
+Target Total Long-Term 
+Incentive Grant Value 
+($) 
+Ted Sarandos 15,500,000 15,500,000 31,000,000 
+Greg Peters 15,500,000 15,500,000 31,000,000 
+Reed Hastings(1) 350,000 350,000 700,000 
+Spencer Neumann 5,250,000 5,250,000 10,500,000 
+David Hyman 3,250,000 3,250,000 6,500,000 
+Clete Willems(2) 1,700,000 1,700,000 3,400,000 
+(1) Effective April 17, 2025, Mr. Hastings transitioned from Executive Chairman to Chairman of the Board and non-executive director. In connection with his 
+transition, Mr. Hastings forfeited all 8,610 unvested PSU awards and 7,710 unvested RSU awards, which had a value of approximately $827,963 and 
+$741,417, respectively, based on the closing price on April 16, 2025. 
+(2) Reflects the annual long-term incentive awards granted to Mr. Willems. See “2025 Leadership Changes” above for a description of Mr. Willems’ new hire 
+awards. 
+RSU Awards Granted 
+RSU awards (weighted 50% of long-term equity awards in 2025) serve to retain, reward and incentivize the Named Executive 
+Officers in the form of long-term compensation. The Compensation Committee reviewed equity award grant practice trends and 
+market data and determined that RSU awards vesting quarterly over a three-year period continue to be the best incentive 
+structure for our Named Executive Officers to reward performance over time and achieve our retention objectives. The number of 
+RSUs granted to each Executive Officer in 2025 was determined by dividing the target value of the award by the 30-trading day 
+average price, rounded up to the nearest whole share. The full denominator of the formula to determine the number of RSUs is 
+the Company’s average closing share price during the 30-trading day period immediately preceding the grant date (the 
+“30-trading day average price”), unless there is a 10% or greater difference between the 30-trading day average price and the 
+Company’s closing share price on the grant date, in which case the Company’s average closing share price during the 5-trading 
+day period immediately preceding the grant date (the “5-trading day average price”) is used. The 30-day trading average price 
+was the denominator applicable to the 2025 RSU grants to our Named Executive Officers, as well as the target number of shares 
+subject to the PSU Awards described below. 
+PSU Awards Granted 
+PSU awards (weighted 50% of long-term equity awards in 2025) promote pay-for-performance and alignment with stockholder 
+interests. The Compensation Committee selected Company TSR relative to the TSR of the companies in the S&P 500 as the 
+performance metric to incentivize successful execution of our strategic initiatives, which we consider to be critical to our ability to 
+create long-term stockholder value and deliver above market performance. We believe the relative TSR metric also supports a 
+strong alignment of Named Executive Officers’ long-term incentive compensation opportunities with the creation of long-term 
+stockholder value. Consistent with this intent, the 2025 PSUs require outperformance at the 55th percentile of the S&P 500 to 
+earn target payouts. The Compensation Committee believes the S&P 500 is the appropriate index for comparison given our 
+unique position across both the technology and entertainment industries. The PSU awards granted in 2025 are eligible to vest 
+based on relative TSR performance during a three-year performance period, from January 1, 2025 to December 31, 2027. 
+NETFLIX 2026 PROXY STATEMENT | COMPENSATION DISCUSSION AND ANALYSIS 

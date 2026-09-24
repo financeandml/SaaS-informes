@@ -1,0 +1,62 @@
+Table of Contents
+Year Ended December 31, Change
+2025 2024 2023 2025 vs. 2024
+(in thousands, except percentages)
+Revenues $ 45,183,036 $ 39,000,966 $ 33,723,297 $ 6,182,070 16 %
+Revenues for the year ended December 31, 2025 increased 16% as compared to the year ended December 31, 2024, primarily due to the growth in
+memberships, price increases, and increased advertising revenue, partially offset by unfavorable changes in foreign exchange rates, net of hedging.
+The following table summarizes streaming revenues by region for the years ended December 31, 2025, 2024 and 2023. Total streaming revenues are
+inclusive of hedging gains (losses) of $(91) million and $124 million for the years ended December 31, 2025 and 2024, respectively. No hedging gains and
+losses were recognized in total streaming revenues for the year ended December 31, 2023. See Note 8 Derivative Financial Instruments and Hedging Activities
+to the consolidated financial statements for further information regarding the Company’s derivative and non-derivative financial instruments.
+Year Ended December 31, Change
+2025 2024 2023 2025 vs. 2024
+(in thousands, except revenue per membership and percentages)
+United States and Canada (UCAN) $ 19,957,152 $ 17,359,369 $ 14,873,783 $ 2,597,783 15 %
+Europe, Middle East, and Africa (EMEA) 14,514,646 12,387,035 10,556,487 2,127,611 17 %
+Latin America (LATAM) 5,357,521 4,839,816 4,446,461 517,705 11 %
+Asia-Pacific (APAC) 5,353,717 4,414,746 3,763,727 938,971 21 %
+Total Streaming Revenues $ 45,183,036 $ 39,000,966 $ 33,640,458 $ 6,182,070 16 %
+Non-GAAP Constant Currency Information
+We believe the non-GAAP financial measure of constant currency revenue is useful in analyzing period-to-period comparisons in revenues absent foreign
+currency fluctuations. However, this non-GAAP financial measure should be considered in addition to, not as a substitute for, or superior to other financial
+measures prepared in accordance with GAAP.
+In order to exclude the effect of foreign currency rate fluctuations on revenue, we calculate current period revenue assuming foreign exchange rates had
+remained constant with foreign exchange rates from each of the corresponding months of the prior-year period and exclude the impact of hedging gains or
+losses realized as revenues. Constant currency percentage change in revenues is calculated as the percentage change between current period constant currency
+revenue and the prior comparative period revenue. The impact of hedging gains or losses is excluded from both the current and prior periods.
+The table below summarizes constant currency streaming revenues by region for the year ended December 31, 2025 and the constant currency percentage
+change in streaming revenues by region for the year ended December 31, 2025 as compared to the year ended December 31, 2024:
+Year Ended December 31, Change
+2025 2024 2025 vs. 2024
+As Reported
+Constant
+Currency
+Adjustment
+Hedging
+(Gains) Losses
+Included in
+Revenues
+Constant
+Currency
+Revenues As Reported
+Hedging
+(Gains) Losses
+Included in
+Revenues
+Revenues
+Less Hedging
+Impact
+Reported
+Change
+Constant
+Currency
+Change
+(in thousands, except percentages)
+UCAN $ 19,957,152 $ 36,991 $ (29,791) $ 19,964,352 $ 17,359,369 $ (11,181) $ 17,348,188 15 % 15 %
+EMEA 14,514,646 (374,174) 137,768 14,278,240 12,387,035 (25,303) 12,361,732 17 % 16 %
+LATAM 5,357,521 457,000 54,108 5,868,629 4,839,816 (58,454) 4,781,362 11 % 23 %
+APAC 5,353,717 59,740 (70,942) 5,342,515 4,414,746 (29,073) 4,385,673 21 % 22 %
+Total Streaming
+Revenues $ 45,183,036 $ 179,557 $ 91,143 $ 45,453,736 $ 39,000,966 $ (124,011) $ 38,876,955 16 % 17 %
+21

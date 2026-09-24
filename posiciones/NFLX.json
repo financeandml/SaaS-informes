@@ -1,0 +1,28 @@
+{
+ "analista": "",
+ "fecha": "",
+ "posicion": {
+  "precio_entrada": null,
+  "fecha_entrada": "",
+  "tamano": "",
+  "horizonte": "",
+  "precio_objetivo": null,
+  "recomendacion": ""
+ },
+ "tesis": {
+  "argumento": "",
+  "asunciones": [],
+  "horizonte": ""
+ },
+ "checklist": [],
+ "riesgo": {
+  "invalidacion": [],
+  "tamano_posicion": "",
+  "volatilidad": ""
+ },
+ "seguimiento": {
+  "kpis": [],
+  "fechas_revision": [],
+  "criterios_salida": []
+ }
+}

@@ -1,0 +1,34 @@
+(u) "Fair Market Value" means, as of any date, the last quoted per share selling price for Shares on the Nasdaq Global Select Market on
+the relevant date, or if there were no sales on such date, the arithmetic mean of the highest and lowest quoted selling prices on the nearest day before and the
+nearest day after the relevant date, as determined by the Administrator. Notwithstanding the preceding, for U.S. and non-U.S. federal, state, and local income
+tax reporting and withholding purposes, fair market value shall be determined by the Administrator (or its delegate) in accordance with uniform and
+nondiscriminatory standards adopted by it from time to time consistent with Applicable Laws.
+(v) "Fiscal Year" means the fiscal year of the Company.
+(w) "Incentive Stock Option" means an Option intended to qualify as an incentive stock option within the meaning of Section 422 of the
+Code and the regulations promulgated thereunder.
+(x) "Misconduct" means that the Company has been required to prepare an accounting restatement due to material noncompliance, as a
+result of misconduct, with any financial reporting requirement under the securities laws, and the Administrator or its delegate has determined in its sole
+discretion that a Participant (i) had knowledge of the material noncompliance or circumstances giving rise to such noncompliance and willfully failed to take
+reasonable steps to bring it to the attention of appropriate individuals within the Company; or (ii) knowingly engaged in practices which materially contributed
+to the circumstances that enabled such material noncompliance to occur.
+The Administrator or its delegate shall determine in its sole discretion whether the Participant has engaged in Misconduct, and its
+determination shall be conclusive and binding on all interested persons; provided that no Officer, Director or Employee shall participate in any decision
+regarding the determination of Misconduct or forfeiture with respect to his or her own Awards.
+(y) "Nonstatutory Stock Option" means an Option that by its terms does not qualify or is not intended to qualify as an Incentive Stock
+Option.
+(z) "Officer" means a person who is an officer of the Company within the meaning of Section 16 of the Exchange Act and the rules and
+regulations promulgated thereunder.
+(aa) "Option" means a stock option granted pursuant to the Plan.
+(bb) "Option Agreement" means the written or electronic agreement setting forth the terms and provisions applicable to each Option
+granted under the Plan. Each Option Agreement is subject to the terms of the Plan.
+(cc) "Parent" means a "parent corporation," whether now or hereafter existing, as defined in Section 424(e) of the Code.
+(dd) "Participant" means the holder of an outstanding Award.
+(ee) "Performance-Based Award" means an Award that is earned or becomes vested on account of achievement of one or more Performance
+Goals.
+(ff) "Performance Goals" means the goal(s) (or combined goal(s)) determined by the Administrator in its discretion to be applicable to a
+Participant for a Performance Period. As determined by the Administrator, the Performance Goals applicable to each Participant shall provide for a targeted
+level or levels of achievement based on measures including, but not limited to, the following: (a) Earnings Per Share, (b) Profit, (c) Return on Equity, (d)
+Revenue, (e) Subscriber Metrics, and (f) Total Shareholder Return. Any criteria used may be measured, as applicable, (i) in absolute terms, (ii) in relative terms
+(including, but not limited, the passage of time and/or against other companies or financial metrics), (iii) on a per share and/or share per capita basis, (iv)
+against the performance of the Company as a whole or against particular segments or products of the Company and/or (v) on a
+-3-

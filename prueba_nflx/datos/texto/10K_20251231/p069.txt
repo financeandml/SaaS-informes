@@ -1,0 +1,40 @@
+Table of Contents
+Year Ended December 31,
+2024 2023
+(in thousands)
+Expected tax expense at U.S. federal statutory tax rate $ 2,092,710 $ 1,303,123
+State income taxes, net of federal income tax effect 166,311 104,717
+Foreign earnings at other than U.S. rates 13,909 (32,292)
+Research and development tax credit (185,312) (87,036)
+Excess tax benefits on stock-based compensation (435,909) (119,043)
+Foreign-derived intangible income deduction (502,968) (426,597)
+Nontaxable and nondeductible items 70,386 41,782
+Other 34,899 12,761
+Provision for income taxes $ 1,254,026 $ 797,415
+Effective Tax Rate 13 % 13 %
+The components of deferred tax assets and liabilities were as follows:
+As of December 31,
+2025 2024
+(in thousands)
+Deferred tax assets:
+Stock-based compensation $ 438,684 $ 440,889
+Tax credits and net operating loss carryforwards 835,529 834,402
+Capitalized research expenses 969,243 1,075,474
+Accruals and reserves 370,568 152,142
+Operating lease liabilities 520,170 522,489
+OCI hedging losses 116,492 —
+Unrealized losses 41,988 12,157
+Other 29,426 18,197
+Total deferred tax assets 3,322,100 3,055,750
+Valuation allowance (617,575) (540,272)
+Net deferred tax assets 2,704,525 2,515,478
+Deferred tax liabilities:
+Depreciation & amortization (32,780) (370,709)
+Operating right-of-use lease assets (448,313) (449,661)
+OCI hedging gains — (220,009)
+Acquired intangibles (261,493) (282,187)
+Other (7,136) (15,354)
+Total deferred tax liabilities (749,722) (1,337,920)
+Net deferred tax assets $ 1,954,803 $ 1,177,558
+The following table shows the deferred tax assets and liabilities within our Consolidated Balance Sheets:
+66

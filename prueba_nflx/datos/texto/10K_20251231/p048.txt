@@ -1,0 +1,48 @@
+Table of Contents
+prospectively to the current annual period. Prior period disclosures have not been adjusted to reflect the new disclosure requirements. See Note 11 Income
+Taxes in the accompanying notes to the consolidated financial statements for further detail.
+Cash Equivalents and Short-term Investments
+The Company considers investments in instruments purchased with an original maturity of 90 days or less to be cash equivalents. The Company also
+classifies amounts in transit from payment processors for customer credit card and debit card transactions that it expects to settle within several days as cash
+equivalents.
+The Company classifies short-term investments, which consist of marketable securities with original maturities in excess of 90 days as available-for-sale.
+Short-term investments are reported at fair value, with allowances for credit losses included in “Interest and other income (expense)” in the Consolidated
+Statements of Operations and unrealized gains and losses included in “Accumulated other comprehensive income (loss)” within Stockholders’ equity in the
+Consolidated Balance Sheets. The Company uses the specific identification method to determine cost in calculating realized gains and losses upon the sale of
+short-term investments.
+Short-term investments are reviewed periodically for allowances for credit losses and impairment. When evaluating the investments, the Company
+reviews factors such as the extent to which the fair value of the security is less than the amortized cost basis, adverse conditions specifically related to the
+security, the financial condition of the issuer, the Company’s intent to sell, and whether it would be more likely than not that the Company would be required to
+sell the investments before the recovery of their amortized cost basis.
+Content
+The Company acquires, licenses and produces content, including original programming, in order to offer members unlimited viewing of video
+entertainment. The content licenses are for a fixed fee and specific windows of availability. Payment terms for certain content licenses and the production of
+content require more upfront cash payments relative to the amortization expense. Payments for content, including additions to content assets and the changes in
+related liabilities, are classified within “Net cash provided by operating activities” on the Consolidated Statements of Cash Flows.
+The Company recognizes content assets (licensed and produced) as “Content assets, net” on the Consolidated Balance Sheets. For licensed content, the
+Company capitalizes the fee per title and records a corresponding liability at the gross amount of the liability when the license period begins, the cost of the
+title is known and the title is accepted and available for streaming. For produced content, the Company capitalizes costs associated with the production,
+including development costs, direct costs and production overhead, as costs are incurred.
+Based on factors including historical and estimated viewing patterns, the Company amortizes the content assets (licensed and produced) in “Cost of
+revenues” on the Consolidated Statements of Operations over the shorter of each title's contractual window of availability, estimated period of use or ten years,
+beginning with the month of first availability. The amortization is on an accelerated basis, as the Company typically expects more upfront viewing, and film
+amortization is more accelerated than TV series amortization. On average, over 90% of a licensed or produced content asset is expected to be amortized within
+four years after its month of first availability. The Company reviews factors impacting the amortization of the content assets on a regular basis. The Company's
+estimates related to these factors require considerable management judgment.
+In the normal course of business, the Company, or a third-party producing content on the Company's behalf, may qualify for tax incentives through
+eligible spend on productions. The accounting for tax incentives is dependent on the particular type of incentive, including the nature of the benefit and the
+location the incentive is earned. In general, tax incentives are realized as cash receipts and may be received prior to or after a title launches on the Company’s
+service. Any amounts the Company is eligible for through qualified production spend but has not received, are recognized in “Other current assets” or “Other
+non-current assets” on the Company’s Consolidated Balance Sheets as receivables. Tax incentives are generally accounted for as a reduction to the cost basis of
+the Company’s content assets (presented in “Content assets, net”) and reduce content amortization over the life of the title (as presented in “Cost of revenues”)
+on the Consolidated Statements of Operations.
+The Company's business model is subscription based as opposed to a model generating revenues at a specific title level. Content assets (licensed and
+produced) are predominantly monetized as a group and therefore are reviewed in the aggregate at a group level when an event or change in circumstances
+indicates a change in the expected usefulness of the content or that the fair value may be less than unamortized cost. To date, the Company has not identified
+any such event or changes in circumstances. If such changes are identified in the future, these aggregated content assets will be stated at the lower of
+unamortized cost or fair value. In addition, unamortized costs for assets that have been, or are expected to be, abandoned are written off.
+Acquisitions
+The Company uses its best estimates and assumptions to assign fair value to the tangible and intangible assets acquired and liabilities assumed at the
+acquisition date. In addition, uncertain tax positions, tax-related valuation allowances and pre-acquisition contingencies of an entity acquired in a business
+combination are recorded as of the acquisition date.
+45

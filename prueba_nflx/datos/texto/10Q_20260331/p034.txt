@@ -1,0 +1,55 @@
+Table of Contents
+EXHIBIT INDEX
+Exhibit
+Number Exhibit Description Incorporated by Reference
+Filed
+Herewith
+Form File No. Exhibit Filing Date
+3.1 Amended and Restated Certificate of Incorporation 8-K 001-35727 3.1 June 8, 2022
+3.2 Certificate of Amendment of Amended and Restated Certificate of
+Incorporation
+8-K 001-35727 3.1 November 14, 2025
+3.3 Amended and Restated Bylaws 8-K 001-35727 3.2 February 24, 2023
+31.1 Certification of Co-Chief Executive Officer Pursuant to Section
+302 of the Sarbanes-Oxley Act of 2002
+X
+31.2 Certification of Co-Chief Executive Officer Pursuant to Section
+302 of the Sarbanes-Oxley Act of 2002
+X
+31.3 Certification of Chief Financial Officer Pursuant to Section 302 of
+the Sarbanes-Oxley Act of 2002
+X
+32.1* Certifications of Co-Chief Executive Officers and Chief Financial
+Officer Pursuant to Section 906 of the Sarbanes-Oxley Act of 2002
+X
+101 The following financial statements from the Company's Quarterly
+Report on Form 10-Q for the quarter ended March 31, 2026,
+formatted in Inline XBRL: (i) Consolidated Statements of
+Operations, (ii) Consolidated Statements of Comprehensive
+Income, (iii) Consolidated Statements of Cash Flows, (iv)
+Consolidated Balance Sheets, (v) Consolidated Statements of
+Stockholders' Equity and (vi) Notes to Consolidated Financial
+Statements, tagged as blocks of text and including detailed tags
+X
+104 The cover page from the Company's Quarterly Report on Form 10-
+Q for the quarter ended March 31, 2026, formatted in Inline XBRL
+X
+* These certifications are not deemed filed by the SEC and are not to be incorporated by reference in any filing we make under the Securities Act of 1933 or
+the Securities Exchange Act of 1934, irrespective of any general incorporation language in any filings.
+SIGNATURES
+Pursuant to the requirements of the Securities Exchange Act of 1934, the registrant has duly caused this report to be signed on its behalf by the
+undersigned thereunto duly authorized.
+NETFLIX, INC.
+Dated: April 17, 2026 By: /s/ Ted Sarandos
+Ted Sarandos
+Co-Chief Executive Officer
+(Principal executive officer)
+Dated: April 17, 2026 By: /s/ Greg Peters
+Greg Peters
+Co-Chief Executive Officer
+(Principal executive officer)
+Dated: April 17, 2026 By: /s/ Jeffrey Karbowski
+Jeffrey Karbowski
+Chief Accounting Officer
+(Principal accounting officer)
+34

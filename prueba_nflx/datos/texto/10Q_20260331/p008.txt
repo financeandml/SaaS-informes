@@ -1,0 +1,46 @@
+Table of Contents
+NETFLIX, INC.
+Notes to Consolidated Financial Statements
+(unaudited)
+1. Basis of Presentation and Summary of Significant Accounting Policies
+The accompanying interim consolidated financial statements of Netflix, Inc. and its wholly owned subsidiaries (the “Company”) have been prepared in
+conformity with accounting principles generally accepted in the United States (“U.S.”) and are consistent in all material respects with those applied in the
+Company’s Annual Report on Form 10-K for the year ended December 31, 2025 filed with the Securities and Exchange Commission (the “SEC”) on January
+23, 2026. The preparation of consolidated financial statements in conformity with U.S. generally accepted accounting principles (“GAAP”) requires
+management to make estimates and judgments that affect the amounts reported in the consolidated financial statements and accompanying notes. Significant
+items subject to such estimates and assumptions include the amortization of content assets and the recognition and measurement of income tax assets and
+liabilities. The Company bases its estimates on historical experience and on various other assumptions that the Company believes to be reasonable under the
+circumstances. On a regular basis, the Company evaluates the assumptions, judgments and estimates. Actual results may differ from these estimates.
+The interim financial information is unaudited, but reflects all normal recurring adjustments that are, in the opinion of management, necessary to fairly
+present the information set forth herein. The interim consolidated financial statements should be read in conjunction with the audited consolidated financial
+statements and related notes included in the Company’s Annual Report on Form 10-K for the year ended December 31, 2025. Interim results are not necessarily
+indicative of the results for a full year.
+There have been no material changes in the Company’s significant accounting policies as compared to the significant accounting policies described in the
+Company’s Annual Report on Form 10-K for the year ended December 31, 2025.
+Stock Split
+On November 14, 2025, the Company completed a ten-for-one forward stock split of the Company's issued common stock (the “Stock Split”). Each
+shareholder as of the record date of November 10, 2025 received nine additional shares of common stock for every share held. References made to share or per
+share amounts in the accompanying consolidated financial statements and applicable disclosures have been retroactively adjusted to reflect the Stock Split.
+Recently issued accounting pronouncements not yet adopted
+In November 2024, the Financial Accounting Standards Board (“FASB”) issued Accounting Standards Update (“ASU”) 2024-03, Income Statement￾Reporting Comprehensive Income-Expense Disaggregation Disclosures (Subtopic 220-40): Disaggregation of Income Statement Expenses, requiring public
+entities to disclose additional information about specific expense categories in the notes to the financial statements on an interim and annual basis. ASU 2024-
+03 is effective for fiscal years beginning after December 15, 2026, and for interim periods beginning after December 15, 2027, with early adoption permitted.
+The Company is currently evaluating the impact of adopting ASU 2024-03.
+In December 2025, the FASB issued ASU 2025-10, Government Grants (Topic 832): Accounting for Government Grants Received by Business Entities,
+which establishes authoritative guidance on the recognition, measurement, presentation, and disclosure of government grants. Under ASU 2025-10,
+government grants are recognized when it is probable that the entity will both comply with the conditions of the grant and the grant will be received. The ASU
+provides specific accounting models for grants related to assets and grants related to income, including options to recognize government grants as deferred
+income or as a reduction of the asset’s cost basis. The ASU also requires enhanced disclosures regarding the nature of government grants, significant terms and
+conditions, accounting policies applied, and amounts recognized in the financial statements. ASU 2025-10 is effective for fiscal years beginning after
+December 15, 2028, including interim periods within those fiscal years, with early adoption permitted. The Company is currently evaluating the impact of
+adopting ASU 2025-10.
+In December 2025, the FASB issued ASU 2025-11, Interim Reporting (Topic 270): Narrow-Scope Improvements, which clarifies the guidance in Topic
+270 to improve the consistency of interim financial reporting. The ASU provides a comprehensive list of required interim disclosures and introduces a
+disclosure principle requiring entities to disclose events since the end of the last annual reporting period that have a material impact on the entity. ASU 2025-11
+is effective for fiscal years beginning after December 15, 2027, including interim periods within those fiscal years, with early adoption permitted. The
+Company is currently evaluating the impact of adopting ASU 2025-11.
+2. Revenue Recognition
+The following table summarizes revenues by region for the three months ended March 31, 2026 and March 31, 2025. Total revenues are inclusive of
+hedging gains (losses) of $(133) million and $165 million for the three months ended March 31, 2026 and 2025, respectively. See Note 8 Derivative Financial
+Instruments and Hedging Activities for further information.
+8

@@ -1,0 +1,35 @@
+Table of Contents
+Leases
+The Company has entered into operating leases primarily for real estate. These leases generally have terms which range from 1 year to 15 years, and often
+include one or more options to renew. These renewal terms can extend the lease term from 1 year to 20 years, and are included in the lease term when it is
+reasonably certain that the Company will exercise the option. These operating leases are included in “Other non-current assets” on the Company's Consolidated
+Balance Sheets, and represent the Company’s right to use the underlying asset for the lease term. The Company’s obligations to make lease payments are
+included in “Accrued expenses and other liabilities” and “Other non-current liabilities” on the Company's Consolidated Balance Sheets. Operating lease right￾of-use assets and liabilities are recognized at the commencement date based on the present value of lease payments over the lease term. The Company has
+entered into various short-term operating leases with an initial term of twelve months or less. These leases are not recorded on the Company's Consolidated
+Balance Sheets. All operating lease expense is recognized on a straight-line basis over the lease term. Because the rate implicit in each lease is not readily
+determinable, the Company uses its incremental borrowing rate to determine the present value of the lease payments. The Company has certain contracts for
+real estate which may contain lease and non-lease components which it has elected to treat as a single lease component.
+The components of lease costs for the years ended December 31, 2025, 2024 and 2023 were as follows:
+Year ended December 31,
+2025 2024 2023
+(in thousands)
+Operating lease cost $ 503,637 $ 468,282 $ 430,856
+Short-term lease cost 207,324 197,691 207,822
+Total lease cost $ 710,961 $ 665,973 $ 638,678
+Information related to the Company's operating right-of-use assets and related operating lease liabilities were as follows:
+Year ended December 31,
+2025 2024 2023
+(in thousands)
+Cash paid for operating lease liabilities $ 506,624 $ 509,296 $ 451,525
+Right-of-use assets obtained in exchange for new operating lease obligations 465,420 442,391 196,639
+As of December 31,
+2025 2024
+(in thousands, except lease term and discount rate)
+Operating lease right-of-use assets, net $ 2,207,161 $ 2,102,310
+Current operating lease liabilities $ 460,475 $ 428,482
+Non-current operating lease liabilities 2,052,526 1,983,688
+Total operating lease liabilities $ 2,513,001 $ 2,412,170
+Weighted-average remaining lease term 7.0 years 6.9 years
+Weighted-average discount rate 3.8 % 3.5 %
+Maturities of operating lease liabilities as of December 31, 2025 were as follows (in thousands):
+52

@@ -1,0 +1,47 @@
+Table of Contents
+The following tables present the effects of the Company’s derivative instruments and related hedged items on the Consolidated Statements of Operations:
+Three Months Ended
+June 30, 2026
+Revenues Cost of Revenues Interest Expense
+Interest and Other
+Income (Expense)
+(in thousands)
+Total amounts presented in the Consolidated Statements of Operations $ 12,559,938 $ 6,036,965 $ (175,685) $ 51,661
+Losses on derivatives in cash flow hedging relationship
+Foreign exchange contracts
+Amount of losses reclassified from AOCI (47,630) (891) — —
+Gains (losses) on derivatives in fair value hedging relationship
+Foreign exchange contracts
+Hedged items — — — 21,567
+Derivatives designated as hedging instruments — — — (17,903)
+Amount excluded from assessment of effectiveness and recognized in earnings
+based on amortization approach — — — (11,384)
+Interest rate contracts
+Hedged items — — 13,809 —
+Derivatives designated as hedging instruments — — (13,809) —
+Amount recognized in earnings on net periodic settlements — — 236 —
+Losses on derivatives not designated as hedging instruments
+Foreign exchange contracts — — — (8,454)
+Three Months Ended
+June 30, 2025
+Revenues Cost of Revenues Interest Expense
+Interest and Other
+Income (Expense)
+(in thousands)
+Total amounts presented in the Consolidated Statements of Operations $ 11,079,166 $ 5,325,311 $ (182,649) $ 39,630
+Gains (losses) on derivatives in cash flow hedging relationship
+Foreign exchange contracts
+Amount of gains (losses) reclassified from AOCI (37,385) 344 — —
+Gains (losses) on derivatives in fair value hedging relationship
+Foreign exchange contracts
+Hedged items — — — (311,562)
+Derivatives designated as hedging instruments — — — 316,192
+Amount excluded from assessment of effectiveness and recognized in earnings
+based on amortization approach — — — (14,802)
+Interest rate contracts
+Hedged items — — — —
+Derivatives designated as hedging instruments — — — —
+Amount recognized in earnings on net periodic settlements — — — —
+Losses on derivatives not designated as hedging instruments
+Foreign exchange contracts — — — (50,021)
+18

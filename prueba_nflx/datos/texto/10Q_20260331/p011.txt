@@ -1,0 +1,46 @@
+5. Balance Sheet Components
+Content Assets, Net
+Content assets consisted of the following:
+As of
+March 31,
+2026
+December 31,
+2025
+(in thousands)
+Licensed content, net $ 12,268,097 $ 12,138,578
+Produced content, net
+Released, less amortization 10,311,881 10,687,444
+In production 10,006,694 9,210,735
+In development and pre-production 789,623 741,635
+21,108,198 20,639,814
+Content assets, net $ 33,376,295 $ 32,778,392
+The following table summarizes the amortization of content assets:
+Three Months Ended
+March 31,
+2026
+March 31,
+2025
+(in thousands)
+Licensed content $ 2,285,813 $ 1,998,525
+Produced content 1,932,087 1,824,587
+Total $ 4,217,900 $ 3,823,112
+Property and Equipment, Net
+Property and equipment and accumulated depreciation consisted of the following:
+As of
+March 31,
+2026
+December 31,
+2025 Estimated Useful Lives
+(in thousands)
+Land $ 154,986 $ 155,664
+Buildings and improvements 538,654 537,082 30 years
+Leasehold improvements 1,343,717 1,263,051 Over life of lease
+Furniture and fixtures 166,873 157,984 3 years
+Information technology 600,663 572,407 3-5 years
+Corporate aircraft 160,116 99,164 8-10 years
+Machinery and equipment 32,183 30,879 3-5 years
+Capital work-in-progress 306,721 285,010
+Property and equipment, gross 3,303,913 3,101,241
+Less: Accumulated depreciation (1,156,084) (1,096,891)
+Property and equipment, net $ 2,147,829 $ 2,004,350
+11

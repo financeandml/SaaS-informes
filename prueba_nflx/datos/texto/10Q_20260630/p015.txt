@@ -1,0 +1,40 @@
+Table of Contents
+The borrowings under the Revolving Credit Agreement bear interest, at the Company’s option, of either (i) a floating rate per annum equal to a base rate
+(the “Alternate Base Rate”) plus an applicable margin or (ii) a per annum rate equal to an adjusted term SOFR rate (the “Adjusted Term SOFR Rate”) plus an
+applicable margin. The applicable margin for Alternate Base Rate loans will range from 0.00% to 0.25%, and the applicable margin for Adjusted Term SOFR
+Rate loans will range from 0.75% to 1.25%, each based on the Company’s credit ratings.
+The Revolving Credit Agreement contains customary affirmative covenants and negative covenants (and customary baskets and exceptions with respect
+thereto) for a credit facility of this size and type and requires the Company to maintain a minimum ratio of consolidated EBITDA to consolidated interest
+expense of 3.0 to 1.0 as of the last day of each fiscal quarter. As of June 30, 2026 and December 31, 2025, the Company was in compliance with all related
+covenants and ratios.
+Commercial Paper Program
+In May 2025, the Company established a $3 billion commercial paper program (the “Commercial Paper Program”) under which it may issue short-term
+unsecured commercial paper notes. Net proceeds from this program may be used for general corporate purposes. There were no borrowings outstanding under
+the Commercial Paper Program as of June 30, 2026.
+WBD Financing
+On February 27, 2026, upon the termination of the Amended and Restated Merger Agreement, all related financing arrangements to fund the previously
+proposed WBD transaction were terminated in accordance with their respective terms. No amounts had been borrowed under any of the financing arrangements
+and the related expenses were not material.
+8. Derivative Financial Instruments and Hedging Activities
+The Company uses derivative and non-derivative instruments to manage foreign exchange risk related to its ongoing business operations with the primary
+objective of reducing earnings and cash flow volatility associated with fluctuations in foreign exchange rates.
+The Company also uses derivative instruments to manage interest rate risk, with the primary objective of reducing its exposure to changes in the fair
+value of its fixed-rate debt attributable to changes in the benchmark interest rate.
+Notional Amount of Derivative Contracts
+The net notional amounts of the Company’s outstanding derivative instruments were as follows:
+As of
+June 30,
+2026
+December 31,
+2025
+(in thousands)
+Derivatives designated as hedging instruments:
+Foreign exchange contracts
+Cash flow hedges $ 23,238,784 $ 21,066,760
+Fair value hedges 2,934,991 2,884,792
+Interest rate contracts
+Fair value hedges 1,400,000 —
+Derivatives not designated as hedging instruments:
+Foreign exchange contracts 1,317,395 1,555,502
+Total $ 28,891,170 $ 25,507,054
+15

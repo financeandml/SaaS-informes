@@ -1,0 +1,50 @@
+83 
+2025 
+Ted Sarandos 
+($) 
+Greg Peters ($) 
+Average for 
+Non-PEO 
+NEOs 
+($) 
+Summary Compensation Table (“SCT”) Total 53,905,972 53,187,307 12,952,760 
+Minus Amounts reported as “Stock Awards” in the SCT (41,398,424) (41,398,424) (8,194,157) 
+Plus the change as of the fiscal year end (from the end of the prior year) in Fair 
+Value (whether positive or negative) of Equity Awards granted in a prior year that 
+are outstanding and unvested as of the fiscal year end 1,614,662 1,614,662 221,391 
+Plus the Fair Value as of the vesting date for awards that were both granted and 
+vested in the relevant year(a) 6,330,612 6,330,612 1,336,729 
+Plus the change as of the vesting date (from the end of the prior year) in Fair 
+Value (whether positive or negative) of Equity Awards granted in a prior year that 
+vested during the relevant year 4,104,688 4,108,342 566,969 
+Minus the Fair Value as of the end of the prior year of awards that were forfeited 
+during the relevant year 0 0 (284,354) 
+Plus the Fair Value as of the fiscal year end of Equity Awards Granted in the Year 
+and Unvested as of the fiscal year end(a) 30,994,753 30,994,753 5,659,542 
+Equals Compensation Actually Paid 55,552,263 54,837,252 12,258,880 
+(a) Because PSUs are earned based on achievement of a market condition, in computing these amounts with respect to PSUs, fair value as of fiscal year end is 
+based on an updated market-based fair value using data through year end and fair value as of the vesting date is based on the market-based fair value as of the 
+vesting date. There were no other assumptions made in the valuation of equity awards, including RSUs and stock options, that differ materially from those 
+disclosed as of the grant date of such awards. 
+Tabular List of Most Important Financial Performance 
+Measures for Fiscal Year 2025 
+For the fiscal year ended December 31, 2025, the following represent the most important financial performance measures used 
+by us to link compensation actually paid to our Named Executive Officers for fiscal year 2025 to company performance: 
+F/X Neutral Operating Margin(1)
+F/X Neutral Revenue(1)
+Company TSR relative to the TSR of the companies in the S&P 500(2)
+(1) We used F/X Neutral Operating Margin and F/X Neutral Revenue as financial performance measures to link CAP to company performance, as these were the 
+metrics used in the 2025 Performance Bonus Program. Both of these measures are non-GAAP financial measures. F/X Neutral Revenue was calculated 
+assuming foreign exchange rates had remained constant with foreign exchange rates from each of the corresponding months of the prior-year period and for 
+2025, excludes the impact of hedging gains or losses realized as revenues and excludes revenues denominated in ARS. F/X Neutral Operating Margin was 
+computed by dividing Adjusted Operating Profit by Adjusted Revenue. Adjusted Revenue is calculated using foreign exchange rates as of the beginning of the 
+fiscal year, and for 2025, excludes the impact of hedging gains or losses realized as revenues from cash flow hedges entered into after January 1 and excludes 
+revenues denominated in ARS. Adjusted Operating Profit is calculated as Adjusted Revenue less Adjusted Operating Expenses. Adjusted Operating Expenses 
+was calculated using foreign exchange rates as of the beginning of the fiscal year, excluding the foreign exchange impact on content amortization as titles are 
+amortized at a historical blended rate based on the timing of spend. The Company did not use financial performance measures to inform compensation for the 
+Named Executive Officers in years prior to 2023, and we may determine a different financial performance measure to be the most important financial 
+performance measure in future years. 
+(2) The PSUs granted to Named Executive Officers in fiscal year 2025 will vest based on our TSR performance relative to companies in the S&P 500. 
+Aside from the measures listed above, we did not use any financial performance measures to link CAP to company performance 
+in fiscal year 2025. 
+OTHER INFORMATION | NETFLIX 2026 PROXY STATEMENT 

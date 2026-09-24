@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DCF — Warrants &amp; Co.</title>
+<link rel="stylesheet" href="formulario.css">
+</head>
+<body data-pagina="dcf">
+<header class="cabecera">
+  <div class="casa">Warrants &amp; Co.</div>
+  <div class="titulo"><span class="empresa" id="empresa">—</span> <span class="cik" id="cik"></span></div>
+  <button type="button" id="idioma" class="secundario" aria-label="Cambiar idioma">EN</button>
+</header>
+<nav id="pasos" class="pasos" aria-label="Pasos"></nav>
+<main>
+  <section class="tarjeta">
+    <h2><span data-i18n="libro">Modelo DCF del analista</span> <span class="apunte" data-i18n="opcional">opcional: sin libro, la sección D sale N/A con su motivo</span></h2>
+    <label class="zona" id="zona-dcf" for="fichero">
+      <span class="grande" data-i18n="soltar_libro">Suelta aquí el libro o pulsa para elegirlo</span>
+      <span class="chica">XLSX · XLSM</span>
+      <input type="file" id="fichero" accept=".xlsx,.xlsm">
+    </label>
+    <p id="subida" class="ayuda"></p>
+  </section>
+
+  <section class="tarjeta" id="resumen" hidden>
+    <h2><span data-i18n="lectura">Lo que se ha leído del libro</span> <span class="apunte" id="cabecera-libro"></span></h2>
+    <dl class="cifras" id="cifras-dcf"></dl>
+    <table class="lista" id="escenarios"><thead><tr>
+      <th data-i18n="escenario">Escenario</th><th class="num">WACC</th><th class="num">g</th>
+      <th class="num" data-i18n="valor_hoy">Valor hoy (USD)</th><th class="num" data-i18n="peso">Peso</th>
+    </tr></thead><tbody></tbody></table>
+    <table class="lista" id="supuestos"><thead><tr>
+      <th data-i18n="supuesto">Supuesto</th><th class="num" data-i18n="valor">Valor</th>
+      <th data-i18n="celda">Celda</th><th data-i18n="justificacion">Justificación del analista</th>
+    </tr></thead><tbody></tbody></table>
+    <ul id="faltan" class="errores"></ul>
+  </section>
+
+  <div class="acciones">
+    <a id="anterior" class="boton secundario" data-i18n="anterior_expediente">← Expediente</a>
+    <span class="separador"></span>
+    <span id="mensaje"></span>
+    <a id="siguiente" class="boton" data-i18n="siguiente_analista">Siguiente: analista →</a>
+  </div>
+</main>
+<script src="saas.js"></script>
+</body>
+</html>

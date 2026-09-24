@@ -1,0 +1,46 @@
+Table of Contents
+Content
+We acquire, license and produce content, including original programming, in order to offer our members unlimited viewing of video entertainment. The
+content licenses are for a fixed fee and specific windows of availability. Payment terms for certain content licenses and the production of content require more
+upfront cash payments relative to the amortization expense. Payments for content, including additions to content assets and the changes in related liabilities, are
+classified within “Net cash provided by operating activities” on the Consolidated Statements of Cash Flows.
+We recognize content assets (licensed and produced) as “Content assets, net” on the Consolidated Balance Sheets. For licensed content, we capitalize the
+fee per title and record a corresponding liability at the gross amount of the liability when the license period begins, the cost of the title is known and the title is
+accepted and available for streaming. For produced content, we capitalize costs associated with the production, including development costs, direct costs and
+production overhead, as costs are incurred.
+Based on factors including historical and estimated viewing patterns, we amortize the content assets (licensed and produced) in “Cost of revenues” on the
+Consolidated Statements of Operations over the shorter of each title's contractual window of availability, estimated period of use or ten years, beginning with
+the month of first availability. The amortization is on an accelerated basis, as we typically expect more upfront viewing, and film amortization is more
+accelerated than TV series amortization. On average, over 90% of a licensed or produced content asset is expected to be amortized within four years after its
+month of first availability. We review factors that impact the amortization of the content assets on a regular basis. Our estimates related to these factors require
+considerable management judgment.
+In the normal course of business, we, or a third-party producing content on our behalf, may qualify for tax incentives through eligible spend on
+productions. The accounting for tax incentives is dependent on the particular type of incentive, including the nature of the benefit and the location the incentive
+is earned. In general, tax incentives are realized as cash receipts and may be received prior to or after a title launches on our service. Any amounts we are
+eligible for through qualified production spend but have not received, are recognized in “Other current assets” or “Other non-current assets” on the
+Consolidated Balance Sheets as receivables. Tax incentives are generally accounted for as a reduction to the cost basis of content assets (presented in “Content
+assets, net”) and reduce content amortization over the life of the title (as presented in “Cost of revenues”) on the Consolidated Statements of Operations.
+Our business model is subscription based as opposed to a model generating revenues at a specific title level. Content assets (licensed and produced) are
+predominantly monetized as a group and therefore are reviewed in the aggregate at a group level when an event or change in circumstances indicates a change
+in the expected usefulness of the content or that the fair value may be less than unamortized cost. To date, we have not identified any such event or changes in
+circumstances. If such changes are identified in the future, these aggregated content assets will be stated at the lower of unamortized cost or fair value. In
+addition, unamortized costs for assets that have been, or are expected to be, abandoned are written off.
+Income Taxes
+We record a provision for income taxes for the anticipated tax consequences of our reported results of operations using the asset and liability method.
+Deferred income taxes are recognized by applying enacted statutory tax rates applicable to future years to differences between the financial statement carrying
+amounts of existing assets and liabilities and their respective tax bases as well as net operating loss and tax credit carryforwards. The effect on deferred tax
+assets and liabilities of a change in tax rates is recognized in income in the period that includes the enactment date. The measurement of deferred tax assets is
+reduced, if necessary, by a valuation allowance when it is more likely than not they will not be realized.
+Although we believe our assumptions, judgments and estimates are reasonable, changes in tax laws or our interpretation of tax laws and the resolution of
+any tax audits could significantly impact the amounts provided for income taxes in our consolidated financial statements.
+In evaluating our ability to recover our deferred tax assets, in full or in part, we consider all available positive and negative evidence, including our past
+operating results, our forecast of future earnings and future taxable income, and prudent and feasible tax planning strategies. The assumptions utilized in
+determining future taxable income require significant judgment and are consistent with the plans and estimates we are using to manage the underlying business.
+Actual operating results in future years could differ from our current assumptions, judgments and estimates.
+We do not recognize certain tax benefits from uncertain tax positions within the provision for income taxes. We may recognize a tax benefit only if it is
+more likely than not the tax position will be sustained on examination by the taxing authorities, based on the technical merits of the position. The tax benefits
+recognized in the financial statements from such positions are then measured based on the largest benefit that has a greater than 50% likelihood of being
+realized upon settlement. Due to uncertainties in any tax audit outcome, our estimates of the ultimate settlement of our unrecognized tax positions may change
+and the actual tax benefits may differ significantly from the estimates.
+See Note 11 Income Taxes to the consolidated financial statements for further information regarding income taxes.
+28

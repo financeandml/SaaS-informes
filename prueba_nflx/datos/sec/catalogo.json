@@ -1,0 +1,2594 @@
+{
+  "emisor": {
+    "cik": 1065280,
+    "nombre": "NETFLIX INC",
+    "tickers": [
+      "NFLX"
+    ],
+    "bolsas": [
+      "Nasdaq"
+    ],
+    "sic": "7841",
+    "sic_descripcion": "Services-Video Tape Rental",
+    "estado": "DE",
+    "cierre_fiscal": "1231",
+    "ein": "770467272",
+    "web": "",
+    "direccion": {
+      "street1": "121 ALBRIGHT WAY",
+      "street2": null,
+      "city": "LOS GATOS",
+      "stateOrCountry": "CA",
+      "zipCode": "95032",
+      "stateOrCountryDescription": "CA",
+      "isForeignLocation": null,
+      "foreignStateTerritory": null,
+      "country": null,
+      "countryCode": null
+    },
+    "antiguos_nombres": [
+      {
+        "name": "NETFLIX COM INC",
+        "from": "2000-04-18T04:00:00.000Z",
+        "to": "2002-03-06T05:00:00.000Z"
+      }
+    ]
+  },
+  "documentos": [
+    {
+      "form": "10-K",
+      "fecha": "2026-01-23",
+      "periodo": "2025-12-31",
+      "accession": "0001065280-26-000034",
+      "principal": "nflx-20251231.htm",
+      "descripcion": "10-K",
+      "items": "",
+      "ficheros": [
+        "nflx-20251231.htm",
+        "ex211-q425.htm"
+      ]
+    },
+    {
+      "form": "DEF 14A",
+      "fecha": "2026-04-16",
+      "periodo": "2026-06-04",
+      "accession": "0001193125-26-159286",
+      "principal": "d20613ddef14a.htm",
+      "descripcion": "DEF 14A",
+      "items": "",
+      "ficheros": [
+        "d20613ddef14a.htm"
+      ]
+    },
+    {
+      "form": "10-Q",
+      "fecha": "2026-07-17",
+      "periodo": "2026-06-30",
+      "accession": "0001065280-26-000212",
+      "principal": "nflx-20260630.htm",
+      "descripcion": "10-Q",
+      "items": "",
+      "ficheros": [
+        "nflx-20260630.htm"
+      ]
+    },
+    {
+      "form": "10-Q",
+      "fecha": "2026-04-17",
+      "periodo": "2026-03-31",
+      "accession": "0001065280-26-000138",
+      "principal": "nflx-20260331.htm",
+      "descripcion": "10-Q",
+      "items": "",
+      "ficheros": [
+        "nflx-20260331.htm"
+      ]
+    },
+    {
+      "form": "8-K",
+      "fecha": "2026-07-30",
+      "periodo": "2026-07-26",
+      "accession": "0001065280-26-000214",
+      "principal": "nflx-20260726.htm",
+      "descripcion": "8-K",
+      "items": "5.02",
+      "ficheros": [
+        "nflx-20260726.htm"
+      ]
+    },
+    {
+      "form": "8-K",
+      "fecha": "2026-07-22",
+      "periodo": "2026-07-20",
+      "accession": "0001193125-26-312575",
+      "principal": "d171951d8k.htm",
+      "descripcion": "8-K",
+      "items": "8.01,9.01",
+      "ficheros": [
+        "d171951d8k.htm"
+      ]
+    },
+    {
+      "form": "8-K",
+      "fecha": "2026-07-16",
+      "periodo": "2026-07-16",
+      "accession": "0001065280-26-000211",
+      "principal": "nflx-20260716.htm",
+      "descripcion": "8-K",
+      "items": "2.02,9.01",
+      "ficheros": [
+        "nflx-20260716.htm",
+        "ex991_q226.htm"
+      ]
+    },
+    {
+      "form": "8-K",
+      "fecha": "2026-06-05",
+      "periodo": "2026-06-04",
+      "accession": "0001065280-26-000189",
+      "principal": "nflx-20260604.htm",
+      "descripcion": "8-K",
+      "items": "5.07,8.01",
+      "ficheros": [
+        "nflx-20260604.htm"
+      ]
+    },
+    {
+      "form": "8-K",
+      "fecha": "2026-04-23",
+      "periodo": "2026-04-22",
+      "accession": "0001065280-26-000139",
+      "principal": "nflx-20260422.htm",
+      "descripcion": "8-K",
+      "items": "8.01",
+      "ficheros": [
+        "nflx-20260422.htm"
+      ]
+    },
+    {
+      "form": "8-K",
+      "fecha": "2026-04-16",
+      "periodo": "2026-04-10",
+      "accession": "0001065280-26-000137",
+      "principal": "nflx-20260410.htm",
+      "descripcion": "8-K",
+      "items": "2.02,5.02,9.01",
+      "ficheros": [
+        "nflx-20260410.htm",
+        "ex991_q126.htm"
+      ]
+    },
+    {
+      "form": "8-K",
+      "fecha": "2026-02-27",
+      "periodo": "2026-02-27",
+      "accession": "0001193125-26-082247",
+      "principal": "d120618d8k.htm",
+      "descripcion": "8-K",
+      "items": "1.02",
+      "ficheros": [
+        "d120618d8k.htm"
+      ]
+    },
+    {
+      "form": "8-K",
+      "fecha": "2026-01-20",
+      "periodo": "2026-01-20",
+      "accession": "0001065280-26-000033",
+      "principal": "nflx-20260120.htm",
+      "descripcion": "8-K",
+      "items": "2.02,9.01",
+      "ficheros": [
+        "nflx-20260120.htm",
+        "ex991_q425.htm"
+      ]
+    },
+    {
+      "form": "8-K",
+      "fecha": "2026-01-20",
+      "periodo": "2026-01-19",
+      "accession": "0001193125-26-015951",
+      "principal": "d37713d8k.htm",
+      "descripcion": "8-K",
+      "items": "1.01,7.01,9.01",
+      "ficheros": [
+        "d37713d8k.htm",
+        "d37713dex21.htm",
+        "d37713dex991.htm"
+      ]
+    },
+    {
+      "form": "8-K",
+      "fecha": "2025-12-22",
+      "periodo": "2025-12-19",
+      "accession": "0001193125-25-327462",
+      "principal": "d82688d8k.htm",
+      "descripcion": "8-K",
+      "items": "1.01,2.03,9.01",
+      "ficheros": [
+        "d82688d8k.htm"
+      ]
+    },
+    {
+      "form": "8-K/A",
+      "fecha": "2025-12-05",
+      "periodo": "2025-12-05",
+      "accession": "0001193125-25-309911",
+      "principal": "d45027d8ka.htm",
+      "descripcion": "8-K/A",
+      "items": "9.01",
+      "ficheros": [
+        "d45027d8ka.htm",
+        "d45027dex21.htm"
+      ]
+    },
+    {
+      "form": "8-K",
+      "fecha": "2025-12-05",
+      "periodo": "2025-12-05",
+      "accession": "0001193125-25-308651",
+      "principal": "d65144d8k.htm",
+      "descripcion": "8-K",
+      "items": "1.01,7.01,9.01",
+      "ficheros": [
+        "d65144d8k.htm",
+        "d65144dex21.htm",
+        "d65144dex991.htm"
+      ]
+    },
+    {
+      "form": "8-K",
+      "fecha": "2025-11-14",
+      "periodo": "2025-11-14",
+      "accession": "0001065280-25-000450",
+      "principal": "nflx-20251114.htm",
+      "descripcion": "8-K",
+      "items": "5.03,9.01",
+      "ficheros": [
+        "nflx-20251114.htm"
+      ]
+    },
+    {
+      "form": "8-K",
+      "fecha": "2025-11-04",
+      "periodo": "2025-10-30",
+      "accession": "0001065280-25-000408",
+      "principal": "nflx-20251030.htm",
+      "descripcion": "8-K",
+      "items": "5.02,9.01",
+      "ficheros": [
+        "nflx-20251030.htm"
+      ]
+    },
+    {
+      "form": "8-K",
+      "fecha": "2025-10-30",
+      "periodo": "2025-10-30",
+      "accession": "0001065280-25-000407",
+      "principal": "nflx-20251030.htm",
+      "descripcion": "8-K",
+      "items": "8.01,9.01",
+      "ficheros": [
+        "nflx-20251030.htm",
+        "ex991_q425stocksplit.htm"
+      ]
+    },
+    {
+      "form": "8-K",
+      "fecha": "2025-10-21",
+      "periodo": "2025-10-21",
+      "accession": "0001065280-25-000404",
+      "principal": "nflx-20251021.htm",
+      "descripcion": "8-K",
+      "items": "2.02,9.01",
+      "ficheros": [
+        "nflx-20251021.htm",
+        "ex991_q325.htm"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-09-10",
+      "periodo": "2026-09-09",
+      "accession": "0001065280-26-000271",
+      "principal": "xslF345X06/wk-form4_1789085087.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1789085087.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-09-09",
+      "periodo": "2026-09-08",
+      "accession": "0001065280-26-000269",
+      "principal": "xslF345X06/wk-form4_1788984509.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1788984509.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-09-02",
+      "periodo": "2026-09-01",
+      "accession": "0001104659-26-104794",
+      "principal": "xslF345X06/tm2624686-1_4seq1.xml",
+      "descripcion": "OWNERSHIP DOCUMENT",
+      "items": "",
+      "ficheros": [
+        "tm2624686-1_4seq1.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-09-02",
+      "periodo": "2026-09-01",
+      "accession": "0001065280-26-000267",
+      "principal": "xslF345X06/wk-form4_1788380182.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1788380182.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-09-02",
+      "periodo": "2026-09-01",
+      "accession": "0001065280-26-000266",
+      "principal": "xslF345X06/wk-form4_1788380130.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1788380130.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-09-02",
+      "periodo": "2026-09-01",
+      "accession": "0001065280-26-000265",
+      "principal": "xslF345X06/wk-form4_1788380102.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1788380102.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-09-02",
+      "periodo": "2026-09-01",
+      "accession": "0001065280-26-000264",
+      "principal": "xslF345X06/wk-form4_1788380077.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1788380077.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-09-02",
+      "periodo": "2026-09-01",
+      "accession": "0001065280-26-000263",
+      "principal": "xslF345X06/wk-form4_1788380052.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1788380052.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-09-02",
+      "periodo": "2026-09-01",
+      "accession": "0001065280-26-000262",
+      "principal": "xslF345X06/wk-form4_1788380025.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1788380025.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-09-02",
+      "periodo": "2026-09-01",
+      "accession": "0001065280-26-000261",
+      "principal": "xslF345X06/wk-form4_1788379988.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1788379988.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-09-02",
+      "periodo": "2026-09-01",
+      "accession": "0001065280-26-000260",
+      "principal": "xslF345X06/wk-form4_1788379961.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1788379961.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-09-02",
+      "periodo": "2026-09-01",
+      "accession": "0001065280-26-000259",
+      "principal": "xslF345X06/wk-form4_1788379914.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1788379914.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-08-10",
+      "periodo": "2026-08-10",
+      "accession": "0001065280-26-000249",
+      "principal": "xslF345X06/wk-form4_1786394054.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1786394054.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-08-06",
+      "periodo": "2026-08-06",
+      "accession": "0001065280-26-000247",
+      "principal": "xslF345X06/wk-form4_1786049108.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1786049108.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-08-06",
+      "periodo": "2026-08-05",
+      "accession": "0001065280-26-000246",
+      "principal": "xslF345X06/wk-form4_1786048937.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1786048937.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-08-04",
+      "periodo": "2026-08-03",
+      "accession": "0001104659-26-090530",
+      "principal": "xslF345X06/tm2622242-1_4seq1.xml",
+      "descripcion": "OWNERSHIP DOCUMENT",
+      "items": "",
+      "ficheros": [
+        "tm2622242-1_4seq1.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-08-04",
+      "periodo": "2026-08-03",
+      "accession": "0001065280-26-000242",
+      "principal": "xslF345X06/wk-form4_1785878597.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1785878597.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-08-04",
+      "periodo": "2026-08-03",
+      "accession": "0001065280-26-000240",
+      "principal": "xslF345X06/wk-form4_1785878446.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1785878446.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-08-04",
+      "periodo": "2026-08-03",
+      "accession": "0001065280-26-000238",
+      "principal": "xslF345X06/wk-form4_1785878235.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1785878235.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-08-04",
+      "periodo": "2026-08-03",
+      "accession": "0001065280-26-000236",
+      "principal": "xslF345X06/wk-form4_1785878177.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1785878177.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-08-04",
+      "periodo": "2026-08-03",
+      "accession": "0001065280-26-000234",
+      "principal": "xslF345X06/wk-form4_1785878104.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1785878104.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-08-04",
+      "periodo": "2026-08-03",
+      "accession": "0001065280-26-000232",
+      "principal": "xslF345X06/wk-form4_1785877732.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1785877732.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-08-04",
+      "periodo": "2026-08-03",
+      "accession": "0001065280-26-000230",
+      "principal": "xslF345X06/wk-form4_1785877677.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1785877677.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-08-04",
+      "periodo": "2026-08-03",
+      "accession": "0001065280-26-000228",
+      "principal": "xslF345X06/wk-form4_1785877624.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1785877624.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-08-04",
+      "periodo": "2026-08-03",
+      "accession": "0001065280-26-000226",
+      "principal": "xslF345X06/wk-form4_1785877578.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1785877578.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-08-04",
+      "periodo": "2026-08-03",
+      "accession": "0001065280-26-000224",
+      "principal": "xslF345X06/wk-form4_1785877516.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1785877516.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-08-04",
+      "periodo": "2026-08-03",
+      "accession": "0001065280-26-000223",
+      "principal": "xslF345X06/wk-form4_1785877445.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1785877445.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-08-04",
+      "periodo": "2026-08-03",
+      "accession": "0001065280-26-000221",
+      "principal": "xslF345X06/wk-form4_1785877385.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1785877385.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-08-04",
+      "periodo": "2026-08-03",
+      "accession": "0001065280-26-000219",
+      "principal": "xslF345X06/wk-form4_1785877318.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1785877318.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-08-04",
+      "periodo": "2026-08-03",
+      "accession": "0001065280-26-000217",
+      "principal": "xslF345X06/wk-form4_1785877253.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1785877253.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-07-02",
+      "periodo": "2026-07-01",
+      "accession": "0001065280-26-000209",
+      "principal": "xslF345X06/wk-form4_1783025913.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1783025913.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-07-02",
+      "periodo": "2026-07-01",
+      "accession": "0001065280-26-000208",
+      "principal": "xslF345X06/wk-form4_1783025729.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1783025729.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-07-02",
+      "periodo": "2026-07-01",
+      "accession": "0001065280-26-000207",
+      "principal": "xslF345X06/wk-form4_1783025705.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1783025705.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-07-02",
+      "periodo": "2026-07-01",
+      "accession": "0001065280-26-000206",
+      "principal": "xslF345X06/wk-form4_1783025682.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1783025682.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-07-02",
+      "periodo": "2026-07-01",
+      "accession": "0001065280-26-000205",
+      "principal": "xslF345X06/wk-form4_1783025662.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1783025662.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-07-02",
+      "periodo": "2026-07-01",
+      "accession": "0001065280-26-000204",
+      "principal": "xslF345X06/wk-form4_1783025644.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1783025644.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-07-02",
+      "periodo": "2026-07-01",
+      "accession": "0001065280-26-000203",
+      "principal": "xslF345X06/wk-form4_1783025622.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1783025622.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-07-02",
+      "periodo": "2026-07-01",
+      "accession": "0001065280-26-000202",
+      "principal": "xslF345X06/wk-form4_1783025599.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1783025599.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-07-02",
+      "periodo": "2026-07-01",
+      "accession": "0001065280-26-000201",
+      "principal": "xslF345X06/wk-form4_1783025574.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1783025574.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-07-02",
+      "periodo": "2026-07-01",
+      "accession": "0001065280-26-000200",
+      "principal": "xslF345X06/wk-form4_1783025555.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1783025555.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-07-02",
+      "periodo": "2026-07-01",
+      "accession": "0001082906-26-000020",
+      "principal": "xslF345X06/form4.xml",
+      "descripcion": "STATEMENT OF CHANGES IN BENEFICIAL OWNERSHIP OF SECURITIES",
+      "items": "",
+      "ficheros": [
+        "form4.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-06-18",
+      "periodo": "2026-06-17",
+      "accession": "0001065280-26-000191",
+      "principal": "xslF345X06/wk-form4_1781813325.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1781813325.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-06-02",
+      "periodo": "2026-06-01",
+      "accession": "0001065280-26-000188",
+      "principal": "xslF345X06/wk-form4_1780431227.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1780431227.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-06-02",
+      "periodo": "2026-06-01",
+      "accession": "0001065280-26-000187",
+      "principal": "xslF345X06/wk-form4_1780431145.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1780431145.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-06-02",
+      "periodo": "2026-06-01",
+      "accession": "0001065280-26-000186",
+      "principal": "xslF345X06/wk-form4_1780431096.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1780431096.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-06-02",
+      "periodo": "2026-06-01",
+      "accession": "0001082906-26-000018",
+      "principal": "xslF345X06/form4.xml",
+      "descripcion": "STATEMENT OF CHANGES IN BENEFICIAL OWNERSHIP OF SECURITIES",
+      "items": "",
+      "ficheros": [
+        "form4.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-06-02",
+      "periodo": "2026-06-01",
+      "accession": "0001065280-26-000185",
+      "principal": "xslF345X06/wk-form4_1780431036.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1780431036.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-06-02",
+      "periodo": "2026-06-01",
+      "accession": "0001065280-26-000184",
+      "principal": "xslF345X06/wk-form4_1780431003.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1780431003.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-06-02",
+      "periodo": "2026-06-01",
+      "accession": "0001065280-26-000183",
+      "principal": "xslF345X06/wk-form4_1780430972.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1780430972.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-06-02",
+      "periodo": "2026-06-01",
+      "accession": "0001065280-26-000182",
+      "principal": "xslF345X06/wk-form4_1780430934.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1780430934.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-06-02",
+      "periodo": "2026-06-01",
+      "accession": "0001065280-26-000181",
+      "principal": "xslF345X06/wk-form4_1780430894.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1780430894.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-06-02",
+      "periodo": "2026-06-01",
+      "accession": "0001065280-26-000180",
+      "principal": "xslF345X06/wk-form4_1780430853.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1780430853.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-06-02",
+      "periodo": "2026-06-01",
+      "accession": "0001065280-26-000179",
+      "principal": "xslF345X06/wk-form4_1780430796.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1780430796.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-06-02",
+      "periodo": "2026-06-01",
+      "accession": "0001065280-26-000178",
+      "principal": "xslF345X06/wk-form4_1780430751.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1780430751.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-05-07",
+      "periodo": "2026-05-06",
+      "accession": "0001583109-26-000002",
+      "principal": "xslF345X06/wk-form4_1778191869.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1778191869.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-05-07",
+      "periodo": "2026-05-07",
+      "accession": "0001065280-26-000172",
+      "principal": "xslF345X06/wk-form4_1778191792.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1778191792.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-05-05",
+      "periodo": "2026-05-04",
+      "accession": "0001065280-26-000170",
+      "principal": "xslF345X06/wk-form4_1778021149.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1778021149.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-05-05",
+      "periodo": "2026-05-04",
+      "accession": "0001065280-26-000169",
+      "principal": "xslF345X06/wk-form4_1778021110.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1778021110.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-05-05",
+      "periodo": "2026-05-04",
+      "accession": "0001065280-26-000168",
+      "principal": "xslF345X06/wk-form4_1778021060.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1778021060.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-05-05",
+      "periodo": "2026-05-04",
+      "accession": "0001065280-26-000167",
+      "principal": "xslF345X06/wk-form4_1778020947.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1778020947.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-05-05",
+      "periodo": "2026-05-04",
+      "accession": "0001065280-26-000166",
+      "principal": "xslF345X06/wk-form4_1778020893.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1778020893.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-05-04",
+      "periodo": "2026-05-01",
+      "accession": "0001082906-26-000014",
+      "principal": "xslF345X06/form4.xml",
+      "descripcion": "STATEMENT OF CHANGES IN BENEFICIAL OWNERSHIP OF SECURITIES",
+      "items": "",
+      "ficheros": [
+        "form4.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-05-04",
+      "periodo": "2026-05-01",
+      "accession": "0001065280-26-000160",
+      "principal": "xslF345X06/wk-form4_1777925635.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1777925635.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-05-04",
+      "periodo": "2026-05-01",
+      "accession": "0001065280-26-000159",
+      "principal": "xslF345X06/wk-form4_1777925591.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1777925591.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-05-04",
+      "periodo": "2026-05-01",
+      "accession": "0001065280-26-000158",
+      "principal": "xslF345X06/wk-form4_1777925546.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1777925546.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-05-04",
+      "periodo": "2026-05-01",
+      "accession": "0001065280-26-000157",
+      "principal": "xslF345X06/wk-form4_1777925515.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1777925515.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-05-04",
+      "periodo": "2026-05-01",
+      "accession": "0001065280-26-000156",
+      "principal": "xslF345X06/wk-form4_1777925482.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1777925482.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-05-04",
+      "periodo": "2026-05-01",
+      "accession": "0001065280-26-000155",
+      "principal": "xslF345X06/wk-form4_1777925446.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1777925446.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-05-04",
+      "periodo": "2026-05-01",
+      "accession": "0001065280-26-000154",
+      "principal": "xslF345X06/wk-form4_1777925353.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1777925353.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-05-04",
+      "periodo": "2026-05-01",
+      "accession": "0001065280-26-000153",
+      "principal": "xslF345X06/wk-form4_1777925312.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1777925312.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-05-04",
+      "periodo": "2026-05-01",
+      "accession": "0001065280-26-000152",
+      "principal": "xslF345X06/wk-form4_1777925278.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1777925278.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-05-04",
+      "periodo": "2026-05-01",
+      "accession": "0001065280-26-000151",
+      "principal": "xslF345X06/wk-form4_1777925225.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1777925225.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-05-04",
+      "periodo": "2026-05-01",
+      "accession": "0001065280-26-000150",
+      "principal": "xslF345X06/wk-form4_1777925127.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1777925127.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-04-03",
+      "periodo": "2026-04-02",
+      "accession": "0001543133-26-000002",
+      "principal": "xslF345X06/wk-form4_1775246849.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1775246849.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-04-02",
+      "periodo": "2026-04-01",
+      "accession": "0001065280-26-000136",
+      "principal": "xslF345X06/wk-form4_1775167371.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1775167371.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-04-02",
+      "periodo": "2026-04-01",
+      "accession": "0001065280-26-000135",
+      "principal": "xslF345X06/wk-form4_1775167364.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1775167364.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-04-02",
+      "periodo": "2026-04-01",
+      "accession": "0001065280-26-000134",
+      "principal": "xslF345X06/wk-form4_1775167354.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1775167354.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-04-02",
+      "periodo": "2026-04-01",
+      "accession": "0001065280-26-000133",
+      "principal": "xslF345X06/wk-form4_1775167345.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1775167345.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-04-02",
+      "periodo": "2026-04-01",
+      "accession": "0001065280-26-000132",
+      "principal": "xslF345X06/wk-form4_1775167337.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1775167337.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-04-02",
+      "periodo": "2026-04-01",
+      "accession": "0001065280-26-000131",
+      "principal": "xslF345X06/wk-form4_1775167309.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1775167309.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-04-02",
+      "periodo": "2026-04-01",
+      "accession": "0001065280-26-000130",
+      "principal": "xslF345X06/wk-form4_1775167302.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1775167302.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-04-02",
+      "periodo": "2026-04-01",
+      "accession": "0001065280-26-000129",
+      "principal": "xslF345X06/wk-form4_1775167293.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1775167293.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-04-02",
+      "periodo": "2026-04-01",
+      "accession": "0001065280-26-000128",
+      "principal": "xslF345X06/wk-form4_1775167286.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1775167286.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-04-02",
+      "periodo": "2026-04-01",
+      "accession": "0001065280-26-000127",
+      "principal": "xslF345X06/wk-form4_1775167280.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1775167280.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-04-02",
+      "periodo": "2026-04-01",
+      "accession": "0001065280-26-000126",
+      "principal": "xslF345X06/wk-form4_1775167264.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1775167264.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-04-02",
+      "periodo": "2026-04-01",
+      "accession": "0001082906-26-000012",
+      "principal": "xslF345X06/form4.xml",
+      "descripcion": "STATEMENT OF CHANGES IN BENEFICIAL OWNERSHIP OF SECURITIES",
+      "items": "",
+      "ficheros": [
+        "form4.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-03-03",
+      "periodo": "2026-03-02",
+      "accession": "0001065280-26-000113",
+      "principal": "xslF345X05/wk-form4_1772582731.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1772582731.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-03-03",
+      "periodo": "2026-03-02",
+      "accession": "0001065280-26-000112",
+      "principal": "xslF345X05/wk-form4_1772582725.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1772582725.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-03-03",
+      "periodo": "2026-03-02",
+      "accession": "0001065280-26-000111",
+      "principal": "xslF345X05/wk-form4_1772582719.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1772582719.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-03-03",
+      "periodo": "2026-03-02",
+      "accession": "0001065280-26-000110",
+      "principal": "xslF345X05/wk-form4_1772582713.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1772582713.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-03-03",
+      "periodo": "2026-03-02",
+      "accession": "0001065280-26-000109",
+      "principal": "xslF345X05/wk-form4_1772582705.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1772582705.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-03-03",
+      "periodo": "2026-03-02",
+      "accession": "0001065280-26-000108",
+      "principal": "xslF345X05/wk-form4_1772582700.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1772582700.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-03-03",
+      "periodo": "2026-03-02",
+      "accession": "0001065280-26-000107",
+      "principal": "xslF345X05/wk-form4_1772582694.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1772582694.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-03-03",
+      "periodo": "2026-03-02",
+      "accession": "0001065280-26-000106",
+      "principal": "xslF345X05/wk-form4_1772582689.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1772582689.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-03-03",
+      "periodo": "2026-03-02",
+      "accession": "0001065280-26-000105",
+      "principal": "xslF345X05/wk-form4_1772582685.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1772582685.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-03-03",
+      "periodo": "2026-03-02",
+      "accession": "0001065280-26-000104",
+      "principal": "xslF345X05/wk-form4_1772582680.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1772582680.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-03-03",
+      "periodo": "2026-03-02",
+      "accession": "0001065280-26-000103",
+      "principal": "xslF345X05/wk-form4_1772582673.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1772582673.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-03-03",
+      "periodo": "2026-03-02",
+      "accession": "0001065280-26-000091",
+      "principal": "xslF345X05/wk-form4_1772582357.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1772582357.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-03-03",
+      "periodo": "2026-03-02",
+      "accession": "0001082906-26-000008",
+      "principal": "xslF345X05/form4.xml",
+      "descripcion": "STATEMENT OF CHANGES IN BENEFICIAL OWNERSHIP OF SECURITIES",
+      "items": "",
+      "ficheros": [
+        "form4.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-03-02",
+      "periodo": "2026-02-27",
+      "accession": "0001065280-26-000089",
+      "principal": "xslF345X05/wk-form4_1772500439.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1772500439.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-02-11",
+      "periodo": "2026-02-09",
+      "accession": "0001065280-26-000087",
+      "principal": "xslF345X05/wk-form4_1770849831.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1770849831.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-02-11",
+      "periodo": "2026-02-10",
+      "accession": "0001065280-26-000086",
+      "principal": "xslF345X05/wk-form4_1770849825.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1770849825.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-02-11",
+      "periodo": "2026-02-10",
+      "accession": "0001065280-26-000085",
+      "principal": "xslF345X05/wk-form4_1770849816.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1770849816.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-02-09",
+      "periodo": "2026-02-06",
+      "accession": "0001065280-26-000081",
+      "principal": "xslF345X05/wk-form4_1770682117.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1770682117.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-02-06",
+      "periodo": "2026-02-05",
+      "accession": "0001065280-26-000079",
+      "principal": "xslF345X05/wk-form4_1770418689.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1770418689.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-02-04",
+      "periodo": "2026-02-03",
+      "accession": "0001065280-26-000078",
+      "principal": "xslF345X05/wk-form4_1770255093.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1770255093.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-02-04",
+      "periodo": "2026-02-03",
+      "accession": "0001065280-26-000077",
+      "principal": "xslF345X05/wk-form4_1770255087.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1770255087.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-02-04",
+      "periodo": "2026-02-03",
+      "accession": "0001065280-26-000076",
+      "principal": "xslF345X05/wk-form4_1770255081.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1770255081.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-02-04",
+      "periodo": "2026-02-03",
+      "accession": "0001065280-26-000075",
+      "principal": "xslF345X05/wk-form4_1770255075.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1770255075.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-02-04",
+      "periodo": "2026-02-03",
+      "accession": "0001065280-26-000074",
+      "principal": "xslF345X05/wk-form4_1770255067.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1770255067.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-02-03",
+      "periodo": "2026-02-02",
+      "accession": "0001065280-26-000068",
+      "principal": "xslF345X05/wk-form4_1770162467.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1770162467.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-02-03",
+      "periodo": "2026-02-02",
+      "accession": "0001065280-26-000067",
+      "principal": "xslF345X05/wk-form4_1770162459.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1770162459.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-02-03",
+      "periodo": "2026-02-02",
+      "accession": "0001065280-26-000066",
+      "principal": "xslF345X05/wk-form4_1770162453.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1770162453.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-02-03",
+      "periodo": "2026-02-02",
+      "accession": "0001065280-26-000065",
+      "principal": "xslF345X05/wk-form4_1770162448.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1770162448.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-02-03",
+      "periodo": "2026-02-02",
+      "accession": "0001065280-26-000064",
+      "principal": "xslF345X05/wk-form4_1770162443.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1770162443.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-02-03",
+      "periodo": "2026-02-02",
+      "accession": "0001065280-26-000063",
+      "principal": "xslF345X05/wk-form4_1770162437.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1770162437.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-02-03",
+      "periodo": "2026-02-02",
+      "accession": "0001065280-26-000062",
+      "principal": "xslF345X05/wk-form4_1770162431.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1770162431.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-02-03",
+      "periodo": "2026-02-02",
+      "accession": "0001065280-26-000061",
+      "principal": "xslF345X05/wk-form4_1770162426.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1770162426.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-02-03",
+      "periodo": "2026-02-02",
+      "accession": "0001065280-26-000060",
+      "principal": "xslF345X05/wk-form4_1770162420.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1770162420.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-02-03",
+      "periodo": "2026-02-02",
+      "accession": "0001065280-26-000059",
+      "principal": "xslF345X05/wk-form4_1770162414.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1770162414.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-02-03",
+      "periodo": "2026-02-02",
+      "accession": "0001065280-26-000048",
+      "principal": "xslF345X05/wk-form4_1770162235.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1770162235.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-02-03",
+      "periodo": "2026-02-02",
+      "accession": "0001082906-26-000004",
+      "principal": "xslF345X05/form4.xml",
+      "descripcion": "STATEMENT OF CHANGES IN BENEFICIAL OWNERSHIP OF SECURITIES",
+      "items": "",
+      "ficheros": [
+        "form4.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-01-30",
+      "periodo": "2026-01-29",
+      "accession": "0001065280-26-000046",
+      "principal": "xslF345X05/wk-form4_1769818214.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1769818214.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-01-23",
+      "periodo": "2026-01-22",
+      "accession": "0001065280-26-000044",
+      "principal": "xslF345X05/wk-form4_1769212815.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1769212815.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-01-23",
+      "periodo": "2026-01-22",
+      "accession": "0001065280-26-000043",
+      "principal": "xslF345X05/wk-form4_1769212809.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1769212809.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-01-23",
+      "periodo": "2026-01-22",
+      "accession": "0001065280-26-000042",
+      "principal": "xslF345X05/wk-form4_1769212801.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1769212801.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-01-23",
+      "periodo": "2026-01-22",
+      "accession": "0001065280-26-000041",
+      "principal": "xslF345X05/wk-form4_1769212794.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1769212794.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-01-23",
+      "periodo": "2026-01-22",
+      "accession": "0001065280-26-000040",
+      "principal": "xslF345X05/wk-form4_1769212789.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1769212789.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-01-20",
+      "periodo": "2026-01-16",
+      "accession": "0001507747-26-000002",
+      "principal": "xslF345X05/wk-form4_1768947445.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1768947445.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-01-16",
+      "periodo": "2026-01-15",
+      "accession": "0001065280-26-000032",
+      "principal": "xslF345X05/wk-form4_1768611613.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1768611613.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-01-08",
+      "periodo": "2026-01-07",
+      "accession": "0001065280-26-000030",
+      "principal": "xslF345X05/wk-form4_1767923343.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1767923343.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-01-08",
+      "periodo": "2026-01-07",
+      "accession": "0001065280-26-000029",
+      "principal": "xslF345X05/wk-form4_1767923336.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1767923336.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-01-08",
+      "periodo": "2026-01-07",
+      "accession": "0001065280-26-000028",
+      "principal": "xslF345X05/wk-form4_1767923330.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1767923330.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-01-08",
+      "periodo": "2026-01-07",
+      "accession": "0001065280-26-000027",
+      "principal": "xslF345X05/wk-form4_1767923324.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1767923324.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-01-05",
+      "periodo": "2026-01-02",
+      "accession": "0001065280-26-000022",
+      "principal": "xslF345X05/wk-form4_1767666394.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1767666394.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-01-05",
+      "periodo": "2026-01-02",
+      "accession": "0001065280-26-000021",
+      "principal": "xslF345X05/wk-form4_1767666388.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1767666388.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-01-05",
+      "periodo": "2026-01-02",
+      "accession": "0001065280-26-000020",
+      "principal": "xslF345X05/wk-form4_1767666382.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1767666382.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-01-05",
+      "periodo": "2026-01-02",
+      "accession": "0001065280-26-000019",
+      "principal": "xslF345X05/wk-form4_1767666376.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1767666376.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-01-05",
+      "periodo": "2026-01-02",
+      "accession": "0001065280-26-000018",
+      "principal": "xslF345X05/wk-form4_1767666370.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1767666370.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-01-05",
+      "periodo": "2026-01-02",
+      "accession": "0001065280-26-000017",
+      "principal": "xslF345X05/wk-form4_1767666364.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1767666364.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-01-05",
+      "periodo": "2026-01-02",
+      "accession": "0001065280-26-000016",
+      "principal": "xslF345X05/wk-form4_1767666358.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1767666358.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-01-05",
+      "periodo": "2026-01-02",
+      "accession": "0001065280-26-000015",
+      "principal": "xslF345X05/wk-form4_1767666352.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1767666352.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-01-05",
+      "periodo": "2026-01-02",
+      "accession": "0001065280-26-000014",
+      "principal": "xslF345X05/wk-form4_1767666346.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1767666346.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-01-05",
+      "periodo": "2026-01-02",
+      "accession": "0001065280-26-000013",
+      "principal": "xslF345X05/wk-form4_1767666337.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1767666337.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-01-05",
+      "periodo": "2026-01-02",
+      "accession": "0001065280-26-000002",
+      "principal": "xslF345X05/wk-form4_1767665933.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1767665933.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2026-01-05",
+      "periodo": "2026-01-02",
+      "accession": "0001082906-26-000002",
+      "principal": "xslF345X05/form4.xml",
+      "descripcion": "STATEMENT OF CHANGES IN BENEFICIAL OWNERSHIP OF SECURITIES",
+      "items": "",
+      "ficheros": [
+        "form4.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2025-12-02",
+      "periodo": "2025-12-01",
+      "accession": "0001065280-25-000472",
+      "principal": "xslF345X05/wk-form4_1764726761.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1764726761.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2025-12-02",
+      "periodo": "2025-12-01",
+      "accession": "0001065280-25-000471",
+      "principal": "xslF345X05/wk-form4_1764726755.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1764726755.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2025-12-02",
+      "periodo": "2025-12-01",
+      "accession": "0001065280-25-000470",
+      "principal": "xslF345X05/wk-form4_1764726748.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1764726748.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2025-12-02",
+      "periodo": "2025-12-01",
+      "accession": "0001065280-25-000469",
+      "principal": "xslF345X05/wk-form4_1764726742.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1764726742.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2025-12-02",
+      "periodo": "2025-12-01",
+      "accession": "0001065280-25-000468",
+      "principal": "xslF345X05/wk-form4_1764726736.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1764726736.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2025-12-02",
+      "periodo": "2025-12-01",
+      "accession": "0001065280-25-000467",
+      "principal": "xslF345X05/wk-form4_1764726729.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1764726729.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2025-12-02",
+      "periodo": "2025-12-01",
+      "accession": "0001065280-25-000466",
+      "principal": "xslF345X05/wk-form4_1764726722.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1764726722.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2025-12-02",
+      "periodo": "2025-12-01",
+      "accession": "0001065280-25-000465",
+      "principal": "xslF345X05/wk-form4_1764726716.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1764726716.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2025-12-02",
+      "periodo": "2025-12-01",
+      "accession": "0001065280-25-000464",
+      "principal": "xslF345X05/wk-form4_1764726710.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1764726710.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2025-12-02",
+      "periodo": "2025-12-01",
+      "accession": "0001065280-25-000463",
+      "principal": "xslF345X05/wk-form4_1764726704.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1764726704.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2025-12-02",
+      "periodo": "2025-12-01",
+      "accession": "0001065280-25-000462",
+      "principal": "xslF345X05/wk-form4_1764726697.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1764726697.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2025-12-02",
+      "periodo": "2025-12-01",
+      "accession": "0001082906-25-000011",
+      "principal": "xslF345X05/form4.xml",
+      "descripcion": "STATEMENT OF CHANGES IN BENEFICIAL OWNERSHIP OF SECURITIES",
+      "items": "",
+      "ficheros": [
+        "form4.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2025-11-12",
+      "periodo": "2025-11-07",
+      "accession": "0001065280-25-000448",
+      "principal": "xslF345X05/wk-form4_1762991503.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1762991503.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2025-11-06",
+      "periodo": "2025-11-06",
+      "accession": "0001065280-25-000446",
+      "principal": "xslF345X05/wk-form4_1762479617.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1762479617.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2025-11-05",
+      "periodo": "2025-11-03",
+      "accession": "0001065280-25-000444",
+      "principal": "xslF345X05/wk-form4_1762397017.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1762397017.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2025-11-05",
+      "periodo": "2025-11-03",
+      "accession": "0001065280-25-000443",
+      "principal": "xslF345X05/wk-form4_1762397011.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1762397011.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2025-11-05",
+      "periodo": "2025-11-03",
+      "accession": "0001065280-25-000442",
+      "principal": "xslF345X05/wk-form4_1762397005.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1762397005.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2025-11-05",
+      "periodo": "2025-11-03",
+      "accession": "0001065280-25-000441",
+      "principal": "xslF345X05/wk-form4_1762397000.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1762397000.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2025-11-05",
+      "periodo": "2025-11-03",
+      "accession": "0001065280-25-000440",
+      "principal": "xslF345X05/wk-form4_1762396986.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1762396986.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2025-11-04",
+      "periodo": "2025-11-03",
+      "accession": "0001065280-25-000434",
+      "principal": "xslF345X05/wk-form4_1762307189.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1762307189.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2025-11-04",
+      "periodo": "2025-11-03",
+      "accession": "0001065280-25-000433",
+      "principal": "xslF345X05/wk-form4_1762307183.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1762307183.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2025-11-04",
+      "periodo": "2025-11-03",
+      "accession": "0001065280-25-000432",
+      "principal": "xslF345X05/wk-form4_1762307177.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1762307177.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2025-11-04",
+      "periodo": "2025-11-03",
+      "accession": "0001065280-25-000431",
+      "principal": "xslF345X05/wk-form4_1762307171.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1762307171.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2025-11-04",
+      "periodo": "2025-11-03",
+      "accession": "0001065280-25-000430",
+      "principal": "xslF345X05/wk-form4_1762307164.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1762307164.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2025-11-04",
+      "periodo": "2025-11-03",
+      "accession": "0001065280-25-000429",
+      "principal": "xslF345X05/wk-form4_1762307159.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1762307159.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2025-11-04",
+      "periodo": "2025-11-03",
+      "accession": "0001065280-25-000428",
+      "principal": "xslF345X05/wk-form4_1762307151.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1762307151.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2025-11-04",
+      "periodo": "2025-11-03",
+      "accession": "0001065280-25-000427",
+      "principal": "xslF345X05/wk-form4_1762307145.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1762307145.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2025-11-04",
+      "periodo": "2025-11-03",
+      "accession": "0001065280-25-000426",
+      "principal": "xslF345X05/wk-form4_1762307139.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1762307139.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2025-11-04",
+      "periodo": "2025-11-03",
+      "accession": "0001065280-25-000425",
+      "principal": "xslF345X05/wk-form4_1762307131.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1762307131.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2025-11-04",
+      "periodo": "2025-10-31",
+      "accession": "0001065280-25-000414",
+      "principal": "xslF345X05/wk-form4_1762306667.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1762306667.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2025-11-04",
+      "periodo": "2025-11-03",
+      "accession": "0001065280-25-000412",
+      "principal": "xslF345X05/wk-form4_1762306574.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1762306574.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2025-11-04",
+      "periodo": "2025-11-03",
+      "accession": "0001065280-25-000411",
+      "principal": "xslF345X05/wk-form4_1762306566.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1762306566.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2025-11-04",
+      "periodo": "2025-11-03",
+      "accession": "0001082906-25-000009",
+      "principal": "xslF345X05/form4.xml",
+      "descripcion": "STATEMENT OF CHANGES IN BENEFICIAL OWNERSHIP OF SECURITIES",
+      "items": "",
+      "ficheros": [
+        "form4.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2025-10-02",
+      "periodo": "2025-10-01",
+      "accession": "0001065280-25-000402",
+      "principal": "xslF345X05/wk-form4_1759449933.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1759449933.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2025-10-02",
+      "periodo": "2025-10-01",
+      "accession": "0001065280-25-000401",
+      "principal": "xslF345X05/wk-form4_1759449927.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1759449927.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2025-10-02",
+      "periodo": "2025-10-01",
+      "accession": "0001065280-25-000400",
+      "principal": "xslF345X05/wk-form4_1759449919.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1759449919.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2025-10-02",
+      "periodo": "2025-10-01",
+      "accession": "0001065280-25-000399",
+      "principal": "xslF345X05/wk-form4_1759449911.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1759449911.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2025-10-02",
+      "periodo": "2025-10-01",
+      "accession": "0001065280-25-000398",
+      "principal": "xslF345X05/wk-form4_1759449903.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1759449903.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2025-10-02",
+      "periodo": "2025-10-01",
+      "accession": "0001065280-25-000397",
+      "principal": "xslF345X05/wk-form4_1759449895.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1759449895.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2025-10-02",
+      "periodo": "2025-10-01",
+      "accession": "0001065280-25-000396",
+      "principal": "xslF345X05/wk-form4_1759449889.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1759449889.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2025-10-02",
+      "periodo": "2025-10-01",
+      "accession": "0001065280-25-000395",
+      "principal": "xslF345X05/wk-form4_1759449881.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1759449881.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2025-10-02",
+      "periodo": "2025-10-01",
+      "accession": "0001065280-25-000394",
+      "principal": "xslF345X05/wk-form4_1759449875.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1759449875.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2025-10-02",
+      "periodo": "2025-10-01",
+      "accession": "0001065280-25-000393",
+      "principal": "xslF345X05/wk-form4_1759449867.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1759449867.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2025-10-02",
+      "periodo": "2025-10-01",
+      "accession": "0001065280-25-000392",
+      "principal": "xslF345X05/wk-form4_1759449861.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1759449861.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2025-10-02",
+      "periodo": "2025-10-01",
+      "accession": "0001065280-25-000391",
+      "principal": "xslF345X05/wk-form4_1759449853.xml",
+      "descripcion": "FORM 4",
+      "items": "",
+      "ficheros": [
+        "wk-form4_1759449853.xml"
+      ]
+    },
+    {
+      "form": "4",
+      "fecha": "2025-10-02",
+      "periodo": "2025-10-01",
+      "accession": "0001082906-25-000007",
+      "principal": "xslF345X05/form4.xml",
+      "descripcion": "STATEMENT OF CHANGES IN BENEFICIAL OWNERSHIP OF SECURITIES",
+      "items": "",
+      "ficheros": [
+        "form4.xml"
+      ]
+    }
+  ]
+}

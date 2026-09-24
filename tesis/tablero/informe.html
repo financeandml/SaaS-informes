@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Informe — Warrants &amp; Co.</title>
+<link rel="stylesheet" href="formulario.css">
+</head>
+<body data-pagina="informe">
+<header class="cabecera">
+  <div class="casa">Warrants &amp; Co.</div>
+  <div class="titulo"><span class="empresa" id="empresa">—</span> <span class="cik" id="cik"></span></div>
+  <button type="button" id="idioma" class="secundario" aria-label="Cambiar idioma">EN</button>
+</header>
+<nav id="pasos" class="pasos" aria-label="Pasos"></nav>
+<main class="ancho">
+  <section class="tarjeta">
+    <h2><span data-i18n="emision">Emisión del informe</span> <span class="apunte" id="huella"></span></h2>
+    <div id="banda"></div>
+    <ul id="pendientes" class="pendientes"></ul>
+    <div class="acciones">
+      <button type="button" id="emitir" data-i18n="emitir">Emitir informe</button>
+      <a id="pdf" class="boton secundario" hidden target="_blank" rel="noopener" data-i18n="abrir_pdf">Abrir el PDF</a>
+      <a id="anterior" class="boton secundario" data-i18n="anterior_analista">← Analista</a>
+      <span class="separador"></span>
+      <span id="mensaje"></span>
+    </div>
+  </section>
+
+  <section class="tarjeta" id="tarjeta-registro" hidden>
+    <h2><span data-i18n="registro_t">Registro de la emisión</span></h2>
+    <pre id="registro" class="registro" aria-live="polite"></pre>
+  </section>
+
+  <section class="tarjeta" id="tarjeta-vista" hidden>
+    <h2><span data-i18n="vista_t">Informe emitido</span> <span class="apunte" id="fichero-informe"></span></h2>
+    <iframe id="vista" title="Informe"></iframe>
+  </section>
+</main>
+<script src="saas.js"></script>
+</body>
+</html>

@@ -1,0 +1,45 @@
+Table of Contents
+Property and Equipment
+Property and equipment are carried at cost less accumulated depreciation. Depreciation is calculated using the straight-line method over the shorter of the
+estimated useful lives of the respective assets, generally up to 30 years, or the expected lease term for leasehold improvements, if applicable.
+Trade Receivables
+Trade receivables primarily consist of membership and advertising fees due to the Company. The Company evaluates the need for an allowance for credit
+losses based on historical collection trends, the financial condition of its payment partners, and external market factors.
+Revenue Recognition
+The Company's primary source of revenues is from monthly membership fees. Members are billed in advance of the start of their monthly membership
+and revenues are recognized ratably over each monthly membership period. Revenues are presented net of the taxes that are collected from members and
+remitted to governmental authorities. The Company is the principal in all its relationships where partners, including consumer electronics (“CE”)
+manufacturers, multichannel video programming distributors (“MVPDs”), mobile operators and internet service providers (“ISPs”), provide access to the
+service as the Company retains control over service delivery to its members. In circumstances in which the price that the member pays is established by a
+partner and there is no standalone price for the Netflix service (for instance, in a bundle), the net amount collected from the partner is recognized as revenue.
+The Company also earns revenue from advertisements presented on its streaming service, consumer products, live experiences and various other sources.
+Revenues earned from sources other than monthly membership fees were not a material component of revenues for the years ended December 31, 2025, 2024,
+and 2023. See Note 2 Revenue Recognition to the consolidated financial statements for further information regarding revenues.
+Sales and Marketing
+Sales and marketing expenses consist primarily of expenses for promotional activities such as digital and television advertising, and certain payments
+made to marketing and advertising sales partners. Our marketing partners include CE manufacturers, MVPDs, mobile operators, and ISPs. Our advertising
+sales partners include advertising technology providers and advertising agencies. Sales and marketing expenses also include payroll, stock-based compensation,
+facilities, and other related expenses for personnel that support advertising sales and marketing activities. Marketing expenses are expensed as incurred.
+Advertising expenses were $2,001 million, $1,779 million and $1,732 million for the years ended December 31, 2025, 2024 and 2023, respectively.
+Income Taxes
+The Company records a provision for income taxes for the anticipated tax consequences of the reported results of operations using the asset and liability
+method. Deferred income taxes are recognized by applying enacted statutory tax rates applicable to future years to differences between the financial statement
+carrying amounts of existing assets and liabilities and their respective tax bases as well as net operating loss and tax credit carryforwards. The effect on
+deferred tax assets and liabilities of a change in tax rates is recognized in income in the period that includes the enactment date. The measurement of deferred
+tax assets is reduced, if necessary, by a valuation allowance for any tax benefits for which future realization is uncertain. The Company accounts for the tax
+effects of global intangible low tax income as a current period expense.
+The Company does not recognize certain tax benefits from uncertain tax positions within the provision for income taxes. The Company may recognize a
+tax benefit only if it is more likely than not the tax position will be sustained on examination by the taxing authorities, based on the technical merits of the
+position. The tax benefits recognized in the financial statements from such positions are then measured based on the largest benefit that has a greater than 50%
+likelihood of being realized upon settlement. The Company recognizes interest and penalties related to uncertain tax positions in income tax expense. See Note
+11 Income Taxes to the consolidated financial statements for further information regarding income taxes.
+Foreign Currency
+The functional currency for the Company's subsidiaries is determined based on the primary economic environment in which the subsidiary operates. The
+Company translates the assets and liabilities of its non-U.S. dollar functional currency subsidiaries into U.S. dollars using exchange rates in effect at the end of
+each period. Revenues and expenses for these subsidiaries are translated using rates that approximate those in effect during the period. Gains and losses from
+these translations are recognized in cumulative translation adjustment included in “Accumulated other comprehensive income” in Stockholders’ equity on the
+Consolidated Balance Sheets.
+The Company remeasures monetary assets and liabilities that are not denominated in the functional currency at exchange rates in effect at the end of each
+period. Gains and losses from these remeasurements are recognized in “Interest and other income (expense)” in the Consolidated Statements of Operations.
+Foreign exchange losses were $123 million, $18 million, and $293 million for the years ended
+46

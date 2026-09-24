@@ -1,0 +1,35 @@
+Netflix, Inc.
+Consolidated Balance Sheets
+(unaudited)
+(in thousands)
+March 31, June 30, September 30, December 31, March 31, June 30,
+2025 2025 2025 2025 2026 2026
+Assets
+Current assets:
+Cash and cash equivalents $ 7.199.848 $ 8.177.405 $ 9.287.287 $ 9.033.681 $ 12.259.772 $ 9.099.232
+Short-term investments 1.171.142 213.115 37.105 28.678 28.678 28.678
+Other current assets 3.326.642 3.602.586 3.638.543 3.957.832 4.782.532 4.725.393
+Total current assets 11.697.632 11.993.106 12.962.935 13.020.191 17.070.982 13.853.303
+Content assets, net 32.040.839 32.089.394 32.639.879 32.778.392 33.376.295 33.837.573
+Property and equipment, net 1.644.346 1.743.566 1.837.889 2.004.350 2.147.829 2.398.848
+Other non-current assets 6.704.827 7.273.598 7.494.132 7.794.060 8.420.808 8.360.717
+Total assets $ 52.087.644 $ 53.099.664 $ 54.934.835 $ 55.596.993 $ 61.015.914 $ 58.450.441
+Liabilities and Stockholders' Equity
+Current liabilities:
+Current content liabilities $ 4.128.905 $ 4.091.770 $ 4.102.640 $ 4.084.854 $ 4.052.278 $ 3.866.522
+Accounts payable 614.489 632.718 793.233 900.612 894.681 814.551
+Accrued expenses and other liabilities 2.359.518 2.489.486 3.111.311 3.220.869 4.441.986 3.172.611
+Deferred revenue 1.609.726 1.728.361 1.724.675 1.775.730 1.743.448 1.797.456
+Short-term debt 1.005.881 - - 998.865 999.185 2.483.758
+Total current liabilities 9.718.519 8.942.335 9.731.859 10.980.930 12.131.578 12.134.898
+Non-current content liabilities 1.696.662 1.606.404 1.591.973 1.579.476 1.626.498 1.625.600
+Long-term debt 14.011.037 14.453.206 14.463.020 13.463.971 13.361.331 11.825.548
+Other non-current liabilities 2.633.353 3.145.820 3.193.948 2.957.128 2.770.108 2.712.343
+Total liabilities 28.059.571 28.147.765 28.980.800 28.981.505 29.889.515 28.298.389
+Stockholders' equity:
+Common stock 6.677.469 6.932.828 7.080.325 7.286.410 7.478.495 7.670.503
+Treasury stock at cost (16.754.929) (18.392.942) (20.270.631) (22.372.658) (23.681.974) (28.387.657)
+Accumulated other comprehensive income (loss) (85.735) (904.668) (719.256) (580.382) (235.031) (97.117)
+Retained earnings 34.191.268 37.316.681 39.863.597 42.282.118 47.564.909 50.966.323
+Total stockholders' equity 24.028.073 24.951.899 25.954.035 26.615.488 31.126.399 30.152.052
+Total liabilities and stockholders' equity $ 52.087.644 $ 53.099.664 $ 54.934.835 $ 55.596.993 $ 61.015.914 $ 58.450.441

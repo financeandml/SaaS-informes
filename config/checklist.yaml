@@ -1,0 +1,19 @@
+# checklist.yaml · Criterios por defecto del apartado 28.
+# auto = lo evalúa el sistema con evidencia · manual = el analista.
+# eliminatorio: un «no» impide «Comprar» salvo justificación escrita.
+criterios:
+  - {id: potencial, texto: "Potencial hasta el PO ≥ 15 %", tipo: auto, umbral: 0.15, eliminatorio: true}
+  - {id: recorrido_riesgo, texto: "Recorrido/riesgo ≥ 1,5", tipo: auto, umbral: 1.5, eliminatorio: true}
+  - {id: margen_seguridad, texto: "Margen de seguridad ≥ 15 %", tipo: auto, umbral: 0.15, eliminatorio: false}
+  - {id: datos_limpios, texto: "0 discrepancias de datos y 0 bloqueos de calidad", tipo: auto, eliminatorio: true}
+  - {id: roic_wacc, texto: "ROIC mediano de 5 años > WACC", tipo: auto, eliminatorio: false}
+  - {id: apalancamiento, texto: "Deuda neta / EBITDA ≤ 3,0x", tipo: auto, umbral: 3.0, eliminatorio: false}
+  - {id: liquidez, texto: "Volumen medio diario de 3 meses ≥ 5 M USD", tipo: auto, umbral: 5000000, eliminatorio: false}
+  - {id: evento, texto: "Sin resultados en los próximos 10 días hábiles, o riesgo asumido por escrito", tipo: auto, dias: 10, eliminatorio: false}
+  - {id: catalizador, texto: "Al menos un catalizador fechado dentro del horizonte", tipo: auto, eliminatorio: false}
+  - {id: cortos, texto: "Interés en corto < 10 % de las acciones", tipo: auto, umbral: 0.10, eliminatorio: false}
+  - {id: tamano, texto: "Tamaño × drawdown tolerado ≤ riesgo máximo por posición", tipo: auto, eliminatorio: true}
+  - {id: invalidacion, texto: "Invalidaciones medibles definidas antes de entrar", tipo: auto, eliminatorio: true}
+  - {id: variante, texto: "Visión propia distinta de lo que descuenta el precio (reverse DCF), en dos frases", tipo: manual, eliminatorio: true}
+riesgo_max_posicion: 0.01   # 1 % de la cartera
+tamano_max: 0.10            # 10 % de la cartera

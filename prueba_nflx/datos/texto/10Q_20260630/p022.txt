@@ -1,0 +1,91 @@
+Table of Contents
+Stock-Based Compensation
+Total stock-based compensation expense was $131 million and $272 million for the three and six months ended June 30, 2026, respectively, and $81
+million and $153 million for the three and six months ended June 30, 2025, respectively.
+Stock Repurchases
+In March 2021, the Company’s Board of Directors authorized a share repurchase program for the Company’s common stock with no expiration date. The
+Board subsequently approved additional repurchase authorizations in September 2023 and December 2024, and most recently in April 2026, authorized the
+repurchase of an additional $25 billion of the Company’s common stock. Stock repurchases may be effected through open market repurchases in compliance
+with Rule 10b-18 under the Exchange Act, including through the use of trading plans intended to qualify under Rule 10b5-1 under the Exchange Act, privately￾negotiated transactions, accelerated stock repurchase plans, block purchases, or other similar purchase techniques and in such amounts as management deems
+appropriate. The Company is not obligated to repurchase any specific number of shares, and the timing and actual number of shares repurchased will depend on
+a variety of factors, including the Company’s stock price, general economic, business and market conditions, and alternative investment opportunities. The
+Company may discontinue any repurchases of its common stock at any time without prior notice. During the three and six months ended June 30, 2026, the
+Company repurchased 52,934,688 and 66,431,786 shares of common stock, respectively, for an aggregate amount of $4.7 billion and $5.9 billion, respectively
+(excluding the 1% excise tax on stock repurchases as a result of the Inflation Reduction Act of 2022). As of June 30, 2026, $27.1 billion remains available for
+repurchases. Shares repurchased by the Company are accounted for when the transaction is settled. As of June 30, 2026, there were no unsettled share
+repurchases. Direct costs incurred to acquire the shares are included in the total cost of the shares.
+Accumulated Other Comprehensive Income (Loss)
+The following tables summarize the changes in accumulated balances of other comprehensive income (loss) for the three and six months ended June 30,
+2026:
+Foreign
+Currency
+Translation
+Adjustments
+Net
+Investment
+Hedge Gains
+(Losses)
+Change in
+Unrealized
+Gains (Losses)
+on Cash Flow
+Hedges
+Change in
+Unrealized
+Gains (Losses)
+on Excluded
+Component of
+Fair Value
+Hedges
+Change in
+Unrealized
+Gains (Losses)
+on AFS
+Securities
+Tax (Expense)
+Benefit Total
+(in thousands)
+Balances as of March 31, 2026 $ (274,555) $ (75,753) $ 127,554 $ (2,396) $ — $ (9,881) $ (235,031)
+Other comprehensive income (loss) before
+reclassifications (7,278) 14,083 120,138 (5,261) — (29,821) 91,861
+Amounts reclassified from accumulated other
+comprehensive income (loss) — — 48,521 11,384 — (13,852) 46,053
+Net change in accumulated other comprehensive
+income (loss) (7,278) 14,083 168,659 6,123 — (43,673) 137,914
+Balances as of June 30, 2026 $ (281,833) $ (61,670) $ 296,213 $ 3,727 $ — $ (53,554) $ (97,117)
+Foreign
+Currency
+Translation
+Adjustments
+Net Investment
+Hedge Gains
+(Losses)
+Change in
+Unrealized
+Gains (Losses)
+on Cash Flow
+Hedges
+Change in
+Unrealized
+Gains (Losses)
+on Excluded
+Component of
+Fair Value
+Hedges
+Change in
+Unrealized
+Gains (Losses)
+on AFS
+Securities
+Tax (Expense)
+Benefit Total
+(in thousands)
+Balances as of December 31, 2025 $ (193,615) $ (112,256) $ (389,289) $ (3,565) $ — $ 118,343 $ (580,382)
+Other comprehensive income (loss) before
+reclassifications (88,218) 50,586 505,368 (17,355) — (124,544) 325,837
+Amounts reclassified from accumulated other
+comprehensive income (loss) — — 180,134 24,647 — (47,353) 157,428
+Net change in accumulated other comprehensive
+income (loss) (88,218) 50,586 685,502 7,292 — (171,897) 483,265
+Balances as of June 30, 2026 $ (281,833) $ (61,670) $ 296,213 $ 3,727 $ — $ (53,554) $ (97,117)
+22

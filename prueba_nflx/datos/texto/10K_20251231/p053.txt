@@ -1,0 +1,67 @@
+Table of Contents
+4. Cash, Cash Equivalents, Restricted Cash, and Short-term Investments
+The Company classifies short-term investments, which consist of marketable securities with original maturities in excess of 90 days as available-for-sale
+(“AFS”). The Company does not buy and hold securities principally for the purpose of selling them in the near future. The Company’s policy is focused on the
+preservation of capital, liquidity and return. From time to time, the Company may sell certain securities but the objectives are generally not to generate profits
+on short-term differences in price.
+The following tables summarize the Company's cash, cash equivalents, restricted cash and short-term investments as of December 31, 2025 and 2024:
+As of December 31, 2025
+Amortized Cost
+Gross
+Unrealized
+Gains
+Gross
+Unrealized
+Losses
+Estimated Fair
+Value
+Cash and cash
+equivalents
+Short-term
+investments
+Other Current
+Assets
+Non-current
+Assets
+(in thousands)
+Cash $ 5,214,163 $ — $ — $ 5,214,163 $ 5,208,710 $ — $ 5,369 $ 84
+Level 1 securities:
+Money market funds 3,259,240 — — 3,259,240 3,259,180 — — 60
+Level 2 securities:
+Time Deposits 594,469 — — 594,469 565,791 28,678 — —
+$ 9,067,872 $ — $ — $ 9,067,872 $ 9,033,681 $ 28,678 $ 5,369 $ 144
+As of December 31, 2024
+Amortized Cost
+Gross
+Unrealized
+Gains
+Gross
+Unrealized
+Losses
+Estimated Fair
+Value
+Cash and cash
+equivalents
+Short-term
+investments
+Other Current
+Assets
+Non-current
+Assets
+(in thousands)
+Cash $ 4,866,753 $ — $ — $ 4,866,753 $ 4,864,207 $ — $ 2,472 $ 74
+Level 1 securities:
+Money market funds 2,676,314 — — 2,676,314 2,676,256 — — 58
+Level 2 securities:
+Time Deposits 301,374 — — 301,374 264,270 37,104 — —
+Government securities 1,738,642 3,260 1,741,902 — 1,741,902 — —
+$ 9,583,083 $ 3,260 $ — $ 9,586,343 $ 7,804,733 $ 1,779,006 $ 2,472 $ 132
+(1) The majority of the Company's time deposits are international deposits, which mature within one year.
+Other current assets and non-current assets primarily consist of restricted cash for deposits related to self-insurance. The fair value of AFS securities, cash
+equivalents and short-term investments included in the Level 2 category is based on observable inputs, such as quoted prices for similar assets at the
+measurement date; quoted prices in markets that are not active; or other inputs that are observable, either directly or indirectly.
+See Note 7 Debt and Note 8 Derivative Financial Instruments and Hedging Activities to the consolidated financial statements for further information
+regarding the fair value of the Company’s senior notes and derivative financial instruments.
+(1)
+(1)
+50

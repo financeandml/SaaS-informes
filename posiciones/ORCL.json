@@ -1,0 +1,28 @@
+{
+ "analista": "Sergio",
+ "fecha": "2026-09-22",
+ "posicion": {
+  "recomendacion": "comprar",
+  "precio_objetivo": 150,
+  "precio_entrada": 100,
+  "fecha_entrada": "2026-09-21",
+  "tamano": "200",
+  "horizonte": "5"
+ },
+ "tesis": {
+  "argumento": "",
+  "asunciones": [],
+  "horizonte": ""
+ },
+ "checklist": [],
+ "riesgo": {
+  "invalidacion": [],
+  "tamano_posicion": "",
+  "volatilidad": ""
+ },
+ "seguimiento": {
+  "kpis": [],
+  "fechas_revision": [],
+  "criterios_salida": []
+ }
+}

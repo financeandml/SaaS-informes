@@ -1,0 +1,49 @@
+Table of Contents
+Year Ended December 31,
+2025
+Revenues Cost of Revenues
+Interest and other
+income (expense)
+Provision for
+Income Taxes
+Total
+Reclassifications
+(in thousands)
+Gains (losses) on available-for-sale securities
+Amount of gains (losses) reclassified from AOCI $ — $ — $ 121 $ (23) $ 98
+Gains (losses) on derivatives in cash flow hedging relationship
+Foreign exchange contracts
+Amount of gains (losses) reclassified from AOCI (91,143) 1,437 — 20,744 (68,962)
+Gains (losses) on derivatives in fair value hedging relationship
+Foreign exchange contracts
+Amount excluded from assessment of effectiveness and
+recognized in earnings based on amortization approach — — (59,201) 13,776 (45,425)
+Total $ (91,143) $ 1,437 $ (59,080) $ 34,497 $ (114,289)
+Year Ended December 31,
+2024
+Revenues Cost of Revenues
+Interest and other
+income (expense)
+Provision for
+Income Taxes
+Total
+Reclassifications
+(in thousands)
+Gains (losses) on derivatives in cash flow hedging relationship
+Foreign exchange contracts
+Amount of gains (losses) reclassified from AOCI $ 124,010 $ 1,629 $ — $ (28,844) $ 96,795
+Gains (losses) on derivatives in fair value hedging relationship
+Foreign exchange contracts
+Amount excluded from assessment of effectiveness and
+recognized in earnings based on amortization approach — — (23,567) 5,410 (18,157)
+Total $ 124,010 $ 1,629 $ (23,567) $ (23,434) $ 78,638
+No amounts were reclassified from AOCI into the Consolidated Statements of Operations in the year ended December 31, 2023.
+11. Income Taxes
+Income before provision for income taxes was as follows:
+Year Ended December 31,
+2025 2024 2023
+(in thousands)
+United States $ 12,198,273 $ 9,101,391 $ 5,602,762
+Foreign 524,279 864,266 602,643
+Income before income taxes $ 12,722,552 $ 9,965,657 $ 6,205,405
+64

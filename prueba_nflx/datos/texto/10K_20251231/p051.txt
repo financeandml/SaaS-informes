@@ -1,0 +1,30 @@
+Table of Contents
+Consolidated Statements of Operations. Cash flows related to these derivative instruments are classified within “Net cash provided by operating activities” on
+the Consolidated Statements of Cash Flows.
+See Note 8 Derivative Financial Instruments and Hedging Activities to the consolidated financial statements for further information regarding the
+Company’s derivative and non-derivative financial instruments.
+Stock-Based Compensation
+The Company grants non-qualified stock options to its employees on a monthly basis. For certain executive officers, the Company grants restricted stock
+units (“RSUs”) and performance-based restricted stock units (“PSUs”). Stock-based compensation expense is based on the fair value of the stock awards at the
+grant date and is recognized, net of forfeitures, over the requisite service period. See Note 10 Stockholders' Equity to the consolidated financial statements for
+further information regarding stock-based compensation.
+2. Revenue Recognition
+The following table summarizes streaming revenues by region for the years ended December 31, 2025, 2024 and 2023. Total streaming revenues are
+inclusive of hedging gains (losses) of $(91) million and $124 million for the years ended December 31, 2025 and 2024, respectively. No hedging gains and
+losses were recognized in total streaming revenues for the year ended December 31, 2023. See Note 8 Derivative Financial Instruments and Hedging Activities
+for further information.
+Year Ended December 31,
+2025 2024 2023
+(in thousands)
+United States and Canada (UCAN) $ 19,957,152 $ 17,359,369 $ 14,873,783
+Europe, Middle East, and Africa (EMEA) 14,514,646 12,387,035 10,556,487
+Latin America (LATAM) 5,357,521 4,839,816 4,446,461
+Asia-Pacific (APAC) 5,353,717 4,414,746 3,763,727
+Total Streaming Revenues $ 45,183,036 $ 39,000,966 $ 33,640,458
+Deferred revenue consists of membership fees billed that have not been recognized, as well as gift and other prepaid memberships that have not been
+fully redeemed. As of December 31, 2025, total deferred revenue was $1,776 million, the vast majority of which was related to membership fees billed that are
+expected to be recognized as revenue within the next month. The remaining deferred revenue balance, which is related to gift cards and other prepaid
+memberships, will be recognized as revenue over the period of service after redemption, which is expected to occur over the next 12 months. Deferred revenue
+increased $255 million from $1,521 million as of December 31, 2024 to $1,776 million as of December 31, 2025. Deferred revenue balances may fluctuate due
+to the number of paid memberships and the price of our memberships.
+48

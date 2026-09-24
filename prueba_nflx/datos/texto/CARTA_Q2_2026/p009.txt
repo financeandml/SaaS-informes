@@ -1,0 +1,36 @@
+Netflix,	Inc.	
+Consolidated	Statements	of	Operations	
+(unaudited)	
+(in	thousands,	except	per	share	data)	
+Three	Months	Ended Six	Months	Ended
+June	30,
+2026
+March	31,
+2026
+June	30,
+2025
+June	30,
+2026
+June	30,
+2025
+Revenues $	 12,559,938	 $	 12,249,757	 $	 11,079,166	 $	 24,809,695	 $	 21,621,967	
+Cost	of	revenues 	 6,036,965	 	 5,888,238	 	 5,325,311	 	 11,925,203	 	 10,588,458	
+Sales	and	marketing 	 823,838	 	 842,217	 	 713,265	 	 1,666,055	 	 1,401,635	
+Technology	and	development 	 1,007,675	 	 959,696	 	 824,683	 	 1,967,371	 	 1,647,506	
+General	and	administrative 	 498,850	 	 602,609	 	 441,213	 	 1,101,459	 	 862,675	
+Operating	income 	 4,192,610	 	 3,956,997	 	 3,774,694	 	 8,149,607	 	 7,121,693	
+Other	income	(expense):
+Interest	expense 	 (175,685)	 	 (262,077)	 	 (182,649)	 	 (437,762)	 	 (366,821)	
+Interest	and	other	income	(expense) 	 51,661	 	 2,852,166	 	 39,630	 	 2,903,827	 	 90,529	
+Income	before	income	taxes 	 4,068,586	 	 6,547,086	 	 3,631,675	 	 10,615,672	 	 6,845,401	
+Provision	for	income	taxes 	 (667,172)	 	 (1,264,295)	 	 (506,262)	 	 (1,931,467)	 	 (829,637)	
+Net	income $	 3,401,414	 $	 5,282,791	 $	 3,125,413	 $	 8,684,205	 $	 6,015,764	
+Earnings	per	share*:
+Basic $	 0.81	 $	 1.25	 $	 0.74	 $	 2.06	 $	 1.41	
+Diluted $	 0.80	 $	 1.23	 $	 0.72	 $	 2.03	 $	 1.38	
+Weighted-average	shares	of	common	stock	outstanding*:
+Basic 	 4,189,303	 	 4,222,787	 	 4,252,112	 	 4,205,952	 	 4,262,347	
+Diluted 	 4,261,300	 	 4,298,437	 	 4,348,825	 	 4,279,776	 	 4,359,167	
+*	Share	and	per	share	amounts	have	been	retroactively	adjusted	to	reflect	the	ten-for-one	forward	stock	split	which	was	effected	on	November	14,	
+2025.
+9

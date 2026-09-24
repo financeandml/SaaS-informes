@@ -1,0 +1,44 @@
+Table of Contents
+As of December 31, 2025
+Gross Amount Not Offset in the
+Consolidated Balance Sheets
+Gross Amount
+Recognized in the
+Consolidated
+Balance Sheets
+Gross Amount
+Offset in the
+Consolidated
+Balance Sheets
+Net Amount
+Presented in the
+Consolidated
+Balance Sheets
+Financial
+Instruments
+Collateral
+Received and
+Posted Net Amount
+(in thousands)
+Derivative assets $ 285,276 $ — $ 285,276 $ (282,469) $ — $ 2,807
+Derivative liabilities 652,619 — 652,619 (282,469) — 370,150
+Ef ect of Derivative and Non-Derivative Instruments on Consolidated Financial Statements
+The pre-tax gains (losses) on the Company’s cash flow hedges, fair value hedges, and net investment hedges recognized in AOCI were as follows:
+Three Months Ended
+March 31,
+2026
+March 31,
+2025
+(in thousands)
+Cash flow hedges:
+Foreign exchange contracts
+Amount included in the assessment of effectiveness $ 385,230 $ (486,967)
+Fair value hedges:
+Foreign exchange contracts
+Amount excluded from the assessment of effectiveness (12,094) (18,031)
+Net investment hedges:
+Foreign currency-denominated debt
+Amount included in the assessment of effectiveness 36,503 (44,600)
+Total $ 409,639 $ (549,598)
+The gains (losses) on hedged items and derivative instruments recognized in the Consolidated Statement of Operations were as follows:
+16

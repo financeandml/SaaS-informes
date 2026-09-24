@@ -1,0 +1,34 @@
+Table of Contents
+Year Ended December 31,
+2025 2024 2023
+(in thousands)
+Cash flow hedges:
+Foreign exchange contracts
+Amount included in the assessment of effectiveness $ (1,393,364) $ 1,195,738 $ (155,730)
+Fair value hedges:
+Foreign exchange contracts
+Amount excluded from the assessment of effectiveness (71,999) (14,334) —
+Net investment hedges:
+Foreign currency-denominated debt
+Amount included in the assessment of effectiveness (144,656) 32,400 —
+Total $ (1,610,019) $ 1,213,804 $ (155,730)
+The gains (losses) on hedged items and derivative instruments recognized in the Consolidated Statement of Operations were as follows:
+Year Ended December 31,
+2025
+Revenues Cost of Revenues
+Interest and other
+income (expense)
+(in thousands)
+Total amounts presented in the Consolidated Statements of Operations $ 45,183,036 $ 23,275,329 $ 172,459
+Gains (losses) on derivatives in cash flow hedging relationship
+Foreign exchange contracts
+Amount of gains (losses) reclassified from AOCI (91,143) 1,437 —
+Gains (losses) on derivatives in fair value hedging relationship
+Foreign exchange contracts
+Hedged items — — (470,441)
+Derivatives designated as hedging instruments — — 481,416
+Amount excluded from assessment of effectiveness and recognized in earnings based on amortization
+approach — — (59,201)
+Losses on derivatives not designated as hedging instruments
+Foreign exchange contracts — — (97,865)
+58

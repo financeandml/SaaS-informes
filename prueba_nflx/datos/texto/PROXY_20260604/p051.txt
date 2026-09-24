@@ -1,0 +1,58 @@
+43 
+F/X Neutral Revenue and F/X Neutral Operating Margin are non-GAAP measures and are calculated as follows: 
+F/X Neutral Revenue(1) is calculated assuming foreign exchange rates had remained constant with foreign exchange rates from 
+each of the corresponding months of the prior-year period and excludes the impact of hedging gains or losses realized as 
+revenues. 
+F/X Neutral Operating Margin(1) is computed by dividing Adjusted Operating Profit by Adjusted Revenue. 
+• Adjusted Operating Profit is calculated as Adjusted Revenue less Adjusted Operating Expenses. Adjusted Operating Expenses 
+are calculated using foreign exchange rates as of the beginning of the fiscal year, excluding the foreign exchange impact on 
+content amortization as titles are amortized at a historical blended rate based on the timing of spend. 
+• Adjusted Revenue is calculated using foreign exchange rates as of the beginning of the fiscal year and excludes the impact of 
+hedging gains or losses realized as revenues from cash flow hedges entered into after January 1. 
+When setting the goals for F/X Neutral Revenue and F/X Neutral Operating Margin, the Compensation Committee considered 
+the Company’s business forecast for the year, the likelihood of a range of scenarios for F/X Neutral Revenue and F/X Neutral 
+Operating Margin and factors that were projected to have an impact, including fluctuations in memberships and scaling 
+advertising revenue. Based on these considerations, in the first quarter of 2025, the Compensation Committee set annual 
+performance goals at levels they considered appropriately rigorous for the year and required growth compared to the prior year.
+The table below shows the payout that could be earned at various performance achievements under the Bonus Program. Linear 
+interpolation is used for achievement between target and maximum, mid-point and target, and threshold and mid-point, for the 
+F/X Neutral Revenue metric, and achievement between target and maximum, mid-point and target, and threshold and 
+mid-point, for the F/X Neutral Operating Margin metric. Achievement below the threshold levels would result in no payout, and 
+achievement at or above the maximum levels was capped at 200% of target. 
+In January 2026, the Compensation Committee certified the achievement of F/X Neutral Revenue at approximately 
+$44.53 billion, which exceeded our target, resulting in a 138.00% payout. F/X Neutral Operating Margin was certified at 
+approximately 28.10%, which exceeded our target, resulting in a 106.57% payout. This resulted in a total payout of 
+approximately 117.57% of the target bonus amounts, determined using a 35% weighting for F/X Neutral Revenue and a 65% 
+weighting for F/X Neutral Operating Margin, as follows: 
+Threshold
+(50% earned)
+Mid-Point
+(75% earned)
+Target
+(100% earned)
+Maximum
+(200% earned)
+Total
+Payout
+Payout 
+Percentage
+F/X Neutral 
+Revenue $41.96 B $42.67 B $44.10 B $45.24 B
+$44.53 B
+Actual Achievement
+138.00%
+17.45% 20.94% 27.92% 30.71%
+F/X Neutral 
+Operating 
+Margin
+106.57%
+28.10%
+Actual Achievement
+35%
+65%
+(1) Revenues denominated in Argentine peso (“ARS”) were excluded from the 2025 targets for F/X Neutral Revenue and Adjusted Revenue (which is an input to 
+the calculation of F/X Neutral Operating Margin) due to the unusual and material adverse F/X impact from ARS which resulted from: (1) price increases in 
+Argentina due to local inflation, and (2) the significant devaluation of ARS relative to the U.S. dollar. For the avoidance of doubt, Adjusted Operating Expenses 
+(which is an input to the calculation of F/X Neutral Operating Margin) includes expenses transacted in Argentine pesos and content cash flow hedge impacts. 
+However, these expense amounts were not expected to have, and did not have, a material impact on either of the 2025 Bonus Program performance metrics. 
+COMPENSATION DISCUSSION AND ANALYSIS | NETFLIX 2026 PROXY STATEMENT 

@@ -1,0 +1,32 @@
+EXHIBIT 10.2
+(hh) “Restricted Stock Unit” or “RSU” means a bookkeeping entry representing an amount equal to the Fair Market Value of one Share,
+granted pursuant to Section 8. Each Restricted Stock Unit represents an unfunded and unsecured obligation of the Company.
+(ii) “Return on Equity” means the percentage equal to the Company’s after-tax Profit divided by average stockholder’s equity.
+(jj) “Revenue” means the Company’s net revenues generated from third parties.
+(kk) “Rule 16b-3” means Rule 16b-3 of the Exchange Act or any successor to Rule 16b-3, as in effect when discretion is being exercised
+with respect to the Plan.
+(ll) “Section 16(b)” means Section 16(b) of the Exchange Act.
+(mm) “Service Provider” means an Employee, Director or Consultant.
+(nn) “Share” means a share of the Common Stock, as adjusted in accordance with Section 13 of the Plan.
+(oo) “Stock Appreciation Right” means an Award, granted alone or in connection with an Option, that pursuant to Section 9 is designated as
+a Stock Appreciation Right.
+(pp) “Subscriber Metrics” means the objective and measurable goals approved by the Administrator that relate to the acquisition, retention
+and/or satisfaction of subscribers.
+(qq) “Subsidiary” means a “subsidiary corporation”, whether now or hereafter existing, as defined in Section 424(f) of the Code.
+(rr) “Tax Obligations” means tax and social insurance liability obligations and requirements in connection with the Awards, including,
+without limitation, (a) all federal, state, and local taxes (including the Participant’s FICA obligation) that are required to be withheld by the Company or the
+employing Subsidiary, (b) the Participant’s and, to the extent required by the Company (or the employing Subsidiary), the Company’s (or the employing
+Subsidiary’s) fringe benefit tax liability, if any, associated with the grant, vesting, or sale of Shares, and (c) any other Company (or employing Subsidiary) taxes
+the responsibility for which the Participant has agreed to bear with respect to such Award (or exercise thereof or issuance of Shares thereunder).
+(ss) “Total Shareholder Return” means the total return (change in share price plus reinvestment of any dividends) of a Share.
+3. Stock Subject to the Plan.
+(a) Stock Subject to the Plan. Subject to the provisions of Section 13 of the Plan, the maximum aggregate number of Shares that may be
+issued under the Plan, as adjusted pursuant to Section 13 of the Plan to reflect the 10-for-1 stock split of the Common Stock in 2025, is 57 million Shares. The
+Shares may be authorized, but unissued, or reacquired Common Stock. Any Shares subject to an Award of Restricted Stock or Restricted Stock Units will be
+counted against the numerical limits of this Section 3 as 1.9 Shares for every one (1) Share subject to the Award. If Shares acquired pursuant to an Award of
+Restricted Stock or Restricted Stock Units are forfeited to the Company or repurchased by the Company and otherwise would return to the Plan pursuant to
+Section 3(c), 1.9 times the number of Shares so forfeited or repurchased will return to the Plan and again will become available for issuance.
+(b) Lapsed Awards. If an Award expires or becomes unexercisable without having been exercised in full, or, with respect to Restricted
+Stock or Restricted Stock Units, is forfeited to the Company or repurchased by the Company, the unpurchased Shares (or for Awards other than Options and
+Stock Appreciation
+-4-

@@ -1,0 +1,38 @@
+(D) Notwithstanding anything in Section 14(c) to the contrary, an Award that vests, is earned or paid-out upon the
+satisfaction of one or more Performance Goals will not be considered assumed if the Company or its Successor modifies any of such Performance Goals
+without the Participant's consent; provided, however, a modification to such Performance Goals only to reflect the Successor's post-Change in Control
+corporate structure will not be deemed to invalidate an otherwise valid Award assumption.
+(iii) Termination, Amendment and Modifications of Change in Control Provisions. Notwithstanding any other provision of the
+Plan or any Award Agreement provision, the provisions of Section 14(c) of the Plan may not be terminated, amended, or modified in any manner that adversely
+affects any then-outstanding Award or Award Participant without the prior written consent of the Participant, unless for the purpose of complying with
+Applicable Laws and regulations.
+(iv) Limitation on Change in Control Payments. Notwithstanding anything in Section 14(c) of the Plan to the contrary, if, with
+respect to a Participant, the acceleration of the vesting of an Award or the payment of cash in exchange for all or part of the Award (i) could be deemed a
+"parachute payment" within the meaning of Section 280G of the Code and (ii) but for Section 14(c) of the Plan, would be subject to an Excise Tax, then the
+"payments" to such Participant pursuant to Section 14(c) of the Plan shall be either (a) delivered in full, or (b) delivered as to such lesser extent which would
+result in no portion of such benefits being subject to the Excise Tax; whichever of the foregoing amounts, taking into account the applicable federal, state and
+local income taxes and the Excise Tax, results in the receipt by the Participant on an after-tax basis, of the greatest amount of benefits, notwithstanding that all
+or some portion of such benefits may be taxable under Section 4999 of the Code. Unless the Company and the Participant otherwise agree in writing, any
+determination required under this Section 14(c)(iv) shall be made in writing in good faith by an accounting firm chosen by the Administrator. If a reduction in
+benefits is required only under the Plan, the reduction will apply to the Participant's "payments" under Section 14(c) of the Plan, as applicable, provided further
+than such payments will be reduced (or acceleration of vesting eliminated) in the following order: the order specified by the Participant's Award Agreement, the
+order specified by any other written agreement between the Participant and the Company, the vesting acceleration of Options or Stock Appreciation Rights,
+then the vesting acceleration of equity awards other than Options or Stock Appreciation Rights. In the event that acceleration of vesting of Options, Stock
+Appreciation Rights or other equity awards is to be reduced, such acceleration of vesting shall be cancelled in the reverse order of the date of grant for the
+Participant's Options, Stock Appreciation Rights or other equity awards, as applicable. If two or more Options, Stock Appreciation Rights or other equity
+awards are granted on the same day, the Options, Stock Appreciation Rights or other equity awards, as applicable, will be reduced on a pro-rata basis. For
+purposes of making the calculations required by this Section 14(c)(iv), the accountant selected by the Administrator may make reasonable assumptions and
+approximations concerning applicable taxes and may rely on reasonable, good faith interpretations concerning the application of Sections 280G and 4999 of the
+Code. The Company and the Participant shall furnish to such accountants such information and documents as the accountants may reasonably request in order
+to make a determination under this Section 14(c)(iv).
+15. Tax Withholding.
+(a) Withholding Requirements. Prior to the delivery of any Shares or cash pursuant to an Award (or exercise thereof), the Company will
+have the power and the right to deduct or withhold, or require a Participant to remit to the Company, an amount sufficient to satisfy all Tax Obligations with
+respect to such Award (or exercise thereof).
+(b) Withholding Arrangements. The Administrator, in its sole discretion and pursuant to such procedures as it may specify from time to
+time, may determine to permit the satisfaction of such withholding obligations for such Tax Obligations, in whole or in part, by any of the following methods
+(without limitation): (a) causing the Participant to tender a cash payment, (b) having the Company withhold otherwise deliverable cash or Shares having a Fair
+Market Value equal to the amount required to be withheld pursuant to the Tax Obligations but not to exceed the sum of all statutory maximum rates applicable
+in the Participant's jurisdiction(s) (provided, in the case of a Participant who is an "officer" of the Company as defined in Rule 16a-1(f) promulgated pursuant
+to the Exchange Act, or any successor law (or any successor rule), that any withholding amount that exceeds the amount
+-15-

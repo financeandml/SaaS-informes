@@ -1,0 +1,51 @@
+Table of Contents
+Three Months Ended
+March 31,
+2026
+March 31,
+2025
+(in thousands)
+United States and Canada (UCAN) $ 5,245,298 $ 4,617,098
+Europe, Middle East, and Africa (EMEA) 3,998,419 3,404,676
+Latin America (LATAM) 1,497,058 1,261,934
+Asia-Pacific (APAC) 1,508,982 1,259,093
+Total Revenues $ 12,249,757 $ 10,542,801
+Deferred revenue consists primarily of membership fees billed that have not been recognized, as well as gift cards and other prepaid memberships that
+have not been fully redeemed. As of March 31, 2026, total deferred revenue was $1,743 million, the vast majority of which was related to membership fees
+billed that are expected to be recognized as revenue within the next month. Deferred revenue balances related to gift cards and other prepaid memberships will
+be recognized as revenue over the period of service after redemption, which is expected to occur over the next 12 months. Deferred revenue decreased $32
+million from $1,776 million as of December 31, 2025 to $1,743 million as of March 31, 2026. Deferred revenue balances may fluctuate due to the number of
+paid memberships and the price of our memberships.
+3. Earnings per Share
+Basic earnings per share is computed using the weighted-average number of outstanding shares of common stock during the period. Diluted earnings per
+share is computed using the weighted-average number of outstanding shares of common stock and, when dilutive, potential outstanding shares of common
+stock during the period. Potential outstanding shares of common stock are calculated using the treasury-stock method and consist of incremental shares issuable
+upon the assumed exercise of stock options and vesting of time-based and performance-based restricted stock units. The computation of earnings per share is as
+follows:
+Three Months Ended
+March 31,
+2026
+March 31,
+2025
+(in thousands, except per share data)
+Basic earnings per share:
+Net income $ 5,282,791 $ 2,890,351
+Shares used in computation:
+Weighted-average shares of common stock outstanding 4,222,787 4,272,695
+Basic earnings per share $ 1.25 $ 0.68
+Diluted earnings per share:
+Net income $ 5,282,791 $ 2,890,351
+Shares used in computation:
+Weighted-average shares of common stock outstanding 4,222,787 4,272,695
+Effect of dilutive stock-based awards 75,650 96,928
+Weighted-average number of shares 4,298,437 4,369,623
+Diluted earnings per share $ 1.23 $ 0.66
+The following table summarizes the potential shares of common stock excluded from the diluted calculation as their inclusion would have been anti￾dilutive:
+Three Months Ended
+March 31,
+2026
+March 31,
+2025
+(in thousands)
+Stock-based awards 5,212 362
+9

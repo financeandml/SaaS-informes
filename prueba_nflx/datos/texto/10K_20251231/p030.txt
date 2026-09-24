@@ -1,0 +1,45 @@
+Table of Contents
+Other Planned Uses of Cash and Debt Capital
+On December 4, 2025, we entered into a definitive agreement and plan of merger with WBD to acquire WBD's streaming and studios businesses,
+including its film and television studios, HBO Max and HBO, which was amended and restated by the parties thereto on January 19, 2026 (as so amended and
+restated, the “Amended and Restated Merger Agreement”). WBD is a leading global media and entertainment company and will separate its Global Linear
+Networks business, Discovery Global, into a new publicly-traded company prior to the closing of the WBD transaction. Under the terms of the Amended and
+Restated Merger Agreement, each WBD stockholder will receive $27.75 in cash (as may be adjusted in accordance with the terms of the Amended and
+Restated Merger Agreement) for each share of WBD common stock outstanding as of immediately prior to the closing of the WBD transaction, for a total
+equity value of approximately $72.0 billion and an enterprise value of approximately $82.7 billion (in each case, as of December 4, 2025). The total equity
+value and enterprise value of the WBD transaction may fluctuate based on WBD's capitalization as of the closing of the WBD transaction. We expect the WBD
+transaction to close in 12-18 months from December 4, 2025, subject to receipt of required regulatory approvals, approval of WBD stockholders, the
+consummation of the separation and distribution of Discovery Global and other customary closing conditions. See Note 6 Acquisitions and Note 9
+Commitments and Contingencies for further information.
+Cash Flows
+The following table summarizes our cash flows:
+Year Ended December 31, Change
+2025 2024 2023 2025 vs. 2024
+(in thousands)
+Net cash provided by operating activities $ 10,149,273 $ 7,361,364 $ 7,274,301 $ 2,787,909 38 %
+Net cash provided by (used in) investing activities 1,041,688 (2,181,784) 541,751 3,223,472 148 %
+Net cash used in financing activities (10,345,623) (4,074,427) (5,950,803) 6,271,196 154 %
+Net cash provided by operating activities for the year ended December 31, 2025 increased $2,788 million as compared to the year ended December 31,
+2024, primarily driven by a $2,270 million or 26% increase in net income and a $1,646 million increase in adjustments for non-cash expenses, partially offset
+by a $705 million increase in payments for content assets and $423 million in unfavorable changes in working capital.
+Net cash provided by (used in) investing activities for the year ended December 31, 2025 increased $3,223 million as compared to the year ended
+December 31, 2024, primarily due to net cash inflows of $1,747 million from maturities, sales and purchases of investments in the year ended December 31,
+2025 as compared to cash outflows of $1,742 million from purchases of investments in the corresponding period in 2024, partially offset by a $249 million
+increase in purchases of property and equipment.
+Net cash used in financing activities for the year ended December 31, 2025 increased $6,271 million as compared to the year ended December 31, 2024,
+primarily driven by changes in cash flows related to the issuance and repayment of debt. The increase in financing cash outflows was primarily driven by no
+proceeds from the issuance of debt in the year ended December 31, 2025, as compared to proceeds from the issuance of debt of $1,794 million, in the
+corresponding period in 2024, coupled with a $1,433 million increase in repayments of debt. In addition, repurchases of common stock increased $2,863
+million in the year ended December 31, 2025 as compared to the corresponding period in 2024.
+Indemnifications
+The information set forth under Note 9 Commitments and Contingencies in the accompanying notes to our consolidated financial statements included in
+Part II, Item 8, “Financial Statements and Supplementary Data” of this Annual Report on Form 10-K is incorporated herein by reference.
+Critical Accounting Estimates
+The preparation of consolidated financial statements in conformity with accounting principles generally accepted in the United States of America requires
+management to make estimates and assumptions that affect the reported amounts of assets and liabilities, disclosures of contingent assets and liabilities at the
+date of the financial statements, and the reported amounts of revenues and expenses during the reported periods. The Securities and Exchange Commission
+(“SEC”) has defined a company’s critical accounting policies as the ones that are most important to the portrayal of a company’s financial condition and results
+of operations, and which require a company to make its most difficult and subjective judgments. Based on this definition, we have identified the critical
+accounting policies and judgments addressed below. We base our estimates on historical experience and on various other assumptions that we believe to be
+reasonable under the circumstances. Actual results may differ from these estimates.
+27

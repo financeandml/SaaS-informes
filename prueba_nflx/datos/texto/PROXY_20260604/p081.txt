@@ -1,0 +1,46 @@
+73 
+Proposal 5 
+In accordance with SEC rules, we have set forth below a stockholder proposal, along with the supporting statement of the 
+stockholder proponent, for which we and our Board accept no responsibility. The stockholder proposal is required to be voted 
+upon at our Annual Meeting only if properly presented at our Annual Meeting. As explained below, our Board unanimously 
+recommends that you vote “AGAINST” the stockholder proposal. 
+National Center for Public Policy Research, 2005 Massachusetts Ave., NW, Washington, DC 20036, the beneficial owner of at 
+least $2,000 of the Company’s common stock for at least three years on the date the proposal was submitted, has notified the 
+Company of its intent to present the following proposal at the Annual Meeting. 
+ESG ROI Report 
+Resolved: Shareholders request that the Board of Directors publish a report, at reasonable expense and excluding proprietary 
+information, disclosing the extent to which the Environmental, Social, and Governance (ESG) investments identified in the 2024 
+ESG Report were authorized and are maintained based on Net Present Value (NPV) and Return on Investment (ROI) calculations. 
+Supporting Statement: 
+Netflix operates in a capital-intensive environment where efficient allocation of shareholder resources is paramount. However, 
+there are reasons to be concerned that capital is being deployed toward ESG initiatives without demonstrated adherence to the 
+financial return metrics required of other business units. 
+The 2024 ESG Report demonstrates that management understands the mechanism of financial efficiency.1 The Company 
+explicitly notes its strategy of identifying” the efficiency improvements with the highest return on investment for energy used in 
+our offices and studios.” This acknowledges that ROI analysis is both feasible and appropriate for ESG-related expenditures. 
+However, significant gaps remain, as this rigorous financial lens appears to be applied selectively or restrictively, leaving 
+shareholders unassured that the Company’s broader ESG portfolio is fully informed by financial opportunity costs. 
+Examples where capital allocation may be decoupled from financial return include: 
+1. Sustainable Aviation Buyers Alliance (SABA): The Company is a co-founder of SABA, participating in a collective 
+commitment of nearly $200 million to purchase Sustainable Aviation Fuel (SAF) certificates. The Report states the goal 
+is to “send market signals” to producers, but subsidizing a nascent market to send signals sounds like an economic 
+policy action not a corporate investment strategy. There is apparently no evidence this premium expenditure was 
+authorized based on an NPV calculation justifying the cost against standard procurement. 
+2. Fund for Creative Equity: This initiative represents a $100 million commitment, with approximately $57 million 
+invested by the end of 2024. Success is reported strictly through non-financial metrics, such as “25k+ people 
+supported” but shareholders have apparently been provided no data demonstrating that this $100 million outflow meets 
+an internal hurdle rate or generates a measurable financial return through recruitment savings or accretive content 
+revenue. 
+3. Operational Efficiency Investments: While the Company references “return on investment,” it qualifies this metric as 
+applying to “energy used.” This phrasing suggests a siloed capital bucket where energy projects compete only against 
+other energy projects, rather than competing for capital against high-yield core business opportunities. If these 
+investments do not meet the enterprise-wide cost of capital, they may represent a destruction of shareholder value 
+despite being “efficient” relative to other energy options. 
+4. “Matching” Emissions via Carbon Credits: The Company purchases and retires millions of tons of carbon credits 
+annually to “match” emissions. Unlike an investment that generates cash flow, this is a recurring expense that purchases 
+an asset immediately retired for zero financial gain. Based on the report, shareholders are left unaware if management 
+has calculated the compound opportunity cost of these funds had they been invested in profitable operations rather 
+than retired assets. 
+We urge a vote FOR this proposal. 
+1 https://s22.q4cdn.com/959853165/files/doc_downloads/2025/6/2024-Netflix-Environmental-Social-Governance-Report.pdf 
+STOCKHOLDER PROPOSALS | NETFLIX 2026 PROXY STATEMENT 

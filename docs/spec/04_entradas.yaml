@@ -1,0 +1,270 @@
+# 04_entradas.yaml · Catálogo ejecutable de entradas. El asistente web se genera desde aquí;
+# motor y plantillas leen por id. Sustituye al formulario actual (portada + 33–36).
+# tipo: texto|numero|pct|fecha|enum|bool|lista|evidencia|ref|serie|escenarios|archivo|solo_lectura|accion
+# oblig: true | false | "condición" · prop: propuesta del sistema (el analista confirma) · val: validación
+convenciones:
+  evidencia: "Hecho id o cita {doc, pag, texto} verificada (03 §6)"
+  palabras: "rango de palabras; el linter comprueba además que toda cifra del texto sea un Hecho"
+  persistencia: "tesis/<TICKER>/<AAAA-MM-DD>/entradas.json, versionado; al emitir se guarda su huella"
+  actualizacion: "un informe nuevo del mismo valor precarga el anterior y marca todo «revisar»"
+  duplicados: "horizonte y tamaño se piden una sola vez"
+
+pasos:
+  - paso: "1 · Metadatos y clasificación"
+    campos:
+      - {id: meta.analista, tipo: texto, oblig: true}
+      - {id: meta.fecha_informe, tipo: fecha, oblig: true, prop: "hoy"}
+      - {id: meta.fecha_valoracion, tipo: fecha, oblig: true, prop: "último cierre hábil ≤ fecha_informe", val: "sesión con cierre oficial Nasdaq"}
+      - {id: meta.tipo, tipo: enum, valores: [inicio_cobertura, actualizacion], oblig: true}
+      - {id: meta.nombre_presentacion, tipo: texto, oblig: true, prop: "portada del 10-K normalizada", val: "sin sufijos de estado (/DE) ni «Common Stock»"}
+      - {id: meta.sector, tipo: enum, valores: "paquetes de 05 §2", oblig: true, prop: "SIC → paquete (config/sectores.yaml)", val: "financieras, REIT y biotech sin ingresos → bloqueo v1"}
+
+  - paso: "2 · Documentos y verificación (03)"
+    campos:
+      - {id: docs.checklist, tipo: lista, oblig: "todos los obligatorios verificados"}
+      - {id: docs.sin_call, tipo: bool, oblig: false, val: "si true, motivo obligatorio"}
+      - {id: verif.discrepancias, tipo: lista, oblig: "0 abiertas"}
+      - {id: verif.solo_documento_ok, tipo: bool, oblig: true}
+
+  - paso: "3 · Tesis y pilares (2, 3)"
+    campos:
+      - {id: tesis.resumen, tipo: texto, palabras: "60-120", oblig: true}
+      - {id: tesis.por_que_ahora, tipo: texto, palabras: "20-60", oblig: true}
+      - {id: tesis.vision_vs_mercado, tipo: texto, palabras: "30-80", oblig: true, ayuda: "contrástala con el reverse DCF (18)"}
+      - id: pilares
+        tipo: lista
+        n: 5
+        campos:
+          - {id: titulo, tipo: texto, palabras: "3-10"}
+          - {id: argumento, tipo: texto, palabras: "40-90"}
+          - {id: evidencias, tipo: evidencia, min: 2}
+          - {id: kpi, tipo: ref, a: pos.kpis}
+          - {id: riesgo_1a, tipo: ref, a: "epígrafes del Item 1A"}
+          - {id: catalizador, tipo: ref, a: catalizadores, oblig: false}
+
+  - paso: "4 · Perfil, equipo y catalizadores (4–7)"
+    campos:
+      - {id: perfil.descripcion, tipo: texto, palabras: "80-200", oblig: true, prop: "tarjetas del Item 1"}
+      - {id: perfil.segmentos_ok, tipo: bool, oblig: true, ayuda: "confirma el cuadro de segmentos XBRL o anota diferencias"}
+      - {id: perfil.fundacion, tipo: numero, oblig: true, prop: "búsqueda en el 10-K", val: "con evidencia"}
+      - {id: perfil.empleados, tipo: numero, oblig: true, prop: "10-K, Human Capital", val: "con evidencia y fecha"}
+      - id: equipo.track_record
+        tipo: lista
+        min: 2
+        ayuda: "mínimo CEO y CFO"
+        campos:
+          - {id: persona, tipo: ref, a: ejecutivos}
+          - {id: juicio, tipo: enum, valores: [positivo, mixto, negativo]}
+          - {id: texto, tipo: texto, palabras: "20-60"}
+          - {id: evidencias, tipo: evidencia, min: 1}
+      - {id: equipo.asignacion_capital, tipo: texto, palabras: "30-80", oblig: true, prop: "recompras, dividendos y adquisiciones de 5 años (10)"}
+      - id: catalizadores
+        tipo: lista
+        min: 3
+        campos:
+          - {id: fecha, tipo: texto, val: "AAAA-MM-DD o AAAA-Tn, futura"}
+          - {id: evento, tipo: texto, palabras: "3-20"}
+          - {id: tipo, tipo: enum, valores: [resultados, producto, regulatorio, corporativo, macro]}
+          - {id: pilar, tipo: ref, a: pilares}
+          - {id: impacto, tipo: enum, valores: [positivo, negativo]}
+          - {id: probabilidad, tipo: pct}
+          - {id: evidencia, tipo: evidencia, min: 1}
+      - {id: direccion.citas, tipo: evidencia, min: 2, max: 5, oblig: "si hay call", prop: "tarjetas de la transcripción"}
+
+  - paso: "5 · Mercado, competencia y moat (21–23)"
+    campos:
+      - id: mercado.cifras
+        tipo: lista
+        min: 1
+        val: "al menos un TAM; si no se aporta SOM, SOM = ingresos verificados"
+        campos:
+          - {id: etiqueta, tipo: texto}
+          - {id: clase, tipo: enum, valores: [TAM, SAM, SOM]}
+          - {id: valor, tipo: numero}
+          - {id: unidad, tipo: texto}
+          - {id: anio, tipo: numero}
+          - {id: metodo, tipo: enum, valores: [top_down, bottom_up, declarado_compania]}
+          - {id: evidencia, tipo: evidencia, min: 1}
+      - id: competencia.competidores
+        tipo: lista
+        min: 3
+        campos:
+          - {id: nombre, tipo: texto}
+          - {id: ticker, tipo: texto, oblig: false}
+          - {id: por_que, tipo: texto, palabras: "5-25"}
+          - {id: cuota, tipo: pct, oblig: false, val: "con evidencia"}
+      - id: comparables
+        tipo: lista
+        min: 3
+        max: 10
+        val: "v1: emisores con 10-K en USD; cifras con más antigüedad que umbrales.comparables_antiguedad_max_meses o en otra moneda → fuera de medianas y marcadas"
+        campos:
+          - {id: ticker, tipo: texto}
+          - {id: justificacion, tipo: texto, palabras: "5-25"}
+          - {id: usar_en_multiplos, tipo: bool}
+      - id: moat.fuentes
+        tipo: lista
+        min: 1
+        campos:
+          - {id: tipo, tipo: enum, valores: [efectos_de_red, costes_de_cambio, intangibles, ventaja_de_costes, escala_eficiente, ninguno]}
+          - {id: evidencias, tipo: evidencia, min: 1}
+          - {id: durabilidad_anios, tipo: numero}
+          - {id: tendencia, tipo: enum, valores: [se_amplia, estable, se_estrecha]}
+      - {id: moat.amenazas, tipo: texto, palabras: "20-80", oblig: true}
+
+  - paso: "6 · Riesgos, bear case e historial (24–26)"
+    campos:
+      - id: riesgos.top
+        tipo: lista
+        n: 5
+        campos:
+          - {id: origen, tipo: ref, a: "epígrafe del Item 1A o riesgo propio con evidencia"}
+          - {id: familia, tipo: enum, valores: [regulatorio, financiero, competitivo, ejecucion]}
+          - {id: probabilidad, tipo: numero, rango: "1-5"}
+          - {id: impacto, tipo: numero, rango: "1-5"}
+          - {id: mitigante, tipo: texto, palabras: "5-40"}
+          - {id: senal, tipo: ref, a: pos.kpis}
+      - id: bear.disparadores
+        tipo: lista
+        min: 3
+        campos:
+          - {id: descripcion, tipo: texto, palabras: "5-30"}
+          - {id: metrica, tipo: texto}
+          - {id: umbral, tipo: numero}
+          - {id: plazo, tipo: texto}
+          - {id: driver, tipo: ref, a: "esc.pesimista.*"}
+      - id: historial.guia_manual
+        tipo: lista
+        oblig: "solo trimestres sin guía detectada"
+        campos:
+          - {id: periodo, tipo: texto}
+          - {id: metrica, tipo: texto}
+          - {id: bajo, tipo: numero}
+          - {id: alto, tipo: numero}
+          - {id: evidencia, tipo: evidencia, min: 1}
+      - {id: historial.causas, tipo: texto, palabras: "30-150", oblig: "si algún desvío frente a guía o consenso supera umbrales.fallo_guia_obliga_causas"}
+
+  - paso: "7 · Valoración (12–20; fórmulas en 05)"
+    campos:
+      - {id: val.anio_base, tipo: enum, valores: [ultimo_ejercicio, ultimos_12_meses], prop: "LTM si han pasado ≥ 2 trimestres desde el cierre"}
+      - {id: val.periodo_explicito, tipo: numero, rango: "5-15", prop: "paquete sectorial"}
+      - {id: val.mitad_de_anio, tipo: bool, prop: true}
+      - {id: val.horizonte_meses, tipo: numero, rango: "6-36", prop: "umbrales.horizonte_meses_defecto", nota: "único horizonte del informe (portada, 20, 27)"}
+      - id: val.normalizaciones
+        tipo: lista
+        oblig: false
+        campos:
+          - {id: concepto, tipo: texto}
+          - {id: importe, tipo: numero}
+          - {id: periodo, tipo: texto}
+          - {id: linea, tipo: ref, a: "línea de 8–10"}
+          - {id: tratamiento, tipo: enum, valores: [excluir_de_base, no_recurrente_en_caja]}
+          - {id: evidencia, tipo: evidencia, min: 1}
+      - {id: val.sbc, tipo: enum, valores: [coste_de_caja, dilucion], prop: coste_de_caja}
+      - {id: val.arrendamientos, tipo: enum, valores: [fuera_de_deuda, deuda], prop: fuera_de_deuda}
+      - id: val.ajustes_puente
+        tipo: lista
+        oblig: false
+        campos:
+          - {id: concepto, tipo: enum, valores: [minoritarios, preferentes, asociadas, pensiones, litigios, otros]}
+          - {id: importe, tipo: numero}
+          - {id: evidencia, tipo: evidencia, min: 1}
+      - {id: wacc.erp, tipo: pct, rango: "3-7", oblig: true, val: "fuente y fecha obligatorias"}
+      - {id: wacc.beta_metodo, tipo: enum, valores: [regresion, bottom_up], prop: regresion}
+      - {id: wacc.beta_desapalancada, tipo: numero, oblig: "si bottom_up", val: "con fuente y fecha; se reapalanca"}
+      - {id: wacc.prima, tipo: pct, rango: "0-5", prop: 0, val: "≠ 0 exige justificación"}
+      - {id: wacc.kd_metodo, tipo: enum, valores: [rating_sintetico, rendimiento_bonos], prop: rating_sintetico}
+      - {id: wacc.kd, tipo: pct, oblig: "si rendimiento_bonos o si falta config/rating_sintetico.yaml", val: "con fuente"}
+      - {id: wacc.tipo_marginal, tipo: pct, prop: 21, val: "≠ 21 exige justificación"}
+      - {id: tv.metodo, tipo: enum, valores: [value_driver, gordon, multiplo_salida], prop: value_driver, nota: "los otros dos se calculan como contraste"}
+      - id: esc
+        tipo: escenarios
+        escenarios: [pesimista, base, optimista]
+        series: "años 1, 2, 3, 5 y N; el resto se interpola linealmente y se puede editar año a año"
+        campos:
+          - {id: probabilidad, tipo: pct, val: "suman 100; base ≥ umbrales.prob_base_min"}
+          - {id: narrativa, tipo: texto, palabras: "15-50", oblig: true}
+          - {id: crecimiento_ingresos, tipo: serie, prop: "histórico y guía"}
+          - {id: margen_ebit, tipo: serie, prop: "histórico y guía"}
+          - {id: impuesto_caja, tipo: serie, prop: "mediana 3 años convergiendo al marginal"}
+          - {id: da_pct, tipo: serie, prop: "mediana 3 años"}
+          - {id: capex_pct, tipo: serie, prop: "mediana 3 años"}
+          - {id: fm_pct_incremental, tipo: pct, prop: "mediana 3 años"}
+          - {id: sbc_pct, tipo: serie, prop: "mediana 3 años"}
+          - {id: paquete, tipo: serie, nota: "drivers propios del paquete sectorial (05 §2)"}
+          - {id: segmentos, tipo: serie, oblig: false, nota: "ingresos y margen por segmento + costes corporativos"}
+          - {id: wacc_ajuste_pp, tipo: numero, prop: 0, val: "≠ 0 exige justificación"}
+          - {id: g, tipo: pct, prop: "pesimista 2,0 · base 2,5 · optimista 3,0"}
+          - {id: ronic, tipo: pct, prop: "WACC + umbrales.ronic_defecto_pp"}
+          - {id: multiplo_salida, tipo: numero, oblig: false}
+      - {id: sotp.aplica, tipo: bool, prop: "≥ 2 segmentos con resultado operativo"}
+      - id: sotp.segmentos
+        tipo: lista
+        oblig: "si sotp.aplica"
+        campos:
+          - {id: segmento, tipo: ref, a: "segmentos XBRL"}
+          - {id: metrica, tipo: enum, valores: [ebit, ebitda, ingresos]}
+          - {id: multiplo, tipo: numero}
+          - {id: justificacion, tipo: texto, palabras: "10-40"}
+      - id: mult.objetivos
+        tipo: lista
+        oblig: false
+        campos:
+          - {id: multiplo, tipo: enum, valores: [per_ntm, ev_ebitda_ntm, ev_ventas_ntm, p_fcf_ntm]}
+          - {id: valor, tipo: numero}
+          - {id: justificacion, tipo: texto, palabras: "15-60"}
+      - {id: excel.archivo, tipo: archivo, oblig: false, nota: "solo para comparar (05 §9)"}
+
+  - paso: "8 · Posición (27–30)"
+    campos:
+      - {id: pos.recomendacion, tipo: enum, valores: "umbrales.recomendacion.escala", prop: "regla de umbrales.recomendacion", val: "si difiere de la regla, justificación de ≥ 20 palabras"}
+      - {id: pos.precio_objetivo, tipo: solo_lectura, de: motor}
+      - {id: pos.precio_entrada, tipo: numero, oblig: true, val: "fecha pasada → dentro del mínimo–máximo de esa sesión (Nasdaq); fecha futura → «orden límite»"}
+      - {id: pos.fecha_entrada, tipo: fecha, oblig: true, val: "anterior a fecha_informe → aviso «posición ya abierta» y checklist a posteriori"}
+      - {id: pos.tamano_pct, tipo: pct, oblig: true, rango: "0,5 – checklist.tamano_max"}
+      - {id: pos.tamano_porque, tipo: texto, palabras: "10-40", oblig: true, ayuda: "compáralo con el tamaño sugerido por drawdown (29)"}
+      - {id: pos.argumento, tipo: texto, palabras: "80-150", oblig: true, nota: "por qué esta empresa y por qué ahora; se imprime literal (27)"}
+      - id: pos.asunciones
+        tipo: lista
+        min: 3
+        max: 7
+        campos:
+          - {id: texto, tipo: texto, palabras: "5-30"}
+          - {id: driver, tipo: ref, a: "entradas de valoración"}
+          - {id: umbral_invalidacion, tipo: texto}
+      - id: pos.checklist
+        tipo: lista
+        prop: "config/checklist.yaml (automáticos ya evaluados) + criterios propios"
+        campos:
+          - {id: criterio, tipo: texto}
+          - {id: tipo, tipo: enum, valores: [automatico, manual]}
+          - {id: cumplido, tipo: enum, valores: ["si", "no", "parcial"]}
+          - {id: evidencia, tipo: evidencia}
+          - {id: eliminatorio, tipo: bool}
+      - id: pos.invalidacion
+        tipo: lista
+        min: 3
+        campos:
+          - {id: metrica, tipo: texto}
+          - {id: umbral, tipo: texto}
+          - {id: plazo, tipo: texto}
+      - {id: pos.stop, tipo: texto, oblig: false, val: "precio o «stop de tesis», con justificación"}
+      - {id: pos.drawdown_tolerado, tipo: pct, oblig: true}
+      - id: pos.kpis
+        tipo: lista
+        min: 3
+        prop: "KPIs del paquete sectorial"
+        campos:
+          - {id: kpi, tipo: texto}
+          - {id: actual, tipo: ref, a: "Hecho si existe"}
+          - {id: verde, tipo: texto}
+          - {id: rojo, tipo: texto}
+          - {id: fuente, tipo: texto}
+          - {id: frecuencia, tipo: enum, valores: [trimestral, anual, mensual, evento]}
+      - {id: pos.fechas_revision, tipo: lista, prop: "2 próximos resultados + fin del horizonte", val: "AAAA-MM-DD, futuras"}
+      - {id: pos.salida, tipo: lista, min: 3, prop: "objetivo alcanzado → revaluar · tesis invalidada · horizonte vencido sin catalizador · mejor oportunidad"}
+
+  - paso: "9 · Revisión y emisión"
+    campos:
+      - {id: qa.bloqueos, tipo: solo_lectura, val: "0 para emitir (06 §3)"}
+      - {id: emitir, tipo: accion, efecto: "estado EMITIDO y huellas de entradas, datos y modelo en 37"}

@@ -1,0 +1,42 @@
+Table of Contents
+3. Earnings per Share
+Basic earnings per share is computed using the weighted-average number of outstanding shares of common stock during the period. Diluted earnings per
+share is computed using the weighted-average number of outstanding shares of common stock and, when dilutive, potential outstanding shares of common
+stock during the period. Potential outstanding shares of common stock are calculated using the treasury-stock method and consist of incremental shares issuable
+upon the assumed exercise of stock options and vesting of time-based and performance-based restricted stock units. The computation of earnings per share is as
+follows:
+Three Months Ended Six Months Ended
+June 30,
+2026
+June 30,
+2025
+June 30,
+2026
+June 30,
+2025
+(in thousands, except per share data)
+Basic earnings per share:
+Net income $ 3,401,414 $ 3,125,413 $ 8,684,205 $ 6,015,764
+Shares used in computation:
+Weighted-average shares of common stock outstanding 4,189,303 4,252,112 4,205,952 4,262,347
+Basic earnings per share $ 0.81 $ 0.74 $ 2.06 $ 1.41
+Diluted earnings per share:
+Net income $ 3,401,414 $ 3,125,413 $ 8,684,205 $ 6,015,764
+Shares used in computation:
+Weighted-average shares of common stock outstanding 4,189,303 4,252,112 4,205,952 4,262,347
+Effect of dilutive stock-based awards 71,997 96,713 73,824 96,820
+Weighted-average number of shares 4,261,300 4,348,825 4,279,776 4,359,167
+Diluted earnings per share $ 0.80 $ 0.72 $ 2.03 $ 1.38
+The following table summarizes the potential shares of common stock excluded from the diluted calculation as their inclusion would have been anti￾dilutive:
+Three Months Ended Six Months Ended
+June 30,
+2026
+June 30,
+2025
+June 30,
+2026
+June 30,
+2025
+(in thousands)
+Stock-based awards 6,794 321 6,003 341
+10

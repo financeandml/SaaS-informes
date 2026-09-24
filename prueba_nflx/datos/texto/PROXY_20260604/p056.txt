@@ -1,0 +1,65 @@
+48 
+Equity Grant Practices 
+We generally grant equity awards to employees, including our Named Executive Officers, on a pre-established schedule and do 
+not grant any form of equity compensation in anticipation of the release of material, non-public information. Similarly, we do not 
+time the release of material, non-public information based on equity award grant dates. 
+Historically, a core component of our executive compensation program consisted of monthly stock option grants to our Named 
+Executive Officers on a formulaic basis based on a stock option allocation amount that the Compensation Committee approved 
+during the December of the prior calendar year. For example, the Compensation Committee approved the stock option allocation 
+amount for each Named Executive Officer’s 2023 compensation in December 2022, with stock options for the 2023 
+compensation year granted beginning in February 2023 through January 2024. We granted stock options on the first trading day 
+of each such month, with the number of options granted based on (a) the closing stock price on that trading day and (b) the stock 
+option allocation amount approved in December 2022. Please see the discussion about stock options under the heading 
+“Elements of the Prior Executive Compensation Program” in our proxy statement filed on April 18, 2024 for additional details 
+about the formula we used to grant options. 
+In 2024, we transitioned from the stock option allocation program to granting RSUs and PSUs to our Named Executive Officers. 
+Our Compensation Committee approved the 2025 target dollar value of the RSU and PSU grants to our Named Executive 
+Officers in December 2024 and specified that the grant date for such awards be the second business day following the January 
+2025 earnings release. In December 2024, the Compensation Committee also approved the formula for converting the target 
+dollar value of the RSU and PSU grants into a number of RSUs and PSUs. 
+During 2025, we did not grant options to our Named Executive Officers, except to Mr. Hastings for his non-employee director 
+service. 
+As described under “Proposal 1: Our Board of Directors—Election of Directors—How We are Paid,” the Director Equity 
+Compensation Plan provides for a monthly grant of stock options to non-employee directors of the Company. Stock option 
+awards are granted on the first trading day of each month. Set forth below are the option awards granted to Mr. Hastings, in his 
+capacity as Chairman and non-executive director of the Board, in the period beginning four business days before the filing of a
+periodic report on Form 10-Q or Form 10-K, or the filing or furnishing of a current report on Form 8-K disclosing material 
+nonpublic information and ending one business day after the filing or furnishing of such report with the SEC. 
+Name Grant date
+Number of securities 
+underlying the 
+award
+Exercise price of the 
+award
+($/Sh)
+Grant date fair value 
+of the award
+($)(1)
+Percentage change 
+in the closing 
+market price of the 
+securities 
+underlying the 
+award between the 
+trading day ending 
+immediately prior to 
+the disclosure of 
+material nonpublic 
+information and the 
+trading day 
+immediately 
+following the 
+disclosure of 
+material nonpublic 
+information (%)
+REED HASTINGS 11/03/2025 570 110.01 33,981 -0.15% 
+REED HASTINGS 12/01/2025 576 109.13 34,064 -6.23% 
+(1) Dollar amounts in the “Grant date fair value of the award” column reflect the grant date fair value with respect to stock options computed in accordance with 
+FASB ASC Topic 718. The grant date fair value for stock options is calculated using a lattice-binomial model and incorporates assumptions such as expected 
+volatility, risk-free interest rate, suboptimal exercise factor, and dividend yield. 
+Compensation Risk 
+Given the design of our compensation structure for our Named Executive Officers, as detailed in the foregoing Compensation 
+Discussion and Analysis, and the compensation structure for other employees, which for other employees generally consists of 
+salary and stock options, we do not believe that our compensation plans, policies and practices are reasonably likely to have a
+material adverse effect on the Company. 
+NETFLIX 2026 PROXY STATEMENT | COMPENSATION DISCUSSION AND ANALYSIS 

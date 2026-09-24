@@ -1,0 +1,35 @@
+EXHIBIT 10.2
+The Company will issue (or cause to be issued) such Shares promptly after the Option is exercised. No adjustment will be made for a dividend or other right for
+which the record date is prior to the date the Shares are issued, except as provided in Section 13 of the Plan.
+Subject to Section 3(b), exercising an Option in any manner will decrease the number of Shares thereafter available, both for
+purposes of the Plan and for sale under the Option, by the number of Shares as to which the Option is exercised.
+(ii) Termination of Relationship as a Service Provider. If a Participant ceases to be a Service Provider, other than upon the
+Participant’s termination as the result of the Participant’s death or Disability, the Participant may exercise his or her Option within such period of time as is
+specified in the Option Agreement to the extent that the Option is vested on the date of termination (but in no event later than the expiration of the term of such
+Option as set forth in the Option Agreement). In the absence of a specified time in the Option Agreement, the Option will remain exercisable for three (3)
+months following the Participant’s termination. Unless otherwise provided by the Administrator, if on the date of termination the Participant is not vested as to
+his or her entire Option, the Shares covered by the unvested portion of the Option will revert to the Plan. If after termination the Participant does not exercise
+his or her Option within the time specified by the Administrator, the Option will terminate, and the Shares covered by such Option will revert to the Plan.
+(iii) Disability of Participant. If a Participant ceases to be a Service Provider as a result of the Participant’s Disability, the
+Participant may exercise his or her Option within such period of time as is specified in the Option Agreement to the extent the Option is vested on the date of
+termination (but in no event later than the expiration of the term of such Option as set forth in the Option Agreement). In the absence of a specified time in the
+Option Agreement, the Option will remain exercisable for twelve (12) months following the Participant’s termination. Unless otherwise provided by the
+Administrator, if on the date of termination the Participant is not vested as to his or her entire Option, the Shares covered by the unvested portion of the Option
+will revert to the Plan. If after termination the Participant does not exercise his or her Option within the time specified herein, the Option will terminate, and the
+Shares covered by such Option will revert to the Plan.
+(iv) Death of Participant. If a Participant dies while a Service Provider, the Option may be exercised following the Participant’s
+death within such period of time as is specified in the Option Agreement to the extent that the Option is vested on the date of death (but in no event later than
+the expiration of the term of such Option as set forth in the Option Agreement), by the Participant’s designated beneficiary, provided such beneficiary has been
+designated prior to Participant’s death in a form acceptable to the Administrator. If no such beneficiary has been designated by the Participant, then such Option
+may be exercised by the personal representative of the Participant’s estate or by the person(s) to whom the Option is transferred pursuant to the Participant’s
+will or in accordance with the laws of descent and distribution. In the absence of a specified time in the Option Agreement, the Option will remain exercisable
+for twelve (12) months following Participant’s death. Unless otherwise provided by the Administrator, if at the time of death Participant is not vested as to his
+or her entire Option, the Shares covered by the unvested portion of the Option will immediately revert to the Plan. If the Option is not so exercised within the
+time specified herein, the Option will terminate, and the Shares covered by such Option will revert to the Plan.
+7. Restricted Stock.
+(a) Grant of Restricted Stock. Subject to the terms and provisions of the Plan, the Administrator, at any time and from time to time, may
+grant Shares of Restricted Stock to Service Providers in such amounts as the Administrator, in its sole discretion, will determine. The Administrator, in its sole
+discretion, shall determine the number of Shares to be granted to each Participant, provided that during any Fiscal Year, no Participant shall receive more than
+5,000,000 Shares of Restricted Stock (and/or Restricted Stock Units). Notwithstanding the foregoing, during the Fiscal Year in which a Participant first
+becomes an Employee, he or she may be granted up to a total of an additional 5,000,000 Shares of Restricted Stock (and/or Restricted Stock Units).
+-8-

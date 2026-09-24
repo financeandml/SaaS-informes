@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Analista — Warrants &amp; Co.</title>
+<link rel="stylesheet" href="formulario.css">
+</head>
+<body data-pagina="formulario">
+<header class="cabecera">
+  <div class="casa">Warrants &amp; Co.</div>
+  <div class="titulo"><span class="empresa" id="empresa">—</span> <span class="cik" id="cik"></span></div>
+  <button type="button" id="idioma" class="secundario" aria-label="Cambiar idioma">EN</button>
+</header>
+<nav id="pasos" class="pasos" aria-label="Pasos"></nav>
+<main>
+  <section class="tarjeta">
+    <h2><span data-i18n="titulo">Posición y tesis del analista</span> <span class="apunte" id="estado-fichero"></span></h2>
+    <div id="contexto"></div>
+    <ul id="pendientes" class="errores"></ul>
+  </section>
+
+  <form id="formulario" novalidate>
+    <section class="tarjeta">
+      <h2><span class="num">Portada</span> <span data-i18n="portada">Recomendación y posición</span></h2>
+      <div class="rejilla">
+        <label><span data-i18n="analista">Analista</span><input type="text" name="analista" autocomplete="off"></label>
+        <label><span data-i18n="fecha">Fecha del informe</span><input type="date" name="fecha"></label>
+        <label><span data-i18n="recomendacion">Recomendación</span>
+          <select name="posicion.recomendacion">
+            <option value="" data-i18n="sin_decidir">— sin decidir —</option>
+            <option value="comprar" data-i18n="comprar">Comprar</option>
+            <option value="mantener" data-i18n="mantener">Mantener</option>
+            <option value="vender" data-i18n="vender">Vender</option>
+          </select>
+        </label>
+        <label><span data-i18n="precio_objetivo">Precio objetivo (USD)</span><input type="number" step="0.01" name="posicion.precio_objetivo"><span class="pista" id="pista-objetivo"></span></label>
+        <label><span data-i18n="precio_entrada">Precio de entrada (USD)</span><input type="number" step="0.01" name="posicion.precio_entrada"></label>
+        <label><span data-i18n="fecha_entrada">Fecha de entrada</span><input type="date" name="posicion.fecha_entrada"></label>
+        <label><span data-i18n="tamano">Tamaño de la posición</span><input type="text" name="posicion.tamano" autocomplete="off"><span class="pista" data-i18n="pista_tamano">texto libre: «2 % de la cartera»</span></label>
+        <label><span data-i18n="horizonte">Horizonte</span><input type="text" name="posicion.horizonte" autocomplete="off"><span class="pista" data-i18n="pista_horizonte">«12–18 meses»</span></label>
+      </div>
+    </section>
+
+    <section class="tarjeta">
+      <h2><span class="num">33</span> <span data-i18n="tesis">Tesis de inversión consolidada</span></h2>
+      <div class="rejilla">
+        <label class="ancha"><span data-i18n="argumento">Argumento</span><textarea name="tesis.argumento" rows="5"></textarea><span class="pista" data-i18n="pista_argumento">por qué esta empresa y por qué ahora; se imprime literal</span></label>
+        <label class="ancha"><span data-i18n="asunciones">Asunciones clave</span><textarea name="tesis.asunciones" rows="4"></textarea><span class="pista" data-i18n="pista_lineas">una por línea</span></label>
+        <label><span data-i18n="horizonte_tesis">Horizonte de la tesis</span><input type="text" name="tesis.horizonte" autocomplete="off"></label>
+      </div>
+    </section>
+
+    <section class="tarjeta">
+      <h2><span class="num">34</span> <span data-i18n="checklist">Checklist de entrada</span></h2>
+      <table class="checklist">
+        <thead><tr><th data-i18n="criterio">Criterio</th><th data-i18n="cumplido">¿Cumplido?</th><th data-i18n="evidencia">Evidencia</th><th></th></tr></thead>
+        <tbody id="checklist"></tbody>
+      </table>
+      <button type="button" id="anadir-criterio" class="secundario" data-i18n="anadir">+ Añadir criterio</button>
+    </section>
+
+    <section class="tarjeta">
+      <h2><span class="num">35</span> <span data-i18n="riesgo">Gestión del riesgo</span></h2>
+      <div class="rejilla">
+        <label class="ancha"><span data-i18n="invalidacion">Qué invalidaría la tesis</span><textarea name="riesgo.invalidacion" rows="4"></textarea><span class="pista" data-i18n="pista_lineas">una por línea</span></label>
+        <label><span data-i18n="tamano_posicion">Tamaño de posición y por qué</span><input type="text" name="riesgo.tamano_posicion" autocomplete="off"></label>
+        <label><span data-i18n="volatilidad">Volatilidad que asumes</span><input type="text" name="riesgo.volatilidad" autocomplete="off"></label>
+      </div>
+    </section>
+
+    <section class="tarjeta">
+      <h2><span class="num">36</span> <span data-i18n="seguimiento">Seguimiento post-entrada</span></h2>
+      <div class="rejilla">
+        <label class="ancha"><span data-i18n="kpis">KPIs que vas a vigilar</span><textarea name="seguimiento.kpis" rows="3"></textarea><span class="pista" data-i18n="pista_lineas">una por línea</span></label>
+        <label><span data-i18n="fechas_revision">Fechas de revisión</span><textarea name="seguimiento.fechas_revision" rows="3"></textarea><span class="pista" data-i18n="pista_fechas">AAAA-MM-DD, una por línea</span></label>
+        <label><span data-i18n="criterios_salida">Criterios de salida</span><textarea name="seguimiento.criterios_salida" rows="3"></textarea><span class="pista" data-i18n="pista_lineas">una por línea</span></label>
+      </div>
+    </section>
+
+    <div class="acciones">
+      <button type="submit" id="guardar" data-i18n="guardar">Guardar</button>
+      <a id="anterior" class="boton secundario" data-i18n="anterior_dcf">← DCF</a>
+      <span class="separador"></span>
+      <span id="mensaje"></span>
+      <a id="siguiente-informe" class="boton" data-i18n="siguiente_informe">Siguiente: informe →</a>
+    </div>
+  </form>
+</main>
+<script src="saas.js"></script>
+<script src="formulario.js"></script>
+</body>
+</html>
