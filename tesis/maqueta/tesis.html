@@ -9,7 +9,7 @@
 <body>
 {#- Los números se imprimen limpios: la fuente, la fórmula o la celda de origen de cada cifra viaja en el atributo title (al pasar el ratón en el HTML)
     y el detalle del cuadre está en el apéndice de datos complementarios. -#}
-{% macro celda_td(c) %}<td class="{{ c.clase }}" title="{{ c.nota|e }}">{{ c.texto }}</td>{% endmacro %}
+{% macro celda_td(c) %}<td class="{{ c.clase }}" title="{{ c.nota|e }}"{% if c.hecho %} data-hecho="{{ c.hecho }}"{% endif %}>{{ c.texto }}</td>{% endmacro %}
 {% macro cuadro(c, texto=False, rotulo=None) %}
 <div class="cuadro{% if (c.partible and c.filas|length > 10) or c.numero in i.partir %} partible{% endif %}">
   <div class="rotulo">{% if rotulo %}{{ rotulo }}{% else %}Cuadro {{ c.numero }}. {{ c.titulo }}{% endif %}</div>
@@ -54,15 +54,15 @@
 <div class="portada">
   <div>
     <div class="recuadro">
-      <div class="rec">RECOMENDACIÓN: {% if i.recomendacion %}{{ i.recomendacion|upper }}{% else %}<span class="na">pendiente</span>{% endif %}</div>
+      <div class="rec">RECOMENDACIÓN: {% if i.recomendacion %}<span data-hecho="recomendacion">{{ i.recomendacion|upper }}</span>{% else %}<span class="na">pendiente</span>{% endif %}</div>
       <table class="mini">
         {% set objetivo = i.objetivo_portada %}
-        <tr><td>Precio objetivo</td><td class="v {% if not objetivo %}na{% endif %}" title="{% if objetivo %}{{ objetivo[0] }} · {{ objetivo[2] }}{% endif %}">{% if objetivo %}{{ usd(objetivo[1]) }}{% else %}N/A{% endif %}</td></tr>
-        <tr><td>Precio actual</td><td class="v {% if not i.precio.hay_dato %}na{% endif %}" title="{{ i.precio.nota|e }}">{% if i.precio.hay_dato %}{{ usd(i.precio.valor) }}{% else %}N/A{% endif %}</td></tr>
+        <tr><td>Precio objetivo</td><td data-hecho="po" class="v {% if not objetivo %}na{% endif %}" title="{% if objetivo %}{{ objetivo[0] }} · {{ objetivo[2] }}{% endif %}">{% if objetivo %}{{ usd(objetivo[1]) }}{% else %}N/A{% endif %}</td></tr>
+        <tr><td>Precio actual</td><td data-hecho="precio" class="v {% if not i.precio.hay_dato %}na{% endif %}" title="{{ i.precio.nota|e }}">{% if i.precio.hay_dato %}{{ usd(i.precio.valor) }}{% else %}N/A{% endif %}</td></tr>
         <tr><td>Potencial</td><td class="v {% if i.potencial is none %}na{% endif %}" title="precio objetivo / precio actual − 1">{% if i.potencial is not none %}{{ pct(i.potencial) }}{% else %}N/A{% endif %}</td></tr>
         {% if i.parte_d is not none and i.parte_d.po is not none %}<tr><td>Margen de seguridad</td><td class="v">{{ pct(i.parte_d.margen_seguridad) }}</td></tr>
         <tr><td>Recorrido / riesgo</td><td class="v">{% if i.parte_d.recorrido_riesgo is not none %}{{ i.parte_d.recorrido_riesgo|numero(2) }}{% else %}sin pérdida{% endif %}</td></tr>
-        <tr><td>Horizonte</td><td class="v">{{ i.parte_d.horizonte_meses }} meses</td></tr>{% endif %}
+        <tr><td>Horizonte</td><td class="v" data-hecho="horizonte">{{ i.parte_d.horizonte_meses }} meses</td></tr>{% endif %}
         {% if i.parte_g %}{% if i.parte_g.entrada.precio %}<tr><td>Entrada</td><td class="v">{{ i.parte_g.entrada.precio }} ({{ i.parte_g.entrada.fecha }})</td></tr>{% endif %}
         {% if i.parte_g.entrada.tamano %}<tr><td>Tamaño</td><td class="v">{{ i.parte_g.entrada.tamano }} de la cartera</td></tr>{% endif %}
         {% if i.parte_g.entrada.stop %}<tr><td>Stop</td><td class="v">{{ i.parte_g.entrada.stop }}</td></tr>{% endif %}{% endif %}
@@ -72,7 +72,7 @@
     </div>
     <table class="mini">
       <tr><th colspan="2">{{ i.ticker }} · {{ i.emisor.bolsa }}</th></tr>
-      {% for d in i.ficha if d.rotulo in ('Acciones en circulación', 'Valor en manos de no afiliados', 'Empleados', 'Precio', 'Capitalización', 'Capitalización · rango 52 s · volumen', 'Última presentación', 'Cierre fiscal') %}<tr><td>{{ d.rotulo }}</td><td class="v {{ d.clase }}" title="{{ d.fuente|e }}">{{ d.texto }}</td></tr>{% endfor %}
+      {% for d in i.ficha if d.rotulo in ('Acciones en circulación', 'Valor en manos de no afiliados', 'Empleados', 'Precio', 'Capitalización', 'Capitalización · rango 52 s · volumen', 'Última presentación', 'Cierre fiscal') %}<tr><td>{{ d.rotulo }}</td><td class="v {{ d.clase }}" title="{{ d.fuente|e }}"{% if d.hecho %} data-hecho="{{ d.hecho }}"{% endif %}>{{ d.texto }}</td></tr>{% endfor %}
     </table>
     <div class="muted" style="font-size:6.8pt">Cada dato lleva su fuente en el apartado 1.</div>
   </div>
@@ -113,7 +113,7 @@
 <h3 id="ap-{{ i.numeros['1'] }}">{{ i.numeros['1'] }}. {{ i.titulos['1'] }}</h3>
 <div class="cuadro"><div class="rotulo">Ficha</div>
 <table class="texto-tabla"><thead><tr><th>Dato</th><th>Valor</th><th>Fuente</th></tr></thead><tbody>
-{% for d in i.ficha %}<tr><td>{{ d.rotulo }}</td><td class="{{ d.clase }}">{{ d.texto }}</td><td class="muted">{{ d.fuente }}</td></tr>{% endfor %}
+{% for d in i.ficha %}<tr><td>{{ d.rotulo }}</td><td class="{{ d.clase }}"{% if d.hecho %} data-hecho="{{ d.hecho }}"{% endif %}>{{ d.texto }}</td><td class="muted">{{ d.fuente }}</td></tr>{% endfor %}
 </tbody></table><div class="fuente">Identidad: SEC EDGAR (submissions). Cifras de portada y texto: 10-K adjunto, con página. El valor en manos de no afiliados es el de la portada del 10-K a su fecha; no es la capitalización. Recortes de las páginas citadas: apartado {{ i.numeros['40'] }}.</div></div>
 
 <h3 id="ap-{{ i.numeros['2'] }}">{{ i.numeros['2'] }}. {{ i.titulos['2'] }}</h3>
@@ -383,7 +383,7 @@
 <h3 id="ap-{{ i.numeros['33'] }}">{{ i.numeros['33'] }}. {{ i.titulos['33'] }}</h3>
 {% if pg.argumento %}<p>{{ pg.argumento }}</p>{% else %}<div class="pendiente">{{ pg.pendientes['argumento'] }}</div>{% endif %}
 {% if pg.cuadros.asunciones %}{{ cuadro(pg.cuadros.asunciones, True) }}{% endif %}
-{% if pg.recomendacion %}<p>Recomendación del analista: <b>{{ pg.recomendacion }}</b>{% if pg.horizonte_meses %}, a {{ pg.horizonte_meses }} meses (el horizonte del precio objetivo del motor, apartado {{ i.numeros['20'] }}){% endif %}.{% if pg.regla and pg.regla != pg.recomendacion %} La regla sugiere «{{ pg.regla }}»{% if pg.justificacion %}; justificación del analista: {{ pg.justificacion }}{% endif %}{% endif %}</p>{% else %}<div class="pendiente">{{ pg.pendientes['recomendacion'] }}</div>{% endif %}
+{% if pg.recomendacion %}<p>Recomendación del analista: <b data-hecho="recomendacion">{{ pg.recomendacion }}</b>{% if pg.horizonte_meses %}, a <span data-hecho="horizonte">{{ pg.horizonte_meses }}</span> meses (el horizonte del precio objetivo del motor, apartado {{ i.numeros['20'] }}){% endif %}.{% if pg.regla and pg.regla != pg.recomendacion %} La regla sugiere «{{ pg.regla }}»{% if pg.justificacion %}; justificación del analista: {{ pg.justificacion }}{% endif %}{% endif %}</p>{% else %}<div class="pendiente">{{ pg.pendientes['recomendacion'] }}</div>{% endif %}
 <h3 id="ap-{{ i.numeros['34'] }}">{{ i.numeros['34'] }}. {{ i.titulos['34'] }}</h3>
 {{ cuadro(pg.cuadros.checklist, True) }}
 <h3 id="ap-{{ i.numeros['35'] }}">{{ i.numeros['35'] }}. {{ i.titulos['35'] }}</h3>

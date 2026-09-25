@@ -6,7 +6,7 @@
 const qs = new URLSearchParams(location.search);
 const TICKER = (qs.get("ticker") || "").toUpperCase();
 let FECHA = qs.get("fecha") || "";
-let ESQUEMA = [], DATOS = {}, FALTAS = {}, PASO = Number(qs.get("paso") || 1);
+let ESQUEMA = [], DATOS = {}, FALTAS = {}, PROPUESTAS = [], PASO = Number(qs.get("paso") || 1);
 
 const PALABRAS = {
   tamano: "tamaño", anio: "año", anios: "años", senal: "señal", descripcion: "descripción", fundacion: "fundación", asignacion: "asignación",
@@ -146,6 +146,53 @@ function editorEscenarios(c) {
       (v) => fijar(DATOS, `esc.${nombre}.${sub.id}`, v), true)),
   ])));
 }
+// ---- paso 9: párrafos de plantilla (06 §1). El sistema propone; el analista acepta o edita frase a frase (la cita no se
+// edita) y lo validado se guarda con la huella de la propuesta: si los datos cambian, la huella es otra y se vuelve a pedir.
+function estadoParrafo(p, guardado) {
+  if (!guardado || !Array.isArray(guardado.frases) || !guardado.frases.length) return "sin validar";
+  if (guardado.propuesta !== p.huella) return "cambió desde que lo validó: vuelva a aceptarlo o editarlo";
+  return guardado.editado ? "editado" : "aceptado";
+}
+function editorParrafos() {
+  const caja = el("div", { class: "parrafos" });
+  if (!PROPUESTAS.length) {
+    caja.appendChild(el("div", { class: "pista" }, ["Aún no hay propuestas para esta fecha: genere el informe (borrador) en la página del informe y vuelva aquí."]));
+    return caja;
+  }
+  PROPUESTAS.forEach((p) => {
+    const bloque = el("div", { class: "fila-lista", "data-parrafo": p.id });
+    const pintarUno = (editando) => {
+      vaciar(bloque);
+      const guardado = obtener(DATOS, `revision.parrafos.${p.id}`);
+      const vigente = guardado && guardado.propuesta === p.huella && Array.isArray(guardado.frases) && guardado.frases.length === p.frases.length;
+      const textos = p.frases.map((f, k) => (vigente ? String(guardado.frases[k][0]) : f[0]));
+      bloque.appendChild(el("div", { class: "cabecera-fila" }, [p.titulo, el("span", { class: "estado-parrafo" }, [estadoParrafo(p, guardado)])]));
+      const campos = [];
+      bloque.appendChild(el("ol", {}, p.frases.map((f, k) => {
+        if (!editando) return el("li", {}, [`${textos[k]} `, el("span", { class: "pista" }, [`[${f[1]}]`])]);
+        const t = el("textarea", { rows: 2 }); t.value = textos[k]; campos.push(t);
+        return el("li", {}, [t, el("span", { class: "pista" }, [`[${f[1]}]`])]);
+      })));
+      const fijarParrafo = (frases) => fijar(DATOS, `revision.parrafos.${p.id}`,
+        { propuesta: p.huella, frases, editado: frases.some((x, k) => x[0] !== p.frases[k][0]) });
+      const botones = editando
+        ? [["Dar por buena la edición", "", () => { fijarParrafo(p.frases.map((f, k) => [campos[k].value.trim(), f[1]])); pintarUno(false); }],
+           ["Cancelar", "secundario", () => pintarUno(false)]]
+        : [["Aceptar la propuesta", "", () => { fijarParrafo(p.frases.map((f) => [f[0], f[1]])); pintarUno(false); }],
+           ["Editar", "secundario", () => pintarUno(true)]];
+      bloque.appendChild(el("div", { class: "botones-parrafo" }, botones.map(([texto, clase, accion]) => {
+        const b = el("button", { type: "button", class: clase || null }, [texto]);
+        b.addEventListener("click", accion);
+        return b;
+      })));
+      (FALTAS[9] || []).filter((x) => x.startsWith(`revision.parrafos.${p.id}`)).forEach((x) => bloque.appendChild(el("div", { class: "falta" }, [legible(x)])));
+    };
+    pintarUno(false);
+    caja.appendChild(bloque);
+  });
+  caja.appendChild(el("div", { class: "pista" }, ["Lo aceptado o editado se guarda con «Guardar» y queda congelado en las entradas."]));
+  return caja;
+}
 function editor(c, valor, cambio, anidado) {
   switch (c.tipo) {
     case "texto": return editorTexto(c, valor, cambio, !anidado && esProsa(c));
@@ -157,6 +204,7 @@ function editor(c, valor, cambio, anidado) {
     case "evidencia": return editorLista(c, valor, cambio, CITA);
     case "lista": return editorLista(c, valor, cambio, c.campos);
     case "escenarios": return editorEscenarios(c);
+    case "parrafos": return editorParrafos();
     case "solo_lectura": return el("div", { class: "pista" }, ["Lo calcula el sistema al generar el informe."]);
     case "accion": {
       const a = el("a", { href: `/informe?ticker=${encodeURIComponent(TICKER)}`, class: "boton" }, ["Ir a la emisión del informe →"]);
@@ -206,7 +254,7 @@ async function cargar() {
   const r = await fetch(`/api/asistente?ticker=${encodeURIComponent(TICKER)}${FECHA ? `&fecha=${encodeURIComponent(FECHA)}` : ""}`);
   const d = await r.json();
   if (!r.ok) { document.getElementById("titulo-paso").textContent = d.error || "No se pudo cargar"; return; }
-  ESQUEMA = d.esquema; DATOS = d.entradas || {}; FALTAS = d.faltas || {}; FECHA = d.fecha;
+  ESQUEMA = d.esquema; DATOS = d.entradas || {}; FALTAS = d.faltas || {}; PROPUESTAS = d.propuestas || []; FECHA = d.fecha;
   document.getElementById("empresa").textContent = `Asistente del analista · ${TICKER}`;
   document.getElementById("a-expediente").setAttribute("href", `/?ticker=${encodeURIComponent(TICKER)}`);
   document.getElementById("a-informe").setAttribute("href", `/informe?ticker=${encodeURIComponent(TICKER)}`);

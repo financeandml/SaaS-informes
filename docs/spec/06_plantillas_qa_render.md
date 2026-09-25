@@ -4,7 +4,7 @@
 - Jinja2 + biblioteca de frases en `plantillas/frases.yaml`: cada frase tiene id, condiciones y 2–3 variantes; la variante se elige por hash(apartado, id), así que el resultado es reproducible.
 - Las frases solo reciben Hechos (`h()`), nunca números sueltos, y añaden las citas de los Hechos que usan.
 - Cobertura mínima: variación («crecieron / cayeron / se mantuvieron» según signo y umbral), cambio de margen en p.p., guía vigente, valoración por escenario, lectura de la sensibilidad, recuento de fallos de guía, P/C y cortos.
-- El sistema propone y el analista valida: en la vista previa cada párrafo de plantilla lleva «aceptar/editar»; lo aceptado queda congelado en `entradas.json`.
+- El sistema propone y el analista valida: cada generación deja sus párrafos de plantilla junto al PDF (`<ticker>_tesis_<fecha>.propuestas.json`, con su huella); el paso 9 del asistente los enseña con «aceptar/editar» (se edita el texto de cada frase, no su cita) y lo validado queda congelado en `entradas.json` (`revision.parrafos`). Sin validar, o con otra huella porque los datos cambiaron, bloquea (06 §3); lo editado pasa el linter.
 - Los textos del analista se imprimen literales después de pasar el linter.
 
 ## 2. Linter de textos del analista (bloquea)
@@ -22,6 +22,7 @@ Bloqueos (impiden emitir):
 8. 5 pilares con ≥ 2 evidencias y su riesgo del Item 1A.
 9. Fechas «próximas» ≥ fecha del informe.
 10. Ningún apartado obligatorio vacío; ningún N/A en la portada ni en 2, 3, 12–20 y 27–30.
+11. Párrafos de plantilla aceptados o editados en el paso 9 con la huella de la propuesta vigente (§1).
 
 Avisos (página interna de QA, no en el informe): los de 05, páginas con relleno < `relleno_pagina_min`, comparables excluidos, 13F antiguos e IV no cuadrada.
 

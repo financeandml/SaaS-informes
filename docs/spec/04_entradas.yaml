@@ -269,5 +269,6 @@ pasos:
 
   - paso: "9 · Revisión y emisión"
     campos:
+      - {id: revision.parrafos, tipo: parrafos, oblig: "si la última generación trae propuestas", val: "cada párrafo de plantilla aceptado o editado frase a frase (la cita no se edita); se guarda {propuesta: huella, frases, editado} y, si los datos cambian, la huella es otra y se vuelve a pedir (06 §1); lo editado pasa el linter"}
       - {id: qa.bloqueos, tipo: solo_lectura, val: "0 para emitir (06 §3)"}
       - {id: emitir, tipo: accion, efecto: "estado EMITIDO y huellas de entradas, datos y modelo en 37"}

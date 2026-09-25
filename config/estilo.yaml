@@ -37,3 +37,7 @@ ingles: [the, and, of, with, for, to, is, are, was, were, be, been, our, we, the
 # La palabra que precede a una cifra que no es un dato sino una referencia (apartado 18, pág. 23, paso 3…).
 referencias: [apartado, apartados, cuadro, cuadros, pág., pág, página, páginas, paso, pasos, pilar, nota, notas, sección,
               secciones, item, ítem, anexo, ex., fila, gráfico, figura, riesgo, criterio]
+
+# Abreviaturas cuyo punto no cierra frase aunque siga una mayúscula (el aviso de frases largas de 02 cuenta frases).
+abreviaturas: ["EE. UU.", "S. A.", "p. p.", "pág.", "págs.", "núm.", "art.", "Sr.", "Sra.", "Dr.", "Dra.", "Inc.", "Corp.", "Co.",
+               "Ltd.", "etc.", "aprox."]

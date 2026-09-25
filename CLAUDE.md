@@ -48,10 +48,11 @@ sensibilidad, reverse, multiplos, sotp, objetivo, excel, validacion) · `tesis/p
 - Dependencias: `jinja2`, `pypdfium2`, `playwright`, `matplotlib`, `pillow`, `openpyxl` y `pyyaml`. LibreOffice (opcional) solo para la prueba de recálculo del Excel exportado.
 
 ## Estado
-F0 ☑ · F1 ☑ esqueleto + C · F2 ☑ B · F3 ☑ D · F4 ☑ E · F5 ☑ F · F6 ☑ G + portada + asistente · F7 ☑ A + H + I + cierre (25/09/2026)
-Protocolo: `docs/fases/00_protocolo.md`. Las siete fases están hechas; lo que queda fuera, en `docs/fases/F7.md` › «No hecho».
+F0 ☑ · F1 ☑ esqueleto + C · F2 ☑ B · F3 ☑ D · F4 ☑ E · F5 ☑ F · F6 ☑ G + portada + asistente · F7 ☑ A + H + I + cierre · F8 ☑ cierre de fallos (25/09/2026)
+Protocolo: `docs/fases/00_protocolo.md`. Lo que queda fuera, en `docs/fases/F7.md` y `F8.md` › «No hecho».
+Alcance (analista, 25/09/2026): solo emisores con 10-K y solo la tesis completa de 39 apartados. Siguiente: la emisión real de QCOM y F9.
 «confirmo borrar» (analista, 24/09/2026): hecho en F1 (sin `narrativa.py`, SDK `anthropic`, `--redactar`, `narrativas/` ni restos).
-Batería: 244 en verde y 34 omitidas sin los adjuntos de NFLX/QCOM. `python -m tesis regresiones` → **33 de 33**.
+Batería: 275 en verde y 34 omitidas sin los adjuntos de NFLX/QCOM. `python -m tesis regresiones` → **33 de 33**.
 F2: segmentos (XBRL inline), accionistas/13G/ejecutivos/retribución/filiales de EDGAR, guía de los Ex. 99.1 confirmada, fechas de Nasdaq.
 F3: `tesis/motor/` (supuestos, proyeccion con periodo parcial, terminal, puente, wacc con beta frente a SPY y rf del Tesoro, escenarios,
 sensibilidad e inverso, comparables del analista, excel con fórmulas vivas e importación por mapa), `parte_d.py`; precio único = cierre oficial.
@@ -64,3 +65,6 @@ F6: `asistente.py` + `tablero/asistente.*` (9 pasos desde 04, guardado versionad
 F7: `parte_a.py` + `frases.py` (resumen factual con cita por frase y 5 pilares), `parte_h.py` (strikes, máximo dolor, VI frente a
 realizada, movimiento en resultados), `parte_i.py` (38 en una página), `qa.py` + `render.emitir` (puerta de calidad, hoja 0,
 EMITIDO/BORRADOR, relleno), `linter.py` + `config/estilo.yaml`; fuera `formulario.py`, `posicion.py`, el inglés del tablero y el agregador.
+F8: `emitir.py` entero en la batería, VI caída como aviso, valor único con `data-hecho`, aceptar/editar del párrafo de
+plantilla (`propuestas.py`, paso 9), avisos de longitud y cifras al redondeo impreso en el linter, paso 1 conectado al motor
+y a la ficha, `motor/sector.py` (05 §2) y bloqueo v1 de biotecnológicas.

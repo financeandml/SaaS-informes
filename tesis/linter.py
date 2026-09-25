@@ -1,7 +1,8 @@
 """Linter de los textos del analista (06 §2; bloquea la emisión).
 
-Toda cifra con unidad de importe, porcentaje, puntos o múltiplo es un Hecho del informe (con la tolerancia de
-`umbrales.linter_tolerancia` o el redondeo con que se escribe) o está en una evidencia de las entradas; ninguna cifra
+Toda cifra con unidad de importe, porcentaje, puntos o múltiplo es un Hecho del informe (con el redondeo con que se
+escribe; la tolerancia de `umbrales.linter_tolerancia`, solo en las cifras redondas) o está en una evidencia de las
+entradas; ninguna cifra
 va sin unidad; sin palabras vetadas, sin inglés (salvo las siglas y términos de 02 › Lenguaje) y sin «N/A» ni
 «pendiente». Los límites de palabras los mira el esquema (asistente._campo). Sin `valores`, la comparación con los
 Hechos se salta: el asistente la usa así mientras el analista escribe, cuando aún no hay informe.
@@ -14,7 +15,7 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Iterable, List, Mapping, Optional, Sequence, Tuple
 
-__all__ = ["revisar", "revisar_entradas", "candidatos", "textos"]
+__all__ = ["revisar", "revisar_entradas", "candidatos", "textos", "frases", "avisos", "avisos_entradas"]
 
 _ESTILO = Path(__file__).resolve().parent.parent / "config" / "estilo.yaml"
 # una cifra es-ES (12.560 · 33,4 · −3.117), sin tocar fechas (23/09/2026), rótulos (3T FY26, 13F, 5G) ni decimales ingleses
@@ -147,9 +148,12 @@ def revisar(texto: str, valores: Optional[Sequence[float]] = None, evidencias: S
             continue
         x = _numero(signo, entero, decimales)
         margen = 0.5 * 10 ** -(len(decimales) if decimales else 0)
-        casa = any(abs(x - v * s) <= max(tol * abs(v * s), margen) or abs(-x - v * s) <= max(tol * abs(v * s), margen)
+        # casa con el redondeo con que se escribe; la tolerancia relativa, solo si la cifra es redonda («15.000 mln USD»):
+        # con más de mil Hechos candidatos, un 1 % para cualquier cifra dejaba pasar más de la mitad de las inventadas
+        rel = tol if not decimales and entero.endswith("0") else 0.0
+        casa = any(abs(x - v * s) <= max(rel * abs(v * s), margen) or abs(-x - v * s) <= max(rel * abs(v * s), margen)
                    for v in valores for s in escalas)
-        casa = casa or any(abs(x - v * s) <= max(tol * abs(v * s), margen) for v in de_evidencias for s in (1.0, 1e3, 1e-3))
+        casa = casa or any(abs(x - v * s) <= max(rel * abs(v * s), margen) for v in de_evidencias for s in (1.0, 1e3, 1e-3))
         if not casa:
             reparos.append(f"cifra sin respaldo «{m.group(0)} {_rotulo(tras)}»: no es un Hecho del informe ni está en una evidencia")
     return reparos
@@ -165,7 +169,7 @@ def _rotulo(resto: str) -> str:
 
 def textos(e) -> List[Tuple[str, str]]:
     """(id, texto) de cada texto del analista que se imprime: los campos `texto` con `palabras` del esquema (04),
-    también dentro de las listas (pilares, riesgos, criterios…)."""
+    también dentro de las listas (pilares, riesgos, criterios…), y las frases que editó de los párrafos de plantilla."""
     from .asistente import esquema
 
     def plano(v) -> str:
@@ -182,7 +186,8 @@ def textos(e) -> List[Tuple[str, str]]:
                     for sub in c.get("campos") or []:
                         if isinstance(x, dict) and sub.get("tipo") == "texto" and sub.get("palabras") and plano(x.get(sub["id"])).strip():
                             salida.append((f"{c['id']}[{k}].{sub['id']}", plano(x.get(sub["id"]))))
-    return salida
+    from .propuestas import editadas                    # 06 §1: lo que edita de un párrafo de plantilla es texto suyo
+    return salida + editadas(e.valor("revision.parrafos"))
 
 
 def _evidencias(x, salida: List[str]) -> List[str]:
@@ -201,3 +206,34 @@ def revisar_entradas(e, valores: Sequence[float]) -> List[str]:
     """«id: reparo» de todos los textos del analista, con las cifras contra los Hechos y las evidencias de las entradas."""
     evs = _evidencias(e.datos, [])
     return [f"{id_}: {r}" for id_, t in textos(e) for r in revisar(t, valores, evs)]
+
+
+def frases(texto: str) -> List[str]:
+    """Las frases de un texto: las corta «.», «!», «?» o «…» seguido de espacio y mayúscula (o de «, ¿, ¡ o paréntesis
+    que abren), salvo en una abreviatura de `estilo.abreviaturas` («EE. UU.», «S. A.»)."""
+    t = " ".join(str(texto or "").split())
+    for a in _estilo().get("abreviaturas") or []:
+        t = t.replace(a, a.replace(".", "\x00"))
+    trozos = re.split(r"(?<=[.!?…])\s+(?=[«\"¿¡(]?[A-ZÁÉÍÓÚÑÜ])", t)
+    return [x.replace("\x00", ".").strip() for x in trozos if x.strip()]
+
+
+def avisos(texto: str) -> List[str]:
+    """02 › Estilo: frases desde `frase_palabras_aviso` palabras y párrafos de más de `parrafo_frases_max` frases (cada
+    texto del analista se imprime como un párrafo). Van a la página interna de QA: avisan, no bloquean."""
+    from .umbrales import umbral
+    largo, max_frases = int(umbral("frase_palabras_aviso")), int(umbral("parrafo_frases_max"))
+    lista = frases(texto)
+    salida = []
+    for f in lista:
+        n = len([w for w in f.split() if re.search(r"\w", w)])
+        if n >= largo:
+            salida.append(f"frase de {n} palabras (02: hasta 35; aviso desde {largo}): «{' '.join(f.split()[:8])}…»")
+    if len(lista) > max_frases:
+        salida.append(f"párrafo de {len(lista)} frases (02: hasta {max_frases})")
+    return salida
+
+
+def avisos_entradas(e) -> List[str]:
+    """«id: aviso» de estilo de todos los textos del analista, también lo que edita de los párrafos de plantilla."""
+    return [f"{id_}: {x}" for id_, t in textos(e) for x in avisos(t)]

@@ -78,6 +78,8 @@ class Parametros:
     sbc_politica: str = "coste_de_caja"
     arrendamientos: str = "fuera_de_deuda"
     paquete: str = "general"
+    paquete_propuesto: str = "general"                  # el del SIC (05 §2); `paquete` es el que confirma el analista (paso 1)
+    paquete_confirmado: bool = False
     erp: float = 0.05
     erp_fuente: str = ""
     beta_metodo: str = "regresion"
@@ -100,11 +102,13 @@ class Parametros:
 def leer(datos: Mapping, fecha_informe: date, paquete_propuesto: str = "general") -> Parametros:
     """`datos`: el JSON de entradas completo. Lo que falta queda en `faltas`, nunca con un valor inventado."""
     val, wacc, tv = datos.get("val") or {}, datos.get("wacc") or {}, datos.get("tv") or {}
+    meta = datos.get("meta") or {}                      # paso 1 (04): fecha de valoración y sector del analista
     faltas: List[str] = []
-    fv = val.get("fecha_valoracion")
+    fv = meta.get("fecha_valoracion")
     p = Parametros(fecha_valoracion=date.fromisoformat(fv) if fv else fecha_informe)
     p.anio_base = val.get("anio_base", p.anio_base)
-    p.paquete = val.get("paquete", paquete_propuesto)
+    p.paquete, p.paquete_propuesto = meta.get("sector") or paquete_propuesto, paquete_propuesto
+    p.paquete_confirmado = bool(meta.get("sector"))
     p.periodo = int(val.get("periodo_explicito", 10))
     if not 5 <= p.periodo <= 15:
         faltas.append(f"val.periodo_explicito: {p.periodo} (entre 5 y 15)")

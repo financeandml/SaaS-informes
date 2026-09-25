@@ -21,7 +21,7 @@ from .sensibilidad import Inverso, Matriz, inverso, matriz
 from .supuestos import Parametros, leer
 from .wacc import Beta, Wacc, beta_bottom_up, beta_regresion, calcular
 
-__all__ = ["Motor", "ejecutar", "paquete_por_sic"]
+__all__ = ["Motor", "ejecutar", "paquete_por_sic", "sectores", "ingresos_anuales"]
 
 
 @dataclass
@@ -59,11 +59,18 @@ class Motor:
     avisos: List[str] = field(default_factory=list)
 
 
-def paquete_por_sic(sic: str) -> Tuple[str, Optional[str]]:
-    """(paquete propuesto, bloqueo v1 o None) según `config/sectores.yaml`. Los códigos concretos antes que los rangos."""
+def sectores() -> dict:
     import yaml
     from pathlib import Path
-    datos = yaml.safe_load((Path(__file__).resolve().parents[2] / "config" / "sectores.yaml").read_text(encoding="utf-8"))
+    return yaml.safe_load((Path(__file__).resolve().parents[2] / "config" / "sectores.yaml").read_text(encoding="utf-8"))
+
+
+def paquete_por_sic(sic: str, ingresos: Optional[float] = None, minimo_biotech: Optional[float] = None) -> Tuple[str, Optional[str]]:
+    """(paquete propuesto, bloqueo v1 o None) según `config/sectores.yaml`. Los códigos concretos antes que los rangos.
+    `ingresos`: los del último ejercicio en USD (None si la SEC no los publica): una biotecnológica por debajo de
+    `umbrales.biotech_ingresos_min_musd` queda fuera de la v1 (05 §2)."""
+    from ..formato import numero
+    datos = sectores()
     try:
         n = int(sic)
     except (TypeError, ValueError):
@@ -71,12 +78,30 @@ def paquete_por_sic(sic: str) -> Tuple[str, Optional[str]]:
     for a, b in datos["bloqueo_v1"]["sic"]:
         if a <= n <= b:
             return "general", datos["bloqueo_v1"]["motivo"]
+    bio = datos.get("bloqueo_biotech") or {}
+    if any(a <= n <= b for a, b in bio.get("sic", [])):
+        if minimo_biotech is None:
+            from ..umbrales import umbral
+            minimo_biotech = float(umbral("biotech_ingresos_min_musd"))
+        if ingresos is None or ingresos < minimo_biotech * 1e6:
+            cuanto = "sin ingresos publicados en la SEC" if ingresos is None else f"con {numero(ingresos / 1e6)} mln USD de ingresos en el último ejercicio"
+            return "salud_madura", bio["motivo"].format(ingresos=cuanto, minimo=numero(minimo_biotech))
     candidatos = []
     for nombre, pq in datos["paquetes"].items():
         for a, b in pq.get("sic", []):
             if a <= n <= b:
                 candidatos.append((b - a, nombre))
     return (min(candidatos)[1] if candidatos else "general"), None
+
+
+def ingresos_anuales(facts: dict, obtenido: Optional[date] = None) -> Optional[float]:
+    """Los ingresos del último ejercicio publicado en la SEC (sin el informe construido: el paso 1 del asistente)."""
+    from .. import sec
+    from ..campos import CAMPOS
+    campo = next(c for c in CAMPOS if c.clave == "ingresos")
+    hechos = sec.hechos_xbrl(facts, campo, obtenido or date.today())
+    anuales = [(p.fin, h.valor) for p, h in hechos.items() if p.meses == 12 and not p.es_instante and h.hay_dato]
+    return max(anuales)[1] if anuales else None
 
 
 def _ultimo(hechos, campo: str, periodos: List[Periodo]) -> Tuple[Optional[float], Optional[Periodo]]:
@@ -147,7 +172,8 @@ def _historico_per(facts: dict, cierres: Dict[date, float], hasta: date) -> List
 def ejecutar(emisor, facts: dict, hechos, periodos: Dict[str, List[Periodo]], datos_entradas: dict, fecha_informe: date,
              acciones_portada: Optional[float], umbrales: dict, desfase_fiscal: int = 0, dividendos: Optional[list] = None) -> Motor:
     from .. import precio as precio_mod, sec, tesoro
-    paquete, bloqueo_v1 = paquete_por_sic(emisor.sic)
+    ingresos_fy, _ = _ultimo(hechos, "ingresos", periodos["anuales"])
+    paquete, bloqueo_v1 = paquete_por_sic(emisor.sic, ingresos_fy, umbrales.get("biotech_ingresos_min_musd"))
     p = leer(datos_entradas, fecha_informe, paquete)
     m = Motor(parametros=p, precio=None, fecha_precio=None)
     if bloqueo_v1:
@@ -240,6 +266,8 @@ def ejecutar(emisor, facts: dict, hechos, periodos: Dict[str, List[Periodo]], da
         m.inverso = inverso(v, m.ingresos_base, m.cierre_base, umbrales)
         m.ntm = _ntm(v, m, hechos, trimestres, p)
     m.historico_per = _historico_per(facts, cierres, fv)
+    from .sector import comprobar                       # 05 §2: las comprobaciones del paquete (avisos, no bloqueos)
+    m.avisos += comprobar(p, hechos, periodos, facts, m, w, arrend, umbrales.get("sector") or {}, sectores())
     if datos_entradas.get("comparables"):
         m.comparables = comparables_mod.construir(datos_entradas["comparables"], m.fecha_precio, umbrales)
     return m

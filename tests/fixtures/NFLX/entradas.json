@@ -1,14 +1,20 @@
 {
  "_prueba": "Entradas de PRUEBA para las regresiones de F3 (docs/fases/F3.md): drivers copiados del libro dcf/NFLX.xlsx; no son del analista.",
- "val": {
+ "meta": {
+  "analista": "Analista de prueba",
+  "fecha_informe": "2026-09-17",
   "fecha_valoracion": "2026-09-17",
+  "tipo": "inicio_cobertura",
+  "nombre_presentacion": "Netflix",
+  "sector": "media_contenido"
+ },
+ "val": {
   "anio_base": "ultimo_ejercicio",
   "periodo_explicito": 10,
   "mitad_de_anio": false,
   "horizonte_meses": 24,
   "sbc": "coste_de_caja",
-  "arrendamientos": "fuera_de_deuda",
-  "paquete": "media_contenido"
+  "arrendamientos": "fuera_de_deuda"
  },
  "wacc": {
   "erp": 5.5,

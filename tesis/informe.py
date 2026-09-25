@@ -83,6 +83,7 @@ class Dato:
     texto: str
     fuente: str
     clase: str = "valor"
+    hecho: str = ""                      # concepto de valor único (06 §3.3), como `data-hecho`
 
 
 @dataclass
@@ -211,6 +212,11 @@ class Informe:
     parte_e: Optional[object] = None                                 # F4 · parte_e.ParteE (mercado, competencia, foso)
     parte_f: Optional[object] = None                                 # F5 · parte_f.ParteF (riesgos, caso bajista, historial)
     parte_g: Optional[object] = None                                 # F6 · parte_g.ParteG (tesis, lista, riesgo, seguimiento)
+
+    @property
+    def parrafos(self) -> list:
+        """06 §1: los párrafos de plantilla de esta generación (propuesta, huella y estado), para el paso 9."""
+        return list(getattr(self.parte_a, "parrafos", None) or [])
 
 
 # ---------------------------------------------------------------------------
@@ -415,12 +421,20 @@ def _cuadro_cifras_resumen(n: Cuadros, hechos, anuales, trimestres) -> Cuadro:
 # Secciones A y B
 # ---------------------------------------------------------------------------
 
-def _ficha(emisor: Emisor, f: Ficha, precio: Hecho, exp: Expediente, hechos, mercado=None) -> List[Dato]:
+def _ficha(emisor: Emisor, f: Ficha, precio: Hecho, exp: Expediente, hechos, mercado=None, nombre: str = "", sector: str = "",
+           propuesto: str = "general") -> List[Dato]:
+    from .motor.datos import sectores as sectores_cfg
+    rotulos = sectores_cfg().get("rotulos") or {}
+    confirmado = bool(nombre) and nombre != (f.nombre_presentacion or emisor.nombre)
     datos: List[Dato] = [
-        Dato("Nombre", f.nombre_presentacion or emisor.nombre, "portada del 10-K (propuesta; la confirma el analista)"),
+        Dato("Nombre", nombre or f.nombre_presentacion or emisor.nombre,
+             "analista (paso 1)" if confirmado else "portada del 10-K (propuesta; la confirma el analista en el paso 1)"),
         Dato("Nombre registral", emisor.nombre, "SEC EDGAR (submissions)"),
         Dato("Ticker · bolsa", f"{emisor.ticker} · {emisor.bolsa}", "SEC EDGAR"),
         Dato("CIK · SIC", f"{int(emisor.cik)} · {emisor.sic}", "SEC EDGAR"),
+        Dato("Sector · paquete del DCF", rotulos.get(sector or propuesto, (sector or propuesto).replace("_", " ")),
+             ("analista (paso 1)" + (f"; el SIC {emisor.sic} proponía «{rotulos.get(propuesto, propuesto)}»" if sector != propuesto else "")
+              if sector else f"propuesta por el SIC {emisor.sic} (05 §2); la confirma el analista en el paso 1")),
         Dato("Constitución", f.constitucion or emisor.estado_constitucion, "SEC EDGAR"),
         Dato("Sede", f.sede or emisor.direccion.title(), "SEC EDGAR"),
         Dato("Cierre fiscal", f.cierre_descrito or (f"{emisor.cierre_fiscal[2:]}/{emisor.cierre_fiscal[:2]}" if len(emisor.cierre_fiscal) == 4 else emisor.cierre_fiscal),
@@ -441,7 +455,7 @@ def _ficha(emisor: Emisor, f: Ficha, precio: Hecho, exp: Expediente, hechos, mer
     cita("acciones_portada", "Acciones en circulación", lambda c: f"{mln(c.valor)} mln")
     cita("float_portada", "Valor en manos de no afiliados", lambda c: f"{mln(c.valor)} mln USD")
     if precio.hay_dato:
-        datos.append(Dato("Precio", f"{numero(precio.valor, 2)} USD", precio.nota, "valor"))
+        datos.append(Dato("Precio", f"{numero(precio.valor, 2)} USD", precio.nota, "valor", "precio"))
         c = mercado.cotizacion if mercado is not None else None
         if c is not None and c.cierre_anterior is not None:
             # el cierre anterior solo se imprime si la ficha de la bolsa y su histórico dicen lo mismo (regla 9)
@@ -458,7 +472,7 @@ def _ficha(emisor: Emisor, f: Ficha, precio: Hecho, exp: Expediente, hechos, mer
             if c is not None and c.cap_mercado_fuente is not None:
                 dif = (capitalizacion - c.cap_mercado_fuente) / c.cap_mercado_fuente
                 fuente += f" · {c.fuente} publica {mln(c.cap_mercado_fuente)} mln USD (diferencia {numero(dif * 100, 2)} %)"
-            datos.append(Dato("Capitalización", f"{mln(capitalizacion)} mln USD", fuente, "valor"))
+            datos.append(Dato("Capitalización", f"{mln(capitalizacion)} mln USD", fuente, "valor", "capitalizacion"))
         else:
             datos.append(Dato("Capitalización", "N/A", "sin acciones en circulación de portada con que multiplicar el precio", "na"))
         if c is not None:
@@ -698,6 +712,7 @@ def construir(ticker: str, hoy: date, emisor: Emisor, exp: Expediente, tab: Tabl
     else:
         objetivos = _cuadro_objetivos(n, guidance)
     parte_a = None
+    avisos_estilo: List[str] = []                                     # 02: frases y párrafos largos (avisan, no bloquean)
     if parte_b is not None and parte_b.segmentos is not None and parte_b.segmentos.periodos:
         segmentos_c, geografia_c, svg_mezcla, sin_traducir = parte_b_mod.cuadro_segmentos(n, parte_b.segmentos, lambda p: _etiqueta(p, anuales, tab))
         regiones_c, svg_regiones = geografia_c, ""
@@ -728,15 +743,32 @@ def construir(ticker: str, hoy: date, emisor: Emisor, exp: Expediente, tab: Tabl
     faltan = [f"Ficha · {k}: {v}" for k, v in ficha.faltan.items()] + [f"Gobierno · {k}: {v}" for k, v in gobierno.faltan.items()] \
         + ([] if parte_b is not None else [f"Objetivos · {k}: {v}" for k, v in guidance.faltan.items()]      # con parte B: Cuadro 2 y
            + [f"Regiones · {k}: {v}" for k, v in regiones.faltan.items()])                                  # geografía de los segmentos
+    # paso 1 (04): nombre de presentación y sector que confirma el analista; sin él, la propuesta del sistema (y bloquea)
+    from .motor.datos import paquete_por_sic, sectores as sectores_cfg
+    ent_b = parte_b.entradas if parte_b is not None else None
+    nombre = (str(ent_b.valor("meta.nombre_presentacion") or "").strip() if ent_b is not None else "") or ficha.nombre_presentacion or emisor.nombre
+    ingresos_fy = next((hechos[("ingresos", a)].valor for a in reversed(anuales) if hechos.get(("ingresos", a)) is not None
+                        and hechos[("ingresos", a)].hay_dato), None)
+    propuesto, bloqueo_v1 = paquete_por_sic(emisor.sic, ingresos_fy)
+    sector = (str(ent_b.valor("meta.sector") or "") if ent_b is not None else "") or ""
+    if ent_b is not None:
+        from .entradas import comprobar_paso1
+        faltan += [f"Paso 1 · {x}" for x in comprobar_paso1(ent_b, hoy, list((sectores_cfg().get("paquetes") or {}).keys()),
+                                                           bloqueo_v1 if motor is None else None)]
     fuentes = [f"{a.nombre} — {a.tipo.value}" + (f", periodo {f_fecha(a.periodo_fin)}" if a.periodo_fin else "") + (f", fecha {f_fecha(a.fecha)}" if a.fecha else "")
                + (" · verificado en EDGAR" if a.verificado_en_edgar else "") + f" · sha256 {a.huella[:12]}" for a in exp.adjuntos]
     fuentes.append(f"SEC EDGAR companyfacts y submissions, CIK {int(emisor.cik)}, obtenidos el {f_fecha(emisor.obtenido_en)}")
+    faltan_mercado: List[str] = []
     if mercado is not None and mercado.cotizacion is not None:
         c = mercado.cotizacion
         fuentes.append(f"{c.fuente} — ficha del valor e histórico de cierres, consultados el {f_fecha(hoy)}" + (f" ({c.hora})" if c.hora else "") + f" · {c.url}")
-        faltan += [f"Mercado · {k}: {v}" for k, v in mercado.faltan.items()]
+        faltan_mercado = [f"Mercado · {k}: {v}" for k, v in mercado.faltan.items()]
     elif mercado is not None and not mercado.precio.hay_dato:
-        faltan.append(f"Mercado · precio: {mercado.precio.motivo}")
+        faltan_mercado = [f"Mercado · precio: {mercado.precio.motivo}"]
+    # con motor, el precio del informe es su cierre oficial de la fecha de valoración (regla 4): la ficha del día de la
+    # bolsa solo contrasta, y que falte es un aviso, no un bloqueo
+    avisos_mercado = faltan_mercado if motor is not None and getattr(motor, "precio", None) is not None else []
+    faltan += [x for x in faltan_mercado if x not in avisos_mercado]
     # --- secciones D–I y evidencia visual de las tablas leídas de documentos ---
     indice, numeros = _indice()
     evidencias: Dict[str, List[Recorte]] = {}
@@ -806,7 +838,7 @@ def construir(ticker: str, hoy: date, emisor: Emisor, exp: Expediente, tab: Tabl
         from .umbrales import umbral
         parte_e = parte_e_mod.construir(n, parte_b.entradas, parte_b.textos, float(umbral("cita_similitud_min")), hechos, anuales,
                                         lambda p: _etiqueta(p, anuales, tab), motor=motor, alias=parte_b.alias,
-                                        nombre=ficha.nombre_presentacion or emisor.nombre, ticker=ticker.upper())
+                                        nombre=nombre, ticker=ticker.upper())
         faltan += [f"Parte E · {x}" for x in parte_e.faltas]
     else:
         # camino antiguo (sin parte B): lo que declara la compañía y lo que asigna la bolsa; se retira en F7
@@ -844,6 +876,7 @@ def construir(ticker: str, hoy: date, emisor: Emisor, exp: Expediente, tab: Tabl
         # 06 §2: los textos del analista pasan el linter (cifras = Hechos o evidencias, unidades, sin vetadas ni inglés)
         from . import linter
         faltan += [f"Linter · {x}" for x in linter.revisar_entradas(parte_b.entradas, linter.candidatos(hechos, _valores_motor(motor, parte_d)))]
+        avisos_estilo = [f"Estilo · {x}" for x in linter.avisos_entradas(parte_b.entradas)]
     parte_g, sesiones = None, {}
     if parte_b is not None:
         # G · 27–30: la posición del analista (paso 8) con los criterios automáticos, el riesgo y el seguimiento
@@ -886,7 +919,9 @@ def construir(ticker: str, hoy: date, emisor: Emisor, exp: Expediente, tab: Tabl
         for s in indice:
             if any(numero == numeros["24"] for numero, _ in s.apartados):      # la parte de la cadena de opciones
                 s.estado = "parcial" if "iv" not in f_cuadros else ""
-    faltan += [f"Parte H · {k}: {v}" for k, v in f_faltan.items()]
+    # 06 §3: la VI (la excepción de Yahoo) caída o sin cuadrar es aviso; lo que falte de la bolsa oficial bloquea
+    faltan += [f"Parte H · {k}: {v}" for k, v in f_faltan.items() if k != "iv"]
+    avisos_mercado += [f"Parte H · iv: {f_faltan['iv']}"] if "iv" in f_faltan else []
     if riesgos is not None and parte_b is None:
         faltan += [f"Riesgos · {k}: {v}" for k, v in riesgos.faltan.items()]
     if historial is not None and parte_b is None:
@@ -951,15 +986,15 @@ def construir(ticker: str, hoy: date, emisor: Emisor, exp: Expediente, tab: Tabl
         nuevas = parte_g.cerrar(len([f for f in faltan if not f.startswith("Parte G")]), len(tab.bloquea))
         faltan += [f"Parte G · {x}" for x in nuevas]
     return Informe(
-        ticker=ticker.upper(), nombre=ficha.nombre_presentacion or emisor.nombre, fecha_emision=hoy, emisor=emisor, expediente=exp, tablero=tab,
-        hechos=hechos, ficha=_ficha(emisor, ficha, precio, exp, hechos, mercado), precio=precio, cifras_resumen=cifras, objetivos=objetivos,
+        ticker=ticker.upper(), nombre=nombre, fecha_emision=hoy, emisor=emisor, expediente=exp, tablero=tab,
+        hechos=hechos, ficha=_ficha(emisor, ficha, precio, exp, hechos, mercado, nombre, sector, propuesto), precio=precio, cifras_resumen=cifras, objetivos=objetivos,
         hitos=guidance.hitos, narrativa=narrativa_impresa, descripcion=ficha.citas.get("descripcion"),
         regiones=regiones_c, grafico_regiones=svg_regiones, grafico_ingresos=svg_ingresos, grafico_deuda=svg_deuda,
         accionistas=accionistas, filiales=filiales, ejecutivos=ejecutivos, retribucion=retribucion,
         citas_call=guidance.citas_call, proxima_presentacion=guidance.proxima_presentacion,
         resultados=resultados, balance=balance, flujo=flujo, rentabilidad=rentabilidad,
         resumen_contraste=tab.resumen, discrepancias=discrepancias, solo_sec=solo_sec, huecos=huecos,
-        avisos=[a.texto for a in exp.avisos] + tab.avisos + avisos_graficos + avisos_extra, fuentes=fuentes, faltan=faltan,
+        avisos=[a.texto for a in exp.avisos] + tab.avisos + avisos_graficos + avisos_extra + avisos_mercado + avisos_estilo, fuentes=fuentes, faltan=faltan,
         periodos_anuales=anuales, periodos_trimestres=trimestres,
         indice=indice, numeros=numeros, titulos={clave: _titulo(indice, numero) for clave, numero in numeros.items()}, evidencias=evidencias, fotos_ejecutivos=fotos_ejecutivos, fotos_consejo=fotos_consejo,
         dcf=cuadros_dcf, riesgos_cuadros=riesgos_cuadros, riesgos_recortes=riesgos_recortes, riesgos_faltan=riesgos.faltan if riesgos is not None else {"item_1a": "no se pidió la lectura del Item 1A"},

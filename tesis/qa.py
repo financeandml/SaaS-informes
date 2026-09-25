@@ -15,7 +15,7 @@ from datetime import date
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 
-__all__ = ["Puerta", "revisar", "texto_tecnico", "apartados", "relleno", "paginas_de", "posicion", "extension"]
+__all__ = ["Puerta", "revisar", "texto_tecnico", "apartados", "valores_unicos", "relleno", "paginas_de", "posicion", "extension"]
 
 # rutas, comandos, etiquetas XBRL (con prefijo o como nombre de concepto: «SellingGeneralAndAdministrativeExpense»),
 # nombres de las API, excepciones y mensajes de parser o de red (06 §3.6); las URL se admiten en 37 y 39
@@ -66,6 +66,44 @@ def texto_tecnico(html: str) -> List[str]:
     return salida
 
 
+_DATA_HECHO = re.compile(r'<(td|span|b)\b[^>]*\bdata-hecho="([^"]+)"[^>]*>(.*?)</\1>', re.S)
+_NUM_ES = re.compile(r"[−-]?\d{1,3}(?:\.\d{3})+(?:,\d+)?|[−-]?\d+(?:,\d+)?")
+
+
+def _valor(texto: str):
+    """(número, decimales impresos) de la primera cifra es-ES del texto; sin cifra, (texto normalizado, None)."""
+    m = _NUM_ES.search(texto)
+    if not m:
+        return " ".join(re.sub(r"[^\w]+", " ", texto.lower()).split()), None
+    entero, _, dec = m.group(0).replace("−", "-").partition(",")
+    return float(entero.replace(".", "") + ("." + dec if dec else "")), len(dec)
+
+
+def valores_unicos(html: str) -> List[str]:
+    """06 §3.3: cada concepto marcado con `data-hecho` (precio, po, recomendación, horizonte, deuda neta de una fecha,
+    acciones diluidas, capitalización) sale con un solo valor en todo el informe; dos, con el redondeo impreso, lo bloquean."""
+    marcas = [(m.start(), m.group(1)) for m in re.finditer(r'<h3 id="ap-(\d+)"', html)]
+
+    def apartado(pos: int) -> str:
+        previas = [n for s, n in marcas if s < pos]
+        return previas[-1] if previas else "portada"
+    grupos: Dict[str, List[Tuple[str, str]]] = {}
+    for m in _DATA_HECHO.finditer(html):
+        texto = _visible(m.group(3))
+        if texto and not texto.startswith("N/A"):
+            grupos.setdefault(m.group(2), []).append((texto, apartado(m.start())))
+    salida = []
+    for clave, lista in grupos.items():
+        base, d0 = _valor(lista[0][0])
+        for texto, ap in lista[1:]:
+            v, d = _valor(texto)
+            distinto = v != base if d0 is None or d is None else abs(v - base) > 0.5 * 10 ** -min(d0, d) + 1e-9
+            if distinto:
+                salida.append(f"«{clave}» sale como «{lista[0][0]}» (apartado {lista[0][1]}) y como «{texto}» (apartado {ap})")
+                break
+    return salida
+
+
 def revisar(inf, html: str, hoy: Optional[date] = None) -> Puerta:
     p = Puerta()
     hoy = hoy or inf.fecha_emision
@@ -85,6 +123,7 @@ def revisar(inf, html: str, hoy: Optional[date] = None) -> Puerta:
     if numeros != list(range(1, 40)) or letras != list("ABCDEFGHI"):
         p.bloqueos.append(f"Índice: {len(numeros)} apartados y partes {''.join(letras)} (se piden 39 y A–I)")   # 5
     p.bloqueos += [f"Texto técnico en el cuerpo, apartado {x}" for x in texto_tecnico(html)]              # 6
+    p.bloqueos += [f"Valor único: {x}" for x in valores_unicos(html)]                                      # 3
     textos = apartados(html)
     for clave, texto in textos.items():                                                    # 10
         if "Pendiente" in texto:

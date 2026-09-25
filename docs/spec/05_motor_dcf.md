@@ -20,7 +20,8 @@ Todos usan el FCFF común (§3). El paquete fija el periodo explícito por defec
 | media_contenido | 7810–7849, 4833, 4841 | 10 | desfase de contenido: gasto en caja − amortización (% ingresos) | — |
 | salud_madura | 2834–2836, 3841–3851 con ingresos | 10 | ingresos por producto con fecha de pérdida de patente (opcional) | — |
 
-Bloqueo v1: 6000–6799 (bancos, aseguradoras, REIT, BDC, SPAC) y biotech con ingresos < `biotech_ingresos_min_musd` (50).
+Bloqueo v1: 6000–6799 (bancos, aseguradoras, REIT, BDC, SPAC) y biotech (SIC 2834–2836 y 8731) con ingresos del último ejercicio en la SEC < `biotech_ingresos_min_musd` (50) o sin ingresos publicados; se ve en el paso 1 del asistente y bloquea al generar.
+El paquete es el que confirma el analista en el paso 1 (`meta.sector`); el SIC solo lo propone. Las comprobaciones son avisos del motor (página interna de QA), con los umbrales de `umbrales.sector` (`tesis/motor/sector.py`); «cierres en enero/febrero» lo resuelve el calendario fiscal (R33), no un aviso.
 Construcción por segmentos (opcional en cualquier paquete): ingresos y margen EBIT por segmento − costes corporativos no asignados = EBIT consolidado.
 
 ## 3. FCFF por año t = 1…N (año base 0 = Hechos verificados)

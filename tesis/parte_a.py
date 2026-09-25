@@ -1,7 +1,8 @@
 """Parte A (apartados 2–3): el resumen ejecutivo y los cinco pilares.
 
 2: los textos del analista (resumen, por qué ahora, visión frente a lo que descuenta el precio) y un párrafo factual de
-plantilla —último trimestre, ejercicio, guía vigente, balance y retribución— con una cita por frase (06 §1). 3: los cinco
+plantilla —último trimestre, ejercicio, guía vigente, balance y retribución— con una cita por frase, que el analista
+acepta o edita en el paso 9 (06 §1, `propuestas.py`). 3: los cinco
 pilares del paso 3 con su argumento, sus evidencias verificadas, su KPI y el riesgo del Item 1A que los amenaza (la
 versión en español del analista, con su página; el literal, en el HTML).
 """
@@ -15,6 +16,7 @@ from typing import Callable, Dict, List, Mapping, Optional, Sequence, Tuple
 from .entradas import Entradas, comprobar_paso3, verificar_cita
 from .formato import numero, pct
 from .frases import frase, posicion, verbo
+from .propuestas import Parrafo, aplicar
 
 __all__ = ["ParteA", "Pilar", "construir"]
 
@@ -38,6 +40,7 @@ class ParteA:
     vision: str = ""
     factual: List[Tuple[str, str]] = field(default_factory=list)      # (frase, cita)
     pilares: List[Pilar] = field(default_factory=list)
+    parrafos: List[Parrafo] = field(default_factory=list)                # 06 §1: propuestas para el paso 9
     pendientes: Dict[str, str] = field(default_factory=dict)
     faltas: List[str] = field(default_factory=list)
 
@@ -123,7 +126,9 @@ def construir(e: Entradas, textos: Mapping[str, str], umbral: float, item, alias
     from .parte_b import alias_doc
     d = ParteA(resumen=_texto(e.valor("tesis.resumen")), por_que_ahora=_texto(e.valor("tesis.por_que_ahora")),
                vision=_texto(e.valor("tesis.vision_vs_mercado")))
-    d.factual = _factual(hechos, periodos, etiqueta, vigentes, comparaciones)
+    d.factual, parrafo, sin_validar = aplicar("resumen_factual", "Párrafo factual del resumen ejecutivo",
+                                              _factual(hechos, periodos, etiqueta, vigentes, comparaciones), e.valor("revision.parrafos"))
+    d.parrafos.append(parrafo)
     if not d.resumen:
         d.pendientes["resumen"] = ("Pendiente del analista: el resumen de la tesis (60–120 palabras), por qué ahora y su visión frente a lo "
                                    "que descuenta el precio (paso 3).")
@@ -141,4 +146,5 @@ def construir(e: Entradas, textos: Mapping[str, str], umbral: float, item, alias
         d.pendientes["pilares"] = ("Pendiente del analista: los cinco pilares, cada uno con su argumento, dos evidencias verificadas, "
                                    "su KPI y el riesgo del Item 1A que lo amenaza (paso 3).")
     d.faltas = comprobar_paso3(e, textos, umbral, lambda t: item is not None and buscar(item, t) is not None)
+    d.faltas += [sin_validar] if sin_validar else []
     return d

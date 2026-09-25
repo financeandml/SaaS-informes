@@ -58,12 +58,13 @@ def _modelo(d: ParteI, n, motor, autor: str) -> None:
         return
     p, w = v.parametros, v.wacc
     filas = [
-        ("Fecha de valoración", f_fecha(p.fecha_valoracion), "fecha", "paso 7", autor),
+        ("Fecha de valoración", f_fecha(p.fecha_valoracion), "fecha", "paso 1", autor),
         ("Horizonte del precio objetivo", numero(p.horizonte_meses), "meses", "paso 7", autor),
         ("Periodo explícito", numero(p.periodo), "años", "paso 7", autor),
         ("Convención de mitad de año", "sí" if p.mitad_de_anio else "no", "", "paso 7", autor),
         ("Retribución en acciones", p.sbc_politica.replace("_", " "), "", "paso 7", autor),
-        ("Paquete sectorial", p.paquete.replace("_", " "), "", "SIC de la SEC", "sistema"),
+        ("Paquete sectorial", p.paquete.replace("_", " "), "", "paso 1" if p.paquete_confirmado else "SIC de la SEC",
+         autor if p.paquete_confirmado else "sistema"),
         ("Tipo sin riesgo", pct(w.rf, 2), "%", f"Tesoro de EE. UU., 10 años, {f_fecha(w.rf_fecha)}", "sistema"),
         ("Prima de riesgo de mercado", pct(p.erp), "%", p.erp_fuente or "paso 7", autor),
         ("Beta", numero(w.beta, 2), "", w.beta_origen, "sistema"),
@@ -78,7 +79,8 @@ def _modelo(d: ParteI, n, motor, autor: str) -> None:
                   (f"{nombre.capitalize()} · margen EBIT", _serie(e.margen), "%", "paso 7", autor),
                   (f"{nombre.capitalize()} · crecimiento terminal", pct(e.g, 2), "%", "paso 7", autor)]
     d.cuadros["entradas"] = Cuadro(n.siguiente(), "Entradas del modelo", ["Valor", "Unidad", "Origen", "Autor"],
-                                   [FilaCuadro(r, [_c(val), _c(u), _c(o), _c(a)], capa="S") for r, val, u, o, a in filas],
+                                   [FilaCuadro(r, [Celda(val, "", "S", "valor", "", "horizonte" if r == "Horizonte del precio objetivo" else ""),
+                                                   _c(u), _c(o), _c(a)], capa="S") for r, val, u, o, a in filas],
                                    "Fuente: entradas del paso 7 y cálculos del motor de valoración (05).", partible=True)
     pr = v.base.proyeccion
     columnas = [str(c.year) for c in pr.cierres]
@@ -182,7 +184,9 @@ def construir(n, motor, pb, emisor, huecos: Sequence[str], excel: Optional[Tuple
         d.excel = f"Libro exportado por el motor: {excel[0]} · sha256 {excel[1][:12]} (fórmulas vivas; el recálculo coincide con el motor)."
     ruta = getattr(e, "ruta", None)
     cuerpo = json.dumps(e.datos, ensure_ascii=False, sort_keys=True)
-    d.entradas = (f"Entradas del analista: {Path(ruta).name if ruta else 'sin fichero'} · sha256 "
+    quien = ", ".join(x for x in (str(e.valor("meta.analista") or ""), {"inicio_cobertura": "inicio de cobertura", "actualizacion": "actualización"}
+                                   .get(str(e.valor("meta.tipo") or ""), "")) if x)
+    d.entradas = (f"Entradas del analista{f' ({quien})' if quien else ''}: {Path(ruta).name if ruta else 'sin fichero'} · sha256 "
                   f"{hashlib.sha256(cuerpo.encode('utf-8')).hexdigest()[:12]}" + (" (entradas de PRUEBA)" if e.de_prueba else ""))
     _fuentes(d, n, emisor)
     citas = _citas(e, getattr(pb, "item1a", None))

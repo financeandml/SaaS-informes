@@ -20,3 +20,9 @@
 .acciones { display: flex; gap: 8px; align-items: center; margin-top: 10px; flex-wrap: wrap; }
 .notas-asistente { margin: 0; padding-left: 18px; color: var(--ocre); }
 .enlaces-asistente { display: flex; gap: 12px; font-size: 13px; }
+/* paso 9: párrafos de plantilla (06 §1) */
+.parrafos ol { margin: 6px 0; padding-left: 20px; }
+.parrafos li { margin: 4px 0; }
+.parrafos li .pista { display: inline; }
+.parrafos .estado-parrafo { font-weight: 600; color: var(--tinta); }
+.botones-parrafo { display: flex; gap: 8px; margin-top: 6px; }

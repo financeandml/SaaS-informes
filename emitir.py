@@ -25,7 +25,8 @@ import sys
 from datetime import date
 from pathlib import Path
 
-sys.stdout.reconfigure(encoding="utf-8")
+if hasattr(sys.stdout, "reconfigure"):             # una salida sustituida (StringIO de `unittest -b`) no lo tiene
+    sys.stdout.reconfigure(encoding="utf-8")
 
 from tesis import (auditor, calendario, comparables, contraste, dcf, derivados, entorno, entradas, expediente, ficha, gobierno, guidance, historial, informe,  # noqa: E402
                    mercado_objetivo, multiplos, parte_b, posicionamiento, precio, recortes, regiones, render, revision, riesgos, rotulos, sec)
@@ -203,6 +204,10 @@ def main(argv=None) -> int:
     inf = informe.construir(args.ticker, hoy, emisor, exp, tab, periodos, f, g, gu, reg, pr, recs, modelo_dcf=modelo,
                             riesgos=ri, historial=hi, salida_recortes=carpeta_recortes, mercado=mer, posicionamiento=posi, comparables=comp, mercado_objetivo=merc,
                             agregador=agr, multiplos=mult, proxima=prox, parte_b=pb, motor=mot, libro=libro_analista, excel=excel_exportado)
+    # 06 §1: las propuestas de plantilla de esta generación, para aceptarlas o editarlas en el paso 9 del asistente
+    from tesis import propuestas
+    propuestas.escribir(salida / f"{nombre_base}.propuestas.json", inf.parrafos)
+    print("  párrafos de plantilla: " + (" · ".join(f"{x.titulo} ({x.estado})" for x in inf.parrafos) or "ninguno"))
     n_evid = sum(len(lista) for _, _, lista in inf.documentacion)
     print(f"  documentación complementaria: {n_evid} piezas en {len(inf.documentacion)} apartados · {len(recs)} recortes de estados junto a sus cuadros · "
           f"{len([x for x in inf.fotos_ejecutivos + inf.fotos_consejo if x.ruta])} retratos")
@@ -227,6 +232,7 @@ def main(argv=None) -> int:
         "solo_sec": inf.solo_sec, "huecos": inf.huecos, "no_son_partidas": dict(tab.no_aplican),
         "fallos_de_las_fuentes": list(rotulos.FALLOS),          # el detalle técnico que el cuerpo dice en español
         "relleno": [{"pagina": k, "ocupado": f, "fin_de_parte": fin} for k, f, fin in medidas],
+        "parrafos": [{"id": x.id, "estado": x.estado, "huella": x.huella} for x in inf.parrafos],
     }, ensure_ascii=False, indent=1), encoding="utf-8")
     print(f"  puerta de calidad: {len(puerta.bloqueos)} bloqueos · {len(puerta.avisos)} avisos · "
           + (f"EMITIDO {inf.emitido:%d/%m/%Y}" if inf.emitido else "BORRADOR (hoja 0 con los bloqueos)"))

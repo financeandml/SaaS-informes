@@ -19,7 +19,7 @@ from typing import Dict, List, Optional, Tuple
 from . import entorno
 from .entradas import Entradas, comprobar_paso8, palabras
 
-__all__ = ["esquema", "ruta", "fechas", "cargar", "guardar", "validar", "migrar_posicion"]
+__all__ = ["esquema", "ruta", "fechas", "cargar", "guardar", "validar", "migrar_posicion", "propuestas"]
 
 _SPEC = Path(__file__).resolve().parent.parent / "docs" / "spec" / "04_entradas.yaml"
 # campos que 04 pide en la validación de otro («fuente y fecha obligatorias», «≠ 0 exige justificación»): van detrás de él
@@ -64,6 +64,14 @@ def esquema() -> List[dict]:
 
 def ruta(ticker: str, fecha: date) -> Path:
     return entorno.carpeta("entradas") / ticker.upper() / fecha.isoformat() / "entradas.json"
+
+
+def propuestas(ticker: str, fecha: date) -> List[dict]:
+    """06 §1: los párrafos de plantilla de la última generación del informe de esa fecha, que `emitir.py` deja junto al
+    PDF; el paso 9 los enseña para aceptarlos o editarlos."""
+    from .propuestas import leer
+    t = ticker.upper()
+    return leer(entorno.carpeta("salida") / t / f"{t}_tesis_{fecha.isoformat()}.propuestas.json")
 
 
 def fechas(ticker: str) -> List[str]:
@@ -208,6 +216,24 @@ def _campo(c: dict, v, id_: str, faltas: List[str]) -> None:
                     _campo(dict(sub, oblig=sub.get("oblig", True)), x.get(sub["id"]), f"{id_}[{k}].{sub['id']}", faltas)
 
 
+def _paso9(ticker: str, fecha: date, e: Entradas) -> List[str]:
+    """Cada propuesta de la última generación, aceptada o editada con su huella vigente; lo editado, por el linter."""
+    from .linter import revisar
+    from .propuestas import editadas
+    revision = e.valor("revision.parrafos")
+    revision = revision if isinstance(revision, dict) else {}
+    faltas = []
+    for p in propuestas(ticker, fecha):
+        r = revision.get(p["id"])
+        if not isinstance(r, dict) or not r.get("frases"):
+            faltas.append(f"revision.parrafos: «{p['titulo']}» sin aceptar ni editar")
+        elif r.get("propuesta") != p.get("huella"):
+            faltas.append(f"revision.parrafos: «{p['titulo']}» cambió desde que lo validó (los datos son otros): vuelva a aceptarlo o editarlo")
+        elif not any(isinstance(x, list) and x and str(x[0]).strip() for x in r["frases"]):
+            faltas.append(f"revision.parrafos: «{p['titulo']}» sin ninguna frase: se edita, no se borra entero")
+    return faltas + [f"{id_}: {x}" for id_, t in editadas(revision) for x in revisar(t)]
+
+
 def validar(ticker: str, fecha: date, datos: dict, regla: Optional[Tuple[str, float, Optional[float]]] = None) -> Tuple[Dict[int, List[str]], List[str]]:
     """({paso: faltas}, avisos). `regla`: (recomendación de la regla, potencial, recorrido/riesgo) si ya hay motor."""
     from . import precio
@@ -225,15 +251,21 @@ def validar(ticker: str, fecha: date, datos: dict, regla: Optional[Tuple[str, fl
         salida[p["numero"]] = faltas
     try:                                              # v1: financieras, REIT y biotech sin ingresos se bloquean en el paso 1
         from . import sec
-        from .motor.datos import paquete_por_sic
-        _, bloqueo = paquete_por_sic(sec.emisor(ticker).sic)
+        from .motor.datos import ingresos_anuales, paquete_por_sic, sectores
+        em = sec.emisor(ticker)
+        ingresos = None
+        if any(a <= int(em.sic) <= b for a, b in (sectores().get("bloqueo_biotech") or {}).get("sic", [])):   # solo si puede serlo
+            facts, obtenido = sec.companyfacts(em.cik)
+            ingresos = ingresos_anuales(facts, obtenido)
+        _, bloqueo = paquete_por_sic(em.sic, ingresos)
         if bloqueo:
             salida[1].insert(0, f"meta.sector: bloqueo v1 — {bloqueo}")
     except Exception:                                 # sin EDGAR no se sabe el SIC: lo dirá el informe al generarse
         pass
     if e.valor("esc"):
         salida[7] += leer(datos, fecha).faltas
-    val = e.valor("val.fecha_valoracion") or e.valor("meta.fecha_valoracion")
+    salida[9] = salida.get(9, []) + _paso9(ticker, fecha, e)
+    val = e.valor("meta.fecha_valoracion")
     fv = date.fromisoformat(str(val)) if val else fecha
     try:
         sesiones = precio.sesiones_nasdaq(ticker.upper(), precio.desde_5a(fv), fv, limite=2000)
@@ -249,4 +281,5 @@ def validar(ticker: str, fecha: date, datos: dict, regla: Optional[Tuple[str, fl
     # las del esquema que la comprobación del paso 8 dice mejor (con su motivo) no se repiten
     propias = {x.split(":")[0].split("[")[0] for x in f8}
     salida[8] = [x for x in salida[8] if x.split(":")[0].split("[")[0] not in propias] + f8
-    return salida, avisos
+    from .linter import avisos_entradas                  # 02: frases y párrafos largos, mientras escribe (avisan, no bloquean)
+    return salida, avisos + avisos_entradas(e)

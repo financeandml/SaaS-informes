@@ -20,7 +20,7 @@ from difflib import SequenceMatcher
 from pathlib import Path
 from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
 
-__all__ = ["Entradas", "cargar", "normalizar", "verificar_cita", "comprobar_paso3", "comprobar_paso4", "comprobar_paso5", "comprobar_paso6", "comprobar_paso8", "palabras"]
+__all__ = ["Entradas", "cargar", "normalizar", "verificar_cita", "comprobar_paso1", "comprobar_paso3", "comprobar_paso4", "comprobar_paso5", "comprobar_paso6", "comprobar_paso8", "palabras"]
 
 
 @dataclass
@@ -288,6 +288,34 @@ def _es(v: float, decimales: int = 2) -> str:
 
 def _texto_de(v) -> str:
     return (v.get("texto", "") if isinstance(v, dict) else (v or "")).strip() if v is not None else ""
+
+
+def comprobar_paso1(e: Entradas, fecha_informe: date, paquetes: Sequence[str], bloqueo_v1: Optional[str] = None) -> List[str]:
+    """Faltas del paso 1 (04: metadatos y clasificación), que al generar bloquean como cualquier obligatorio (06 §3.1).
+    `paquetes`: los de `config/sectores.yaml`; `bloqueo_v1`: el motivo si el emisor queda fuera de la v1 (05 §2)."""
+    faltas: List[str] = []
+    for id_ in ("meta.analista", "meta.fecha_valoracion", "meta.tipo", "meta.nombre_presentacion", "meta.sector"):
+        if not str(e.valor(id_) or "").strip():
+            faltas.append(f"{id_}: obligatorio (paso 1)")
+    fv = e.valor("meta.fecha_valoracion")
+    if fv:
+        try:
+            if date.fromisoformat(str(fv)) > fecha_informe:
+                faltas.append(f"meta.fecha_valoracion: {date.fromisoformat(str(fv)):%d/%m/%Y} es posterior a la fecha del informe")
+        except ValueError:
+            faltas.append("meta.fecha_valoracion: fecha AAAA-MM-DD")
+    tipo = e.valor("meta.tipo")
+    if tipo and tipo not in ("inicio_cobertura", "actualizacion"):
+        faltas.append(f"meta.tipo: «{tipo}» no es inicio de cobertura ni actualización")
+    sector = e.valor("meta.sector")
+    if sector and sector not in paquetes:
+        faltas.append(f"meta.sector: «{sector}» no es un paquete sectorial de 05 §2")
+    nombre = str(e.valor("meta.nombre_presentacion") or "")
+    if re.search(r"/[A-Z]{2}\b|common stock", nombre, re.I):
+        faltas.append(f"meta.nombre_presentacion: «{nombre}» lleva sufijo de estado o «Common Stock»")
+    if bloqueo_v1:
+        faltas.insert(0, f"meta.sector: bloqueo v1 — {bloqueo_v1}")
+    return faltas
 
 
 def comprobar_paso8(e: Entradas, fecha_informe: date, rango_sesion, regla: Optional[str] = None, potencial: Optional[float] = None,

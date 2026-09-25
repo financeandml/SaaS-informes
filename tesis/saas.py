@@ -455,7 +455,8 @@ class _Manejador(BaseHTTPRequestHandler):
             datos, notas = asistente.cargar(t, fecha)
             faltas, avisos = asistente.validar(t, fecha, datos)
             self._json(200, {"ticker": t, "fecha": fecha.isoformat(), "fechas": asistente.fechas(t), "esquema": asistente.esquema(),
-                             "entradas": datos, "notas": notas, "faltas": faltas, "avisos": avisos})
+                             "entradas": datos, "notas": notas, "faltas": faltas, "avisos": avisos,
+                             "propuestas": asistente.propuestas(t, fecha)})
             return
         nombre = camino.lstrip("/")
         fichero = (TABLERO / nombre).resolve()

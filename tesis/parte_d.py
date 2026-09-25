@@ -12,8 +12,13 @@ from .formato import Celda, fecha as f_fecha, numero
 __all__ = ["ParteD", "construir"]
 
 
-def _c(texto: str, nota: str = "", clase: str = "valor", capa: str = "D") -> Celda:
-    return Celda(texto, "", capa, clase, nota)
+def _c(texto: str, nota: str = "", clase: str = "valor", capa: str = "D", hecho: str = "") -> Celda:
+    return Celda(texto, "", capa, clase, nota, hecho)
+
+
+def _dn(pte) -> str:
+    """La clave de valor único de la deuda neta del puente: por fecha de balance (06 §3.3)."""
+    return f"deuda_neta@{pte.fecha_balance.isoformat()}" if getattr(pte, "fecha_balance", None) else "deuda_neta@puente"
 
 
 def _na(motivo: str) -> Celda:
@@ -100,14 +105,14 @@ def construir(n, m, etiqueta, hechos=None, anuales=None, consenso=None, libro: O
     for l in pte.lineas:
         filas.append(FilaCuadro(("(−) " if l.signo < 0 else "(+) ") + l.rotulo, [_c(_mln(l.valor), capa="H"), _c(l.fuente)]))
     filas += [FilaCuadro("Fondos propios", [_c(_mln(b.fondos_propios)), _c("valor de empresa + ajustes del puente")], destacada=True),
-              FilaCuadro("Acciones diluidas (millones)", [_c(numero(pte.acciones / 1e6, 1), capa="H"), _c(pte.acciones_nota)]),
+              FilaCuadro("Acciones diluidas (millones)", [_c(numero(pte.acciones / 1e6, 1), capa="H", hecho="acciones_diluidas"), _c(pte.acciones_nota)]),
               FilaCuadro("Valor por acción hoy (V₀)", [_c(_usd(b.v0)), _c("fondos propios / acciones diluidas")], destacada=True)]
     d.cuadros["puente"] = Cuadro(n.siguiente(), "Puente del valor de empresa al valor por acción (escenario base, mln USD)", ["Importe", "Origen"],
                                  filas, f"Fuente: motor; deuda neta del puente {_mln(pte.deuda_neta)} M USD, los mismos importes del apartado 9.")
     # 12 · entradas frente al dato oficial
-    filas = [FilaCuadro("Precio", [_c(_usd(v.precio), capa="H"), _c(_usd(m.precio), capa="H"), _c("✓")]),
+    filas = [FilaCuadro("Precio", [_c(_usd(v.precio), capa="H", hecho="precio"), _c(_usd(m.precio), capa="H", hecho="precio"), _c("✓")]),
              FilaCuadro(f"Ingresos del año base ({m.etiqueta_base})", [_c(_mln(m.ingresos_base), capa="H"), _c(_mln(m.ingresos_base), capa="H"), _c("✓")]),
-             FilaCuadro("Deuda neta del puente", [_c(_mln(pte.deuda_neta), capa="H"), _c(_mln(pte.deuda_neta), capa="H"), _c("✓")])]
+             FilaCuadro("Deuda neta del puente", [_c(_mln(pte.deuda_neta), capa="H", hecho=_dn(pte)), _c(_mln(pte.deuda_neta), capa="H", hecho=_dn(pte)), _c("✓")])]
     d.cuadros["entradas"] = Cuadro(n.siguiente(), "Entradas del modelo frente al dato oficial", ["Motor", "Dato oficial", "Cuadre"], filas,
                                    f"El motor lee los hechos verificados: precio ({precio_txt}), ingresos (SEC) y balance (SEC). Deben coincidir.")
     # 12 · supuestos generales
@@ -243,7 +248,8 @@ def construir(n, m, etiqueta, hechos=None, anuales=None, consenso=None, libro: O
         d.sotp = ("No aplica: la compañía declara un único segmento operativo." if segmento_unico else
                   "No aplica por decisión del analista (entradas, sotp.aplica = no); el DCF consolidado rige.")
     # 20 · PO y margen de seguridad
-    filas = [FilaCuadro(rot, [_c(val, formula)], destacada=dest) for rot, val, formula, dest in (
+    unicos = {f"Precio objetivo a {h} meses": "po", "Precio (cierre oficial)": "precio"}          # 06 §3.3
+    filas = [FilaCuadro(rot, [_c(val, formula, hecho=unicos.get(rot, ""))], destacada=dest) for rot, val, formula, dest in (
         (f"Precio objetivo a {h} meses", _usd(v.po), "Σ p · V_h", True), ("Valor razonable hoy", _usd(v.valor_razonable), "Σ p · V₀", False),
         ("Precio (cierre oficial)", _usd(v.precio), precio_txt, False), ("Potencial", _pct(v.potencial), "PO / precio − 1", True),
         ("Margen de seguridad", _pct(v.margen_seguridad), "1 − precio / valor razonable", False),
@@ -252,7 +258,7 @@ def construir(n, m, etiqueta, hechos=None, anuales=None, consenso=None, libro: O
          "(PO − precio) / (precio − V_h pesimista)", False),
         ("Recomendación sugerida por la regla", v.recomendacion, "regla de recomendación de la configuración de umbrales", True))]
     if recomendacion_analista:
-        filas.append(FilaCuadro("Recomendación del analista", [_c(recomendacion_analista.capitalize(), "posición del analista", capa="S")]))
+        filas.append(FilaCuadro("Recomendación del analista", [_c(recomendacion_analista.capitalize(), "posición del analista", capa="S", hecho="recomendacion")]))
     d.cuadros["objetivo"] = Cuadro(n.siguiente(), "Precio objetivo y margen de seguridad", ["Valor"], filas,
                                    "Definiciones únicas (05 §7). Un solo precio objetivo, el del motor; el consenso no entra en ninguna media.")
     if consenso is not None:

@@ -53,6 +53,7 @@ class Celda:
     capa: str
     clase: str          # «na» · «cero» · «valor» · «negativo»
     nota: str
+    hecho: str = ""     # concepto de valor único (06 §3.3: precio, po, deuda_neta@fecha…); se imprime como data-hecho
 
 
 def celda(h: Optional[Hecho], unidad: Optional[str] = None) -> Celda:
@@ -81,4 +82,6 @@ def celda(h: Optional[Hecho], unidad: Optional[str] = None) -> Celda:
     nota = h.nota
     if h.capa is Capa.DERIVADO and h.formula:
         nota = (h.formula + (" · " + nota if nota else ""))
-    return Celda(texto, h.contraste.value, h.capa.value, "negativo" if v < 0 else "valor", nota)
+    # 06 §3.3: la deuda neta de una fecha es una sola en todo el informe (cuadro 1, balance, puente)
+    unico = f"deuda_neta@{h.periodo.fin.isoformat()}" if h.campo == "deuda_neta" and h.periodo.es_instante else ""
+    return Celda(texto, h.contraste.value, h.capa.value, "negativo" if v < 0 else "valor", nota, unico)
