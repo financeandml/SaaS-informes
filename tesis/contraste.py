@@ -50,6 +50,7 @@ from .campos import CAMPOS, Campo, campo as campo_de
 _POR_CLAVE = {c.clave: c for c in CAMPOS}
 from .expediente import Adjunto, Expediente, Tipo
 from .extractor import Candidato, PaginaLeida, extraer_pdf, extraer_xlsx
+from .formato import numero
 from .hechos import Capa, Certeza, Contraste, Estado, Hecho, Origen, Periodo, de_valor, derivar, na
 
 __all__ = ["Decision", "Resultado", "Tablero", "contrastar", "periodos_del_informe"]
@@ -151,10 +152,10 @@ def _no_los_tiene_la_compania(resultados: List[Resultado], facts: dict) -> Dict[
         limite = date(desde.year - 2, desde.month, 28 if (desde.month, desde.day) == (2, 29) else desde.day)
         if ultimo is not None and ultimo >= limite.isoformat():
             continue
-        que = ", ".join(conceptos) if conceptos else "ningún concepto us-gaap para esto"
-        salida[clave] = (f"la compañía dejó de declarar {que} en {ultimo[:4]}" if ultimo
-                         else f"la compañía no declara {que} en ningún depósito") + \
-                        ", y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, " \
+        # sin los nombres de los conceptos: son identificadores de la fuente, que nunca se imprimen (CLAUDE.md › Idioma)
+        salida[clave] = (f"la compañía dejó de declarar esta partida en {ultimo[:4]}" if ultimo
+                         else "la compañía no declara esta partida en ningún 10-K ni 10-Q") + \
+                        ", y tampoco la imprime en los documentos del expediente: no es una línea de sus cuentas, " \
                         "no un dato que falte."
     return salida
 
@@ -372,17 +373,17 @@ def _contrastar_celda(c: Campo, p: Periodo, hecho_sec: Optional[Hecho],
             return Resultado(c, p, hecho, hecho_sec, cands, [cand for _, cand in coinciden], ev)
         if pares:
             a, ev = _ordenar_evidencia(pares)[0]
-            lecturas = "; ".join(f"{aa.nombre} pág. {cc.pagina} = {cc.valor:,.2f}" for aa, cc in _ordenar_evidencia(pares)[:4])
+            lecturas = "; ".join(f"{aa.nombre} pág. {cc.pagina} = {numero(cc.valor, 2)}" for aa, cc in _ordenar_evidencia(pares)[:4])
             pista = _pista(hecho_sec.valor, ev, c)
             if decision is not None:
                 hecho = de_valor(c.clave, p, _normalizar(decision.valor, c), Capa.SUPUESTO if decision.valor not in (hecho_sec.valor, ev.valor) else Capa.SEC,
                                  hecho_sec.origen if decision.valor == hecho_sec.valor else _origen_de(a, ev), unidad=c.unidad,
                                  certeza=Certeza.ALTA,
-                                 nota=f"discrepancia SEC {hecho_sec.valor:,.2f} / documento {ev.valor:,.2f} resuelta por {decision.analista} el {decision.fecha}: {decision.motivo}")
+                                 nota=f"discrepancia SEC {numero(hecho_sec.valor, 2)} / documento {numero(ev.valor, 2)} resuelta por {decision.analista} el {decision.fecha}: {decision.motivo}")
                 hecho = hecho.con(contraste=Contraste.CONFIRMADO)
                 return Resultado(c, p, hecho, hecho_sec, cands, [], ev, nota=hecho.nota)
             hecho = hecho_sec.con(contraste=Contraste.DISCREPANTE,
-                                  nota=f"SEC {hecho_sec.valor:,.2f} frente a {lecturas}" + (f" · {pista}" if pista else ""))
+                                  nota=f"SEC {numero(hecho_sec.valor, 2)} frente a {lecturas}" + (f" · {pista}" if pista else ""))
             return Resultado(c, p, hecho, hecho_sec, cands, [], ev, nota=hecho.nota)
         hecho = hecho_sec.con(contraste=Contraste.SOLO_SEC, nota=(hecho_sec.nota + " · " if hecho_sec.nota else "") + "sin contraste documental")
         return Resultado(c, p, hecho, hecho_sec, [], [], None)
@@ -393,7 +394,7 @@ def _contrastar_celda(c: Campo, p: Periodo, hecho_sec: Optional[Hecho],
         # ¿los adjuntos coinciden entre sí? (cada uno con su tolerancia)
         distintos = [cand for _, cand in ordenados if abs(abs(cand.valor) - abs(ev.valor)) > max(_tolerancia(cand, c), _tolerancia(ev, c))]
         if distintos and decision is None:
-            lecturas = "; ".join(f"{aa.nombre} pág. {cc.pagina} = {cc.valor:,.2f}" for aa, cc in ordenados[:4])
+            lecturas = "; ".join(f"{aa.nombre} pág. {cc.pagina} = {numero(cc.valor, 2)}" for aa, cc in ordenados[:4])
             hecho = Hecho(campo=c.clave, periodo=p, valor=_normalizar(ev.valor, c), estado=Estado.CERO if ev.valor == 0 else Estado.VALOR,
                           capa=Capa.DOCUMENTO, unidad=c.unidad, origen=_origen_de(a, ev), certeza=Certeza.BAJA,
                           contraste=Contraste.DISCREPANTE, motivo="los adjuntos no coinciden entre sí",

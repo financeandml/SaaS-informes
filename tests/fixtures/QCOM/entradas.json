@@ -1,5 +1,5 @@
 {
- "_prueba": "Entradas de PRUEBA para las regresiones de F2 a F6: no son del analista y el informe no se puede emitir con ellas.",
+ "_prueba": "Entradas de PRUEBA para las regresiones de F2 a F7: no son del analista y el informe no se puede emitir con ellas.",
  "perfil": {
   "descripcion": {
    "texto": "Qualcomm diseña semiconductores y licencia la propiedad intelectual de sus tecnologías inalámbricas. Se organiza en tres segmentos: QCT, que vende plataformas y circuitos integrados para teléfonos móviles, automoción e internet de las cosas; QTL, que cobra regalías por su cartera de patentes de comunicaciones móviles; y QSI, que agrupa inversiones estratégicas. La mayor parte de los ingresos procede de fabricantes de teléfonos, con fuerte concentración en clientes de China y Corea del Sur, mientras la compañía intenta diversificarse hacia automoción, ordenadores personales y centros de datos. Su posición se apoya en la investigación en conectividad y en computación de bajo consumo, y en una cartera de patentes que licencia a buena parte del sector.",
@@ -553,26 +553,116 @@
  "pilares": [
   {
    "titulo": "Diversificación fuera del teléfono",
+   "argumento": {
+    "texto": "Automoción, IoT y PC crecen más deprisa que el teléfono y ya son una parte relevante de los ingresos de QCT. Si la diversificación cumple el objetivo que la compañía se ha fijado, la dependencia de un gran cliente de módems pesa menos y el crecimiento de los ingresos se sostiene aunque el teléfono se estanque."
+   },
+   "evidencias": [
+    {
+     "doc": "10-K",
+     "pag": "4",
+     "texto": "Our platforms help power intelligent devices that people and businesses rely on every day across industries and applications from handsets to other areas, including automotive and the internet of things (IoT).",
+     "texto_es": "Sus plataformas impulsan dispositivos inteligentes en sectores y aplicaciones que van de los teléfonos a otras áreas, como la automoción y el internet de las cosas (IoT)."
+    },
+    {
+     "doc": "8-K 2026-07-29",
+     "pag": "1",
+     "texto": "We are well positioned to execute on the vision we outlined at our recent Investor Day, with total non-handset revenues growing to $40 billion by fiscal 2029 – nearly double the target we shared in November 2024.",
+     "texto_es": "La compañía se ve bien situada para que sus ingresos fuera de los teléfonos lleguen a 40.000 millones USD en el ejercicio fiscal 2029."
+    }
+   ],
+   "kpi": "Ingresos de automoción",
    "riesgo_1a": "Our growth depends in part on our ability to extend our technologies and products into new and expanded product areas",
    "riesgo_es": "Que automoción, IoT y PC no crezcan al ritmo del objetivo y no compensen la caída del teléfono."
   },
   {
    "titulo": "Licencias de patentes esenciales",
+   "argumento": {
+    "texto": "Las patentes esenciales de los estándares celulares se licencian a casi todos los fabricantes de dispositivos. Las regalías tienen márgenes muy altos y se renuevan con cada generación del estándar, lo que da a la compañía una fuente de beneficios estable y difícil de replicar por sus competidores."
+   },
+   "evidencias": [
+    {
+     "doc": "10-K",
+     "pag": "10",
+     "texto": "We grant licenses or otherwise provide rights to use our cellular standard-essential patents (including 3G, 4G and 5G) for cellular devices on a worldwide basis.",
+     "texto_es": "Licencia en todo el mundo sus patentes esenciales de los estándares celulares (3G, 4G y 5G) para dispositivos móviles."
+    },
+    {
+     "doc": "10-K",
+     "pag": "7",
+     "texto": "This intellectual property has been incorporated into the most widely accepted and deployed cellular wireless communications technology standards, and we have licensed it to hundreds of companies.",
+     "texto_es": "Su propiedad intelectual está incorporada en los estándares celulares más extendidos y la ha licenciado a cientos de compañías."
+    }
+   ],
+   "kpi": "Ingresos de QTL",
    "riesgo_1a": "Changes in our patent licensing practices, whether due to governmental investigations",
    "riesgo_es": "Que investigaciones o litigios obliguen a cambiar el modelo de licencias y rebajen las regalías."
   },
   {
    "titulo": "Liderazgo en procesadores de gama alta",
+   "argumento": {
+    "texto": "Snapdragon es la plataforma de referencia en los teléfonos de gama alta y en la cabina digital de los coches. Esa posición permite cobrar precios más altos, llevar la misma tecnología a nuevos mercados y mantener el margen operativo cerca de su media aunque el ciclo del teléfono sea débil."
+   },
+   "evidencias": [
+    {
+     "doc": "10-K",
+     "pag": "9",
+     "texto": "QCT's marketing strategy aims to promote Qualcomm as the leader of enabling intelligent computing everywhere, Snapdragon as the preferred platform powering premium experiences across handsets, automotive and consumer IoT, and Dragonwing as the leading-edge products for industrial and edge networking IoT.",
+     "texto_es": "Su estrategia comercial presenta Snapdragon como la plataforma preferida para las experiencias de gama alta en teléfonos, automoción e IoT de consumo."
+    },
+    {
+     "doc": "10-K",
+     "pag": "8",
+     "texto": "QCT’s integrated circuit products are sold and its system software is licensed to manufacturers that use our products in a broad range of devices, from low-tier, entry-level devices primarily for emerging regions to premium-tier devices, including but not limited to mobile devices, wireless networks, devices used in IoT, broadband gateway equipment, consumer electronic devices and automotive systems.",
+     "texto_es": "QCT vende sus circuitos a fabricantes de una amplia gama de dispositivos, desde los de entrada para mercados emergentes hasta los de gama alta."
+    }
+   ],
+   "kpi": "Ingresos de QCT por teléfonos",
    "riesgo_1a": "Our industry is subject to intense competition in an environment of rapid technological change",
    "riesgo_es": "Que la competencia o la integración vertical de los clientes le quiten cuota en la gama alta."
   },
   {
    "titulo": "Retorno al accionista sostenido",
+   "argumento": {
+    "texto": "La compañía reparte de forma constante su caja entre dividendos y recompras, con un programa de recompra amplio y sin vencimiento. Mientras el flujo de caja libre se mantenga, la retribución al accionista sostiene el valor aunque el crecimiento sea moderado y el ciclo de semiconductores empeore."
+   },
+   "evidencias": [
+    {
+     "doc": "8-K 2026-07-29",
+     "pag": "2",
+     "texto": "Return of Capital to Stockholders During the third quarter of fiscal 2026, we returned $2.3 billion to stockholders, including $973 million, or $0.92 per share, of cash dividends paid and $1.4 billion through repurchases of 8 million shares of common stock.",
+     "texto_es": "En el tercer trimestre fiscal de 2026 devolvió 2.300 millones USD al accionista: 973 millones en dividendos y 1.400 millones en recompras."
+    },
+    {
+     "doc": "10-K",
+     "pag": "37",
+     "texto": "We currently intend to continue to pay quarterly cash dividends, subject to capital availability and our view that cash dividends are in the best interests of our stockholders.",
+     "texto_es": "La compañía tiene intención de seguir pagando dividendos trimestrales, según su disponibilidad de capital."
+    }
+   ],
+   "kpi": "Flujo de caja libre",
    "riesgo_1a": "There are risks associated with our debt.",
    "riesgo_es": "Que la deuda y los compromisos de caja limiten las recompras y el dividendo."
   },
   {
-   "titulo": "Valoración frente al ciclo",
+   "titulo": "Caja y balance para atravesar el ciclo",
+   "argumento": {
+    "texto": "La caja, los valores negociables y la generación de caja de las operaciones cubren con holgura las necesidades de capital. Ese balance permite seguir invirtiendo en investigación y en la diversificación durante una caída del ciclo sin recortar la retribución al accionista ni endeudarse en exceso."
+   },
+   "evidencias": [
+    {
+     "doc": "10-K",
+     "pag": "44",
+     "texto": "Our principal sources of liquidity are our existing cash, cash equivalents and marketable securities (including restricted cash), cash generated from operations and cash provided by our debt programs, which we believe will satisfy our working and other capital requirements for at least the next 12 months based on our current business plans.",
+     "texto_es": "Sus fuentes de liquidez —caja, valores negociables, caja de las operaciones y programas de deuda— cubren sus necesidades de capital de los próximos doce meses."
+    },
+    {
+     "doc": "10-K",
+     "pag": "37",
+     "texto": "(2) On November 6, 2024, we announced a $15.0 billion stock repurchase program, which has no expiration date.",
+     "texto_es": "El 6 de noviembre de 2024 anunció un programa de recompra de acciones de 15.000 millones USD, sin fecha de vencimiento."
+    }
+   ],
+   "kpi": "Flujo de caja libre",
    "riesgo_1a": "We operate in the highly cyclical semiconductor industry",
    "riesgo_es": "Que una caída del ciclo de semiconductores rebaje los beneficios cuando la valoración descuenta crecimiento."
   }
@@ -667,6 +757,22 @@
     "rojo": "< 22 %",
     "fuente": "10-Q y 10-K",
     "frecuencia": "trimestral"
+   },
+   {
+    "kpi": "Ingresos de QTL",
+    "actual": "",
+    "verde": "≥ 0 % interanual",
+    "rojo": "< −15 % interanual",
+    "fuente": "nota de resultados (8-K)",
+    "frecuencia": "trimestral"
+   },
+   {
+    "kpi": "Flujo de caja libre",
+    "actual": "",
+    "verde": "≥ retribución al accionista",
+    "rojo": "< dividendos pagados",
+    "fuente": "10-Q y 10-K",
+    "frecuencia": "trimestral"
    }
   ],
   "fechas_revision": [
@@ -680,5 +786,16 @@
    "Horizonte vencido sin catalizador.",
    "Una oportunidad mejor con el mismo riesgo."
   ]
+ },
+ "tesis": {
+  "resumen": {
+   "texto": "Qualcomm une un negocio de licencias de patentes muy rentable con una división de semiconductores que empieza a diversificarse fuera del teléfono. La tesis de prueba es que automoción, IoT y PC compensan la pérdida gradual de un gran cliente de módems, que las licencias mantienen sus regalías y que la caja sostiene dividendos y recompras. El motor, con estas entradas de prueba, no ve potencial al precio actual: el informe sirve para comprobar el sistema, no como recomendación."
+  },
+  "por_que_ahora": {
+   "texto": "La compañía acaba de elevar su objetivo de ingresos fuera del teléfono y los próximos resultados dirán si la automoción y el IoT sostienen el ritmo; en el ejercicio 2025 facturó 44.284 M USD con un margen operativo del 27,9 %."
+  },
+  "vision_vs_mercado": {
+   "texto": "El DCF inverso indica cuánto crecimiento descuenta el precio; la visión de prueba es que la diversificación lo supera, pero las entradas del motor son conservadoras y el resultado no apoya comprar."
+  }
  }
 }

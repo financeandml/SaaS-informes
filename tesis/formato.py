@@ -23,8 +23,11 @@ _SIGNO = {c.clave: c.signo_informe for c in CAMPOS}
 
 
 def numero(v: float, decimales: int = 0) -> str:
-    s = f"{v:,.{decimales}f}"
-    return s.replace(",", " ").replace(".", ",").replace(" ", ".")
+    """es-ES (02): miles con punto, decimales con coma y signo menos tipográfico («−3.117»); sin «−0»."""
+    s = f"{v:,.{decimales}f}".replace(",", " ").replace(".", ",").replace(" ", ".")
+    if s.startswith("-"):
+        return "−" + s[1:] if s.strip("-0.,") else s[1:]
+    return s
 
 
 def mln(v: float, decimales: int = 0) -> str:

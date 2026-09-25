@@ -202,7 +202,7 @@ def _comparables(d: ParteE, n, motor, hechos, anuales, etiqueta, nombre: str, ti
     d.cuadros["comparables"] = Cuadro(
         n.siguiente(), "Comparables: tamaño, crecimiento y margen del último ejercicio",
         ["Cierre del ejercicio", "Capitalización (mill. USD)", "Ingresos (mill. USD)", "Crecimiento de ingresos", "Margen EBIT"],
-        filas, "Fuente: SEC (companyfacts de cada emisor) y cierres oficiales de Nasdaq; lista de comparables del analista.", notas)
+        filas, "Fuente: SEC EDGAR (10-K y 10-Q de cada emisor) y cierres oficiales de Nasdaq; lista de comparables del analista.", notas)
     d.grafico = graficos.dispersion(puntos, "Crecimiento de ingresos (último ejercicio)", "Margen EBIT")
     d.grafico_fuente = f"Los mismos datos que el cuadro {d.cuadros['comparables'].numero}."
 
@@ -263,7 +263,7 @@ def _apoyo(d: ParteE, n, hechos, anuales, etiqueta: Callable, wacc: Optional[flo
                           "sin gasto en I+D del ejercicio"))
     if filas:
         d.cuadros["apoyo"] = Cuadro(n.siguiente(), "Datos de apoyo del foso defensivo", [etiqueta(p) for p in periodos] + ["Cinco años"],
-                                    filas, "Fuente: SEC (companyfacts), derivados de la sección C y WACC del motor de valoración.")
+                                    filas, "Fuente: SEC EDGAR, derivados de la sección C y WACC del motor de valoración.")
 
 
 def construir(n, e: Entradas, textos: Mapping[str, str], umbral: float, hechos, anuales, etiqueta: Callable,

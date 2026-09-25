@@ -35,20 +35,18 @@ def _documentos(argv: List[str]) -> int:
     ap = argparse.ArgumentParser(prog="python -m tesis documentos",
                                  description="Qué documentos pide el informe de este emisor y cuáles están ya adjuntados.")
     ap.add_argument("ticker")
-    ap.add_argument("--idioma", default="es", choices=("es", "en"))
     args = ap.parse_args(argv)
     ticker = args.ticker.upper()
 
     clasificados = saas.clasificar(ticker)
     filas = clasificados["adjuntos"]
     print(f"{ticker} · {saas.ADJUNTOS / ticker}")
-    for d in catalogo.estado(filas, args.idioma):
-        titulo = d["titulo"] if args.idioma == "es" else d["titulo_en"]
-        print(f"  [{d['estado']:9}] {titulo}  ({d['exigencia']})")
+    for d in catalogo.estado(filas):
+        print(f"  [{d['estado']:9}] {d['titulo']}  ({d['exigencia']})")
         for f in d["ficheros"]:
             print(f"        {f['fichero']}  ·  {f['certeza']}" + (f"  ·  EDGAR {f['accession']}" if f["edgar"] else ""))
         if d["estado"] == "falta":
-            print(f"        sin él: {d['sin_el'] if args.idioma == 'es' else d['sin_el_en']}")
+            print(f"        sin él: {d['sin_el']}")
     sueltos = catalogo.sueltos(filas)
     if sueltos:
         print("  fuera del catálogo: " + ", ".join(f["fichero"] for f in sueltos))

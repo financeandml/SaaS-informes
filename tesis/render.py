@@ -26,6 +26,8 @@ MAQUETA = Path(__file__).resolve().parent / "maqueta"
 def a_html(informe: Informe, casa: str = "Warrants & Co.") -> str:
     from jinja2 import Environment, FileSystemLoader, select_autoescape
     entorno = Environment(loader=FileSystemLoader(str(MAQUETA)), autoescape=select_autoescape(["html"]))
+    from .formato import numero, pct
+    entorno.filters.update(numero=numero, pct_es=pct)         # es-ES y menos tipográfico (02), como el resto de cifras
     plantilla = entorno.get_template("tesis.html")
     css = (MAQUETA / "tesis.css").read_text(encoding="utf-8")
     recortes_datos: Dict[str, str] = {}
@@ -62,7 +64,8 @@ def _cabecera_pie(informe: Informe, casa: str) -> tuple:
                 f"border-bottom:2px solid #7a1f2b;padding-bottom:1.5mm;margin-top:6mm\">"
                 f"<span style=\"font-weight:700;font-size:9pt;color:#1a1a1a;letter-spacing:.04em\">{casa}</span>"
                 f"<span style=\"text-align:right\">Análisis · {informe.nombre}<br>{informe.fecha_emision:%d/%m/%Y} · "
-                f"<b style=\"color:#7a1f2b\">BORRADOR — NO EMITIDO</b></span></div>")
+                + (f"<b style=\"color:#1f5d3a\">EMITIDO {informe.emitido:%d/%m/%Y}</b>" if getattr(informe, "emitido", None)
+                   else "<b style=\"color:#7a1f2b\">BORRADOR — NO EMITIDO</b>") + "</span></div>")
     pie = (f"<div style=\"{estilo}display:flex;justify-content:space-between;border-top:1px solid #d9d9d9;padding-top:1.5mm;margin-bottom:6mm\">"
            f"<span>© {informe.fecha_emision.year} {casa}</span><span>Análisis / {informe.nombre}</span>"
            f"<span>Página <span class=\"pageNumber\"></span> de <span class=\"totalPages\"></span></span></div>")
@@ -115,3 +118,37 @@ def a_pdf(html: str, salida_pdf: Path, salida_html: Optional[Path] = None, infor
     if huella != hashlib.sha256(salida_pdf.read_bytes()).hexdigest():
         raise RuntimeError("la huella del PDF no coincide con la anunciada por el proceso de impresión")
     return huella
+
+
+def emitir(informe: Informe, salida_pdf: Path, hoy=None, casa: str = "Warrants & Co.", pasadas: int = 2, prueba: bool = False):
+    """La emisión de 06 §3–§4: puerta de calidad sobre el HTML, «EMITIDO dd/mm/aaaa» solo con 0 bloqueos (y nunca con
+    entradas de prueba), hoja 0 con los bloqueos en el borrador y PDF paginado: si una página queda por debajo de
+    `umbrales.relleno_pagina_min` sin ser fin de parte, el cuadro que abre la página siguiente se deja partir y se vuelve a
+    imprimir (máximo `pasadas`). Devuelve (puerta, huella del PDF, HTML, relleno por página)."""
+    import re
+    from . import qa
+    from .umbrales import umbral
+    html = a_html(informe, casa)
+    puerta = qa.revisar(informe, html, hoy)
+    informe.bloqueos_qa = list(puerta.bloqueos)
+    informe.emitido = (hoy or informe.fecha_emision) if puerta.emitible and not prueba else None
+    html = a_html(informe, casa)
+    huella = a_pdf(html, salida_pdf, informe=informe, casa=casa)
+    minimo = float(umbral("relleno_pagina_min"))
+    for _ in range(pasadas):
+        medidas = qa.relleno(Path(salida_pdf))
+        bajas = [k for k, fraccion, fin in medidas if fraccion < minimo and not fin]
+        textos = qa.paginas_de(Path(salida_pdf))
+        nuevos = set()
+        for k in bajas:                                   # k es 1-based: la página siguiente es textos[k]
+            m = re.search(r"Cuadro (\d+)\.", textos[k][:600]) if k < len(textos) else None
+            if m:
+                nuevos.add(int(m.group(1)))
+        if not nuevos - informe.partir:
+            break
+        informe.partir |= nuevos
+        html = a_html(informe, casa)
+        huella = a_pdf(html, salida_pdf, informe=informe, casa=casa)
+    medidas = qa.relleno(Path(salida_pdf))
+    puerta.avisos += [f"Página {k} ocupada al {fraccion:.0%} sin ser fin de parte" for k, fraccion, fin in medidas if fraccion < minimo and not fin]
+    return puerta, huella, html, medidas

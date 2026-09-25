@@ -45,6 +45,7 @@ from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 
 from .campos import Campo
+from .formato import numero
 from .hechos import Capa, Contraste, Estado, Hecho, Origen, Periodo, de_valor, na
 
 __all__ = [
@@ -92,13 +93,25 @@ def _ruta_cache(url: str) -> Path:
     return CACHE / (nombre + ".json.gz")
 
 
+CONSULTADOS: Dict[str, Tuple[date, str]] = {}      # URL → (obtenido, sha256 de lo guardado): fuentes (37) y documentación (39)
+
+
+def _registrar(url: str, obtenido: date, cuerpo: str) -> None:
+    import hashlib
+    if url not in CONSULTADOS:
+        CONSULTADOS[url] = (obtenido, hashlib.sha256(cuerpo.encode("utf-8")).hexdigest())
+
+
 def _descargar(url: str, refrescar: bool = False) -> Tuple[dict, date]:
     """Devuelve (JSON, fecha de obtención). Con caché en disco salvo `refrescar`."""
     ruta = _ruta_cache(url)
     if ruta.exists() and not refrescar:
         with gzip.open(ruta, "rt", encoding="utf-8") as f:
-            envoltorio = json.load(f)
-        return envoltorio["datos"], date.fromisoformat(envoltorio["obtenido_en"])
+            cuerpo = f.read()
+        envoltorio = json.loads(cuerpo)
+        obtenido = date.fromisoformat(envoltorio["obtenido_en"])
+        _registrar(url, obtenido, cuerpo)
+        return envoltorio["datos"], obtenido
     espera = 0.11 - (time.monotonic() - _ULTIMA_PETICION[0])
     if espera > 0:
         time.sleep(espera)
@@ -115,8 +128,10 @@ def _descargar(url: str, refrescar: bool = False) -> Tuple[dict, date]:
     datos = json.loads(crudo.decode("utf-8"))
     hoy = date.today()
     CACHE.mkdir(exist_ok=True)
+    cuerpo = json.dumps({"url": url, "obtenido_en": hoy.isoformat(), "datos": datos}, ensure_ascii=False)
     with gzip.open(ruta, "wt", encoding="utf-8") as f:
-        json.dump({"url": url, "obtenido_en": hoy.isoformat(), "datos": datos}, f, ensure_ascii=False)
+        f.write(cuerpo)
+    _registrar(url, hoy, cuerpo)
     return datos, hoy
 
 
@@ -130,8 +145,11 @@ def descargar_texto(url: str, refrescar: bool = False) -> Tuple[str, date]:
     ruta = _ruta_cache(url)
     if ruta.exists() and not refrescar:
         with gzip.open(ruta, "rt", encoding="utf-8") as f:
-            envoltorio = json.load(f)
-        return envoltorio["datos"], date.fromisoformat(envoltorio["obtenido_en"])
+            cuerpo = f.read()
+        envoltorio = json.loads(cuerpo)
+        obtenido = date.fromisoformat(envoltorio["obtenido_en"])
+        _registrar(url, obtenido, cuerpo)
+        return envoltorio["datos"], obtenido
     espera = 0.11 - (time.monotonic() - _ULTIMA_PETICION[0])
     if espera > 0:
         time.sleep(espera)
@@ -149,8 +167,10 @@ def descargar_texto(url: str, refrescar: bool = False) -> Tuple[str, date]:
     texto = crudo.decode(m.group(1) if m else "utf-8", errors="replace")
     hoy = date.today()
     CACHE.mkdir(exist_ok=True)
+    cuerpo = json.dumps({"url": url, "obtenido_en": hoy.isoformat(), "datos": texto}, ensure_ascii=False)
     with gzip.open(ruta, "wt", encoding="utf-8") as f:
-        json.dump({"url": url, "obtenido_en": hoy.isoformat(), "datos": texto}, f, ensure_ascii=False)
+        f.write(cuerpo)
+    _registrar(url, hoy, cuerpo)
     return texto, hoy
 
 
@@ -304,7 +324,7 @@ def _por_suma_de_conceptos(facts: dict, campo: Campo, ya_estan: Dict[Periodo, He
                     por_periodo[p] = fila
             partes[concepto] = {
                 p: de_valor(concepto, p, f["val"], Capa.SEC, unidad=campo.unidad,
-                            origen=Origen(documento="SEC companyfacts", formulario=f["form"],
+                            origen=Origen(documento="SEC EDGAR", formulario=f["form"],
                                           presentado=date.fromisoformat(f["filed"]), concepto=f"us-gaap:{concepto}",
                                           referencia=f["accn"]))
                 for p, f in por_periodo.items()}
@@ -349,7 +369,7 @@ def hechos_xbrl(facts: dict, campo: Campo, obtenido_en: date,
         nota = ""
         if primera is not fila and primera["val"] != fila["val"]:
             nota = f"reexpresado en {fila['form']} presentado el {fila['filed']} (antes {primera['val']:,} en {primera['form']} de {primera['filed']})"
-        origen = Origen(documento="SEC companyfacts", formulario=fila["form"],
+        origen = Origen(documento="SEC EDGAR", formulario=fila["form"],
                         presentado=date.fromisoformat(fila["filed"]), concepto=f"us-gaap:{concepto}" if ":" not in concepto else concepto,
                         referencia=fila["accn"])
         salida[p] = de_valor(campo.clave, p, fila["val"], Capa.SEC, origen, unidad=campo.unidad, nota=nota)
@@ -367,8 +387,8 @@ def hechos_xbrl(facts: dict, campo: Campo, obtenido_en: date,
                 # el 4T es el trimestre que acaba con el ejercicio fiscal, no el de octubre a diciembre
                 motivo = ("la SEC no presenta el cuarto trimestre fiscal como tal"
                           if (p.meses == 3 and p.fin in (cierres_fiscales or ())) else
-                          f"companyfacts no trae {campo.clave} para {p.clave} en ningún 10-K/10-Q"
-                          + ("" if campo.conceptos else " (la compañía no lo declara con un concepto us-gaap)"))
+                          f"la SEC no publica «{campo.rotulo}» para {f'{p.fin:%d/%m/%Y}' if p.es_instante else p.clave} en ningún 10-K ni 10-Q"
+                          + ("" if campo.conceptos else " (la SEC no tiene una partida normalizada para esto)"))
                 pedidos[p] = na(campo.clave, p, motivo, unidad=campo.unidad)
         return pedidos
     return salida
@@ -388,7 +408,7 @@ def splits(facts: dict) -> List[Tuple[date, float, Origen]]:
             continue
         fecha = date.fromisoformat(f["end"])
         if fecha not in vistos:
-            vistos[fecha] = (float(f["val"]), Origen(documento="SEC companyfacts", formulario=f["form"], presentado=date.fromisoformat(f["filed"]),
+            vistos[fecha] = (float(f["val"]), Origen(documento="SEC EDGAR", formulario=f["form"], presentado=date.fromisoformat(f["filed"]),
                                                      concepto="us-gaap:StockholdersEquityNoteStockSplitConversionRatio1", referencia=f["accn"]))
     # la misma operación llega declarada en varias fechas (anuncio, efectividad, cierre del trimestre): un split de la
     # misma razón a menos de 90 días del anterior es el mismo split, no otro; contarlo dos veces multiplicaría el ajuste
@@ -415,7 +435,7 @@ def ajustar_por_split(h: Hecho, ajustes: Sequence[Tuple[date, float, Origen]], p
     formula = (f"valor presentado ÷ {factor:g}" if por_accion else f"valor presentado × {factor:g}") + f" ({descripcion}; us-gaap:StockholdersEquityNoteStockSplitConversionRatio1)"
     ajustado = derivar(h.campo, h.periodo, formula, {"presentado": h},
                        (lambda presentado: presentado / factor) if por_accion else (lambda presentado: presentado * factor), unidad=h.unidad)
-    return ajustado.con(origen=h.origen, nota=f"reexpresado por {descripcion}; el {h.origen.formulario} de {h.origen.presentado:%d/%m/%Y} publicó {h.valor:,.2f}")
+    return ajustado.con(origen=h.origen, nota=f"reexpresado por {descripcion}; el {h.origen.formulario} de {h.origen.presentado:%d/%m/%Y} publicó {numero(h.valor, 2)}")
 
 
 def calendario(facts: dict, meses: int) -> List[Periodo]:
@@ -520,7 +540,7 @@ def float_publico(facts: dict) -> Optional[Tuple[float, date, Origen]]:
         return None
     f = max(filas, key=lambda f: (f["filed"], f["end"]))
     return (float(f["val"]), date.fromisoformat(f["end"]),
-            Origen(documento="SEC companyfacts", formulario=f["form"], presentado=date.fromisoformat(f["filed"]),
+            Origen(documento="SEC EDGAR", formulario=f["form"], presentado=date.fromisoformat(f["filed"]),
                    concepto="dei:EntityPublicFloat", referencia=f["accn"]))
 
 
@@ -542,7 +562,7 @@ def acciones_portada(facts: dict) -> Optional[Tuple[float, date, Origen]]:
     del_ultimo = [f for f in filas if f["filed"] == ultimo]
     f = del_ultimo[0]
     return (float(sum(x["val"] for x in del_ultimo)), date.fromisoformat(f["end"]),
-            Origen(documento="SEC companyfacts", formulario=f["form"], presentado=date.fromisoformat(f["filed"]),
+            Origen(documento="SEC EDGAR", formulario=f["form"], presentado=date.fromisoformat(f["filed"]),
                    concepto="dei:EntityCommonStockSharesOutstanding", referencia=f["accn"]))
 
 

@@ -162,8 +162,7 @@ def _bajista(d: ParteF, n, e: Entradas, item, motor) -> None:
         if not p.get("riesgo_es"):
             continue
         ep = buscar(item, p.get("riesgo_1a", "")) if item is not None else None
-        if ep is None:
-            d.faltas.append(f"pilares[{k}].riesgo_1a: no es un epígrafe del Item 1A")
+        if ep is None:                                  # la falta la da el paso 3 (entradas.comprobar_paso3)
             continue
         filas.append(FilaCuadro(f"Pilar {k} · {p.get('titulo', '')}", [_c(p["riesgo_es"]), _c(f"Item\xa01A, pág.\xa0{ep.pagina}", ep.texto)],
                                 capa="S", formula=ep.texto))

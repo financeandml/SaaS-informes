@@ -116,3 +116,44 @@ def cargo(texto: str, femenino: bool = False) -> Tuple[str, bool]:
         salida = re.sub(r"\b(" + "|".join(_FEMENINO) + r")\b", lambda m: _FEMENINO[m.group(1)], salida)
     salida = salida[:1].upper() + salida[1:]
     return salida, not restos
+
+
+SIN_TRADUCIR_BOLSA: set = set()        # rótulos de la bolsa sin traducción: aviso de la puerta de calidad (sin inglés en el cuerpo)
+
+
+def bolsa(texto: str) -> str:
+    """Un rótulo literal de la web de Nasdaq en español (`config/traducciones.yaml` › bolsa); los compuestos
+    «Officer · Director» se traducen por partes. Sin traducción, el literal y queda anotado."""
+    import re
+    tabla = {k.lower(): v for k, v in (_datos().get("bolsa") or {}).items()}
+    partes = [p.strip() for p in re.split(r"\s*[,/]\s*", str(texto or "")) if p.strip()]
+    salida = []
+    for p in partes or [str(texto or "")]:
+        t = tabla.get(p.lower())
+        if t is None:
+            SIN_TRADUCIR_BOLSA.add(p)
+        salida.append(t or p)
+    return ", ".join(salida)
+
+
+FALLOS: list = []                      # el detalle técnico de cada consulta fallida: a auditoria.json, nunca al cuerpo (regla 5)
+
+
+def fallo(e: BaseException) -> str:
+    """Por qué falló una consulta, dicho para el lector: sin URL, sin traza y sin el nombre de la excepción (el
+    detalle queda en `FALLOS` para la auditoría de la emisión)."""
+    FALLOS.append(f"{type(e).__name__}: {e}")
+    causa = e.__cause__
+    codigo = getattr(e, "code", None) or getattr(causa, "code", None)
+    texto = f"{e} {getattr(e, 'reason', '')} {causa or ''}"
+    if codigo == 429:
+        return "la fuente limitó las consultas por exceso de peticiones"
+    if isinstance(codigo, int):
+        return f"la fuente devolvió el error {codigo}"
+    if "sin respuesta guardada" in texto:
+        return "sin conexión y sin copia guardada de la respuesta"
+    if "timed out" in texto or isinstance(e, TimeoutError) or isinstance(causa, TimeoutError):
+        return "la consulta superó el tiempo de espera"
+    if isinstance(e, (ValueError, KeyError, TypeError, IndexError)):
+        return "la respuesta no tiene el formato esperado"
+    return "no hubo conexión con la fuente"

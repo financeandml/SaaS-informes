@@ -29,7 +29,7 @@ class Emision(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
         base = Path(self.tmp.name)
-        self.parches = [mock.patch.object(saas, n, base / n.lower()) for n in ("ADJUNTOS", "DCF", "SALIDA", "POSICIONES")]
+        self.parches = [mock.patch.object(saas, n, base / n.lower()) for n in ("ADJUNTOS", "DCF", "SALIDA")]
         for p in self.parches:
             p.start()
         (saas.ADJUNTOS / "PRUEBA").mkdir(parents=True)

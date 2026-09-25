@@ -2,7 +2,7 @@
 
 Mismo criterio que `informe`: aquí no se lee ningún documento ni se calcula nada
 nuevo; se toman los objetos que producen `dcf`, `riesgos`, `historial`, `gobierno`,
-`narrativa` y `posicion` y se colocan en cuadros numerados con su fuente. Cada
+`narrativa` y se colocan en cuadros numerados con su fuente. Cada
 celda que viene del libro del analista lleva capa S y su celda de origen; cada
 celda que viene de un documento lleva Hd y su página. Lo que no hay sale N/A con
 motivo.
@@ -20,16 +20,16 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Dict, List, Optional, Sequence, Tuple
 
-from datetime import datetime
+from datetime import date, datetime
 
 from .dcf import Cuadre, Modelo
 from .expediente import Adjunto, Expediente, Tipo
+from . import rotulos
 from .formato import Celda, fecha as f_fecha, numero, pct, veces
 from .gobierno import Gobierno
 from .hechos import Contraste
 from .historial import Historial
 from .informe import Cuadro, Cuadros, FilaCuadro
-from .posicion import Posicion
 from .recortes import Recorte, recortar_lineas
 from .riesgos import FAMILIAS, Riesgos
 
@@ -329,45 +329,34 @@ def _linea_multiplo(l) -> FilaCuadro:
         valor = Celda(numero(l.valor / 1e6), "∑", "D", "valor", l.formula)
     else:
         valor = Celda(numero(l.valor, 2), "∑", "D", "valor", l.formula)
-    if l.agregador is None:
-        publicado = Celda("—", "", "", "valor", l.nota_contraste or "el agregador no publica este dato")
-    else:
-        a = l.agregador
-        texto = pct(a, 1) if l.unidad == "%" else (veces(a, 1) if l.unidad == "x" else numero(a / 1e6))
-        publicado = Celda(texto, l.contraste.value, "Hd", "negativo" if l.contraste is Contraste.DISCREPANTE else "valor", l.nota_contraste)
-    return FilaCuadro(l.rotulo, [valor, Celda(l.componentes or "—", "", "", "valor", l.formula), publicado], capa="D", formula=l.formula)
+    # sin columna del agregador: Yahoo solo para la volatilidad implícita (regla 6)
+    return FilaCuadro(l.rotulo, [valor, Celda(l.componentes or "—", "", "", "valor", l.formula)], capa="D", formula=l.formula)
 
 
 def cuadro_multiplos_sec(n: Cuadros, m) -> Cuadro:
     """Apartado 17: PER, EV/EBITDA, EV/Ventas, P/FCF y PEG sobre las últimas cifras de la SEC y la cotización oficial."""
-    filas = [_linea_multiplo(l) for l in m.lineas if not l.rotulo.startswith("RO")]
-    notas: List[str] = []
-    for l in m.lineas:
-        if l.rotulo.startswith("RO"):
-            continue
-        if l.contraste is Contraste.DISCREPANTE:
-            notas.append(f"{l.rotulo}: {l.nota_contraste}.")
-        elif l.agregador is not None and l.contraste is Contraste.SIN_CONTRASTAR and l.nota_contraste:
-            notas.append(f"{l.rotulo}: {l.nota_contraste}.")
+    # un múltiplo sin valor (PEG con BPA a la baja) no se imprime como «N/A»: se dice por qué en la nota (06 §3.10)
+    filas = [_linea_multiplo(l) for l in m.lineas if not l.rotulo.startswith("RO") and l.valor is not None]
+    notas: List[str] = [f"{l.rotulo}: no se calcula ({l.motivo or 'sin dato'})." for l in m.lineas
+                        if not l.rotulo.startswith("RO") and l.valor is None]
     fuente = (f"Fuente: cifras de la SEC contrastadas en la sección C, en suma de los cuatro últimos trimestres ({', '.join(m.trimestres)}) y saldos al "
-              f"{f_fecha(m.cierre)}; cotización oficial de la bolsa; acciones de la portada del último formulario. La columna «Agregador» es lo que publica "
-              "Yahoo Finance para el mismo múltiplo, cuando lo publica.")
+              f"{f_fecha(m.cierre)}; cotización oficial de la bolsa; acciones de la portada del último formulario.")
     if m.faltan:
         fuente += " " + " ".join(f"{k}: {v}." for k, v in m.faltan.items())
-    return Cuadro(n.siguiente(), "Múltiplos sobre las últimas cifras de la SEC y la cotización oficial", ["Valor", "Cálculo", "Agregador"], filas, fuente, notas)
+    return Cuadro(n.siguiente(), "Múltiplos sobre las últimas cifras de la SEC y la cotización oficial", ["Valor", "Cálculo"], filas, fuente, notas)
 
 
 def cuadro_rentabilidad_ttm(n: Cuadros, m) -> Optional[Cuadro]:
-    """Apartado 11: ROE y ROA de los últimos doce meses con la definición del 10-K, frente a lo que publica el agregador."""
+    """Apartado 11: ROE y ROA de los últimos doce meses con la definición del 10-K (sobre cifras de la SEC)."""
     lineas = [l for l in m.lineas if l.rotulo.startswith("RO")]
     if not lineas:
         return None
     filas = [_linea_multiplo(l) for l in lineas]
-    notas = [f"{l.rotulo}: {l.nota_contraste}." for l in lineas if l.contraste is Contraste.DISCREPANTE]
+    notas = []
     notas.append("Los formularios de la compañía no publican ROE, ROA ni ROIC como cifras; el 10-K define el ROE (beneficio después de impuestos / patrimonio medio) para su plan de "
                  "incentivos y esa es la definición que se aplica. El ROIC no lo publica ninguna fuente: solo la fórmula del cuadro anterior.")
-    return Cuadro(n.siguiente(), f"Rentabilidad de los últimos doce meses ({m.trimestres[0]}–{m.fin}) frente al agregador", ["Valor", "Cálculo", "Agregador"], filas,
-                  f"Fuente: beneficio neto TTM y saldos medios de la SEC (sección C y companyfacts); Yahoo Finance publica ROE y ROA TTM y se imprimen al lado.", notas)
+    return Cuadro(n.siguiente(), f"Rentabilidad de los últimos doce meses ({m.trimestres[0]}–{m.fin})", ["Valor", "Cálculo"], filas,
+                  "Fuente: beneficio neto TTM y saldos medios de la SEC (sección C).", notas)
 
 
 # ---------------------------------------------------------------------------
@@ -497,8 +486,37 @@ def _ratio(numerador: Optional[float], denominador: Optional[float], rotulo: str
     return Celda(numero(numerador / denominador, 2), "∑", "D", "valor", f"{rotulo}: {numero(numerador)} / {numero(denominador)}")
 
 
-def cuadros_f(n: Cuadros, p, acciones_circulacion: Optional[float] = None, maximo_vencimientos: int = 10, maximo_filas: int = 12) -> Dict[str, Cuadro]:
-    """Los cuadros de los apartados 24, 25 (interés abierto), 27, 28 y 29 con lo que publica la bolsa."""
+def _fecha_bolsa(texto: str) -> str:
+    """«September 25, 2026» o «Sep 25, 2026» (la bolsa) → «25/09/2026»; si no se reconoce, el literal."""
+    from datetime import datetime as _dt
+    for formato in ("%B %d, %Y", "%b %d, %Y", "%m/%d/%Y"):
+        try:
+            return f_fecha(_dt.strptime(str(texto).strip(), formato).date())
+        except ValueError:
+            continue
+    return str(texto)
+
+
+def _ultima_operacion(texto: str) -> str:
+    """«LAST TRADE: $75.66 (AS OF SEP 17, 2026 1:46 PM ET)» (literal de la bolsa) → «última operación: 75,66 USD el
+    17/09/2026 a las 13:46 (hora de Nueva York)». Sin reconocerlo, nada: el literal inglés no va al cuerpo."""
+    m = re.search(r"\$\s*([\d,]+(?:\.\d+)?)\s*\(AS OF (\w{3})\w* (\d{1,2}), (\d{4})(?:\s+(\d{1,2}):(\d{2})\s*([AP]M))?", str(texto or ""), re.I)
+    meses = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"]
+    if not m or m.group(2).upper() not in meses:
+        return ""
+    precio = float(m.group(1).replace(",", ""))
+    dia = date(int(m.group(4)), meses.index(m.group(2).upper()) + 1, int(m.group(3)))
+    hora = ""
+    if m.group(5):
+        h = int(m.group(5)) % 12 + (12 if m.group(7).upper() == "PM" else 0)
+        hora = f" a las {h:02d}:{m.group(6)} (hora de Nueva York)"
+    return f"última operación: {numero(precio, 2)} USD el {f_fecha(dia)}{hora}"
+
+
+def cuadros_f(n: Cuadros, p, acciones_circulacion: Optional[float] = None, maximo_vencimientos: int = 10, maximo_filas: int = 12,
+              sesiones=None, hasta: Optional[date] = None, hoy: Optional[date] = None, resultados: Optional[date] = None) -> Dict[str, Cuadro]:
+    """Los cuadros de la parte H (31–35) con lo que publica la bolsa, en el orden en que se imprimen (numeración). Con `hoy`,
+    también los calculados sobre la cadena (`parte_h`): strikes y máximo dolor, VI frente a realizada y movimiento en resultados."""
     from .posicionamiento import FUENTE
     salida: Dict[str, Cuadro] = {}
     hora = p.obtenido.strftime("%d/%m/%Y %H:%M") if p.obtenido else ""
@@ -507,42 +525,63 @@ def cuadros_f(n: Cuadros, p, acciones_circulacion: Optional[float] = None, maxim
         c = p.cadena
         filas = []
         for v in c.vencimientos[:maximo_vencimientos]:
-            filas.append(FilaCuadro(v.fecha, [_n(v.vol_calls), _n(v.vol_puts), _ratio(v.vol_puts, v.vol_calls, "volumen puts / volumen calls"),
-                                              _n(v.oi_calls), _n(v.oi_puts), _ratio(v.oi_puts, v.oi_calls, "OI puts / OI calls"), _hd(str(v.contratos))], capa="Hd"))
+            filas.append(FilaCuadro(_fecha_bolsa(v.fecha), [_n(v.vol_calls), _n(v.vol_puts), _ratio(v.vol_puts, v.vol_calls, "volumen puts / volumen calls"),
+                                              _n(v.oi_calls), _n(v.oi_puts), _ratio(v.oi_puts, v.oi_calls, "interés abierto puts / calls"), _hd(str(v.contratos))], capa="Hd"))
         tot = {k: c.total(k) for k in ("vol_calls", "vol_puts", "oi_calls", "oi_puts")}
         filas.append(FilaCuadro(f"Total ({len(c.vencimientos)} vencimientos{f', {len(filas)} impresos' if len(filas) < len(c.vencimientos) else ''})", [_n(tot["vol_calls"]), _n(tot["vol_puts"]), _ratio(tot["vol_puts"], tot["vol_calls"], "volumen puts / volumen calls"),
-                                                                                _n(tot["oi_calls"]), _n(tot["oi_puts"]), _ratio(tot["oi_puts"], tot["oi_calls"], "OI puts / OI calls"),
+                                                                                _n(tot["oi_calls"]), _n(tot["oi_puts"]), _ratio(tot["oi_puts"], tot["oi_calls"], "interés abierto puts / calls"),
                                                                                 _hd(str(sum(v.contratos for v in c.vencimientos)))], capa="Hd", destacada=True))
         salida["cadena"] = Cuadro(n.siguiente(), "Cadena de opciones por vencimiento: volumen e interés abierto (contratos)",
-                                  ["Vol. calls", "Vol. puts", "Put/Call vol.", "OI calls", "OI puts", "Put/Call OI", "Strikes"], filas,
-                                  base + f" Cadena completa ({c.total_filas} filas); «{c.ultimo}». El volumen es el de la sesión en curso y el interés abierto el del cierre anterior. "
+                                  ["Vol. calls", "Vol. puts", "Put/Call vol.", "Int. abierto calls", "Int. abierto puts", "Put/Call int. abierto", "Precios de ejercicio"], filas,
+                                  base + f" Cadena completa ({c.total_filas} filas)" + (f"; {_ultima_operacion(c.ultimo)}" if _ultima_operacion(c.ultimo) else "")
+                                  + ". El volumen es el de la sesión en curso y el interés abierto el del cierre anterior. "
                                   "Put/Call = puts / calls (al pasar el ratón, las cifras). Sin volatilidad implícita: la bolsa no la publica.", partible=True)
+        if hoy is not None:
+            from . import parte_h
+            x = parte_h.cuadro_strikes(n, p, hoy)
+            if x is not None:
+                salida["strikes"] = x
         iv = cuadro_iv(n, p)
         if iv is not None:
             salida["iv"] = iv
+        if hoy is not None:
+            salida["vi_realizada"] = parte_h.cuadro_vi_realizada(n, p, sesiones or {}, hasta or hoy, hoy)
+            x = parte_h.cuadro_movimiento(n, p, resultados, hoy)
+            if x is not None:
+                salida["movimiento"] = x
     if p.institucional is not None and (p.institucional.resumen or p.institucional.posiciones):
         i = p.institucional
-        filas = [FilaCuadro(rotulo, [_hd(_cifra_bolsa(valor), f"literal de la bolsa: {valor}"), Celda("", "", "", "valor", "")], capa="Hd") for rotulo, valor in i.resumen]
-        filas += [FilaCuadro(rotulo, [_n(tenedores), _n(acciones)], capa="Hd", destacada=rotulo.startswith("Total")) for rotulo, tenedores, acciones in i.posiciones]
+        filas = [FilaCuadro(rotulos.bolsa(rotulo), [_hd(_cifra_bolsa(valor), f"literal de la bolsa: {rotulo} · {valor}"), Celda("", "", "", "valor", "")], capa="Hd") for rotulo, valor in i.resumen]
+        filas += [FilaCuadro(rotulos.bolsa(rotulo), [_n(tenedores), _n(acciones)], capa="Hd", destacada=rotulo.startswith("Total")) for rotulo, tenedores, acciones in i.posiciones]
         salida["institucional"] = Cuadro(n.siguiente(), "Posicionamiento institucional (13F): resumen", ["Tenedores", "Acciones"], filas,
                                          base + " Cifras de la bolsa a partir de los 13F, en la convención del documento (el literal, al pasar el ratón); la fecha de cada 13F varía por gestor.")
-        filas = [FilaCuadro(nombre, [_hd(f_fecha(fecha)) if fecha else _na("sin fecha"), _n(acciones), _n(variacion),
+        reciente = max((f for _, f, _, _, _ in i.mayores if f), default=None)
+
+        def fecha_13f(fecha):
+            # un 13F más de un trimestre anterior al más reciente de la lista es antiguo y se marca (F7)
+            if fecha is None:
+                return _na("sin fecha")
+            antiguo = reciente is not None and (reciente - fecha).days > 100
+            return Celda(f"{f_fecha(fecha)} (antiguo)" if antiguo else f_fecha(fecha), "", "Hd", "negativo" if antiguo else "valor",
+                         f"13F anterior al más reciente de la lista ({f_fecha(reciente)})" if antiguo else "")
+        filas = [FilaCuadro(nombre, [fecha_13f(fecha), _n(acciones), _n(variacion),
                                      Celda(pct(v_pct / 100, 2), "", "Hd", "negativo" if v_pct < 0 else "valor", "") if v_pct is not None else _na("—")], capa="Hd")
                  for nombre, fecha, acciones, variacion, v_pct in i.mayores[:maximo_filas + 3]]
         salida["mayores"] = Cuadro(n.siguiente(), "Mayores tenedores institucionales (13F)", ["Fecha del 13F", "Acciones", "Variación (acciones)", "Variación"], filas,
                                    base + " Los accionistas de más del 5 % según la proxy están en el cuadro de estructura corporativa: fechas distintas, no se comparan.", partible=True)
     if p.insiders is not None and (p.insiders.operaciones or p.insiders.ultimas):
         s = p.insiders
-        filas = [FilaCuadro(rotulo, [_n(m3), _n(m12)], capa="Hd") for rotulo, m3, m12 in s.operaciones]
-        filas += [FilaCuadro(rotulo, [Celda(numero(m3), "", "Hd", "negativo" if (m3 or 0) < 0 else "valor", "") if m3 is not None else _na("—"),
+        filas = [FilaCuadro(rotulos.bolsa(rotulo), [_n(m3), _n(m12)], capa="Hd") for rotulo, m3, m12 in s.operaciones]
+        filas += [FilaCuadro(rotulos.bolsa(rotulo), [Celda(numero(m3), "", "Hd", "negativo" if (m3 or 0) < 0 else "valor", "") if m3 is not None else _na("—"),
                                       Celda(numero(m12), "", "Hd", "negativo" if (m12 or 0) < 0 else "valor", "") if m12 is not None else _na("—")], capa="Hd",
                              destacada=rotulo.startswith("Net")) for rotulo, m3, m12 in s.acciones]
-        salida["insiders"] = Cuadro(n.siguiente(), "Operaciones de insiders (Form 4): recuento y acciones", ["3 meses", "12 meses"], filas,
+        salida["insiders"] = Cuadro(n.siguiente(), "Operaciones de directivos (Form 4): recuento y acciones", ["3 meses", "12 meses"], filas,
                                     base + (f" {s.total_operaciones} operaciones registradas en total." if s.total_operaciones else ""))
-        filas = [FilaCuadro(f"{insider} · {relacion}", [_hd(f_fecha(fecha)) if fecha else _na("sin fecha"), _hd(tipo), _n(acciones), _n(precio, 2)], capa="Hd")
+        filas = [FilaCuadro(f"{insider} · {rotulos.bolsa(relacion)}", [_hd(f_fecha(fecha)) if fecha else _na("sin fecha"), _hd(rotulos.bolsa(tipo), f"literal de la bolsa: {tipo}"),
+                                                                     _n(acciones), _n(precio, 2)], capa="Hd")
                  for insider, relacion, fecha, tipo, acciones, precio in s.ultimas[:maximo_filas + 3]]
-        salida["insiders_ultimas"] = Cuadro(n.siguiente(), "Últimas operaciones de insiders", ["Fecha", "Tipo", "Acciones", "Precio (USD)"], filas,
-                                            base + " «Automatic Sell» es una venta bajo plan 10b5-1 según lo rotula la bolsa.", partible=True)
+        salida["insiders_ultimas"] = Cuadro(n.siguiente(), "Últimas operaciones de directivos", ["Fecha", "Tipo", "Acciones", "Precio (USD)"], filas,
+                                            base + " «Venta automática» es una venta bajo un plan 10b5-1, según la rotula la bolsa.", partible=True)
     if p.short is not None and p.short.filas:
         filas = []
         for liq, interes, vol, dias in p.short.filas[:maximo_filas]:
@@ -553,7 +592,7 @@ def cuadros_f(n: Cuadros, p, acciones_circulacion: Optional[float] = None, maxim
                 celdas.append(_na("sin acciones en circulación"))
             filas.append(FilaCuadro(f_fecha(liq), celdas, capa="Hd"))
         nota_split = f" Serie desde la primera liquidación posterior al split del {f_fecha(p.short.desde)} para no mezclar acciones de antes y de después." if p.short.desde else ""
-        salida["short"] = Cuadro(n.siguiente(), "Short interest (FINRA, publicado por la bolsa) por fecha de liquidación",
+        salida["short"] = Cuadro(n.siguiente(), "Interés en corto (FINRA, publicado por la bolsa) por fecha de liquidación",
                                  ["Interés corto (acciones)", "Vol. medio diario", "Días para cubrir", "% del capital"], filas, base + nota_split, partible=True)
     return salida
 
@@ -676,25 +715,24 @@ def cuadro_iv(n: Cuadros, p) -> Optional[Cuadro]:
             # la IV puede venir sin su strike (el agregador no siempre lo trae): se imprime la IV y se calla el
             # strike, en vez de romper la emisión entera por una nota al pie
             if valor is None:
-                return _na(x.motivo or "sin contrato con IV válida")
-            return Celda(pct(valor, 1), "", "Hd", "valor", f"strike {numero(strike, 2)}" if strike is not None else "sin strike declarado")
+                return _na(x.motivo or "sin contrato con volatilidad implícita válida")
+            return Celda(pct(valor, 1), "", "Hd", "valor", f"precio de ejercicio {numero(strike, 2)}" if strike is not None else "sin precio de ejercicio declarado")
         sesgo = x.sesgo
         celdas = [_hd(numero(x.subyacente, 2)), _iv(x.iv_call_atm, x.strike_atm), _iv(x.iv_put_atm, x.strike_atm), _iv(x.iv_put_otm, x.strike_put_otm), _iv(x.iv_call_otm, x.strike_call_otm),
                   Celda(f"{'+' if sesgo > 0 else ''}{numero(sesgo * 100, 1)} p.p.", "∑", "D", "negativo" if sesgo < 0 else "valor",
-                        f"IV put {numero(x.strike_put_otm, 0) if x.strike_put_otm is not None else 'OTM'} − "
-                        f"IV call {numero(x.strike_call_otm, 0) if x.strike_call_otm is not None else 'OTM'} = "
-                        f"{pct(x.iv_put_otm, 1)} − {pct(x.iv_call_otm, 1)}") if sesgo is not None else _na("sin las dos IV fuera del dinero"),
-                  _ratio(x.oi_puts, x.oi_calls, "OI puts / OI calls (agregador)"),
+                        f"VI put {numero(x.strike_put_otm, 0) if x.strike_put_otm is not None else 'fuera del dinero'} − "
+                        f"VI call {numero(x.strike_call_otm, 0) if x.strike_call_otm is not None else 'fuera del dinero'} = "
+                        f"{pct(x.iv_put_otm, 1)} − {pct(x.iv_call_otm, 1)}") if sesgo is not None else _na("sin las dos volatilidades implícitas fuera del dinero"),
                   Celda("sí" if x.contraste_oi and x.contraste_oi[0] is Contraste.CONFIRMADO else ("no" if x.contraste_oi and x.contraste_oi[0] is Contraste.DISCREPANTE else "—"), "", "",
                         "negativo" if x.contraste_oi and x.contraste_oi[0] is Contraste.DISCREPANTE else "valor", x.contraste_oi[1] if x.contraste_oi else "")]
         filas.append(FilaCuadro(f_fecha(x.fecha), celdas, capa="Hd"))
     hora = f", precio del subyacente según el agregador a las {v.hora_precio:%H:%M} (hora local)" if v.hora_precio else ""
     return Cuadro(n.siguiente(), "Volatilidad implícita por vencimiento y sesgo put-call",
-                  ["Subyacente (USD)", "IV call ATM", "IV put ATM", "IV put 90 %", "IV call 110 %", "Sesgo put − call", "Put/Call OI", "OI cuadra con la bolsa"], filas,
-                  f"Fuente: {v.fuente}{hora}. La bolsa (Nasdaq) no publica IV; el analista autorizó Yahoo Finance como excepción provisional (17/09/2026). "
-                  "ATM: el strike más cercano al subyacente; 90 % y 110 %: los strikes más cercanos a esos niveles. El sesgo es IV put 90 % − IV call 110 %. "
-                  "«OI cuadra con la bolsa»: el interés abierto total del vencimiento según el agregador frente al de la bolsa (cuadro de la cadena), dentro del 2 %; "
-                  "cuando no cuadra, la IV de ese vencimiento no se imprime.", partible=True)
+                  ["Subyacente (USD)", "VI call en el dinero", "VI put en el dinero", "VI put 90 %", "VI call 110 %", "Sesgo put − call", "Interés abierto cuadra con la bolsa"], filas,
+                  f"Fuente: {v.fuente}{hora}. La bolsa (Nasdaq) no publica la volatilidad implícita; el analista autorizó Yahoo Finance como excepción provisional (17/09/2026). "
+                  "VI: volatilidad implícita. En el dinero: el precio de ejercicio más cercano al subyacente; 90 % y 110 %: los más cercanos a esos niveles. "
+                  "El sesgo es VI put 90 % − VI call 110 %. «Interés abierto cuadra con la bolsa»: el interés abierto total del vencimiento según el "
+                  "agregador frente al de la bolsa (cuadro de la cadena), dentro del 2 %; cuando no cuadra, la VI de ese vencimiento no se imprime.", partible=True)
 
 
 def cuadros_comparables(n: Cuadros, c) -> Optional[Cuadro]:
@@ -706,8 +744,8 @@ def cuadros_comparables(n: Cuadros, c) -> Optional[Cuadro]:
         cuentas = f"{x.formulario} al {f_fecha(x.cierre)}" if x.cierre else ""
         celdas = [_hd(x.pais or "—"),
                   Celda(numero(x.capitalizacion / 1e6), "", "Hd", "valor", "capitalización del screener de la bolsa, USD") if x.capitalizacion else _na("sin capitalización en el screener"),
-                  Celda(numero(x.ingresos / 1e6), "", "H", "valor", f"{cuentas}, SEC companyfacts, {x.moneda}") if x.ingresos is not None else _na(x.nota_sec or "sin cuentas"),
-                  Celda(numero(x.beneficio / 1e6), "", "H", "negativo" if (x.beneficio or 0) < 0 else "valor", f"{cuentas}, SEC companyfacts, {x.moneda}") if x.beneficio is not None else _na(x.nota_sec or "sin cuentas"),
+                  Celda(numero(x.ingresos / 1e6), "", "H", "valor", f"{cuentas}, SEC EDGAR, {x.moneda}") if x.ingresos is not None else _na(x.nota_sec or "sin cuentas"),
+                  Celda(numero(x.beneficio / 1e6), "", "H", "negativo" if (x.beneficio or 0) < 0 else "valor", f"{cuentas}, SEC EDGAR, {x.moneda}") if x.beneficio is not None else _na(x.nota_sec or "sin cuentas"),
                   Celda(veces(x.p_ventas, 2), "∑", "D", "valor", f"{numero(x.capitalizacion / 1e6)} / {numero(x.ingresos / 1e6)}") if x.p_ventas is not None else _na(x.nota_sec or ("beneficio negativo" if x.beneficio is not None and x.beneficio <= 0 else "sin cuentas en USD")),
                   Celda(veces(x.per, 1), "∑", "D", "valor", f"{numero(x.capitalizacion / 1e6)} / {numero(x.beneficio / 1e6)}") if x.per is not None else _na("beneficio negativo o nulo: PER no definido" if x.beneficio is not None and x.beneficio <= 0 else (x.nota_sec or "sin cuentas en USD")),
                   Celda(f"{x.moneda} · {cuentas}" if cuentas else "—", "", "H", "valor" if cuentas else "na", x.nota_sec)]
@@ -716,7 +754,7 @@ def cuadros_comparables(n: Cuadros, c) -> Optional[Cuadro]:
     return Cuadro(n.siguiente(), f"Comparables según la clasificación de la bolsa: industria «{c.industria}» (sector {c.sector})",
                   ["País", "Capitalización (M USD)", "Ingresos anuales (M)", "Beneficio neto (M)", "P/Ventas", "PER", "Cuentas"], filas,
                   f"Fuente: screener de Nasdaq (clasificación sectorial, capitalización y país), consultado el {hora}; cuentas del último ejercicio anual de cada valor "
-                  "en SEC companyfacts (formulario y cierre en cada celda). P/Ventas y PER = capitalización / cuentas anuales, solo con cuentas en USD. "
+                  "en SEC EDGAR (formulario y cierre en cada celda). P/Ventas y PER = capitalización / cuentas anuales, solo con cuentas en USD. "
                   "La clasificación es de la bolsa: el 10-K no nombra competidores concretos (texto del apartado).", partible=True)
 
 
@@ -724,8 +762,8 @@ def _fila_comparable(x, propio: bool) -> FilaCuadro:
     cuentas = f"{x.formulario} al {f_fecha(x.cierre)}" if x.cierre else ""
     celdas = [_hd(x.pais or "—"),
               Celda(numero(x.capitalizacion / 1e6), "", "Hd", "valor", "capitalización del screener de la bolsa, USD") if x.capitalizacion else _na("sin capitalización en el screener de la bolsa"),
-              Celda(numero(x.ingresos / 1e6), "", "H", "valor", f"{cuentas}, SEC companyfacts, {x.moneda}") if x.ingresos is not None else _na(x.nota_sec or "sin cuentas"),
-              Celda(numero(x.beneficio / 1e6), "", "H", "negativo" if (x.beneficio or 0) < 0 else "valor", f"{cuentas}, SEC companyfacts, {x.moneda}") if x.beneficio is not None else _na(x.nota_sec or "sin cuentas"),
+              Celda(numero(x.ingresos / 1e6), "", "H", "valor", f"{cuentas}, SEC EDGAR, {x.moneda}") if x.ingresos is not None else _na(x.nota_sec or "sin cuentas"),
+              Celda(numero(x.beneficio / 1e6), "", "H", "negativo" if (x.beneficio or 0) < 0 else "valor", f"{cuentas}, SEC EDGAR, {x.moneda}") if x.beneficio is not None else _na(x.nota_sec or "sin cuentas"),
               Celda(veces(x.p_ventas, 2), "∑", "D", "valor", f"{numero(x.capitalizacion / 1e6)} / {numero(x.ingresos / 1e6)}") if x.p_ventas is not None else _na(x.nota_sec or ("beneficio negativo" if x.beneficio is not None and x.beneficio <= 0 else "sin cuentas en USD")),
               Celda(veces(x.per, 1), "∑", "D", "valor", f"{numero(x.capitalizacion / 1e6)} / {numero(x.beneficio / 1e6)}") if x.per is not None else _na("beneficio negativo o nulo: PER no definido" if x.beneficio is not None and x.beneficio <= 0 else (x.nota_sec or "sin cuentas en USD")),
               Celda(f"{x.moneda} · {cuentas}" if cuentas else "—", "", "H", "valor" if cuentas else "na", x.nota_sec)]
@@ -743,7 +781,7 @@ def cuadro_comparables_sic(n: Cuadros, c) -> Optional[Cuadro]:
     return Cuadro(n.siguiente(), f"Comparables según la clasificación de la SEC: SIC {c.sic} «{c.sic_descripcion}»",
                   ["País", "Capitalización (M USD)", "Ingresos anuales (M)", "Beneficio neto (M)", "P/Ventas", "PER", "Cuentas"], filas,
                   f"Fuente: búsqueda de emisores por SIC en EDGAR (solo los que tienen ticker en la lista oficial de la SEC), capitalización y país del screener de Nasdaq, "
-                  f"cuentas del último ejercicio anual en SEC companyfacts. "
+                  f"cuentas del último ejercicio anual en SEC EDGAR. "
                   + (f"Coinciden con la clasificación de la bolsa: {', '.join(en_ambas)}. " if en_ambas else "Ningún valor coincide con la clasificación de la bolsa. ")
                   + "Ni la SEC ni la bolsa publican competidores: publican clasificaciones.", partible=True)
 

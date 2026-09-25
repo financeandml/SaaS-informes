@@ -1,4 +1,4 @@
-/* Las páginas del SaaS (expediente, DCF, informe) y la barra de pasos que comparten con el formulario.
+/* Las páginas del SaaS (expediente, DCF, informe) y la barra de pasos que comparten con el asistente. Solo en español.
    Nada de HTML inyectado: todo lo dinámico se construye con elemento() y textContent. El ticker viaja en ?ticker=.
    Regla de la casa: un estado nunca se distingue solo por el color. Aquí lo dice su palabra —«adjuntado»,
    «falta», «alta», «EDGAR»—, sin símbolos: el rótulo es el portador. */
@@ -36,53 +36,16 @@ const D = {
     sin_ticker: "Elige primero la empresa en el paso 1.", sin_adjuntos: "Sin documentos no hay informe: vuelve al paso 1.",
     viejo: "El informe que ves es anterior a los últimos documentos que has adjuntado: vuelve a emitir.",
     al_dia: "El informe está al día con lo adjuntado.", nunca: "Aún no has emitido el informe de esta empresa.",
-    pend_posicion: "Sin la posición del analista (paso 3), la sección H y la recomendación de portada salen N/A.",
+    pend_posicion: "Sin las entradas del analista (paso 3, asistente), el informe sale como borrador con sus apartados pendientes.",
     pend_dcf: "Sin libro DCF (paso 2), los apartados 12 a 20 salen N/A con su motivo.",
     emitido_el: "emitido el", ficheros_usados: "documentos", cifras: "cifras",
     edgar_si: "EDGAR", edgar_no: "no casa con EDGAR",
   },
-  en: {
-    p_expediente: "Filings", p_dcf: "DCF", p_analista: "Analyst", p_informe: "Report",
-    empresa: "Company", expediente: "Filings in chronological order", contraste_t: "Reconciliation with the SEC",
-    fichero: "File", tipo: "Type", periodo: "Period", fecha_doc: "Date", certeza: "Confidence",
-    destino: "Where it goes in the report", quitar: "Remove", siguiente_dcf: "Next: DCF →", siguiente_analista: "Next: analyst →",
-    anterior_expediente: "← Filings", anterior_analista: "← Analyst", libro: "Analyst's DCF model",
-    opcional: "optional: without it, section D is N/A with its reason", lectura: "What was read from the workbook",
-    escenario: "Scenario", valor_hoy: "Value today (USD)", peso: "Weight", supuesto: "Assumption", valor: "Value",
-    celda: "Cell", justificacion: "Analyst's rationale", emision: "Report emission",
-    emitir: "Emit report", reemitir: "Emit again", abrir_pdf: "Open the PDF", registro_t: "Emission log",
-    vista_t: "Emitted report", soltar: "Drop the files here or click to choose them", formatos: "PDF · XLSX · DOCX — several at once",
-    soltar_libro: "Drop the workbook here or click to choose it",
-    necesarios: "Required documents", documento: "Document", estado_doc: "Status", ficheros_adj: "Attached files",
-    adjuntar: "Attach", anadir: "Add another", sustituir: "Replace", adjuntado: "attached", falta: "missing",
-    imprescindible: "required", recomendado: "recommended", opcional_doc: "optional",
-    donde_t: "Where to get it:", cuantos: "of", falta_bloquea: "the report cannot be emitted without it",
-    otros_t: "Other documents not on the list", sin_casilla: "not on the list",
-    traer: "Fetch from the SEC", traer_todo: "Fetch what is missing from the SEC", trayendo: "Asking EDGAR and printing the document…",
-    sin_fuente_t: "No official source:", traido_t: "fetched from EDGAR", registro_traida: "What was fetched",
-    buscando: "Searching…", sin_resultados: "No SEC issuer matches", cargando: "Loading", listo: "Ready", error: "Error",
-    subiendo: "Uploading and classifying…", subidos: "documents in the file", rechazados: "not accepted",
-    contraste_en_curso: "Reading the documents and reconciling with the SEC…", bloquean: "undecided discrepancies",
-    confirmado: "confirmed by the document", solo_sec: "SEC only", derivado: "derived", solo_documento: "document only",
-    hueco: "no data", no_aplica: "not line items of this company", discrepante: "in disagreement", ejercicios: "Fiscal years", trimestres: "Quarters",
-    si: "yes", no: "no", na: "N/A", paginas: "pages", hojas: "sheets", recalculado: "copy recalculated with Excel",
-    sin_libro: "No DCF workbook for this company yet.", faltan_libro: "The workbook lacks:",
-    emitiendo: "Emitting… this can take a few minutes", terminado: "Report emitted", borrador: "Draft: undecided discrepancies",
-    fallo: "The emission stopped: check the log", error_red: "Could not reach the local server.",
-    sin_ticker: "Choose the company in step 1 first.", sin_adjuntos: "No documents, no report: go back to step 1.",
-    viejo: "The report you see predates the latest documents you attached: emit again.",
-    al_dia: "The report is up to date with what you attached.", nunca: "You have not emitted this company's report yet.",
-    pend_posicion: "Without the analyst position (step 3), section H and the cover recommendation are N/A.",
-    pend_dcf: "Without a DCF workbook (step 2), sections 12 to 20 are N/A with their reason.",
-    emitido_el: "emitted on", ficheros_usados: "documents", cifras: "figures",
-    edgar_si: "EDGAR", edgar_no: "no EDGAR match",
-  },
 };
-let idioma = "es";
-const t = (k) => (D[idioma][k] !== undefined ? D[idioma][k] : k);
+const t = (k) => (D.es[k] !== undefined ? D.es[k] : k);
 const PAGINA = document.body.dataset.pagina;
 const TICKER = (new URLSearchParams(location.search).get("ticker") || "").toUpperCase();
-let ultimo = null;          // el último /api/estado, para repintar al cambiar de idioma
+let ultimo = null;          // el último /api/estado, para repintar los rótulos
 
 function elemento(etiqueta, atributos, hijos) {
   const e = document.createElement(etiqueta);
@@ -92,7 +55,7 @@ function elemento(etiqueta, atributos, hijos) {
 }
 function vaciar(n) { while (n.firstChild) n.removeChild(n.firstChild); return n; }
 const con = (ruta) => ruta + (TICKER ? `?ticker=${encodeURIComponent(TICKER)}` : "");
-const num = (v, dec) => (v === null || v === undefined ? t("na") : Number(v).toLocaleString(idioma === "es" ? "es-ES" : "en-GB", { minimumFractionDigits: dec, maximumFractionDigits: dec }));
+const num = (v, dec) => (v === null || v === undefined ? t("na") : Number(v).toLocaleString("es-ES", { minimumFractionDigits: dec, maximumFractionDigits: dec }));
 const pct = (v, dec) => (v === null || v === undefined ? t("na") : num(v * 100, dec) + " %");
 const fecha = (iso) => (iso ? iso.split("-").reverse().join("/") : "—");
 
@@ -118,7 +81,7 @@ function enviarFicheros(ruta, ficheros) {
 }
 
 // ---------------------------------------------------------------- pasos y cabecera
-const PASOS = [["/", "p_expediente", "inicio"], ["/dcf", "p_dcf", "dcf"], ["/asistente", "p_analista", "formulario"], ["/informe", "p_informe", "informe"]];
+const PASOS = [["/", "p_expediente", "inicio"], ["/dcf", "p_dcf", "dcf"], ["/asistente", "p_analista", "asistente"], ["/informe", "p_informe", "informe"]];
 
 function pintarPasos(d) {
   const nav = document.getElementById("pasos");
@@ -127,7 +90,7 @@ function pintarPasos(d) {
   const hecho = {
     inicio: !!(d && d.adjuntos && d.adjuntos.adjuntos.length),
     dcf: !!(d && d.dcf && d.dcf.existe),
-    formulario: !!(d && d.posicion && d.posicion.existe),
+    asistente: !!(d && d.posicion && d.posicion.existe),
     informe: !!(d && d.informe && d.informe.al_dia),
   };
   PASOS.forEach(([ruta, clave, pagina], i) => {
@@ -148,10 +111,8 @@ function pintarCabecera(d) {
   if (cik) cik.textContent = d && d.carga && d.carga.cik ? `CIK ${Number(d.carga.cik)} · ${d.carga.bolsa || ""}` : "";
 }
 
-function repintarIdioma() {
+function pintarRotulos() {
   document.querySelectorAll("[data-i18n]").forEach((n) => { n.textContent = t(n.getAttribute("data-i18n")); });
-  document.getElementById("idioma").textContent = idioma === "es" ? "EN" : "ES";
-  document.documentElement.lang = idioma;
   if (ultimo) pintarEstado(ultimo);
 }
 
@@ -223,14 +184,13 @@ function pintarDocumentos(d) {
   document.getElementById("cuenta-documentos").textContent = docs.length ? `${puestos} ${t("cuantos")} ${docs.length}` : "";
   docs.forEach((doc) => {
     const puesto = doc.estado === "adjuntado";
-    const es = idioma === "es";
     // en pantalla, el nombre y la exigencia; lo demás —dónde entra, qué queda en N/A sin él, dónde conseguirlo—
     // viaja en el título de la fila: es lo que hacía ilegible la lista, no lo que la explicaba
-    const porque = [es ? doc.aporta : doc.aporta_en, puesto ? "" : (es ? doc.sin_el : doc.sin_el_en),
+    const porque = [doc.aporta, puesto ? "" : doc.sin_el,
                     puesto ? "" : (doc.fuente ? `${t("donde_t")} ${doc.donde}` : `${t("sin_fuente_t")} ${doc.sin_fuente}`)]
       .filter(Boolean).join(" · ");
     const celdaDoc = elemento("td", { class: "doc", title: porque }, [
-      elemento("div", { class: "doc-titulo" }, [es ? doc.titulo : doc.titulo_en]),
+      elemento("div", { class: "doc-titulo" }, [doc.titulo]),
       elemento("div", { class: "doc-aporta exigencia" },
         [t(doc.exigencia === "imprescindible" ? "imprescindible" : doc.exigencia === "recomendado" ? "recomendado" : "opcional_doc")]),
     ]);
@@ -490,9 +450,8 @@ function zona(id, entradaId, manejar) {
 }
 
 // ---------------------------------------------------------------- arranque
-document.getElementById("idioma").addEventListener("click", () => { idioma = idioma === "es" ? "en" : "es"; repintarIdioma(); });
 pintarPasos(null);
-repintarIdioma();
+pintarRotulos();
 if (PAGINA === "inicio") {
   buscador();
   zona("zona", "ficheros", subirAdjuntos);

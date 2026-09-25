@@ -91,7 +91,7 @@ def calcular(rf: float, rf_fecha: date, beta: float, beta_origen: str, erp: floa
     bloqueos, avisos = [], []
     ke = rf + beta * erp + prima
     if kd is None:
-        bloqueos.append("Kd: sin rendimiento de la deuda del analista ni tabla de rating sintético (config/rating_sintetico.yaml)")
+        bloqueos.append("Kd: sin rendimiento de la deuda del analista ni tabla de rating sintético (la tabla de rating sintético de la configuración)")
         kd = 0.0
     kd_neto = kd * (1 - t)
     peso_e = e / (e + d) if e + d else 1.0

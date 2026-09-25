@@ -36,3 +36,11 @@
 1. `pytest` 9.1.1 instalado **sin jubilar `unittest`**: `pytest.ini` le enseña a recorrer `prueba_*.py`; los dos corredores dan 207.
 2. `tesis/__main__.py` con `servir · documentos · generar`: los dos primeros delegan en `tesis.saas` y en `emitir.py` pasándoles las opciones tal cual, así que lo antiguo manda; `documentos TICKER` es lo único nuevo y sale del catálogo.
 3. `adjuntos/` y `salida/` movidos a `PROYECTOS VERANO/datos-tesis/` (761 ficheros, 279 MB verificados antes de borrar el origen); los sitúa `WC_DATOS` vía `entorno.carpeta` y sin la variable vuelven a la raíz. El repositorio baja a 43 MB.
+
+## F7 · cierre (25/09/2026)
+Retirados con «confirmo borrar»: `formulario.py`, `tablero/formulario.{html,js}`, `posicion.py` y sus pruebas (el asistente
+de 04 los sustituye; `posiciones/` solo se lee para migrar). Siguen los del camino anterior que `emitir.py` aún llama
+(varios solo alimentan el informe sin entradas del asistente) y cuyas pruebas solo corren con los adjuntos: `regiones`,
+`guidance`, `cartas`, `historial`, `riesgos`, `mercado_objetivo`, `comparables`, `dcf` y `auditor`; `derivados` (sección C) y
+`multiplos` (cuadro de 17) siguen en uso sin absorberse en `motor/`; `agregador` queda sin llamada (regla 6). Retirarlos
+es trabajo aparte.

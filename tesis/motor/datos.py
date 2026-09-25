@@ -13,6 +13,7 @@ from datetime import date, timedelta
 from typing import Dict, List, Optional, Tuple
 
 from ..hechos import Periodo, etiqueta_fiscal
+from ..rotulos import fallo
 from . import comparables as comparables_mod
 from .escenarios import Valoracion, valorar
 from .puente import acciones_diluidas, puente
@@ -158,7 +159,7 @@ def ejecutar(emisor, facts: dict, hechos, periodos: Dict[str, List[Periodo]], da
         cierres = precio_mod.cierres_nasdaq(emisor.ticker, desde, fv, limite=2000)
         mercado = precio_mod.cierres_nasdaq("SPY", desde, fv, limite=2000, clase="etf")
     except Exception as e:                                                   # la bolsa no respondió
-        m.bloqueos.append(f"precio: el histórico de Nasdaq no respondió ({e})")
+        m.bloqueos.append(f"precio: el histórico de Nasdaq no respondió ({fallo(e)})")
         return m
     dias = sorted(d for d in cierres if d <= fv)
     if not dias:
@@ -208,7 +209,7 @@ def ejecutar(emisor, facts: dict, hechos, periodos: Dict[str, List[Periodo]], da
         return m
     kd, kd_origen = p.kd, p.kd_fuente or "analista"
     if p.kd_metodo == "rating_sintetico" and kd is None:
-        kd_origen = "falta config/rating_sintetico.yaml (tabla del analista con fuente y fecha)"
+        kd_origen = "falta la tabla de rating sintético del analista (con fuente y fecha)"
     w = calcular(rf.valor, rf.fecha, beta, origen, p.erp, p.prima, kd, kd_origen, p.tipo_marginal, e_mercado, d_mercado,
                  b_sem, b_men, umbrales.get("beta_r2_min", 0.10))
     # año base

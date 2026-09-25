@@ -51,7 +51,7 @@ def acciones_diluidas(basicas: Optional[float], opciones: Optional[float], preci
         return basicas + tsm + rsu, (f"básicas de la portada + opciones por el método de autocartera ({tsm / 1e6:,.1f} M) "
                                       f"+ RSU pendientes ({rsu / 1e6:,.1f} M)").replace(",", "X").replace(".", ",").replace("X", ".")
     if diluidas_medias is not None:
-        return diluidas_medias, (f"diluidas medias del {trimestre}: la SEC no publica en XBRL todas las piezas del método de "
+        return diluidas_medias, (f"diluidas medias del {trimestre}: la SEC no publica todas las piezas del método de "
                                  "autocartera (opciones con su precio de ejercicio y RSU pendientes)")
     return None, "sin acciones: ni componentes de la dilución ni diluidas medias"
 

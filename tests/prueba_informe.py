@@ -25,7 +25,7 @@ class Formato(unittest.TestCase):
         cero = Hecho("dividendos", p, 0.0, Estado.CERO, Capa.SEC)
         self.assertEqual(formato.celda(cero).texto, "0")
         v = Hecho("coste_ingresos", p, 23_275_329_000.0, Estado.VALOR, Capa.SEC)
-        self.assertEqual(formato.celda(v).texto, "-23.275")     # signo de la casa: coste en negativo, millones con punto
+        self.assertEqual(formato.celda(v).texto, "−23.275")     # signo de la casa: coste en negativo (menos tipográfico, 02), millones con punto
         self.assertEqual(formato.pct(0.295), "29,5 %")
 
 
@@ -120,7 +120,7 @@ class Concordancia(unittest.TestCase):
         # tenía ingresos por DVD fuera de las regiones (82.839 miles) y el informe lo declara.
         self.assertTrue(any(c.startswith("✓ FY2025") for c in cuadres), cuadres)
         self.assertTrue(any(c.startswith("✓ 2T26") for c in cuadres), cuadres)
-        self.assertTrue(any(c.startswith("≠ FY2023") and "82,839,000" in c for c in cuadres), cuadres)
+        self.assertTrue(any(c.startswith("≠ FY2023") and "82.839.000" in c for c in cuadres), cuadres)
         self.assertFalse(any(c.startswith("≠") and "hoja regional" in c for c in cuadres), "el formulario y la hoja regional deben coincidir: " + str(cuadres))
 
 

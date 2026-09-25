@@ -6,7 +6,7 @@ import unittest
 from datetime import date
 from pathlib import Path
 
-from tesis import cartas, comparables, formulario, historial, multiplos, posicion, secciones
+from tesis import cartas, comparables, historial, multiplos, saas, secciones
 from tesis.dcf import Celda as CeldaLibro
 
 RAIZ = Path(__file__).resolve().parents[1]
@@ -86,18 +86,12 @@ class Fuentes(unittest.TestCase):
 
 
 class Analista(unittest.TestCase):
-    def test_un_criterio_vacio_con_evidencia_no_se_guarda(self):
-        """Falla si una fila del checklist con evidencia pero sin criterio pasa la validación (cargar la descartaría en silencio)."""
-        d = posicion.plantilla()
-        d["checklist"] = [{"criterio": "", "cumplido": True, "evidencia": "PER < 30"}]
-        self.assertIn("checklist[0].criterio", posicion.validar(d))
-
     def test_una_ruta_absoluta_de_windows_no_sale_de_la_carpeta(self):
         """Falla si «GET /C:\\…\\fuera.css» (sin «/» ni «..») sirve un fichero de fuera de tesis/tablero: en Windows, unir una ruta absoluta descarta la base."""
         with tempfile.TemporaryDirectory() as tmp:
             fuera = Path(tmp, "fuera.css")
             fuera.write_text("body{}", encoding="utf-8")
-            servidor, _ = formulario.servir("PRUEBA", 0, Path(tmp), en_hilo=True)
+            servidor, _ = saas.servir(0, en_hilo=True)
             try:
                 with socket.create_connection(("127.0.0.1", servidor.server_address[1]), timeout=10) as s:
                     s.sendall(f"GET /{fuera} HTTP/1.0\r\nHost: x\r\n\r\n".encode())

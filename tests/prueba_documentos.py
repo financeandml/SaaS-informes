@@ -6,6 +6,7 @@ hubiera avisado antes de emitir—. Ahora cada documento tiene su casilla, su bo
 """
 
 import json
+import re
 import tempfile
 import unittest
 from pathlib import Path
@@ -25,10 +26,24 @@ class Catalogo(unittest.TestCase):
         """Falla si una casilla no declara su destino en el informe o su consecuencia: la lista existe para que el
         analista sepa, antes de emitir, qué apartado se quedará en N/A."""
         for d in documentos.CATALOGO:
-            for campo in ("titulo", "titulo_en", "aporta", "aporta_en", "sin_el", "sin_el_en", "donde"):
+            for campo in ("titulo", "aporta", "sin_el", "donde"):
                 self.assertTrue(getattr(d, campo).strip(), f"{d.clave}.{campo}")
             self.assertIn(d.exigencia, (documentos.IMPRESCINDIBLE, documentos.RECOMENDADO, documentos.OPCIONAL), d.clave)
             self.assertTrue(all(f.startswith(".") for f in d.formatos), d.clave)
+
+    def test_los_apartados_que_cita_son_los_del_indice(self):
+        """Falla si la lista del paso 1 cita un apartado por un número que ya no es el suyo (el catálogo decía «25 tamaño
+        de mercado» y «32 guía frente a real» con la numeración antigua: el analista buscaba donde no era)."""
+        import yaml
+        titulos = {n: a["titulo"] for n, a in yaml.safe_load((Path(__file__).resolve().parents[1] / "docs" / "spec" / "01_indice.yaml")
+                                                              .read_text(encoding="utf-8"))["apartados"].items()}
+        clave = {"segmentos": "Productos", "geografía": "Productos", "riesgos": "Riesgos", "tamaño de mercado": "Tamaño de mercado",
+                 "frente a real": "Historial de resultados", "objetivos vigentes": "Resumen ejecutivo", "gobierno": "Estructura corporativa"}
+        for d in documentos.CATALOGO:
+            for n, que in re.findall(r"(\d+)(?:–\d+)? ([a-záéíóúñ ]+?)(?= ·|;|:|$| \(|,)", d.aporta):
+                for palabra, titulo in clave.items():
+                    if palabra in que:
+                        self.assertIn(titulo, titulos[int(n)], f"{d.clave}: «{n} {que}»")
 
     def test_la_clave_de_la_casilla_es_la_del_expediente(self):
         """Falla si el catálogo nombra un documento de otra manera que el expediente: la lista del paso 1 no casaría

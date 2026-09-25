@@ -195,8 +195,8 @@ class VolatilidadImplicitaYahoo(unittest.TestCase):
         fila = cuadro.filas[0]
         self.assertEqual(fila.celdas[5].glifo, "∑")
         self.assertIn("53,1", fila.celdas[5].nota)
-        self.assertEqual(fila.celdas[7].texto, "sí")
-        self.assertEqual(cuadro.filas[1].celdas[7].texto, "no")
+        self.assertEqual(fila.celdas[6].texto, "sí")                  # F7: un solo ratio put/call (el de la cadena)
+        self.assertEqual(cuadro.filas[1].celdas[6].texto, "no")
         self.assertEqual(cuadro.filas[1].celdas[1].texto, "N/A")
         self.assertIn("no cuadra", cuadro.filas[1].celdas[1].nota)
 
@@ -343,7 +343,7 @@ class IVSinStrike(unittest.TestCase):
         cuadro = secciones.cuadro_iv(informe.Cuadros(), p)
         fila = cuadro.filas[0]
         self.assertEqual(fila.celdas[1].texto, "31,0 %")
-        self.assertIn("sin strike", fila.celdas[1].nota)
+        self.assertIn("sin precio de ejercicio", fila.celdas[1].nota)
         self.assertEqual(fila.celdas[5].glifo, "∑")          # el sesgo sigue saliendo: son las dos IV, no los strikes
 
 

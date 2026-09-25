@@ -10,7 +10,7 @@ from pathlib import Path
 from types import SimpleNamespace
 from unittest import mock
 
-from tesis import agregador, calendario, cartas, multiplos, posicion, precio, revision, yahoo
+from tesis import agregador, calendario, cartas, multiplos, precio, revision, yahoo
 from tesis.hechos import Capa, Contraste, Estado, Hecho, Periodo, na
 
 RESUMEN_YAHOO = {"quoteSummary": {"result": [{
@@ -195,32 +195,6 @@ class MultiplosSec(unittest.TestCase):
         self.assertIsNone(L["Capitalización"].valor)
         self.assertIsNotNone(L["EBITDA TTM"].valor)      # lo que no depende del precio sí sale
         self.assertIn("precio", m.faltan)
-
-
-class PosicionValidada(unittest.TestCase):
-    def test_validar_y_guardar(self):
-        """Falla si un fichero con una fecha mal formada, un precio no numérico o una recomendación fuera de la lista se guarda,
-        o si uno válido no se guarda tal cual."""
-        d = posicion.plantilla()
-        self.assertEqual(posicion.validar(d), {})
-        d["posicion"]["recomendacion"] = "comprar"
-        d["posicion"]["precio_objetivo"] = 100
-        d["seguimiento"]["fechas_revision"] = ["2026-12-31", "31/12/2026"]
-        errores = posicion.validar(d)
-        self.assertEqual(list(errores), ["seguimiento.fechas_revision[1]"])
-        d["seguimiento"]["fechas_revision"] = ["2026-12-31"]
-        import tempfile
-        with tempfile.TemporaryDirectory() as tmp:
-            ruta = Path(tmp) / "X.json"
-            posicion.guardar(d, ruta)
-            p = posicion.cargar(ruta)
-            self.assertEqual(p.recomendacion, "comprar")
-            self.assertEqual(p.precio_objetivo, 100.0)
-            self.assertEqual(p.fechas_revision, [date(2026, 12, 31)])
-            d["posicion"]["recomendacion"] = "holdear"
-            with self.assertRaises(ValueError):
-                posicion.guardar(d, ruta)
-            self.assertEqual(posicion.cargar(ruta).recomendacion, "comprar")     # nada se guardó a medias
 
 
 class DobleComprobacion(unittest.TestCase):

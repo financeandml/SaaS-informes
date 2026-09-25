@@ -22,7 +22,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from datetime import date
 from pathlib import Path
-from typing import Dict, List, Optional, Sequence, Tuple
+from typing import Dict, List, Optional, Sequence, Tuple, Set
 
 from . import derivados as derivados_mod
 from .campos import CAMPOS, DERIVADOS, campo as campo_de, por_seccion
@@ -177,8 +177,6 @@ class Informe:
     historial_frases: List[Cita] = field(default_factory=list)
     historial_faltan: Dict[str, str] = field(default_factory=dict)
     historial_recorte: Optional[Recorte] = None
-    posicion: Optional[object] = None
-    posicion_faltan: Dict[str, str] = field(default_factory=dict)
     segmento_unico: Optional[Cita] = None
     objetivo_portada: Optional[Tuple[str, float, str]] = None       # (rótulo, USD/acción, origen) del analista, para la portada
     f_cuadros: Dict[str, Cuadro] = field(default_factory=dict)      # sección F interina: lo que publica la bolsa
@@ -205,6 +203,11 @@ class Informe:
     salidas_13g: List[str] = field(default_factory=list)
     clases_acciones: List[str] = field(default_factory=list)
     parte_d: Optional[object] = None                                 # F3 · parte_d.ParteD (motor de valoración)
+    parte_a: Optional[object] = None                                 # F7 · parte_a.ParteA (resumen y pilares)
+    parte_i: Optional[object] = None                                 # F7 · parte_i.ParteI (modelo, fuentes, notas, documentación)
+    partir: Set[int] = field(default_factory=set)                    # cuadros que el render deja partir entre páginas (06 §4)
+    emitido: Optional[date] = None                                   # fecha de emisión: solo con 0 bloqueos (06 §4)
+    bloqueos_qa: List[str] = field(default_factory=list)             # hoja 0 del borrador (06 §4)
     parte_e: Optional[object] = None                                 # F4 · parte_e.ParteE (mercado, competencia, foso)
     parte_f: Optional[object] = None                                 # F5 · parte_f.ParteF (riesgos, caso bajista, historial)
     parte_g: Optional[object] = None                                 # F6 · parte_g.ParteG (tesis, lista, riesgo, seguimiento)
@@ -247,7 +250,7 @@ def _fuente_tablero(tab: Tablero, claves: Sequence[str], periodos: Sequence[Peri
     for r in tab.resultados:
         if r.campo.clave in claves and r.evidencia is not None:
             docs.add(r.evidencia.documento)
-    partes = ["SEC EDGAR (companyfacts, 10-K/10-Q)"] + sorted(docs)
+    partes = ["SEC EDGAR (10-K y 10-Q)"] + sorted(docs)
     return "Fuente: " + "; ".join(partes) + "."
 
 
@@ -428,7 +431,8 @@ def _ficha(emisor: Emisor, f: Ficha, precio: Hecho, exp: Expediente, hechos, mer
         if c is None:
             datos.append(Dato(rotulo, "N/A", f.faltan.get(clave, ""), "na"))
         else:
-            donde = f"pág. {c.origen.pagina}" if c.origen.pagina else (c.origen.concepto or c.origen.formulario)
+            # la etiqueta XBRL (dei:AuditorName) no es cuerpo: se cita el formulario (06 §3.6)
+            donde = f"pág. {c.origen.pagina}" if c.origen.pagina else (c.origen.formulario or "portada")
             datos.append(Dato(rotulo, fmt(c), f"{c.origen.documento}, {donde}" + (f" · a {f_fecha(c.fecha)}" if c.fecha else "")
                               + (f" · {c.nota}" if c.nota.startswith("propuesta") else "")))
     cita("fundacion", "Fundación", lambda c: f"{int(c.valor)}")
@@ -604,6 +608,31 @@ def _documentacion(indice: List[Seccion], numeros: Dict[str, int], por_clave: Di
     return salida
 
 
+def _valores_motor(motor, parte_d) -> List[float]:
+    """Las cifras del motor que un texto del analista puede citar: precio, PO, potencial, márgenes de la regla, WACC,
+    tipo sin riesgo, beta, g y probabilidades de cada escenario."""
+    salida = [getattr(parte_d, a, None) for a in ("po", "precio", "potencial", "margen_seguridad", "recorrido_riesgo")] if parte_d else []
+    v = getattr(motor, "valoracion", None)
+    if v is not None:
+        w = v.wacc
+        salida += [w.wacc, w.rf, w.beta, w.kd] + [x for e in v.parametros.escenarios.values() for x in (e.g, e.probabilidad)]
+    return [float(x) for x in salida if isinstance(x, (int, float))]
+
+
+def _huecos_por_partida(tab: Tablero, anuales=None) -> List[str]:
+    """Los huecos del apartado 38, una línea por partida y motivo con sus periodos (38 cabe en una página; la lista
+    periodo a periodo va a la auditoría). Lo que la compañía no tiene no es un hueco (regla 10): se cuenta aparte."""
+    import re
+    grupos: Dict[Tuple[str, str], List[str]] = {}
+    for r in tab.resultados:
+        if r.hecho.contraste is not Contraste.HUECO or r.campo.clave in tab.no_aplican:
+            continue
+        motivo = re.sub(r"no publica «[^»]*» para \S+ ", "no lo publica ", r.hecho.motivo or "sin dato")
+        p = r.periodo
+        grupos.setdefault((r.campo.rotulo, motivo), []).append(f"{p.fin:%d/%m/%Y}" if p.es_instante else _etiqueta(p, anuales, tab))
+    return [f"{rotulo} ({', '.join(periodos)}): {motivo}" for (rotulo, motivo), periodos in grupos.items()]
+
+
 def _mover_cuadres(cuadros) -> List[str]:
     """Las notas de cuadre (las que empiezan por un glifo de contraste) salen de los cuadros y van al apéndice:
     los números se imprimen limpios y el detalle del cuadre queda donde el analista lo busca."""
@@ -649,9 +678,9 @@ def _segmento_unico(exp: Expediente) -> Optional[Cita]:
 
 def construir(ticker: str, hoy: date, emisor: Emisor, exp: Expediente, tab: Tablero, periodos: Dict[str, List[Periodo]],
               ficha: Ficha, gobierno: Gobierno, guidance: Guidance, regiones: Regiones, precio: Hecho,
-              recortes: Dict[Tuple[str, int], Recorte], modelo_dcf=None, posicion=None, riesgos=None, historial=None,
+              recortes: Dict[Tuple[str, int], Recorte], modelo_dcf=None, riesgos=None, historial=None,
               salida_recortes: Optional[Path] = None, mercado=None, posicionamiento=None, comparables=None, mercado_objetivo=None,
-              agregador=None, multiplos=None, proxima=None, parte_b=None, motor=None, libro=None) -> Informe:
+              agregador=None, multiplos=None, proxima=None, parte_b=None, motor=None, libro=None, excel=None) -> Informe:
     from . import secciones as secciones_mod
     from . import parte_b as parte_b_mod
     anuales, trimestres, instantes = periodos["anuales"], periodos["trimestres"], periodos["instantes"]
@@ -668,6 +697,7 @@ def construir(ticker: str, hoy: date, emisor: Emisor, exp: Expediente, tab: Tabl
         objetivos = parte_b_mod.cuadro_objetivos(n, vigentes, bool(parte_b.notas and parte_b.notas[-1].candidatos))
     else:
         objetivos = _cuadro_objetivos(n, guidance)
+    parte_a = None
     if parte_b is not None and parte_b.segmentos is not None and parte_b.segmentos.periodos:
         segmentos_c, geografia_c, svg_mezcla, sin_traducir = parte_b_mod.cuadro_segmentos(n, parte_b.segmentos, lambda p: _etiqueta(p, anuales, tab))
         regiones_c, svg_regiones = geografia_c, ""
@@ -696,7 +726,8 @@ def construir(ticker: str, hoy: date, emisor: Emisor, exp: Expediente, tab: Tabl
     solo_sec = [f"{r.campo.rotulo} {r.periodo.clave}" for r in tab.resultados if r.hecho.contraste is Contraste.SOLO_SEC]
     huecos = [f"{r.campo.rotulo} {r.periodo.clave}: {r.hecho.motivo}" for r in tab.resultados if r.hecho.contraste is Contraste.HUECO]
     faltan = [f"Ficha · {k}: {v}" for k, v in ficha.faltan.items()] + [f"Gobierno · {k}: {v}" for k, v in gobierno.faltan.items()] \
-        + [f"Objetivos · {k}: {v}" for k, v in guidance.faltan.items()] + [f"Regiones · {k}: {v}" for k, v in regiones.faltan.items()]
+        + ([] if parte_b is not None else [f"Objetivos · {k}: {v}" for k, v in guidance.faltan.items()]      # con parte B: Cuadro 2 y
+           + [f"Regiones · {k}: {v}" for k, v in regiones.faltan.items()])                                  # geografía de los segmentos
     fuentes = [f"{a.nombre} — {a.tipo.value}" + (f", periodo {f_fecha(a.periodo_fin)}" if a.periodo_fin else "") + (f", fecha {f_fecha(a.fecha)}" if a.fecha else "")
                + (" · verificado en EDGAR" if a.verificado_en_edgar else "") + f" · sha256 {a.huella[:12]}" for a in exp.adjuntos]
     fuentes.append(f"SEC EDGAR companyfacts y submissions, CIK {int(emisor.cik)}, obtenidos el {f_fecha(emisor.obtenido_en)}")
@@ -757,7 +788,7 @@ def construir(ticker: str, hoy: date, emisor: Emisor, exp: Expediente, tab: Tabl
         cuadros_dcf = {"faltan": {}, "cuadres": []}
         parte_d = parte_d_mod.construir(n, motor, lambda p: _etiqueta(p, anuales, tab), hechos, anuales,
                                         consenso=getattr(mercado, "consenso", None) if mercado is not None else getattr(motor, "consenso", None),
-                                        libro=libro, recomendacion_analista=(posicion.recomendacion if posicion is not None else ""),
+                                        libro=libro, recomendacion_analista=(str(parte_b.entradas.valor("pos.recomendacion") or "") if parte_b is not None else ""),
                                         segmento_unico=_segmento_unico(exp) is not None, multiplos=multiplos)
         if parte_d.cuadros.get("multiplos_sec") is not None:
             cuadros_dcf["multiplos_sec"] = parte_d.cuadros["multiplos_sec"]
@@ -805,7 +836,15 @@ def construir(ticker: str, hoy: date, emisor: Emisor, exp: Expediente, tab: Tabl
         parte_f = parte_f_mod.construir(n, parte_b, motor, comparaciones, hechos, trimestres, lambda p: _etiqueta(p, anuales, tab),
                                         float(umbral("cita_similitud_min")), float(umbral("fallo_guia_obliga_causas")))
         faltan += [f"Parte F · {x}" for x in parte_f.faltas]
-    parte_g = None
+        # A · 2–3: textos del analista y pilares (paso 3), con el párrafo factual de plantilla (no numera cuadros)
+        from . import parte_a as parte_a_mod
+        parte_a = parte_a_mod.construir(parte_b.entradas, parte_b.textos, float(umbral("cita_similitud_min")), parte_b.item1a, parte_b.alias,
+                                        hechos, periodos, lambda p: _etiqueta(p, anuales, tab), vigentes, comparaciones)
+        faltan += [f"Parte A · {x}" for x in parte_a.faltas]
+        # 06 §2: los textos del analista pasan el linter (cifras = Hechos o evidencias, unidades, sin vetadas ni inglés)
+        from . import linter
+        faltan += [f"Linter · {x}" for x in linter.revisar_entradas(parte_b.entradas, linter.candidatos(hechos, _valores_motor(motor, parte_d)))]
+    parte_g, sesiones = None, {}
     if parte_b is not None:
         # G · 27–30: la posición del analista (paso 8) con los criterios automáticos, el riesgo y el seguimiento
         from . import entradas as entradas_mod, parte_g as parte_g_mod, precio as precio_mod
@@ -837,7 +876,9 @@ def construir(ticker: str, hoy: date, emisor: Emisor, exp: Expediente, tab: Tabl
     faltan += [f"DCF · {k}: {v}" for k, v in cuadros_dcf.get("faltan", {}).items()]
     # F · lo que la bolsa publica, y la evidencia de cada petición (la respuesta literal, pintada)
     acc_portada = ficha.citas.get("acciones_portada")
-    f_cuadros = secciones_mod.cuadros_f(n, posicionamiento, acc_portada.valor if acc_portada is not None else None) if posicionamiento is not None else {}
+    f_cuadros = secciones_mod.cuadros_f(n, posicionamiento, acc_portada.valor if acc_portada is not None else None, sesiones=sesiones,
+                                        hasta=motor.parametros.fecha_valoracion if motor is not None else hoy, hoy=hoy,
+                                        resultados=proxima.fecha if proxima is not None else None) if posicionamiento is not None else {}
     f_faltan = dict(posicionamiento.faltan) if posicionamiento is not None else {"fuente": "no se pidió la lectura de la bolsa para la sección F"}
     for clave, lista in secciones_mod.recortes_f(posicionamiento, mercado, salida_recortes, comparables, agregador, proxima, historial).items():
         evidencias.setdefault(clave, []).extend(lista)
@@ -845,7 +886,7 @@ def construir(ticker: str, hoy: date, emisor: Emisor, exp: Expediente, tab: Tabl
         for s in indice:
             if any(numero == numeros["24"] for numero, _ in s.apartados):      # la parte de la cadena de opciones
                 s.estado = "parcial" if "iv" not in f_cuadros else ""
-    faltan += [f"F · {k}: {v}" for k, v in f_faltan.items()]
+    faltan += [f"Parte H · {k}: {v}" for k, v in f_faltan.items()]
     if riesgos is not None and parte_b is None:
         faltan += [f"Riesgos · {k}: {v}" for k, v in riesgos.faltan.items()]
     if historial is not None and parte_b is None:
@@ -856,17 +897,13 @@ def construir(ticker: str, hoy: date, emisor: Emisor, exp: Expediente, tab: Tabl
         faltan += [f"Parte B · {x}" for x in parte_b.faltas] + [f"Gobierno · traducir {x}" for x in getattr(gobierno, "sin_traducir", [])]
     if modelo_dcf is not None:
         fuentes.append(f"{modelo_dcf.nombre} — libro de valoración del analista · sha256 {modelo_dcf.huella[:12]}")
-    if posicion is not None and posicion.fichero is not None:
-        fuentes.append(f"{posicion.fichero.name} — fichero de posición y tesis del analista")
     # el precio objetivo de la portada es del analista: el de su fichero de posición o, si no, el «objetivo calculado» de su libro
     objetivo_portada = None
     if parte_d is not None and parte_d.po is not None:
         objetivo_portada = (f"precio objetivo del motor a {parte_d.horizonte_meses} meses", parte_d.po, "motor de valoración (05 §7)")
-    # un solo PO (regla 4): con el motor, el suyo; el del analista o el de su libro solo sin motor (camino antiguo)
+    # un solo PO (regla 4): con el motor, el suyo; el del libro del analista solo sin motor (camino antiguo)
     if objetivo_portada is not None:
         pass
-    elif posicion is not None and posicion.precio_objetivo is not None:
-        objetivo_portada = ("precio objetivo del analista", posicion.precio_objetivo, f"fichero de posición {posicion.fichero.name if posicion.fichero else ''}")
     elif modelo_dcf is not None:
         for rotulo, valor, celda in modelo_dcf.anclajes_objetivo:
             if "calculado" in rotulo.lower() or "objetivo" in rotulo.lower():
@@ -876,9 +913,10 @@ def construir(ticker: str, hoy: date, emisor: Emisor, exp: Expediente, tab: Tabl
     potencial = objetivo_portada[1] / precio.valor - 1 if objetivo_portada is not None and precio.hay_dato and precio.valor else None
     if parte_d is not None and parte_d.po is not None:
         potencial = parte_d.potencial
-    if proxima is not None:
-        faltan.append(f"Fechas clave · próxima presentación: la compañía no la anuncia en ningún adjunto ni en la SEC; se imprime la que publica la bolsa "
-                      f"({proxima.fecha:%d/%m/%Y}, {'esperada' if proxima.esperada else 'anunciada'}) y su cuadre con el agregador: {proxima.nota_contraste}")
+    avisos_extra: List[str] = []
+    if proxima is not None:                 # aviso (página interna de QA), no bloqueo: la fecha es la de la bolsa y se dice
+        avisos_extra.append(f"Fechas clave · próxima presentación: la compañía no la anuncia en ningún adjunto ni en la SEC; se imprime la que publica la bolsa "
+                            f"({proxima.fecha:%d/%m/%Y}, {'esperada' if proxima.esperada else 'anunciada'}) y su cuadre con el agregador: {proxima.nota_contraste}")
     if multiplos is not None:
         faltan += [f"Múltiplos · {k}: {v}" for k, v in multiplos.faltan.items()]
     if agregador is not None:
@@ -902,6 +940,12 @@ def construir(ticker: str, hoy: date, emisor: Emisor, exp: Expediente, tab: Tabl
         por_clave.setdefault("32", []).append(historial_recorte)
     documentacion = _documentacion(indice, numeros, por_clave)
 
+    parte_i = None
+    if parte_b is not None:
+        # I · 36–39: modelo, fuentes con huella, notas en una página y documentación (numera sus cuadros al final)
+        from . import parte_i as parte_i_mod
+        parte_i = parte_i_mod.construir(n, motor, parte_b, emisor, _huecos_por_partida(tab, periodos.get("anuales")), excel,
+                                        cuadres=cuadres_apendice, ajenas=sorted({r.campo.rotulo for r in tab.resultados if r.campo.clave in tab.no_aplican}))
     if parte_g is not None:
         # «0 discrepancias y 0 bloqueos» se evalúa con la puerta de calidad ya completa (sin contar lo de la propia parte G)
         nuevas = parte_g.cerrar(len([f for f in faltan if not f.startswith("Parte G")]), len(tab.bloquea))
@@ -915,20 +959,18 @@ def construir(ticker: str, hoy: date, emisor: Emisor, exp: Expediente, tab: Tabl
         citas_call=guidance.citas_call, proxima_presentacion=guidance.proxima_presentacion,
         resultados=resultados, balance=balance, flujo=flujo, rentabilidad=rentabilidad,
         resumen_contraste=tab.resumen, discrepancias=discrepancias, solo_sec=solo_sec, huecos=huecos,
-        avisos=[a.texto for a in exp.avisos] + tab.avisos + avisos_graficos, fuentes=fuentes, faltan=faltan,
+        avisos=[a.texto for a in exp.avisos] + tab.avisos + avisos_graficos + avisos_extra, fuentes=fuentes, faltan=faltan,
         periodos_anuales=anuales, periodos_trimestres=trimestres,
         indice=indice, numeros=numeros, titulos={clave: _titulo(indice, numero) for clave, numero in numeros.items()}, evidencias=evidencias, fotos_ejecutivos=fotos_ejecutivos, fotos_consejo=fotos_consejo,
         dcf=cuadros_dcf, riesgos_cuadros=riesgos_cuadros, riesgos_recortes=riesgos_recortes, riesgos_faltan=riesgos.faltan if riesgos is not None else {"item_1a": "no se pidió la lectura del Item 1A"},
         historial_cuadros=historial_cuadros, historial_frases=historial.frases_guia if historial is not None else [],
         historial_faltan=historial.faltan if historial is not None else {"historial": "no se pidió"}, historial_recorte=historial_recorte,
-        posicion=posicion, posicion_faltan=posicion.faltan() if posicion is not None else {"fichero": f"el analista no ha rellenado su fichero de posición (formulario: python -m tesis.formulario {ticker.upper()} → posiciones/{ticker.upper()}.json)"},
         segmento_unico=_segmento_unico(exp), objetivo_portada=objetivo_portada, f_cuadros=f_cuadros, f_faltan=f_faltan,
         comparables_cuadro=comparables_cuadro, comparables_faltan=comparables_faltan, mercado_cuadro=mercado_cuadro, mercado_faltan=mercado_faltan,
         comparables_sic_cuadro=comparables_sic_cuadro, rentabilidad_ttm=rentabilidad_ttm, proxima_bolsa=proxima, potencial=potencial,
         recomendacion=((parte_g.recomendacion if parte_g is not None and parte_g.recomendacion else "")
-                       or (posicion.recomendacion if posicion is not None and posicion.recomendacion else "")
                        or (parte_d.recomendacion_regla if parte_d is not None else "")),
-        documentacion=documentacion, cuadres_apendice=cuadres_apendice, parte_d=parte_d, parte_e=parte_e, parte_f=parte_f, parte_g=parte_g,
+        documentacion=documentacion, cuadres_apendice=cuadres_apendice, parte_d=parte_d, parte_e=parte_e, parte_f=parte_f, parte_g=parte_g, parte_a=parte_a, parte_i=parte_i,
         textos_b=parte_b_mod.textos(parte_b.entradas, parte_b.alias) if parte_b is not None else None, segmentos=segmentos_c, geografia=geografia_c,
         grafico_mezcla=svg_mezcla, fechas_clave=fechas_c, catalizadores=catalizadores_c,
         salidas_13g=list(getattr(gobierno, "salidas_13g", [])), clases_acciones=list(parte_b.clases) if parte_b is not None else [],

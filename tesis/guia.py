@@ -19,6 +19,7 @@ from datetime import date
 from typing import Dict, Iterable, List, Mapping, Optional, Sequence, Tuple
 
 from . import tablas_html
+from .rotulos import fallo
 
 __all__ = ["Candidato", "Real", "Nota", "Comparacion", "leer_nota", "notas_edgar", "vigentes", "frente_a_real", "trimestre"]
 
@@ -243,7 +244,7 @@ def notas_edgar(emisor, maximo: int = 9) -> Tuple[List[Nota], Dict[str, str]]:
                 continue
             html, _ = sec.descargar_texto(f"{carpeta}/{nombre}")
         except (RuntimeError, sec.SinContacto, KeyError) as e:
-            faltan[d.accession] = f"EDGAR no sirvió el anexo: {e}"
+            faltan[d.accession] = f"EDGAR no sirvió el anexo: {fallo(e)}"
             continue
         notas.append(leer_nota(html, d.presentado, f"{carpeta}/{nombre}"))
     return sorted(notas, key=lambda n: n.presentado), faltan

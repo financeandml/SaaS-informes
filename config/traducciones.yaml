@@ -268,3 +268,36 @@ cargos:   # de más largo a más corto; se aplican como frases completas (sin di
   - [Interim, interino]
   - [member of the Board of Directors, consejero]
   - [Director, consejero]
+bolsa:   # rótulos literales de la web de Nasdaq (13F, Form 4, relaciones y tipos de operación); sin traducir → aviso de QA
+  institutional ownership: Participación institucional
+  total shares outstanding (millions): Acciones en circulación (millones)
+  total value of holdings (millions): Valor de las posiciones institucionales (millones USD)
+  increased positions: Posiciones aumentadas
+  decreased positions: Posiciones reducidas
+  held positions: Posiciones mantenidas
+  total institutional shares: Acciones institucionales en total
+  new positions: Posiciones nuevas
+  sold out positions: Posiciones liquidadas
+  number of open market buys: Compras en mercado abierto
+  number of sells: Ventas
+  total insider trades: Operaciones de directivos
+  number of shares bought: Acciones compradas
+  number of shares sold: Acciones vendidas
+  total shares traded: Acciones negociadas
+  net activity: Saldo neto
+  officer: Directivo
+  director: Consejero
+  president: Presidente
+  chief executive officer: Consejero delegado
+  chief financial officer: Director financiero
+  general counsel: Director jurídico
+  beneficial owner (10% or more): Titular de más del 10 %
+  10% owner: Titular de más del 10 %
+  automatic sell: Venta automática (plan 10b5-1)
+  automatic buy: Compra automática (plan 10b5-1)
+  sell: Venta
+  buy: Compra
+  disposition (non open market): Transmisión fuera de mercado
+  acquisition (non open market): Adquisición fuera de mercado
+  option execute: Ejercicio de opciones
+  gift: Donación

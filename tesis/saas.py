@@ -9,11 +9,11 @@ Sirve en 127.0.0.1 cuatro páginas estáticas (`tesis/tablero/`, CSP estricta, s
                     (PDF, XLSX, Word) a `adjuntos/<TICKER>/`; cada uno se clasifica con `expediente.cargar`, se ordena
                     cronológicamente, se contrasta con la SEC (`contraste.contrastar`) y se dice en qué apartados se usa.
   2. `/dcf`         el libro Excel del analista, a `dcf/<TICKER>.xlsx`, leído con `dcf.cargar` (copia recalculada si hace falta).
-  3. `/formulario`  la posición y la tesis (sección H y portada), a `posiciones/<TICKER>.json`.
+  3. `/asistente`   las entradas del analista en 9 pasos (`asistente.py`), a `<datos>/entradas/<TICKER>/<fecha>/entradas.json`.
   4. `/informe`     lanza `emitir.py` como proceso aparte (registro en `salida/<TICKER>/emision.log`) y muestra el HTML y el PDF.
 
-El servidor solo escribe en `adjuntos/`, `dcf/`, `posiciones/` (vía emitir.py) y `salida/`. Escucha solo en
-127.0.0.1 y rechaza las escrituras que no vengan de sus propias páginas (cabecera propia + origen local), como el formulario.
+El servidor solo escribe en `adjuntos/`, `dcf/`, `entradas/` y `salida/` (`posiciones/` solo se lee, para migrarla). Escucha
+solo en 127.0.0.1 y rechaza las escrituras que no vengan de sus propias páginas (cabecera propia + origen local).
 """
 
 from __future__ import annotations
@@ -34,19 +34,24 @@ from pathlib import Path
 from typing import Dict, Iterator, List, Optional, Tuple
 from urllib.parse import parse_qs, unquote, urlparse
 
-from . import documentos as catalogo, entorno, expediente, fuentes, posicion as posicion_mod, sec
-from .formulario import CSP, TABLERO, _TICKER, _TIPOS, cargar_o_plantilla, ruta_posicion
+from . import documentos as catalogo, entorno, expediente, fuentes, sec
+
+TABLERO = Path(__file__).resolve().parent / "tablero"
+_TICKER = re.compile(r"^[A-Z0-9.\-]{1,10}$")
+CSP = ("default-src 'none'; script-src 'self'; style-src 'self'; connect-src 'self'; img-src 'self'; form-action 'none'; "
+       "base-uri 'none'; frame-ancestors 'none'")
+_TIPOS = {".html": "text/html; charset=utf-8", ".css": "text/css; charset=utf-8", ".js": "text/javascript; charset=utf-8"}
 
 __all__ = ["Servidor", "servir", "main"]
 
 RAIZ = Path(__file__).resolve().parents[1]
 ADJUNTOS, SALIDA = entorno.carpeta("adjuntos"), entorno.carpeta("salida")   # pesan cientos de megas: fuera del repositorio
-DCF, POSICIONES = RAIZ / "dcf", RAIZ / "posiciones"
+DCF = RAIZ / "dcf"
 ADMITIDOS = {".pdf", ".xlsx", ".xlsm", ".docx"}
 LIBROS = {".xlsx", ".xlsm"}
 MAXIMO_CUERPO = 400_000_000
 CSP_SAAS = CSP + "; frame-src 'self'"          # el paso 4 enmarca el informe emitido, servido por este mismo servidor
-PAGINAS = {"/": "inicio.html", "/dcf": "dcf.html", "/formulario": "formulario.html", "/informe": "informe.html", "/asistente": "asistente.html"}
+PAGINAS = {"/": "inicio.html", "/dcf": "dcf.html", "/informe": "informe.html", "/asistente": "asistente.html"}
 _NOMBRE = re.compile(r"[^A-Za-z0-9._\- ]+")
 
 DECLARADO = "declarado.json"       # en la carpeta del ticker: fichero → casilla en la que lo adjuntó el analista
@@ -257,9 +262,16 @@ def resumen_dcf(ticker: str) -> dict:
 
 # ---------------------------------------------------------------- emisión
 
+def _entradas_analista(ticker: str) -> Optional[Path]:
+    """Las últimas entradas guardadas por el asistente (una carpeta por fecha de informe)."""
+    from . import asistente
+    ultimas = asistente.fechas(ticker)
+    return asistente.ruta(ticker, date.fromisoformat(ultimas[-1])) if ultimas else None
+
+
 def entradas(ticker: str) -> List[Path]:
-    """Todo lo que alimenta al informe: adjuntos, libro y posición del analista."""
-    fuentes = _rutas(ticker) + [DCF / f"{ticker}.xlsx", ruta_posicion(ticker)]
+    """Todo lo que alimenta al informe: adjuntos, libro y entradas del analista."""
+    fuentes = _rutas(ticker) + [DCF / f"{ticker}.xlsx"] + [x for x in [_entradas_analista(ticker)] if x is not None]
     return [p for p in fuentes if p.exists()]
 
 
@@ -293,8 +305,6 @@ def emitir(ticker: str) -> dict:
     orden = [sys.executable, "-u", "emitir.py", ticker, "--carpeta", str(ADJUNTOS / ticker), "--salida", str(salida)]
     if (DCF / f"{ticker}.xlsx").exists():
         orden += ["--dcf", str(DCF / f"{ticker}.xlsx")]
-    if (POSICIONES / f"{ticker}.json").exists():
-        orden += ["--posicion", str(POSICIONES / f"{ticker}.json")]
     registro = salida / "emision.log"
     fh = registro.open("w", encoding="utf-8")
     proceso = subprocess.Popen(orden, cwd=str(RAIZ), stdout=fh, stderr=subprocess.STDOUT,
@@ -333,8 +343,7 @@ def resumen_ticker(ticker: str) -> dict:
         arrancar_carga(ticker)      # el servidor se reinició, pero el trabajo del analista sigue en el disco: se retoma solo
     if e["dcf"] is None and (DCF / f"{ticker}.xlsx").exists():
         e["dcf"] = resumen_dcf(ticker)
-    ruta_pos = ruta_posicion(ticker)
-    pos = posicion_mod.cargar(ruta_pos) if ruta_pos.exists() else None
+    ruta_ent = _entradas_analista(ticker)
     adj = e["adjuntos"] or {"adjuntos": [], "avisos": []}
     if not adj["adjuntos"] and _rutas(ticker) and e["carga"]["estado"] == "listo":
         adj = e["adjuntos"] = clasificar(ticker)
@@ -345,10 +354,8 @@ def resumen_ticker(ticker: str) -> dict:
             "sueltos": catalogo.sueltos(filas), "traida": e.get("traida"),
             "faltan_imprescindibles": [d.clave for d in catalogo.faltan(filas)],
             "dcf": e["dcf"] or {"existe": False},
-            "posicion": {"existe": pos is not None, "ruta": str(ruta_pos), "fichero": ruta_pos.name,
-                         "sin_rellenar": sorted(pos.faltan()) if pos is not None else None,
-                         "analista": pos.analista if pos is not None else "", "recomendacion": pos.recomendacion if pos is not None else "",
-                         "precio_objetivo": pos.precio_objetivo if pos is not None else None},
+            "posicion": {"existe": ruta_ent is not None, "fichero": ruta_ent.name if ruta_ent else "",
+                         "fecha": ruta_ent.parent.name if ruta_ent else ""},
             "informe": informe_en_disco(ticker), "emision": estado_emision(ticker)}
 
 
@@ -404,7 +411,7 @@ class _Manejador(BaseHTTPRequestHandler):
 
     def _es_propia(self, tipos: Tuple[str, ...]) -> bool:
         tipo = (self.headers.get("Content-Type") or "").split(";", 1)[0].strip().lower()
-        if tipo not in tipos or self.headers.get("X-Formulario") not in ("posicion", "saas"):
+        if tipo not in tipos or self.headers.get("X-Formulario") != "saas":
             return False
         origen, anfitrion, puerto = self.headers.get("Origin"), self.headers.get("Host") or "", self.server.server_address[1]
         return origen is None or origen == f"http://{anfitrion}" or origen in (f"http://127.0.0.1:{puerto}", f"http://localhost:{puerto}")
@@ -449,13 +456,6 @@ class _Manejador(BaseHTTPRequestHandler):
             faltas, avisos = asistente.validar(t, fecha, datos)
             self._json(200, {"ticker": t, "fecha": fecha.isoformat(), "fechas": asistente.fechas(t), "esquema": asistente.esquema(),
                              "entradas": datos, "notas": notas, "faltas": faltas, "avisos": avisos})
-            return
-        if camino == "/api/posicion":
-            t = self._ticker(qs)
-            if t is None:
-                self._json(400, {"error": "ticker no válido"})
-                return
-            self._json(200, {"ticker": t, "ruta": str(ruta_posicion(t)), "existe": ruta_posicion(t).exists(), "posicion": cargar_o_plantilla(t)})
             return
         nombre = camino.lstrip("/")
         fichero = (TABLERO / nombre).resolve()
@@ -593,17 +593,6 @@ class _Manejador(BaseHTTPRequestHandler):
                 guardado = asistente.guardar(t, fecha, datos)
                 faltas, avisos = asistente.validar(t, fecha, datos)
                 self._json(200, {"guardado": guardado.name, "carpeta": f"entradas/{t}/{fecha.isoformat()}", "faltas": faltas, "avisos": avisos})
-                return
-            if camino == "/api/posicion":
-                if not self._es_propia(("application/json",)):
-                    self._tragar(); self._json(403, {"errores": {"": "la escritura solo se admite desde la propia página del formulario"}}); return
-                datos = json.loads(self._cuerpo().decode("utf-8"))
-                errores = posicion_mod.validar(datos)
-                if errores:
-                    self._json(400, {"errores": errores}); return
-                posicion_mod.guardar(datos, ruta_posicion(t))
-                self._json(200, {"guardado": str(ruta_posicion(t)), "fichero": ruta_posicion(t).name,
-                                 "sin_rellenar": sorted(posicion_mod.cargar(ruta_posicion(t)).faltan()), "estado": resumen_ticker(t)})
                 return
             if camino == "/api/emitir":
                 if not self._es_propia(("application/json",)):

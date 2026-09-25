@@ -1,0 +1,39 @@
+# 02 › Lenguaje y 06 §2: lo que el linter de los textos del analista no deja pasar (bloquea la emisión).
+
+# Tono comercial y adjetivos valorativos: el informe es factual e impersonal. Sin términos contables de uso legítimo
+# («dividendo extraordinario», «deuda garantizada», «partidas excepcionales»).
+vetadas:
+  - increíble
+  - espectacular
+  - fantástico
+  - fantástica
+  - impresionante
+  - asombroso
+  - asombrosa
+  - brillante
+  - magnífico
+  - magnífica
+  - revolucionario
+  - revolucionaria
+  - imparable
+  - indiscutible
+  - sin duda
+  - sin lugar a dudas
+  - obviamente
+  - evidentemente
+  - claramente
+  - chollo
+  - ganga
+  - pelotazo
+  - oportunidad única
+
+# Palabras que delatan una frase en inglés. Se buscan fuera de «» y de comillas (donde van los nombres propios y los
+# títulos); con dos distintas en un mismo texto, bloquea. Las siglas y términos admitidos en 02 (DCF, WACC, EBITDA,
+# capex, put/call…) no están aquí porque no son palabras funcionales.
+ingles: [the, and, of, with, for, to, is, are, was, were, be, been, our, we, their, which, that, this, these, those, from,
+         by, will, would, should, have, had, not, but, it, its, at, on, an, or, into, than, more, revenue, growth, margin,
+         guidance, earnings, outlook]
+
+# La palabra que precede a una cifra que no es un dato sino una referencia (apartado 18, pág. 23, paso 3…).
+referencias: [apartado, apartados, cuadro, cuadros, pág., pág, página, páginas, paso, pasos, pilar, nota, notas, sección,
+              secciones, item, ítem, anexo, ex., fila, gráfico, figura, riesgo, criterio]

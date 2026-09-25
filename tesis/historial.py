@@ -25,7 +25,9 @@ from typing import Dict, List, Optional, Sequence, Tuple
 from datetime import date, datetime
 
 from .expediente import Adjunto, Expediente, Tipo
+from .formato import numero
 from .hechos import Capa, Certeza, Cita, Contraste, Hecho, Origen, Periodo
+from .rotulos import fallo
 
 __all__ = ["Historial", "Sorpresa", "SorpresaBolsa", "construir"]
 
@@ -133,8 +135,8 @@ def _leer_call(call: Adjunto, h: Historial, hechos: Dict[Tuple[str, Periodo], He
             s.nota = "el real del proveedor coincide con el hecho contrastado (sección C)"
         else:
             s.contraste = Contraste.DISCREPANTE
-            s.nota = f"el proveedor publica {s.real:g} y el hecho contrastado es {valor:,.2f}: BPA normalizado ≠ BPA GAAP diluido" if clave[0] == "bpa_diluido" \
-                else f"el proveedor publica {s.real:,.2f} y el hecho contrastado es {valor:,.2f}"
+            s.nota = f"el proveedor publica {numero(s.real, 2)} y el hecho contrastado es {numero(valor, 2)}: BPA normalizado ≠ BPA GAAP diluido" if clave[0] == "bpa_diluido" \
+                else f"el proveedor publica {numero(s.real, 2)} y el hecho contrastado es {numero(valor, 2)}"
 
 
 def _leer_carta(carta: Adjunto, h: Historial) -> None:
@@ -163,7 +165,7 @@ def _leer_bolsa(ticker: str, h: Historial, hechos: Dict[Tuple[str, Periodo], Hec
     try:
         datos, cuerpo, obtenido = pedir_crudo(url)
     except Exception as e:
-        h.faltan["consenso_bolsa"] = f"la bolsa no sirvió la serie de sorpresas: {e}"
+        h.faltan["consenso_bolsa"] = f"la bolsa no sirvió la serie de sorpresas: {fallo(e)}"
         return
     filas = (((datos or {}).get("data") or {}).get("earningsSurpriseTable") or {}).get("rows") or []
     if not filas:

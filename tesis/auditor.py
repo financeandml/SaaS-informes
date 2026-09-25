@@ -22,6 +22,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional, Sequence, Tuple
 
+from .formato import numero
 from .hechos import Capa, Hecho, Periodo, derivar
 
 __all__ = ["Identidad", "Comprobacion", "Auditoria", "IDENTIDADES", "auditar", "aplicar"]
@@ -86,7 +87,7 @@ class Comprobacion:
         glifo = {"cuadra": "✓", "no cuadra": "≠", "derivada": "∑", "sin datos": "—"}[self.estado]
         cifras = ""
         if self.total is not None and self.suma is not None:
-            cifras = f" · {self.total:,.0f} frente a {self.suma:,.0f} (dif. {self.diferencia:,.0f})"
+            cifras = f" · {numero(self.total)} frente a {numero(self.suma)} (dif. {numero(self.diferencia)})"
         return f"{glifo} {self.rotulo} · {self.periodo}{cifras}{(' · ' + self.motivo) if self.motivo else ''}"
 
 

@@ -1,0 +1,34 @@
+# Frases de plantilla (06 §1). Cada frase tiene variantes; la variante se elige por hash(apartado, id), así que el
+# texto es reproducible. Aquí no hay cifras: las pone `tesis/frases.py` desde Hechos, ya formateadas, con su cita.
+verbos:                 # según el signo de la variación y `umbrales.frase_variacion_estable`
+  sube: crecieron
+  baja: cayeron
+  igual: se mantuvieron
+trimestre:
+  - "En el {trimestre}, los ingresos {verbo} un {variacion} interanual, hasta {valor}."
+  - "Los ingresos del {trimestre} {verbo} un {variacion} frente al mismo trimestre del año anterior, hasta {valor}."
+trimestre_guia:
+  - "En el {trimestre}, los ingresos fueron de {valor}, {posicion} de la guía de la compañía ({bajo}–{alto})."
+  - "Los ingresos del {trimestre} sumaron {valor}: {posicion} de la guía de la compañía ({bajo}–{alto})."
+posiciones:
+  dentro: dentro del rango
+  encima: por encima del rango
+  debajo: por debajo del rango
+trimestre_igual:
+  - "En el {trimestre}, los ingresos {verbo} en {valor}, en línea con el mismo trimestre del año anterior."
+ejercicio:
+  - "En el ejercicio {ejercicio}, la compañía facturó {ingresos} con un margen operativo del {margen} ({cambio} frente al ejercicio anterior)."
+  - "El ejercicio {ejercicio} cerró con {ingresos} de ingresos y un margen operativo del {margen} ({cambio} sobre el anterior)."
+guia:
+  - "Para el {trimestre}, la compañía guía unos ingresos de {bajo} a {alto}."
+  - "La guía vigente de la compañía para el {trimestre} sitúa los ingresos entre {bajo} y {alto}."
+guia_punto:
+  - "Para el {trimestre}, la compañía prevé unos ingresos de {valor}."
+deuda_neta:
+  - "Al cierre del {periodo}, la deuda neta era de {importe}, {veces} veces el EBITDA del ejercicio {ejercicio}."
+  - "La deuda neta al cierre del {periodo} sumaba {importe} ({veces} veces el EBITDA del ejercicio {ejercicio})."
+caja_neta:
+  - "Al cierre del {periodo}, la compañía tenía una caja neta de {importe}."
+retribucion:
+  - "En el ejercicio {ejercicio} devolvió al accionista {importe} entre dividendos y recompras, el {pct_fcf} de su flujo de caja libre."
+  - "La retribución al accionista del ejercicio {ejercicio}, entre dividendos y recompras, sumó {importe}: el {pct_fcf} del flujo de caja libre."

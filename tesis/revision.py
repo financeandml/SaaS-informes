@@ -49,7 +49,7 @@ def _miles(v: float, decimales: int) -> str:
         entero = entero[:-3]
     grupos.insert(0, entero)
     texto = ".".join(grupos) + ("," + dec if dec else "")
-    return ("-" if v < 0 and texto.strip("0.,") else "") + texto
+    return ("−" if v < 0 and texto.strip("0.,") else "") + texto          # signo menos tipográfico (02)
 
 
 def _texto_hecho(h, unidad: str) -> Optional[str]:

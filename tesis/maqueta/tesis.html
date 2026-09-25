@@ -10,9 +10,9 @@
 {#- Los números se imprimen limpios: la fuente, la fórmula o la celda de origen de cada cifra viaja en el atributo title (al pasar el ratón en el HTML)
     y el detalle del cuadre está en el apéndice de datos complementarios. -#}
 {% macro celda_td(c) %}<td class="{{ c.clase }}" title="{{ c.nota|e }}">{{ c.texto }}</td>{% endmacro %}
-{% macro cuadro(c, texto=False) %}
-<div class="cuadro{% if c.partible and c.filas|length > 10 %} partible{% endif %}">
-  <div class="rotulo">Cuadro {{ c.numero }}. {{ c.titulo }}</div>
+{% macro cuadro(c, texto=False, rotulo=None) %}
+<div class="cuadro{% if (c.partible and c.filas|length > 10) or c.numero in i.partir %} partible{% endif %}">
+  <div class="rotulo">{% if rotulo %}{{ rotulo }}{% else %}Cuadro {{ c.numero }}. {{ c.titulo }}{% endif %}</div>
   <table class="{% if texto %}texto-tabla{% endif %}">
     <thead><tr><th></th>{% for col in c.columnas %}<th>{{ col }}</th>{% endfor %}</tr></thead>
     <tbody>
@@ -38,9 +38,14 @@
 {% else %}<div class="pendiente">Texto pendiente de redacción por el sistema a partir de los adjuntos (narrativa, bloque {{ clave }}).</div>{% endif %}
 {% endmacro %}
 {% macro texto_s(valor, motivo) %}{% if valor %}{{ valor }}{% else %}<span class="na">N/A — {{ motivo }}</span>{% endif %}{% endmacro %}
-{% macro pct(v) %}{{ '%.1f'|format(v * 100)|replace('.', ',') }} %{% endmacro %}
-{% macro usd(v) %}{{ '%.2f'|format(v)|replace('.', ',') }} USD{% endmacro %}
+{% macro pct(v) %}{{ v|pct_es }}{% endmacro %}
+{% macro usd(v) %}{{ v|numero(2) }} USD{% endmacro %}
 
+{% if not i.emitido and i.bloqueos_qa %}<section class="hoja hoja-cero">
+<h2>BORRADOR — NO EMITIDO · Hoja 0: bloqueos de la puerta de calidad</h2>
+<p class="muted">Borrador: el informe no se emite mientras quede alguno. Los avisos están en la auditoría de la emisión.</p>
+<ol class="compacta">{% for b in i.bloqueos_qa %}<li>{{ b }}</li>{% endfor %}</ol>
+</section>{% endif %}
 <!-- ============================== PORTADA ============================== -->
 <section class="hoja">
 <h1>{{ i.nombre }}</h1>
@@ -56,14 +61,14 @@
         <tr><td>Precio actual</td><td class="v {% if not i.precio.hay_dato %}na{% endif %}" title="{{ i.precio.nota|e }}">{% if i.precio.hay_dato %}{{ usd(i.precio.valor) }}{% else %}N/A{% endif %}</td></tr>
         <tr><td>Potencial</td><td class="v {% if i.potencial is none %}na{% endif %}" title="precio objetivo / precio actual − 1">{% if i.potencial is not none %}{{ pct(i.potencial) }}{% else %}N/A{% endif %}</td></tr>
         {% if i.parte_d is not none and i.parte_d.po is not none %}<tr><td>Margen de seguridad</td><td class="v">{{ pct(i.parte_d.margen_seguridad) }}</td></tr>
-        <tr><td>Recorrido / riesgo</td><td class="v">{% if i.parte_d.recorrido_riesgo is not none %}{{ '%.2f'|format(i.parte_d.recorrido_riesgo)|replace('.', ',') }}{% else %}sin pérdida{% endif %}</td></tr>
+        <tr><td>Recorrido / riesgo</td><td class="v">{% if i.parte_d.recorrido_riesgo is not none %}{{ i.parte_d.recorrido_riesgo|numero(2) }}{% else %}sin pérdida{% endif %}</td></tr>
         <tr><td>Horizonte</td><td class="v">{{ i.parte_d.horizonte_meses }} meses</td></tr>{% endif %}
         {% if i.parte_g %}{% if i.parte_g.entrada.precio %}<tr><td>Entrada</td><td class="v">{{ i.parte_g.entrada.precio }} ({{ i.parte_g.entrada.fecha }})</td></tr>{% endif %}
         {% if i.parte_g.entrada.tamano %}<tr><td>Tamaño</td><td class="v">{{ i.parte_g.entrada.tamano }} de la cartera</td></tr>{% endif %}
         {% if i.parte_g.entrada.stop %}<tr><td>Stop</td><td class="v">{{ i.parte_g.entrada.stop }}</td></tr>{% endif %}{% endif %}
       </table>
-      {% if i.parte_d is not none and i.parte_d.po is not none %}<div class="muted" style="font-size:6.8pt">Precio objetivo: motor de valoración, a {{ i.parte_d.horizonte_meses }} meses (apartado {{ i.numeros['20'] }}). Recomendación: {% if i.parte_g and i.parte_g.recomendacion %}del analista{% if i.parte_g.regla and i.parte_g.regla != i.parte_g.recomendacion %} (la regla sugiere «{{ i.parte_g.regla }}», apartado {{ i.numeros['33'] }}){% endif %}{% elif i.posicion and i.posicion.recomendacion %}del analista{% else %}la que sugiere la regla (el analista aún no ha fijado la suya){% endif %}. Precio: {{ i.precio.nota }}.</div>
-      {% else %}<div class="muted" style="font-size:6.8pt">Recomendación y precio objetivo: del analista ({% if i.posicion and i.posicion.fichero %}fichero de posición{% if objetivo and 'libro' in objetivo[2] %} y libro de valoración{% endif %}{% elif objetivo %}libro de valoración{% else %}pendientes de su fichero de posición{% endif %}). {% if i.precio.hay_dato %}Precio: {{ i.precio.nota }}.{% else %}Precio: {{ i.precio.motivo }}.{% endif %}</div>{% endif %}
+      {% if i.parte_d is not none and i.parte_d.po is not none %}<div class="muted" style="font-size:6.8pt">Precio objetivo: motor de valoración, a {{ i.parte_d.horizonte_meses }} meses (apartado {{ i.numeros['20'] }}). Recomendación: {% if i.parte_g and i.parte_g.recomendacion %}del analista{% if i.parte_g.regla and i.parte_g.regla != i.parte_g.recomendacion %} (la regla sugiere «{{ i.parte_g.regla }}», apartado {{ i.numeros['33'] }}){% endif %}{% else %}la que sugiere la regla (el analista aún no ha fijado la suya){% endif %}. Precio: {{ i.precio.nota }}.</div>
+      {% else %}<div class="muted" style="font-size:6.8pt">Recomendación y precio objetivo: {% if objetivo %}del libro de valoración del analista{% else %}pendientes del motor de valoración (paso 7 del asistente){% endif %}. {% if i.precio.hay_dato %}Precio: {{ i.precio.nota }}.{% else %}Precio: {{ i.precio.motivo }}.{% endif %}</div>{% endif %}
     </div>
     <table class="mini">
       <tr><th colspan="2">{{ i.ticker }} · {{ i.emisor.bolsa }}</th></tr>
@@ -72,7 +77,11 @@
     <div class="muted" style="font-size:6.8pt">Cada dato lleva su fuente en el apartado 1.</div>
   </div>
   <div>
-    {% if i.narrativa and i.narrativa.resumen %}
+    {% if i.parte_a and (i.parte_a.resumen or i.parte_a.factual) %}
+      {% if i.parte_a.resumen %}<div class="bloque"><p>{{ i.parte_a.resumen }}</p></div>{% endif %}
+      {% if i.parte_a.factual %}<div class="bloque"><p>{% for t, c in i.parte_a.factual %}{{ t }} <span class="cita">[{{ c }}]</span> {% endfor %}</p></div>{% endif %}
+      <div class="muted" style="font-size:6.8pt">Texto completo en el apartado {{ i.numeros['2'] }}: el del analista y el párrafo de plantilla, con el documento de cada frase.</div>
+    {% elif i.narrativa and i.narrativa.resumen %}
       {% for parrafo in i.narrativa.resumen[:2] %}<div class="bloque"><p>{% for f in parrafo %}{{ f.texto }} <span class="cita">[{{ f.cita }}]</span> {% endfor %}</p></div>{% endfor %}
       <div class="muted" style="font-size:6.8pt">Texto completo en el apartado 2; cada frase con su documento y página.</div>
     {% else %}
@@ -81,7 +90,7 @@
     <div class="bloque"><span class="ante">Objetivos de la compañía vigentes</span>
       <ul class="compacta">{% for f in i.objetivos.filas %}<li>{{ f.rotulo }} {{ f.celdas[0].texto }}: <b>{{ f.celdas[1].texto }}</b> <span class="muted">(comunicado el {{ f.celdas[2].texto }})</span></li>{% else %}<li class="na">N/A — {{ i.objetivos.fuente }}</li>{% endfor %}</ul>
     </div>
-    {{ cuadro(i.cifras_resumen) }}
+    {{ cuadro(i.cifras_resumen, rotulo="Cifras clave (mln USD) · cuadro " ~ i.cifras_resumen.numero ~ " del apartado " ~ i.numeros['2']) }}
   </div>
 </div>
 </section>
@@ -108,7 +117,10 @@
 </tbody></table><div class="fuente">Identidad: SEC EDGAR (submissions). Cifras de portada y texto: 10-K adjunto, con página. El valor en manos de no afiliados es el de la portada del 10-K a su fecha; no es la capitalización. Recortes de las páginas citadas: apartado {{ i.numeros['40'] }}.</div></div>
 
 <h3 id="ap-{{ i.numeros['2'] }}">{{ i.numeros['2'] }}. {{ i.titulos['2'] }}</h3>
-{% if i.narrativa %}
+{% if i.parte_a %}{% set pa = i.parte_a %}
+{% if pa.resumen %}<p>{{ pa.resumen }}</p>{% if pa.por_que_ahora %}<p><b>Por qué ahora.</b> {{ pa.por_que_ahora }}</p>{% endif %}{% if pa.vision %}<p><b>Frente a lo que descuenta el precio.</b> {{ pa.vision }}</p>{% endif %}{% else %}<div class="pendiente">{{ pa.pendientes['resumen'] }}</div>{% endif %}
+{% if pa.factual %}<p>{% for t, c in pa.factual %}{{ t }} <span class="cita">[{{ c }}]</span> {% endfor %}</p>{% endif %}
+{% elif i.narrativa %}
 {% for parrafo in i.narrativa.resumen %}<p>{% for f in parrafo %}{{ f.texto }} <span class="cita">[{{ f.cita }}]</span> {% endfor %}</p>{% else %}<p class="na">Ningún párrafo del resumen superó la verificación (apéndice {{ i.numeros['39'] }}).</p>{% endfor %}
 {% else %}
 <div class="pendiente">Texto pendiente de redacción por el sistema a partir de los adjuntos. Debajo, las evidencias con las que se redactará: la caja de cifras (los mismos objetos que la sección C), los objetivos vigentes de la compañía y los últimos hitos.</div>{% endif %}
@@ -118,7 +130,13 @@
 <ul class="compacta">{% for h in i.hitos %}<li>{{ h.fecha.strftime("%d/%m/%Y") }} · 8-K · {{ h.descripcion }} <span class="muted">({{ h.epigrafes }})</span></li>{% else %}<li class="na">Ningún 8-K en los últimos doce meses.</li>{% endfor %}</ul>
 
 <h3 id="ap-{{ i.numeros['3'] }}">{{ i.numeros['3'] }}. {{ i.titulos['3'] }}</h3>
-{% if i.narrativa and i.narrativa.pilares %}{% for p in i.narrativa.pilares %}<div class="bloque"><span class="ante">{{ loop.index }}. {{ p.titulo }}</span><p>{% for f in p.frases %}{{ f.texto }} <span class="cita">[{{ f.cita }}]</span> {% endfor %}</p>{% if p.riesgo %}<p class="riesgo">{{ p.riesgo.texto }} <span class="cita">[{{ p.riesgo.cita }}]</span></p>{% else %}<p class="na">Riesgo del Item 1A: N/A (no citado o retirado; apéndice {{ i.numeros['39'] }}).</p>{% endif %}</div>{% endfor %}
+{% if i.parte_a %}
+{% for p in i.parte_a.pilares %}<div class="bloque"><span class="ante">{{ p.numero }}. {{ p.titulo }}</span><p>{{ p.argumento }}</p>
+<ul class="compacta">{% for t, literal in p.evidencias %}<li title="{{ literal|e }}">{{ t }}</li>{% endfor %}</ul>
+{% if p.kpi %}<p class="muted">KPI de seguimiento: {{ p.kpi }} (apartado {{ i.numeros['36'] }}).</p>{% endif %}
+{% if p.riesgo_es %}<p class="riesgo" title="{{ p.riesgo_literal|e }}"><b>Riesgo{% if p.riesgo_ref %} ({{ p.riesgo_ref }}){% endif %}:</b> {{ p.riesgo_es }}</p>{% endif %}</div>{% endfor %}
+{% if not i.parte_a.pilares %}<div class="pendiente">{{ i.parte_a.pendientes['pilares'] }}</div>{% endif %}
+{% elif i.narrativa and i.narrativa.pilares %}{% for p in i.narrativa.pilares %}<div class="bloque"><span class="ante">{{ loop.index }}. {{ p.titulo }}</span><p>{% for f in p.frases %}{{ f.texto }} <span class="cita">[{{ f.cita }}]</span> {% endfor %}</p>{% if p.riesgo %}<p class="riesgo">{{ p.riesgo.texto }} <span class="cita">[{{ p.riesgo.cita }}]</span></p>{% else %}<p class="na">Riesgo del Item 1A: N/A (no citado o retirado; apéndice {{ i.numeros['39'] }}).</p>{% endif %}</div>{% endfor %}
 {% if i.narrativa.pilares|length != 5 %}<p class="na">El índice pide 5 pilares; se imprimen {{ i.narrativa.pilares|length }} (apéndice {{ i.numeros['39'] }}).</p>{% endif %}
 {% else %}
 <div class="pendiente">Pendiente de redacción por el sistema. Cada pilar debe enlazar al menos un hecho contrastado del informe y el riesgo que lo amenaza (10-K, Item 1A); la maqueta no imprime un pilar sin evidencia.</div>{% endif %}
@@ -221,14 +239,14 @@
 {% if pd.cuadros.get('libro') %}{{ cuadro(pd.cuadros['libro'], True) }}{% endif %}
 </section>
 {% for nombre, narrativa, c in pd.escenarios %}
-<section class="hoja">
+<section class="sigue">
 {% set clave = '13' if nombre == 'pesimista' else ('14' if nombre == 'base' else '15') %}
 <h3 id="ap-{{ i.numeros[clave] }}">{{ i.numeros[clave] }}. {{ i.titulos[clave] }}</h3>
 {% if narrativa %}<p>{{ narrativa }}</p>{% else %}<div class="pendiente">Pendiente del analista: narrativa del escenario (15–50 palabras).</div>{% endif %}
 {{ cuadro(c) }}
 </section>
 {% endfor %}
-<section class="hoja">
+<section class="sigue">
 <h3 id="ap-{{ i.numeros['16'] }}">{{ i.numeros['16'] }}. {{ i.titulos['16'] }}</h3>
 {% if pd.cuadros.get('sensibilidad') %}{{ cuadro(pd.cuadros['sensibilidad']) }}{% else %}<p class="na">N/A — sin escenario base valorado.</p>{% endif %}
 <h3 id="ap-{{ i.numeros['17'] }}">{{ i.numeros['17'] }}. {{ i.titulos['17'] }}</h3>
@@ -281,7 +299,6 @@
 <h3 id="ap-{{ i.numeros['20'] }}">{{ i.numeros['20'] }}. {{ i.titulos['20'] }}</h3>
 {{ cuadro(i.dcf['objetivo'], True) }}
 <div class="conclusion"><span class="ante">Lectura:</span> las columnas «sobre precio de entrada» y «sobre precio de mercado del libro» son las que calcula el libro con el precio que el analista tecleó en él{% if i.dcf['modelo'].supuesto('precio de mercado') %} ({{ usd(i.dcf['modelo'].supuesto('precio de mercado').valor) }}; origen según el libro: «{{ i.dcf['modelo'].supuesto('precio de mercado').origen }}»){% endif %}. {% if i.precio.hay_dato %}La cotización oficial del informe es {{ usd(i.precio.valor) }} (apartado 1) y la última columna es el recorrido de cada valor sobre ella.{% else %}La cotización oficial del informe es N/A ({{ i.precio.motivo }}): el margen de seguridad frente al precio oficial queda pendiente de configurar la fuente de cotización.{% endif %} Las filas de consenso son, primero, el que el analista anotó en su libro y, después, el que publica la bolsa (precio objetivo medio, recuento de recomendaciones y rango) junto al «1 Year Target» de su ficha del valor: dos cifras de la misma bolsa para el mismo hecho, y se imprimen las dos. El consenso de estimaciones de la portada de la transcripción está en el apartado {{ i.numeros['32'] }}.</div>
-{% if i.posicion and (i.posicion.precio_entrada is not none or i.posicion.precio_objetivo is not none) %}<p><b>Posición del analista</b> (fichero {{ i.posicion.fichero.name }}): entrada {% if i.posicion.precio_entrada is not none %}{{ usd(i.posicion.precio_entrada) }}{% else %}N/A{% endif %}{% if i.posicion.fecha_entrada %} el {{ i.posicion.fecha_entrada.strftime('%d/%m/%Y') }}{% endif %} · tamaño {{ texto_s(i.posicion.tamano, 'sin rellenar') }} · horizonte {{ texto_s(i.posicion.horizonte, 'sin rellenar') }} · objetivo {% if i.posicion.precio_objetivo is not none %}{{ usd(i.posicion.precio_objetivo) }}{% else %}N/A{% endif %}.</p>{% endif %}
 </section>
 {% endif %}
 
@@ -358,7 +375,7 @@
 {% endif %}
 </section>
 
-<!-- ============================== H ============================== -->
+<!-- ============================== G · posición ============================== -->
 <section class="hoja">
 <h2 id="parte-{{ i.indice[6].letra }}">{{ i.indice[6].letra }}. {{ i.indice[6].titulo }}</h2>
 {% if i.parte_g %}{% set pg = i.parte_g %}
@@ -378,26 +395,8 @@
 {% if pg.fechas_revision %}<p><b>Fechas de revisión:</b> {{ pg.fechas_revision|join(' · ') }}</p>{% endif %}
 {% if pg.salida|length >= 3 %}<h4>Criterios de salida</h4><ul class="compacta">{% for x in pg.salida %}<li>{{ x }}</li>{% endfor %}</ul>{% else %}<div class="pendiente">{{ pg.pendientes['salida'] }}</div>{% endif %}
 {% else %}
-<p class="muted" style="font-size:7.5pt">Esta sección la escribe el analista en el formulario de posición (<code>python -m tesis.formulario {{ i.ticker }}</code>, que guarda <code>posiciones/{{ i.ticker }}.json</code>); el informe la imprime tal cual y rotula N/A lo que falte.{% if i.posicion and i.posicion.analista %} Analista: <b>{{ i.posicion.analista }}</b>{% if i.posicion.fecha %}, {{ i.posicion.fecha.strftime('%d/%m/%Y') }}{% endif %}.{% endif %}</p>
-{% set pos = i.posicion %}
-<h3 id="ap-{{ i.numeros['33'] }}">{{ i.numeros['33'] }}. {{ i.titulos['33'] }}</h3>
-{% if pos %}<p>{{ texto_s(pos.argumento, i.posicion_faltan.get('33 · argumento', '')) }}</p>
-<h4>Asunciones clave</h4><ul class="compacta">{% for a in pos.asunciones %}<li>{{ a }}</li>{% else %}<li class="na">N/A — {{ i.posicion_faltan.get('33 · asunciones clave', '') }}</li>{% endfor %}</ul>
-<p>Horizonte temporal: {% if i.parte_d is not none and i.parte_d.po is not none %}{{ i.parte_d.horizonte_meses }} meses (el del precio objetivo){% else %}{{ texto_s(pos.horizonte, i.posicion_faltan.get('33 · horizonte temporal', '')) }}{% endif %}</p>
-{% else %}<p class="na">N/A — {{ i.posicion_faltan.get('fichero', '') }}</p>{% endif %}
-<h3 id="ap-{{ i.numeros['34'] }}">{{ i.numeros['34'] }}. {{ i.titulos['34'] }}</h3>
-{% if pos and pos.checklist %}<div class="cuadro"><table class="texto-tabla"><thead><tr><th>Criterio</th><th>¿Cumplido?</th><th>Evidencia (del analista)</th></tr></thead><tbody>
-{% for c in pos.checklist %}<tr><td>{{ c.criterio }}</td><td>{% if c.cumplido is none %}<span class="na">sin evaluar</span>{% elif c.cumplido %}sí{% else %}no{% endif %}</td><td class="muted">{{ c.evidencia or '—' }}</td></tr>{% endfor %}
-</tbody></table><div class="fuente">Fuente: fichero de posición del analista.</div></div>{% else %}<p class="na">N/A — {{ i.posicion_faltan.get('34 · checklist de entrada', i.posicion_faltan.get('fichero', '')) }}</p>{% endif %}
-<h3 id="ap-{{ i.numeros['35'] }}">{{ i.numeros['35'] }}. {{ i.titulos['35'] }}</h3>
-{% if pos %}<h4>Qué invalida la tesis</h4><ul class="compacta">{% for x in pos.invalidacion %}<li>{{ x }}</li>{% else %}<li class="na">N/A — {{ i.posicion_faltan.get('35 · invalidación de la tesis', '') }}</li>{% endfor %}</ul>
-<p>Tamaño de posición: {{ texto_s(pos.tamano_posicion, i.posicion_faltan.get('35 · tamaño de posición', '')) }} · Volatilidad: {{ texto_s(pos.volatilidad, i.posicion_faltan.get('35 · volatilidad', '')) }}</p>
-{% else %}<p class="na">N/A — {{ i.posicion_faltan.get('fichero', '') }}</p>{% endif %}
-<h3 id="ap-{{ i.numeros['36'] }}">{{ i.numeros['36'] }}. {{ i.titulos['36'] }}</h3>
-{% if pos %}<h4>KPIs</h4><ul class="compacta">{% for x in pos.kpis %}<li>{{ x }}</li>{% else %}<li class="na">N/A — {{ i.posicion_faltan.get('36 · KPIs', '') }}</li>{% endfor %}</ul>
-<h4>Fechas de revisión</h4><p>{% for f in pos.fechas_revision %}{{ f.strftime('%d/%m/%Y') }}{% if not loop.last %} · {% endif %}{% else %}<span class="na">N/A — {{ i.posicion_faltan.get('36 · fechas de revisión', '') }}</span>{% endfor %}</p>
-<h4>Criterios de salida</h4><ul class="compacta">{% for x in pos.criterios_salida %}<li>{{ x }}</li>{% else %}<li class="na">N/A — {{ i.posicion_faltan.get('36 · criterios de salida', '') }}</li>{% endfor %}</ul>
-{% else %}<p class="na">N/A — {{ i.posicion_faltan.get('fichero', '') }}</p>{% endif %}
+{% for clave in ['33', '34', '35', '36'] %}<h3 id="ap-{{ i.numeros[clave] }}">{{ i.numeros[clave] }}. {{ i.titulos[clave] }}</h3>
+<div class="pendiente">Pendiente del analista: sin las entradas del paso 8 del asistente no hay posición que imprimir.</div>{% endfor %}
 {% endif %}
 </section>
 
@@ -410,14 +409,15 @@
 <div class="pendiente"><b>Sin datos de la bolsa para esta parte.</b> {{ i.f_faltan.values()|join('; ') }}</div>
 {% endif %}
 <h3 id="ap-{{ i.numeros['24'] }}">{{ i.numeros['24'] }}. {{ i.titulos['24'] }}</h3>
-{% if i.f_cuadros.get('cadena') %}{{ cuadro(i.f_cuadros['cadena']) }}<p class="muted" style="font-size:7.5pt">Sesgo implícito: la bolsa no publica volatilidad implícita por strike; con sus datos el único sesgo afirmable es el reparto de volumen e interés abierto entre puts y calls. La volatilidad implícita por vencimiento y su sesgo put − call están en el apartado {{ i.numeros['25'] }}.</p>{% else %}<p class="na">N/A — {{ i.f_faltan.get('cadena', i.f_faltan.get('fuente', 'pendiente de la API')) }}</p>{% endif %}
+{% if i.f_cuadros.get('cadena') %}{{ cuadro(i.f_cuadros['cadena']) }}<p class="muted" style="font-size:7.5pt">Sesgo implícito: la bolsa no publica volatilidad implícita por precio de ejercicio; con sus datos el único sesgo afirmable es el reparto de volumen e interés abierto entre puts y calls. La volatilidad implícita por vencimiento y su sesgo put − call están en el apartado {{ i.numeros['25'] }}.</p>{% if i.f_cuadros.get('strikes') %}{{ cuadro(i.f_cuadros['strikes']) }}{% endif %}{% else %}<p class="na">N/A — {{ i.f_faltan.get('cadena', i.f_faltan.get('fuente', 'pendiente de la API')) }}</p>{% endif %}
 <h3 id="ap-{{ i.numeros['25'] }}">{{ i.numeros['25'] }}. {{ i.titulos['25'] }}</h3>
-{% if i.f_cuadros.get('cadena') %}<p>Interés abierto y volumen, call frente a put, con el Put/Call ratio por vencimiento y total: Cuadro {{ i.f_cuadros['cadena'].numero }} (bolsa).</p>{% endif %}
-{% if i.f_cuadros.get('iv') %}{{ cuadro(i.f_cuadros['iv']) }}<p class="muted" style="font-size:7.5pt">Lectura del sesgo: un sesgo positivo (la put fuera del dinero más cara que la call fuera del dinero) es el habitual en renta variable; el signo y la magnitud por vencimiento son los del cuadro, sin interpretación añadida. El coste de cobertura es la prima de la put, que el agregador trae por contrato (cuerpo guardado) y no se resume aquí.</p>{% else %}<p class="na">Volatilidad implícita: N/A — {{ i.f_faltan.get('iv', 'la bolsa no la publica') }}.</p>{% endif %}
+{% if i.f_cuadros.get('cadena') %}<p>Interés abierto y volumen, call frente a put, con el ratio put/call por vencimiento y en total: cuadro {{ i.f_cuadros['cadena'].numero }} (bolsa).</p>{% endif %}
+{% if i.f_cuadros.get('iv') %}{{ cuadro(i.f_cuadros['iv']) }}<p class="muted" style="font-size:7.5pt">Lectura del sesgo: un sesgo positivo (la put fuera del dinero más cara que la call fuera del dinero) es el habitual en renta variable; el signo y la magnitud por vencimiento son los del cuadro, sin interpretación añadida. El coste de cobertura es la prima de la put, que el agregador trae por contrato (respuesta guardada, apartado {{ i.numeros['40'] }}) y no se resume aquí.</p>{% else %}<p class="na">Volatilidad implícita: N/A — {{ i.f_faltan.get('iv', 'la bolsa no la publica') }}.</p>{% endif %}
+{% if i.f_cuadros.get('vi_realizada') %}{{ cuadro(i.f_cuadros['vi_realizada']) }}{% endif %}{% if i.f_cuadros.get('movimiento') %}{{ cuadro(i.f_cuadros['movimiento']) }}{% endif %}
 <h3 id="ap-{{ i.numeros['27'] }}">{{ i.numeros['27'] }}. {{ i.titulos['27'] }}</h3>
 {% if i.f_cuadros.get('institucional') %}{{ cuadro(i.f_cuadros['institucional']) }}{{ cuadro(i.f_cuadros['mayores']) }}<p class="muted" style="font-size:7.5pt">Los accionistas de más del 5 % que declara la proxy están en el apartado {{ i.numeros['5'] }} con su fecha; las cifras 13F llevan la suya y no se comparan entre sí.</p>{% else %}<p class="na">N/A — {{ i.f_faltan.get('institucional', i.f_faltan.get('fuente', 'pendiente de la API')) }}</p>{% endif %}
 </section>
-<section class="hoja">
+<section class="sigue">
 <h3 id="ap-{{ i.numeros['28'] }}">{{ i.numeros['28'] }}. {{ i.titulos['28'] }}</h3>
 {% if i.f_cuadros.get('insiders') %}{{ cuadro(i.f_cuadros['insiders']) }}{{ cuadro(i.f_cuadros['insiders_ultimas']) }}<p class="muted" style="font-size:7.5pt">La participación del management según la proxy (acciones de cada consejero y ejecutivo a la fecha de la proxy) está en el apartado {{ i.numeros['5'] }}.</p>{% else %}<p class="na">N/A — {{ i.f_faltan.get('insiders', i.f_faltan.get('fuente', 'pendiente de la API')) }}</p>{% endif %}
 <h3 id="ap-{{ i.numeros['29'] }}">{{ i.numeros['29'] }}. {{ i.titulos['29'] }}</h3>
@@ -427,6 +427,36 @@
 <!-- ============================== I ============================== -->
 <section class="hoja">
 <h2 id="parte-{{ i.indice[8].letra }}">{{ i.indice[8].letra }}. {{ i.indice[8].titulo }}</h2>
+{% if i.parte_i %}{% set pi = i.parte_i %}
+<h3 id="ap-{{ i.numeros['37'] }}">{{ i.numeros['37'] }}. {{ i.titulos['37'] }}</h3>
+{% if pi.cuadros.entradas %}{{ cuadro(pi.cuadros.entradas, True) }}{{ cuadro(pi.cuadros.proyeccion) }}{% else %}<div class="pendiente">Pendiente: sin motor de valoración no hay modelo que detallar (paso 7).</div>{% endif %}
+{% if pi.excel %}<p class="muted">{{ pi.excel }}</p>{% endif %}
+{% if i.parte_d and i.parte_d.cuadros.get('libro') %}<p class="muted">La comparación con el libro del analista está en el cuadro {{ i.parte_d.cuadros['libro'].numero }}.</p>{% endif %}
+<h3 id="ap-{{ i.numeros['38'] }}">{{ i.numeros['38'] }}. {{ i.titulos['38'] }}</h3>
+{% if pi.cuadros.documentos %}{{ cuadro(pi.cuadros.documentos, True) }}{% endif %}
+{% if pi.cuadros.apis %}{{ cuadro(pi.cuadros.apis, True) }}{% endif %}
+<p class="muted">{{ pi.entradas }}.</p>
+<h3 id="ap-{{ i.numeros['39'] }}">{{ i.numeros['39'] }}. {{ i.titulos['39'] }}</h3>
+<p>Contraste de cada cifra de la sección C con la SEC: {{ i.resumen_contraste.get('confirmado', 0) }} confirmadas · {{ i.resumen_contraste.get('derivado', 0) }} calculadas con fórmula · {{ i.resumen_contraste.get('discrepante', 0) }} discrepantes · {{ i.resumen_contraste.get('solo_sec', 0) }} solo en la SEC · {{ i.resumen_contraste.get('hueco', 0) }} sin dato. El detalle de cada cifra, al pasar el ratón en el HTML; las listas completas, en la auditoría de la emisión.</p>
+<h4>Discrepancias</h4>
+<ul class="compacta">{% for d in i.discrepancias %}<li>{{ d }}</li>{% else %}<li>Ninguna.</li>{% endfor %}</ul>
+<h4>Cuadres entre fuentes (regla «un hecho, una fuente»)</h4>
+<ul class="compacta">{% for c in pi.cuadres %}<li>{{ c }}</li>{% else %}<li>Ninguno que anotar.</li>{% endfor %}</ul>
+<h4>Huecos materiales</h4>
+<ul class="compacta">{% for h in pi.huecos %}<li>{{ h }}</li>{% else %}<li>Ninguno.</li>{% endfor %}</ul>
+{% if pi.huecos_resto %}<p class="muted">Y {{ pi.huecos_resto }} más en la auditoría de la emisión.</p>{% endif %}
+{% if pi.ajenas %}<p class="muted">No son huecos: {{ pi.ajenas|join(' · ') }} no son partidas de las cuentas de esta compañía (ni la SEC ni sus documentos las recogen).</p>{% endif %}
+<h4>Definiciones y convenciones</h4>
+<ul class="compacta">{% for x in pi.definiciones %}<li>{{ x }}</li>{% endfor %}</ul>
+</section>
+<section class="sigue">
+<h3 id="ap-{{ i.numeros['40'] }}">{{ i.numeros['40'] }}. {{ i.titulos['40'] }}</h3>
+{% if pi.cuadros.citas %}{{ cuadro(pi.cuadros.citas, True) }}{% endif %}
+{% for numero, nombre, lista in i.documentacion %}
+<div class="evidencias"><div class="rotulo">Apartado {{ numero }}. {{ nombre }}</div>
+<div class="rejilla">{% for r in lista %}<div class="recorte{% if r.pagina == 0 %} ancho{% endif %}"><img src="{{ recortes_datos[r.ruta|string] }}" alt="{{ r.alt|e }}"><div class="pie">{{ r.pie }} · huella {{ r.huella }}</div></div>{% endfor %}</div></div>
+{% endfor %}
+{% else %}
 <h3 id="ap-{{ i.numeros['37'] }}">{{ i.numeros['37'] }}. {{ i.titulos['37'] }}</h3>
 <div class="pendiente">Pendiente (decisión del analista, 17/09/2026). {% if i.dcf.get('modelo') %}El libro del analista está leído e impreso en la sección D (cuadros {{ i.dcf['supuestos'].numero }} a {{ i.dcf['objetivo'].numero }}); el detalle celda a celda irá aquí cuando se cierre el formato.{% endif %}</div>
 <h3 id="ap-{{ i.numeros['38'] }}">{{ i.numeros['38'] }}. {{ i.titulos['38'] }}</h3>
@@ -457,6 +487,7 @@
 <div class="evidencias"><div class="rotulo">Apartado {{ numero }}. {{ nombre }}</div>
 <div class="rejilla">{% for r in lista %}<div class="recorte{% if r.pagina == 0 %} ancho{% endif %}"><img src="{{ recortes_datos[r.ruta|string] }}" alt="{{ r.alt|e }}"><div class="pie">{{ r.pie }} · huella {{ r.huella }}</div></div>{% endfor %}</div></div>
 {% else %}<p class="na">Sin recortes: la emisión no produjo evidencia visual (carpeta de recortes no configurada).</p>{% endfor %}
+{% endif %}
 </section>
 </body>
 </html>

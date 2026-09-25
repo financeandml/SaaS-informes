@@ -10,10 +10,8 @@ Regla del día de emisión: un precio que no sea del día en que se emite el
 informe (o del último día de mercado anterior) no se imprime; sale N/A con el
 motivo. Un informe con un precio de hace una semana afirma algo que no es.
 
-La fuente se elige con `WC_PRECIO_FUENTE` (`nasdaq` · `polygon` · `yahoo`) y,
-si hace falta, `WC_POLYGON_CLAVE`, en el entorno o en `.env`. Sin configurar, todo
-lo que depende del precio es N/A y el informe lo dice; nunca se toma un precio de
-ningún sitio por defecto.
+La fuente es `WC_PRECIO_FUENTE=nasdaq` (en el entorno o en `.env`), la única admitida (CLAUDE.md, regla 6). Sin
+configurar, todo lo que depende del precio es N/A y el informe lo dice; nunca se toma un precio de ningún sitio por defecto.
 
 De Nasdaq se toma además lo que la propia bolsa publica en la ficha del valor
 —volumen, rango de 52 semanas, cierre anterior, capitalización, «1 Year Target»—
@@ -38,6 +36,7 @@ from urllib.request import Request, urlopen
 from .entorno import variable
 from .formato import numero
 from .hechos import Capa, Certeza, Contraste, Hecho, Origen, Periodo, de_valor, na
+from .rotulos import fallo
 
 __all__ = ["Consenso", "Cotizacion", "Mercado", "mercado", "obtener", "pedir_crudo"]
 
@@ -290,32 +289,6 @@ def cierres_nasdaq(ticker: str, desde: date, hasta: date, limite: int = 400, cla
     return {f: s.cierre for f, s in sesiones_nasdaq(ticker, desde, hasta, limite, clase).items()}
 
 
-def _polygon(ticker: str, clave: str) -> Optional[Cotizacion]:
-    """Polygon/Massive: datos de bolsa licenciados; el cierre de la última sesión."""
-    url = f"https://api.polygon.io/v2/aggs/ticker/{ticker}/prev?adjusted=true&apiKey={clave}"
-    datos = _json(url, {"User-Agent": "Warrants&Co tesis"})
-    res = (datos or {}).get("results") or []
-    if not res:
-        return None
-    fila = res[0]
-    fecha = datetime.utcfromtimestamp(fila["t"] / 1000).date()
-    return Cotizacion(precio=float(fila["c"]), fecha=fecha, fuente="Polygon/Massive (datos de bolsa licenciados)", oficial=True,
-                      url=url.split("&apiKey=")[0])
-
-
-def _yahoo(ticker: str) -> Optional[Cotizacion]:
-    """Último recurso, y el informe lo rotula como no oficial."""
-    url = f"https://query1.finance.yahoo.com/v8/finance/chart/{ticker}?range=5d&interval=1d"
-    datos = _json(url, {"User-Agent": "Mozilla/5.0"})
-    r = datos["chart"]["result"][0]
-    cierres = r["indicators"]["quote"][0]["close"]
-    marcas = r["timestamp"]
-    for c, t in zip(reversed(cierres), reversed(marcas)):
-        if c is not None:
-            return Cotizacion(precio=float(c), fecha=datetime.utcfromtimestamp(t).date(), fuente="Yahoo Finance (agregador, no oficial)", oficial=False, url=url)
-    return None
-
-
 def _dia_de_mercado_valido(fecha: date, hoy: date) -> bool:
     """Hoy, o el último día laborable anterior (fin de semana o antes de la apertura)."""
     if fecha == hoy:
@@ -334,20 +307,12 @@ def _cotizacion(ticker: str, hoy: date) -> Tuple[Optional[Cotizacion], Hecho]:
     fuente = variable("WC_PRECIO_FUENTE").lower()
     if not fuente:
         return None, na("precio", p, "sin fuente de cotización configurada (WC_PRECIO_FUENTE): la SEC no publica precios", unidad="USD/acción")
+    if fuente != "nasdaq":                 # regla 6: el precio es el cierre oficial de Nasdaq y ninguna otra fuente
+        return None, na("precio", p, f"fuente de cotización no admitida ({fuente}): el precio es el cierre oficial de Nasdaq", unidad="USD/acción")
     try:
-        if fuente == "nasdaq":
-            c = _nasdaq(ticker)
-        elif fuente == "polygon":
-            clave = variable("WC_POLYGON_CLAVE")
-            if not clave:
-                return None, na("precio", p, "WC_PRECIO_FUENTE=polygon sin WC_POLYGON_CLAVE", unidad="USD/acción")
-            c = _polygon(ticker, clave)
-        elif fuente == "yahoo":
-            c = _yahoo(ticker)
-        else:
-            return None, na("precio", p, f"fuente de cotización desconocida: {fuente}", unidad="USD/acción")
+        c = _nasdaq(ticker)
     except (HTTPError, URLError, KeyError, ValueError, TypeError) as e:
-        return None, na("precio", p, f"la fuente {fuente} no respondió: {e}", unidad="USD/acción")
+        return None, na("precio", p, f"la fuente {fuente} no respondió: {fallo(e)}", unidad="USD/acción")
     if c is None:
         return None, na("precio", p, f"la fuente {fuente} no devolvió cotización para {ticker}", unidad="USD/acción")
     if not _dia_de_mercado_valido(c.fecha, hoy):
@@ -390,12 +355,12 @@ def mercado(ticker: str, hoy: date, fechas: Tuple[date, ...] = ()) -> Mercado:
         desde, hasta = min(pedir) - timedelta(days=7), max(max(pedir), c.fecha)
         m.cierres = cierres_nasdaq(ticker, desde, hasta)
     except (HTTPError, URLError, KeyError, ValueError, TypeError) as e:
-        m.faltan["cierres"] = f"el histórico de Nasdaq no respondió: {e}"
+        m.faltan["cierres"] = f"el histórico de Nasdaq no respondió: {fallo(e)}"
         return m
     try:
         m.consenso = consenso_nasdaq(ticker)
     except (HTTPError, URLError, KeyError, ValueError, TypeError) as e:
-        m.faltan["consenso"] = f"el consenso de analistas de Nasdaq no respondió: {e}"
+        m.faltan["consenso"] = f"el consenso de analistas de Nasdaq no respondió: {fallo(e)}"
     if m.consenso is not None and c.objetivo_consenso is not None:
         # dos cifras de la misma bolsa para el mismo hecho: si no coinciden, el informe lo marca
         dif = abs(m.consenso.objetivo - c.objetivo_consenso)

@@ -11,7 +11,7 @@ from datetime import date
 from pathlib import Path
 
 from tests import rutas_nflx
-from tesis import dcf, expediente, gobierno, historial, posicion, recortes, riesgos
+from tesis import dcf, expediente, gobierno, historial, recortes, riesgos
 from tesis.hechos import Capa, Contraste, Estado, Hecho, Periodo
 
 RUTAS = rutas_nflx()
@@ -158,19 +158,6 @@ class HistorialYRecortes(unittest.TestCase):
             self.assertIsNotNone(r)
             self.assertTrue(r.ruta.exists() and r.rectangulo[3] - r.rectangulo[1] < 200)   # unas pocas líneas, no la página entera
             self.assertIsNone(recortes.recortar_lineas(carta, 2, ["texto que no está en la carta"], Path(d), ["prueba"], "q"))
-
-
-class Posicion(unittest.TestCase):
-    def test_plantilla_vacia_declara_todo_lo_que_falta(self):
-        """Falla si un fichero de posición vacío deja de rotular N/A cada campo de la sección H."""
-        with tempfile.TemporaryDirectory() as d:
-            ruta = Path(d) / "p.json"
-            ruta.write_text(json.dumps(posicion.plantilla()), encoding="utf-8")
-            p = posicion.cargar(ruta)
-        self.assertTrue(p.vacia)
-        self.assertEqual(len(p.faltan()), 13)
-        self.assertIn("33 · argumento", p.faltan())
-        self.assertIn("portada · recomendación", p.faltan())
 
 
 if __name__ == "__main__":

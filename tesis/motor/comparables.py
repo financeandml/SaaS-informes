@@ -83,7 +83,7 @@ def _uno(ticker: str, fecha: date, umbrales: dict) -> Comparable:
     except ValueError:
         per = {"trimestres": [], "anuales": [], "instantes": []}
     if not per["trimestres"] and not per["anuales"]:
-        c.excluido = c.excluido or "sin cuentas US GAAP en companyfacts"
+        c.excluido = c.excluido or "sin cuentas US GAAP en la SEC"
         return c
     ultimo = max(per["trimestres"] + per["anuales"], key=lambda p: p.fin)
     c.cierre_ltm = ultimo.fin
@@ -101,7 +101,7 @@ def _uno(ticker: str, fecha: date, umbrales: dict) -> Comparable:
         h = hechos.get(("acciones_diluidas", max(per["trimestres"], key=lambda q: q.fin)))
         if h is not None and h.hay_dato:
             acciones = h.valor
-            c.motivos["acciones"] = "sin portada vigente en companyfacts: diluidas medias del último trimestre"
+            c.motivos["acciones"] = "sin portada vigente en la SEC: diluidas medias del último trimestre"
     p = de_valor("precio", Periodo.instante(c.fecha_precio), c.precio, Capa.SEC, Origen(documento="Nasdaq"), unidad="USD/acción")
     m = multiplos.construir(hechos, per["trimestres"], per["anuales"], p, acciones, None, facts, obtenido, no_aplican=tab.no_aplican)
     if acciones:

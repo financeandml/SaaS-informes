@@ -1,7 +1,7 @@
 """Configuración: del entorno o de `.env` en la raíz del proyecto, nunca inventada.
 
 Un solo lector para todas las claves (`WC_SEC_CONTACTO`, `WC_PRECIO_FUENTE`,
-`WC_POLYGON_CLAVE`…), para que configurar `.env` baste en todos los módulos y
+`WC_DATOS`…), para que configurar `.env` baste en todos los módulos y
 ninguno tenga su propia copia de la misma lógica.
 """
 

@@ -179,6 +179,8 @@ def _campo(c: dict, v, id_: str, faltas: List[str]) -> None:
         n = palabras(_texto(v))
         if not bajo <= n <= alto:
             faltas.append(f"{id_}: {n} palabras (se piden {bajo}–{alto})")
+        from .linter import revisar                     # 06 §2 mientras se escribe; las cifras frente a los Hechos, al generar
+        faltas += [f"{id_}: {r}" for r in revisar(_texto(v))]
     if tipo in ("numero", "pct") and not isinstance(v, (int, float)):
         faltas.append(f"{id_}: tiene que ser un número")
     elif tipo in ("numero", "pct") and c.get("rango"):
@@ -221,6 +223,14 @@ def validar(ticker: str, fecha: date, datos: dict, regla: Optional[Tuple[str, fl
                 continue
             _campo(c, e.valor(c["id"]), c["id"], faltas)
         salida[p["numero"]] = faltas
+    try:                                              # v1: financieras, REIT y biotech sin ingresos se bloquean en el paso 1
+        from . import sec
+        from .motor.datos import paquete_por_sic
+        _, bloqueo = paquete_por_sic(sec.emisor(ticker).sic)
+        if bloqueo:
+            salida[1].insert(0, f"meta.sector: bloqueo v1 — {bloqueo}")
+    except Exception:                                 # sin EDGAR no se sabe el SIC: lo dirá el informe al generarse
+        pass
     if e.valor("esc"):
         salida[7] += leer(datos, fecha).faltas
     val = e.valor("val.fecha_valoracion") or e.valor("meta.fecha_valoracion")

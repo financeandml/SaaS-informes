@@ -144,7 +144,7 @@ class QualcommParteF(_Informes):
         self.assertIn("Item 1A, pág. 16", texto)
 
     def test_sin_causas_con_un_fallo_no_se_emite(self):
-        self.assertEqual(self.inf.parte_f.fallos, ["4T FY25 · BPA diluido (GAAP): -224,0\xa0% frente a la guía"])
+        self.assertEqual(self.inf.parte_f.fallos, ["4T FY25 · BPA diluido (GAAP): −224,0\xa0% frente a la guía"])
         pb = copy.copy(self.pb)
         pb.entradas = Entradas(copy.deepcopy(self.ent.datos))
         del pb.entradas.datos["historial"]

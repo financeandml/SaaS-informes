@@ -37,10 +37,13 @@ from urllib.error import HTTPError, URLError
 
 from . import precio as precio_mod
 from .hechos import Contraste
+from .rotulos import fallo
 
 __all__ = ["Cadena", "Insiders", "Institucional", "Posicionamiento", "ShortInterest", "Vencimiento", "VolatilidadImplicita", "construir"]
 
 FUENTE = "Nasdaq (web del mercado)"
+_QUE = {"cadena": "la cadena de opciones", "institucional": "las posiciones institucionales (13F)",
+        "insiders": "las operaciones de directivos", "short": "el interés en corto"}
 
 
 @dataclass
@@ -52,6 +55,17 @@ class Respuesta:
 
 
 @dataclass
+class Strike:
+    """Una fila de la cadena: precio de ejercicio, interés abierto y la prima de cada lado (punto medio compra/venta si
+    la bolsa da los dos; si no, la última negociada)."""
+    precio: float
+    oi_calls: Optional[float]
+    oi_puts: Optional[float]
+    call: Optional[float]
+    put: Optional[float]
+
+
+@dataclass
 class Vencimiento:
     fecha: str                     # tal cual lo rotula la bolsa («September 18, 2026»)
     vol_calls: Optional[float]
@@ -59,6 +73,7 @@ class Vencimiento:
     oi_calls: Optional[float]
     oi_puts: Optional[float]
     contratos: int                 # filas (strikes) del vencimiento
+    strikes: List[Strike] = field(default_factory=list)
 
 
 @dataclass
@@ -168,6 +183,14 @@ def _fecha_us(s: str) -> Optional[date]:
     return date(int(m.group(3)), int(m.group(1)), int(m.group(2))) if m else None
 
 
+def _prima(fila: dict, lado: str) -> Optional[float]:
+    compra, venta = _num(fila.get(f"{lado}_Bid")), _num(fila.get(f"{lado}_Ask"))
+    if compra is not None and venta is not None and 0 < compra <= venta:
+        return (compra + venta) / 2
+    ultima = _num(fila.get(f"{lado}_Last"))
+    return ultima if ultima is not None and ultima > 0 else None
+
+
 def _cadena(ticker: str) -> Cadena:
     url = (f"https://api.nasdaq.com/api/quote/{ticker}/option-chain?assetclass=stocks&limit=0&fromdate=all"
            f"&todate=undefined&excode=oprac&callput=callput&money=all&type=all")
@@ -185,6 +208,9 @@ def _cadena(ticker: str) -> Cadena:
         if actual is None:
             continue
         actual.contratos += 1
+        k = _num(f.get("strike"))
+        if k is not None:
+            actual.strikes.append(Strike(k, _num(f.get("c_Openinterest")), _num(f.get("p_Openinterest")), _prima(f, "c"), _prima(f, "p")))
         for campo, clave in (("vol_calls", "c_Volume"), ("vol_puts", "p_Volume"), ("oi_calls", "c_Openinterest"), ("oi_puts", "p_Openinterest")):
             v = _num(f.get(clave))
             if v is not None:
@@ -309,9 +335,9 @@ def _iv_yahoo(ticker: str, cadena: Optional[Cadena], maximo: int = 4) -> Volatil
         # una cadena que no cuadra (a medio cargar, o de otro día) no es una fuente para nada de lo que trae
         if iv.contraste_oi is not None and iv.contraste_oi[0] is Contraste.DISCREPANTE:
             iv.iv_call_atm = iv.iv_put_atm = iv.iv_put_otm = iv.iv_call_otm = None
-            iv.motivo = "la cadena del agregador no cuadra con el interés abierto de la bolsa a la hora de consulta: su IV no se imprime"
+            iv.motivo = "la cadena del agregador no cuadra con el interés abierto de la bolsa a la hora de consulta: su volatilidad implícita no se imprime"
         elif not iv.hay_iv:
-            iv.motivo = "el agregador no trae ningún contrato con cotización, interés abierto e IV con sentido (cadena a medio cargar fuera de sesión)"
+            iv.motivo = "el agregador no trae ningún contrato con cotización, interés abierto y volatilidad implícita con sentido (cadena a medio cargar fuera de sesión)"
         v.vencimientos.append(iv)
     return v
 
@@ -332,15 +358,15 @@ def construir(ticker: str, split_desde: Optional[date] = None, con_iv: bool = Tr
         try:
             setattr(p, clave, fn())
         except (HTTPError, URLError, ValueError, TypeError, KeyError, json.JSONDecodeError) as e:
-            p.faltan[clave] = f"Nasdaq no sirvió {clave}: {e}"
+            p.faltan[clave] = f"Nasdaq no sirvió {_QUE[clave]}: {fallo(e)}"
     if con_iv:
         try:
             p.iv = _iv_yahoo(ticker, p.cadena)
             if p.iv is not None and not any(x.hay_iv for x in p.iv.vencimientos):
                 motivos = sorted({x.motivo for x in p.iv.vencimientos if x.motivo})
-                p.faltan["iv"] = "la bolsa no publica IV y la cadena de Yahoo Finance (excepción) no sirve a esta hora: " + ("; ".join(motivos) or "sin vencimientos")
+                p.faltan["iv"] = "la bolsa no publica volatilidad implícita y la cadena de Yahoo Finance (excepción) no sirve a esta hora: " + ("; ".join(motivos) or "sin vencimientos")
         except (HTTPError, URLError, ValueError, TypeError, KeyError, IndexError, json.JSONDecodeError) as e:
-            p.faltan["iv"] = f"la bolsa no publica IV y Yahoo Finance (excepción) no respondió: {e}"
+            p.faltan["iv"] = f"la bolsa no publica volatilidad implícita y Yahoo Finance (excepción) no respondió: {fallo(e)}"
     else:
         p.faltan["iv"] = "la bolsa no publica volatilidad implícita y no se pidió la excepción de Yahoo Finance"
     return p

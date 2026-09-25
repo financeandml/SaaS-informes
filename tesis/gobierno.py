@@ -33,6 +33,7 @@ from typing import List, Optional, Tuple
 
 from .expediente import Adjunto, Expediente, Tipo, _fecha_larga
 from .hechos import Origen
+from .rotulos import fallo
 
 __all__ = ["Accionista", "Consejero", "Ejecutivo", "Filial", "Gobierno", "Retribucion", "construir"]
 
@@ -486,7 +487,7 @@ def construir(exp: Expediente, salida_fotos: Optional[Path] = None, emisor=None)
             return g
         except (RuntimeError, sec.SinContacto) as e:
             g = Gobierno()
-            g.faltan["edgar"] = f"EDGAR no respondió ({e}); se leen los PDF adjuntos"
+            g.faltan["edgar"] = f"EDGAR no respondió ({fallo(e)}); se leen los PDF adjuntos"
     if proxy is None:
         g.faltan["proxy"] = "sin DEF 14A en el expediente: accionariado, ejecutivos y retribución quedan sin fuente"
     else:

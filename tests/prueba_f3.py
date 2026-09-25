@@ -15,7 +15,7 @@ from pathlib import Path
 import pytest
 
 from tesis import (calendario, contraste, derivados, entorno, entradas, ficha, gobierno, guidance, informe, multiplos, parte_b,
-                   precio as precio_mod, regiones, render, sec)
+                   posicionamiento, precio as precio_mod, regiones, render, sec)
 from tesis.expediente import Expediente
 from tesis.hechos import Capa, Origen, Periodo, de_valor
 from tesis.motor import datos as motor_datos, excel
@@ -76,7 +76,7 @@ class _Informes(unittest.TestCase):
     def setUpClass(cls):
         cls._env, cls._raiz, cls._cache = dict(os.environ), entorno.RAIZ, sec.CACHE
         cls._bolsa = (precio_mod.CACHE_BOLSA, precio_mod.SOLO_CACHE)
-        os.environ["WC_SEC_CONTACTO"] = ""
+        os.environ["WC_SEC_CONTACTO"], os.environ["WC_PRECIO_FUENTE"] = "", "nasdaq"
         entorno.RAIZ, sec.CACHE = F, F / "cache_sec"
         precio_mod.CACHE_BOLSA, precio_mod.SOLO_CACHE = F / "cache_bolsa", True
         T, hoy = cls.T, cls.HOY
@@ -102,8 +102,11 @@ class _Informes(unittest.TestCase):
         cls.pb, cls.hechos, cls.anuales = pb, hechos, per["anuales"]         # F4 reconstruye la parte E con otras entradas
         x = cls.ent.datos.get("excel")
         cls.libro = excel.importar(RAIZ / x["archivo"], x.get("mapa"), RAIZ / x["recalculado"]) if x else None
+        splits = [f for f, _, _ in sec.splits(facts)]
+        posi = posicionamiento.construir(T, split_desde=max(splits) if splits else None)          # parte H: la bolsa, en caché
         cls.inf = informe.construir(T, hoy, e, exp, tab, per, fi, g, guidance.construir(exp, e.depositos, hoy), regiones.construir(exp, tab),
-                                    precio, {}, multiplos=mult, proxima=calendario.proxima(T, None, hoy), parte_b=pb, motor=m, libro=cls.libro)
+                                    precio, {}, multiplos=mult, proxima=calendario.proxima(T, None, hoy), parte_b=pb, motor=m, libro=cls.libro,
+                                    posicionamiento=posi)
         cls.html = render.a_html(cls.inf)
 
     @classmethod

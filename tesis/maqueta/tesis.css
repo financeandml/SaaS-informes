@@ -23,8 +23,9 @@ html, body { margin: 0; padding: 0; background: var(--papel); color: var(--tinta
 * { box-sizing: border-box; }
 a { color: inherit; text-decoration: none; }
 
-.hoja { page-break-after: always; break-after: page; }
-.hoja:last-child { page-break-after: auto; }
+/* 01: salto de página solo antes de cada parte (y de la portada y el índice); lo demás («sigue») fluye */
+.hoja { page-break-before: always; break-before: page; }
+.hoja:first-of-type { page-break-before: auto; break-before: auto; }
 .cabecera { display: flex; justify-content: space-between; align-items: baseline; border-bottom: 2px solid var(--acento);
   padding-bottom: 2mm; margin-bottom: 4mm; }
 .cabecera .casa { font-weight: 700; letter-spacing: .04em; font-size: 10pt; }
@@ -68,6 +69,9 @@ p { margin: 0 0 2mm; text-align: justify; }
 .cuadro.partible { break-inside: auto; }
 .cuadro.partible tr { break-inside: avoid; }
 .cuadro.partible thead { display: table-header-group; }
+.cuadro .fuente, .cuadro .notas { break-before: avoid; }
+.cuadro tbody tr:last-child { break-after: avoid; }
+p, li { orphans: 3; widows: 3; }
 .cuadro .rotulo { color: var(--acento); font-weight: 600; font-size: 8.5pt; margin-bottom: 1mm; break-after: avoid-page; page-break-after: avoid; }
 .cuadro table { width: 100%; border-collapse: collapse; font-size: 7.6pt; }
 .cuadro th { background: var(--acento); color: #fff; font-weight: 600; text-align: right; padding: .9mm 1.2mm; white-space: nowrap; }

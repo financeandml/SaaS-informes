@@ -29,6 +29,7 @@ from urllib.error import HTTPError, URLError
 
 from . import precio as precio_mod
 from . import sec
+from .rotulos import fallo
 
 __all__ = ["Comparable", "Comparables", "construir"]
 
@@ -132,7 +133,7 @@ def construir(ticker: str, con_sec: bool = True, maximo: int = 12) -> Comparable
     try:
         datos, cuerpo, obtenido = precio_mod.pedir_crudo(url)
     except (HTTPError, URLError, ValueError, json.JSONDecodeError) as e:
-        c.faltan["screener"] = f"el screener de Nasdaq no respondió: {e}"
+        c.faltan["screener"] = f"el screener de Nasdaq no respondió: {fallo(e)}"
         return c
     filas = ((datos or {}).get("data") or {}).get("rows") or []
     propia = next((f for f in filas if (f.get("symbol") or "").upper() == c.ticker), None)
@@ -158,7 +159,7 @@ def construir(ticker: str, con_sec: bool = True, maximo: int = 12) -> Comparable
             c.faltan["sec"] = str(e)
             break
         except (HTTPError, URLError, RuntimeError, ValueError, KeyError) as e:
-            x.nota_sec = f"EDGAR no sirvió las cuentas: {str(e)[:80]}"
+            x.nota_sec = f"EDGAR no sirvió las cuentas: {fallo(e)}"
     if len(c.filas) <= 1:
         c.faltan["comparables"] = f"la bolsa no asigna a ningún otro valor la industria «{c.industria}»"
     _mismo_sic(c, filas, maximo)
@@ -185,7 +186,7 @@ def _mismo_sic(c: Comparables, filas_screener: list, maximo: int) -> None:
         c.faltan["sic"] = str(e)
         return
     except (HTTPError, URLError, RuntimeError, ValueError, KeyError) as e:
-        c.faltan["sic"] = f"EDGAR no sirvió la búsqueda por SIC: {str(e)[:80]}"
+        c.faltan["sic"] = f"EDGAR no sirvió la búsqueda por SIC: {fallo(e)}"
         return
     por_cik = {f"{int(f['cik_str']):010d}": (str(f["ticker"]), str(f["title"])) for f in tickers.values()}
     ciks = re.findall(r"<cik>(\d+)</cik>", atom)
@@ -208,4 +209,4 @@ def _mismo_sic(c: Comparables, filas_screener: list, maximo: int) -> None:
         try:
             _cuentas(x)
         except (sec.SinContacto, HTTPError, URLError, RuntimeError, ValueError, KeyError) as e:
-            x.nota_sec = f"EDGAR no sirvió las cuentas: {str(e)[:80]}"
+            x.nota_sec = f"EDGAR no sirvió las cuentas: {fallo(e)}"

@@ -1,4 +1,4 @@
-/* Asistente de 9 pasos: se apoya en formulario.css (paleta, tarjetas, botones) y solo añade lo suyo. */
+/* Asistente de 9 pasos: se apoya en comun.css (paleta, tarjetas, botones) y solo añade lo suyo. */
 .pasos-asistente { display: flex; flex-wrap: wrap; gap: 4px; padding: 8px 16px; border-bottom: 1px solid var(--gris-claro); }
 .pasos-asistente button { font-size: 12px; padding: 4px 8px; background: var(--papel); color: var(--tinta); border: 1px solid var(--gris-claro); cursor: pointer; }
 .pasos-asistente button.actual { border-color: var(--acento); color: var(--acento); font-weight: 600; }

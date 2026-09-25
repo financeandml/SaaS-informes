@@ -13,6 +13,7 @@ from typing import Callable, Dict, List, Optional, Sequence, Set, Tuple
 from . import guia as guia_mod
 from .entradas import Entradas
 from .formato import Celda, celda, fecha as f_fecha, numero
+from .rotulos import fallo
 from .segmentos import Segmentos
 
 __all__ = ["ParteB", "Textos", "cuadro_segmentos", "cuadro_objetivos", "cuadro_fechas", "cuadro_catalizadores",
@@ -88,7 +89,7 @@ def cuadro_segmentos(n, s: Segmentos, etiqueta: Callable) -> Tuple[object, objec
     if s.udm is not None:
         notas.append(f"{s.etiqueta_udm}: ejercicio + acumulado del año en curso − acumulado del año anterior (10-Q).")
     segmentos = Cuadro(n.siguiente(), "Ingresos por segmento y línea de negocio (mln USD)", columnas, filas,
-                       f"Fuente: SEC EDGAR, XBRL inline ({origen}); ejes de segmento, producto y conciliación.", notas)
+                       f"Fuente: SEC EDGAR, estados del {origen}; ejes de segmento, producto y conciliación.", notas)
     geo, padre = s.geografia()
     filas_geo = [FilaCuadro(l.rotulo, [celda(l.valores.get(p), "M USD") for p in s.periodos], capa="H") for l in geo]
     de_que = ""
@@ -96,7 +97,7 @@ def cuadro_segmentos(n, s: Segmentos, etiqueta: Callable) -> Tuple[object, objec
         linea_padre = next((l for l in s.lineas if l.miembro == padre or l.miembro.endswith("|" + padre)), None)
         de_que = f" de {linea_padre.rotulo}" if linea_padre is not None else ""
     geografia = Cuadro(n.siguiente(), f"Ingresos por geografía{de_que} (mln USD)", columnas, filas_geo,
-                       f"Fuente: SEC EDGAR, XBRL inline ({origen}); eje geográfico. El 10-Q no suele desglosarlo: sin él, "
+                       f"Fuente: SEC EDGAR, estados del {origen}; eje geográfico. El 10-Q no suele desglosarlo: sin él, "
                        "la columna de los últimos doce meses queda N/A.")
     # la mezcla, al nivel más fino que suma el total: las líneas de cada segmento que las desglosa, el segmento si no
     ultimo = s.periodos[-1] if s.periodos else None
@@ -279,7 +280,7 @@ def construir(emisor, hoy: date, facts: dict, portada=None, entradas: Optional[E
         pb.segmentos = seg_mod.construir(emisor, pb.entradas.valor("perfil.rotulos") or {}, etiqueta)
         pb.faltas += [f"segmentos: {v}" for v in pb.segmentos.faltan.values()]
     except (RuntimeError, sec.SinContacto) as e:
-        pb.faltas.append(f"segmentos: EDGAR no sirvió el XBRL inline ({e})")
+        pb.faltas.append(f"segmentos: EDGAR no sirvió el 10-K ({fallo(e)})")
     pb.notas, faltan = guia.notas_edgar(emisor)
     pb.faltas += [f"guía · {k}: {v}" for k, v in faltan.items()]
     if pb.notas and pb.notas[-1].candidatos and not (pb.confirmadas & {c.id for c in pb.notas[-1].candidatos}):

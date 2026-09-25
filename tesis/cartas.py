@@ -20,6 +20,7 @@ from typing import Dict, List, Optional, Sequence, Tuple
 
 from . import sec
 from .hechos import Contraste, Hecho, Periodo
+from .rotulos import fallo
 
 __all__ = ["Carta", "Guia", "cartas_edgar", "guias_frente_a_real"]
 
@@ -173,7 +174,7 @@ def cartas_edgar(cik: str, maximo: int = 9) -> Tuple[List[Carta], Dict[str, str]
     try:
         s, _ = sec.submissions(cik)
     except Exception as e:
-        return [], {"cartas": f"no se pudo leer la lista de depósitos de EDGAR: {e}"}
+        return [], {"cartas": f"no se pudo leer la lista de depósitos de EDGAR: {fallo(e)}"}
     r = s["filings"]["recent"]
     ochok = [(date.fromisoformat(r["filingDate"][i]), r["accessionNumber"][i]) for i in range(len(r["form"]))
              if r["form"][i] == "8-K" and "2.02" in (r.get("items", [""] * len(r["form"]))[i] or "")]
@@ -188,7 +189,7 @@ def cartas_edgar(cik: str, maximo: int = 9) -> Tuple[List[Carta], Dict[str, str]
                 continue
             html, _ = sec.descargar_texto(f"{carpeta}/{nombre}")
         except Exception as e:
-            faltan[accession] = f"EDGAR no sirvió el exhibit: {e}"
+            faltan[accession] = f"EDGAR no sirvió el anexo: {fallo(e)}"
             continue
         carta = _leer(html, presentado, accession, f"{carpeta}/{nombre}")
         if carta is None:

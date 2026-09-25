@@ -196,24 +196,22 @@ def construir(n, m, etiqueta, hechos=None, anuales=None, consenso=None, libro: O
     if m.comparables is not None:
         from .motor.comparables import MULTIPLOS
         filas = []
-        for c in m.comparables.filas:
+        for c in m.comparables.filas:                           # los excluidos, marcados y con «—» (R15; sin «N/A», 06 §3.10)
             celdas = []
             for clave, _ in MULTIPLOS:
                 x = c.valores.get(clave)
-                if c.excluido:
-                    celdas.append(_na(c.excluido))
-                elif x is None:
-                    celdas.append(_na(c.motivos.get(clave, "sin dato")))
+                if c.excluido or x is None:                     # «—» con su motivo: en 12–20 no hay «N/A» (06 §3.10)
+                    celdas.append(_c("—", c.excluido or c.motivos.get(clave, "sin dato del emisor en la SEC"), capa=""))
                 else:
                     celdas.append(Celda(numero(x, 1) + "x", "✱" if clave in c.atipicos else "", "H", "valor",
                                         "atípico: fuera de medianas" if clave in c.atipicos else ""))
             rot = f"{c.ticker} · {c.nombre}" + (" (excluido)" if c.excluido else "")
             filas.append(FilaCuadro(rot, celdas + [_c(c.excluido or f"cuentas a {f_fecha(c.cierre_ltm)}", capa="")]))
-        filas.append(FilaCuadro("Mediana (excluidos y atípicos fuera)", [_c(numero(x, 1) + "x" if x is not None else "N/A") for x in
+        filas.append(FilaCuadro("Mediana (excluidos y atípicos fuera)", [_c(numero(x, 1) + "x" if x is not None else "—") for x in
                                                                            (m.comparables.medianas.get(k) for k, _ in MULTIPLOS)] + [_c("")], destacada=True))
         d.cuadros["comparables"] = Cuadro(n.siguiente(), "Comparables del analista (LTM)", ["PER", "EV / EBITDA", "EV / Ventas", "P / FCF", "Nota"], filas,
                                           "Fuente: SEC (cuentas) y Nasdaq (cierre en la fecha de valoración). Fuera de medianas: cuentas con más antigüedad "
-                                          "que el umbral o en otra moneda.", partible=True)
+                                          "que el umbral o en otra moneda. «—»: sin dato o excluido (motivo al pasar el ratón).", partible=True)
         # valor implícito por acción: mediana de comparables × métrica propia (solo contraste)
         implicitos = _implicitos(m, v)
         if implicitos:
@@ -233,12 +231,13 @@ def construir(n, m, etiqueta, hechos=None, anuales=None, consenso=None, libro: O
             ing = [x.valor for x in ing if x is not None and x.hay_dato]
             if len(ing) >= 2 and ing[0] > 0:
                 historico = (ing[-1] / ing[0]) ** (1 / (len(ing) - 1)) - 1
-        fila = lambda rot, x, base, hist="": FilaCuadro(rot, [_c(_pct(x, 1) if x is not None else "sin solución en el rango"), _c(_pct(base, 1)), _c(hist or "—")])  # noqa: E731
+        fila = lambda rot, x, base, hist="": FilaCuadro(rot, [_c(_pct(x, 1) if x is not None else "sin solución en el rango"),  # noqa: E731
+                                                              _c(_pct(base, 1) if base is not None else "—"), _c(hist or "—")])
         filas = [fila("CAGR de ingresos implícito (márgenes del base)", inv.cagr_ingresos, inv.base_cagr, _pct(historico, 1) if historico is not None else ""),
                  fila("Margen EBIT terminal implícito (crecimiento del base)", inv.margen_terminal, inv.base_margen),
                  fila("Crecimiento constante del FCFF implícito", inv.crecimiento_fcff, None)]
         d.cuadros["inverso"] = Cuadro(n.siguiente(), "DCF inverso: lo que descuenta el precio", ["Implícito", "Escenario base", "Histórico 5 años"], filas,
-                                      f"Fuente: motor (bisección en los rangos de config/umbrales.yaml); precio: {precio_txt}.")
+                                      f"Fuente: motor (bisección en los rangos de la configuración de umbrales); precio: {precio_txt}.")
     # 19 · SOTP
     if not p.sotp.get("aplica"):
         d.sotp = ("No aplica: la compañía declara un único segmento operativo." if segmento_unico else
@@ -251,7 +250,7 @@ def construir(n, m, etiqueta, hechos=None, anuales=None, consenso=None, libro: O
         ("Downside pesimista", _pct(v.downside), "V_h pesimista / precio − 1", False),
         ("Recorrido / riesgo", numero(v.recorrido_riesgo, 2) if v.recorrido_riesgo is not None else "sin pérdida en el pesimista",
          "(PO − precio) / (precio − V_h pesimista)", False),
-        ("Recomendación sugerida por la regla", v.recomendacion, "config/umbrales.yaml › recomendacion", True))]
+        ("Recomendación sugerida por la regla", v.recomendacion, "regla de recomendación de la configuración de umbrales", True))]
     if recomendacion_analista:
         filas.append(FilaCuadro("Recomendación del analista", [_c(recomendacion_analista.capitalize(), "posición del analista", capa="S")]))
     d.cuadros["objetivo"] = Cuadro(n.siguiente(), "Precio objetivo y margen de seguridad", ["Valor"], filas,

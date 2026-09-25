@@ -122,7 +122,7 @@ def _consolidado(doc: ixbrl.Documento) -> Dict[Periodo, ixbrl.HechoIX]:
 
 
 def _origen(doc: ixbrl.Documento, formulario: str, presentado: Optional[date], concepto: str) -> Origen:
-    return Origen(documento=f"{formulario} (XBRL inline)", formulario=formulario, presentado=presentado,
+    return Origen(documento=formulario, formulario=formulario, presentado=presentado,
                   concepto=concepto, referencia=doc.url)
 
 
@@ -139,7 +139,7 @@ def desde_documentos(k10: ixbrl.Documento, presentado_k: Optional[date], q10: Op
     total_k = _consolidado(k10)
     fy = sorted({p for p in total_k if p.meses == 12})[-ejercicios:]
     if not fy:
-        s.faltan["segmentos"] = "el 10-K no trae ingresos anuales etiquetados en XBRL inline"
+        s.faltan["segmentos"] = "el 10-K no publica ingresos anuales por segmento"
         return s
     s.periodos = list(fy)
     s.origenes["10-K"] = _origen(k10, "10-K", presentado_k, "ingresos por eje")
@@ -200,8 +200,8 @@ def desde_documentos(k10: ixbrl.Documento, presentado_k: Optional[date], q10: Op
                 par = _renombrado((tipo, clave, padre), anuales_q)
                 if par is not None:
                     en_q = anuales_q[par]
-                    s.cuadres.append(f"◐ {rotulo}: el 10-Q lo etiqueta «{par[1].split('|')[-1].split(':')[-1]}» y el 10-K "
-                                     f"«{miembro.split(':')[-1]}»; se tratan como la misma línea")
+                    # sin los nombres de los miembros XBRL: son identificadores de la fuente, que nunca se imprimen
+                    s.cuadres.append(f"◐ {rotulo}: el 10-Q y el 10-K la etiquetan con nombres distintos; se tratan como la misma línea")
             en_q = en_q or {}
             linea.valores[s.udm] = _udm(campo, linea.valores[ultimo_fy], en_q.get(acumulado), en_q.get(anterior))
         s.lineas.append(linea)

@@ -64,7 +64,7 @@ class Saas(unittest.TestCase):
 
     def test_las_cuatro_paginas_salen_con_csp_estricta_y_sin_scripts_en_linea(self):
         """Falla si una página lleva scripts o estilos en línea, si la CSP admite unsafe-inline o si no permite enmarcar el informe."""
-        for ruta in ("/", "/dcf", "/formulario", "/informe"):
+        for ruta in ("/", "/dcf", "/asistente", "/informe"):
             estado, cab, cuerpo = self._pedir(ruta)
             self.assertEqual(estado, 200, ruta)
             html = cuerpo.decode("utf-8")
@@ -168,19 +168,16 @@ class Saas(unittest.TestCase):
         self.assertIn("propia página", json.loads(resp)["error"])
         self.assertFalse(Path(saas.ADJUNTOS, "PRUEBA", "grande.pdf").exists())
 
-    def test_emitir_sin_adjuntos_se_rechaza_y_la_posicion_se_guarda_por_ticker(self):
-        """Falla si se lanza una emisión sin expediente, o si la posición no se guarda en el fichero del ticker pedido."""
+    def test_emitir_sin_adjuntos_se_rechaza_y_nada_escribe_en_posiciones(self):
+        """Falla si se lanza una emisión sin expediente, o si vuelve el formulario antiguo que escribía en `posiciones/`
+        (regla 15: `posiciones/` solo se lee, para migrarla al asistente)."""
         estado, _, resp = self._pedir("/api/emitir?ticker=VACIO", b"{}", {"Content-Type": "application/json", "X-Formulario": "saas"})
         self.assertEqual(estado, 400)
         self.assertIn("sin adjuntos", json.loads(resp)["error"])
-        with mock.patch.object(saas, "ruta_posicion", lambda t, carpeta=None: Path(self.tmp.name, f"{t}.json")):
-            from tesis import posicion
-            bueno = posicion.plantilla()
-            bueno["analista"] = "Prueba"
-            estado, _, resp = self._pedir("/api/posicion?ticker=PRUEBA", json.dumps(bueno).encode(), {"Content-Type": "application/json", "X-Formulario": "posicion"})
-            self.assertEqual(estado, 200, resp)
-            self.assertTrue(Path(self.tmp.name, "PRUEBA.json").exists())
-            self.assertTrue(json.loads(self._pedir("/api/posicion?ticker=PRUEBA")[2])["existe"])
+        self.assertEqual(self._pedir("/formulario?ticker=PRUEBA")[0], 404)
+        self.assertEqual(self._pedir("/api/posicion?ticker=PRUEBA")[0], 404)
+        estado, _, _ = self._pedir("/api/posicion?ticker=PRUEBA", b"{}", {"Content-Type": "application/json", "X-Formulario": "posicion"})
+        self.assertIn(estado, (403, 404))
 
 
 if __name__ == "__main__":

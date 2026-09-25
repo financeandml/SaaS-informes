@@ -21,6 +21,7 @@ from typing import Dict, List, Optional, Tuple
 from .contraste import Tablero
 from .expediente import Adjunto, Expediente, Tipo
 from .extractor import PaginaLeida
+from .formato import numero
 from .hechos import Capa, Certeza, Contraste, Hecho, Origen, Periodo, de_valor
 
 __all__ = ["Regiones", "construir"]
@@ -105,7 +106,7 @@ def _de_xlsx(exp: Expediente, r: Regiones) -> None:
                         if abs(previo.valor - h.valor) <= escala / 2:
                             r.hechos[clave_h] = previo.con(nota=previo.nota + f" · coincide con {a.nombre} ({origen.referencia})")
                         else:
-                            r.cuadres.append(f"≠ {cod} {periodo.clave}: formulario {previo.valor:,.0f} frente a hoja regional {h.valor:,.0f}")
+                            r.cuadres.append(f"≠ {cod} {periodo.clave}: formulario {numero(previo.valor)} frente a hoja regional {numero(h.valor)}")
                     else:
                         r.hechos[clave_h] = h
         r.origenes[a.clave] = Origen(documento=a.nombre, formulario=a.tipo.value, pagina=wb.worksheets.index(hoja) + 1)
@@ -129,7 +130,7 @@ def construir(exp: Expediente, tablero: Tablero) -> Regiones:
             continue
         suma = sum(h.valor for h in partes)
         if abs(suma - total.hecho.valor) <= 1_000:
-            r.cuadres.append(f"✓ {p.clave}: suma de regiones {suma:,.0f} = ingresos {total.hecho.valor:,.0f}")
+            r.cuadres.append(f"✓ {p.clave}: suma de regiones {numero(suma)} = ingresos {numero(total.hecho.valor)}")
         else:
-            r.cuadres.append(f"≠ {p.clave}: suma de regiones {suma:,.0f} ≠ ingresos {total.hecho.valor:,.0f} (diferencia {suma - total.hecho.valor:,.0f})")
+            r.cuadres.append(f"≠ {p.clave}: suma de regiones {numero(suma)} ≠ ingresos {numero(total.hecho.valor)} (diferencia {numero(suma - total.hecho.valor)})")
     return r

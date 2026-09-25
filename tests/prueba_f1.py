@@ -182,9 +182,30 @@ class Indice(unittest.TestCase):
         self.assertFalse(re.search(r'<h2 id="parte-[A-I]">[A-I]\.', plantilla), "título de parte escrito a mano")
         self.assertFalse(re.search(r"<h3 id=\"ap-[^\"]*\">[^<]*—", plantilla), "título de apartado escrito a mano")
         self.assertNotIn("penúltima", plantilla)
-        formulario = (RAIZ / "tesis" / "tablero" / "formulario.html").read_text(encoding="utf-8")
-        g = next(s for s in secciones if s.letra == "G")
-        self.assertEqual([int(x) for x in re.findall(r'<span class="num">(\d+)</span>', formulario)], [n for n, _ in g.apartados])
+        # 06 §3.5: el formulario (hoy el asistente, generado desde 04) con la misma numeración: cada apartado que cita un
+        # paso recibe alguna entrada de ese paso, y toda entrada que pide 01 tiene su campo en algún paso
+        from tesis import asistente
+        esquema = asistente.esquema()
+        todos = {c["id"] for paso in esquema for c in paso["campos"]}
+
+        def casa(e: str, ids) -> bool:
+            e = e[:-2] if e.endswith(".*") else e                    # «val.*»: todo lo que cuelga de val
+            return any(e == i or e.startswith(i + ".") or i.startswith(e + ".") for i in ids)
+        for paso in esquema:
+            m = re.search(r"\(([\d,\s–-]+)[;)]", paso["paso"])
+            if not m or paso["numero"] == 2:                        # el paso 2 cita el spec 03, no apartados
+                continue
+            numeros = set()
+            for trozo in m.group(1).split(","):
+                a, _, b = trozo.strip().replace("-", "–").partition("–")
+                numeros |= set(range(int(a), int(b or a) + 1))
+            ids = {c["id"] for c in paso["campos"]}
+            for n in sorted(numeros):
+                entradas = datos["apartados"][n].get("entradas") or []
+                self.assertTrue(not entradas or any(casa(e, ids) for e in entradas), (paso["paso"], n, entradas))
+        for n, a in datos["apartados"].items():
+            for e in a.get("entradas") or []:
+                self.assertTrue(casa(e, todos), (n, e))
         self.assertEqual(indice.titulo("24"), datos["apartados"][31]["titulo"])
 
 

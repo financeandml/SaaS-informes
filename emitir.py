@@ -1,7 +1,7 @@
 """Línea de órdenes: del expediente del analista al informe.
 
     python emitir.py NFLX --adjuntos ruta1.pdf ruta2.pdf … [--carpeta ./adjuntos/NFLX]
-                     [--dcf modelo_dcf.xlsx] [--posicion posiciones/NFLX.json]
+                     [--dcf modelo_dcf.xlsx] [--entradas entradas.json]
                      [--decisiones decisiones_nflx.json] [--fecha 2026-09-16] [--salida ./salida]
 
 Pasos, en el orden de la tubería: emisor en EDGAR → expediente clasificado y en
@@ -27,8 +27,8 @@ from pathlib import Path
 
 sys.stdout.reconfigure(encoding="utf-8")
 
-from tesis import (agregador, auditor, calendario, comparables, contraste, dcf, derivados, entorno, entradas, expediente, ficha, gobierno, guidance, historial, informe,  # noqa: E402
-                   mercado_objetivo, multiplos, parte_b, posicion, posicionamiento, precio, recortes, regiones, render, revision, riesgos, sec)
+from tesis import (auditor, calendario, comparables, contraste, dcf, derivados, entorno, entradas, expediente, ficha, gobierno, guidance, historial, informe,  # noqa: E402
+                   mercado_objetivo, multiplos, parte_b, posicionamiento, precio, recortes, regiones, render, revision, riesgos, rotulos, sec)
 from tesis.hechos import Contraste  # noqa: E402
 
 
@@ -38,8 +38,6 @@ def main(argv=None) -> int:
     ap.add_argument("--adjuntos", nargs="*", default=[], help="rutas de los adjuntos (PDF, XLSX)")
     ap.add_argument("--carpeta", help="carpeta con los adjuntos (se toman todos los PDF y XLSX)")
     ap.add_argument("--dcf", help="libro Excel con el DCF del analista (sección D: apartados 12–20)")
-    ap.add_argument("--posicion", help="JSON con la posición y la tesis del analista (sección H); por defecto posiciones/<TICKER>.json si existe "
-                                       "(se rellena con «python -m tesis.formulario TICKER»)")
     ap.add_argument("--decisiones", help="JSON con las decisiones del analista sobre discrepancias")
     ap.add_argument("--entradas", help="JSON con las entradas del analista (04_entradas.yaml); por defecto <datos>/entradas/<TICKER>/<fecha>/entradas.json")
     ap.add_argument("--fecha", help="fecha de emisión (AAAA-MM-DD); por defecto, hoy")
@@ -155,11 +153,7 @@ def main(argv=None) -> int:
     print(f"  tamaño de mercado: {len(merc.declaraciones)} cifras declaradas por la compañía"
           + (f" · faltan {list(merc.faltan)}" if merc.faltan else "")
           + (f" · {len(merc.no_aplican)} conceptos de otro sector, no se cuentan como huecos" if merc.no_aplican else ""))
-    # el agregador (Yahoo Finance) solo para lo que ni la SEC ni la bolsa publican, y para cuadrar
-    agr = agregador.resumen(args.ticker)
-    _o = lambda v, f="{}": f.format(v) if v is not None else "N/A"        # el agregador puede omitir cualquier campo
-    print("  agregador: " + (f"ROE {_o(agr.roe, '{:.2%}')} · ROA {_o(agr.roa, '{:.2%}')} · deuda total {_o(agr.deuda_total and agr.deuda_total / 1e6, '{:,.0f}')} M · EV/EBITDA {_o(agr.ev_ebitda)} · PEG {_o(agr.peg)} · resultados {_o(agr.fecha_resultados)}"
-                             if agr is not None else "sin respuesta (todo lo que dependa de él sale N/A)"))
+    agr = None                     # regla 6: Yahoo solo para la volatilidad implícita (sin ROE, deuda ni múltiplos del agregador)
     prox = calendario.proxima(args.ticker, agr, hoy)
     print("  próxima presentación: " + (f"{prox.fecha:%d/%m/%Y} {prox.momento} ({'esperada' if prox.esperada else 'anunciada'} según la bolsa) · {prox.contraste.value or '—'} {prox.nota_contraste}" if prox else "N/A"))
     acc_portada = f.citas.get("acciones_portada")
@@ -171,6 +165,7 @@ def main(argv=None) -> int:
     mot = motor_datos.ejecutar(emisor, facts, hechos, periodos, ent.datos, hoy, acc_portada.valor if acc_portada is not None else None,
                                umbrales_todos(), tab.desfase_fiscal, dividendos_bolsa) if ent.datos.get("esc") else None
     libro_analista = None
+    excel_exportado = None
     if mot is not None and mot.precio is not None:
         from tesis.hechos import Capa as _Capa, Origen as _Origen, Periodo as _Periodo, de_valor as _de_valor
         pr = _de_valor("precio", _Periodo.instante(mot.fecha_precio), mot.precio, _Capa.SEC, _Origen(documento="Nasdaq"), unidad="USD/acción",
@@ -181,6 +176,8 @@ def main(argv=None) -> int:
               f"{v.recomendacion}" if v else "sin valoración") + (f" · bloqueos: {'; '.join(mot.bloqueos)}" if mot.bloqueos else ""))
         if v is not None:
             ruta_libro = motor_excel.exportar(v, mot.ingresos_base, salida / f"{nombre_base}.motor.xlsx", umbrales_todos())
+            import hashlib as _hashlib
+            excel_exportado = (ruta_libro.name, _hashlib.sha256(ruta_libro.read_bytes()).hexdigest())
             print(f"  motor: libro con fórmulas vivas en {ruta_libro.name}")
         x = ent.datos.get("excel") or {}
         if x.get("archivo") and Path(x["archivo"]).exists():
@@ -196,13 +193,6 @@ def main(argv=None) -> int:
               + " · ".join(f"{c.rotulo_modelo[:28]} {c.contraste.value or '—'}" for c in cuadres))
         for k, v in modelo.faltan.items():
             print(f"    falta {k}: {v}")
-    ruta_posicion = Path(args.posicion) if args.posicion else Path("posiciones") / f"{args.ticker.upper()}.json"
-    pos = posicion.cargar(ruta_posicion) if ruta_posicion.exists() else None
-    if pos is not None:
-        print(f"  posición: {ruta_posicion} · {len(pos.faltan())} campos sin rellenar")
-    else:
-        print(f"  posición: sin {ruta_posicion} (la sección H y la recomendación de la portada salen N/A; se rellena con «python -m tesis.formulario {args.ticker.upper()}»)")
-
     pb = parte_b.construir(emisor, hoy, facts, portada, ent, g)
     print(f"  parte B: entradas {'de PRUEBA ' if ent.de_prueba else ''}{ent.ruta or 'sin fichero'} · {len(pb.notas)} notas de resultados · "
           f"{sum(len(n.candidatos) for n in pb.notas)} candidatos de guía ({len(pb.confirmadas)} confirmados) · {len(pb.faltas)} faltas")
@@ -210,9 +200,9 @@ def main(argv=None) -> int:
         print(f"    falta {x}")
 
     print("[7/8] Informe")
-    inf = informe.construir(args.ticker, hoy, emisor, exp, tab, periodos, f, g, gu, reg, pr, recs, modelo_dcf=modelo, posicion=pos,
+    inf = informe.construir(args.ticker, hoy, emisor, exp, tab, periodos, f, g, gu, reg, pr, recs, modelo_dcf=modelo,
                             riesgos=ri, historial=hi, salida_recortes=carpeta_recortes, mercado=mer, posicionamiento=posi, comparables=comp, mercado_objetivo=merc,
-                            agregador=agr, multiplos=mult, proxima=prox, parte_b=pb, motor=mot, libro=libro_analista)
+                            agregador=agr, multiplos=mult, proxima=prox, parte_b=pb, motor=mot, libro=libro_analista, excel=excel_exportado)
     n_evid = sum(len(lista) for _, _, lista in inf.documentacion)
     print(f"  documentación complementaria: {n_evid} piezas en {len(inf.documentacion)} apartados · {len(recs)} recortes de estados junto a sus cuadros · "
           f"{len([x for x in inf.fotos_ejecutivos + inf.fotos_consejo if x.ruta])} retratos")
@@ -227,7 +217,19 @@ def main(argv=None) -> int:
     if rev.desacuerdos:
         print("  EMISIÓN DETENIDA: hay cifras impresas que no coinciden con su fuente al releerlas.")
         return 3
-    huella = render.a_pdf(html, salida / f"{nombre_base}.pdf", informe=inf, casa=args.casa)
+    # puerta de calidad (06 §3), «EMITIDO» solo con 0 bloqueos y sin entradas de prueba, y PDF paginado (06 §4)
+    puerta, huella, html, medidas = render.emitir(inf, salida / f"{nombre_base}.pdf", hoy, casa=args.casa, prueba=ent.de_prueba)
+    import json as _json
+    (salida / f"{nombre_base}.auditoria.json").write_text(_json.dumps({
+        "ticker": args.ticker.upper(), "fecha": hoy.isoformat(), "emitido": inf.emitido.isoformat() if inf.emitido else None,
+        "pdf_sha256": huella, "entradas": {"fichero": str(ent.ruta) if ent.ruta else None, "prueba": ent.de_prueba},
+        "bloqueos": puerta.bloqueos, "avisos": puerta.avisos, "faltan": inf.faltan, "discrepancias": inf.discrepancias,
+        "solo_sec": inf.solo_sec, "huecos": inf.huecos, "no_son_partidas": dict(tab.no_aplican),
+        "fallos_de_las_fuentes": list(rotulos.FALLOS),          # el detalle técnico que el cuerpo dice en español
+        "relleno": [{"pagina": k, "ocupado": f, "fin_de_parte": fin} for k, f, fin in medidas],
+    }, ensure_ascii=False, indent=1), encoding="utf-8")
+    print(f"  puerta de calidad: {len(puerta.bloqueos)} bloqueos · {len(puerta.avisos)} avisos · "
+          + (f"EMITIDO {inf.emitido:%d/%m/%Y}" if inf.emitido else "BORRADOR (hoja 0 con los bloqueos)"))
     registro = salida / f"{nombre_base}.contraste.txt"
     with registro.open("w", encoding="utf-8") as fh:
         fh.write(f"Contraste {args.ticker.upper()} {hoy.isoformat()} · resumen {tab.resumen}\n\n")
@@ -241,6 +243,9 @@ def main(argv=None) -> int:
         print(f"\nBORRADOR: {len(bloqueos)} discrepancias sin decidir bloquean la emisión:")
         for r in bloqueos:
             print(f"  ≠ {r.campo.rotulo} {r.periodo.clave}: {r.nota}")
+        return 1
+    if not inf.emitido:
+        print(f"\nBORRADOR: {len(puerta.bloqueos)} bloqueos de la puerta de calidad (hoja 0 del PDF y {nombre_base}.auditoria.json)")
         return 1
     return 0
 

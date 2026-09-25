@@ -20,7 +20,7 @@ from difflib import SequenceMatcher
 from pathlib import Path
 from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
 
-__all__ = ["Entradas", "cargar", "normalizar", "verificar_cita", "comprobar_paso4", "comprobar_paso5", "comprobar_paso6", "comprobar_paso8", "palabras"]
+__all__ = ["Entradas", "cargar", "normalizar", "verificar_cita", "comprobar_paso3", "comprobar_paso4", "comprobar_paso5", "comprobar_paso6", "comprobar_paso8", "palabras"]
 
 
 @dataclass
@@ -370,3 +370,32 @@ def comprobar_paso8(e: Entradas, fecha_informe: date, rango_sesion, regla: Optio
     if len(e.valor("pos.salida") or []) < 3:
         faltas.append("pos.salida: mínimo 3 criterios de salida")
     return faltas, avisos
+
+
+def comprobar_paso3(e: Entradas, textos: Mapping[str, str], umbral: float, es_epigrafe) -> List[str]:
+    """Las faltas del paso 3 (apartados 2 y 3): los textos del analista y exactamente cinco pilares, cada uno con dos
+    evidencias verificadas, su KPI (uno de los de la posición) y el epígrafe del Item 1A que lo amenaza (06 §3.8)."""
+    faltas: List[str] = []
+    for id_, rango in (("tesis.resumen", "60-120"), ("tesis.por_que_ahora", "20-60"), ("tesis.vision_vs_mercado", "30-80")):
+        texto = _texto_de(e.valor(id_))
+        if not texto:
+            faltas.append(f"{id_}: falta el texto del analista")
+        else:
+            _rango(id_, texto, rango, faltas)
+    pilares = e.valor("pilares") or []
+    if len(pilares) != 5:
+        faltas.append(f"pilares: {len(pilares)} (se piden 5)")
+    kpis = {k.get("kpi") for k in e.valor("pos.kpis") or []}
+    for i, p in enumerate(pilares, 1):
+        id_ = f"pilares[{i}]"
+        _rango(f"{id_}.titulo", p.get("titulo", ""), "3-10", faltas)
+        _rango(f"{id_}.argumento", _texto_de(p.get("argumento")), "40-90", faltas)
+        _citas(f"{id_}.evidencias", p.get("evidencias"), textos, umbral, faltas, minimo=2)
+        if not p.get("kpi"):
+            faltas.append(f"{id_}.kpi: falta el KPI de seguimiento")
+        elif kpis and p["kpi"] not in kpis:
+            faltas.append(f"{id_}.kpi: «{p['kpi']}» no es ninguno de los KPI de la posición (paso 8)")
+        if not p.get("riesgo_1a") or not es_epigrafe(p["riesgo_1a"]):
+            faltas.append(f"{id_}.riesgo_1a: no es el comienzo de un epígrafe del Item 1A")
+        _rango(f"{id_}.riesgo_es", p.get("riesgo_es", ""), "8-40", faltas)
+    return faltas

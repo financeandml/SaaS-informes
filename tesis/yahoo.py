@@ -49,9 +49,34 @@ class Cliente:
         return self._crumb
 
     def json(self, url: str) -> dict:
+        """Con la misma caché por URL y día que la bolsa (`precio.CACHE_BOLSA`, `precio.SOLO_CACHE`): la respuesta queda
+        guardada entera, con su hora y su huella, y las pruebas no salen a la red. El crumb no forma parte de la clave."""
+        import gzip
+        import hashlib
+        from datetime import date
+        from . import precio
+        carpeta, ruta = precio._ruta_bolsa(url, date.today())
+        if not ruta.exists() and precio.SOLO_CACHE:
+            previas = sorted(carpeta.glob(ruta.name.rsplit("__", 1)[0] + "__*.json.gz"))
+            if not previas:
+                raise urllib.error.URLError(f"sin respuesta guardada de {url}")
+            ruta = previas[-1]
+        if ruta.exists():
+            with gzip.open(ruta, "rt", encoding="utf-8") as f:
+                sobre = json.load(f)
+            self.crudos[url] = (sobre["cuerpo"], datetime.fromisoformat(sobre["obtenido"]))
+            return json.loads(sobre["cuerpo"])
         separador = "&" if "?" in url else "?"
         cuerpo = self._texto(f"{url}{separador}crumb={urllib.parse.quote(self.crumb())}")
-        self.crudos[url] = (cuerpo, datetime.now())
+        ahora = datetime.now()
+        self.crudos[url] = (cuerpo, ahora)
+        try:
+            carpeta.mkdir(parents=True, exist_ok=True)
+            with gzip.open(ruta, "wt", encoding="utf-8") as f:
+                json.dump({"url": url, "obtenido": ahora.isoformat(timespec="seconds"),
+                           "sha256": hashlib.sha256(cuerpo.encode("utf-8")).hexdigest(), "cuerpo": cuerpo}, f, ensure_ascii=False)
+        except OSError:
+            pass
         return json.loads(cuerpo)
 
 
