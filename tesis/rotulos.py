@@ -8,12 +8,13 @@ from __future__ import annotations
 
 import re
 from functools import lru_cache
-from pathlib import Path
 from typing import Dict, Mapping, Optional, Tuple
+
+from .rutas import CONFIG
 
 __all__ = ["miembro", "jurisdiccion", "es_acronimo", "cargo"]
 
-_RUTA = Path(__file__).resolve().parent.parent / "config" / "traducciones.yaml"
+_RUTA = CONFIG / "traducciones.yaml"
 
 
 @lru_cache(maxsize=1)

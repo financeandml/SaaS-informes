@@ -15,8 +15,10 @@ from pathlib import Path
 
 import pytest
 
-from tesis import campos, entorno, sec
-from tesis.hechos import Periodo
+from tesis.datos import campos
+from tesis import entorno
+from tesis.fuentes import sec
+from tesis.datos.hechos import Periodo
 
 FIXTURES = Path(__file__).resolve().parent / "fixtures" / "cache_sec"
 HOY = date(2026, 9, 23)

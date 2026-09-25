@@ -10,7 +10,7 @@ import re
 import unittest
 from pathlib import Path
 
-TABLERO = Path(__file__).resolve().parents[1] / "tesis" / "tablero"
+TABLERO = Path(__file__).resolve().parents[1] / "tesis" / "web" / "tablero"
 PAGINAS = ("inicio.html", "dcf.html", "informe.html")          # las que pinta saas.js; el asistente trae sus propios rótulos
 
 

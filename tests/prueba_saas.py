@@ -11,7 +11,7 @@ from pathlib import Path
 from unittest import mock
 
 from tests import hay_cache_sec
-from tesis import saas
+from tesis.web import saas
 
 RAIZ = Path(__file__).resolve().parents[1]
 

@@ -4,8 +4,9 @@ import unittest
 from datetime import date
 
 from tests import contacto_sec_de_prueba, hay_cache_sec
-from tesis import campos, sec
-from tesis.hechos import Capa, Contraste, Estado, Periodo
+from tesis.datos import campos
+from tesis.fuentes import sec
+from tesis.datos.hechos import Capa, Contraste, Estado, Periodo
 
 
 @unittest.skipUnless(hay_cache_sec(), "sin companyfacts de NFLX en cache_sec/")

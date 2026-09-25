@@ -13,8 +13,14 @@ from pathlib import Path
 
 import pytest
 
-from tesis import asistente, contraste, derivados, informe, linter, precio as precio_mod, qa, render, rotulos, sec
-from tesis.expediente import Expediente
+from tesis.entradas import asistente
+from tesis.verificacion import contraste
+from tesis.datos import derivados
+from tesis.plantillas import informe
+from tesis.qa import linter
+from tesis.fuentes import precio as precio_mod, sec
+from tesis import qa, render, rotulos
+from tesis.datos.expediente import Expediente
 from tesis.umbrales import umbral
 from tests.prueba_f3 import _Informes
 
@@ -307,7 +313,7 @@ class Linter(unittest.TestCase):
         self.assertEqual(linter.revisar("La compañía cita «The Walt Disney Company» y “Game of Thrones”.", None), [])
 
     def test_candidatos_incluyen_variaciones_del_periodo_anterior(self):
-        from tesis.hechos import Capa, Estado, Hecho, Periodo
+        from tesis.datos.hechos import Capa, Estado, Hecho, Periodo
         a, b = Periodo.de_meses(date(2024, 12, 31), 12), Periodo.de_meses(date(2025, 12, 31), 12)
         hechos = {("ingresos", a): Hecho("ingresos", a, 100e6, Estado.VALOR, Capa.SEC), ("ingresos", b): Hecho("ingresos", b, 112e6, Estado.VALOR, Capa.SEC)}
         self.assertEqual(linter.revisar("Los ingresos crecieron un 12 % hasta 112 M USD.", linter.candidatos(hechos)), [])
@@ -318,21 +324,21 @@ class CalculosDeLaParteH(unittest.TestCase):
     """Los cálculos sobre la cadena, con una cadena sintética y las cuentas hechas a mano."""
 
     def setUp(self):
-        from tesis.posicionamiento import Strike
+        from tesis.fuentes.posicionamiento import Strike
         # interés abierto (calls, puts): 90 → (10, 100) · 100 → (50, 50) · 110 → (200, 10)
         self.strikes = [Strike(90.0, 10, 100, 12.0, 0.5), Strike(100.0, 50, 50, 4.0, 3.0), Strike(110.0, 200, 10, 0.6, 11.0)]
 
     def test_maximo_dolor_a_mano(self):
         """A 90: puts 50×10 + 10×20 = 700; a 100: call 10×10 + put 10×10 = 200; a 110: calls 10×20 + 50×10 = 700 → 100
         (con las calls pagando como puts saldría 110: el extremo)."""
-        from tesis import parte_h
+        from tesis.plantillas import parte_h
         self.assertEqual(parte_h.max_dolor(self.strikes), 100.0)
         self.assertEqual([s.precio for s in parte_h.mayores(self.strikes)], [110.0, 90.0, 100.0])
 
     def test_straddle_mensual_y_realizada(self):
         from types import SimpleNamespace as N
-        from tesis import parte_h
-        from tesis.posicionamiento import Cadena, Vencimiento
+        from tesis.plantillas import parte_h
+        from tesis.fuentes.posicionamiento import Cadena, Vencimiento
         s = parte_h.straddle(Vencimiento("October 16, 2026", None, None, None, None, 3, self.strikes), 101.0)
         self.assertEqual((s.precio, s.call + s.put), (100.0, 7.0))
         c = Cadena([Vencimiento("October 9, 2026", None, None, None, None, 3, self.strikes),

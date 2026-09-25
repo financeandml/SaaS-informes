@@ -10,6 +10,7 @@ Importar: solo por rangos con nombre o, en libros antiguos, por un mapa explíci
 
 from __future__ import annotations
 
+import hashlib
 import shutil
 import subprocess
 import tempfile
@@ -19,6 +20,7 @@ from typing import Dict, List, Optional
 
 from .escenarios import Valoracion
 from .supuestos import NOMBRES
+from ..rutas import CONFIG
 
 __all__ = ["exportar", "recalcular", "importar", "Comparacion", "comparar", "CORTOS"]
 
@@ -192,11 +194,58 @@ def exportar(v: Valoracion, ingresos_base: float, ruta: Path, umbrales: dict) ->
     return Path(ruta)
 
 
+def _sin_valores(valores, formulas) -> int:
+    """Cuántas celdas con fórmula no tienen valor calculado guardado (un libro guardado sin recalcular)."""
+    n = 0
+    for ws in formulas.worksheets:
+        wv = valores[ws.title]
+        for fila in ws.iter_rows():
+            for c in fila:
+                if isinstance(c.value, str) and c.value.startswith("=") and wv[c.coordinate].value is None:
+                    n += 1
+    return n
+
+
+def recalcular_con_excel(ruta: Path, copia: Path) -> Optional[str]:
+    """Abre una COPIA del libro en el Excel del analista (COM, vía PowerShell), recalcula, guarda y devuelve su sha256.
+
+    El libro original no se toca. No es el sistema quien calcula: es el Excel de la máquina evaluando las fórmulas
+    del propio analista, lo mismo que ocurriría al abrir el fichero. Sin Excel (u otro sistema), o si tras
+    recalcular siguen faltando valores, devuelve None.
+    """
+    import os
+    import shutil
+    import subprocess
+    if os.name != "nt":
+        return None
+    copia = Path(copia).resolve()
+    copia.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copyfile(ruta, copia)
+    # el guion va en un fichero .ps1: una ruta con «&» o espacios dentro de -Command no sobrevive al doble entrecomillado de Windows
+    guion = copia.with_suffix(".recalcular.ps1")
+    lineas = ["$ErrorActionPreference = 'Stop'", "$x = New-Object -ComObject Excel.Application", "$x.Visible = $false", "$x.DisplayAlerts = $false",
+              "$wb = $x.Workbooks.Open('" + str(copia).replace("'", "''") + "')", "$x.CalculateFullRebuild()", "$wb.Save()", "$wb.Close($true)", "$x.Quit()",
+              "[System.Runtime.InteropServices.Marshal]::ReleaseComObject($x) | Out-Null", "Write-Output listo"]
+    guion.write_text(chr(10).join(lineas) + chr(10), encoding="utf-8")
+    try:
+        r = subprocess.run(["powershell", "-NoProfile", "-NonInteractive", "-ExecutionPolicy", "Bypass", "-File", str(guion)],
+                           capture_output=True, text=True, timeout=180)
+    except (OSError, subprocess.TimeoutExpired):
+        return None
+    finally:
+        guion.unlink(missing_ok=True)
+    if r.returncode != 0 or "listo" not in r.stdout:
+        return None
+    import openpyxl
+    if _sin_valores(openpyxl.load_workbook(str(copia), data_only=True), openpyxl.load_workbook(str(copia), data_only=False)):
+        return None                      # Excel no dejó valores: no se da por recalculado
+    return hashlib.sha256(copia.read_bytes()).hexdigest()
+
+
 def recalcular(ruta: Path, destino: Path) -> Optional[Path]:
     """Una copia recalculada: Excel en Windows (el del analista) o LibreOffice sin interfaz. Sin ninguno, None."""
-    from .. import dcf
     destino = Path(destino)
-    if dcf.recalcular_con_excel(Path(ruta), destino):
+    if recalcular_con_excel(Path(ruta), destino):
         return destino
     soffice = shutil.which("soffice") or shutil.which("libreoffice")
     if not soffice:
@@ -214,7 +263,7 @@ def recalcular(ruta: Path, destino: Path) -> Optional[Path]:
 
 def _mapa(nombre: str) -> Dict[str, str]:
     import yaml
-    ruta = Path(__file__).resolve().parents[2] / "config" / "excel_mapas" / f"{nombre}.yaml"
+    ruta = CONFIG / "excel_mapas" / f"{nombre}.yaml"
     if not ruta.exists():
         return {}
     return dict((yaml.safe_load(ruta.read_text(encoding="utf-8")) or {}).get("celdas") or {})

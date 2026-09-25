@@ -37,19 +37,26 @@ pytest -q                                                  # la batería entera,
 
 ## Mapa del código (`tesis/`)
 
-| Parte | Módulos |
-|---|---|
-| Fuentes | `sec.py` (EDGAR, companyfacts, calendario fiscal), `fuentes.py`, `precio.py` (cierre oficial y sesiones de Nasdaq), `tesoro.py`, `yahoo.py` (solo VI), `posicionamiento.py` (cadena, 13F, directivos, cortos) |
-| Datos | `hechos.py`, `campos.py`, `contraste.py`, `derivados.py`, `segmentos.py`, `ixbrl.py`, `guia.py`, `item1a.py`, `calendario.py`, `gobierno.py`, `proxy.py`, `ficha.py` |
-| Entradas | `entradas.py`, `asistente.py` + `tablero/asistente.*`, `tarjetas.py` + `config/evidencias.yaml`, `linter.py` + `config/estilo.yaml` |
-| Motor | `motor/` (supuestos, proyeccion, terminal, puente, wacc, escenarios, sensibilidad, comparables, excel, datos) |
-| Partes | `parte_a.py` (1–3) · `parte_b.py` (4–7) · C en `informe.py` y `secciones.py` (8–11) · `parte_d.py` (12–20) · `parte_e.py` (21–23) · `parte_f.py` (24–26) · `parte_g.py` (27–30) · `parte_h.py` y `secciones.py` (31–35) · `parte_i.py` (36–39) |
-| Salida | `informe.py`, `frases.py` + `config/frases.yaml`, `maqueta/`, `render.py`, `qa.py`, `revision.py` |
-| SaaS | `saas.py` + `tablero/` (CSP estricta, sin `innerHTML`, solo en español) |
+Un subpaquete por responsabilidad, en el orden del flujo; cada `__init__.py` dice qué contiene.
 
-Umbrales solo en `config/*.yaml`. Quedan módulos del camino anterior al asistente (`regiones`, `guidance`, `cartas`,
-`historial`, `riesgos`, `mercado_objetivo`, `comparables`, `dcf`, `multiplos`, `agregador`…): `emitir.py` aún llama a
-algunos y sus pruebas solo corren con los adjuntos de NFLX/QCOM (las 34 omitidas); retirarlos es trabajo aparte.
+| Subpaquete | Módulos |
+|---|---|
+| `fuentes/` | `sec` (EDGAR: companyfacts, submissions, depósitos, calendario fiscal), `edgar` (trae al expediente los documentos no adjuntos), `precio` (cierre oficial y sesiones de Nasdaq), `calendario` (próxima presentación, dividendos, sorpresas), `posicionamiento` (cadena, 13F, directivos, cortos y VI), `tesoro`, `yahoo` (solo VI) |
+| `datos/` | `hechos`, `campos`, `derivados`, `expediente`, `documentos`, `extractor`, `recortes`, `tablas_html`, `ixbrl`, `segmentos`, `ficha`, `gobierno`, `proxy`, `item1a`, `guia`, `guidance` |
+| `verificacion/` | `contraste` (SEC frente a adjuntos), `auditor` (identidades), `revision` (doble comprobación de lo impreso) |
+| `entradas/` | el paquete (`Entradas`, carga, citas y comprobaciones por paso), `asistente` + `web/tablero/asistente.*`, `propuestas` (06 §1), `tarjetas` + `config/evidencias.yaml` |
+| `motor/` | `supuestos`, `proyeccion`, `terminal`, `puente`, `wacc`, `escenarios`, `sensibilidad`, `comparables`, `multiplos`, `sector`, `excel`, `datos` |
+| `plantillas/` | `indice`, `informe`, `parte_a` (1–3) · `parte_b` (4–7) · C en `informe` y `secciones` (8–11) · `parte_d` (12–20) · `parte_e` (21–23) · `parte_f` (24–26) · `parte_g` (27–30) · `parte_h` y `secciones` (31–35) · `parte_i` (36–39), `frases` + `config/frases.yaml`, `graficos`, `maqueta/` |
+| `qa/` | el paquete (puerta de calidad, 06 §3) y `linter` + `config/estilo.yaml` (06 §2) |
+| `render/` | el paquete (HTML y PDF paginado, 06 §4) e `imprimir` (Chromium en proceso aparte) |
+| `web/` | `saas` + `tablero/` (CSP estricta, sin `innerHTML`, solo en español) |
+| `heredado/` | el camino anterior al asistente: `agregador`, `comparables`, `mercado_objetivo`, `regiones`, `riesgos`, `historial`, `cartas`, `dcf` |
+
+Transversales en la raíz del paquete: `entorno` (configuración y carpetas de datos), `rutas` (dónde está cada cosa del
+repositorio), `umbrales`, `formato` (cifras y fechas es-ES) y `rotulos` (traducciones y fallos de red en español).
+Umbrales solo en `config/*.yaml`. Lo de `heredado/` aún lo llaman `emitir.py`, `plantillas.informe`,
+`plantillas.secciones` y `web.saas`, y sus pruebas solo corren con los adjuntos de NFLX/QCOM (las 34 omitidas); una prueba
+impide que otro módulo empiece a depender de él. Retirarlo es F9.
 
 ## Pruebas
 

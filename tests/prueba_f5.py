@@ -9,7 +9,10 @@ import unittest
 from datetime import date
 from pathlib import Path
 
-from tesis import entorno, guia, informe, item1a, parte_f, sec, tablas_html
+from tesis import entorno
+from tesis.datos import guia, item1a, tablas_html
+from tesis.plantillas import informe, parte_f
+from tesis.fuentes import sec
 from tesis.entradas import Entradas, comprobar_paso6, verificar_cita
 from tests.prueba_f3 import _Informes
 
@@ -173,7 +176,7 @@ class _Sorpresa:
 
 
 def _comparaciones(caso):
-    from tesis.informe import _etiqueta
+    from tesis.plantillas.informe import _etiqueta
     xbrl = {}
     for (campo, p), h in caso.hechos.items():
         if h.hay_dato and p.meses == 3 and campo in ("ingresos", "bpa_diluido"):

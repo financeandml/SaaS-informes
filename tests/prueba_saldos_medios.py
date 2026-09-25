@@ -11,8 +11,8 @@ que faltaba, cuando el saldo estaba y la fecha era la inventada.
 import unittest
 from datetime import date
 
-from tesis import derivados
-from tesis.hechos import Capa, Origen, Periodo, de_valor
+from tesis.datos import derivados
+from tesis.datos.hechos import Capa, Origen, Periodo, de_valor
 
 FUENTE = Origen(documento="companyfacts", formulario="10-K", presentado=date(2022, 11, 2))
 

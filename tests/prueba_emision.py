@@ -12,7 +12,7 @@ from datetime import datetime
 from pathlib import Path
 from unittest import mock
 
-from tesis import saas
+from tesis.web import saas
 
 
 class _Proceso:
@@ -51,6 +51,21 @@ class Emision(unittest.TestCase):
         self.assertNotIn("--redactar", orden)
         self.assertNotIn("--narrativa", orden)
         self.assertIn("--carpeta", orden)
+
+    def test_la_emision_usa_la_fecha_y_las_entradas_del_asistente(self):
+        """Falla si el SaaS emite con la fecha del día y sin las entradas guardadas: quien guardaba el asistente un día y
+        emitía al siguiente se quedaba con un informe sin sus entradas (y el paso 9 sin las propuestas de su fecha)."""
+        from datetime import date
+        from tesis.entradas import asistente
+        with mock.patch.dict(os.environ, {"WC_DATOS": self.tmp.name}):
+            for dia in (23, 24):
+                asistente.guardar("PRUEBA", date(2026, 9, dia), {"meta": {"fecha_informe": f"2026-09-{dia}"}})
+            with mock.patch.object(saas.subprocess, "Popen", lambda *a, **k: _Proceso(None)):
+                saas.emitir("PRUEBA")
+            ruta = asistente.ruta("PRUEBA", date(2026, 9, 24))
+        orden = saas.estado("PRUEBA")["emision"]["orden"]
+        self.assertEqual(orden[orden.index("--fecha") + 1], "2026-09-24")
+        self.assertEqual(orden[orden.index("--entradas") + 1], str(ruta))
 
     def test_una_emision_que_revienta_no_pasa_por_borrador(self):
         """Falla si un código 1 sin PDF (traceback del proceso) se enseña como «terminado · borrador»: son cosas

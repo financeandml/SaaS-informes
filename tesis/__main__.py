@@ -1,6 +1,6 @@
 """El punto de entrada único: `python -m tesis servir | documentos | generar`.
 
-Manda lo que ya había: `servir` es `tesis.saas` y `generar` es `emitir.py`, y a los dos se les pasan sus opciones
+Manda lo que ya había: `servir` es `tesis.web.saas` y `generar` es `emitir.py`, y a los dos se les pasan sus opciones
 tal cual —incluido `--help`—, así que nada de lo que el analista ya escribía cambia de significado. Lo que añade
 el spec es `documentos`: el catálogo de lo que hay que adjuntar y qué falta, en el terminal, sin abrir el
 navegador ni emitir nada.
@@ -30,7 +30,8 @@ def _emitir():
 def _documentos(argv: List[str]) -> int:
     import argparse
 
-    from . import documentos as catalogo, saas
+    from .datos import documentos as catalogo
+    from .web import saas
 
     ap = argparse.ArgumentParser(prog="python -m tesis documentos",
                                  description="Qué documentos pide el informe de este emisor y cuáles están ya adjuntados.")
@@ -106,7 +107,7 @@ def main(argv: Optional[List[str]] = None) -> int:
     argv = list(sys.argv[1:] if argv is None else argv)
     orden, resto = (argv[0] if argv else ""), argv[1:]
     if orden == "servir":
-        from . import saas
+        from .web import saas
         return saas.main(resto)
     if orden == "generar":
         return _emitir().main(resto)

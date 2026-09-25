@@ -13,10 +13,15 @@ from pathlib import Path
 
 import pytest
 
-from tesis import (calendario, contraste, derivados, entorno, entradas, ficha, gobierno, guia, guidance, informe, multiplos,
-                   parte_b, precio as precio_mod, regiones, render, sec, segmentos)
-from tesis.expediente import Expediente
-from tesis.hechos import Capa, Origen, Periodo, de_valor, etiqueta_fiscal
+from tesis.fuentes import calendario, precio as precio_mod, sec
+from tesis.verificacion import contraste
+from tesis.datos import derivados, ficha, gobierno, guia, guidance, segmentos
+from tesis import entorno, entradas, render
+from tesis.plantillas import informe, parte_b
+from tesis.motor import multiplos
+from tesis.heredado import regiones
+from tesis.datos.expediente import Expediente
+from tesis.datos.hechos import Capa, Origen, Periodo, de_valor, etiqueta_fiscal
 
 RAIZ = Path(__file__).resolve().parent.parent
 FIXTURES = RAIZ / "tests" / "fixtures"
@@ -111,7 +116,7 @@ class Qualcomm(_ConFixtures):
         self.assertNotIn("Vanguard Group Inc.", por_nombre, "su 13G/A de marzo de 2026 declara 0 %")
         self.assertFalse([n for n in por_nombre if "QUALCOMM" in n.upper()], "13G que presenta la compañía sobre otras")
         # EDGAR lista en los depósitos de Qualcomm también los 13G que Qualcomm presenta sobre otras compañías
-        from tesis import proxy
+        from tesis.datos import proxy
         xml, _ = sec.descargar_texto("https://www.sec.gov/Archives/edgar/data/804328/000110465926059421/primary_doc.xml")
         self.assertEqual(proxy.leer_13g(xml, date(2026, 5, 12), "SCHEDULE 13G/A", "", "").declarante, "QUALCOMM Incorporated")
         self.assertIsNone(proxy.leer_13g(xml, date(2026, 5, 12), "SCHEDULE 13G/A", "", self.emisor.nombre), "13G sobre otra compañía")
@@ -173,7 +178,7 @@ class Qualcomm(_ConFixtures):
         texto = _texto_visible(_apartado(html, 4))
         self.assertIn("Qualcomm diseña semiconductores", texto)
         # con el 10-K adjunto, la ficha trae la descripción literal del Item 1, en inglés: no entra en el cuerpo
-        from tesis.hechos import Cita
+        from tesis.datos.hechos import Cita
         inf.descripcion = Cita("descripcion", "We develop and commercialize foundational technologies and products used across industries.",
                                Origen(documento="10-K", pagina=4))
         texto = _texto_visible(_apartado(render.a_html(inf), 4))

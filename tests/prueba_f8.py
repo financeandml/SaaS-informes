@@ -11,7 +11,9 @@ import unittest
 from datetime import date
 from pathlib import Path
 
-from tesis import asistente, entorno, fuentes, precio as precio_mod, propuestas, qa, sec
+from tesis.entradas import asistente, propuestas
+from tesis import entorno, qa
+from tesis.fuentes import edgar, precio as precio_mod, sec
 from tests.prueba_f3 import _Informes
 from tests.prueba_f6 import _Datos
 
@@ -31,7 +33,7 @@ class EmisionCompleta(unittest.TestCase):
         entorno.RAIZ, sec.CACHE = F, F / "cache_sec"
         precio_mod.CACHE_BOLSA, precio_mod.SOLO_CACHE = F / "cache_bolsa", True
         adjuntos = cls.tmp / "adjuntos" / "QCOM"
-        cls.traidos = fuentes.traer(sec.emisor("QCOM"), ["10K", "10Q"], adjuntos)
+        cls.traidos = edgar.traer(sec.emisor("QCOM"), ["10K", "10Q"], adjuntos)
         import emitir
         salida = cls.tmp / "salida"
         cls.codigo = emitir.main(["QCOM", "--carpeta", str(adjuntos), "--fecha", "2026-09-23", "--entradas", str(F / "QCOM" / "entradas.json"),
@@ -175,7 +177,7 @@ class Propuestas(unittest.TestCase):
 
     def test_lo_editado_pasa_el_linter(self):
         """Falla si las frases editadas no llegan al linter como textos del analista."""
-        from tesis import linter
+        from tesis.qa import linter
         from tesis.entradas import Entradas
         e = Entradas({"revision": {"parrafos": self._revision([("Los ingresos subieron 15.000 mln USD.", "")], editado=True)}})
         self.assertEqual(linter.revisar_entradas(e, [9_947e6]),
@@ -187,7 +189,7 @@ class LinterCifras(unittest.TestCase):
     def test_una_cifra_precisa_casa_solo_con_su_redondeo(self):
         """Falla si vuelve el 1 % para toda cifra: con los más de mil Hechos candidatos de un informe, dejaba pasar más de
         la mitad de las cifras inventadas en millones. Una cifra redonda sigue casando dentro del 1 %."""
-        from tesis import linter
+        from tesis.qa import linter
         hechos = [12_596e6, 0.279]
         for texto, pasa in (("sumó 12.596 mln USD.", True), ("sumó 12.603 mln USD.", False), ("sumó 12.600 mln USD.", True),
                             ("sumó 12.800 mln USD.", False), ("un margen del 27,9 %.", True), ("un margen del 28,2 %.", False),
@@ -200,7 +202,7 @@ class LinterEstilo(unittest.TestCase):
     def test_frases_y_parrafos_largos_avisan_sin_bloquear(self):
         """Falla si una frase desde 40 palabras o un párrafo de más de 6 frases no se avisan (02), si se avisa por debajo o
         si pasan a bloquear. «EE. UU.» no corta la frase."""
-        from tesis import linter
+        from tesis.qa import linter
         frase = lambda n: " ".join(["palabra"] * n) + "."
         self.assertEqual(linter.avisos(frase(39)), [])
         self.assertEqual(len(linter.avisos(frase(40))), 1)
@@ -290,7 +292,7 @@ class AsistentePaso9(_Datos):
         """Falla si los botones del paso 9 no dejan en `entradas.json` la propuesta aceptada con su huella, o lo editado
         marcado como editado y con la cita de la propuesta."""
         from playwright.sync_api import expect, sync_playwright
-        from tesis import saas
+        from tesis.web import saas
         srv, _ = saas.servir(8795, en_hilo=True)
         ruta = Path(self.tmp) / "entradas" / "QCOM" / "2026-09-23" / "entradas.json"
         try:
@@ -320,13 +322,13 @@ class AsistentePaso9(_Datos):
 
 
 def _anual(anio: int):
-    from tesis.hechos import Periodo
+    from tesis.datos.hechos import Periodo
     return Periodo(date(anio, 12, 31), date(anio, 1, 1))
 
 
 def _hechos(series):
     """{(campo, periodo): Hecho} de series anuales {campo: {año: valor}}."""
-    from tesis.hechos import Capa, Origen, de_valor
+    from tesis.datos.hechos import Capa, Origen, de_valor
     return {(c, _anual(a)): de_valor(c, _anual(a), v, Capa.SEC, Origen(documento="10-K")) for c, s in series.items() for a, v in s.items()}
 
 
@@ -360,7 +362,7 @@ class ComprobacionesDeSector(unittest.TestCase):
     def test_semiconductores_pico_de_ciclo_y_margen_terminal(self):
         """Falla si QCOM valorada a finales de 2022 (margen del 35,9 % frente a una mediana de ciclo del 28,0 %) no avisa de
         pico, o si un margen terminal del 35 % pasa; con el año base de 2025 en la mediana, no avisa."""
-        from tesis import sec
+        from tesis.fuentes import sec
         from tesis.motor import sector
         cache = sec.CACHE
         sec.CACHE = F / "cache_sec"
@@ -511,6 +513,74 @@ class QualcommCicloEstricto(_Informes):
         self.assertEqual(len(ciclo), 1, puerta.avisos)
         self.assertIn("pico de ciclo", ciclo[0])
         self.assertFalse([b for b in puerta.bloqueos if "Ciclo" in b])
+
+
+class QualcommCitas(_Informes):
+    """Lo que el analista puede citar: el 10-K, la DEF 14A, las notas de resultados y, desde F8, el último 10-Q."""
+    T, HOY = "QCOM", date(2026, 9, 23)
+
+    def test_el_ultimo_10q_se_puede_citar_por_su_folio(self):
+        """Falla si el 10-Q del trimestre en curso deja de ser citable (con sus folios y su alias en el cuerpo) o si una
+        cita a un documento que no está no dice cuáles se pueden citar."""
+        from tesis.entradas import verificar_cita
+        textos = self.pb.textos
+        self.assertIn("10-Q 2026-07-29", textos)
+        self.assertEqual(self.pb.alias["10-Q 2026-07-29"], "10-Q 3T FY26")
+        pagina = next(k for k in textos if k.startswith("10-Q 2026-07-29#") and len(textos[k].split()) > 200)
+        literal = " ".join(textos[pagina].split()[100:125])
+        self.assertTrue(verificar_cita({"doc": "10-Q 2026-07-29", "pag": pagina.split("#")[1], "texto": literal}, textos, 0.9)[0])
+        otra = next(k for k in textos if k.startswith("10-Q 2026-07-29#") and k != pagina and literal[:40] not in textos[k])
+        self.assertFalse(verificar_cita({"doc": "10-Q 2026-07-29", "pag": otra.split("#")[1], "texto": literal}, textos, 0.9)[0])
+        ok, motivo = verificar_cita({"doc": "10-Q", "pag": "3", "texto": literal}, textos, 0.9)
+        self.assertFalse(ok)
+        self.assertIn("se pueden citar: 10-K, 10-Q 2026-07-29, 8-K 2024-07-31", motivo)
+
+
+class OrdenDelPaquete(unittest.TestCase):
+    """El backend ordenado en subpaquetes (fuentes, datos, verificacion, entradas, motor, plantillas, qa, render, web,
+    heredado): cada ruta del repositorio sale de `rutas` y lo heredado no se cuela en lo nuevo."""
+
+    def test_las_rutas_apuntan_al_repositorio(self):
+        """Falla si un módulo movido calcula sus rutas desde su carpeta: la caché de EDGAR, la carpeta de `emitir.py`, la
+        maqueta, el tablero, los specs o un fichero de configuración quedarían dentro del paquete (y las pruebas, que
+        desvían la caché, no lo verían)."""
+        from tesis import rotulos, rutas, umbrales
+        from tesis.datos import item1a
+        from tesis.entradas import asistente as asis, tarjetas
+        from tesis.plantillas import frases, indice, parte_g, parte_i
+        from tesis.qa import linter
+        from tesis.render import MAQUETA
+        from tesis.web import saas
+        self.assertTrue((rutas.REPO / "emitir.py").is_file())
+        self.assertEqual((sec.RAIZ, saas.RAIZ), (rutas.REPO, rutas.REPO))
+        self.assertTrue((MAQUETA / "tesis.html").is_file() and (saas.TABLERO / "asistente.js").is_file())
+        for ruta in (asis._SPEC, indice.RUTA, linter._ESTILO, frases._RUTA, parte_g._RUTA, parte_i._DEFINICIONES, item1a._RUTA,
+                     tarjetas._RUTA, rotulos._RUTA, umbrales._RUTA):
+            self.assertTrue(ruta.is_file(), ruta)
+
+    def test_imprimir_arranca_sin_cargar_el_informe(self):
+        """Falla si `python -m tesis.render.imprimir` (un proceso por PDF) vuelve a importar el informe entero al arrancar."""
+        import subprocess
+        import sys
+        r = subprocess.run([sys.executable, "-c", "import sys, tesis.render.imprimir; print(sorted(m for m in sys.modules if m.startswith('tesis')))"],
+                           cwd=str(Path(__file__).resolve().parents[1]), capture_output=True, text=True, timeout=60)
+        self.assertEqual(r.stdout.strip(), "['tesis', 'tesis.render', 'tesis.render.imprimir', 'tesis.rutas']", r.stderr)
+
+    def test_cada_modulo_en_su_paquete_y_lo_heredado_aparte(self):
+        """Falla si vuelve un módulo suelto a la raíz del paquete, si un subpaquete no dice qué contiene o si un módulo nuevo
+        importa del camino anterior (`heredado`) fuera de los que F9 retira."""
+        import ast
+        raiz = Path(__file__).resolve().parents[1] / "tesis"
+        self.assertEqual(sorted(p.stem for p in raiz.glob("*.py")), ["__init__", "__main__", "entorno", "formato", "rotulos", "rutas", "umbrales"])
+        for paquete in ("fuentes", "datos", "verificacion", "entradas", "motor", "plantillas", "qa", "render", "web", "heredado"):
+            self.assertTrue(ast.get_docstring(ast.parse((raiz / paquete / "__init__.py").read_text(encoding="utf-8"))), paquete)
+        llaman = set()
+        for f in raiz.rglob("*.py"):
+            modulo = ".".join(f.relative_to(raiz).with_suffix("").parts)
+            for n in ast.walk(ast.parse(f.read_text(encoding="utf-8"))):
+                if isinstance(n, ast.ImportFrom) and "heredado" in (n.module or "") and not modulo.startswith("heredado."):
+                    llaman.add(modulo)
+        self.assertEqual(sorted(llaman), ["plantillas.informe", "plantillas.secciones", "web.saas"])
 
 
 if __name__ == "__main__":

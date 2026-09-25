@@ -52,9 +52,12 @@ def _monedas(facts: dict) -> set:
 
 
 def _uno(ticker: str, fecha: date, umbrales: dict) -> Comparable:
-    from .. import contraste, derivados, multiplos, precio as precio_mod, sec
-    from ..expediente import Expediente
-    from ..hechos import Capa, Origen, Periodo, de_valor
+    from ..verificacion import contraste
+    from ..datos import derivados
+    from . import multiplos
+    from ..fuentes import precio as precio_mod, sec
+    from ..datos.expediente import Expediente
+    from ..datos.hechos import Capa, Origen, Periodo, de_valor
     c = Comparable(ticker.upper())
     try:
         e = sec.emisor(ticker)

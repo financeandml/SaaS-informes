@@ -11,8 +11,9 @@ from datetime import date
 from pathlib import Path
 
 from tests import rutas_nflx
-from tesis import dcf, expediente, gobierno, historial, recortes, riesgos
-from tesis.hechos import Capa, Contraste, Estado, Hecho, Periodo
+from tesis.heredado import dcf, historial, riesgos
+from tesis.datos import expediente, gobierno, recortes
+from tesis.datos.hechos import Capa, Contraste, Estado, Hecho, Periodo
 
 RUTAS = rutas_nflx()
 CARPETA = Path(json.loads((Path(__file__).parent / "expediente_nflx.json").read_text(encoding="utf-8"))["carpeta"])

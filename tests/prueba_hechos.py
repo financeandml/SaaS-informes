@@ -3,7 +3,7 @@
 import unittest
 from datetime import date
 
-from tesis.hechos import Capa, Certeza, Contraste, Estado, Hecho, Origen, Periodo, de_valor, derivar, na
+from tesis.datos.hechos import Capa, Certeza, Contraste, Estado, Hecho, Origen, Periodo, de_valor, derivar, na
 
 
 class Estados(unittest.TestCase):

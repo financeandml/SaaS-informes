@@ -44,3 +44,26 @@ de 04 los sustituye; `posiciones/` solo se lee para migrar). Siguen los del cami
 `guidance`, `cartas`, `historial`, `riesgos`, `mercado_objetivo`, `comparables`, `dcf` y `auditor`; `derivados` (sección C) y
 `multiplos` (cuadro de 17) siguen en uso sin absorberse en `motor/`; `agregador` queda sin llamada (regla 6). Retirarlos
 es trabajo aparte.
+
+## F8 · orden del backend (25/09/2026)
+`tesis/` pasa de 63 módulos sueltos a un subpaquete por responsabilidad (cada `__init__.py` dice qué contiene; mapa en
+`README.md` y `CLAUDE.md`). Solo se mueve: ninguna función cambia de comportamiento (misma batería, 33 de 33 regresiones y
+todas las mutaciones cazadas antes y después), salvo `recalcular_con_excel`, que pasa de `dcf` a `motor/excel` para que el
+motor no dependa de lo heredado. Las rutas del repositorio salen de `tesis/rutas.py`: movidos, `sec.py` y `saas.py` habrían
+apuntado la caché de EDGAR y la carpeta de `emitir.py` dentro del paquete, y las pruebas, que desvían la caché, no lo veían.
+
+| Antes (`tesis/…`) | Ahora (`tesis/…`) |
+|---|---|
+| `sec`, `precio`, `calendario`, `posicionamiento`, `tesoro`, `yahoo` | `fuentes/` (mismo nombre) |
+| `fuentes.py` | `fuentes/edgar.py` |
+| `hechos`, `campos`, `derivados`, `expediente`, `documentos`, `extractor`, `recortes`, `tablas_html`, `ixbrl`, `segmentos`, `proxy`, `gobierno`, `ficha`, `item1a`, `guia`, `guidance` | `datos/` |
+| `contraste`, `auditor`, `revision` | `verificacion/` |
+| `entradas.py` · `asistente`, `propuestas`, `tarjetas` | `entradas/__init__.py` · `entradas/` |
+| `multiplos` | `motor/` |
+| `informe`, `indice`, `frases`, `graficos`, `secciones`, `parte_a`…`parte_i`, `maqueta/` | `plantillas/` |
+| `qa.py` · `linter` | `qa/__init__.py` · `qa/` |
+| `render.py` · `imprimir` | `render/__init__.py` · `render/` (`python -m tesis.render.imprimir`) |
+| `saas`, `tablero/` | `web/` (`python -m tesis servir` o `python -m tesis.web.saas`) |
+| `agregador`, `comparables`, `mercado_objetivo`, `regiones`, `riesgos`, `historial`, `cartas`, `dcf` | `heredado/` |
+| `entorno`, `umbrales`, `formato`, `rotulos` | sin cambio; nuevo `rutas` |
+

@@ -11,8 +11,11 @@ from pathlib import Path
 from unittest import mock
 
 from tests import contacto_sec_de_prueba, hay_cache_sec, rutas_nflx
-from tesis import dcf, expediente, ficha, gobierno, guidance, informe, precio, sec, secciones
-from tesis.hechos import Contraste
+from tesis.heredado import dcf
+from tesis.datos import expediente, ficha, gobierno, guidance
+from tesis.plantillas import informe, secciones
+from tesis.fuentes import precio, sec
+from tesis.datos.hechos import Contraste
 
 RUTAS = rutas_nflx()
 CARPETA = Path(json.loads((Path(__file__).parent / "expediente_nflx.json").read_text(encoding="utf-8"))["carpeta"])

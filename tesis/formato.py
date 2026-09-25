@@ -14,8 +14,8 @@ from dataclasses import dataclass
 from datetime import date
 from typing import Optional
 
-from .campos import CAMPOS
-from .hechos import Capa, Contraste, Estado, Hecho
+from .datos.campos import CAMPOS
+from .datos.hechos import Capa, Contraste, Estado, Hecho
 
 __all__ = ["Celda", "celda", "fecha", "mln", "numero", "pct", "veces"]
 

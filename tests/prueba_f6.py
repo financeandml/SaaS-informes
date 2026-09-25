@@ -12,7 +12,8 @@ from pathlib import Path
 
 import pytest
 
-from tesis import asistente, precio as precio_mod, sec
+from tesis.entradas import asistente
+from tesis.fuentes import precio as precio_mod, sec
 from tesis.entradas import Entradas, comprobar_paso8
 from tests.prueba_f3 import _Informes
 
@@ -104,7 +105,7 @@ class Servidor(_Datos):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        from tesis import saas
+        from tesis.web import saas
         cls.srv, _ = saas.servir(8793, en_hilo=True)
         cls.base = "http://127.0.0.1:8793"
 

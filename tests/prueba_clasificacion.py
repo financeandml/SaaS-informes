@@ -9,8 +9,9 @@ import unittest
 from datetime import date
 from pathlib import Path
 
-from tesis import documentos, saas
-from tesis.expediente import APARTADO_DE, Adjunto, Certeza, Tipo, clasificar
+from tesis.datos import documentos
+from tesis.web import saas
+from tesis.datos.expediente import APARTADO_DE, Adjunto, Certeza, Tipo, clasificar
 
 NOTA = ("Contact: Ken Bond\n"
         "Oracle Investor Relations\n"
@@ -85,14 +86,14 @@ class Tablas(unittest.TestCase):
     """Qué tabla de un documento son las cuentas y cuál no: una conciliación o un desglose tienen las mismas filas."""
 
     def _pagina(self, titulo, *lineas):
-        from tesis.extractor import Linea, PaginaLeida, Token
+        from tesis.datos.extractor import Linea, PaginaLeida, Token
         return PaginaLeida(numero=1, lineas=[Linea([Token(t, 0, 10, 0, 10) for t in l.split()]) for l in lineas],
                            escala=1, titulo=titulo, columnas=[], filas=[])
 
     def test_la_conciliacion_gaap_a_no_gaap_no_son_las_cuentas(self):
         """Falla si la página de conciliación entra como fuente: sus columnas son ajustes (retribución en acciones,
         amortización), así que «Tecnología y desarrollo» saldría por la cuarta parte de su valor y en discrepancia con la SEC."""
-        from tesis.contraste import es_conciliacion
+        from tesis.verificacion.contraste import es_conciliacion
         p = self._pagina("ORACLE CORPORATION", "($ in millions, except per share data)", "2026 2026 2025 2025",
                          "GAAP Adj. Non-GAAP GAAP Adj. Non-GAAP", "TOTAL REVENUES $ 19,345 $ - $ 19,345")
         self.assertTrue(es_conciliacion(p))
@@ -100,7 +101,7 @@ class Tablas(unittest.TestCase):
     def test_un_desglose_de_otra_partida_no_son_las_cuentas(self):
         """Falla si la tabla de retribución en acciones por línea de gasto, o la de información geográfica, entra como
         fuente: sus filas se llaman igual que las del estado de resultados («Sales and marketing») y sus cifras son otras."""
-        from tesis.contraste import es_conciliacion
+        from tesis.verificacion.contraste import es_conciliacion
         self.assertTrue(es_conciliacion(self._pagina(
             "Table of Contents", "Stock-based compensation was included in the following operating expense line items of our "
             "consolidated statements of operations (in millions):", "Year Ended May 31,", "2026 2025", "Sales and marketing 759 757")))
@@ -109,7 +110,7 @@ class Tablas(unittest.TestCase):
 
     def test_el_estado_de_resultados_si_son_las_cuentas(self):
         """Falla si la regla se lleva por delante el estado de resultados (el de la SEC o el de la web del emisor)."""
-        from tesis.contraste import es_conciliacion
+        from tesis.verificacion.contraste import es_conciliacion
         self.assertFalse(es_conciliacion(self._pagina(
             "CONDENSED CONSOLIDATED STATEMENTS OF OPERATIONS", "($ in millions, except per share data)",
             "Three Months Ended August 31,", "2026 2025", "Total revenues 19,345 14,926")))
@@ -172,7 +173,7 @@ class LecturaDelDocumento(unittest.TestCase):
     def test_el_espacio_de_la_capa_de_texto_cuenta_aunque_el_hueco_no_llegue(self):
         """Falla si las palabras solo se separan por distancia: en la cursiva en negrita de los epígrafes del Item 1A
         el hueco entre palabras es menor que el criterio, y los 24 riesgos salían impresos como «ofour revenuesfrom»."""
-        from tesis.extractor import _tokens_de
+        from tesis.datos.extractor import _tokens_de
         # «of our»: dos palabras pegadas (hueco de 0,05 em) con el espacio en la capa de texto
         juntas = [("o", 0, 0, 5, 10, False), ("f", 5, 0, 10, 10, False), ("o", 10.5, 0, 15, 10, True),
                   ("u", 15, 0, 20, 10, False), ("r", 20, 0, 25, 10, False)]
@@ -184,7 +185,7 @@ class LecturaDelDocumento(unittest.TestCase):
         """Falla si el Item 1A solo se encuentra en las páginas que empiezan por «Table of Contents» —la cabecera del
         HTML de EDGAR, que el PDF maquetado por la compañía no lleva—: el 10-K se quedaba sin un solo riesgo. Y falla
         si se confunde con la línea del índice, donde al epígrafe le sigue el número de página."""
-        from tesis.riesgos import _ITEM_1A
+        from tesis.heredado.riesgos import _ITEM_1A
         self.assertTrue(_ITEM_1A.search("…Law Center.\nItem 1A. Risk Factors\nYou should consider each of the following"))
         self.assertFalse(_ITEM_1A.search("Item 1. Business 4\nItem 1A. Risk Factors 14\nItem 1B. Unresolved Staff Comments 34"))
 
@@ -192,7 +193,7 @@ class LecturaDelDocumento(unittest.TestCase):
         """Falla si solo se lee «As of …, there were N shares» en la primera página: Qualcomm las declara en la
         segunda, con otras palabras y en millones, y sin ellas no hay capitalización, ni PER, ni EV, ni un solo
         múltiplo: los cinco salían N/A con la cotización delante."""
-        from tesis.ficha import _acciones_portada
+        from tesis.datos.ficha import _acciones_portada
         p1 = "UNITED STATES SECURITIES AND EXCHANGE COMMISSION\nFORM 10-Q"
         p2 = ("Indicate by check mark whether the registrant is a shell company. Yes ☐ No ☒\n"
               "The number of shares outstanding of the registrant’s common stock was 1,050 million at July 27, 2026.")
@@ -217,12 +218,13 @@ class LecturaDelDocumento(unittest.TestCase):
         """Regla 9: el mismo 8-K tenía anexo 99 para traerlo al expediente (búsqueda) y no lo tenía para leer la
         previsión de la carta (prefijo), así que el informe decía «el 8-K no lleva Exhibit 99» de un depósito cuyo
         anexo estaba adjuntado. Falla si vuelve a haber dos detectores."""
-        from tesis import cartas, fuentes, sec
+        from tesis.heredado import cartas
+        from tesis.fuentes import edgar, sec
         for nombre in ("ex99-1.htm", "orcl-ex99_1.htm", "qcom062826erex991.htm", "exhibit991.htm"):
             self.assertTrue(sec.es_anexo_99(nombre), nombre)
         for nombre in ("MetaLinks.json", "img1.gif", "qcom-20260729.htm"):
             self.assertFalse(sec.es_anexo_99(nombre), nombre)
-        for modulo in (cartas, fuentes):
+        for modulo in (cartas, edgar):
             fuente = Path(modulo.__file__).read_text(encoding="utf-8")
             self.assertIn("es_anexo_99", fuente, modulo.__name__)
             self.assertNotIn('startswith("ex99")', fuente, modulo.__name__)      # el detector por prefijo, el viejo
@@ -234,8 +236,8 @@ class ProcedenciaDeLosAnexos(unittest.TestCase):
         """Falla si solo el 10-K, el 10-Q y la proxy pueden constar como verificados en EDGAR: la nota de resultados
         traída de la SEC salía con «—» en la columna de procedencia, como si no se supiera de dónde venía."""
         from datetime import date as _date
-        from tesis.expediente import Expediente, _cruzar_con_edgar
-        from tesis.sec import Deposito
+        from tesis.datos.expediente import Expediente, _cruzar_con_edgar
+        from tesis.fuentes.sec import Deposito
         dep = Deposito(cik="0000804328", formulario="8-K", presentado=_date(2026, 7, 29), periodo=_date(2026, 7, 29),
                        accession="0000804328-26-000085", documento="qcom.htm", epigrafes="2.02,9.01")
         a = Adjunto(ruta=Path("SEC_8-K_2026-07-29_ex99-1_0000804328-26-000085.pdf"), huella="x", paginas=["y"],

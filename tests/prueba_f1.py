@@ -11,9 +11,14 @@ from pathlib import Path
 
 import pytest
 
-from tesis import contraste, derivados, entorno, ficha, indice, informe, multiplos, sec
-from tesis.expediente import Expediente
-from tesis.hechos import Capa, Origen, Periodo, de_valor, etiqueta_fiscal
+from tesis.verificacion import contraste
+from tesis.datos import derivados, ficha
+from tesis import entorno
+from tesis.plantillas import indice, informe
+from tesis.motor import multiplos
+from tesis.fuentes import sec
+from tesis.datos.expediente import Expediente
+from tesis.datos.hechos import Capa, Origen, Periodo, de_valor, etiqueta_fiscal
 
 RAIZ = Path(__file__).resolve().parent.parent
 FIXTURES = RAIZ / "tests" / "fixtures" / "cache_sec"
@@ -178,13 +183,13 @@ class Indice(unittest.TestCase):
             for n, titulo in s.apartados:
                 self.assertEqual(titulo, datos["apartados"][n]["titulo"])
                 self.assertEqual(datos["apartados"][n]["parte"], s.letra)
-        plantilla = (RAIZ / "tesis" / "maqueta" / "tesis.html").read_text(encoding="utf-8")
+        plantilla = (RAIZ / "tesis" / "plantillas" / "maqueta" / "tesis.html").read_text(encoding="utf-8")
         self.assertFalse(re.search(r'<h2 id="parte-[A-I]">[A-I]\.', plantilla), "título de parte escrito a mano")
         self.assertFalse(re.search(r"<h3 id=\"ap-[^\"]*\">[^<]*—", plantilla), "título de apartado escrito a mano")
         self.assertNotIn("penúltima", plantilla)
         # 06 §3.5: el formulario (hoy el asistente, generado desde 04) con la misma numeración: cada apartado que cita un
         # paso recibe alguna entrada de ese paso, y toda entrada que pide 01 tiene su campo en algún paso
-        from tesis import asistente
+        from tesis.entradas import asistente
         esquema = asistente.esquema()
         todos = {c["id"] for paso in esquema for c in paso["campos"]}
 

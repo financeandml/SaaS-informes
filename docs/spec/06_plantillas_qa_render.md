@@ -1,7 +1,7 @@
 # 06 · Plantillas deterministas, QA y render
 
 ## 1. Redacción sin IA
-- Jinja2 + biblioteca de frases en `plantillas/frases.yaml`: cada frase tiene id, condiciones y 2–3 variantes; la variante se elige por hash(apartado, id), así que el resultado es reproducible.
+- Jinja2 + biblioteca de frases en `config/frases.yaml` (`tesis/plantillas/frases.py`): cada frase tiene id, condiciones y 2–3 variantes; la variante se elige por hash(apartado, id), así que el resultado es reproducible.
 - Las frases solo reciben Hechos (`h()`), nunca números sueltos, y añaden las citas de los Hechos que usan.
 - Cobertura mínima: variación («crecieron / cayeron / se mantuvieron» según signo y umbral), cambio de margen en p.p., guía vigente, valoración por escenario, lectura de la sensibilidad, recuento de fallos de guía, P/C y cortos.
 - El sistema propone y el analista valida: cada generación deja sus párrafos de plantilla junto al PDF (`<ticker>_tesis_<fecha>.propuestas.json`, con su huella); el paso 9 del asistente los enseña con «aceptar/editar» (se edita el texto de cada frase, no su cita) y lo validado queda congelado en `entradas.json` (`revision.parrafos`). Sin validar, o con otra huella porque los datos cambiaron, bloquea (06 §3); lo editado pasa el linter.

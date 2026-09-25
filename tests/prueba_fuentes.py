@@ -11,8 +11,9 @@ import unittest
 from datetime import date
 from pathlib import Path
 
-from tesis import documentos, fuentes
-from tesis.sec import Deposito
+from tesis.datos import documentos
+from tesis.fuentes import edgar
+from tesis.fuentes.sec import Deposito
 
 CIK = "0001341439"
 
@@ -52,17 +53,17 @@ class Catalogo(unittest.TestCase):
         """Falla si un documento de la lista no declara su fuente oficial ni el motivo de no tenerla: el analista se
         quedaría sin saber si es que no lo ha buscado o es que no existe."""
         for d in documentos.CATALOGO:
-            self.assertIn(d.clave, fuentes.FUENTES, d.clave)
-            f = fuentes.FUENTES[d.clave]
+            self.assertIn(d.clave, edgar.FUENTES, d.clave)
+            f = edgar.FUENTES[d.clave]
             self.assertTrue(f.formulario or f.del_8k or f.sin_fuente, d.clave)
             if f.sin_fuente:
-                self.assertFalse(fuentes.hay_fuente(d.clave), d.clave)
+                self.assertFalse(edgar.hay_fuente(d.clave), d.clave)
                 self.assertGreater(len(f.sin_fuente), 40, d.clave)     # un motivo, no una etiqueta
 
     def test_la_transcripcion_no_se_trae_y_se_dice_por_que(self):
         p = _Papel()
         with tempfile.TemporaryDirectory() as tmp:
-            salida = fuentes.traer(_Emisor([]), ["CALL"], Path(tmp), descargar=p.descargar, imprimir=p.imprimir)
+            salida = edgar.traer(_Emisor([]), ["CALL"], Path(tmp), descargar=p.descargar, imprimir=p.imprimir)
         self.assertEqual([t.estado for t in salida], ["sin fuente"])
         self.assertIn("tercero", salida[0].motivo)
         self.assertEqual(p.descargas, [])
@@ -76,7 +77,7 @@ class DeEdgar(unittest.TestCase):
         nuevo = _dep("DEF 14A", "2025-09-26", "2025-11-18", accession="0001193125-25-220801")
         p = _Papel()
         with tempfile.TemporaryDirectory() as tmp:
-            salida = fuentes.traer(_Emisor([viejo, nuevo]), ["PROXY"], Path(tmp), descargar=p.descargar, imprimir=p.imprimir)
+            salida = edgar.traer(_Emisor([viejo, nuevo]), ["PROXY"], Path(tmp), descargar=p.descargar, imprimir=p.imprimir)
             self.assertEqual([t.estado for t in salida], ["traído"])
             t = salida[0]
             self.assertEqual(t.fichero, "SEC_DEF-14A_2025-11-18_0001193125-25-220801.pdf")
@@ -91,7 +92,7 @@ class DeEdgar(unittest.TestCase):
     def test_el_html_se_imprime_sin_salir_a_la_red_y_declarando_su_deposito(self):
         """Falla si el documento que se imprime puede pedir imágenes a la SEC por su cuenta (sin identificarnos) o si
         no lleva el número de acceso como título: es lo que casa el PDF con su depósito."""
-        html = fuentes._para_imprimir("<html><head><title>Oracle</title></head><body>x</body></html>", "0001-25-1")
+        html = edgar._para_imprimir("<html><head><title>Oracle</title></head><body>x</body></html>", "0001-25-1")
         self.assertIn("Content-Security-Policy", html)
         self.assertIn("default-src 'none'", html)
         self.assertIn("<title>0001-25-1</title>", html)
@@ -100,7 +101,7 @@ class DeEdgar(unittest.TestCase):
     def test_lo_que_ya_esta_adjuntado_no_se_pide_a_la_sec(self):
         p = _Papel()
         with tempfile.TemporaryDirectory() as tmp:
-            salida = fuentes.traer(_Emisor([_dep("10-K", "2026-06-22", "2026-05-31")]), ["10K"], Path(tmp),
+            salida = edgar.traer(_Emisor([_dep("10-K", "2026-06-22", "2026-05-31")]), ["10K"], Path(tmp),
                                    ya_estan=["10K"], descargar=p.descargar, imprimir=p.imprimir)
         self.assertEqual([t.estado for t in salida], ["ya estaba"])
         self.assertEqual(p.descargas, [])
@@ -108,7 +109,7 @@ class DeEdgar(unittest.TestCase):
     def test_si_edgar_no_tiene_ese_formulario_se_dice(self):
         p = _Papel()
         with tempfile.TemporaryDirectory() as tmp:
-            salida = fuentes.traer(_Emisor([_dep("10-K", "2026-06-22")]), ["PROXY"], Path(tmp),
+            salida = edgar.traer(_Emisor([_dep("10-K", "2026-06-22")]), ["PROXY"], Path(tmp),
                                    descargar=p.descargar, imprimir=p.imprimir)
         self.assertEqual([t.estado for t in salida], ["no publicado"])
         self.assertIn("DEF 14A", salida[0].motivo)
@@ -121,7 +122,7 @@ class DeEdgar(unittest.TestCase):
                                                                        {"name": "MetaLinks.json"}, {"name": "img1.gif"}]}}, date(2026, 9, 23))
         p = _Papel()
         with tempfile.TemporaryDirectory() as tmp:
-            salida = fuentes.traer(_Emisor([ocho]), ["NOTA", "TABLAS", "CARTA"], Path(tmp),
+            salida = edgar.traer(_Emisor([ocho]), ["NOTA", "TABLAS", "CARTA"], Path(tmp),
                                    descargar=p.descargar, imprimir=p.imprimir, indice=indice)
         self.assertEqual([t.estado for t in salida], ["traído", "traído"])         # los dos anexos, una sola vez
         self.assertEqual(len(p.descargas), 2)
@@ -133,7 +134,7 @@ class DeEdgar(unittest.TestCase):
         indice = lambda url, refrescar=False: ({"directory": {"item": [{"name": "orcl-20260910.htm"}]}}, date(2026, 9, 23))
         p = _Papel()
         with tempfile.TemporaryDirectory() as tmp:
-            salida = fuentes.traer(_Emisor([ocho]), ["NOTA"], Path(tmp), descargar=p.descargar, imprimir=p.imprimir, indice=indice)
+            salida = edgar.traer(_Emisor([ocho]), ["NOTA"], Path(tmp), descargar=p.descargar, imprimir=p.imprimir, indice=indice)
         self.assertEqual([t.estado for t in salida], ["no publicado"])
         self.assertEqual(p.descargas, [])
 

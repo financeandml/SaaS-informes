@@ -29,11 +29,14 @@ Todo en español: informe, interfaz (sin interruptor ES/EN), documentación y re
 - Parches, no reescrituras. Respuesta: cambios (≤ 5 líneas) + tests + bloqueos.
 - En Windows, `PYTHONIOENCODING=utf-8`; los heredocs de Bash se comen las barras invertidas: edita con Write/Edit.
 
-## Mapa (objetivo)
-`tesis/fuentes` (edgar, nasdaq, yahoo, tesoro) · `tesis/datos` (hechos, calendario, mapeo, segmentos, textos) ·
-`tesis/verificacion` · `tesis/entradas` (asistente web) · `tesis/motor` (wacc, proyeccion, terminal, puente, escenarios,
-sensibilidad, reverse, multiplos, sotp, objetivo, excel, validacion) · `tesis/plantillas` · `tesis/qa` · `tesis/render` ·
-`config/` · `docs/spec/`
+## Mapa
+`tesis/fuentes` (sec, edgar, precio, calendario, posicionamiento, tesoro, yahoo) · `tesis/datos` (hechos, campos, derivados,
+expediente, extractor, segmentos, ficha, gobierno, item1a, guia…) · `tesis/verificacion` (contraste, auditor, revision) ·
+`tesis/entradas` (Entradas, asistente, propuestas, tarjetas) · `tesis/motor` (supuestos, wacc, proyeccion, terminal, puente,
+escenarios, sensibilidad, comparables, multiplos, sector, excel, datos) · `tesis/plantillas` (indice, informe, parte_a…i,
+secciones, frases, graficos, maqueta/) · `tesis/qa` (puerta, linter) · `tesis/render` (HTML, PDF, imprimir) · `tesis/web`
+(saas, tablero/) · `tesis/heredado` (camino anterior; F9 lo retira) · raíz: entorno, rutas, umbrales, formato, rotulos ·
+`config/` · `docs/spec/`. Las rutas del repositorio (config, specs, maqueta, raíz) salen de `tesis/rutas.py`.
 
 ## Specs
 01 índice · 02 estilo · 03 datos y verificación · 04 entradas · 05 motor · 06 plantillas, QA y render · 07 regresiones
@@ -41,18 +44,19 @@ sensibilidad, reverse, multiplos, sotp, objetivo, excel, validacion) · `tesis/p
 ## Comandos
 - Asistente del analista (9 pasos): http://127.0.0.1:8770/asistente?ticker=TICKER[&fecha=AAAA-MM-DD].
 - `python -m tesis servir [--puerto 8770] [--sin-navegador]` · `python -m tesis documentos TICKER` · `python -m tesis generar TICKER --fecha AAAA-MM-DD`
-- Lo antiguo sigue valiendo y manda: `servir` es `tesis.saas` y `generar` es `emitir.py`, con sus mismas opciones pasadas tal cual.
+- Lo antiguo sigue valiendo y manda: `servir` es `tesis.web.saas` y `generar` es `emitir.py`, con sus mismas opciones pasadas tal cual.
 - `pytest -q` y `python -m unittest discover -s tests -p "prueba_*.py"` recorren la misma batería (`pytest.ini`).
 - Datos pesados fuera de la copia de trabajo: `WC_DATOS` sitúa `adjuntos/`, `entradas/` y `salida/`. Sin la variable, vuelven a la raíz.
-- Fixtures sin red (versionados): `tests/fixtures/cache_sec/` (QCOM, NFLX, WMT, JPM; 10-K, 10-Q, DEF 14A, Ex. 21, 13G y notas de QCOM y NFLX: apunta `sec.CACHE` ahí), `tests/fixtures/cache_bolsa/` (Nasdaq y la VI de Yahoo: `precio.CACHE_BOLSA` y `precio.SOLO_CACHE = True`) y `tests/fixtures/<TICKER>/entradas.json` (entradas de prueba) y `tests/fixtures/NFLX/libro_nflx*.xlsx` (copia congelada de `dcf/NFLX.xlsx`, solo lectura).
+- Fixtures sin red (versionados): `tests/fixtures/cache_sec/` (QCOM, NFLX, WMT, JPM; 10-K, 10-Q, DEF 14A, Ex. 21, 13G y notas de QCOM y NFLX: apunta `fuentes.sec.CACHE` ahí), `tests/fixtures/cache_bolsa/` (Nasdaq y la VI de Yahoo: `fuentes.precio.CACHE_BOLSA` y `SOLO_CACHE = True`) y `tests/fixtures/<TICKER>/entradas.json` (entradas de prueba) y `tests/fixtures/NFLX/libro_nflx*.xlsx` (copia congelada de `dcf/NFLX.xlsx`, solo lectura).
 - Dependencias: `jinja2`, `pypdfium2`, `playwright`, `matplotlib`, `pillow`, `openpyxl` y `pyyaml`. LibreOffice (opcional) solo para la prueba de recálculo del Excel exportado.
 
 ## Estado
 F0 ☑ · F1 ☑ esqueleto + C · F2 ☑ B · F3 ☑ D · F4 ☑ E · F5 ☑ F · F6 ☑ G + portada + asistente · F7 ☑ A + H + I + cierre · F8 ☑ cierre de fallos (25/09/2026)
 Protocolo: `docs/fases/00_protocolo.md`. Lo que queda fuera, en `docs/fases/F7.md` y `F8.md` › «No hecho».
-Alcance (analista, 25/09/2026): solo emisores con 10-K y solo la tesis completa de 39 apartados. Siguiente: la emisión real de QCOM y F9.
+Alcance (analista, 25/09/2026): solo emisores con 10-K y solo la tesis completa de 39 apartados. Siguiente: la emisión real de
+QCOM (`docs/emision_real.md`) y F9.
 «confirmo borrar» (analista, 24/09/2026): hecho en F1 (sin `narrativa.py`, SDK `anthropic`, `--redactar`, `narrativas/` ni restos).
-Batería: 275 en verde y 34 omitidas sin los adjuntos de NFLX/QCOM. `python -m tesis regresiones` → **33 de 33**.
+Batería: 280 en verde y 34 omitidas sin los adjuntos de NFLX/QCOM. `python -m tesis regresiones` → **33 de 33**.
 F2: segmentos (XBRL inline), accionistas/13G/ejecutivos/retribución/filiales de EDGAR, guía de los Ex. 99.1 confirmada, fechas de Nasdaq.
 F3: `tesis/motor/` (supuestos, proyeccion con periodo parcial, terminal, puente, wacc con beta frente a SPY y rf del Tesoro, escenarios,
 sensibilidad e inverso, comparables del analista, excel con fórmulas vivas e importación por mapa), `parte_d.py`; precio único = cierre oficial.
@@ -67,4 +71,5 @@ realizada, movimiento en resultados), `parte_i.py` (38 en una página), `qa.py` 
 EMITIDO/BORRADOR, relleno), `linter.py` + `config/estilo.yaml`; fuera `formulario.py`, `posicion.py`, el inglés del tablero y el agregador.
 F8: `emitir.py` entero en la batería, VI caída como aviso, valor único con `data-hecho`, aceptar/editar del párrafo de
 plantilla (`propuestas.py`, paso 9), avisos de longitud y cifras al redondeo impreso en el linter, paso 1 conectado al motor
-y a la ficha, `motor/sector.py` (05 §2) y bloqueo v1 de biotecnológicas.
+y a la ficha, `motor/sector.py` (05 §2) y bloqueo v1 de biotecnológicas. Backend ordenado en subpaquetes (§ Mapa); las líneas
+de fases anteriores citan los módulos por su nombre de entonces (correspondencia en `docs/estado.md` › F8).

@@ -4,9 +4,11 @@ import unittest
 from datetime import date
 
 from tests import contacto_sec_de_prueba, hay_cache_sec, rutas_nflx
-from tesis import campos, contraste, expediente, extractor, sec
-from tesis.extractor import Candidato
-from tesis.hechos import Contraste, Periodo
+from tesis.datos import campos, expediente, extractor
+from tesis.verificacion import contraste
+from tesis.fuentes import sec
+from tesis.datos.extractor import Candidato
+from tesis.datos.hechos import Contraste, Periodo
 
 RUTAS = rutas_nflx()
 

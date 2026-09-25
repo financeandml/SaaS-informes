@@ -9,8 +9,9 @@ entre las acciones pasaban las dos puertas: cada número venía de su fuente.
 import unittest
 from datetime import date
 
-from tesis import auditor, derivados
-from tesis.hechos import Capa, Origen, Periodo, de_valor, na
+from tesis.verificacion import auditor
+from tesis.datos import derivados
+from tesis.datos.hechos import Capa, Origen, Periodo, de_valor, na
 
 FY = Periodo.anual(date(2026, 5, 31))
 CIERRE = Periodo.instante(date(2026, 5, 31))

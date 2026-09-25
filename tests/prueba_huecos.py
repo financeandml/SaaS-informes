@@ -16,10 +16,11 @@ por qué. Al mirarlas una a una no eran una sola cosa, sino cuatro, y solo una e
 import unittest
 from datetime import date
 
-from tesis import contraste, sec
-from tesis.campos import Campo, campo
-from tesis.contraste import Resultado, _no_los_tiene_la_compania
-from tesis.hechos import Capa, Contraste, Periodo, na
+from tesis.verificacion import contraste
+from tesis.fuentes import sec
+from tesis.datos.campos import Campo, campo
+from tesis.verificacion.contraste import Resultado, _no_los_tiene_la_compania
+from tesis.datos.hechos import Capa, Contraste, Periodo, na
 
 ANUAL = ("2025-06-01", "2026-05-31")
 

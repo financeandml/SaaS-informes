@@ -10,8 +10,13 @@ from types import SimpleNamespace
 from unittest import mock
 
 from tests import contacto_sec_de_prueba, hay_cache_sec, rutas_nflx
-from tesis import contraste, derivados, expediente, ficha, formato, gobierno, graficos, guidance, historial, informe, mercado_objetivo, precio, regiones, render, riesgos, sec
-from tesis.hechos import Capa, Certeza, Contraste, Estado, Hecho, Origen, Periodo, na
+from tesis.verificacion import contraste
+from tesis.datos import derivados, expediente, ficha, gobierno, guidance
+from tesis import formato, render
+from tesis.plantillas import graficos, informe
+from tesis.heredado import historial, mercado_objetivo, regiones, riesgos
+from tesis.fuentes import precio, sec
+from tesis.datos.hechos import Capa, Certeza, Contraste, Estado, Hecho, Origen, Periodo, na
 
 RUTAS = rutas_nflx()
 

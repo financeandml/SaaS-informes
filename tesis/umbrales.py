@@ -3,11 +3,12 @@
 from __future__ import annotations
 
 from functools import lru_cache
-from pathlib import Path
+
+from .rutas import CONFIG
 
 __all__ = ["umbral"]
 
-_RUTA = Path(__file__).resolve().parent.parent / "config" / "umbrales.yaml"
+_RUTA = CONFIG / "umbrales.yaml"
 
 
 @lru_cache(maxsize=1)

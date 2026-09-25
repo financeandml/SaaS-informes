@@ -10,8 +10,11 @@ from pathlib import Path
 from types import SimpleNamespace
 from unittest import mock
 
-from tesis import agregador, calendario, cartas, multiplos, precio, revision, yahoo
-from tesis.hechos import Capa, Contraste, Estado, Hecho, Periodo, na
+from tesis.heredado import agregador, cartas
+from tesis.fuentes import calendario, precio, yahoo
+from tesis.motor import multiplos
+from tesis.verificacion import revision
+from tesis.datos.hechos import Capa, Contraste, Estado, Hecho, Periodo, na
 
 RESUMEN_YAHOO = {"quoteSummary": {"result": [{
     "financialData": {"returnOnEquity": {"raw": 0.49541}, "returnOnAssets": {"raw": 0.16085}, "totalDebt": {"raw": 16654660608}, "totalCash": {"raw": 9127910400},
@@ -166,7 +169,7 @@ class MultiplosSec(unittest.TestCase):
         usa otra tasa que el crecimiento anual del BPA, si el ROE no usa saldos medios o si el contraste con el agregador
         deja de marcar ✓/≠ con la tolerancia del 2 %."""
         h, ps, anuales = _hechos_ttm()
-        precio_h = Hecho("precio", Periodo.instante(date(2026, 9, 17)), 75.31, Estado.VALOR, Capa.DOCUMENTO, certeza=__import__("tesis.hechos", fromlist=["Certeza"]).Certeza.MEDIA)
+        precio_h = Hecho("precio", Periodo.instante(date(2026, 9, 17)), 75.31, Estado.VALOR, Capa.DOCUMENTO, certeza=__import__("tesis.datos.hechos", fromlist=["Certeza"]).Certeza.MEDIA)
         agr = SimpleNamespace(ebitda_ttm=14726931456.0, ev_ebitda=21.804, peg=1.41, roe=0.49541, roa=0.16085)
         m = multiplos.construir(h, ps, anuales, precio_h, 4163939676.0, agr)
         L = {l.rotulo.split(" (")[0]: l for l in m.lineas}
@@ -200,7 +203,7 @@ class MultiplosSec(unittest.TestCase):
 class DobleComprobacion(unittest.TestCase):
     def _informe(self, texto_celda):
         from tesis.formato import Celda
-        from tesis.informe import Cuadro, FilaCuadro
+        from tesis.plantillas.informe import Cuadro, FilaCuadro
         p = Periodo.anual(date(2025, 12, 31))
         hechos = {("ingresos", p): Hecho("ingresos", p, 45183036000.0, Estado.VALOR, Capa.SEC)}
         fila = FilaCuadro("Ingresos", [Celda(texto_celda, "✓", "H", "valor", "")], origen="hecho:ingresos", periodos=("FY2025",))

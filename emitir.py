@@ -28,9 +28,14 @@ from pathlib import Path
 if hasattr(sys.stdout, "reconfigure"):             # una salida sustituida (StringIO de `unittest -b`) no lo tiene
     sys.stdout.reconfigure(encoding="utf-8")
 
-from tesis import (auditor, calendario, comparables, contraste, dcf, derivados, entorno, entradas, expediente, ficha, gobierno, guidance, historial, informe,  # noqa: E402
-                   mercado_objetivo, multiplos, parte_b, posicionamiento, precio, recortes, regiones, render, revision, riesgos, rotulos, sec)
-from tesis.hechos import Contraste  # noqa: E402
+from tesis.verificacion import auditor, contraste, revision  # noqa: E402
+from tesis.fuentes import calendario, posicionamiento, precio, sec  # noqa: E402
+from tesis.heredado import comparables, dcf, historial, mercado_objetivo, regiones, riesgos  # noqa: E402
+from tesis.datos import derivados, expediente, ficha, gobierno, guidance, recortes  # noqa: E402
+from tesis import entorno, entradas, render, rotulos  # noqa: E402
+from tesis.plantillas import informe, parte_b  # noqa: E402
+from tesis.motor import multiplos  # noqa: E402
+from tesis.datos.hechos import Contraste  # noqa: E402
 
 
 def main(argv=None) -> int:
@@ -168,7 +173,7 @@ def main(argv=None) -> int:
     libro_analista = None
     excel_exportado = None
     if mot is not None and mot.precio is not None:
-        from tesis.hechos import Capa as _Capa, Origen as _Origen, Periodo as _Periodo, de_valor as _de_valor
+        from tesis.datos.hechos import Capa as _Capa, Origen as _Origen, Periodo as _Periodo, de_valor as _de_valor
         pr = _de_valor("precio", _Periodo.instante(mot.fecha_precio), mot.precio, _Capa.SEC, _Origen(documento="Nasdaq"), unidad="USD/acción",
                        nota=f"cierre oficial de Nasdaq del {mot.fecha_precio:%d/%m/%Y}")
         mot.consenso = mer.consenso
@@ -205,7 +210,7 @@ def main(argv=None) -> int:
                             riesgos=ri, historial=hi, salida_recortes=carpeta_recortes, mercado=mer, posicionamiento=posi, comparables=comp, mercado_objetivo=merc,
                             agregador=agr, multiplos=mult, proxima=prox, parte_b=pb, motor=mot, libro=libro_analista, excel=excel_exportado)
     # 06 §1: las propuestas de plantilla de esta generación, para aceptarlas o editarlas en el paso 9 del asistente
-    from tesis import propuestas
+    from tesis.entradas import propuestas
     propuestas.escribir(salida / f"{nombre_base}.propuestas.json", inf.parrafos)
     print("  párrafos de plantilla: " + (" · ".join(f"{x.titulo} ({x.estado})" for x in inf.parrafos) or "ninguno"))
     n_evid = sum(len(lista) for _, _, lista in inf.documentacion)

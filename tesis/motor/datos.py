@@ -12,7 +12,7 @@ from dataclasses import dataclass, field
 from datetime import date, timedelta
 from typing import Dict, List, Optional, Tuple
 
-from ..hechos import Periodo, etiqueta_fiscal
+from ..datos.hechos import Periodo, etiqueta_fiscal
 from ..rotulos import fallo
 from . import comparables as comparables_mod
 from .escenarios import Valoracion, valorar
@@ -20,6 +20,7 @@ from .puente import acciones_diluidas, puente
 from .sensibilidad import Inverso, Matriz, inverso, matriz
 from .supuestos import Parametros, leer
 from .wacc import Beta, Wacc, beta_bottom_up, beta_regresion, calcular
+from ..rutas import CONFIG
 
 __all__ = ["Motor", "ejecutar", "paquete_por_sic", "sectores", "ingresos_anuales"]
 
@@ -61,8 +62,7 @@ class Motor:
 
 def sectores() -> dict:
     import yaml
-    from pathlib import Path
-    return yaml.safe_load((Path(__file__).resolve().parents[2] / "config" / "sectores.yaml").read_text(encoding="utf-8"))
+    return yaml.safe_load((CONFIG / "sectores.yaml").read_text(encoding="utf-8"))
 
 
 def paquete_por_sic(sic: str, ingresos: Optional[float] = None, minimo_biotech: Optional[float] = None) -> Tuple[str, Optional[str]]:
@@ -96,8 +96,8 @@ def paquete_por_sic(sic: str, ingresos: Optional[float] = None, minimo_biotech: 
 
 def ingresos_anuales(facts: dict, obtenido: Optional[date] = None) -> Optional[float]:
     """Los ingresos del último ejercicio publicado en la SEC (sin el informe construido: el paso 1 del asistente)."""
-    from .. import sec
-    from ..campos import CAMPOS
+    from ..fuentes import sec
+    from ..datos.campos import CAMPOS
     campo = next(c for c in CAMPOS if c.clave == "ingresos")
     hechos = sec.hechos_xbrl(facts, campo, obtenido or date.today())
     anuales = [(p.fin, h.valor) for p, h in hechos.items() if p.meses == 12 and not p.es_instante and h.hay_dato]
@@ -124,7 +124,7 @@ def _ultimo_facts(facts: dict, concepto: str, unidad: str, hasta: date) -> Optio
 def _historico_per(facts: dict, cierres: Dict[date, float], hasta: date) -> List[Tuple[date, float]]:
     """PER de cada cierre de trimestre de los últimos 5 años: cierre oficial / BPA diluido de los 12 meses anteriores
     (ejercicio, o ejercicio + acumulado − acumulado del año anterior). Solo con BPA positivo."""
-    from .. import sec
+    from ..fuentes import sec
     filas = (((facts.get("facts") or {}).get("us-gaap") or {}).get("EarningsPerShareDiluted") or {}).get("units", {}).get("USD/shares", [])
     # los cierres de Nasdaq vienen ajustados por splits; el BPA de un depósito anterior a un split, no: se divide por la razón
     splits = [(f, r) for f, r, _ in sec.splits(facts)]
@@ -171,7 +171,7 @@ def _historico_per(facts: dict, cierres: Dict[date, float], hasta: date) -> List
 
 def ejecutar(emisor, facts: dict, hechos, periodos: Dict[str, List[Periodo]], datos_entradas: dict, fecha_informe: date,
              acciones_portada: Optional[float], umbrales: dict, desfase_fiscal: int = 0, dividendos: Optional[list] = None) -> Motor:
-    from .. import precio as precio_mod, sec, tesoro
+    from ..fuentes import precio as precio_mod, sec, tesoro
     ingresos_fy, _ = _ultimo(hechos, "ingresos", periodos["anuales"])
     paquete, bloqueo_v1 = paquete_por_sic(emisor.sic, ingresos_fy, umbrales.get("biotech_ingresos_min_musd"))
     p = leer(datos_entradas, fecha_informe, paquete)

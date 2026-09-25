@@ -14,9 +14,10 @@ Tres fallos encadenados, y ninguno se veía como un error: se veía como una emp
 import unittest
 from datetime import date
 
-from tesis import contraste, sec
-from tesis.extractor import Linea, Token, _columnas_de, _es_por_accion
-from tesis.hechos import Periodo
+from tesis.verificacion import contraste
+from tesis.fuentes import sec
+from tesis.datos.extractor import Linea, Token, _columnas_de, _es_por_accion
+from tesis.datos.hechos import Periodo
 
 
 def _facts(pares, concepto="Revenues"):

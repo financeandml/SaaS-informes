@@ -56,7 +56,7 @@ class LasTresOrdenes(unittest.TestCase):
 
     def test_servir_le_pasa_a_saas_sus_opciones_tal_cual(self):
         """Falla si `servir` deja de ser `tesis.saas`: el puerto y `--sin-navegador` son los de siempre."""
-        from tesis import saas
+        from tesis.web import saas
         original, recibido = saas.main, []
         saas.main = lambda argv: (recibido.append(list(argv)), 0)[1]
         try:

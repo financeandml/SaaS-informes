@@ -11,9 +11,11 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from tesis import documentos, expediente, revision, secciones
-from tesis.expediente import Adjunto, Aviso, Tipo
-from tesis.hechos import Certeza
+from tesis.datos import documentos, expediente
+from tesis.verificacion import revision
+from tesis.plantillas import secciones
+from tesis.datos.expediente import Adjunto, Aviso, Tipo
+from tesis.datos.hechos import Certeza
 
 
 def _adj(tipo=Tipo.DESCONOCIDO, nombre="x.pdf", motivo="Ninguna pista reconocible en la primera página."):
@@ -106,7 +108,7 @@ class Declaracion(unittest.TestCase):
     def test_la_declaracion_sobrevive_al_reinicio(self):
         """Falla si lo declarado no queda escrito junto a los adjuntos: al reiniciar el servidor, la lista de
         documentos volvería a decir que falta todo."""
-        from tesis import saas
+        from tesis.web import saas
         with tempfile.TemporaryDirectory() as tmp:
             antes = saas.ADJUNTOS
             try:
@@ -142,8 +144,8 @@ class CifraDelLibro(unittest.TestCase):
         """Falla si el cuadro imprime las filas del bloque «precio objetivo» como importes: un peso y un upside que el
         libro guarda en porcentaje salen «0,00» y «0,25», la relectura dice «0,00 %» y «25,4 %», y la emisión se
         detiene. Y falla si el recorrido sobre la cotizacion se calcula sobre un porcentaje, que no es un precio."""
-        from tesis.dcf import Celda as CeldaLibro, Modelo
-        from tesis.informe import Cuadros
+        from tesis.heredado.dcf import Celda as CeldaLibro, Modelo
+        from tesis.plantillas.informe import Cuadros
         m = Modelo(fichero=Path("libro.xlsx"), huella="h", hojas=["01 Summary"], anclajes_objetivo=[
             ("Suma de los pesos", 0.0, CeldaLibro("01 Summary", "D79", None, "0.00%")),
             ("Upside / (Downside) al precio objetivo", 0.2543, CeldaLibro("01 Summary", "C82", None, "0.0%")),

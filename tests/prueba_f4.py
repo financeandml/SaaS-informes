@@ -8,7 +8,9 @@ import unittest
 from datetime import date
 from pathlib import Path
 
-from tesis import informe, parte_e, tablas_html, tarjetas
+from tesis.plantillas import informe, parte_e
+from tesis.datos import tablas_html
+from tesis.entradas import tarjetas
 from tesis.entradas import Entradas, comprobar_paso5, verificar_cita
 from tests.prueba_f3 import _Informes
 

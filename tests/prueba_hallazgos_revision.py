@@ -6,8 +6,11 @@ import unittest
 from datetime import date
 from pathlib import Path
 
-from tesis import cartas, comparables, historial, multiplos, saas, secciones
-from tesis.dcf import Celda as CeldaLibro
+from tesis.heredado import cartas, comparables, historial
+from tesis.motor import multiplos
+from tesis.web import saas
+from tesis.plantillas import secciones
+from tesis.heredado.dcf import Celda as CeldaLibro
 
 RAIZ = Path(__file__).resolve().parents[1]
 

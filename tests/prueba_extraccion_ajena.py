@@ -10,11 +10,11 @@ import unittest
 from datetime import date
 from pathlib import Path
 
-from tesis import contraste
-from tesis.campos import campo as campo_de
-from tesis.expediente import Tipo
-from tesis.extractor import Linea, Token, _columnas_de
-from tesis.hechos import Periodo
+from tesis.verificacion import contraste
+from tesis.datos.campos import campo as campo_de
+from tesis.datos.expediente import Tipo
+from tesis.datos.extractor import Linea, Token, _columnas_de
+from tesis.datos.hechos import Periodo
 
 
 def _linea(texto, y=100.0):
@@ -28,7 +28,7 @@ def _linea(texto, y=100.0):
 
 
 def _cand(rotulo, valor, pagina=1):
-    from tesis.extractor import Candidato
+    from tesis.datos.extractor import Candidato
     return Candidato(documento="10k.pdf", pagina=pagina, rotulo=rotulo, contexto="", periodo=Periodo.instante(date(2026, 5, 31)),
                      etiqueta_columna="", valor=valor, crudo=str(valor), escala=1_000_000, por_accion=False, guion=False,
                      porcentaje=False, rect=(0, 0, 1, 1), rect_fila=(0, 0, 1, 1))
@@ -68,7 +68,7 @@ class Patrimonio(unittest.TestCase):
     def test_el_balance_solo_aporta_la_fila_del_grupo(self):
         """Falla si del balance salen las dos filas como candidatas del mismo campo: una confirmaría el hecho de la SEC
         y la otra lo desmentiría, y el informe acabaría con una discrepancia inventada por nosotros (regla 9)."""
-        from tesis.extractor import Fila, PaginaLeida
+        from tesis.datos.extractor import Fila, PaginaLeida
 
         class _Adj:
             clave, tipo, ruta, paginas = "10K_20260531", Tipo.K10, Path("10k.pdf"), [""]
@@ -98,7 +98,7 @@ class LibroAjeno(unittest.TestCase):
     def test_una_fila_que_no_es_un_escenario_no_se_lee_como_tal(self):
         """Falla si una fila de importes bajo el rótulo «Escenarios» pasa por escenario: «Equity Value 496.514 · 303.615»
         se imprimía como un WACC del 49.651.483 % y un crecimiento del 30.361.500 %."""
-        from tesis.dcf import _parece_escenario
+        from tesis.heredado.dcf import _parece_escenario
         self.assertFalse(_parece_escenario([496514.8, 303615.0, 608375.0, 952026.0]))
         self.assertFalse(_parece_escenario([2934.0, 191755.0, 496515.0, 840166.0]))
         self.assertTrue(_parece_escenario([0.105, 0.025, 36.26, 0.25]))      # fracciones
@@ -109,7 +109,7 @@ class LibroAjeno(unittest.TestCase):
         """Falla si «08 Sensitivity» no se reconoce como la hoja de sensibilidad."""
         import re
 
-        from tesis import dcf
+        from tesis.heredado import dcf
         fuente = Path(dcf.__file__).read_text(encoding="utf-8")
         patron = re.search(r'libro\.hoja\(r"(sensib[^"]*)"\)', fuente).group(1)
         self.assertTrue(re.search(patron, "08 Sensitivity", re.I))
@@ -122,7 +122,7 @@ class Riesgos(unittest.TestCase):
     def test_la_cabecera_de_familia_se_reconoce_aunque_no_diga_related_to(self):
         """Falla si «Business and Operational Risks» (Oracle) no se reconoce como cabecera: se pega al epígrafe
         siguiente y el Item 1A entero sale como un solo riesgo, que es lo que pasaba."""
-        from tesis.riesgos import _es_cabecera
+        from tesis.heredado.riesgos import _es_cabecera
         for cabecera in ("Business and Operational Risks", "Legal and Regulatory Risks", "General Risks", "Risks Related to Our Business"):
             self.assertTrue(_es_cabecera(cabecera), cabecera)
         for epigrafe in ("We may be unsuccessful in developing and selling new products and services.",
@@ -133,7 +133,7 @@ class Riesgos(unittest.TestCase):
     def test_un_epigrafe_cortado_se_completa_con_el_texto_de_su_pagina(self):
         """Falla si un epígrafe cuya última línea comparte renglón con el cuerpo —y deja de contar como negrita— se
         descarta por no acabar en punto: así se perdían 22 de los 23 riesgos de Oracle."""
-        from tesis.riesgos import _completar
+        from tesis.heredado.riesgos import _completar
         pagina = ("Business and Operational Risks\nWe may be unsuccessful in developing and selling new products and services, integrating "
                   "acquired businesses and technologies.\nOur industry is characterized by rapid technological advances.")
         entero = _completar("We may be unsuccessful in developing and selling new products and services, integrating", pagina)

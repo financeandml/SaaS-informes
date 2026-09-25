@@ -14,10 +14,15 @@ from pathlib import Path
 
 import pytest
 
-from tesis import (calendario, contraste, derivados, entorno, entradas, ficha, gobierno, guidance, informe, multiplos, parte_b,
-                   posicionamiento, precio as precio_mod, regiones, render, sec)
-from tesis.expediente import Expediente
-from tesis.hechos import Capa, Origen, Periodo, de_valor
+from tesis.fuentes import calendario, posicionamiento, precio as precio_mod, sec
+from tesis.verificacion import contraste
+from tesis.datos import derivados, ficha, gobierno, guidance
+from tesis import entorno, entradas, render
+from tesis.plantillas import informe, parte_b
+from tesis.motor import multiplos
+from tesis.heredado import regiones
+from tesis.datos.expediente import Expediente
+from tesis.datos.hechos import Capa, Origen, Periodo, de_valor
 from tesis.motor import datos as motor_datos, excel
 from tesis.motor.escenarios import valorar
 from tesis.motor.proyeccion import fraccion, proyectar

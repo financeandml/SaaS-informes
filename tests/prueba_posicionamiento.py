@@ -11,8 +11,9 @@ from pathlib import Path
 from unittest import mock
 
 from tests import rutas_nflx
-from tesis import informe, posicionamiento, precio, secciones
-from tesis.hechos import Contraste
+from tesis.plantillas import informe, secciones
+from tesis.fuentes import posicionamiento, precio
+from tesis.datos.hechos import Contraste
 
 RUTAS = rutas_nflx()
 
@@ -75,7 +76,7 @@ class _YahooFalso:
 
 class SeccionF(unittest.TestCase):
     def setUp(self):
-        from tesis import yahoo
+        from tesis.fuentes import yahoo
         self.parches = [mock.patch.object(precio, "_json", _nasdaq_falso), mock.patch.object(precio, "variable", lambda n: "nasdaq" if n == "WC_PRECIO_FUENTE" else ""),
                         mock.patch.object(yahoo, "cliente", lambda: _YahooFalso())]
         for p in self.parches:
@@ -142,7 +143,7 @@ class SeccionF(unittest.TestCase):
     def test_volcado_api_guarda_el_cuerpo_y_su_huella(self):
         """Falla si la evidencia de una API deja de guardar el cuerpo completo junto a la imagen o si el pie no
         dice que no es una captura de pantalla."""
-        from tesis.recortes import volcado_api
+        from tesis.datos.recortes import volcado_api
         import hashlib
         with tempfile.TemporaryDirectory() as d:
             cuerpo = json.dumps(SHORT)
@@ -160,7 +161,7 @@ class SeccionF(unittest.TestCase):
 
 class VolatilidadImplicitaYahoo(unittest.TestCase):
     def setUp(self):
-        from tesis import yahoo
+        from tesis.fuentes import yahoo
         self.parches = [mock.patch.object(precio, "_json", _nasdaq_falso), mock.patch.object(precio, "variable", lambda n: "nasdaq" if n == "WC_PRECIO_FUENTE" else ""),
                         mock.patch.object(yahoo, "cliente", lambda: _YahooFalso())]
         for p in self.parches:
@@ -203,7 +204,7 @@ class VolatilidadImplicitaYahoo(unittest.TestCase):
     def test_cadena_a_medio_cargar_no_da_iv(self):
         """Falla si una cadena con bid y ask a cero e interés abierto a cero (lo que el agregador devuelve fuera de sesión)
         produce alguna IV, o si la sección no dice por qué la IV es N/A."""
-        from tesis import yahoo
+        from tesis.fuentes import yahoo
         vacia = {"optionChain": {"result": [{"quote": {"regularMarketPrice": 75.31, "regularMarketTime": 1789675200}, "expirationDates": [1789689600],
                                              "options": [{"expirationDate": 1789689600,
                                                           "calls": [{"strike": 75.0, "impliedVolatility": 0.0625, "bid": 0.0, "ask": 0.0, "openInterest": 0, "volume": 3893},
@@ -250,7 +251,8 @@ CIKS = {"NFLX": ("0001065280", "NETFLIX INC"), "BBY": ("0000764478", "BEST BUY C
 
 class ComparablesDeLaBolsa(unittest.TestCase):
     def setUp(self):
-        from tesis import comparables, sec
+        from tesis.heredado import comparables
+        from tesis.fuentes import sec
 
         def _json_screener(url, cabeceras):
             if "/screener/" in url:
@@ -292,7 +294,8 @@ class TamanoDeMercado(unittest.TestCase):
     def test_declaraciones_de_la_compania_clasificadas(self):
         """Falla si las cifras de la call (800 M hogares, 670.000 M USD, 45 %, 7 %, 5 %) o de la proxy (325 M suscripciones)
         dejan de leerse literales con su página, o si la clasificación TAM/SAM/SOM pierde su motivo."""
-        from tesis import expediente as exp_mod, mercado_objetivo
+        from tesis.datos import expediente as exp_mod
+        from tesis.heredado import mercado_objetivo
         exp = exp_mod.cargar("NFLX", RUTAS)
         m = mercado_objetivo.construir(exp)
         por = {d.concepto: d for d in m.declaraciones}
@@ -314,8 +317,9 @@ class TamanoDeMercado(unittest.TestCase):
         Y falla si, cuando la dirección sí usa el término pero sin cifra, deja de contarse como hueco."""
         from datetime import date
 
-        from tesis import expediente as exp_mod, mercado_objetivo
-        from tesis.hechos import Certeza
+        from tesis.datos import expediente as exp_mod
+        from tesis.heredado import mercado_objetivo
+        from tesis.datos.hechos import Certeza
 
         def _exp(texto):
             a = exp_mod.Adjunto(ruta=Path("call.pdf"), huella="h", paginas=[texto], tipo=exp_mod.Tipo.CALL,

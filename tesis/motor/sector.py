@@ -67,8 +67,8 @@ def _sbc(hechos, periodos, p, u: Mapping) -> List[str]:
 
 
 def _ciclo(facts, p, u: Mapping) -> List[str]:
-    from .. import sec
-    from ..campos import CAMPOS
+    from ..fuentes import sec
+    from ..datos.campos import CAMPOS
     minimo, maximo = (int(x) for x in u.get("ciclo_anios", [7, 10]))
     por = {c.clave: c for c in CAMPOS}
     ingresos = sec.hechos_xbrl(facts, por["ingresos"], date.today())
