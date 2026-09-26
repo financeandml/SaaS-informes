@@ -408,6 +408,13 @@ def _de_edgar(emisor, g: Gobierno) -> None:
                                             fuente=f"{x.formulario} del {f_fecha(x.presentado)}"
                                                    + (f" (a {f_fecha(x.fecha_evento)})" if x.fecha_evento else "")))
         g.accionistas.sort(key=lambda a: -(a.porcentaje or 0))
+        # F9: la participación de cada consejero y directivo (las filas de la proxy por debajo del 5 %), antes de su
+        # total: el apartado 28 remite aquí para «las acciones de cada consejero y ejecutivo»
+        for f in filas:
+            if f.es_grupo or (f.porcentaje is not None and f.porcentaje >= 5):
+                continue
+            g.accionistas.append(Accionista(nombre=f.nombre, acciones=f.acciones, porcentaje=f.porcentaje, direccion="", pagina=None,
+                                            nota="menos del 1 %" if f.menos_de_uno else "", fuente=fuente_proxy))
         if grupo is not None:
             g.accionistas.append(Accionista(nombre=re.sub(r"All current (executive officers and directors|directors and executive officers)",
                                                           "Consejeros y directivos actuales", grupo.nombre).replace("as a group", "en conjunto")

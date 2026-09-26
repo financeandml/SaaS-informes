@@ -30,7 +30,7 @@ if hasattr(sys.stdout, "reconfigure"):             # una salida sustituida (Stri
 
 from tesis.verificacion import auditor, contraste, revision  # noqa: E402
 from tesis.fuentes import calendario, posicionamiento, precio, sec  # noqa: E402
-from tesis.heredado import comparables, dcf, historial, mercado_objetivo, regiones, riesgos  # noqa: E402
+from tesis.heredado import dcf  # noqa: E402   (el libro del analista; se retira en F15)
 from tesis.datos import derivados, expediente, ficha, gobierno, guidance, recortes  # noqa: E402
 from tesis import entorno, entradas, render, rotulos  # noqa: E402
 from tesis.plantillas import informe, parte_b  # noqa: E402
@@ -103,7 +103,6 @@ def main(argv=None) -> int:
         print(f"    gobierno · falta {k}: {v}")
     print(f"  retratos: {sum(1 for e in g.ejecutivos if e.foto)} de {len(g.ejecutivos)} ejecutivos · {sum(1 for c in g.consejeros if c.foto)} de {len(g.consejeros)} consejeros")
     gu = guidance.construir(exp, emisor.depositos, hoy)
-    reg = regiones.construir(exp, tab)
     flujos, instantes = periodos["anuales"] + periodos["trimestres"], periodos["instantes"]
     hechos = derivados.calcular(tab.hechos(), flujos, instantes)
     # auditoría: que las cifras cuadren entre ellas, no solo con su fuente. Lo que falte y la identidad determine se
@@ -119,14 +118,8 @@ def main(argv=None) -> int:
     (salida / f"{nombre_base}.auditoria.txt").write_text(
         f"Auditoría de datos {args.ticker.upper()} {hoy.isoformat()} · " + " · ".join(f"{k} {v}" for k, v in r.items())
         + "\n\n" + aud.como_texto() + "\n", encoding="utf-8")
-    ri = riesgos.construir(exp)
-    print(f"  riesgos: {len(ri.riesgos)} epígrafes del Item 1A" + (f" (págs. {ri.paginas[0]}–{ri.paginas[1]})" if ri.riesgos else f" — {ri.faltan}"))
-    # historial: la tabla de la transcripción, las cartas anteriores depositadas en la SEC y la serie de la bolsa
-    hi = historial.construir(exp, hechos, cik=emisor.cik, ticker=args.ticker, splits=[(f, x) for f, x, _ in sec.splits(facts)])
-    print(f"  historial: {len(hi.sorpresas)} sorpresas de consenso (transcripción) · {len(hi.frases_guia)} frases de guía frente a real · "
-          f"{len(hi.cartas)} cartas de EDGAR → {len(hi.guias)} previsiones frente a real · {len(hi.bolsa)} trimestres de consenso según la bolsa")
-    for k, v in hi.faltan.items():
-        print(f"    falta {k}: {v}")
+    # F9: riesgos (24), historial (26), comparables (22), tamaño de mercado (21) y regiones (4) salen de la parte B, de
+    # las entradas del analista y de los segmentos XBRL; el camino antiguo (`tesis.heredado`) ya no se construye aquí
     modelo = dcf.cargar(Path(args.dcf), salida / f"{nombre_base}.dcf_recalculado.xlsx") if args.dcf else None
     if modelo is not None and modelo.faltan.get("valores"):
         print(f"  DCF: {modelo.faltan['valores']}")
@@ -151,14 +144,11 @@ def main(argv=None) -> int:
           + (f" · IV (Yahoo, excepción) ✓ {len(posi.iv.vencimientos)} vencimientos" if posi.iv is not None else ""))
     for k, v in posi.faltan.items():
         print(f"    pendiente {k}: {v}")
-    comp = comparables.construir(args.ticker)
-    print(f"  comparables (industria de la bolsa «{comp.industria}»): " + ", ".join(f"{x.ticker}{' ✓' if x.ingresos is not None else ' sin cuentas'}" for x in comp.filas[1:]) if comp.filas else "  comparables: N/A")
-    for k, v in comp.faltan.items():
-        print(f"    falta {k}: {v}")
-    merc = mercado_objetivo.construir(exp, hechos)
-    print(f"  tamaño de mercado: {len(merc.declaraciones)} cifras declaradas por la compañía"
-          + (f" · faltan {list(merc.faltan)}" if merc.faltan else "")
-          + (f" · {len(merc.no_aplican)} conceptos de otro sector, no se cuentan como huecos" if merc.no_aplican else ""))
+    if posi.insiders is not None and posi.insiders.ultimas:
+        # F9: cada operación de directivos de la bolsa, casada con su Form 4 de EDGAR (o el porqué de que no case)
+        from tesis.fuentes import form4
+        posi.insiders.cruce = form4.cruzar(posi.insiders.ultimas, emisor.depositos)
+        print(f"  Form 4: {sum(1 for c in posi.insiders.cruce if c.casado)} de {len(posi.insiders.cruce)} operaciones de directivos casadas con EDGAR")
     agr = None                     # regla 6: Yahoo solo para la volatilidad implícita (sin ROE, deuda ni múltiplos del agregador)
     prox = calendario.proxima(args.ticker, agr, hoy)
     print("  próxima presentación: " + (f"{prox.fecha:%d/%m/%Y} {prox.momento} ({'esperada' if prox.esperada else 'anunciada'} según la bolsa) · {prox.contraste.value or '—'} {prox.nota_contraste}" if prox else "N/A"))
@@ -206,8 +196,8 @@ def main(argv=None) -> int:
         print(f"    falta {x}")
 
     print("[7/8] Informe")
-    inf = informe.construir(args.ticker, hoy, emisor, exp, tab, periodos, f, g, gu, reg, pr, recs, modelo_dcf=modelo,
-                            riesgos=ri, historial=hi, salida_recortes=carpeta_recortes, mercado=mer, posicionamiento=posi, comparables=comp, mercado_objetivo=merc,
+    inf = informe.construir(args.ticker, hoy, emisor, exp, tab, periodos, f, g, gu, None, pr, recs, modelo_dcf=modelo,
+                            riesgos=None, historial=None, salida_recortes=carpeta_recortes, mercado=mer, posicionamiento=posi, comparables=None, mercado_objetivo=None,
                             agregador=agr, multiplos=mult, proxima=prox, parte_b=pb, motor=mot, libro=libro_analista, excel=excel_exportado)
     # 06 §1: las propuestas de plantilla de esta generación, para aceptarlas o editarlas en el paso 9 del asistente
     from tesis.entradas import propuestas

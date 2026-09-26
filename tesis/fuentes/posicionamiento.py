@@ -101,6 +101,7 @@ class Insiders:
     operaciones: List[Tuple[str, Optional[float], Optional[float]]] = field(default_factory=list)   # (rótulo, 3 meses, 12 meses)
     acciones: List[Tuple[str, Optional[float], Optional[float]]] = field(default_factory=list)
     ultimas: List[Tuple[str, str, Optional[date], str, Optional[float], Optional[float]]] = field(default_factory=list)   # insider, relación, fecha, tipo, acciones, precio
+    cruce: List = field(default_factory=list)       # form4.Cruce por operación de `ultimas`, en el mismo orden (vacío: sin cruzar)
     total_operaciones: Optional[int] = None
     respuesta: Optional[Respuesta] = None
 

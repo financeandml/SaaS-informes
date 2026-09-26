@@ -19,6 +19,7 @@ atipicos_iqr: 3
 comparables_antiguedad_max_meses: 15
 tolerancia_oi_yahoo_nasdaq: 0.02
 reexpresion_nota: 0.005
+form4_dias_presentacion_max: 10       # 28: un Form 4 se presenta en 2 días hábiles; con retrasos, hasta este margen
 acciones_4t_derivadas_tolerancia: 0.001   # 03: 4T de acciones medias derivado de la SEC frente al publicado; dentro, manda el documento
 pdf_vs_edgar_similitud_min: 0.98
 cita_similitud_min: 0.90

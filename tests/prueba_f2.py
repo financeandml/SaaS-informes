@@ -131,6 +131,20 @@ class Qualcomm(_ConFixtures):
         self.assertIn(("Qualcomm Technologies, Inc.", "Delaware"), [(f.nombre, f.jurisdiccion) for f in g.filiales])
         self.assertFalse(g.faltan, g.faltan)
 
+    def test_participacion_de_cada_consejero_y_directivo(self):
+        """F9. Falla si la tabla de propiedad de la proxy pierde las filas de cada consejero y directivo: el apartado 28
+        remite al 5 para «las acciones de cada consejero y ejecutivo» y el 5 solo traía a los del 5 % y el total del grupo.
+        Van después de los grandes accionistas y antes del total, que sigue siendo la última fila."""
+        g = self.gobierno
+        nombres = [a.nombre for a in g.accionistas]
+        amon = next((a for a in g.accionistas if "Amon" in a.nombre), None)
+        self.assertIsNotNone(amon, nombres)
+        self.assertIsNotNone(amon.acciones)
+        self.assertTrue(amon.porcentaje is None or amon.porcentaje < 5)
+        self.assertTrue(nombres[-1].startswith("Consejeros y directivos"), nombres[-1])
+        grandes = [i for i, a in enumerate(g.accionistas) if a.porcentaje is not None and a.porcentaje >= 5]
+        self.assertLess(max(grandes), nombres.index(amon.nombre))
+
     @pytest.mark.regresion("R16")
     def test_guia_como_candidatos_y_frente_a_real(self):
         """R16. La guía «Business Outlook» de Qualcomm no se leía (se buscaba la columna «Forecast» de las cartas de

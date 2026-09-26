@@ -577,11 +577,25 @@ def cuadros_f(n: Cuadros, p, acciones_circulacion: Optional[float] = None, maxim
                              destacada=rotulo.startswith("Net")) for rotulo, m3, m12 in s.acciones]
         salida["insiders"] = Cuadro(n.siguiente(), "Operaciones de directivos (Form 4): recuento y acciones", ["3 meses", "12 meses"], filas,
                                     base + (f" {s.total_operaciones} operaciones registradas en total." if s.total_operaciones else ""))
+        impresas = s.ultimas[:maximo_filas + 3]
+        cruces = list(s.cruce[:len(impresas)]) if s.cruce else []
+
+        def _form4(c) -> Celda:
+            # F9: cada operación con su Form 4 de EDGAR, o el porqué de que no case; la bolsa sigue siendo la fuente de la fila
+            if c.casado:
+                return Celda(f_fecha(c.presentado), Contraste.CONFIRMADO.value, "H", "valor", f"Form 4 {c.accession} presentado el {f_fecha(c.presentado)}: {c.url}")
+            return _na(c.motivo)
         filas = [FilaCuadro(f"{insider} · {rotulos.bolsa(relacion)}", [_hd(f_fecha(fecha)) if fecha else _na("sin fecha"), _hd(rotulos.bolsa(tipo), f"literal de la bolsa: {tipo}"),
-                                                                     _n(acciones), _n(precio, 2)], capa="Hd")
-                 for insider, relacion, fecha, tipo, acciones, precio in s.ultimas[:maximo_filas + 3]]
-        salida["insiders_ultimas"] = Cuadro(n.siguiente(), "Últimas operaciones de directivos", ["Fecha", "Tipo", "Acciones", "Precio (USD)"], filas,
-                                            base + " «Venta automática» es una venta bajo un plan 10b5-1, según la rotula la bolsa.", partible=True)
+                                                                     _n(acciones), _n(precio, 2)] + ([_form4(cruces[i])] if cruces else []), capa="Hd")
+                 for i, (insider, relacion, fecha, tipo, acciones, precio) in enumerate(impresas)]
+        fuente = base + " «Venta automática» es una venta bajo un plan 10b5-1, según la rotula la bolsa."
+        if cruces:
+            fuente = (f"Fuente: {FUENTE}, consultada el {hora}; cruzada con los Form 4 del emisor en SEC EDGAR: "
+                      f"{sum(1 for c in cruces if c.casado)} de {len(cruces)} operaciones casadas con su depósito (titular, fecha y acciones). "
+                      "«Venta automática» es una venta bajo un plan 10b5-1, según la rotula la bolsa.")
+        salida["insiders_ultimas"] = Cuadro(n.siguiente(), "Últimas operaciones de directivos",
+                                            ["Fecha", "Tipo", "Acciones", "Precio (USD)"] + (["Form 4 (EDGAR)"] if cruces else []), filas,
+                                            fuente, partible=True)
     if p.short is not None and p.short.filas:
         filas = []
         for liq, interes, vol, dias in p.short.filas[:maximo_filas]:
@@ -597,8 +611,12 @@ def cuadros_f(n: Cuadros, p, acciones_circulacion: Optional[float] = None, maxim
     return salida
 
 
-def recortes_f(p, mercado, salida: Optional[Path], comparables=None, agregador=None, proxima=None, historial=None) -> Dict[str, List[Recorte]]:
-    """La evidencia de la sección F, de la cotización y de las demás fuentes externas: la respuesta literal de cada petición, pintada."""
+def recortes_f(p, mercado, salida: Optional[Path], comparables=None, agregador=None, proxima=None, historial=None,
+               parte_b=None) -> Dict[str, List[Recorte]]:
+    """La evidencia de la sección F, de la cotización y de las demás fuentes externas: la respuesta literal de cada petición, pintada.
+
+    Con la parte B, la evidencia del historial (26) sale de lo que ella misma usa —las sorpresas de la bolsa y las notas de
+    resultados de EDGAR—: la misma fuente que el cuadro que respalda (regla 13). `historial` es el camino antiguo."""
     import json as json_mod
     from ..fuentes.posicionamiento import FUENTE
     from ..datos.recortes import volcado_api
@@ -627,6 +645,21 @@ def recortes_f(p, mercado, salida: Optional[Path], comparables=None, agregador=N
             cuerpo = json_mod.dumps(resumen, indent=1, ensure_ascii=False)
             rec = volcado_api("https://www.sec.gov/cgi-bin/browse-edgar (8-K, Item 2.02, Exhibit 99.1)", cuerpo, datetime.now(), salida, "edgar_cartas",
                               "Cartas a accionistas depositadas en la SEC: previsión de cada carta para el trimestre siguiente", "SEC EDGAR (Exhibit 99.1 de los 8-K de resultados)")
+            if rec is not None:
+                recs.setdefault("32", []).append(rec)
+    if parte_b is not None:
+        if getattr(parte_b, "sorpresas_respuesta", None) is not None:
+            url, cuerpo, obtenido = parte_b.sorpresas_respuesta
+            rec = volcado_api(url, cuerpo, obtenido, salida, "nasdaq_sorpresas", "Consenso frente a BPA publicado (serie de la bolsa)", FUENTE)
+            if rec is not None:
+                recs.setdefault("32", []).append(rec)
+        if getattr(parte_b, "notas", None):
+            resumen = [{"nota_8k_presentada": x.presentado.isoformat(), "url": x.url, "trimestre_publicado": x.publicado,
+                        "guia": [{"metrica": c.metrica, "trimestre": c.trimestre, "bajo": c.bajo, "alto": c.alto, "unidad": c.unidad}
+                                 for c in x.candidatos]} for x in parte_b.notas]
+            cuerpo = json_mod.dumps(resumen, indent=1, ensure_ascii=False)
+            rec = volcado_api("https://www.sec.gov/cgi-bin/browse-edgar (8-K, Item 2.02, Exhibit 99.1)", cuerpo, datetime.now(), salida, "edgar_notas",
+                              "Notas de resultados depositadas en la SEC: la guía que publica cada una", "SEC EDGAR (Exhibit 99.1 de los 8-K de resultados)")
             if rec is not None:
                 recs.setdefault("32", []).append(rec)
     if comparables is not None and comparables.respuesta_sic is not None:

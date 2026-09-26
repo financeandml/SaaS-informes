@@ -34,6 +34,7 @@ class ParteB:
     textos: Dict[str, str] = field(default_factory=dict)     # documento (y «documento#página») → texto: verifica las citas
     item1a: Optional[object] = None                          # item1a.Item1A del último 10-K (parte F)
     sorpresas: List = field(default_factory=list)            # calendario.Sorpresa: consenso frente a BPA de la bolsa (26)
+    sorpresas_respuesta: Optional[Tuple[str, str, object]] = None   # (url, cuerpo, obtenido): la evidencia literal del 26
     cortos: Optional[Tuple[date, float]] = None              # último interés en corto de la bolsa (28)
 
     @property
@@ -288,7 +289,15 @@ def construir(emisor, hoy: date, facts: dict, portada=None, entradas: Optional[E
     if pb.notas and pb.notas[-1].candidatos and not (pb.confirmadas & {c.id for c in pb.notas[-1].candidatos}):
         pb.faltas.append("guía: el analista no ha confirmado los candidatos de la última nota de resultados (Cuadro 2)")
     pb.dividendos, pb.dividendos_url = calendario.dividendos(emisor.ticker)
-    pb.sorpresas, _ = calendario.sorpresas(emisor.ticker)
+    pb.sorpresas, url_sorpresas = calendario.sorpresas(emisor.ticker)
+    if pb.sorpresas:
+        # la respuesta literal va a la documentación del 26 (antes la pedía por su cuenta `heredado.historial`)
+        from ..fuentes.precio import pedir_crudo
+        try:
+            _, cuerpo, obtenido = pedir_crudo(url_sorpresas)       # caché por URL y día: no repite la petición
+            pb.sorpresas_respuesta = (url_sorpresas, cuerpo, obtenido)
+        except Exception:
+            pass
     pb.cortos = calendario.cortos(emisor.ticker)
     pb.splits = [(f, r) for f, r, _ in sec.splits(facts)]
     if portada is not None and portada.dei.get("Security12bTitle"):

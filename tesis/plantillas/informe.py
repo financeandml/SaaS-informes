@@ -510,8 +510,12 @@ def _cuadro_objetivos(n: Cuadros, g: Guidance) -> Cuadro:
                   fuente + ". Objetivo de la compañía, no estimación del analista.", [])
 
 
-def _cuadro_regiones(n: Cuadros, r: Regiones, anuales, trimestres) -> Tuple[Cuadro, str]:
+def _cuadro_regiones(n: Cuadros, r: Optional[Regiones], anuales, trimestres) -> Tuple[Cuadro, str]:
     from . import graficos
+    if r is None:
+        # sin el camino antiguo, la geografía sale solo de los segmentos XBRL: si no traen periodos, se dice
+        return Cuadro(n.siguiente(), "Ingresos por región (mln USD)", [], [],
+                      "Fuente: SEC EDGAR. N/A: los segmentos XBRL del 10-K no traen el desglose geográfico de ningún periodo.", []), ""
     from ..heredado.regiones import REGIONES
     periodos = [p for p in r.periodos if p.meses in (12, 3)]
     periodos = [p for p in periodos if p in list(anuales) + list(trimestres)] or periodos[-6:]
@@ -544,12 +548,19 @@ def _cuadros_gobierno(n: Cuadros, g: Gobierno) -> Tuple[Cuadro, Cuadro, Cuadro, 
             return f"Fuente: {o.documento}, pág. {o.pagina} ({seccion})."
         return f"Fuente: SEC EDGAR, {o.documento}{' del ' + f_fecha(o.presentado) if o.presentado else ''} ({seccion})."
     edgar = any(a.fuente for a in g.accionistas)
-    filas = [FilaCuadro(a.nombre, [Celda(numero(a.acciones) if a.acciones is not None else "N/A", "", "H", "valor" if a.acciones is not None else "na", ""),
+    def _acciones(a) -> Celda:
+        # tres estados: sin dato, cero («—» en la proxy: no posee acciones) y valor
+        if a.acciones is None:
+            return Celda("N/A", "", "H", "na", "")
+        if a.acciones == 0:
+            return Celda(numero(0), "", "H", "cero", "«—» en la proxy: no posee acciones")
+        return Celda(numero(a.acciones), "", "H", "valor", "")
+    filas = [FilaCuadro(a.nombre, [_acciones(a),
                                    _pct_accionista(a),
                                    Celda((a.fuente or a.direccion or "c/o la compañía").replace("SCHEDULE ", "").replace("SC ", ""), "", "", "valor", "")],
                         destacada=a.nombre.startswith("Consejeros y directivos")) for a in g.accionistas]
     o = g.origenes.get("accionistas")
-    accionistas = Cuadro(n.siguiente(), "Accionistas con 5 % o más, y consejeros y directivos en conjunto" if edgar else
+    accionistas = Cuadro(n.siguiente(), "Accionistas con 5 % o más, y consejeros y directivos uno a uno y en conjunto" if edgar else
                          f"Principales accionistas, consejeros y directivos{' a ' + f_fecha(g.fecha_accionistas) if g.fecha_accionistas else ''}",
                          ["Acciones", "% del capital", "Fuente y fecha" if edgar else "Dirección"], filas,
                          (_fuente(o, "tabla de propiedad") + (" Participaciones posteriores: Schedule 13G/13D en XML de EDGAR; la última declaración de cada declarante manda." if edgar else ""))
@@ -742,7 +753,7 @@ def construir(ticker: str, hoy: date, emisor: Emisor, exp: Expediente, tab: Tabl
     huecos = [f"{r.campo.rotulo} {r.periodo.clave}: {r.hecho.motivo}" for r in tab.resultados if r.hecho.contraste is Contraste.HUECO]
     faltan = [f"Ficha · {k}: {v}" for k, v in ficha.faltan.items()] + [f"Gobierno · {k}: {v}" for k, v in gobierno.faltan.items()] \
         + ([] if parte_b is not None else [f"Objetivos · {k}: {v}" for k, v in guidance.faltan.items()]      # con parte B: Cuadro 2 y
-           + [f"Regiones · {k}: {v}" for k, v in regiones.faltan.items()])                                  # geografía de los segmentos
+           + [f"Regiones · {k}: {v}" for k, v in (regiones.faltan.items() if regiones is not None else ())])  # geografía de los segmentos
     # paso 1 (04): nombre de presentación y sector que confirma el analista; sin él, la propuesta del sistema (y bloquea)
     from ..motor.datos import paquete_por_sic, sectores as sectores_cfg
     ent_b = parte_b.entradas if parte_b is not None else None
@@ -916,7 +927,8 @@ def construir(ticker: str, hoy: date, emisor: Emisor, exp: Expediente, tab: Tabl
                                         hasta=motor.parametros.fecha_valoracion if motor is not None else hoy, hoy=hoy,
                                         resultados=proxima.fecha if proxima is not None else None) if posicionamiento is not None else {}
     f_faltan = dict(posicionamiento.faltan) if posicionamiento is not None else {"fuente": "no se pidió la lectura de la bolsa para la sección F"}
-    for clave, lista in secciones_mod.recortes_f(posicionamiento, mercado, salida_recortes, comparables, agregador, proxima, historial).items():
+    for clave, lista in secciones_mod.recortes_f(posicionamiento, mercado, salida_recortes, comparables, agregador, proxima, historial,
+                                                 parte_b=parte_b).items():
         evidencias.setdefault(clave, []).extend(lista)
     if f_cuadros:
         for s in indice:
@@ -959,6 +971,9 @@ def construir(ticker: str, hoy: date, emisor: Emisor, exp: Expediente, tab: Tabl
         faltan += [f"Múltiplos · {k}: {v}" for k, v in multiplos.faltan.items()]
     if agregador is not None:
         fuentes.append(f"{agregador.fuente} — resumen del valor (rentabilidad, deuda total, EV/EBITDA, PEG, fecha de resultados), consultado el {f_fecha(hoy)} · {agregador.respuesta[0]}")
+    if parte_b is not None and parte_b.notas:
+        fuentes.append(f"SEC EDGAR — {len(parte_b.notas)} notas de resultados (Exhibit 99.1 de los 8-K de resultados, "
+                       f"{f_fecha(min(x.presentado for x in parte_b.notas))} a {f_fecha(max(x.presentado for x in parte_b.notas))})")
     if historial is not None and historial.cartas:
         fuentes.append(f"SEC EDGAR — {len(historial.cartas)} cartas a accionistas (Exhibit 99.1 de los 8-K de resultados, "
                        f"{f_fecha(min(c.presentado for c in historial.cartas))} a {f_fecha(max(c.presentado for c in historial.cartas))})")
