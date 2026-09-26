@@ -11,6 +11,8 @@ import unittest
 from datetime import date
 from pathlib import Path
 
+import pytest
+
 from tesis.entradas import asistente, propuestas
 from tesis import entorno, qa
 from tesis.fuentes import edgar, precio as precio_mod, sec
@@ -21,6 +23,7 @@ F = Path(__file__).resolve().parent / "fixtures"
 PRUEBA = "Parte B · entradas de PRUEBA (fixture), no del analista: no se puede emitir con ellas"
 
 
+@pytest.mark.lenta
 class EmisionCompleta(unittest.TestCase):
     """QCOM a 23/09/2026 por el mismo camino que el botón «Emitir» del SaaS: adjuntos traídos de EDGAR y `emitir.py`."""
 
@@ -288,6 +291,7 @@ class AsistentePaso9(_Datos):
         self.assertTrue([a for a in avisos if a.startswith("tesis.resumen: frase de 50 palabras")], avisos)
         self.assertFalse([f for f in faltas[3] if "frase de" in f])
 
+    @pytest.mark.lenta
     def test_aceptar_y_editar_en_el_navegador(self):
         """Falla si los botones del paso 9 no dejan en `entradas.json` la propuesta aceptada con su huella, o lo editado
         marcado como editado y con la cita de la propuesta."""
@@ -312,7 +316,8 @@ class AsistentePaso9(_Datos):
                 self.assertEqual(pagina.locator(".estado-parrafo").inner_text(), "editado")
                 pagina.locator("#guardar").click()                   # «Guardando…» al pulsar, «Guardado en…» al volver
                 expect(pagina.locator("#estado-guardado")).to_have_text(re.compile("^Guardado en"))
-                navegador.close()
+                # sin `navegador.close()`: en esta máquina no vuelve (ver `render/imprimir.py`) y la prueba se quedaba
+                # colgada 2 h 16 min; al salir del `with`, Playwright termina Chromium en ~30 s sin dejar procesos
         finally:
             srv.shutdown()
             srv.server_close()

@@ -6,10 +6,10 @@ Hereda `../../CLAUDE.md`; donde choquen, manda este fichero.
 1. Índice, títulos, numeración y anclas: solo `docs/spec/01_indice.yaml`.
 2. Toda cifra impresa es un Hecho (`docs/spec/03` §2) con id, fuente y estado. Prohibidos los literales numéricos en plantillas.
 3. Nada específico de un emisor en código, plantillas ni notas.
-4. Un valor por informe: precio = cierre oficial Nasdaq de `fecha_valoracion`; PO = motor; una recomendación; un horizonte.
+4. Un valor por informe: precio = cierre oficial de la bolsa principal del emisor en `fecha_valoracion` (Nasdaq o NYSE en EE. UU.); si esa bolsa no lo publica de forma accesible, excepción rotulada según la regla 6. PO = motor; una recomendación; un horizonte.
 5. No se emite con bloqueos de QA (`docs/spec/06` §3). Los logs van a `auditoria.json`, nunca al cuerpo del informe.
-6. Fuentes: SEC EDGAR · Nasdaq · Tesoro de EE. UU. · Yahoo solo para IV (excepción marcada). Ninguna más.
-7. v1 solo no financieras; financieras, REIT y biotech sin ingresos → bloqueo.
+6. Fuentes: solo oficiales, listadas en `config/fuentes.yaml`: el propio emisor, reguladores y registros (SEC EDGAR, CNMV y equivalentes), bolsas, bancos centrales y tesoros (Tesoro de EE. UU., Reserva Federal, BCE), organismos estadísticos, ClinicalTrials.gov y FDA. Excepción supletoria, solo si la oficial no publica el dato o no responde: Investing y, si falla, Yahoo Finance. Todo dato excepcional lleva su nivel en el Hecho y se rotula en el cuerpo, en el 38 y en la QA. Una serie, una sola fuente. Ninguna más.
+7. Sectores: financieras, REIT y biotech sin ingresos siguen bloqueados hasta que su fase (F20 bancos y aseguradoras, F21 REIT, extractivas y biotech) cierre su paquete; cada bloqueo se levanta al cerrar la suya, sin costes ni fuentes de pago.
 8. Umbrales solo en `config/*.yaml`, nunca en código.
 9. **Nunca inventes datos.** Sin dato publicado, `N/A` con motivo. Prohibido rellenar con ceros, medias o estimaciones.
 10. **Tres estados siempre**: hay dato · el dato es cero · no hay dato. Y «no es una partida de esta empresa» no es un hueco.
@@ -53,8 +53,8 @@ secciones, frases, graficos, maqueta/) · `tesis/qa` (puerta, linter) · `tesis/
 ## Estado
 F0 ☑ · F1 ☑ esqueleto + C · F2 ☑ B · F3 ☑ D · F4 ☑ E · F5 ☑ F · F6 ☑ G + portada + asistente · F7 ☑ A + H + I + cierre · F8 ☑ cierre de fallos (25/09/2026)
 Protocolo: `docs/fases/00_protocolo.md`. Lo que queda fuera, en `docs/fases/F7.md` y `F8.md` › «No hecho».
-Alcance (analista, 25/09/2026): solo emisores con 10-K y solo la tesis completa de 39 apartados. Siguiente: la emisión real de
-QCOM (`docs/emision_real.md`) y F9.
+Alcance (analista, 26/09/2026): cualquier emisor, cualquier fecha de informe y cualquier documento; la tesis de 39 apartados y, en F31, los formatos cortos. Idioma: solo español. Cumplimiento normativo: fuera de alcance, no se toca. Validación (F33): solo avisa, nunca bloquea. Plan: T0 → F9 → F10–F33.
+Siguiente: cerrar T0; la emisión real de QCOM (`docs/emision_real.md`) sigue pendiente.
 «confirmo borrar» (analista, 24/09/2026): hecho en F1 (sin `narrativa.py`, SDK `anthropic`, `--redactar`, `narrativas/` ni restos).
 Batería: 280 en verde y 34 omitidas sin los adjuntos de NFLX/QCOM. `python -m tesis regresiones` → **33 de 33**.
 F2: segmentos (XBRL inline), accionistas/13G/ejecutivos/retribución/filiales de EDGAR, guía de los Ex. 99.1 confirmada, fechas de Nasdaq.

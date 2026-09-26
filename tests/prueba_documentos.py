@@ -76,6 +76,15 @@ class Catalogo(unittest.TestCase):
         self.assertEqual(est["PROXY"]["estado"], "falta")
         self.assertEqual([f["fichero"] for f in documentos.sueltos(filas)], ["raro.pdf"])
 
+    def test_un_fichero_que_contiene_dos_documentos_ocupa_las_dos_casillas(self):
+        """Falla si la nota que trae también los estados condensados deja la casilla de las cuentas en «falta»."""
+        filas = [{"fichero": "ex99.pdf", "tipo": Tipo.NOTA.value, "tambien": [Tipo.TABLAS.value]}]
+        est = {e["clave"]: e for e in documentos.estado(filas)}
+        self.assertEqual(est["NOTA"]["estado"], "adjuntado")
+        self.assertEqual(est["TABLAS"]["estado"], "adjuntado")
+        self.assertEqual([f["fichero"] for f in est["TABLAS"]["ficheros"]], ["ex99.pdf"])
+        self.assertEqual(documentos.sueltos(filas), [])
+
 
 class Declaracion(unittest.TestCase):
     """La casilla en la que el analista lo adjunta es una declaración suya, no una lectura del documento (regla 3)."""

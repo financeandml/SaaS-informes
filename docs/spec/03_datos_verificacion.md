@@ -27,7 +27,7 @@ El render solo imprime números con `h(id)`; un número sin Hecho hace fallar el
 - Periodos según `fy`/`fp`/fechas de cada filing y las DEI (`DocumentFiscalYearFocus`, `DocumentFiscalPeriodFocus`, `CurrentFiscalYearEndDate`). **Prohibido** usar `frame` (CYaaaaQn) de companyfacts para etiquetar o elegir periodos, y suponer cierre en diciembre.
 - Etiqueta siempre fiscal («4T FY25») con fecha de cierre; se describen los años de 52/53 semanas.
 - Los flujos de los 10-Q son acumulados: trimestre = acumulado − acumulado anterior. 4T = ejercicio − 9 meses (`calculado`). Balance = saldo al cierre.
-- BPA del 4T derivado = beneficio del 4T / (4 × acciones medias anuales − suma T1–T3), `calculado`.
+- Acciones medias del 4T = (días del ejercicio × media anual − días de los 9 meses × media de 9 meses) / días del 4T, `calculado`; BPA del 4T derivado = beneficio del 4T / esas acciones. Las diluidas derivadas son aproximadas: si el documento publica el 4T y la derivación se aparta menos que `umbrales.acciones_4t_derivadas_tolerancia`, manda el documento y la derivación queda en la nota.
 - Reexpresiones: para cada periodo, el valor del filing más reciente; cambios > 0,5 % → nota.
 - Splits: detectados por los datos (DEI, 8-K, salto de acciones); se reexpresan acciones y cifras por acción; la nota se genera con la fecha y el ratio detectados.
 

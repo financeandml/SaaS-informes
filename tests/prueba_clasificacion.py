@@ -45,6 +45,47 @@ class Clasificacion(unittest.TestCase):
         self.assertIsNone(c["periodo_fin"])
         self.assertIn("no se le atribuye ninguno", c["motivo"])
 
+    def test_la_nota_titulada_reports_results_tambien_es_la_nota(self):
+        """Falla si la nota que se titula «… reports … results» (en minúsculas, y sin «Announces») queda «desconocido»:
+        el anexo 99.1 de Apple (30/07/2026) se trajo de EDGAR y la casilla de la nota seguía diciendo «falta»."""
+        nota = ("EX-99.1 2 a8-kex991.htm EX-99.1\nExhibit 99.1\n"
+                "Apple reports third quarter results\n"
+                "June quarter records for total company revenue and EPS\n"
+                "CUPERTINO, CALIFORNIA — Apple today announced financial results for its fiscal 2026 third quarter ended June 27, 2026.\n"
+                "Apple will provide live streaming of its Q3 2026 financial results conference call beginning at 2:00 p.m. PT on July 30, 2026.\n"
+                "Apple periodically provides information for investors on its corporate website, and its investor relations website.")
+        c = _clasificar(nota)
+        self.assertIs(c["tipo"], Tipo.NOTA)
+        self.assertIs(c["certeza"], Certeza.ALTA)
+        self.assertIsNone(c["periodo_fin"])        # mismo criterio que la nota con «Announces»: no se le atribuye cierre
+        # la primera fecha de esta portada es el cierre del trimestre, no la publicación: tomarla fechaba la nota el 27/06
+        self.assertIsNone(c["fecha"])
+        # sin el bloque de relación con inversores, un titular así no basta: no se amplía la regla más de lo necesario
+        self.assertIs(_clasificar("Apple reports third quarter results\nJune 27, 2026")["tipo"], Tipo.DESCONOCIDO)
+
+    def test_los_titulares_de_resultados_de_cualquier_emisor(self):
+        """Falla si la nota de resultados solo se reconoce con los verbos de dos emisores concretos. Los titulares
+        habituales («posts», «delivers», «releases») y la fórmula «today announced … results» sin bloque de inversores
+        también son la nota; un titular suelto, sin ninguna de las dos pruebas, no."""
+        for nota in ("Acme Corp Posts Record Second Quarter Results\nContacts: Investor Relations",
+                     "Globex delivers strong fiscal 2026 results\nFor more information, visit our investor relations site",
+                     "Initech Releases First Quarter 2026 Financial Results\nInvestor Relations contact: ir@initech.test",
+                     "Beta Inc. Reports Fourth Quarter Results\nBeta Inc. today announced financial results for its fourth quarter."):
+            self.assertIs(_clasificar(nota)["tipo"], Tipo.NOTA, nota)
+        self.assertIs(_clasificar("Acme Corp Posts Record Second Quarter Results\nJune 30, 2026")["tipo"], Tipo.DESCONOCIDO)
+
+    def test_una_nota_con_los_estados_cuenta_tambien_como_cuentas_del_anexo(self):
+        """Falla si una nota o una carta que trae en sus páginas los estados condensados no cuenta también como «cuentas
+        del anexo 99.1» (la casilla decía «falta» con las cuentas adjuntadas), o si basta con mencionarlos en la prosa."""
+        from tesis.datos.expediente import tambien
+        estados = "Apple Inc.\nCONDENSED CONSOLIDATED STATEMENTS OF OPERATIONS (Unaudited)\nNet sales: 109,417"
+        self.assertEqual(tambien(Tipo.NOTA, ["portada", "texto", estados]), (Tipo.TABLAS,))
+        self.assertEqual(tambien(Tipo.CARTA, ["portada", "Condensed Consolidated Statements of Operations\n(unaudited)"]), (Tipo.TABLAS,))
+        prosa = "see the condensed consolidated statements of operations included in our Form 10-Q for details"
+        self.assertEqual(tambien(Tipo.NOTA, ["portada", prosa]), ())
+        self.assertEqual(tambien(Tipo.NOTA, [estados]), ())            # la portada ya es la nota: se miran las siguientes
+        self.assertEqual(tambien(Tipo.Q10, ["portada", estados]), ())   # un 10-Q no es un anexo del 8-K
+
     def test_las_tablas_del_anexo_991_toman_su_cierre_aunque_venga_partido(self):
         """Falla si las tablas del 8-K quedan «desconocido» o si no toman el cierre del periodo porque «Three Months
         Ended» y la fecha vienen en líneas distintas, como los imprime el PDF."""
@@ -232,6 +273,27 @@ class LecturaDelDocumento(unittest.TestCase):
 
 
 class ProcedenciaDeLosAnexos(unittest.TestCase):
+    def test_el_anexo_99_del_8k_de_resultados_sin_pistas_es_la_nota(self):
+        """Falla si un anexo 99 traído de EDGAR del 8-K de resultados se queda en «desconocido» porque su portada no trae
+        ninguna pista: EDGAR dice de dónde salió, y eso lo hace la nota con certeza media, dicho en el motivo. Un
+        fichero del mismo 8-K que no es un anexo 99 no se toca."""
+        from tesis.datos.expediente import _de_edgar
+
+        def adjunto():
+            return Adjunto(ruta=Path("SEC_8-K_2026-07-30_ex99-1_0000000000-26-000001.pdf"), huella="x", paginas=["sin pistas"],
+                           tipo=Tipo.DESCONOCIDO, apartado=None, certeza=Certeza.BAJA, motivo="Ninguna pista reconocible en la primera página.")
+        dato = {"url": "https://www.sec.gov/Archives/edgar/data/1/000000000026000001/a8-kex991q3.htm", "accession": "0000000000-26-000001",
+                "formulario": "8-K", "presentado": "2026-07-30", "periodo": ""}
+        a, avisos = adjunto(), []
+        _de_edgar(a, dato, avisos)
+        self.assertIs(a.tipo, Tipo.NOTA)
+        self.assertIs(a.certeza, Certeza.MEDIA)
+        self.assertIs(a.apartado, APARTADO_DE[Tipo.NOTA])
+        self.assertIn("anexo 99", a.motivo)
+        b = adjunto()
+        _de_edgar(b, dict(dato, url="https://www.sec.gov/Archives/edgar/data/1/000000000026000001/acme-8k.htm"), [])
+        self.assertIs(b.tipo, Tipo.DESCONOCIDO)
+
     def test_un_anexo_del_8k_con_su_numero_de_acceso_consta_como_de_edgar(self):
         """Falla si solo el 10-K, el 10-Q y la proxy pueden constar como verificados en EDGAR: la nota de resultados
         traída de la SEC salía con «—» en la columna de procedencia, como si no se supiera de dónde venía."""

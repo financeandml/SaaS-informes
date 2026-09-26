@@ -103,6 +103,7 @@ class Adjunto:
     accession: str = ""                      # número de acceso EDGAR, si el PDF lo trae
     hojas: List[str] = field(default_factory=list)   # solo XLSX
     verificado_en_edgar: Optional[bool] = None       # None = no aplica o no se comprobó
+    tambien: Tuple["Tipo", ...] = ()                 # otros documentos del catálogo que trae dentro (`tambien()`)
 
     @property
     def nombre(self) -> str:
@@ -229,6 +230,18 @@ def clasificar(p1: str, titulo_pdf: str, primeras: str) -> dict:
         return dict(tipo=Tipo.NOTA, periodo_fin=None, fecha=_fecha_larga(p1), accession=accession, certeza=Certeza.ALTA,
                     motivo="Titular «Announces … Results» con el contacto de relación con inversores: es la nota de resultados (anexo 99.1 del 8-K). "
                            "El cierre del periodo no se declara literalmente en la portada, así que no se le atribuye ninguno.")
+    # la misma nota con los otros titulares habituales («reports / posts / delivers / releases … results», en cualquier
+    # caja), con el bloque de relación con inversores o con la fórmula «today announced … results» como segunda prueba.
+    # Sin fecha de la portada: la primera que trae suele ser el cierre del trimestre («quarter ended …») y las
+    # siguientes, dividendo y call; la del documento la pone su depósito
+    if (re.search(r"\b(?:reports|posts|delivers|releases|announces)\b[^.\n]{0,80}\bresults\b", p1, re.I)
+            and (re.search(r"Investor Relations|Earnings Release", p1, re.I)
+                 or re.search(r"\btoday (?:announced|reported)\b[^.\n]{0,80}\bresults\b", p1, re.I))):
+        return dict(tipo=Tipo.NOTA, periodo_fin=None, fecha=None, accession=accession, certeza=Certeza.ALTA,
+                    motivo="Titular de resultados («reports / posts / delivers / releases … results») con el bloque de relación con inversores "
+                           "o el «today announced … results»: es la nota de resultados (anexo 99.1 del 8-K). "
+                           "Ni el cierre del periodo ni la fecha de publicación se declaran solos en la portada, así que no se le atribuyen: "
+                           "la fecha la pone su depósito de EDGAR.")
     # la presentación de resultados: el rótulo de la primera diapositiva —que puede venir partido en dos líneas—,
     # o el título que el propio PDF declara. No vale buscarlo en toda la página: debajo va el descargo legal, que en
     # una portada real ocupa más que el rótulo. Lo que distingue a la diapositiva es que su rótulo es una línea corta.
@@ -242,6 +255,22 @@ def clasificar(p1: str, titulo_pdf: str, primeras: str) -> dict:
                            + ": es la presentación de resultados. Material de apoyo: las cifras se toman de las cuentas.")
     return dict(tipo=Tipo.DESCONOCIDO, accession=accession, certeza=Certeza.BAJA,
                 motivo="Ninguna pista reconocible en la primera página.")
+
+
+# el rótulo de un estado de resultados como encabezado de su propia línea: mencionarlo en la prosa no es traerlo
+_ESTADO_DE_RESULTADOS = re.compile(r"^\s*(?:CONDENSED\s+)?CONSOLIDATED\s+STATEMENTS?\s+OF\s+(?:OPERATIONS|INCOME|EARNINGS)\b", re.I | re.M)
+
+
+def tambien(tipo: Tipo, paginas: Sequence[str]) -> Tuple[Tipo, ...]:
+    """Los otros documentos del catálogo que un adjunto trae dentro, además del que dice ser su portada.
+
+    La nota de resultados y la carta a accionistas suelen llevar detrás los estados condensados del trimestre: son las
+    mismas cuentas que el anexo 99.1 publica sueltas en otros emisores, el contraste ya las lee de sus páginas, y la
+    lista de documentos no puede decir que faltan. La portada se salta: ya dice lo que el documento es.
+    """
+    if tipo in (Tipo.NOTA, Tipo.CARTA) and any(_ESTADO_DE_RESULTADOS.search(p) for p in paginas[1:]):
+        return (Tipo.TABLAS,)
+    return ()
 
 
 def _pares_mes_anio(texto: str) -> List[Tuple[str, str]]:
@@ -418,6 +447,14 @@ def _de_edgar(a: Adjunto, dato: dict, avisos: List[Aviso]) -> None:
         # un anexo 99 del 8-K: EDGAR no dice si es la nota, las tablas o la presentación; eso lo dice su portada
         a.fecha = a.fecha or presentado
         a.motivo += f" Traído de EDGAR: anexo del 8-K {a.accession}, presentado el {presentado:%d/%m/%Y}." if presentado else ""
+        # si la portada no trae ninguna pista, su procedencia sí la da: `fuentes.edgar` solo trae anexos 99 del 8-K
+        # de resultados (epígrafe 2.02), y el anexo 99 de ese 8-K es la nota. Es una inferencia, y se dice
+        from ..fuentes.sec import es_anexo_99
+        if a.tipo is Tipo.DESCONOCIDO and formulario == "8-K" and es_anexo_99(str(dato.get("url") or "").rsplit("/", 1)[-1]):
+            a.tipo, a.apartado, a.certeza = Tipo.NOTA, APARTADO_DE[Tipo.NOTA], Certeza.MEDIA
+            a.motivo = ("Su portada no trae ninguna pista reconocible, pero EDGAR lo sirve como anexo 99 del 8-K de resultados "
+                        f"{a.accession}" + (f", presentado el {presentado:%d/%m/%Y}" if presentado else "")
+                        + ": se toma como la nota de resultados por su procedencia, no por lo que dice el documento.")
         return
     if a.tipo is not tipo and a.tipo is not Tipo.DESCONOCIDO:
         avisos.append(Aviso("grave", f"{a.nombre}: EDGAR lo sirve como «{formulario}» y su portada dice «{a.tipo.value}»; "
@@ -466,6 +503,7 @@ def cargar(ticker: str, rutas: Iterable[Path], depositos: Optional[Sequence] = N
             _de_edgar(a, origen, avisos)      # lo que dice el depósito manda sobre la casilla del analista
         elif clave:
             _declarado(a, clave, avisos)
+        a.tambien = tambien(a.tipo, a.paginas)       # después de EDGAR y de la casilla: el tipo ya es el definitivo
         if a.huella in vistos:
             avisos.append(Aviso("aviso", f"{a.nombre} es una copia exacta de {vistos[a.huella].nombre}: se usa una sola vez."))
             continue

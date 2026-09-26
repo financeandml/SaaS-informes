@@ -129,6 +129,11 @@ def estado(filas: Sequence[dict]) -> List[dict]:
     por_clave: Dict[str, List[dict]] = {}
     for f in filas:
         por_clave.setdefault(_clave_de_fila(f), []).append(f)
+        # lo que trae dentro (la nota con los estados condensados) llena también esa casilla: es el mismo fichero
+        for t in f.get("tambien") or ():
+            d = next((d for d in CATALOGO if d.tipo.value == t), None)
+            if d is not None and f not in por_clave.setdefault(d.clave, []):
+                por_clave[d.clave].append(f)
     salida = []
     for d in CATALOGO:
         suyos = por_clave.get(d.clave, [])

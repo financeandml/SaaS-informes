@@ -45,6 +45,50 @@ class ReglasDeCasado(unittest.TestCase):
         self.assertEqual("", contraste._pista(6.0, _cand("Basic", "Earnings per share", 5.0, por_accion=True), campos.campo("bpa_basico")))
 
 
+class AccionesMediasDel4T(unittest.TestCase):
+    """El 4T de las acciones medias no lo publica la SEC: se deriva del ejercicio y de los nueve meses. Caso real de
+    NFLX (4T de 2025): con «4 × año − 3 × 9M» las básicas salían 223.000 acciones por debajo de lo publicado y el
+    contraste bloqueaba la emisión por dos discrepancias que no lo eran."""
+
+    FY = Periodo(fin=date(2025, 12, 31), inicio=date(2025, 1, 1))
+    NUEVE = Periodo(fin=date(2025, 9, 30), inicio=date(2025, 1, 1))
+    Q4 = Periodo(fin=date(2025, 12, 31), inicio=date(2025, 10, 1))
+
+    def _serie(self, fy, nueve):
+        from tesis.datos.hechos import Capa, de_valor
+        hechos = {self.FY: de_valor("x", self.FY, fy, Capa.SEC, None, unidad="acciones"),
+                  self.NUEVE: de_valor("x", self.NUEVE, nueve, Capa.SEC, None, unidad="acciones")}
+        return lambda campo: hechos
+
+    def _pares(self, valor):
+        from pathlib import Path
+        from tesis.datos.expediente import APARTADO_DE, Adjunto, Tipo
+        from tesis.datos.hechos import Certeza
+        a = Adjunto(ruta=Path("cuentas.pdf"), huella="x", paginas=["y"], tipo=Tipo.FINWEB, apartado=APARTADO_DE[Tipo.FINWEB],
+                    certeza=Certeza.MEDIA, motivo="")
+        return [(a, _cand("Diluted", "Weighted-average shares", valor, periodo=self.Q4))]
+
+    def test_la_media_del_4t_pondera_por_dias(self):
+        """Falla si el 4T vuelve a suponer trimestres iguales: el año tiene 365 días, los nueve meses 273 y el 4T 92."""
+        q4 = contraste._q4_por_accion("acciones_basicas", self.Q4, self._serie(4_249_512_000, 4_256_350_000))
+        self.assertAlmostEqual(q4.valor, (365 * 4_249_512_000 - 273 * 4_256_350_000) / 92, places=0)
+        self.assertLessEqual(abs(q4.valor - 4_229_221_000), 500)      # lo publicado, redondeado a miles
+
+    def test_la_diluida_derivada_cercana_toma_la_cifra_del_documento(self):
+        """Falla si una diluida derivada que se aparta del documento menos que la tolerancia de config sale discrepante,
+        o si sale confirmada con la cifra aproximada en vez de la publicada. Lejos de la tolerancia sigue discrepando."""
+        from tesis.datos.hechos import Capa
+        c = campos.campo("acciones_diluidas")
+        q4 = contraste._q4_por_accion("acciones_diluidas", self.Q4, self._serie(4_343_863_000, 4_352_840_000))
+        r = contraste._contrastar_media_derivada(c, self.Q4, q4, self._pares(4_317_144_000), None)
+        self.assertIs(r.hecho.contraste, Contraste.CONFIRMADO)
+        self.assertEqual(r.hecho.valor, 4_317_144_000)
+        self.assertIs(r.hecho.capa, Capa.DOCUMENTO)
+        self.assertIn("derivación", r.hecho.nota)
+        lejos = contraste._contrastar_media_derivada(c, self.Q4, q4, self._pares(4_400_000_000), None)
+        self.assertIs(lejos.hecho.contraste, Contraste.DISCREPANTE)
+
+
 @unittest.skipUnless(RUTAS, "sin expediente de NFLX (tests/expediente_nflx.json)")
 class ExtractorReal(unittest.TestCase):
     @classmethod

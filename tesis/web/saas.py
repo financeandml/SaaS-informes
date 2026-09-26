@@ -164,6 +164,7 @@ def clasificar(ticker: str) -> dict:
         filas.append({"fichero": a.ruta.name, "clave": a.clave, "tipo": a.tipo.value, "periodo_fin": a.periodo_fin, "fecha": a.fecha,
                       "orden": orden.isoformat() if orden else "", "certeza": a.certeza.value, "motivo": a.motivo, "edgar": a.verificado_en_edgar,
                       "accession": a.accession, "paginas": len(a.paginas), "destino": catalogo.destino(a.tipo),
+                      "tambien": [t.value for t in a.tambien],
                       "declarado": declarado.get(a.ruta.name, "")})
     filas.sort(key=lambda f: (f["orden"] == "", f["orden"], f["fichero"]))
     return {"adjuntos": filas, "avisos": [{"gravedad": av.gravedad, "texto": av.texto} for av in exp.avisos]}

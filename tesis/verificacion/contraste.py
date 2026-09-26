@@ -432,8 +432,10 @@ def _cero_declarado(c: Campo, p: Periodo, exp: Expediente) -> Optional[Hecho]:
 def _q4_por_accion(clave: str, p: Periodo, serie) -> Optional[Hecho]:
     """El 4T fiscal de las acciones medias y del BPA, que nadie publica suelto.
 
-    Acciones medias del 4T = 4 × media del ejercicio − 3 × media de los nueve meses (las medias ponderan por días). BPA
-    del 4T = beneficio del 4T / esas acciones. Sale como derivado con su fórmula: nunca como hecho publicado.
+    Acciones medias del 4T = (días del ejercicio × media del ejercicio − días de los nueve meses × su media) / días del
+    4T: las medias ponderan por días, y suponer trimestres iguales («4 × año − 3 × 9M») dejaba las básicas de NFLX
+    223.000 acciones por debajo de lo publicado. BPA del 4T = beneficio del 4T / esas acciones. Sale como derivado con
+    su fórmula: nunca como hecho publicado.
     """
     from ..datos.hechos import derivar
     fin_9m = p.inicio - timedelta(days=1)
@@ -448,9 +450,14 @@ def _q4_por_accion(clave: str, p: Periodo, serie) -> Optional[Hecho]:
     s_fy, s_9m = par(f"acciones_{tipo}")
     if s_fy is None or s_9m is None:
         return None
+    d_fy, d_9m = (s_fy.periodo.fin - s_fy.periodo.inicio).days + 1, (s_9m.periodo.fin - s_9m.periodo.inicio).days + 1
+    d_q4 = d_fy - d_9m
+    if d_q4 <= 0:
+        return None
     if clave.startswith("acciones"):
-        return derivar(clave, p, f"4 × {s_fy.periodo.clave} − 3 × 9M (acciones medias del 4T)", {"fy": s_fy, "nueve_meses": s_9m},
-                       lambda fy, nueve_meses: 4 * fy - 3 * nueve_meses, unidad="acciones")
+        return derivar(clave, p, f"({d_fy} × {s_fy.periodo.clave} − {d_9m} × 9M) / {d_q4} días (acciones medias del 4T)",
+                       {"fy": s_fy, "nueve_meses": s_9m},
+                       lambda fy, nueve_meses: (d_fy * fy - d_9m * nueve_meses) / d_q4, unidad="acciones")
     b_fy, b_9m = par("beneficio_neto")
     if b_fy is None or b_9m is None:
         return None
@@ -459,9 +466,40 @@ def _q4_por_accion(clave: str, p: Periodo, serie) -> Optional[Hecho]:
         s_fy, s_9m = par("acciones_basicas")
         if s_fy is None or s_9m is None:
             return None
-    return derivar(clave, p, f"(beneficio {b_fy.periodo.clave} − 9M) / (4 × acciones {s_fy.periodo.clave} − 3 × 9M)",
+    return derivar(clave, p, f"(beneficio {b_fy.periodo.clave} − 9M) / (({d_fy} × acciones {s_fy.periodo.clave} − {d_9m} × 9M) / {d_q4})",
                    {"b_fy": b_fy, "b_9m": b_9m, "s_fy": s_fy, "s_9m": s_9m},
-                   lambda b_fy, b_9m, s_fy, s_9m: (b_fy - b_9m) / (4 * s_fy - 3 * s_9m), unidad="USD/acción")
+                   lambda b_fy, b_9m, s_fy, s_9m: (b_fy - b_9m) / ((d_fy * s_fy - d_9m * s_9m) / d_q4), unidad="USD/acción")
+
+
+def _contrastar_media_derivada(c: Campo, p: Periodo, q4: Hecho, pares: Sequence[Tuple[Adjunto, Candidato]],
+                               decision: Optional[Decision]) -> Resultado:
+    """El 4T de las acciones medias frente a lo que publica el documento.
+
+    La derivación por días es exacta para las básicas, pero las diluidas del ejercicio no son la media de las de cada
+    trimestre (la dilución se calcula periodo a periodo con su precio medio), así que la diluida derivada es una
+    aproximación. Si los documentos coinciden entre sí y la derivación se aparta de ellos menos que
+    `umbrales.acciones_4t_derivadas_tolerancia`, manda la cifra publicada y la derivación queda en la nota como contraste.
+    Fuera de esa tolerancia, o con los documentos en desacuerdo, sigue siendo una discrepancia.
+    """
+    from ..umbrales import umbral
+    r = _contrastar_celda(c, p, q4, pares, decision)
+    if r.hecho.contraste is not Contraste.DISCREPANTE or decision is not None or c.unidad != "acciones" or not pares:
+        return r
+    ordenados = _ordenar_evidencia(pares)
+    a, ev = ordenados[0]
+    if any(abs(cand.valor - ev.valor) > max(_tolerancia(cand, c), _tolerancia(ev, c)) for _, cand in ordenados):
+        return r
+    desvio = abs(q4.valor - ev.valor) / abs(ev.valor) if ev.valor else float("inf")
+    if desvio > umbral("acciones_4t_derivadas_tolerancia"):
+        return r
+    docs = {aa.clave for aa, _ in ordenados}
+    hecho = de_valor(c.clave, p, _normalizar(ev.valor, c), Capa.DOCUMENTO, _origen_de(a, ev), unidad=c.unidad,
+                     certeza=Certeza.ALTA if len(docs) >= 2 else Certeza.MEDIA,
+                     motivo="la SEC no publica las acciones medias del 4T; se toma la cifra publicada en el documento",
+                     nota=f"según {a.nombre} pág. {ev.pagina}; la derivación desde la SEC ({q4.formula}) da {numero(q4.valor, 0)}, "
+                          f"a un {numero(desvio * 100, 3)} %, dentro de la tolerancia de una media derivada")
+    hecho = hecho.con(contraste=Contraste.CONFIRMADO)
+    return Resultado(c, p, hecho, q4, [cand for _, cand in pares], [cand for _, cand in ordenados], ev, nota=hecho.nota)
 
 
 def contrastar(exp: Expediente, facts: dict, obtenido_en: date, periodos: Dict[str, List[Periodo]],
@@ -524,7 +562,7 @@ def contrastar(exp: Expediente, facts: dict, obtenido_en: date, periodos: Dict[s
                     and c.clave in ("acciones_basicas", "acciones_diluidas", "bpa_basico", "bpa_diluido")):
                 q4 = _q4_por_accion(c.clave, p, serie)
                 if q4 is not None:
-                    resultados.append(_contrastar_celda(c, p, q4, pares, decs.get((c.clave, p.clave))))
+                    resultados.append(_contrastar_media_derivada(c, p, q4, pares, decs.get((c.clave, p.clave))))
                     continue
             if (h_sec is None or not h_sec.hay_dato) and p.meses == 3 and c.conceptos and c.unidad == "USD":
                 # el trimestre que no se publica suelto se saca de los acumulados, que sí se publican
