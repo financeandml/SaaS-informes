@@ -26,3 +26,10 @@
 .parrafos li .pista { display: inline; }
 .parrafos .estado-parrafo { font-weight: 600; color: var(--tinta); }
 .botones-parrafo { display: flex; gap: 8px; margin-top: 6px; }
+/* F10: propuestas del sistema (glifo y texto, no solo color) */
+.propuesta { font-size: 12px; margin: 2px 0 6px; padding: 4px 8px; border-left: 3px solid var(--ocre); background: var(--ocre-suave); color: var(--tinta); }
+.propuesta .marca { color: var(--ocre); font-weight: 600; }
+.propuesta button { margin-left: 6px; font-size: 12px; padding: 2px 8px; }
+.propuesta.confirmada { border-left-color: var(--ok); background: var(--ok-suave); }
+.propuesta.sin { border-left-color: var(--gris-claro); background: var(--gris-fondo); color: var(--tinta-suave); }
+#confirmar-bloque { margin-bottom: 8px; }

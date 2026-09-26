@@ -1,0 +1,15 @@
+# propuestas.yaml · Qué propuestas del sistema (tesis/entradas/proponer.py) se pueden confirmar en bloque con
+# «Confirmar las propuestas de este paso». Lo que no está en `en_bloque` se confirma campo a campo, mirándolo.
+# `nunca_en_bloque` manda sobre `en_bloque`: es el criterio del analista, que se propone pero no se acepta sin leer.
+en_bloque:
+  - meta.tipo
+  - meta.sector
+# cómo se nombra cada campo cuando el informe (37) dice qué se confirmó desde una propuesta: nunca el identificador interno
+rotulos:
+  meta.tipo: tipo de informe
+  meta.sector: sector
+nunca_en_bloque:
+  - pos.recomendacion
+  - pos.tamano_pct
+  - pos.precio_entrada
+  - pos.drawdown_tolerado

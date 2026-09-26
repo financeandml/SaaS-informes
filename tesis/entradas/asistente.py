@@ -158,6 +158,8 @@ def cargar(ticker: str, fecha: date) -> Tuple[dict, List[str]]:
 
 def guardar(ticker: str, fecha: date, datos: dict) -> Path:
     """Escribe el fichero y guarda la versión anterior en `versiones/` (04: persistencia versionada)."""
+    from .proponer import normalizar
+    normalizar(datos)                          # lo confirmado y cambiado después ya no es la propuesta (F10)
     r = ruta(ticker, fecha)
     r.parent.mkdir(parents=True, exist_ok=True)
     if r.exists():
@@ -263,6 +265,11 @@ def validar(ticker: str, fecha: date, datos: dict, regla: Optional[Tuple[str, fl
             salida[1].insert(0, f"meta.sector: bloqueo v1 — {bloqueo}")
     except Exception:                                 # sin EDGAR no se sabe el SIC: lo dirá el informe al generarse
         pass
+    # F10: lo confirmado desde una propuesta cuyos datos han cambiado vuelve a «revisar», en el paso de su campo
+    from .proponer import caducadas, proponer
+    paso_de = {c["id"]: p["numero"] for p in esquema() for c in p["campos"]}
+    for falta in caducadas(datos, proponer(ticker, fecha, datos)):
+        salida.setdefault(paso_de.get(falta.split(":")[0], 9), []).append(falta)
     if e.valor("esc"):
         salida[7] += leer(datos, fecha).faltas
     salida[9] = salida.get(9, []) + _paso9(ticker, fecha, e)

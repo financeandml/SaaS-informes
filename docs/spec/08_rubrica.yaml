@@ -1,0 +1,52 @@
+# 08_rubrica.yaml · Qué tiene un informe de iniciación de nivel institucional, y en qué punto está el sistema.
+# Solo informa (plan del 26/09/2026, tramo 5): nunca bloquea una emisión. `python -m tesis rubrica [TICKER]` la resume.
+# estado: si · parcial · no · por_comprobar (no verificado en el código: no se da por hecho). Se actualiza al cerrar
+# cada fase, con la salida de la batería que lo demuestre; `fase` es la que lo cubre o lo completa.
+criterios:
+  # Cobertura de emisores
+  - {id: 1,  grupo: cobertura, criterio: "Emisores de EE. UU. no financieros con 10-K", estado: "si", fase: "—"}
+  - {id: 2,  grupo: cobertura, criterio: "Emisores extranjeros en la SEC (20-F / 40-F, NIIF)", estado: "no", fase: F16}
+  - {id: 3,  grupo: cobertura, criterio: "Emisores sin SEC (UE y otros mercados)", estado: "no", fase: F18}
+  - {id: 4,  grupo: cobertura, criterio: "Bancos y aseguradoras", estado: "no", fase: F20}
+  - {id: 5,  grupo: cobertura, criterio: "REIT, extractivas y biotecnológicas sin ingresos", estado: "no", fase: F21}
+  - {id: 6,  grupo: cobertura, criterio: "Clases de acciones, ADR, splits, escisiones y pro forma", estado: por_comprobar, fase: F19}
+  - {id: 7,  grupo: cobertura, criterio: "Moneda distinta del USD", estado: "no", fase: F16}
+  # Datos y verificación
+  - {id: 8,  grupo: datos, criterio: "Toda cifra con fuente, id y estado; contraste con XBRL", estado: "si", fase: "—"}
+  - {id: 9,  grupo: datos, criterio: "Citas con documento y página, recortes en el 39", estado: "si", fase: F13}
+  - {id: 10, grupo: datos, criterio: "Cuentas de 8 periodos intermedios con el último derivado", estado: parcial, fase: F24, nota: "hoy 4 trimestres"}
+  - {id: 11, grupo: datos, criterio: "KPIs operativos del sector", estado: parcial, fase: F11, nota: "sin lista por paquete"}
+  - {id: 12, grupo: datos, criterio: "Estructura de deuda: vencimientos, tipos, covenants", estado: parcial, fase: F27}
+  # Modelo de estimaciones
+  - {id: 13, grupo: modelo, criterio: "Modelo integrado de resultados, balance y flujos que cuadra", estado: "no", fase: F24}
+  - {id: 14, grupo: modelo, criterio: "Estimaciones de los próximos 4–8 periodos intermedios", estado: "no", fase: F24}
+  - {id: 15, grupo: modelo, criterio: "Proyección por segmentos y drivers", estado: parcial, fase: F24}
+  - {id: 16, grupo: modelo, criterio: "BPA proyectado con acciones diluidas y recompras", estado: "no", fase: F24}
+  - {id: 17, grupo: modelo, criterio: "Estimaciones propias frente al consenso", estado: parcial, fase: F25, nota: "BPA de Nasdaq"}
+  - {id: 18, grupo: modelo, criterio: "Cuadro de cambios de estimaciones entre informes", estado: "no", fase: F25}
+  # Valoración
+  - {id: 19, grupo: valoracion, criterio: "DCF con escenarios, sensibilidad y DCF inverso", estado: "si", fase: F12}
+  - {id: 20, grupo: valoracion, criterio: "Comparables con estimaciones de los próximos 12 meses", estado: parcial, fase: F26}
+  - {id: 21, grupo: valoracion, criterio: "Bandas históricas de múltiplos", estado: parcial, fase: F26}
+  - {id: 22, grupo: valoracion, criterio: "Suma de partes", estado: "si", fase: F22}
+  - {id: 23, grupo: valoracion, criterio: "Método propio del sector (P/VTC-ROTE, NAV, rNPV, FFO)", estado: "no", fase: F20}
+  - {id: 24, grupo: valoracion, criterio: "Método del precio objetivo y riesgos para alcanzarlo", estado: parcial, fase: F26}
+  # Contenido
+  - {id: 25, grupo: contenido, criterio: "Tesis, pilares y catalizadores fechados", estado: "si", fase: F11}
+  - {id: 26, grupo: contenido, criterio: "Mercado, competencia y foso con evidencias", estado: "si", fase: F13}
+  - {id: 27, grupo: contenido, criterio: "Riesgos con probabilidad e impacto, y caso bajista", estado: "si", fase: F14}
+  - {id: 28, grupo: contenido, criterio: "Historial de guía frente a real", estado: "si", fase: "—"}
+  - {id: 29, grupo: contenido, criterio: "Industria con estadísticas oficiales", estado: "no", fase: F28}
+  - {id: 30, grupo: contenido, criterio: "ESG y controversias con evidencias", estado: "no", fase: F28}
+  - {id: 31, grupo: contenido, criterio: "Gobierno, retribución, accionistas y operaciones de directivos cruzadas con el Form 4", estado: "si", fase: F9}
+  - {id: 32, grupo: contenido, criterio: "Posicionamiento: opciones, cortos, 13F", estado: "si", fase: F18, nota: "EE. UU."}
+  # Presentación
+  - {id: 33, grupo: presentacion, criterio: "Primera página estándar con cuadro de estimaciones y gráfico", estado: parcial, fase: F29}
+  - {id: 34, grupo: presentacion, criterio: "Cotización frente a índice y rango de 52 semanas", estado: por_comprobar, fase: F29}
+  - {id: 35, grupo: presentacion, criterio: "Todo en español (decisión del 26/09/2026: sin versión en inglés)", estado: "si", fase: "—"}
+  # Gobierno del informe y operación
+  - {id: 36, grupo: operacion, criterio: "Revisión de un segundo analista antes de emitir", estado: "no", fase: F30}
+  - {id: 37, grupo: operacion, criterio: "Cumplimiento normativo", estado: fuera, fase: "—", nota: "fuera de alcance por decisión del analista (26/09/2026)"}
+  - {id: 38, grupo: operacion, criterio: "Propuestas del sistema confirmadas por el analista, con su fuente en el 37", estado: parcial, fase: F11, nota: "F10: mecanismo, sector y tipo de informe"}
+  - {id: 39, grupo: operacion, criterio: "Formatos cortos: resultados, avance, flash", estado: "no", fase: F31}
+  - {id: 40, grupo: operacion, criterio: "Seguimiento de la cobertura con alertas", estado: parcial, fase: F32}

@@ -1,4 +1,4 @@
-"""El punto de entrada único: `python -m tesis servir | documentos | generar`.
+"""El punto de entrada único: `python -m tesis servir | documentos | generar | regresiones | rubrica`.
 
 Manda lo que ya había: `servir` es `tesis.web.saas` y `generar` es `emitir.py`, y a los dos se les pasan sus opciones
 tal cual —incluido `--help`—, así que nada de lo que el analista ya escribía cambia de significado. Lo que añade
@@ -14,7 +14,7 @@ from typing import List, Optional
 
 RAIZ = Path(__file__).resolve().parents[1]
 
-ORDENES = ("servir", "documentos", "generar", "regresiones")
+ORDENES = ("servir", "documentos", "generar", "regresiones", "rubrica")
 
 _FILA_07 = None   # se compila al usarla: `re` solo hace falta en `regresiones`
 
@@ -103,6 +103,32 @@ def _regresiones(argv: List[str]) -> int:
     return 0 if codigo == 0 else 1
 
 
+def _rubrica(argv: List[str]) -> int:
+    """La rúbrica institucional (docs/spec/08) resumida; con TICKER, además, la puerta de calidad de su último informe.
+    Solo informa: el código de salida es siempre 0 (tramo 5 del plan del 26/09/2026)."""
+    import json
+    import yaml
+    from .rutas import SPEC
+    from . import entorno
+    criterios = yaml.safe_load((SPEC / "08_rubrica.yaml").read_text(encoding="utf-8"))["criterios"]
+    glifo = {"si": "✓", "parcial": "◐", "no": "✕", "por_comprobar": "?", "fuera": "—"}
+    cuenta = {k: sum(1 for c in criterios if c["estado"] == k) for k in glifo}
+    print(f"Rúbrica institucional · {cuenta['si']} sí · {cuenta['parcial']} parciales · {cuenta['no']} no · "
+          f"{cuenta['por_comprobar']} por comprobar · {cuenta['fuera']} fuera de alcance (de {len(criterios)})\n")
+    for c in criterios:
+        print(f"{c['id']:>3} {glifo.get(c['estado'], '?')} {c['criterio']}  [{c['fase']}]" + (f" · {c['nota']}" if c.get("nota") else ""))
+    if argv:
+        t = argv[0].upper()
+        auditorias = sorted((entorno.carpeta("salida") / t).glob(f"{t}_tesis_*.auditoria.json"))
+        if auditorias:
+            a = json.loads(auditorias[-1].read_text(encoding="utf-8"))
+            print(f"\n{t}, último informe ({a.get('fecha')}): {len(a.get('bloqueos') or [])} bloqueos · {len(a.get('avisos') or [])} avisos · "
+                  f"{'EMITIDO' if a.get('emitido') else 'BORRADOR'} · {len(a.get('confirmados_desde_propuesta') or {})} datos confirmados desde una propuesta")
+        else:
+            print(f"\n{t}: sin informes generados en {entorno.carpeta('salida') / t}")
+    return 0
+
+
 def main(argv: Optional[List[str]] = None) -> int:
     argv = list(sys.argv[1:] if argv is None else argv)
     orden, resto = (argv[0] if argv else ""), argv[1:]
@@ -115,6 +141,8 @@ def main(argv: Optional[List[str]] = None) -> int:
         return _documentos(resto)
     if orden == "regresiones":
         return _regresiones(resto)
+    if orden == "rubrica":
+        return _rubrica(resto)
     print(f"uso: python -m tesis {{{'|'.join(ORDENES)}}} …\n\n{__doc__}", file=sys.stderr)
     return 2
 

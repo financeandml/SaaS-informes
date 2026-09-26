@@ -67,3 +67,9 @@ apuntado la caché de EDGAR y la carpeta de `emitir.py` dentro del paquete, y la
 | `agregador`, `comparables`, `mercado_objetivo`, `regiones`, `riesgos`, `historial`, `cartas`, `dcf` | `heredado/` |
 | `entorno`, `umbrales`, `formato`, `rotulos` | sin cambio; nuevo `rutas` |
 
+
+## F10 · punto de partida del asistente (26/09/2026)
+Medido sobre las entradas completas de QCOM (`tests/fixtures/QCOM/entradas.json`), las que emiten el informe de control:
+**486 valores tecleados** (hojas del JSON, sin claves internas) y **29 citas** (documento, página, literal y traducción).
+El plan del 26/09 estimaba ~350 y ~35 contando la especificación con sus mínimos: la medida manda. El tiempo que cuesta
+rellenarlas no se puede medir desde aquí: queda para el analista, con un informe real. Se vuelve a medir al cerrar F11–F14.

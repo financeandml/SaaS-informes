@@ -6,7 +6,7 @@
 const qs = new URLSearchParams(location.search);
 const TICKER = (qs.get("ticker") || "").toUpperCase();
 let FECHA = qs.get("fecha") || "";
-let ESQUEMA = [], DATOS = {}, FALTAS = {}, PROPUESTAS = [], PASO = Number(qs.get("paso") || 1);
+let ESQUEMA = [], DATOS = {}, FALTAS = {}, PROPUESTAS = [], PROPUESTAS_CAMPOS = {}, PASO = Number(qs.get("paso") || 1);
 
 const PALABRAS = {
   tamano: "tamaño", anio: "año", anios: "años", senal: "señal", descripcion: "descripción", fundacion: "fundación", asignacion: "asignación",
@@ -190,6 +190,17 @@ function editorParrafos() {
     pintarUno(false);
     caja.appendChild(bloque);
   });
+  // F10: aceptar de una vez los párrafos que siguen sin validar (lo ya aceptado o editado con la huella vigente no se toca)
+  const sinValidar = PROPUESTAS.filter((p) => estadoParrafo(p, obtener(DATOS, `revision.parrafos.${p.id}`)) !== "aceptado"
+    && estadoParrafo(p, obtener(DATOS, `revision.parrafos.${p.id}`)) !== "editado");
+  if (sinValidar.length > 1) {
+    const todos = el("button", { type: "button", id: "aceptar-todos", class: "secundario" }, [`Aceptar las ${sinValidar.length} propuestas sin validar`]);
+    todos.addEventListener("click", () => {
+      sinValidar.forEach((p) => fijar(DATOS, `revision.parrafos.${p.id}`, { propuesta: p.huella, frases: p.frases.map((f) => [f[0], f[1]]), editado: false }));
+      pintar();
+    });
+    caja.insertBefore(todos, caja.firstChild);
+  }
   caja.appendChild(el("div", { class: "pista" }, ["Lo aceptado o editado se guarda con «Guardar» y queda congelado en las entradas."]));
   return caja;
 }
@@ -213,14 +224,48 @@ function editor(c, valor, cambio, anidado) {
     default: return editorTexto(c, valor, cambio, false);
   }
 }
+// ---- F10: lo que propone el sistema. No es una entrada hasta que el analista lo confirma: al confirmar, el valor y su
+// origen (fuente, motivo, huella) se escriben en DATOS y «Guardar» los guarda. Si luego lo cambia, pasa a ser suyo.
+function vacio(v) { return v === undefined || v === null || v === "" || (Array.isArray(v) && !v.length); }
+function confirmar(id, p) {
+  fijar(DATOS, id, p.valor);
+  if (!DATOS._origen || typeof DATOS._origen !== "object") DATOS._origen = {};
+  DATOS._origen[id] = { tipo: "propuesta", fuente: p.fuente, motivo: p.motivo, huella: p.huella, valor: p.valor };
+}
+function nodoPropuesta(c, valor) {
+  const p = PROPUESTAS_CAMPOS[c.id];
+  const origen = DATOS._origen && DATOS._origen[c.id];
+  if (!vacio(valor) && origen && origen.tipo === "propuesta") {
+    return el("div", { class: "propuesta confirmada" }, [`✓ Confirmado desde la propuesta del sistema · ${origen.fuente}`]);
+  }
+  if (!p) return null;
+  if (p.sin !== undefined) return vacio(valor) ? el("div", { class: "propuesta sin" }, [`○ Sin propuesta del sistema: ${p.sin}`]) : null;
+  if (!vacio(valor)) return null;
+  const mostrado = typeof p.valor === "string" ? valorEnum(p.valor) : String(p.valor);
+  const b = el("button", { type: "button", class: "secundario" }, ["Confirmar"]);
+  b.addEventListener("click", () => { confirmar(c.id, p); pintar(); });
+  return el("div", { class: "propuesta", "data-propuesta": c.id, title: p.motivo }, [
+    el("span", { class: "marca" }, ["◇ Propuesto: "]), el("strong", {}, [mostrado]), ` · ${p.fuente} `, b,
+  ]);
+}
 function campoNodo(c, valor, cambio, anidado) {
   const faltas = (FALTAS[PASO] || []).filter((f) => !anidado && f.split(":")[0].split("[")[0] === c.id);
+  const propuesta = anidado ? null : nodoPropuesta(c, valor);
   return el("div", { class: "campo" }, [
     el("span", { class: "rotulo" }, [rotulo(c.id)]),
     ...(pista(c) ? [el("span", { class: "pista" }, [pista(c)])] : []),
+    ...(propuesta ? [propuesta] : []),
     editor(c, valor, cambio, anidado),
     ...faltas.map((f) => el("div", { class: "falta" }, [legible(f)])),
   ]);
+}
+function botonBloque(p) {
+  // solo lo que `config/propuestas.yaml` deja confirmar en bloque, y solo si el campo está vacío
+  const pendientes = p.campos.filter((c) => PROPUESTAS_CAMPOS[c.id] && PROPUESTAS_CAMPOS[c.id].bloque && vacio(obtener(DATOS, c.id)));
+  if (!pendientes.length) return null;
+  const b = el("button", { type: "button", id: "confirmar-bloque", class: "secundario" }, [`Confirmar las propuestas de este paso (${pendientes.length})`]);
+  b.addEventListener("click", () => { pendientes.forEach((c) => confirmar(c.id, PROPUESTAS_CAMPOS[c.id])); pintar(); });
+  return b;
 }
 
 // ---- pintar
@@ -238,6 +283,8 @@ function pintar() {
   const p = ESQUEMA.find((x) => x.numero === PASO) || ESQUEMA[0];
   document.getElementById("titulo-paso").textContent = `Paso ${p.paso}`;
   const campos = vaciar(document.getElementById("campos"));
+  const bloque = botonBloque(p);
+  if (bloque) campos.appendChild(bloque);
   p.campos.forEach((c) => campos.appendChild(campoNodo(c, obtener(DATOS, c.id), (v) => fijar(DATOS, c.id, v), false)));
   const lista = vaciar(document.getElementById("faltas"));
   (FALTAS[PASO] || []).forEach((f) => lista.appendChild(el("li", {}, [legible(f)])));
@@ -255,6 +302,7 @@ async function cargar() {
   const d = await r.json();
   if (!r.ok) { document.getElementById("titulo-paso").textContent = d.error || "No se pudo cargar"; return; }
   ESQUEMA = d.esquema; DATOS = d.entradas || {}; FALTAS = d.faltas || {}; PROPUESTAS = d.propuestas || []; FECHA = d.fecha;
+  PROPUESTAS_CAMPOS = d.propuestas_campos || {};
   document.getElementById("empresa").textContent = `Asistente del analista · ${TICKER}`;
   document.getElementById("a-expediente").setAttribute("href", `/?ticker=${encodeURIComponent(TICKER)}`);
   document.getElementById("a-informe").setAttribute("href", `/informe?ticker=${encodeURIComponent(TICKER)}`);

@@ -189,6 +189,12 @@ def construir(n, motor, pb, emisor, huecos: Sequence[str], excel: Optional[Tuple
                                    .get(str(e.valor("meta.tipo") or ""), "")) if x)
     d.entradas = (f"Entradas del analista{f' ({quien})' if quien else ''}: {Path(ruta).name if ruta else 'sin fichero'} · sha256 "
                   f"{hashlib.sha256(cuerpo.encode('utf-8')).hexdigest()[:12]}" + (" (entradas de PRUEBA)" if e.de_prueba else ""))
+    # F10: lo que el analista confirmó desde una propuesta del sistema, con su fuente (la decisión sigue siendo suya)
+    from ..entradas.proponer import confirmadas
+    lista_c = confirmadas(e.datos)
+    if lista_c:
+        d.entradas += (f" · {len(lista_c)} confirmado{'s' if len(lista_c) != 1 else ''} desde una propuesta del sistema: "
+                       + "; ".join(f"{rotulo} ({fuente})" for rotulo, fuente in lista_c))
     _fuentes(d, n, emisor)
     citas = _citas(e, getattr(pb, "item1a", None))
     if citas:

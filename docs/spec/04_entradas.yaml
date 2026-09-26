@@ -8,6 +8,7 @@ convenciones:
   persistencia: "tesis/<TICKER>/<AAAA-MM-DD>/entradas.json, versionado; al emitir se guarda su huella"
   actualizacion: "un informe nuevo del mismo valor precarga el anterior y marca todo «revisar»"
   duplicados: "horizonte y tamaño se piden una sola vez"
+  propuestas: "F10: `prop` describe la propuesta; el valor lo calcula tesis/entradas/proponer.py (una función por campo, la misma que usa el motor o la plantilla). No se escribe hasta que el analista la confirma; confirmada, `_origen.<campo>` guarda fuente, motivo, huella y valor, y si la huella cambia el campo vuelve a «revisar». Lo que se confirma en bloque, en config/propuestas.yaml"
   idioma: "toda evidencia que se imprime lleva texto_es (versión en español del analista); el literal original, solo en el HTML y en 39"
 
 pasos:

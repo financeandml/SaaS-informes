@@ -458,12 +458,13 @@ class _Manejador(BaseHTTPRequestHandler):
             if t is None or fecha is None:
                 self._json(400, {"error": "ticker o fecha no válidos"})
                 return
-            from ..entradas import asistente
+            from ..entradas import asistente, proponer
             datos, notas = asistente.cargar(t, fecha)
             faltas, avisos = asistente.validar(t, fecha, datos)
             self._json(200, {"ticker": t, "fecha": fecha.isoformat(), "fechas": asistente.fechas(t), "esquema": asistente.esquema(),
                              "entradas": datos, "notas": notas, "faltas": faltas, "avisos": avisos,
-                             "propuestas": asistente.propuestas(t, fecha)})
+                             "propuestas": asistente.propuestas(t, fecha),
+                             "propuestas_campos": proponer.como_json(proponer.proponer(t, fecha, datos))})
             return
         nombre = camino.lstrip("/")
         fichero = (TABLERO / nombre).resolve()

@@ -228,6 +228,8 @@ def main(argv=None) -> int:
         "fallos_de_las_fuentes": list(rotulos.FALLOS),          # el detalle técnico que el cuerpo dice en español
         "relleno": [{"pagina": k, "ocupado": f, "fin_de_parte": fin} for k, f, fin in medidas],
         "parrafos": [{"id": x.id, "estado": x.estado, "huella": x.huella} for x in inf.parrafos],
+        # F10: los campos que el analista confirmó desde una propuesta del sistema, con fuente y huella
+        "confirmados_desde_propuesta": {k: v for k, v in (ent.datos.get("_origen") or {}).items() if isinstance(v, dict) and v.get("tipo") == "propuesta"},
     }, ensure_ascii=False, indent=1), encoding="utf-8")
     print(f"  puerta de calidad: {len(puerta.bloqueos)} bloqueos · {len(puerta.avisos)} avisos · "
           + (f"EMITIDO {inf.emitido:%d/%m/%Y}" if inf.emitido else "BORRADOR (hoja 0 con los bloqueos)"))
