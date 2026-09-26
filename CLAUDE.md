@@ -51,12 +51,12 @@ secciones, frases, graficos, maqueta/) · `tesis/qa` (puerta, linter) · `tesis/
 - Dependencias: `jinja2`, `pypdfium2`, `playwright`, `matplotlib`, `pillow`, `openpyxl` y `pyyaml`. LibreOffice (opcional) solo para la prueba de recálculo del Excel exportado.
 
 ## Estado
-F0 ☑ · F1 ☑ esqueleto + C · F2 ☑ B · F3 ☑ D · F4 ☑ E · F5 ☑ F · F6 ☑ G + portada + asistente · F7 ☑ A + H + I + cierre · F8 ☑ cierre de fallos (25/09/2026)
+F0 ☑ · F1 ☑ esqueleto + C · F2 ☑ B · F3 ☑ D · F4 ☑ E · F5 ☑ F · F6 ☑ G + portada + asistente · F7 ☑ A + H + I + cierre · F8 ☑ cierre de fallos (25/09/2026) · T0 ☑ base en verde (26/09/2026)
 Protocolo: `docs/fases/00_protocolo.md`. Lo que queda fuera, en `docs/fases/F7.md` y `F8.md` › «No hecho».
 Alcance (analista, 26/09/2026): cualquier emisor, cualquier fecha de informe y cualquier documento; la tesis de 39 apartados y, en F31, los formatos cortos. Idioma: solo español. Cumplimiento normativo: fuera de alcance, no se toca. Validación (F33): solo avisa, nunca bloquea. Plan: T0 → F9 → F10–F33.
-Siguiente: cerrar T0; la emisión real de QCOM (`docs/emision_real.md`) sigue pendiente.
+Siguiente: F9; la emisión real de QCOM (`docs/emision_real.md`) sigue pendiente.
 «confirmo borrar» (analista, 24/09/2026): hecho en F1 (sin `narrativa.py`, SDK `anthropic`, `--redactar`, `narrativas/` ni restos).
-Batería: 280 en verde y 34 omitidas sin los adjuntos de NFLX/QCOM. `python -m tesis regresiones` → **33 de 33**.
+Batería: 321 en verde en 6 min 40 s (26/09/2026); `pytest -m "not lenta"` para iterar. `python -m tesis regresiones` → **33 de 33**.
 F2: segmentos (XBRL inline), accionistas/13G/ejecutivos/retribución/filiales de EDGAR, guía de los Ex. 99.1 confirmada, fechas de Nasdaq.
 F3: `tesis/motor/` (supuestos, proyeccion con periodo parcial, terminal, puente, wacc con beta frente a SPY y rf del Tesoro, escenarios,
 sensibilidad e inverso, comparables del analista, excel con fórmulas vivas e importación por mapa), `parte_d.py`; precio único = cierre oficial.
