@@ -231,6 +231,8 @@ def main(argv=None) -> int:
         # F10: los campos que el analista confirmó desde una propuesta del sistema, con fuente y huella
         "confirmados_desde_propuesta": {k: v for k, v in (ent.datos.get("_origen") or {}).items() if isinstance(v, dict) and v.get("tipo") == "propuesta"},
     }, ensure_ascii=False, indent=1), encoding="utf-8")
+    from tesis.web import saas as _saas                          # cuándo y con qué entradas: lo que no sobrevive a un git clone
+    _saas.escribir_emision(args.ticker.upper(), salida / nombre_base)
     print(f"  puerta de calidad: {len(puerta.bloqueos)} bloqueos · {len(puerta.avisos)} avisos · "
           + (f"EMITIDO {inf.emitido:%d/%m/%Y}" if inf.emitido else "BORRADOR (hoja 0 con los bloqueos)"))
     registro = salida / f"{nombre_base}.contraste.txt"

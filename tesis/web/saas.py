@@ -279,23 +279,63 @@ def entradas(ticker: str) -> List[Path]:
     return [p for p in fuentes if p.exists()]
 
 
+_HUELLAS: Dict[Tuple[str, int, int], str] = {}
+
+
+def _clave(p: Path) -> str:
+    """«adjuntos/QCOM/x.pdf», «dcf/QCOM.xlsx», «2026-09-27/entradas.json»: la misma en cualquier copia del repositorio."""
+    return "/".join(p.parts[-3:])
+
+
+def huellas(ticker: str) -> Dict[str, str]:
+    """La huella (sha256) de todo lo que alimenta al informe, por su clave. Se recalcula solo si el fichero cambia."""
+    import hashlib
+    salida = {}
+    for p in entradas(ticker):
+        st = p.stat()
+        k = (str(p), st.st_mtime_ns, st.st_size)
+        if k not in _HUELLAS:
+            _HUELLAS[k] = hashlib.sha256(p.read_bytes()).hexdigest()
+        salida[_clave(p)] = _HUELLAS[k]
+    return salida
+
+
+def escribir_emision(ticker: str, base: Path, generado: Optional[datetime] = None) -> Path:
+    """`<informe>.emision.json`: cuándo se emitió y con qué entradas (sus huellas). Git no conserva la fecha de los
+    ficheros —al clonar, todos llevan la hora del clonado—, así que «emitido» y «al día» no pueden salir de ella."""
+    ruta = base.with_suffix(".emision.json")
+    ruta.write_text(json.dumps({"generado": (generado or datetime.now()).isoformat(timespec="seconds"), "entradas": huellas(ticker)},
+                               ensure_ascii=False, indent=1), encoding="utf-8")
+    return ruta
+
+
+def _fecha_del_nombre(pdf: Path) -> str:
+    return pdf.stem.split("_tesis_")[-1]
+
+
 def informe_en_disco(ticker: str) -> Optional[dict]:
     """El último informe emitido para el ticker y si está al día con lo que hay adjuntado ahora mismo.
 
     Se mira el disco y no la memoria: el analista vuelve al día siguiente, o reinicia el servidor, y su informe sigue ahí.
-    «Al día» = el PDF es posterior a todo lo que lo alimenta; si adjunta un documento después, el informe que ve es viejo
-    y hay que decírselo en vez de dejar que lo tome por suyo.
+    «Al día» = las entradas de ahora son las mismas (misma huella) con las que se emitió; si adjunta, cambia o quita un
+    documento después, el informe que ve es viejo y hay que decírselo en vez de dejar que lo tome por suyo. El último es
+    el de fecha más reciente en su nombre, y la hora de emisión la que se guardó al emitir: las fechas de los ficheros no
+    sobreviven a un `git clone`. Sin `.emision.json` (informes anteriores), las fechas de los ficheros, como antes.
     """
     salida = SALIDA / ticker
-    pdfs = sorted(salida.glob(f"{ticker}_tesis_*.pdf"), key=lambda p: p.stat().st_mtime) if salida.is_dir() else []
+    pdfs = sorted(salida.glob(f"{ticker}_tesis_*.pdf"), key=lambda p: (_fecha_del_nombre(p), p.stat().st_mtime)) if salida.is_dir() else []
     if not pdfs:
         return None
     pdf = pdfs[-1]
-    ultima_entrada = max((p.stat().st_mtime for p in entradas(ticker)), default=0)
     html = pdf.with_suffix(".html")
+    try:
+        meta = json.loads(pdf.with_suffix(".emision.json").read_text(encoding="utf-8"))
+        emitido, al_dia = datetime.fromisoformat(meta["generado"]), meta["entradas"] == huellas(ticker)
+    except (OSError, ValueError, KeyError, TypeError):
+        emitido = datetime.fromtimestamp(pdf.stat().st_mtime)
+        al_dia = pdf.stat().st_mtime >= max((p.stat().st_mtime for p in entradas(ticker)), default=0)
     return {"pdf": f"/informes/{ticker}/{pdf.name}", "html": f"/informes/{ticker}/{html.name}" if html.exists() else None,
-            "fichero": pdf.name, "emitido": datetime.fromtimestamp(pdf.stat().st_mtime).strftime("%d/%m/%Y %H:%M"),
-            "al_dia": pdf.stat().st_mtime >= ultima_entrada}
+            "fichero": pdf.name, "emitido": emitido.strftime("%d/%m/%Y %H:%M"), "al_dia": al_dia}
 
 
 def emitir(ticker: str) -> dict:
