@@ -24,9 +24,11 @@ guia:
   - "La guía vigente de la compañía para el {trimestre} sitúa los ingresos entre {bajo} y {alto}."
 guia_punto:
   - "Para el {trimestre}, la compañía prevé unos ingresos de {valor}."
-deuda_neta:
-  - "Al cierre del {periodo}, la deuda neta era de {importe}, {veces} veces el EBITDA del ejercicio {ejercicio}."
-  - "La deuda neta al cierre del {periodo} sumaba {importe} ({veces} veces el EBITDA del ejercicio {ejercicio})."
+deuda_neta:    # A4: numerador y denominador de la misma fecha (EBITDA de los cuatro trimestres hasta ese cierre)
+  - "Al cierre del {periodo}, la deuda neta era de {importe}, {veces} veces el EBITDA de los últimos doce meses."
+  - "La deuda neta al cierre del {periodo} sumaba {importe} ({veces} veces el EBITDA de los últimos doce meses)."
+deuda_neta_sin_ratio:
+  - "Al cierre del {periodo}, la deuda neta era de {importe}."
 caja_neta:
   - "Al cierre del {periodo}, la compañía tenía una caja neta de {importe}."
 retribucion:

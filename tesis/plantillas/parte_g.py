@@ -15,6 +15,7 @@ from datetime import date, timedelta
 from functools import lru_cache
 from typing import Dict, List, Mapping, Optional, Sequence, Tuple
 
+from ..datos.derivados import deuda_neta_ebitda_vigente
 from ..entradas import Entradas, palabras
 from ..formato import Celda, fecha as f_fecha, numero, pct
 from ..rutas import CONFIG
@@ -130,7 +131,7 @@ def _automatico(cid: str, cfg: dict, ctx: dict) -> Tuple[str, str]:
     if cid == "apalancamiento":
         x = ctx.get("dn_ebitda")
         if x is None:
-            return "sin_dato", "sin deuda neta / EBITDA del último ejercicio"
+            return "sin_dato", "sin deuda neta del último balance o sin EBITDA de los últimos doce meses"
         return ("si" if x <= cfg["umbral"] else "no"), f"{numero(x, 1)}x (umbral {numero(cfg['umbral'], 1)}x)"
     if cid == "liquidez":
         x = ctx.get("mercado", {}).get("liquidez")
@@ -188,7 +189,7 @@ def construir(n, e: Entradas, motor, hechos, anuales, etiqueta, sesiones: Mappin
     # 28 · lista de comprobación
     ultimos = sorted(anuales, key=lambda p: p.fin)[-5:]
     roics = [hechos[("roic", p)].valor for p in ultimos if ("roic", p) in hechos and hechos[("roic", p)].hay_dato]
-    dn = hechos.get(("dfn_ebitda", ultimos[-1])) if ultimos else None
+    dn = deuda_neta_ebitda_vigente(hechos)
     fv = v.parametros.fecha_valoracion if v is not None else hoy
     mercado = _mercado(sesiones, fv) if sesiones else {}
     catalizadores = []
@@ -200,7 +201,7 @@ def construir(n, e: Entradas, motor, hechos, anuales, etiqueta, sesiones: Mappin
     tam, dd = e.valor("pos.tamano_pct"), e.valor("pos.drawdown_tolerado")
     invalidaciones = [x for x in e.valor("pos.invalidacion") or [] if x.get("metrica") and x.get("umbral") and x.get("plazo")]
     ctx = {"valoracion": v, "roic_5a": statistics.median(roics) if roics else None, "wacc": v.wacc.wacc if v is not None else None,
-           "dn_ebitda": dn.valor if dn is not None and dn.hay_dato else None, "mercado": mercado, "proxima": proxima,
+           "dn_ebitda": dn[0] if dn else None, "mercado": mercado, "proxima": proxima,
            "fecha_informe": hoy, "catalizadores": catalizadores, "horizonte": g.horizonte_meses,
            "cortos": (cortos[1] / acciones) if cortos and acciones else None, "cortos_fecha": cortos[0] if cortos else None,
            "tamano": float(tam) / 100 if isinstance(tam, (int, float)) else None,

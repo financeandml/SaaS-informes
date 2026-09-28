@@ -63,6 +63,7 @@ rotulos:
   val.horizonte_meses: horizonte
   val.sbc: tratamiento de la SBC
   val.arrendamientos: tratamiento de los arrendamientos
+  val.inversiones_lp: valores negociables a largo plazo en el puente
   wacc.beta_metodo: método de la beta
   wacc.prima: prima específica
   wacc.kd_metodo: método del coste de la deuda

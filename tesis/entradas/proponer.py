@@ -490,3 +490,25 @@ def _margen(ctx: Contexto):
 for _nombre in ("pesimista", "base", "optimista"):
     propone(f"esc.{_nombre}.g")((lambda n: lambda ctx: Propuesta(
         float(por_defecto(f"esc.{n}.g")), "config/propuestas.yaml", "crecimiento terminal de partida de la casa (04)"))(_nombre))
+
+
+@propone("val.inversiones_lp")
+def _inversiones_lp(ctx: Contexto):
+    """A4 (decisión del analista, 28/09/2026): los valores negociables a largo plazo del último balance entran en el puente
+    si el analista confirma la propuesta. Sin ellos en la SEC, no hay propuesta."""
+    from ..datos.campos import campo
+    from ..fuentes import sec
+    from ..formato import numero
+    fv = ctx.fecha_valoracion() or ctx.fecha
+    facts = ctx.facts()[0]
+    # los del último balance, el mismo del puente: un saldo de hace años no es liquidez de hoy
+    balances = [p.fin for p, h in sec.hechos_xbrl(facts, campo("total_activo"), fv).items() if p.es_instante and p.fin <= fv and h.hay_dato]
+    if not balances:
+        return SinPropuesta("sin balance en la SEC anterior a la fecha de valoración")
+    fin = max(balances)
+    h = next((h for p, h in sec.hechos_xbrl(facts, campo("inversiones_lp"), fv).items() if p.es_instante and p.fin == fin and h.hay_dato), None)
+    if h is None or not h.valor:
+        return SinPropuesta(f"el balance a {fin:%d/%m/%Y} no trae valores negociables a largo plazo")
+    concepto = h.origen.concepto if h.origen else "valores negociables no corrientes"
+    return Propuesta("incluir", f"SEC (companyfacts), {concepto}: {numero(h.valor / 1e6)} mln USD a {fin:%d/%m/%Y}",
+                     "son liquidez de la compañía y suman al valor por acción")

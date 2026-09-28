@@ -55,6 +55,19 @@ class ParteD:
     recomendacion_regla: str = ""
 
 
+def _fila_deuda_neta(pte, hechos):
+    """Deuda neta del puente (sumada de sus líneas) frente a la del apartado 9 (el Hecho derivado de esa fecha). El ✓
+    comparaba antes la cifra del puente consigo misma (A4, fallo [45]): ahora son dos cálculos que deben coincidir."""
+    from .informe import FilaCuadro
+    from ..datos.hechos import Periodo
+    h = (hechos or {}).get(("deuda_neta", Periodo.instante(pte.fecha_balance))) if getattr(pte, "fecha_balance", None) else None
+    if h is None or not h.hay_dato:
+        return FilaCuadro("Deuda neta del puente", [_c(_mln(pte.deuda_neta), capa="H"), _c("N/A", "sin deuda neta del apartado 9 en esa fecha", clase="na"), _c("—")])
+    cuadra = abs(h.valor - pte.deuda_neta) <= 0.5e6
+    return FilaCuadro("Deuda neta del puente", [_c(_mln(pte.deuda_neta), capa="H"), _c(_mln(h.valor), capa="H", hecho=_dn(pte)),
+                                                _c("✓" if cuadra else "≠")])
+
+
 def construir(n, m, etiqueta, hechos=None, anuales=None, consenso=None, libro: Optional[dict] = None,
               recomendacion_analista: str = "", segmento_unico: bool = False, multiplos=None) -> ParteD:
     """`m`: motor.datos.Motor. `etiqueta(p)`: rótulo fiscal de un periodo. `libro`: {rango: valor} del Excel del analista."""
@@ -112,7 +125,7 @@ def construir(n, m, etiqueta, hechos=None, anuales=None, consenso=None, libro: O
     # 12 · entradas frente al dato oficial
     filas = [FilaCuadro("Precio", [_c(_usd(v.precio), capa="H", hecho="precio"), _c(_usd(m.precio), capa="H", hecho="precio"), _c("✓")]),
              FilaCuadro(f"Ingresos del año base ({m.etiqueta_base})", [_c(_mln(m.ingresos_base), capa="H"), _c(_mln(m.ingresos_base), capa="H"), _c("✓")]),
-             FilaCuadro("Deuda neta del puente", [_c(_mln(pte.deuda_neta), capa="H", hecho=_dn(pte)), _c(_mln(pte.deuda_neta), capa="H", hecho=_dn(pte)), _c("✓")])]
+             _fila_deuda_neta(pte, hechos)]
     d.cuadros["entradas"] = Cuadro(n.siguiente(), "Entradas del modelo frente al dato oficial", ["Motor", "Dato oficial", "Cuadre"], filas,
                                    f"El motor lee los hechos verificados: precio ({precio_txt}), ingresos (SEC) y balance (SEC). Deben coincidir.")
     # 12 · supuestos generales

@@ -260,10 +260,14 @@ class Sesion:
     volumen: Optional[float]
 
 
+def _url_historico(ticker: str, desde: date, hasta: date, limite: int = 400, clase: str = "stocks") -> str:
+    return (f"https://api.nasdaq.com/api/quote/{ticker}/historical?assetclass={clase}"
+            f"&fromdate={desde:%Y-%m-%d}&todate={hasta:%Y-%m-%d}&limit={limite}")
+
+
 def sesiones_nasdaq(ticker: str, desde: date, hasta: date, limite: int = 400, clase: str = "stocks") -> Dict[date, Sesion]:
     """Las sesiones oficiales del histórico de Nasdaq (apertura, máximo, mínimo, cierre y volumen) por fecha."""
-    url = (f"https://api.nasdaq.com/api/quote/{ticker}/historical?assetclass={clase}"
-           f"&fromdate={desde:%Y-%m-%d}&todate={hasta:%Y-%m-%d}&limit={limite}")
+    url = _url_historico(ticker, desde, hasta, limite, clase)
     datos = _json(url, _CABECERAS_NASDAQ)
     filas = (((datos or {}).get("data") or {}).get("tradesTable") or {}).get("rows") or []
     salida: Dict[date, Sesion] = {}
@@ -301,6 +305,30 @@ def _dia_de_mercado_valido(fecha: date, hoy: date) -> bool:
     return False
 
 
+def _ventana(hoy: date, fechas: Tuple[date, ...] = ()) -> Tuple[date, date]:
+    """El tramo del histórico que acompaña a la cotización: las dos últimas semanas hasta el día de emisión (y las fechas
+    que se pidan). Una sola petición para la sesión, el cierre anterior, el volumen y la evidencia del apartado 1."""
+    return min([hoy - timedelta(days=14), *fechas]) - timedelta(days=7), hoy
+
+
+def _con_sesion(c: Cotizacion, sesiones: Dict[date, "Sesion"]) -> Cotizacion:
+    """La sesión, el volumen y el cierre anterior salen del histórico oficial, no de la ficha (A1, fallos [1] y [66]).
+
+    La ficha de Nasdaq fecha el cierre del viernes con el día anterior («Sep 24» para el cierre del 25/09): su fecha no
+    manda. Con el mercado cerrado, el precio de la ficha es el cierre de la última sesión del histórico que lo iguale; esa
+    es su fecha, y el volumen es el de esa sesión en el histórico.
+    """
+    from dataclasses import replace
+    if not c.es_cierre or not sesiones:
+        return c
+    candidatas = sorted((f for f in sesiones if f >= c.fecha and abs(sesiones[f].cierre - c.precio) <= 0.0005 * c.precio), reverse=True)
+    if not candidatas:
+        return c
+    f = candidatas[0]
+    return replace(c, fecha=f, volumen=sesiones[f].volumen if sesiones[f].volumen is not None else c.volumen,
+                   hora="" if f != c.fecha else c.hora)
+
+
 def _cotizacion(ticker: str, hoy: date) -> Tuple[Optional[Cotizacion], Hecho]:
     """La cotización de la fuente configurada y el `Hecho` del precio (N/A con motivo si no procede)."""
     p = Periodo.instante(hoy)
@@ -315,6 +343,10 @@ def _cotizacion(ticker: str, hoy: date) -> Tuple[Optional[Cotizacion], Hecho]:
         return None, na("precio", p, f"la fuente {fuente} no respondió: {fallo(e)}", unidad="USD/acción")
     if c is None:
         return None, na("precio", p, f"la fuente {fuente} no devolvió cotización para {ticker}", unidad="USD/acción")
+    try:
+        c = _con_sesion(c, sesiones_nasdaq(ticker, *_ventana(hoy)))
+    except (HTTPError, URLError, KeyError, ValueError, TypeError):
+        pass                                    # sin histórico, la fecha de la ficha; la regla del día de emisión decide
     if not _dia_de_mercado_valido(c.fecha, hoy):
         return c, na("precio", p, f"la cotización de {c.fuente} es del {c.fecha:%d/%m/%Y}, no del día de emisión", unidad="USD/acción")
     origen = Origen(documento=c.fuente, presentado=c.fecha, referencia=c.url)
@@ -334,13 +366,6 @@ def obtener(ticker: str, hoy: date) -> Hecho:
     return _cotizacion(ticker, hoy)[1]
 
 
-def _dia_habil_anterior(f: date) -> date:
-    d = f - timedelta(days=1)
-    while d.weekday() >= 5:
-        d -= timedelta(days=1)
-    return d
-
-
 def mercado(ticker: str, hoy: date, fechas: Tuple[date, ...] = ()) -> Mercado:
     """Precio del día de emisión, cierres oficiales de las `fechas` pedidas (las que el analista tecleó en su
     libro) y el contraste interno de la fuente: su «cierre anterior» frente a su propio histórico."""
@@ -350,9 +375,8 @@ def mercado(ticker: str, hoy: date, fechas: Tuple[date, ...] = ()) -> Mercado:
         if c is not None:
             m.faltan["cierres"] = f"la fuente {c.fuente} no sirve histórico de cierres en este adaptador"
         return m
-    pedir = set(fechas) | {_dia_habil_anterior(c.fecha)}
+    desde, hasta = _ventana(hoy, tuple(fechas))
     try:
-        desde, hasta = min(pedir) - timedelta(days=7), max(max(pedir), c.fecha)
         m.cierres = cierres_nasdaq(ticker, desde, hasta)
     except (HTTPError, URLError, KeyError, ValueError, TypeError) as e:
         m.faltan["cierres"] = f"el histórico de Nasdaq no respondió: {fallo(e)}"
@@ -368,10 +392,14 @@ def mercado(ticker: str, hoy: date, fechas: Tuple[date, ...] = ()) -> Mercado:
             m.contraste_consenso = (Contraste.CONFIRMADO, f"el «1 Year Target» de la ficha ({numero(c.objetivo_consenso, 2)}) coincide con el consenso de analistas ({numero(m.consenso.objetivo, 2)})")
         else:
             m.contraste_consenso = (Contraste.DISCREPANTE, f"la ficha de Nasdaq dice «1 Year Target» {numero(c.objetivo_consenso, 2)} y su página de analistas {numero(m.consenso.objetivo, 2)}: dos cifras de la misma bolsa para el mismo hecho")
-    for nombre, patron in (("cotizacion", "/info?"), ("resumen", "/summary?"), ("historico", "/historical?"), ("consenso", "/targetprice")):
+    for nombre, patron in (("cotizacion", "/info?"), ("resumen", "/summary?"), ("consenso", "/targetprice")):
         for url, (cuerpo, obtenido) in _CRUDOS.items():
             if f"/{ticker}/" in url and patron in url:
                 m.crudos[nombre] = (url, cuerpo, obtenido)
+    # la evidencia del histórico es la ventana que fecha el precio, no la serie de cinco años del motor (A1, fallo [2])
+    url_h = _url_historico(ticker, desde, hasta)
+    if url_h in _CRUDOS:
+        m.crudos["historico"] = (url_h, *_CRUDOS[url_h])
     anteriores = sorted(f for f in m.cierres if f < c.fecha)
     if c.cierre_anterior is not None and anteriores:
         f_ant, v_ant = anteriores[-1], m.cierres[anteriores[-1]]

@@ -497,9 +497,12 @@ def _fecha_bolsa(texto: str) -> str:
     return str(texto)
 
 
-def _ultima_operacion(texto: str) -> str:
+def _ultima_operacion(texto: str, sesiones=None) -> str:
     """«LAST TRADE: $75.66 (AS OF SEP 17, 2026 1:46 PM ET)» (literal de la bolsa) → «última operación: 75,66 USD el
-    17/09/2026 a las 13:46 (hora de Nueva York)». Sin reconocerlo, nada: el literal inglés no va al cuerpo."""
+    17/09/2026 a las 13:46 (hora de Nueva York)». Sin reconocerlo, nada: el literal inglés no va al cuerpo.
+
+    La fecha del literal es la de la ficha de la bolsa, que llama «Sep 24» al cierre del viernes 25: si una sesión
+    posterior del histórico oficial cerró a ese precio, la fecha es la de esa sesión (A1, fallo [42])."""
     m = re.search(r"\$\s*([\d,]+(?:\.\d+)?)\s*\(AS OF (\w{3})\w* (\d{1,2}), (\d{4})(?:\s+(\d{1,2}):(\d{2})\s*([AP]M))?", str(texto or ""), re.I)
     meses = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"]
     if not m or m.group(2).upper() not in meses:
@@ -510,6 +513,9 @@ def _ultima_operacion(texto: str) -> str:
     if m.group(5):
         h = int(m.group(5)) % 12 + (12 if m.group(7).upper() == "PM" else 0)
         hora = f" a las {h:02d}:{m.group(6)} (hora de Nueva York)"
+    posteriores = sorted((f for f, s in (sesiones or {}).items() if f > dia and abs(s.cierre - precio) <= 0.0005 * precio), reverse=True)
+    if posteriores:
+        dia, hora = posteriores[0], " (cierre de la sesión)"
     return f"última operación: {numero(precio, 2)} USD el {f_fecha(dia)}{hora}"
 
 
@@ -533,7 +539,7 @@ def cuadros_f(n: Cuadros, p, acciones_circulacion: Optional[float] = None, maxim
                                                                                 _hd(str(sum(v.contratos for v in c.vencimientos)))], capa="Hd", destacada=True))
         salida["cadena"] = Cuadro(n.siguiente(), "Cadena de opciones por vencimiento: volumen e interés abierto (contratos)",
                                   ["Vol. calls", "Vol. puts", "Put/Call vol.", "Int. abierto calls", "Int. abierto puts", "Put/Call int. abierto", "Precios de ejercicio"], filas,
-                                  base + f" Cadena completa ({c.total_filas} filas)" + (f"; {_ultima_operacion(c.ultimo)}" if _ultima_operacion(c.ultimo) else "")
+                                  base + f" Cadena completa ({c.total_filas} filas)" + (f"; {_ultima_operacion(c.ultimo, sesiones)}" if _ultima_operacion(c.ultimo) else "")
                                   + ". El volumen es el de la sesión en curso y el interés abierto el del cierre anterior. "
                                   "Put/Call = puts / calls (al pasar el ratón, las cifras). Sin volatilidad implícita: la bolsa no la publica.", partible=True)
         if hoy is not None:

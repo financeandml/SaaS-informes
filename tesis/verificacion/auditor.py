@@ -133,6 +133,12 @@ def _comprobar(hechos: Hechos, ident: Identidad, p: Periodo) -> Tuple[Comprobaci
     """Comprueba la identidad en ese periodo; si falta exactamente un término y la igualdad es exacta, lo despeja."""
     if ident.clave == "bpa":
         return _bpa(hechos, ident, p), None
+    if ident.clave == "deuda":
+        # A4: con el papel comercial en línea propia, la deuda bruta lo incluye y la identidad también (misma regla)
+        from ..datos.derivados import incluye_papel_comercial
+        if incluye_papel_comercial(_valor(hechos, "deuda_cp", p), _valor(hechos, "papel_comercial", p)):
+            from dataclasses import replace
+            ident = replace(ident, rotulo=ident.rotulo + " + Papel comercial", partes=ident.partes + (("papel_comercial", 1),))
     total = _valor(hechos, ident.total, p)
     partes = {k: _valor(hechos, k, p) for k, _ in ident.partes}
     ausentes = [k for k, h in partes.items() if h is None] + ([] if total is not None else [ident.total])

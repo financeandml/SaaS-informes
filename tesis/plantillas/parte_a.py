@@ -107,12 +107,14 @@ def _factual(hechos, periodos: Mapping, etiqueta: Callable, vigentes: Sequence, 
         dn = _dato(hechos, "deuda_neta", i)
         cierre = next((p for p in trimestres + anuales if p.fin == i.fin), None)          # «3T FY26», no la fecha cruda
         periodo = etiqueta(cierre) if cierre is not None else f"{i.fin:%d/%m/%Y}"
-        ebitda = _dato(hechos, "ebitda", anuales[-1]) if anuales else None
+        from ..datos.derivados import deuda_neta_ebitda_vigente
+        vigente = deuda_neta_ebitda_vigente(hechos)
         if dn.valor < 0:
             salida.append((frase("2", "caja_neta", {"periodo": periodo, "importe": _mln(-dn.valor)}), _cita(dn)))
-        elif ebitda is not None and ebitda.valor > 0:
-            salida.append((frase("2", "deuda_neta", {"periodo": periodo, "importe": _mln(dn.valor), "veces": numero(dn.valor / ebitda.valor, 1),
-                                                     "ejercicio": etiqueta(anuales[-1])}), _cita(dn)))
+        elif vigente is not None and vigente[1] is dn and vigente[2] > 0:
+            salida.append((frase("2", "deuda_neta", {"periodo": periodo, "importe": _mln(dn.valor), "veces": numero(vigente[0], 1)}), _cita(dn)))
+        else:
+            salida.append((frase("2", "deuda_neta_sin_ratio", {"periodo": periodo, "importe": _mln(dn.valor)}), _cita(dn)))
     if anuales:
         r, rf = _dato(hechos, "retribucion", anuales[-1]), _dato(hechos, "retribucion_sobre_fcf", anuales[-1])
         if r is not None and rf is not None:

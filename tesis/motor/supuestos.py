@@ -96,6 +96,8 @@ class Parametros:
     tv_metodo: str = "value_driver"
     bin_inicial: float = 0.0
     ajustes_puente: List[dict] = field(default_factory=list)
+    inversiones_lp: Optional[str] = None                   # A4: «incluir» | «excluir» | None (sin confirmar: fuera, con aviso)
+    dilucion_adicional: List[dict] = field(default_factory=list)   # A4: warrants y otros instrumentos que la SEC aún no recoge
     escenarios: Dict[str, Escenario] = field(default_factory=dict)
     mult_objetivos: List[dict] = field(default_factory=list)
     sotp: dict = field(default_factory=dict)
@@ -127,6 +129,14 @@ def leer(datos: Mapping, fecha_informe: date, paquete_propuesto: str = "general"
     p.arrendamientos = val.get("arrendamientos", por_defecto("val.arrendamientos"))
     p.bin_inicial = float(val.get("bin_inicial", 0.0)) * 1e6
     p.ajustes_puente = list(val.get("ajustes_puente") or [])
+    if val.get("inversiones_lp") is not None:
+        p.inversiones_lp = str(val["inversiones_lp"])
+        if p.inversiones_lp not in ("incluir", "excluir"):
+            faltas.append(f"val.inversiones_lp: «{p.inversiones_lp}» (incluir o excluir)")
+    p.dilucion_adicional = list(val.get("dilucion_adicional") or [])
+    for k, d in enumerate(p.dilucion_adicional, 1):
+        if not isinstance(d, dict) or d.get("acciones") is None or d.get("precio_ejercicio") is None or not d.get("evidencia"):
+            faltas.append(f"val.dilucion_adicional[{k}]: acciones (millones), precio de ejercicio y evidencia obligatorios")
     if wacc.get("erp") is None or not wacc.get("erp_fuente"):
         faltas.append("wacc.erp: prima de riesgo de mercado con fuente y fecha")
     p.erp = float(wacc.get("erp", 5.0)) / 100

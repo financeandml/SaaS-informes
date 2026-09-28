@@ -117,24 +117,20 @@ def definido(xlsx: Path, nombre: str) -> float:
 
 @unittest.skipUnless(HAY, "sin fixtures de la auditoría o sin los adjuntos del analista")
 class Mercado(unittest.TestCase):
-    @falla(1, "la sesión sale de la ficha de Nasdaq, que fecha el cierre del viernes el jueves")
     def test_01_sesion_del_precio(self):
         for t in TICKERS:
             self.assertFalse(inf(t).celda("Ficha", "Cierre anterior", "Valor").startswith("N/A"), t)
             self.assertIn("25/09/2026", inf(t).celda("Ficha", "Volumen", "Valor"), t)
 
-    @falla(2, "el histórico que se guarda como evidencia acaba la víspera de la valoración")
     def test_02_historico_de_evidencia_hasta_la_valoracion(self):
         for t in TICKERS:
             ruta = _E["base"][t].parent / f"{t}_tesis_{DIA}_recortes" / "api_nasdaq_historico.json"
             filas = json.loads(ruta.read_text(encoding="utf-8"))["data"]["tradesTable"]["rows"]
             self.assertEqual(filas[0]["date"], "09/25/2026", t)
 
-    @falla(42, "cadena de opciones con la última operación del 24/09")
     def test_42_ultima_operacion_de_la_cadena(self):
         self.assertIn("última operación: 137,10 USD el 25/09/2026", inf("ORCL").texto)
 
-    @falla(66, "la fecha de Nasdaq («Sep 24») se toma por buena")
     def test_66_fecha_de_nasdaq_no_manda(self):
         self.assertIn("última operación: 201,97 USD el 25/09/2026", inf("QCOM").texto)
         self.assertNotIn("es del 24/09/2026, no del día de emisión", json.dumps(aud("QCOM"), ensure_ascii=False))
@@ -203,12 +199,10 @@ class TresEstados(unittest.TestCase):
 
 @unittest.skipUnless(HAY, "sin fixtures de la auditoría o sin los adjuntos del analista")
 class DeudaYAcciones(unittest.TestCase):
-    @falla(7, "la deuda bruta no incluye el papel comercial")
     def test_07_papel_comercial(self):
         i = inf("AAPL")
         self.assertEqual(i.fila("Balance", "Deuda bruta")[i.cabecera("Balance").index("2025") - 1], "98.657")
 
-    @falla(8, "tres cifras de acciones: el peso E del WACC y V₀ usan cifras distintas")
     def test_08_una_cifra_de_acciones(self):
         for t in TICKERS:
             i = inf(t)
@@ -217,21 +211,17 @@ class DeudaYAcciones(unittest.TestCase):
             acciones = num(i.fila("Puente", "Acciones diluidas")[0])
             self.assertAlmostEqual(e / precio, acciones, delta=1.0, msg=t)
 
-    @falla(45, "deuda neta de AAPL sin papel comercial ni valores a largo plazo")
     def test_45_deuda_neta_aapl(self):
         self.assertNotIn("la deuda neta era de 19.948", inf("AAPL").texto)
         self.assertEqual(inf("AAPL").fila("Puente", "(−) Deuda financiera")[0], "84.344")
 
-    @falla(54, "checklist con la deuda del ejercicio y el EBITDA de otro periodo")
     def test_54_checklist_deuda_vigente(self):
         self.assertIn("2,6x", " ".join(inf("ORCL").fila("Lista de comprobación", "Deuda neta / EBITDA")))
 
-    @falla(58, "el warrant de Amazon no entra en las acciones diluidas ni se avisa")
     def test_58_dilucion_adicional(self):
         acciones = num(inf("QCOM").fila("Puente", "Acciones diluidas")[0])
         self.assertTrue(acciones > 1069.5 or any("dilu" in a.lower() for a in avisos("QCOM")))
 
-    @falla(69, "un 8-K material del expediente (3.02) sin tratar ni avisar")
     def test_69_hecho_material(self):
         self.assertTrue(any("3.02" in a for a in avisos("QCOM")))
 

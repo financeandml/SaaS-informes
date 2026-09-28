@@ -166,6 +166,16 @@ pasos:
           - {id: evidencia, tipo: evidencia, min: 1}
       - {id: val.sbc, tipo: enum, valores: [coste_de_caja, dilucion], prop: coste_de_caja}
       - {id: val.arrendamientos, tipo: enum, valores: [fuera_de_deuda, deuda], prop: fuera_de_deuda}
+      - {id: val.inversiones_lp, tipo: enum, valores: [incluir, excluir], oblig: false, prop: "incluir si el último balance trae valores negociables a largo plazo (SEC); A4, decisión del 28/09/2026: propuesta automática que confirma el analista", nota: "sin confirmar quedan fuera del puente, con aviso"}
+      - id: val.dilucion_adicional
+        tipo: lista
+        oblig: false
+        nota: "A4: warrants u otros instrumentos que aún no recogen los 10-K/10-Q (un 8-K de Item 3.02); entran por el método de autocartera"
+        campos:
+          - {id: instrumento, tipo: texto}
+          - {id: acciones, tipo: numero, ayuda: "millones de acciones"}
+          - {id: precio_ejercicio, tipo: numero, ayuda: "USD por acción"}
+          - {id: evidencia, tipo: evidencia, min: 1}
       - id: val.ajustes_puente
         tipo: lista
         oblig: false

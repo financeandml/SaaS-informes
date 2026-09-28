@@ -168,7 +168,9 @@ class Netflix(_Informes):
         v = self.motor.valoracion
         self.assertAlmostEqual(v.po, sum(r.escenario.probabilidad * r.vh for r in v.resultados.values()), places=9)
         self.assertEqual(self.inf.objetivo_portada[1], v.po)
-        self.assertIn("88,71 USD", self._portada())
+        # 88,71 hasta A4: las acciones del valor por acción eran las diluidas medias del trimestre; ahora son las básicas
+        # de la portada más el efecto dilutivo que publica la compañía (auditoría del 27/09/2026, fallo [8])
+        self.assertIn("89,17 USD", self._portada())
         self.assertNotIn("90,00 USD", self._portada())
         self.assertIsNotNone(self.inf.parte_d.cuadros.get("consenso"))
 

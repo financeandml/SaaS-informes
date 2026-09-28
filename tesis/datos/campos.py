@@ -130,6 +130,11 @@ CAMPOS: Tuple[Campo, ...] = (
     Campo("inversiones_cp", "Inversiones a corto plazo", "Short-term investments", 9, tipo=INSTANTE,
           conceptos=("ShortTermInvestments", "MarketableSecuritiesCurrent", "AvailableForSaleSecuritiesDebtSecuritiesCurrent"),
           filas=(r"^Short-term investments$", r"^Marketable securities$")),
+    # A4: valores negociables a largo plazo. Solo títulos de deuda o negociables, no participaciones estratégicas
+    # (`LongTermInvestments` mezcla ambas: Qualcomm guarda ahí QSI). Entran en el puente si el analista lo confirma
+    # (val.inversiones_lp); sin filas de documento: el mismo rótulo que las de corto plazo emparejaba mal (fallo [4]).
+    Campo("inversiones_lp", "Valores negociables a largo plazo", "Non-current marketable securities", 9, tipo=INSTANTE,
+          conceptos=("MarketableSecuritiesNoncurrent", "AvailableForSaleSecuritiesDebtSecuritiesNoncurrent")),
     Campo("activo_corriente", "Activo corriente", "Total current assets", 9, tipo=INSTANTE,
           conceptos=("AssetsCurrent",), filas=(r"^Total current assets$",)),
     Campo("contenido", "Activos de contenido, neto", "Content assets, net", 9, tipo=INSTANTE,
@@ -151,6 +156,10 @@ CAMPOS: Tuple[Campo, ...] = (
           # vencimiento corriente del largo plazo más 498 de pagarés), y leer solo la parte discrepaba del documento
           conceptos=("DebtCurrent", "LongTermDebtCurrent", "ShortTermBorrowings", "NotesPayableCurrent"),
           filas=(r"^Short-term debt$", r"^Current portion of long-term debt$", r"^Notes payable, current$")),
+    # A4 (fallo [7]): quien presenta el papel comercial en su propia línea —Apple: «Commercial paper» junto a «Term
+    # debt»— lo deja fuera de `LongTermDebtCurrent`; la deuda bruta lo suma entonces (`derivados.incluye_papel_comercial`).
+    Campo("papel_comercial", "Papel comercial", "Commercial paper", 9, tipo=INSTANTE,
+          conceptos=("CommercialPaper",), filas=(r"^Commercial paper$",)),
     Campo("deuda_lp", "Deuda a largo plazo", "Long-term debt", 9, tipo=INSTANTE,
           # el orden importa: `LongTermDebt` es el último porque algunos emisores solo lo usan en la nota de valor
           # razonable y lo dejan a cero en el balance (Oracle: un único hecho, 0, en 2022); su deuda no corriente
@@ -238,6 +247,7 @@ DERIVADOS: Tuple[Derivado, ...] = (
     Derivado("margen_neto", "Margen neto", "Net margin", 8, "Beneficio neto / Ingresos", ("beneficio_neto", "ingresos"), "%"),
     Derivado("tipo_efectivo", "Tipo impositivo efectivo", "Effective tax rate", 8, "Impuesto sobre beneficios / Resultado antes de impuestos", ("impuestos", "bai"), "%"),
     Derivado("deuda_bruta", "Deuda bruta", "Gross debt", 9, "Deuda a corto plazo + Deuda a largo plazo", ("deuda_cp", "deuda_lp")),
+    # (+ papel comercial cuando la compañía lo presenta en línea propia: `derivados.calcular` lo añade con su fórmula)
     Derivado("deuda_neta", "Deuda neta", "Net debt", 9, "Deuda bruta − Tesorería − Inversiones a corto plazo", ("deuda_bruta", "caja", "inversiones_cp")),
     Derivado("dfn_ebitda", "Deuda neta / EBITDA", "Net debt / EBITDA", 9, "Deuda neta / EBITDA", ("deuda_neta", "ebitda"), "x"),
     Derivado("fondo_maniobra", "Fondo de maniobra", "Working capital", 9, "Activo corriente − Pasivo corriente", ("activo_corriente", "pasivo_corriente")),

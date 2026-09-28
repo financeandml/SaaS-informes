@@ -211,26 +211,36 @@ def ejecutar(emisor, facts: dict, hechos, periodos: Dict[str, List[Periodo]], da
     val = lambda campo: (hechos.get((campo, p_deuda)).valor if p_deuda and hechos.get((campo, p_deuda)) is not None
                          and hechos.get((campo, p_deuda)).hay_dato else None)                                  # noqa: E731
     caja, inversiones, arrend = val("caja"), val("inversiones_cp"), val("arrendamientos")
+    inversiones_lp = val("inversiones_lp")
+    if inversiones_lp and p.inversiones_lp is None:
+        from ..formato import numero
+        m.avisos.append(f"val.inversiones_lp: la compañía tiene {numero(inversiones_lp / 1e6)} mln USD de valores negociables a "
+                        f"largo plazo a {fecha_balance:%d/%m/%Y}; confirme en el paso 7 si entran en el puente (hoy, fuera)")
     trimestres = sorted(periodos["trimestres"], key=lambda q: q.fin)
     diluidas_medias, q_dil = _ultimo(hechos, "acciones_diluidas", trimestres)
+    basicas_medias = (hechos.get(("acciones_basicas", q_dil)).valor if q_dil and hechos.get(("acciones_basicas", q_dil)) is not None
+                      and hechos.get(("acciones_basicas", q_dil)).hay_dato else None)
     opciones = _ultimo_facts(facts, "ShareBasedCompensationArrangementByShareBasedPaymentAwardOptionsOutstandingNumber", "shares", fv)
     ejercicio = _ultimo_facts(facts, "ShareBasedCompensationArrangementByShareBasedPaymentAwardOptionsOutstandingWeightedAverageExercisePrice", "USD/shares", fv)
     rsu = _ultimo_facts(facts, "ShareBasedCompensationArrangementByShareBasedPaymentAwardEquityInstrumentsOtherThanOptionsNonvestedNumber", "shares", fv)
     cierre_fy = periodos["anuales"][-1].fin if periodos["anuales"] else None
     etq = (lambda q: etiqueta_fiscal(q, cierre_fy, desfase_fiscal)) if cierre_fy else (lambda q: q.clave)
     acciones, nota = acciones_diluidas(acciones_portada, opciones[0] if opciones else None, ejercicio[0] if ejercicio else None,
-                                       rsu[0] if rsu else None, m.precio, diluidas_medias, etq(q_dil) if q_dil else "")
+                                       rsu[0] if rsu else None, m.precio, diluidas_medias, etq(q_dil) if q_dil else "",
+                                       basicas_medias, p.dilucion_adicional)
     if acciones is None:
         m.bloqueos.append(f"acciones: {nota}")
         return m
     fuente_balance = f"balance a {fecha_balance:%d/%m/%Y} (SEC)" if fecha_balance else "sin balance"
+    lp = inversiones_lp if p.inversiones_lp == "incluir" else None
     pte = puente(deuda, arrend, caja, inversiones, None, p.ajustes_puente, p.arrendamientos == "deuda", acciones, nota,
-                 fecha_balance, fuente_balance)
-    # pesos a valor de mercado
-    e_mercado = m.precio * (acciones_portada or acciones)
+                 fecha_balance, fuente_balance, lp)
+    # pesos a valor de mercado: E con las mismas acciones que el valor por acción (A4, fallo [8]); la capitalización de
+    # los múltiplos, con las de la portada, como la publica la bolsa
+    e_mercado = m.precio * acciones
     d_mercado = (deuda or 0.0) + ((arrend or 0.0) if p.arrendamientos == "deuda" else 0.0)
-    m.cap_mercado = e_mercado
-    m.ev_mercado = e_mercado + d_mercado - (caja or 0.0) - (inversiones or 0.0)
+    m.cap_mercado = m.precio * (acciones_portada or acciones)
+    m.ev_mercado = m.cap_mercado + d_mercado - (caja or 0.0) - (inversiones or 0.0) - (lp or 0.0)
     b_sem = beta_regresion(cierres, mercado, fv, 2, "semanal")
     b_men = beta_regresion(cierres, mercado, fv, 5, "mensual")
     if p.beta_metodo == "bottom_up" and p.beta_desapalancada is not None:
@@ -274,11 +284,34 @@ def ejecutar(emisor, facts: dict, hechos, periodos: Dict[str, List[Periodo]], da
         m.inverso = inverso(v, m.ingresos_base, m.cierre_base, umbrales)
         m.ntm = _ntm(v, m, hechos, trimestres, p)
     m.historico_per = _historico_per(facts, cierres, fv)
+    m.avisos += hechos_materiales_sin_citar(emisor, datos_entradas, fv)
     from .sector import comprobar                       # 05 §2: las comprobaciones del paquete (avisos, no bloqueos)
     m.avisos += comprobar(p, hechos, periodos, facts, m, w, arrend, umbrales.get("sector") or {}, sectores())
     if datos_entradas.get("comparables"):
         m.comparables = comparables_mod.construir(datos_entradas["comparables"], m.fecha_precio, umbrales)
     return m
+
+
+_ITEMS_MATERIALES = {"1.01": "acuerdo material", "2.01": "adquisición o venta de activos", "3.02": "venta de valores no registrados"}
+
+
+def hechos_materiales_sin_citar(emisor, datos_entradas: dict, fv: date) -> List[str]:
+    """Avisos (tramo 5: no bloquean) por cada 8-K de los doce meses anteriores a la valoración con un hecho material
+    (Items 1.01, 2.01 o 3.02) que la tesis no cita en ninguna evidencia (A4, fallos [58] y [69]). El warrant de Qualcomm
+    a Amazon —hasta 25 M de acciones, Item 3.02— no aparecía ni en la tesis ni en las acciones del valor por acción."""
+    import json
+    citado = json.dumps(datos_entradas or {}, ensure_ascii=False)
+    avisos = []
+    for d in getattr(emisor, "depositos", None) or []:
+        if d.formulario != "8-K" or not (fv - timedelta(days=365) <= d.presentado <= fv):
+            continue
+        items = [x.strip() for x in (d.epigrafes or "").split(",") if x.strip() in _ITEMS_MATERIALES]
+        if not items or f"8-K {d.presentado.isoformat()}" in citado:
+            continue
+        que = ", ".join(f"Item {x} ({_ITEMS_MATERIALES[x]})" for x in items)
+        cola = ("; si emite o puede emitir acciones, su dilución va en val.dilucion_adicional con su cita" if "3.02" in items else "")
+        avisos.append(f"8-K del {d.presentado:%d/%m/%Y} con {que} sin citar en la tesis{cola}")
+    return avisos
 
 
 def _ntm(v: Valoracion, m: Motor, hechos, trimestres: List[Periodo], p: Parametros) -> Ntm:

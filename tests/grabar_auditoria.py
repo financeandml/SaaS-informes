@@ -51,10 +51,13 @@ def main(entradas: Path) -> int:
         for vivo in vivo_bolsa.glob(prefijo + "__*.json.gz"):
             if date.fromisoformat(vivo.name.rsplit("__", 1)[1][:10]) <= DIA and not (bolsa_dest / vivo.name).exists():
                 shutil.copy2(vivo, bolsa_dest / vivo.name)
-        return bolsa_dest, bolsa_dest / ruta.name
+        guardadas = sorted(bolsa_dest.glob(prefijo + "__*.json.gz"))
+        # lo que ya se pidió el 27/09 o antes, tal cual; una URL que la emisión de entonces no pidió (una corrección que
+        # cambia la petición) se trae de la red y se guarda como del 27/09: solo vale para las de fechas fijas (histórico)
+        return bolsa_dest, guardadas[-1] if guardadas else bolsa_dest / f"{prefijo}__{DIA.isoformat()}.json.gz"
 
     sec._ruta_cache, precio._ruta_bolsa = ruta_sec, ruta_bolsa
-    precio.SOLO_CACHE = True
+    precio.SOLO_CACHE = False
     os.environ["WC_SEC_CONTACTO"] = ""                     # sin identificación, la SEC no se consulta: nada sale a la red
     import emitir
     codigos = {}
