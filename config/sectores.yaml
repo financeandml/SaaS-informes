@@ -16,6 +16,49 @@ paquetes:
   telecom:      {sic: [[4800, 4899]], periodo: [7, 10], drivers: [], comprobaciones: [arrendamientos]}
   media_contenido: {sic: [[7810, 7849], [4833, 4833], [4841, 4841]], periodo: [10, 10], drivers: [desfase_contenido], comprobaciones: []}
   salud_madura: {sic: [[2834, 2836], [3841, 3851]], periodo: [10, 10], drivers: [], comprobaciones: []}
+# F11 · KPI de seguimiento que propone el asistente por paquete (paso 8, `pos.kpis`). BORRADOR del sistema pendiente de
+# revisar por el analista (26/09/2026): son indicadores que seguir, no cifras; el verde y el rojo los pone el analista.
+kpis:
+  general:
+    - {kpi: "Crecimiento de ingresos interanual", fuente: "10-Q / 10-K (SEC EDGAR)", frecuencia: trimestral}
+    - {kpi: "Margen operativo", fuente: "10-Q / 10-K (SEC EDGAR)", frecuencia: trimestral}
+    - {kpi: "Flujo de caja libre", fuente: "10-Q / 10-K (SEC EDGAR)", frecuencia: trimestral}
+  software:
+    - {kpi: "Crecimiento de ingresos interanual", fuente: "10-Q / 10-K (SEC EDGAR)", frecuencia: trimestral}
+    - {kpi: "Regla del 40 (crecimiento + margen de FCF)", fuente: "10-Q / 10-K (SEC EDGAR)", frecuencia: trimestral}
+    - {kpi: "SBC sobre ingresos", fuente: "10-Q / 10-K (SEC EDGAR)", frecuencia: trimestral}
+  semiconductores:
+    - {kpi: "Ingresos por segmento", fuente: "10-Q (segmentos XBRL)", frecuencia: trimestral}
+    - {kpi: "Margen bruto", fuente: "10-Q / 10-K (SEC EDGAR)", frecuencia: trimestral}
+    - {kpi: "Días de inventario", fuente: "10-Q / 10-K (SEC EDGAR)", frecuencia: trimestral}
+  consumo_retail:
+    - {kpi: "Ventas comparables", fuente: "nota de resultados (8-K)", frecuencia: trimestral}
+    - {kpi: "Margen bruto", fuente: "10-Q / 10-K (SEC EDGAR)", frecuencia: trimestral}
+    - {kpi: "Días de inventario", fuente: "10-Q / 10-K (SEC EDGAR)", frecuencia: trimestral}
+  industrial:
+    - {kpi: "Cartera de pedidos", fuente: "10-Q / 10-K (SEC EDGAR)", frecuencia: trimestral}
+    - {kpi: "Margen operativo", fuente: "10-Q / 10-K (SEC EDGAR)", frecuencia: trimestral}
+    - {kpi: "Flujo de caja libre", fuente: "10-Q / 10-K (SEC EDGAR)", frecuencia: trimestral}
+  energia_materias:
+    - {kpi: "Producción (volumen)", fuente: "10-Q / 10-K (SEC EDGAR)", frecuencia: trimestral}
+    - {kpi: "Coste unitario de producción", fuente: "10-Q / 10-K (SEC EDGAR)", frecuencia: trimestral}
+    - {kpi: "Capex de mantenimiento", fuente: "10-K (SEC EDGAR)", frecuencia: anual}
+  utilities:
+    - {kpi: "Base de activos regulada", fuente: "10-K (SEC EDGAR)", frecuencia: anual}
+    - {kpi: "Rentabilidad permitida frente a obtenida", fuente: "10-K (SEC EDGAR)", frecuencia: anual}
+    - {kpi: "Deuda sobre capital empleado", fuente: "10-Q / 10-K (SEC EDGAR)", frecuencia: trimestral}
+  telecom:
+    - {kpi: "Altas netas de clientes", fuente: "nota de resultados (8-K)", frecuencia: trimestral}
+    - {kpi: "Ingreso medio por cliente (ARPU)", fuente: "nota de resultados (8-K)", frecuencia: trimestral}
+    - {kpi: "Capex sobre ingresos", fuente: "10-Q / 10-K (SEC EDGAR)", frecuencia: trimestral}
+  media_contenido:
+    - {kpi: "Suscriptores o usuarios de pago", fuente: "nota de resultados (8-K)", frecuencia: trimestral}
+    - {kpi: "Gasto en contenido en caja frente a amortización", fuente: "10-Q / 10-K (SEC EDGAR)", frecuencia: trimestral}
+    - {kpi: "Margen operativo", fuente: "10-Q / 10-K (SEC EDGAR)", frecuencia: trimestral}
+  salud_madura:
+    - {kpi: "Ingresos por producto principal", fuente: "10-Q / 10-K (SEC EDGAR)", frecuencia: trimestral}
+    - {kpi: "Margen bruto", fuente: "10-Q / 10-K (SEC EDGAR)", frecuencia: trimestral}
+    - {kpi: "Vencimientos de patentes de los productos principales", fuente: "10-K (SEC EDGAR)", frecuencia: anual}
 drivers:   # partidas propias del paquete que restan del FCFF (serie en % de ingresos)
   desfase_contenido: "Desfase de contenido (gasto en caja − amortización)"
 rotulos:   # cómo se imprime cada paquete (ficha del apartado 1 y entradas del modelo)

@@ -5,6 +5,7 @@ recomendacion:
   vender: {potencial_max: -0.10}
   # el resto → Mantener
 horizonte_meses_defecto: 12
+erp_antiguedad_max_dias: 45            # F11: una ERP de referencia más antigua deja de proponerse (config/erp.yaml)
 prob_base_min: 0.40
 divergencia_multiplos_aviso: 0.20
 fallo_guia_obliga_causas: 0.02

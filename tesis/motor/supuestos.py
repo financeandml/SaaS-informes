@@ -109,38 +109,43 @@ def leer(datos: Mapping, fecha_informe: date, paquete_propuesto: str = "general"
     p.anio_base = val.get("anio_base", p.anio_base)
     p.paquete, p.paquete_propuesto = meta.get("sector") or paquete_propuesto, paquete_propuesto
     p.paquete_confirmado = bool(meta.get("sector"))
-    p.periodo = int(val.get("periodo_explicito", 10))
+    # los valores de partida salen de la misma fuente que la propuesta del asistente (config/propuestas.yaml, regla 13)
+    from ..entradas.proponer import por_defecto
+    from ..umbrales import umbral
+    from .datos import periodo_propuesto
+    p.periodo = int(val.get("periodo_explicito", periodo_propuesto(p.paquete)))
     if not 5 <= p.periodo <= 15:
         faltas.append(f"val.periodo_explicito: {p.periodo} (entre 5 y 15)")
-    p.mitad_de_anio = bool(val.get("mitad_de_anio", True))
-    p.horizonte_meses = int(val.get("horizonte_meses", 12))
+    p.mitad_de_anio = bool(val.get("mitad_de_anio", por_defecto("val.mitad_de_anio")))
+    p.horizonte_meses = int(val.get("horizonte_meses", umbral("horizonte_meses_defecto")))
     if not 6 <= p.horizonte_meses <= 36:
         faltas.append(f"val.horizonte_meses: {p.horizonte_meses} (entre 6 y 36)")
-    p.sbc_politica = val.get("sbc", p.sbc_politica)
-    p.arrendamientos = val.get("arrendamientos", p.arrendamientos)
+    p.sbc_politica = val.get("sbc", por_defecto("val.sbc"))
+    p.arrendamientos = val.get("arrendamientos", por_defecto("val.arrendamientos"))
     p.bin_inicial = float(val.get("bin_inicial", 0.0)) * 1e6
     p.ajustes_puente = list(val.get("ajustes_puente") or [])
     if wacc.get("erp") is None or not wacc.get("erp_fuente"):
         faltas.append("wacc.erp: prima de riesgo de mercado con fuente y fecha")
     p.erp = float(wacc.get("erp", 5.0)) / 100
     p.erp_fuente = wacc.get("erp_fuente", "")
-    p.beta_metodo = wacc.get("beta_metodo", "regresion")
+    p.beta_metodo = wacc.get("beta_metodo", por_defecto("wacc.beta_metodo"))
     if wacc.get("beta_desapalancada") is not None:
         p.beta_desapalancada = float(wacc["beta_desapalancada"])
     p.beta_fuente = wacc.get("beta_fuente", "")
     if p.beta_metodo == "bottom_up" and (p.beta_desapalancada is None or not p.beta_fuente):
         faltas.append("wacc.beta_desapalancada: obligatoria con fuente en el método bottom-up")
-    p.prima = float(wacc.get("prima", 0)) / 100
+    p.prima = float(wacc.get("prima", por_defecto("wacc.prima"))) / 100
     if p.prima and not wacc.get("prima_justificacion"):
         faltas.append("wacc.prima: distinta de cero exige justificación")
-    p.kd_metodo = wacc.get("kd_metodo", "rendimiento_bonos")
+    p.kd_metodo = wacc.get("kd_metodo", por_defecto("wacc.kd_metodo"))
     if wacc.get("kd") is not None:
         p.kd = float(wacc["kd"]) / 100
     p.kd_fuente = wacc.get("kd_fuente", "")
-    p.tipo_marginal = float(wacc.get("tipo_marginal", 21)) / 100
-    if abs(p.tipo_marginal - 0.21) > 1e-9 and not wacc.get("tipo_marginal_justificacion"):
-        faltas.append("wacc.tipo_marginal: distinto del 21 % exige justificación")
-    p.tv_metodo = tv.get("metodo", "value_driver")
+    marginal = float(por_defecto("wacc.tipo_marginal"))
+    p.tipo_marginal = float(wacc.get("tipo_marginal", marginal)) / 100
+    if abs(p.tipo_marginal - marginal / 100) > 1e-9 and not wacc.get("tipo_marginal_justificacion"):
+        faltas.append(f"wacc.tipo_marginal: distinto del {marginal:g} % exige justificación")
+    p.tv_metodo = tv.get("metodo", por_defecto("tv.metodo"))
     p.mult_objetivos = list((datos.get("mult") or {}).get("objetivos") or [])
     p.sotp = dict(datos.get("sotp") or {})
     esc = datos.get("esc") or {}

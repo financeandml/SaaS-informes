@@ -70,11 +70,11 @@ class Contexto:
         return self._cache["facts"]
 
     def sesiones(self):
-        """Las sesiones de Nasdaq de las tres últimas semanas hasta la fecha del informe (cierre oficial)."""
+        """Las sesiones de Nasdaq hasta la fecha del informe (cierre oficial): la misma petición de cinco años que usan el
+        motor y el paso 8 (`precio.desde_5a`), así que va a la misma caché y no se pide dos veces."""
         if "sesiones" not in self._cache:
-            from datetime import timedelta
             from ..fuentes import precio
-            self._cache["sesiones"] = precio.sesiones_nasdaq(self.ticker, self.fecha - timedelta(days=21), self.fecha, limite=40)
+            self._cache["sesiones"] = precio.sesiones_nasdaq(self.ticker, precio.desde_5a(self.fecha), self.fecha, limite=2000)
         return self._cache["sesiones"]
 
     def valor(self, campo: str):
@@ -102,11 +102,14 @@ def propone(campo: str):
     return registrar
 
 
-def proponer(ticker: str, fecha: date, datos: dict) -> Dict[str, Union[Propuesta, SinPropuesta]]:
-    """Una propuesta (o su ausencia, con motivo) por cada campo del registro."""
+def proponer(ticker: str, fecha: date, datos: dict, campos: Optional[List[str]] = None) -> Dict[str, Union[Propuesta, SinPropuesta]]:
+    """Una propuesta (o su ausencia, con motivo) por cada campo del registro, o solo por los de `campos`: la validación
+    solo necesita las de lo ya confirmado, y calcularlas todas descargaba el 10-K en cada guardado."""
     ctx = Contexto(ticker.upper(), fecha, datos or {})
     salida: Dict[str, Union[Propuesta, SinPropuesta]] = {}
     for campo, funcion in _REGISTRO.items():
+        if campos is not None and campo not in campos:
+            continue
         try:
             salida[campo] = funcion(ctx)
         except Exception as e:                        # sin EDGAR o sin configuración: se dice, no se inventa
@@ -116,16 +119,24 @@ def proponer(ticker: str, fecha: date, datos: dict) -> Dict[str, Union[Propuesta
 
 
 def _config() -> dict:
-    import yaml
-    from ..rutas import CONFIG
+    from ..rutas import CONFIG, leer_yaml
     ruta = CONFIG / "propuestas.yaml"
-    return (yaml.safe_load(ruta.read_text(encoding="utf-8")) or {}) if ruta.exists() else {}
+    return leer_yaml(ruta) if ruta.exists() else {}
 
 
 def en_bloque(campo: str) -> bool:
     """Si «Confirmar las propuestas de este paso» puede confirmarlo sin que el analista lo mire uno a uno."""
     c = _config()
     return campo in (c.get("en_bloque") or []) and campo not in (c.get("nunca_en_bloque") or [])
+
+
+def por_defecto(campo: str):
+    """El valor de partida de `config/propuestas.yaml › valores`: el que propone el asistente y el que usa el motor si el
+    analista no lo da. Sin él, error: un valor de partida escondido en código es lo que esta función evita."""
+    valores = _config().get("valores") or {}
+    if campo not in valores:
+        raise KeyError(f"falta «{campo}» en config/propuestas.yaml › valores")
+    return valores[campo]
 
 
 def como_json(propuestas: Dict[str, Union[Propuesta, SinPropuesta]]) -> Dict[str, dict]:
@@ -163,6 +174,12 @@ def confirmadas(datos: dict) -> List[tuple]:
     origen = datos.get("_origen") if isinstance(datos, dict) else None
     return [(rotulos.get(campo, campo.split(".")[-1].replace("_", " ")), o.get("fuente", ""))
             for campo, o in (origen or {}).items() if isinstance(o, dict) and o.get("tipo") == "propuesta"]
+
+
+def confirmados(datos: dict) -> List[str]:
+    """Los campos cuyo valor se confirmó desde una propuesta (los únicos que pueden caducar)."""
+    origen = datos.get("_origen") if isinstance(datos, dict) else None
+    return [c for c, o in (origen or {}).items() if isinstance(o, dict) and o.get("tipo") == "propuesta"]
 
 
 def caducadas(datos: dict, propuestas: Dict[str, Union[Propuesta, SinPropuesta]]) -> List[str]:
@@ -208,3 +225,187 @@ def _tipo(ctx: Contexto):
     if anteriores:
         return Propuesta("actualizacion", f"entradas guardadas del {anteriores[-1]}", "hay un informe anterior de este valor")
     return Propuesta("inicio_cobertura", "sin entradas anteriores de este valor", "primer informe de este valor")
+
+
+# ---------------------------------------------------------------- F11: lo que ya tiene fuente oficial o valor en config
+
+def _de_config(campo: str):
+    def funcion(ctx: Contexto):
+        return Propuesta(por_defecto(campo), "config/propuestas.yaml", "valor de partida de la casa; el motor usa el mismo si no se da")
+    return funcion
+
+
+for _campo in ("val.mitad_de_anio", "val.sbc", "val.arrendamientos", "wacc.beta_metodo", "wacc.prima", "wacc.kd_metodo",
+               "wacc.tipo_marginal", "tv.metodo", "pos.salida"):
+    propone(_campo)(_de_config(_campo))
+
+
+@propone("meta.fecha_valoracion")
+def _fecha_valoracion(ctx: Contexto):
+    """La última sesión con cierre oficial en Nasdaq antes de la fecha del informe (o en ella, si es un día pasado: la de
+    hoy puede no haber cerrado todavía)."""
+    hoy = date.today()
+    validas = [d for d, s in ctx.sesiones().items() if s.cierre is not None and (d <= ctx.fecha if ctx.fecha < hoy else d < ctx.fecha)]
+    if not validas:
+        return SinPropuesta("Nasdaq no devuelve ninguna sesión cerrada en las tres semanas anteriores a la fecha del informe")
+    d = max(validas)
+    return Propuesta(d.isoformat(), f"Nasdaq, sesión del {d:%d/%m/%Y}", "último cierre oficial anterior a la fecha del informe")
+
+
+@propone("meta.nombre_presentacion")
+def _nombre(ctx: Contexto):
+    """El de la portada del último 10-K, con la misma función que la ficha del informe."""
+    from ..datos.ficha import nombre_presentacion
+    portada = ctx.portada()
+    if portada is None:
+        return SinPropuesta("EDGAR no sirve el último 10-K del emisor")
+    nombre = nombre_presentacion(portada.nombre_portada, portada.dei.get("EntityRegistrantName") or ctx.emisor().nombre)
+    return Propuesta(nombre, f"portada del 10-K de EDGAR ({portada.deposito.accession})", "sin sufijo de estado ni mayúsculas de registro")
+
+
+@propone("meta.analista")
+def _analista(ctx: Contexto):
+    """El que firmó las últimas entradas guardadas, de este valor o de otro."""
+    from .. import entorno
+    rutas = sorted(entorno.carpeta("entradas").glob("*/*/entradas.json"), key=lambda r: r.stat().st_mtime, reverse=True)
+    for r in rutas:
+        try:
+            nombre = str(((json.loads(r.read_text(encoding="utf-8")).get("meta") or {}).get("analista")) or "").strip()
+        except (OSError, ValueError):
+            continue
+        if nombre:
+            return Propuesta(nombre, f"entradas de {r.parent.parent.name} del {r.parent.name}", "el analista de las últimas entradas guardadas")
+    return SinPropuesta("no hay entradas guardadas con nombre de analista")
+
+
+def _del_10k(extraer, que: str):
+    def funcion(ctx: Contexto):
+        portada = ctx.portada()
+        if portada is None:
+            return SinPropuesta("EDGAR no sirve el último 10-K del emisor")
+        r = extraer(portada.texto)
+        if not r:
+            return SinPropuesta(f"el 10-K no declara {que} de forma reconocible: la aporta el analista con su cita")
+        d = portada.deposito
+        return Propuesta(r[0], f"10-K {d.periodo:%Y} (EDGAR, {d.accession})" if d.periodo else f"10-K (EDGAR, {d.accession})",
+                         f"«{r[-1][:220]}»")
+    return funcion
+
+
+def _empleados(texto):
+    from ..datos.ficha import proponer_empleados
+    r = proponer_empleados(texto)
+    return (int(r[0]), r[2]) if r else None
+
+
+def _fundacion(texto):
+    from ..datos.ficha import proponer_fundacion
+    return proponer_fundacion(texto)
+
+
+propone("perfil.empleados")(_del_10k(_empleados, "la plantilla"))
+propone("perfil.fundacion")(_del_10k(_fundacion, "el año de constitución o fundación"))
+
+
+@propone("val.anio_base")
+def _anio_base(ctx: Contexto):
+    """Últimos 12 meses si, a la fecha del informe, hay al menos dos 10-Q presentados después del último 10-K; si no, el
+    último ejercicio (04, paso 7)."""
+    dep = [d for d in ctx.emisor().depositos if d.presentado <= ctx.fecha]
+    k = max((d for d in dep if d.formulario == "10-K" and d.periodo), key=lambda d: d.periodo, default=None)
+    if k is None:
+        return SinPropuesta("sin 10-K en EDGAR anterior a la fecha del informe")
+    q = sorted({d.periodo for d in dep if d.formulario == "10-Q" and d.periodo and d.periodo > k.periodo})
+    motivo = f"EDGAR: {len(q)} 10-Q tras el 10-K de {k.periodo:%d/%m/%Y}"
+    if len(q) >= 2:
+        return Propuesta("ultimos_12_meses", motivo, "dos o más trimestres desde el cierre")
+    return Propuesta("ultimo_ejercicio", motivo, "menos de dos trimestres desde el cierre")
+
+
+def _paquete(ctx: Contexto) -> str:
+    return ctx.valor("meta.sector") or getattr(_REGISTRO["meta.sector"](ctx), "valor", None) or "general"
+
+
+@propone("val.periodo_explicito")
+def _periodo(ctx: Contexto):
+    from ..motor.datos import periodo_propuesto
+    paquete = _paquete(ctx)
+    return Propuesta(periodo_propuesto(paquete), f"config/sectores.yaml, paquete «{paquete}»", "el extremo alto de la horquilla del paquete")
+
+
+@propone("val.horizonte_meses")
+def _horizonte(ctx: Contexto):
+    from ..umbrales import umbral
+    return Propuesta(int(umbral("horizonte_meses_defecto")), "config/umbrales.yaml", "horizonte de la casa; el único del informe")
+
+
+@propone("pos.fecha_entrada")
+def _fecha_entrada(ctx: Contexto):
+    fv = ctx.fecha_valoracion()
+    if fv is None:
+        return SinPropuesta("sin fecha de valoración")
+    return Propuesta(fv.isoformat(), "fecha de valoración", "la entrada al cierre de la fecha de valoración")
+
+
+@propone("pos.precio_entrada")
+def _precio_entrada(ctx: Contexto):
+    fv = ctx.fecha_valoracion()
+    s = ctx.sesiones().get(fv) if fv else None
+    if s is None or s.cierre is None:
+        return SinPropuesta("Nasdaq no da el cierre de la fecha de valoración")
+    return Propuesta(round(float(s.cierre), 2), f"Nasdaq, cierre oficial del {fv:%d/%m/%Y}", "el precio único del informe (regla 4)")
+
+
+def _mas_meses(d: date, meses: int) -> date:
+    import calendar as _cal
+    anio, mes = divmod(d.month - 1 + meses, 12)
+    return date(d.year + anio, mes + 1, min(d.day, _cal.monthrange(d.year + anio, mes + 1)[1]))
+
+
+@propone("pos.fechas_revision")
+def _fechas_revision(ctx: Contexto):
+    """La próxima presentación de resultados que publica la bolsa y el fin del horizonte. Ninguna fecha estimada a mano."""
+    from ..fuentes import calendario
+    from ..umbrales import umbral
+    fv = ctx.fecha_valoracion()
+    if fv is None:
+        return SinPropuesta("sin fecha de valoración")
+    meses = int(ctx.valor("val.horizonte_meses") or umbral("horizonte_meses_defecto"))
+    fechas, fuentes = [], []
+    prox = calendario.proxima(ctx.ticker, None, ctx.fecha)
+    if prox is not None and prox.fecha > ctx.fecha:
+        fechas.append(prox.fecha.isoformat())
+        fuentes.append(f"próximos resultados según Nasdaq ({'esperada' if prox.esperada else 'anunciada'})")
+    fechas.append(_mas_meses(fv, meses).isoformat())
+    fuentes.append(f"fin del horizonte de {meses} meses")
+    return Propuesta(fechas, " · ".join(fuentes), "fechas publicadas y el fin del horizonte")
+
+
+@propone("pos.kpis")
+def _kpis(ctx: Contexto):
+    """Los KPI del paquete sectorial (config/sectores.yaml › kpis): el analista pone el verde y el rojo."""
+    from ..motor.datos import sectores
+    paquete = _paquete(ctx)
+    kpis = sectores().get("kpis") or {}
+    lista = kpis.get(paquete) or kpis.get("general")
+    if not lista:
+        return SinPropuesta(f"config/sectores.yaml no tiene KPI para el paquete «{paquete}»")
+    return Propuesta([{"kpi": k["kpi"], "fuente": k["fuente"], "frecuencia": k["frecuencia"]} for k in lista],
+                     f"config/sectores.yaml, paquete «{paquete if paquete in kpis else 'general'}» (borrador pendiente de revisar por el analista)",
+                     "los indicadores del paquete; el verde y el rojo son del analista")
+
+
+@propone("wacc.erp")
+def _erp(ctx: Contexto):
+    """La prima de riesgo de mercado de referencia de la casa, con fuente y fecha, si la hay (config/erp.yaml)."""
+    import yaml
+    from ..rutas import CONFIG
+    from ..umbrales import umbral
+    ruta = CONFIG / "erp.yaml"
+    d = (yaml.safe_load(ruta.read_text(encoding="utf-8")) or {}) if ruta.exists() else {}
+    if d.get("valor") is None or not d.get("fuente") or not d.get("fecha"):
+        return SinPropuesta("no hay ERP de referencia en config/erp.yaml (valor, fuente y fecha): la fija el analista")
+    edad = (ctx.fecha - date.fromisoformat(str(d["fecha"]))).days
+    if edad > int(umbral("erp_antiguedad_max_dias")):
+        return SinPropuesta(f"la ERP de config/erp.yaml es del {d['fecha']} ({edad} días): hay que actualizarla")
+    return Propuesta(float(d["valor"]), f"{d['fuente']}, {d['fecha']}", "ERP de referencia de la casa")

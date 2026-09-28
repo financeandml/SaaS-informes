@@ -241,7 +241,8 @@ function nodoPropuesta(c, valor) {
   if (!p) return null;
   if (p.sin !== undefined) return vacio(valor) ? el("div", { class: "propuesta sin" }, [`○ Sin propuesta del sistema: ${p.sin}`]) : null;
   if (!vacio(valor)) return null;
-  const mostrado = typeof p.valor === "string" ? valorEnum(p.valor) : String(p.valor);
+  const uno = (x) => (x && typeof x === "object" ? (x.kpi || x.evento || x.texto || Object.values(x)[0] || "") : typeof x === "string" ? valorEnum(x) : String(x));
+  const mostrado = Array.isArray(p.valor) ? p.valor.map(uno).join(" · ") : typeof p.valor === "boolean" ? (p.valor ? "sí" : "no") : uno(p.valor);
   const b = el("button", { type: "button", class: "secundario" }, ["Confirmar"]);
   b.addEventListener("click", () => { confirmar(c.id, p); pintar(); });
   return el("div", { class: "propuesta", "data-propuesta": c.id, title: p.motivo }, [

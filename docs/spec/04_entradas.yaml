@@ -177,7 +177,7 @@ pasos:
       - {id: wacc.beta_metodo, tipo: enum, valores: [regresion, bottom_up], prop: regresion}
       - {id: wacc.beta_desapalancada, tipo: numero, oblig: "si bottom_up", val: "con fuente y fecha; se reapalanca"}
       - {id: wacc.prima, tipo: pct, rango: "0-5", prop: 0, val: "≠ 0 exige justificación"}
-      - {id: wacc.kd_metodo, tipo: enum, valores: [rating_sintetico, rendimiento_bonos], prop: rating_sintetico}
+      - {id: wacc.kd_metodo, tipo: enum, valores: [rating_sintetico, rendimiento_bonos], prop: "rendimiento_bonos (config/propuestas.yaml; el rating sintético exige una tabla oficial en config/, que no hay)"}
       - {id: wacc.kd, tipo: pct, oblig: "si rendimiento_bonos o si falta config/rating_sintetico.yaml", val: "con fuente"}
       - {id: wacc.tipo_marginal, tipo: pct, prop: 21, val: "≠ 21 exige justificación"}
       - {id: tv.metodo, tipo: enum, valores: [value_driver, gordon, multiplo_salida], prop: value_driver, nota: "los otros dos se calculan como contraste"}

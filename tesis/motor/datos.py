@@ -61,8 +61,8 @@ class Motor:
 
 
 def sectores() -> dict:
-    import yaml
-    return yaml.safe_load((CONFIG / "sectores.yaml").read_text(encoding="utf-8"))
+    from ..rutas import leer_yaml
+    return leer_yaml(CONFIG / "sectores.yaml")
 
 
 def paquete_por_sic(sic: str, ingresos: Optional[float] = None, minimo_biotech: Optional[float] = None) -> Tuple[str, Optional[str]]:
@@ -92,6 +92,14 @@ def paquete_por_sic(sic: str, ingresos: Optional[float] = None, minimo_biotech: 
             if a <= n <= b:
                 candidatos.append((b - a, nombre))
     return (min(candidatos)[1] if candidatos else "general"), None
+
+
+def periodo_propuesto(paquete: str) -> int:
+    """El periodo explícito del paquete sectorial (el extremo alto de su horquilla en config/sectores.yaml): el que propone
+    el asistente y el que usa el motor si el analista no lo da."""
+    pq = (sectores().get("paquetes") or {}).get(paquete) or (sectores().get("paquetes") or {}).get("general") or {}
+    horquilla = pq.get("periodo") or [10, 10]
+    return int(horquilla[-1])
 
 
 def ingresos_anuales(facts: dict, obtenido: Optional[date] = None) -> Optional[float]:

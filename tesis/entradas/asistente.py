@@ -266,9 +266,10 @@ def validar(ticker: str, fecha: date, datos: dict, regla: Optional[Tuple[str, fl
     except Exception:                                 # sin EDGAR no se sabe el SIC: lo dirá el informe al generarse
         pass
     # F10: lo confirmado desde una propuesta cuyos datos han cambiado vuelve a «revisar», en el paso de su campo
-    from .proponer import caducadas, proponer
+    from .proponer import caducadas, confirmados, proponer
     paso_de = {c["id"]: p["numero"] for p in esquema() for c in p["campos"]}
-    for falta in caducadas(datos, proponer(ticker, fecha, datos)):
+    ya = confirmados(datos)
+    for falta in (caducadas(datos, proponer(ticker, fecha, datos, ya)) if ya else []):
         salida.setdefault(paso_de.get(falta.split(":")[0], 9), []).append(falta)
     if e.valor("esc"):
         salida[7] += leer(datos, fecha).faltas

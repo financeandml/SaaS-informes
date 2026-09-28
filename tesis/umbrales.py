@@ -13,8 +13,8 @@ _RUTA = CONFIG / "umbrales.yaml"
 
 @lru_cache(maxsize=1)
 def _datos() -> dict:
-    import yaml
-    return yaml.safe_load(_RUTA.read_text(encoding="utf-8")) or {}
+    from .rutas import leer_yaml
+    return leer_yaml(_RUTA)
 
 
 def umbral(nombre: str):

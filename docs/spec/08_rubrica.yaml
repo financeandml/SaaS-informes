@@ -15,7 +15,7 @@ criterios:
   - {id: 8,  grupo: datos, criterio: "Toda cifra con fuente, id y estado; contraste con XBRL", estado: "si", fase: "—"}
   - {id: 9,  grupo: datos, criterio: "Citas con documento y página, recortes en el 39", estado: "si", fase: F13}
   - {id: 10, grupo: datos, criterio: "Cuentas de 8 periodos intermedios con el último derivado", estado: parcial, fase: F24, nota: "hoy 4 trimestres"}
-  - {id: 11, grupo: datos, criterio: "KPIs operativos del sector", estado: parcial, fase: F11, nota: "sin lista por paquete"}
+  - {id: 11, grupo: datos, criterio: "KPIs operativos del sector", estado: parcial, fase: F11, nota: "F11: lista por paquete en config/sectores.yaml, borrador pendiente de revisar por el analista"}
   - {id: 12, grupo: datos, criterio: "Estructura de deuda: vencimientos, tipos, covenants", estado: parcial, fase: F27}
   # Modelo de estimaciones
   - {id: 13, grupo: modelo, criterio: "Modelo integrado de resultados, balance y flujos que cuadra", estado: "no", fase: F24}
@@ -47,6 +47,6 @@ criterios:
   # Gobierno del informe y operación
   - {id: 36, grupo: operacion, criterio: "Revisión de un segundo analista antes de emitir", estado: "no", fase: F30}
   - {id: 37, grupo: operacion, criterio: "Cumplimiento normativo", estado: fuera, fase: "—", nota: "fuera de alcance por decisión del analista (26/09/2026)"}
-  - {id: 38, grupo: operacion, criterio: "Propuestas del sistema confirmadas por el analista, con su fuente en el 37", estado: parcial, fase: F11, nota: "F10: mecanismo, sector y tipo de informe"}
+  - {id: 38, grupo: operacion, criterio: "Propuestas del sistema confirmadas por el analista, con su fuente en el 37", estado: parcial, fase: F11, nota: "F11: 25 campos; faltan los de filas de listas (F13–F14) y la ERP de referencia (config/erp.yaml, del analista)"}
   - {id: 39, grupo: operacion, criterio: "Formatos cortos: resultados, avance, flash", estado: "no", fase: F31}
   - {id: 40, grupo: operacion, criterio: "Seguimiento de la cobertura con alertas", estado: parcial, fase: F32}

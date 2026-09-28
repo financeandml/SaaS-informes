@@ -4,12 +4,68 @@
 en_bloque:
   - meta.tipo
   - meta.sector
+  - meta.fecha_valoracion
+  - meta.nombre_presentacion
+  - meta.analista
+  - val.anio_base
+  - val.periodo_explicito
+  - val.mitad_de_anio
+  - val.horizonte_meses
+  - val.sbc
+  - val.arrendamientos
+  - wacc.beta_metodo
+  - wacc.prima
+  - wacc.kd_metodo
+  - wacc.tipo_marginal
+  - tv.metodo
+  - pos.fechas_revision
+  - pos.salida
+# Valores de partida de la valoración (05) y de la posición: los usa el motor cuando el analista no los da y el asistente
+# los propone. Una sola fuente para los dos (regla 13): no se repiten en código. Las cadenas de sí/no van entre comillas
+# para que YAML no las lea como booleanos.
+valores:
+  val.mitad_de_anio: true
+  val.sbc: coste_de_caja
+  val.arrendamientos: fuera_de_deuda
+  wacc.beta_metodo: regresion
+  wacc.prima: 0
+  wacc.kd_metodo: rendimiento_bonos     # rating sintético solo si existe una tabla oficial en config/ (no la hay)
+  wacc.tipo_marginal: 21
+  tv.metodo: value_driver
+  pos.salida:
+    - "Objetivo alcanzado: se revalúa la tesis con el motor."
+    - "Tesis invalidada por cualquiera de las invalidaciones."
+    - "Horizonte vencido sin catalizador."
+    - "Una oportunidad mejor con el mismo riesgo."
 # cómo se nombra cada campo cuando el informe (37) dice qué se confirmó desde una propuesta: nunca el identificador interno
 rotulos:
   meta.tipo: tipo de informe
   meta.sector: sector
+  meta.fecha_valoracion: fecha de valoración
+  meta.nombre_presentacion: nombre en el informe
+  meta.analista: analista
+  perfil.fundacion: año de fundación
+  perfil.empleados: empleados
+  val.anio_base: año base
+  val.periodo_explicito: periodo explícito
+  val.mitad_de_anio: descuento a mitad de año
+  val.horizonte_meses: horizonte
+  val.sbc: tratamiento de la SBC
+  val.arrendamientos: tratamiento de los arrendamientos
+  wacc.beta_metodo: método de la beta
+  wacc.prima: prima específica
+  wacc.kd_metodo: método del coste de la deuda
+  wacc.tipo_marginal: tipo impositivo marginal
+  tv.metodo: método del valor terminal
+  pos.fecha_entrada: fecha de entrada
+  pos.precio_entrada: precio de entrada
+  pos.fechas_revision: fechas de revisión
+  pos.salida: criterios de salida
+  pos.kpis: KPI de seguimiento
 nunca_en_bloque:
   - pos.recomendacion
   - pos.tamano_pct
   - pos.precio_entrada
+  - pos.fecha_entrada
   - pos.drawdown_tolerado
+  - pos.kpis
