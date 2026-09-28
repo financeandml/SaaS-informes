@@ -5,6 +5,7 @@ recomendacion:
   vender: {potencial_max: -0.10}
   # el resto → Mantener
 horizonte_meses_defecto: 12
+historico_ejercicios: 3               # F12 (04, paso 7): ejercicios de la SEC para la mediana de D&A, capex, SBC, FM e impuesto en caja
 erp_antiguedad_max_dias: 45            # F11: una ERP de referencia más antigua deja de proponerse (config/erp.yaml)
 prob_base_min: 0.40
 divergencia_multiplos_aviso: 0.20
@@ -30,6 +31,7 @@ sector:
   regla_40_min: 0.40              # software: crecimiento de ingresos + margen de FCF del último ejercicio
   sbc_ingresos_max: 0.10          # software: SBC / ingresos del último ejercicio
   sbc_proyeccion_pp: 0.03         # software: SBC del año 1 del escenario base por debajo del histórico en más de 3 p. p.
+  paquetes_ciclicos: [semiconductores]   # F12: el margen terminal propuesto del base es la mediana de ciclo (F22 amplía la lista)
   ciclo_anios: [7, 10]            # semiconductores: la mediana del margen operativo, con 7 a 10 ejercicios de la SEC
   ciclo_desvio_pp: 0.05           # año base o margen terminal a más de 5 p. p. de esa mediana → pico o valle de ciclo
   arrendamientos_ve_max: 0.05     # consumo y telecom: arrendamientos fuera de la deuda por encima del 5 % del VE de mercado

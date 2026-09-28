@@ -67,21 +67,13 @@ def _sbc(hechos, periodos, p, u: Mapping) -> List[str]:
 
 
 def _ciclo(facts, p, u: Mapping) -> List[str]:
-    from ..fuentes import sec
-    from ..datos.campos import CAMPOS
+    # la misma mediana que propone el asistente como margen terminal del base (F12, regla 13)
+    from .historico import margen_ciclo
     minimo, maximo = (int(x) for x in u.get("ciclo_anios", [7, 10]))
-    por = {c.clave: c for c in CAMPOS}
-    ingresos = sec.hechos_xbrl(facts, por["ingresos"], date.today())
-    ebit = sec.hechos_xbrl(facts, por["ebit"], date.today())
-    margenes = []
-    for per, h in ingresos.items():
-        e = ebit.get(per)
-        if per.meses == 12 and not per.es_instante and per.fin <= p.fecha_valoracion and h.hay_dato and h.valor and e is not None and e.hay_dato:
-            margenes.append((per.fin, e.valor / h.valor))
-    margenes = sorted(dict(margenes).items())[-maximo:]
-    if len(margenes) < minimo:
-        return [f"Ciclo (semiconductores): la SEC publica {len(margenes)} ejercicios de margen operativo y la mediana de ciclo pide "
-                f"al menos {minimo}; no se comprueba"]
+    ciclo = margen_ciclo(facts, p.fecha_valoracion, minimo, maximo)
+    if not ciclo.hay_valor:
+        return [f"Ciclo (semiconductores): {ciclo.motivo}; no se comprueba"]
+    margenes = list(ciclo.anios)
     mediana = statistics.median(m for _, m in margenes)
     desvio = float(u.get("ciclo_desvio_pp", 0.05))
     salida = []

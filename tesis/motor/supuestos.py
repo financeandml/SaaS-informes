@@ -2,6 +2,8 @@
 
 Las series se dan en los años 1, 2, 3, 5 y N; el resto se interpola linealmente (04: «el resto se interpola»). Un año
 dado explícitamente manda sobre la interpolación. Los porcentajes llegan en % (5 = 5 %) y aquí se pasan a tanto por uno.
+El pesimista y el optimista pueden dar cualquier serie como `{"delta_pp": x}`: la del base más x puntos en todos los años
+(F12). La g que falta es la de partida de `config/propuestas.yaml`, la misma que propone el asistente.
 """
 
 from __future__ import annotations
@@ -66,6 +68,7 @@ class Escenario:
     g: float = 0.025
     ronic: Optional[float] = None
     multiplo_salida: Optional[float] = None
+    deltas: Dict[str, float] = field(default_factory=dict)   # clave de 04 → diferencia sobre el base (tanto por uno)
 
 
 @dataclass
@@ -149,22 +152,46 @@ def leer(datos: Mapping, fecha_informe: date, paquete_propuesto: str = "general"
     p.mult_objetivos = list((datos.get("mult") or {}).get("objetivos") or [])
     p.sotp = dict(datos.get("sotp") or {})
     esc = datos.get("esc") or {}
-    for nombre in NOMBRES:
+    # el base primero: el pesimista y el optimista pueden darse como diferencia sobre él
+    for nombre in ("base",) + tuple(x for x in NOMBRES if x != "base"):
         e = esc.get(nombre)
         if not e:
             faltas.append(f"esc.{nombre}: falta el escenario")
             continue
         try:
             n = p.periodo
+            base = p.escenarios.get("base") if nombre != "base" else None
+            deltas: Dict[str, float] = {}
+
+            def valor(clave: str, sobre=None, escalar: bool = False, defecto=None):
+                x = e.get(clave, defecto) if defecto is not None else e[clave]
+                if isinstance(x, dict) and "delta_pp" in x:
+                    # 04: prioridad serie explícita > diferencia > propuesta confirmada; la diferencia es sobre el base ya
+                    # interpolado, en puntos porcentuales, igual en todos los años
+                    if nombre == "base":
+                        raise ValueError(f"{clave}: el escenario base no puede darse como diferencia")
+                    if sobre is None:
+                        raise ValueError(f"{clave}: diferencia sin valor del base")
+                    d = float(x["delta_pp"]) / 100
+                    deltas[clave] = d
+                    return sobre + d if escalar else [v + d for v in sobre]
+                return float(x) / 100 if escalar else serie(x, n)
+
+            g_defecto = por_defecto(f"esc.{nombre}.g")
+            ronic_base = base.ronic if base is not None else None
             p.escenarios[nombre] = Escenario(
                 nombre=nombre, probabilidad=float(e["probabilidad"]) / 100, narrativa=e.get("narrativa", ""),
-                crecimiento=serie(e["crecimiento_ingresos"], n), margen=serie(e["margen_ebit"], n),
-                impuesto=serie(e["impuesto_caja"], n), da=serie(e["da_pct"], n), capex=serie(e["capex_pct"], n),
-                fm=float(e["fm_pct_incremental"]) / 100, sbc=serie(e["sbc_pct"], n),
+                crecimiento=valor("crecimiento_ingresos", base and base.crecimiento),
+                margen=valor("margen_ebit", base and base.margen),
+                impuesto=valor("impuesto_caja", base and base.impuesto), da=valor("da_pct", base and base.da),
+                capex=valor("capex_pct", base and base.capex),
+                fm=valor("fm_pct_incremental", base and base.fm, escalar=True), sbc=valor("sbc_pct", base and base.sbc),
                 paquete={k: serie(v, n) for k, v in (e.get("paquete") or {}).items()},
-                wacc_ajuste=float(e.get("wacc_ajuste_pp", 0)) / 100, g=float(e.get("g", 2.5)) / 100,
-                ronic=float(e["ronic"]) / 100 if e.get("ronic") is not None else None,
-                multiplo_salida=float(e["multiplo_salida"]) if e.get("multiplo_salida") is not None else None)
+                wacc_ajuste=float(e.get("wacc_ajuste_pp", 0)) / 100,
+                g=valor("g", base.g if base else None, escalar=True, defecto=g_defecto),
+                ronic=(valor("ronic", ronic_base, escalar=True) if e.get("ronic") is not None else None),
+                multiplo_salida=float(e["multiplo_salida"]) if e.get("multiplo_salida") is not None else None,
+                deltas=deltas)
         except (KeyError, ValueError) as ex:
             faltas.append(f"esc.{nombre}: {ex}")
             continue

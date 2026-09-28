@@ -409,3 +409,84 @@ def _erp(ctx: Contexto):
     if edad > int(umbral("erp_antiguedad_max_dias")):
         return SinPropuesta(f"la ERP de config/erp.yaml es del {d['fecha']} ({edad} días): hay que actualizarla")
     return Propuesta(float(d["valor"]), f"{d['fuente']}, {d['fecha']}", "ERP de referencia de la casa")
+
+
+# ---------------------------------------------------------------- F12: series del escenario base por su histórico
+# Las mismas funciones que imprime el informe junto a cada supuesto (`motor/historico.py`): lo que se confirma es lo que
+# se ve como «histórico». Solo el base: el pesimista y el optimista se dan como diferencia sobre él.
+
+
+def _historico(ctx: Contexto):
+    if "historico" not in ctx._cache:
+        from ..motor import historico
+        fv = ctx.fecha_valoracion() or ctx.fecha
+        ctx._cache["historico"] = historico.series(ctx.facts()[0], fv)
+    return ctx._cache["historico"]
+
+
+def _de_serie(s, convergencia=None):
+    """Una serie del histórico como propuesta; `convergencia` = (valor en N, de dónde sale) si converge linealmente."""
+    if not s.hay_valor:
+        return SinPropuesta(s.motivo)
+    fuente = f"SEC (companyfacts): {s.formula}"
+    if convergencia is None:
+        return Propuesta({"1": s.valor, "N": s.valor}, fuente, s.motivo, s.certeza)
+    from ..formato import numero
+    final, origen = convergencia
+    return Propuesta({"1": s.valor, "N": final}, f"{fuente}; en el año N, {origen}",
+                     f"{s.motivo}; converge a {numero(final, 1)} % en el año N", s.certeza)
+
+
+for _clave in ("da_pct", "capex_pct", "sbc_pct"):
+    propone(f"esc.base.{_clave}")((lambda k: lambda ctx: _de_serie(_historico(ctx)[k]))(_clave))
+
+
+@propone("esc.base.fm_pct_incremental")
+def _fm(ctx: Contexto):
+    s = _historico(ctx)["fm_pct_incremental"]
+    return Propuesta(s.valor, f"SEC (companyfacts): {s.formula}", s.motivo, s.certeza) if s.hay_valor else SinPropuesta(s.motivo)
+
+
+@propone("esc.base.impuesto_caja")
+def _impuesto(ctx: Contexto):
+    marginal = ctx.valor("wacc.tipo_marginal")
+    marginal = float(marginal if marginal is not None else por_defecto("wacc.tipo_marginal"))
+    return _de_serie(_historico(ctx)["impuesto_caja"], (marginal, "el tipo marginal"))
+
+
+def _g_base(ctx: Contexto) -> float:
+    g = _valor(ctx.datos, "esc.base.g")
+    return float(g if g is not None and not isinstance(g, dict) else por_defecto("esc.base.g"))
+
+
+@propone("esc.base.crecimiento_ingresos")
+def _crecimiento(ctx: Contexto):
+    from ..motor import historico
+    s = historico.crecimiento_udm(ctx.facts()[0], ctx.fecha_valoracion() or ctx.fecha)
+    return _de_serie(s, (_g_base(ctx), "el crecimiento terminal del base"))
+
+
+@propone("esc.base.margen_ebit")
+def _margen(ctx: Contexto):
+    """Año 1: el margen del último ejercicio. Año N: en los paquetes cíclicos, la mediana de ciclo (la misma que comprueba
+    `motor/sector.py`); en los demás, el mismo margen, porque una mediana de diez años de una compañía que ha cambiado de
+    escala (NFLX: 18 % frente al 30 % actual) no es un margen normalizado sino uno antiguo."""
+    from ..motor import historico
+    from ..umbrales import umbral
+    facts, fv = ctx.facts()[0], ctx.fecha_valoracion() or ctx.fecha
+    ultimo = historico.margen_ultimo(facts, fv)
+    if not ultimo.hay_valor:
+        return SinPropuesta(ultimo.motivo)
+    paquete = _paquete(ctx)
+    if paquete not in (umbral("sector").get("paquetes_ciclicos") or []):
+        return _de_serie(ultimo)
+    minimo, maximo = (int(x) for x in umbral("sector")["ciclo_anios"])
+    ciclo = historico.margen_ciclo(facts, fv, minimo, maximo)
+    if not ciclo.hay_valor:
+        return SinPropuesta(f"paquete cíclico «{paquete}»: {ciclo.motivo}")
+    return _de_serie(ultimo, (ciclo.valor, f"la mediana de ciclo ({ciclo.motivo})"))
+
+
+for _nombre in ("pesimista", "base", "optimista"):
+    propone(f"esc.{_nombre}.g")((lambda n: lambda ctx: Propuesta(
+        float(por_defecto(f"esc.{n}.g")), "config/propuestas.yaml", "crecimiento terminal de partida de la casa (04)"))(_nombre))

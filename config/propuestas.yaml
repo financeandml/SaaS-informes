@@ -20,6 +20,14 @@ en_bloque:
   - tv.metodo
   - pos.fechas_revision
   - pos.salida
+  - esc.base.da_pct
+  - esc.base.capex_pct
+  - esc.base.sbc_pct
+  - esc.base.fm_pct_incremental
+  - esc.base.impuesto_caja
+  - esc.pesimista.g
+  - esc.base.g
+  - esc.optimista.g
 # Valores de partida de la valoración (05) y de la posición: los usa el motor cuando el analista no los da y el asistente
 # los propone. Una sola fuente para los dos (regla 13): no se repiten en código. Las cadenas de sí/no van entre comillas
 # para que YAML no las lea como booleanos.
@@ -32,6 +40,9 @@ valores:
   wacc.kd_metodo: rendimiento_bonos     # rating sintético solo si existe una tabla oficial en config/ (no la hay)
   wacc.tipo_marginal: 21
   tv.metodo: value_driver
+  esc.pesimista.g: 2.0                 # 04: crecimiento terminal de partida por escenario (%)
+  esc.base.g: 2.5
+  esc.optimista.g: 3.0
   pos.salida:
     - "Objetivo alcanzado: se revalúa la tesis con el motor."
     - "Tesis invalidada por cualquiera de las invalidaciones."
@@ -62,7 +73,19 @@ rotulos:
   pos.fechas_revision: fechas de revisión
   pos.salida: criterios de salida
   pos.kpis: KPI de seguimiento
+  esc.base.crecimiento_ingresos: crecimiento de ingresos del escenario base
+  esc.base.margen_ebit: margen EBIT del escenario base
+  esc.base.impuesto_caja: impuesto en caja del escenario base
+  esc.base.da_pct: D&A sobre ingresos del escenario base
+  esc.base.capex_pct: capex sobre ingresos del escenario base
+  esc.base.sbc_pct: SBC sobre ingresos del escenario base
+  esc.base.fm_pct_incremental: fondo de maniobra incremental del escenario base
+  esc.pesimista.g: crecimiento terminal del pesimista
+  esc.base.g: crecimiento terminal del base
+  esc.optimista.g: crecimiento terminal del optimista
 nunca_en_bloque:
+  - esc.base.crecimiento_ingresos      # F12: crecimiento y margen del base se miran uno a uno
+  - esc.base.margen_ebit
   - pos.recomendacion
   - pos.tamano_pct
   - pos.precio_entrada
