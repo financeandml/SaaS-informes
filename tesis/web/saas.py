@@ -283,8 +283,14 @@ _HUELLAS: Dict[Tuple[str, int, int], str] = {}
 
 
 def _clave(p: Path) -> str:
-    """«adjuntos/QCOM/x.pdf», «dcf/QCOM.xlsx», «2026-09-27/entradas.json»: la misma en cualquier copia del repositorio."""
-    return "/".join(p.parts[-3:])
+    """«adjuntos/QCOM/x.pdf», «dcf/QCOM.xlsx», «entradas/QCOM/2026-09-27/entradas.json»: relativa a la carpeta de datos o
+    al repositorio, nunca con el nombre de la carpeta en la que se clonó (la misma en cualquier copia)."""
+    for raiz in (ADJUNTOS.parent, DCF.parent, entorno.carpeta("entradas").parent):
+        try:
+            return p.resolve().relative_to(raiz.resolve()).as_posix()
+        except ValueError:
+            continue
+    return p.name
 
 
 def huellas(ticker: str) -> Dict[str, str]:

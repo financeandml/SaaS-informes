@@ -52,6 +52,12 @@ class TrasUnClonado(unittest.TestCase):
         self.assertEqual(i["emitido"], "27/09/2026 19:31")
         self.assertTrue(i["al_dia"])
 
+    def test_la_clave_no_lleva_la_carpeta_del_clon(self):
+        """Falla si la clave de una entrada lleva la carpeta donde está el repositorio: en otra copia no coincidiría y el
+        informe saldría «no al día» (pasó con dcf/QCOM.xlsx: «SAAS-INFORMES/dcf/…» frente a «clon2/dcf/…»)."""
+        (self.tmp / "dcf" / "QCOM.xlsx").write_bytes(b"libro")
+        self.assertEqual(set(saas.huellas("QCOM")), {"adjuntos/QCOM/10k.pdf", "dcf/QCOM.xlsx"})
+
     def test_el_ultimo_es_el_de_fecha_mas_reciente_en_su_nombre(self):
         """Falla si se enseña el informe del 26 porque su fichero quedó con una hora posterior al del 27."""
         self._clonar(self.tmp / "salida" / "QCOM" / "QCOM_tesis_2026-09-27.pdf")
