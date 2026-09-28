@@ -1,0 +1,920 @@
+{
+ "meta": {
+  "analista": "Warrants & Co. · Análisis de renta variable",
+  "fecha_informe": "2026-09-27",
+  "fecha_valoracion": "2026-09-25",
+  "tipo": "inicio_cobertura",
+  "nombre_presentacion": "Qualcomm",
+  "sector": "semiconductores"
+ },
+ "perfil": {
+  "descripcion": {
+   "texto": "Qualcomm diseña semiconductores sin fábricas propias y licencia la propiedad intelectual de sus tecnologías inalámbricas. Se organiza en tres segmentos: QCT, que vende plataformas Snapdragon y circuitos para teléfonos, automoción e internet de las cosas; QTL, que cobra regalías por su cartera de patentes celulares; y QSI, que agrupa inversiones estratégicas. Desde el ejercicio 2026 añade un negocio de centros de datos, reforzado con las compras de Alphawave y Modular. Los ingresos dependen todavía del teléfono y de pocos clientes, con China como primer mercado por país de venta. La compañía persigue que la automoción, el internet de las cosas y los centros de datos pesen más que el teléfono antes del cierre de la década.",
+   "evidencias": [
+    {
+     "doc": "10-K",
+     "pag": "4",
+     "texto": "Our platforms help power intelligent devices that people and businesses rely on every day across industries and applications from handsets to other areas, including automotive and the internet of things (IoT).",
+     "texto_es": "Sus plataformas impulsan dispositivos inteligentes en sectores y aplicaciones que van del teléfono a otras áreas, como la automoción y el internet de las cosas (IoT)."
+    }
+   ]
+  },
+  "segmentos_ok": true,
+  "fundacion": 1985,
+  "empleados": 52000
+ },
+ "equipo": {
+  "track_record": [
+   {
+    "persona": "Cristiano R. Amon",
+    "juicio": "mixto",
+    "texto": "Consejero delegado desde junio de 2021 tras casi tres décadas en la casa. Ha diversificado QCT hacia automoción e internet de las cosas con resultados visibles, pero el teléfono y la salida de Apple siguen marcando los ingresos, y la apuesta por centros de datos aún no está probada.",
+    "evidencias": [
+     {
+      "doc": "DEF 14A",
+      "pag": "21",
+      "texto": "Mr. Amon has been our President and Chief Executive Officer and a member of our Board of Directors since June 2021.",
+      "texto_es": "El Sr. Amon es presidente y consejero delegado, y miembro del consejo de administración, desde junio de 2021."
+     },
+     {
+      "doc": "DEF 14A",
+      "pag": "53",
+      "texto": "Our strong financial performance in fiscal 2025 was driven by growth in automotive and IoT, and continued traction of our Snapdragon mobile platforms across leading smartphones.",
+      "texto_es": "Los resultados del ejercicio 2025 se apoyaron en el crecimiento de automoción e IoT y en la tracción continuada de las plataformas Snapdragon en los principales teléfonos."
+     }
+    ]
+   },
+   {
+    "persona": "Akash Palkhiwala",
+    "juicio": "positivo",
+    "texto": "Director financiero desde noviembre de 2019 y de operaciones desde enero de 2024. Ha sostenido una retribución al accionista que absorbe casi todo el flujo de caja libre y ha comunicado la guía con precisión, aunque la inversión en centros de datos eleva los gastos operativos.",
+    "evidencias": [
+     {
+      "doc": "10-K",
+      "pag": "14",
+      "texto": "Akash Palkhiwala, age 50, has served as Chief Financial Officer since November 2019 and as Chief Operating Officer since January 2024.",
+      "texto_es": "Akash Palkhiwala, de 50 años, es director financiero desde noviembre de 2019 y director de operaciones desde enero de 2024."
+     },
+     {
+      "doc": "DEF 14A",
+      "pag": "53",
+      "texto": "Returned $12.6 billion to stockholders, including $8.8 billion in stock repurchases and $3.8 billion in dividends",
+      "texto_es": "Devolvió 12.600 millones de USD a los accionistas: 8.800 millones en recompras y 3.800 millones en dividendos."
+     }
+    ]
+   }
+  ],
+  "asignacion_capital": {
+   "texto": "La compañía reparte casi todo su flujo de caja libre entre un dividendo trimestral y recompras de acciones. Desde el ejercicio 2026 dedica además caja y acciones a adquisiciones para entrar en centros de datos, como Alphawave y Modular. Las recompras compensan la emisión de acciones de esas compras, pero el margen para retribuir se estrecha mientras los ingresos del teléfono caen.",
+   "evidencias": [
+    {
+     "doc": "10-Q 2026-07-29",
+     "pag": "16",
+     "texto": "The acquisition is intended to further accelerate, and provide key assets for, our expansion into data centers.",
+     "texto_es": "La adquisición de Alphawave busca acelerar la entrada en centros de datos y aportar activos clave para ella."
+    }
+   ]
+  }
+ },
+ "catalizadores": [
+  {
+   "fecha": "2026-11-04",
+   "evento": "Resultados del cuarto trimestre fiscal de 2026, primera caída acelerada de los ingresos de Apple",
+   "tipo": "resultados",
+   "pilar": "2",
+   "impacto": "negativo",
+   "probabilidad": 85,
+   "evidencia": [
+    {
+     "doc": "8-K 2026-07-29",
+     "pag": "2",
+     "texto": "The following table summarizes GAAP and Non-GAAP guidance based on the current outlook.",
+     "texto_es": "La compañía resume en una tabla su guía GAAP y no GAAP según las perspectivas actuales."
+    }
+   ]
+  },
+  {
+   "fecha": "2026-T4",
+   "evento": "Primeros ingresos de silicio a medida para centros de datos en el primer trimestre fiscal de 2027",
+   "tipo": "producto",
+   "pilar": "1",
+   "impacto": "positivo",
+   "probabilidad": 70,
+   "evidencia": [
+    {
+     "doc": "8-K 2026-07-29",
+     "pag": "1",
+     "texto": "In the near term, we expect year-over-year growth in non-handset revenues, including Data Center, to accelerate from 24% in fiscal 2026 to greater than 60% in fiscal 2027",
+     "texto_es": "A corto plazo, la compañía prevé que el crecimiento interanual de los ingresos ajenos al teléfono, centros de datos incluidos, se acelere del 24 % en el ejercicio 2026 a más del 60 % en el 2027."
+    }
+   ]
+  },
+  {
+   "fecha": "2027-T1",
+   "evento": "Subidas de precios que trasladan el encarecimiento de obleas, encapsulado y memoria al margen bruto",
+   "tipo": "corporativo",
+   "pilar": "3",
+   "impacto": "positivo",
+   "probabilidad": 65,
+   "evidencia": [
+    {
+     "doc": "8-K 2026-07-29",
+     "pag": "2",
+     "texto": "We are taking concrete actions to reflect the higher input costs in our product pricing and expect these actions to benefit our gross margins over time as the pricing changes gradually come into effect.",
+     "texto_es": "La compañía está trasladando a sus precios el aumento de los costes de producción y espera que el margen bruto mejore a medida que los nuevos precios entren en vigor."
+    }
+   ]
+  },
+  {
+   "fecha": "2027-T4",
+   "evento": "Cierre del ejercicio fiscal 2027: prueba del crecimiento prometido fuera del teléfono",
+   "tipo": "resultados",
+   "pilar": "1",
+   "impacto": "negativo",
+   "probabilidad": 50,
+   "evidencia": [
+    {
+     "doc": "8-K 2026-07-29",
+     "pag": "1",
+     "texto": "We are well positioned to execute on the vision we outlined at our recent Investor Day, with total non-handset revenues growing to $40 billion by fiscal 2029 – nearly double the target we shared in November 2024.",
+     "texto_es": "La compañía se considera bien situada para que sus ingresos ajenos al teléfono lleguen a 40.000 millones de USD en el ejercicio 2029, casi el doble del objetivo de noviembre de 2024."
+    }
+   ]
+  }
+ ],
+ "direccion": {
+  "citas": [
+   {
+    "doc": "8-K 2026-07-29",
+    "pag": "1",
+    "texto": "Despite a challenging memory and supply environment, our third quarter results reflect solid execution of our growth strategy, with quarterly revenues at the high end of guidance",
+    "texto_es": "Pese a un entorno difícil de memoria y suministro, los resultados del tercer trimestre reflejan una ejecución sólida de la estrategia de crecimiento, con ingresos en la parte alta de la guía."
+   },
+   {
+    "doc": "8-K 2026-07-29",
+    "pag": "1",
+    "texto": "We are well positioned to execute on the vision we outlined at our recent Investor Day, with total non-handset revenues growing to $40 billion by fiscal 2029 – nearly double the target we shared in November 2024.",
+    "texto_es": "Estamos bien situados para ejecutar la visión del reciente día del inversor, con unos ingresos ajenos al teléfono que llegarán a 40.000 millones de USD en el ejercicio 2029, casi el doble del objetivo de noviembre de 2024."
+   },
+   {
+    "doc": "8-K 2026-07-29",
+    "pag": "1",
+    "texto": "In the near term, we expect year-over-year growth in non-handset revenues, including Data Center, to accelerate from 24% in fiscal 2026 to greater than 60% in fiscal 2027 – a significant inflection point in the execution of our growth strategy.",
+    "texto_es": "A corto plazo, esperamos que el crecimiento interanual de los ingresos ajenos al teléfono, centros de datos incluidos, se acelere del 24 % en el ejercicio 2026 a más del 60 % en el 2027, un punto de inflexión en la estrategia."
+   }
+  ]
+ },
+ "guia": {
+  "confirmadas": [
+   "2024-07-31|4T FY24|ingresos",
+   "2024-07-31|4T FY24|ingresos_segmento:QCT",
+   "2024-07-31|4T FY24|ingresos_segmento:QTL",
+   "2024-07-31|4T FY24|bpa_diluido",
+   "2024-07-31|4T FY24|bpa_no_gaap",
+   "2024-11-06|1T FY25|ingresos",
+   "2024-11-06|1T FY25|ingresos_segmento:QCT",
+   "2024-11-06|1T FY25|ingresos_segmento:QTL",
+   "2024-11-06|1T FY25|bpa_diluido",
+   "2024-11-06|1T FY25|bpa_no_gaap",
+   "2025-02-05|2T FY25|ingresos",
+   "2025-02-05|2T FY25|ingresos_segmento:QCT",
+   "2025-02-05|2T FY25|ingresos_segmento:QTL",
+   "2025-02-05|2T FY25|bpa_diluido",
+   "2025-02-05|2T FY25|bpa_no_gaap",
+   "2025-04-30|3T FY25|ingresos",
+   "2025-04-30|3T FY25|ingresos_segmento:QCT",
+   "2025-04-30|3T FY25|ingresos_segmento:QTL",
+   "2025-04-30|3T FY25|bpa_diluido",
+   "2025-04-30|3T FY25|bpa_no_gaap",
+   "2025-07-30|4T FY25|ingresos",
+   "2025-07-30|4T FY25|ingresos_segmento:QCT",
+   "2025-07-30|4T FY25|ingresos_segmento:QTL",
+   "2025-07-30|4T FY25|bpa_diluido",
+   "2025-07-30|4T FY25|bpa_no_gaap",
+   "2025-11-05|1T FY26|ingresos",
+   "2025-11-05|1T FY26|ingresos_segmento:QCT",
+   "2025-11-05|1T FY26|ingresos_segmento:QTL",
+   "2025-11-05|1T FY26|bpa_diluido",
+   "2025-11-05|1T FY26|bpa_no_gaap",
+   "2026-02-04|2T FY26|ingresos",
+   "2026-02-04|2T FY26|ingresos_segmento:QCT",
+   "2026-02-04|2T FY26|ingresos_segmento:QTL",
+   "2026-02-04|2T FY26|bpa_diluido",
+   "2026-02-04|2T FY26|bpa_no_gaap",
+   "2026-04-29|3T FY26|ingresos",
+   "2026-04-29|3T FY26|ingresos_segmento:QCT",
+   "2026-04-29|3T FY26|ingresos_segmento:QTL",
+   "2026-04-29|3T FY26|bpa_diluido",
+   "2026-04-29|3T FY26|bpa_no_gaap",
+   "2026-07-29|4T FY26|ingresos",
+   "2026-07-29|4T FY26|ingresos_segmento:QCT",
+   "2026-07-29|4T FY26|ingresos_segmento:QTL",
+   "2026-07-29|4T FY26|bpa_diluido",
+   "2026-07-29|4T FY26|bpa_no_gaap"
+  ]
+ },
+ "val": {
+  "anio_base": "ultimo_ejercicio",
+  "anio_base_justificacion": "El ejercicio fiscal 2026 cierra el 27/09/2026, dos días después de la fecha de valoración: el año 1 del modelo es ese ejercicio, estimado con nueve meses publicados y la guía del cuarto trimestre, y apenas pondera en el valor.",
+  "periodo_explicito": 10,
+  "mitad_de_anio": true,
+  "horizonte_meses": 12,
+  "sbc": "coste_de_caja",
+  "arrendamientos": "fuera_de_deuda"
+ },
+ "wacc": {
+  "erp": 4.14,
+  "erp_fuente": "Damodaran (NYU Stern), prima implícita del S&P 500 a 01/09/2026 (flujos de doce meses con payout ajustado), pages.stern.nyu.edu/~adamodar, consultada el 27/09/2026",
+  "beta_metodo": "regresion",
+  "prima": 0,
+  "kd_metodo": "rendimiento_bonos",
+  "kd": 5.0,
+  "kd_fuente": "10-K FY2025, nota de deuda (pág. F-22): las notas emitidas en mayo de 2025 pagan del 4,50 % al 5,00 % y los tipos efectivos de la deuda van del 2,39 % al 5,12 %; se toma el cupón a diez años (5,00 %) como coste marginal",
+  "tipo_marginal": 21
+ },
+ "tv": {
+  "metodo": "value_driver"
+ },
+ "sotp": {
+  "aplica": false
+ },
+ "esc": {
+  "pesimista": {
+   "probabilidad": 25,
+   "narrativa": "El teléfono sigue cayendo sin Apple, los centros de datos se retrasan y el margen se queda en el suelo del ciclo. La SBC ya está restada en el margen EBIT GAAP y no se descuenta dos veces.",
+   "crecimiento_ingresos": {
+    "1": -3.1,
+    "2": -4.0,
+    "3": 3.0,
+    "5": 4.0,
+    "N": 2.5
+   },
+   "margen_ebit": {
+    "1": 21.0,
+    "2": 19.0,
+    "3": 20.0,
+    "5": 22.0,
+    "N": 23.0
+   },
+   "impuesto_caja": {
+    "1": 15,
+    "3": 16,
+    "N": 18
+   },
+   "da_pct": 3.8,
+   "capex_pct": {
+    "1": 4.8,
+    "2": 4.8,
+    "3": 4.0,
+    "N": 3.8
+   },
+   "fm_pct_incremental": 6.0,
+   "sbc_pct": 0,
+   "g": 2.5,
+   "ronic": 15
+  },
+  "base": {
+   "probabilidad": 50,
+   "narrativa": "La diversificación compensa la salida de Apple y los ingresos vuelven a crecer desde 2027, pero el plan de 2029 se cumple solo en parte y el margen vuelve a mitad de ciclo. SBC incluida en el margen GAAP.",
+   "crecimiento_ingresos": {
+    "1": -3.1,
+    "2": 3.0,
+    "3": 10.0,
+    "4": 11.0,
+    "5": 8.0,
+    "7": 6.0,
+    "N": 3.0
+   },
+   "margen_ebit": {
+    "1": 21.0,
+    "2": 20.5,
+    "3": 23.0,
+    "5": 26.0,
+    "N": 27.0
+   },
+   "impuesto_caja": {
+    "1": 15,
+    "3": 16,
+    "N": 18
+   },
+   "da_pct": 3.8,
+   "capex_pct": {
+    "1": 4.8,
+    "2": 4.8,
+    "3": 4.3,
+    "5": 4.0,
+    "N": 4.0
+   },
+   "fm_pct_incremental": 6.0,
+   "sbc_pct": 0,
+   "g": 3.0,
+   "ronic": 22
+  },
+  "optimista": {
+   "probabilidad": 25,
+   "narrativa": "Se cumplen los objetivos del día del inversor: los ingresos ajenos al teléfono llegan a lo prometido en 2029, el Android se recupera y el margen supera el máximo del último ciclo. SBC incluida en el margen GAAP.",
+   "crecimiento_ingresos": {
+    "1": -3.1,
+    "2": 8.0,
+    "3": 16.0,
+    "4": 15.0,
+    "5": 10.0,
+    "7": 7.0,
+    "N": 3.5
+   },
+   "margen_ebit": {
+    "1": 21.0,
+    "2": 22.0,
+    "3": 26.0,
+    "4": 29.0,
+    "N": 30.0
+   },
+   "impuesto_caja": {
+    "1": 15,
+    "3": 16,
+    "N": 18
+   },
+   "da_pct": 3.8,
+   "capex_pct": {
+    "1": 4.8,
+    "2": 5.0,
+    "3": 4.5,
+    "5": 4.2,
+    "N": 4.0
+   },
+   "fm_pct_incremental": 6.0,
+   "sbc_pct": 0,
+   "g": 3.5,
+   "ronic": 28
+  }
+ },
+ "comparables": [
+  {
+   "ticker": "AVGO",
+   "justificacion": "Conectividad, radiofrecuencia y silicio a medida para centros de datos; rival directo en el plan de Qualcomm",
+   "usar_en_multiplos": true
+  },
+  {
+   "ticker": "NXPI",
+   "justificacion": "Semiconductores para automoción e internet de las cosas, los dos negocios que más crecen en QCT",
+   "usar_en_multiplos": true
+  },
+  {
+   "ticker": "TXN",
+   "justificacion": "Semiconductores analógicos e integrados para industria y automoción; referencia de ciclo y de retribución",
+   "usar_en_multiplos": true
+  },
+  {
+   "ticker": "ADI",
+   "justificacion": "Semiconductores analógicos para industria y automoción con retribución al accionista comparable",
+   "usar_en_multiplos": true
+  },
+  {
+   "ticker": "SWKS",
+   "justificacion": "Radiofrecuencia para teléfonos con Apple como gran cliente; misma exposición al ciclo del teléfono",
+   "usar_en_multiplos": true
+  },
+  {
+   "ticker": "QRVO",
+   "justificacion": "Radiofrecuencia para teléfonos y redes; competidor citado en el 10-K y expuesto a los mismos clientes",
+   "usar_en_multiplos": true
+  },
+  {
+   "ticker": "MRVL",
+   "justificacion": "Silicio a medida para centros de datos; fuera de medianas porque su múltiplo descuenta un ciclo de inteligencia artificial",
+   "usar_en_multiplos": false
+  },
+  {
+   "ticker": "AMD",
+   "justificacion": "Procesadores y aceleradores para centros de datos; fuera de medianas por un beneficio GAAP deprimido por amortizaciones",
+   "usar_en_multiplos": false
+  }
+ ],
+ "mercado": {
+  "cifras": [
+   {
+    "etiqueta": "Mercado de centros de datos al que apunta la hoja de ruta de la compañía",
+    "clase": "TAM",
+    "valor": 1000000,
+    "unidad": "millones USD",
+    "anio": 2029,
+    "metodo": "declarado_compania",
+    "evidencia": [
+     {
+      "doc": "Presentación de resultados 3T FY26",
+      "pag": "14",
+      "texto": "Data Center: Our largest growth opportunity Creating a comprehensive roadmap to address expanding TAM $1T+ 2029 TAM",
+      "texto_es": "Centros de datos, su mayor oportunidad de crecimiento: una hoja de ruta para un mercado que la compañía cifra en más de un billón de USD en 2029."
+     }
+    ]
+   },
+   {
+    "etiqueta": "Ingresos ajenos al teléfono que la compañía se fija para el ejercicio 2029",
+    "clase": "SOM",
+    "valor": 40000,
+    "unidad": "millones USD",
+    "anio": 2029,
+    "metodo": "declarado_compania",
+    "evidencia": [
+     {
+      "doc": "8-K 2026-07-29",
+      "pag": "1",
+      "texto": "We are well positioned to execute on the vision we outlined at our recent Investor Day, with total non-handset revenues growing to $40 billion by fiscal 2029 – nearly double the target we shared in November 2024.",
+      "texto_es": "La compañía se ve bien situada para que sus ingresos ajenos al teléfono lleguen a 40.000 millones de USD en el ejercicio 2029, casi el doble del objetivo de noviembre de 2024."
+     }
+    ]
+   }
+  ]
+ },
+ "competencia": {
+  "competidores": [
+   {
+    "nombre": "Apple",
+    "ticker": "AAPL",
+    "por_que": "Primer cliente de módems que los sustituye por diseños propios; su salida acelera desde el cuarto trimestre fiscal de 2026.",
+    "evidencia": [
+     {
+      "doc": "10-Q 2026-07-29",
+      "pag": "24",
+      "texto": "In particular, Apple utilizes its own modem (rather than our products) in certain of its smartphones and we expect that Apple will increasingly use its own modem products, rather than our products, in its future devices, which will have a significant negative impact on our QCT revenues, results of operations and cash flows.",
+      "texto_es": "Apple ya usa su propio módem en algunos teléfonos y la compañía espera que lo haga cada vez más, con un impacto negativo significativo en los ingresos, resultados y flujos de QCT."
+     }
+    ]
+   },
+   {
+    "nombre": "MediaTek",
+    "por_que": "Principal rival en procesadores y módems para teléfonos Android de gama media y alta, sobre todo en China.",
+    "evidencia": [
+     {
+      "doc": "10-K",
+      "pag": "28",
+      "texto": "Examples (some of which are strategic partners of ours in other areas) include Broadcom, HiSilicon, MediaTek, Mobileye, Nvidia, NXP Semiconductors, Qorvo, Samsung, Skyworks, Texas Instruments and UNISOC.",
+      "texto_es": "Entre sus competidores (algunos, socios estratégicos en otras áreas) están Broadcom, HiSilicon, MediaTek, Mobileye, Nvidia, NXP Semiconductors, Qorvo, Samsung, Skyworks, Texas Instruments y UNISOC."
+     }
+    ]
+   },
+   {
+    "nombre": "Broadcom",
+    "ticker": "AVGO",
+    "por_que": "Líder en silicio a medida e interconexión para centros de datos, el terreno donde Qualcomm quiere crecer.",
+    "evidencia": [
+     {
+      "doc": "10-K",
+      "pag": "28",
+      "texto": "Examples (some of which are strategic partners of ours in other areas) include Broadcom, HiSilicon, MediaTek, Mobileye, Nvidia, NXP Semiconductors, Qorvo, Samsung, Skyworks, Texas Instruments and UNISOC.",
+      "texto_es": "Entre sus competidores (algunos, socios estratégicos en otras áreas) están Broadcom, HiSilicon, MediaTek, Mobileye, Nvidia, NXP Semiconductors, Qorvo, Samsung, Skyworks, Texas Instruments y UNISOC."
+     }
+    ]
+   },
+   {
+    "nombre": "Nvidia",
+    "ticker": "NVDA",
+    "por_que": "Compite en computación para automoción y domina los aceleradores de inteligencia artificial en centros de datos.",
+    "evidencia": [
+     {
+      "doc": "10-K",
+      "pag": "28",
+      "texto": "Examples (some of which are strategic partners of ours in other areas) include Broadcom, HiSilicon, MediaTek, Mobileye, Nvidia, NXP Semiconductors, Qorvo, Samsung, Skyworks, Texas Instruments and UNISOC.",
+      "texto_es": "Entre sus competidores (algunos, socios estratégicos en otras áreas) están Broadcom, HiSilicon, MediaTek, Mobileye, Nvidia, NXP Semiconductors, Qorvo, Samsung, Skyworks, Texas Instruments y UNISOC."
+     }
+    ]
+   },
+   {
+    "nombre": "Samsung",
+    "por_que": "Cliente clave que también diseña sus propios procesadores Exynos y puede sustituir a Snapdragon en sus teléfonos.",
+    "evidencia": [
+     {
+      "doc": "10-K",
+      "pag": "28",
+      "texto": "Examples (some of which are strategic partners of ours in other areas) include Broadcom, HiSilicon, MediaTek, Mobileye, Nvidia, NXP Semiconductors, Qorvo, Samsung, Skyworks, Texas Instruments and UNISOC.",
+      "texto_es": "Entre sus competidores (algunos, socios estratégicos en otras áreas) están Broadcom, HiSilicon, MediaTek, Mobileye, Nvidia, NXP Semiconductors, Qorvo, Samsung, Skyworks, Texas Instruments y UNISOC."
+     }
+    ]
+   }
+  ]
+ },
+ "moat": {
+  "fuentes": [
+   {
+    "tipo": "intangibles",
+    "durabilidad_anios": 10,
+    "tendencia": "estable",
+    "evidencias": [
+     {
+      "doc": "10-K",
+      "pag": "10",
+      "texto": "We grant licenses or otherwise provide rights to use our cellular standard-essential patents (including 3G, 4G and 5G) for cellular devices on a worldwide basis.",
+      "texto_es": "Licencia en todo el mundo sus patentes esenciales de los estándares celulares (3G, 4G y 5G) para dispositivos móviles."
+     },
+     {
+      "doc": "10-K",
+      "pag": "7",
+      "texto": "This intellectual property has been incorporated into the most widely accepted and deployed cellular wireless communications technology standards, and we have licensed it to hundreds of companies.",
+      "texto_es": "Su propiedad intelectual está incorporada en los estándares celulares más extendidos y la ha licenciado a cientos de compañías."
+     }
+    ]
+   },
+   {
+    "tipo": "escala_eficiente",
+    "durabilidad_anios": 5,
+    "tendencia": "se_estrecha",
+    "evidencias": [
+     {
+      "doc": "10-K",
+      "pag": "9",
+      "texto": "QCT's marketing strategy aims to promote Qualcomm as the leader of enabling intelligent computing everywhere, Snapdragon as the preferred platform powering premium experiences across handsets, automotive and consumer IoT, and Dragonwing as the leading-edge products for industrial and edge networking IoT.",
+      "texto_es": "Su estrategia comercial presenta Snapdragon como la plataforma preferida para las experiencias de gama alta en teléfonos, automoción e IoT de consumo."
+     }
+    ]
+   }
+  ],
+  "amenazas": {
+   "texto": "Los grandes clientes de teléfonos diseñan sus propios módems y procesadores, empezando por Apple. En China, los fabricantes locales integran circuitos propios por presión política. En centros de datos, Qualcomm entra tarde frente a rivales con más escala y relación previa con los clientes. Y los litigios sobre patentes esenciales pueden rebajar las regalías de QTL."
+  }
+ },
+ "riesgos": {
+  "top": [
+   {
+    "origen": {
+     "epigrafe": "Our business, particularly our semiconductor business, may suffer as a result of our customers vertically integrating"
+    },
+    "texto_es": "Los grandes clientes de teléfonos, con Apple a la cabeza, sustituyen los módems y procesadores de la compañía por diseños propios.",
+    "familia": "competitivo",
+    "probabilidad": 5,
+    "impacto": 4,
+    "mitigante": "La salida de Apple ya está anunciada y la compañía espera reponer esos ingresos con automoción, IoT y centros de datos en 2027.",
+    "senal": "Ingresos de QCT por teléfonos"
+   },
+   {
+    "origen": {
+     "epigrafe": "A significant portion of our business is concentrated in China"
+    },
+    "texto_es": "China es el primer mercado por país de venta y está expuesta a controles de exportación, tensiones comerciales y fabricantes que integran circuitos propios.",
+    "familia": "regulatorio",
+    "probabilidad": 3,
+    "impacto": 5,
+    "mitigante": "Licencias con fabricantes de todo el mundo y negocios de automoción e IoT con clientes fuera de China.",
+    "senal": "Ingresos de QCT por teléfonos"
+   },
+   {
+    "origen": {
+     "epigrafe": "Our growth depends in part on our ability to extend our technologies and products into new and expanded product areas"
+    },
+    "texto_es": "Los centros de datos y la automoción exigen inversión por delante de los ingresos y competir con rivales más asentados; un retraso deja el gasto sin retorno.",
+    "familia": "ejecucion",
+    "probabilidad": 3,
+    "impacto": 4,
+    "mitigante": "Dos contratos de silicio a medida con grandes operadores de nube y una cartera de diseños en automoción ya adjudicada.",
+    "senal": "Ingresos no ligados al teléfono"
+   },
+   {
+    "origen": {
+     "epigrafe": "We depend on a limited number of third-party suppliers"
+    },
+    "texto_es": "El encarecimiento y la escasez de obleas, encapsulado y memoria reducen la demanda de teléfonos y el margen bruto de QCT.",
+    "familia": "ejecucion",
+    "probabilidad": 4,
+    "impacto": 3,
+    "mitigante": "Subidas de precios en curso, escala de compra y existencias acumuladas como colchón de suministro.",
+    "senal": "Margen EBIT"
+   },
+   {
+    "origen": {
+     "epigrafe": "Efforts by some OEMs to avoid paying fair and reasonable royalties"
+    },
+    "texto_es": "Fabricantes que discuten o retrasan el pago de regalías, con litigios largos y cobros aplazados que rebajan los ingresos de QTL.",
+    "familia": "regulatorio",
+    "probabilidad": 2,
+    "impacto": 3,
+    "mitigante": "Cartera de patentes esenciales renovada con cada estándar y acuerdos de licencia de varios años.",
+    "senal": "Ingresos de QTL"
+   }
+  ]
+ },
+ "bear": {
+  "disparadores": [
+   {
+    "descripcion": "Los ingresos de QCT por teléfonos siguen cayendo con fuerza tras la salida de Apple y sin recuperación del Android.",
+    "metrica": "ingresos de QCT por teléfonos, interanual",
+    "umbral": -15,
+    "unidad": "%",
+    "plazo": "2T FY27",
+    "driver": "esc.pesimista.crecimiento_ingresos"
+   },
+   {
+    "descripcion": "Los ingresos ajenos al teléfono crecen muy por debajo de lo prometido para el ejercicio 2027.",
+    "metrica": "ingresos no ligados al teléfono, interanual",
+    "umbral": 30,
+    "unidad": "%",
+    "plazo": "FY27",
+    "driver": "esc.pesimista.crecimiento_ingresos"
+   },
+   {
+    "descripcion": "El margen operativo no se recupera por costes de producción y por la inversión en centros de datos.",
+    "metrica": "margen EBIT del ejercicio",
+    "umbral": 20,
+    "unidad": "%",
+    "plazo": "FY27",
+    "driver": "esc.pesimista.margen_ebit"
+   }
+  ]
+ },
+ "pilares": [
+  {
+   "titulo": "La diversificación avanza, pero el precio ya la descuenta",
+   "argumento": {
+    "texto": "Automoción crece con fuerza y los centros de datos empiezan a facturar a finales de 2026. La compañía promete duplicar sus ingresos ajenos al teléfono de aquí a 2029. El precio actual descuenta ese plan casi completo; nuestra estimación central lo cumple solo en parte y deja poco margen para errores."
+   },
+   "evidencias": [
+    {
+     "doc": "8-K 2026-07-29",
+     "pag": "2",
+     "texto": "Automotive 1,588 984 +61%",
+     "texto_es": "Los ingresos de automoción de QCT subieron un 61 % interanual en el tercer trimestre fiscal de 2026."
+    },
+    {
+     "doc": "8-K 2026-07-29",
+     "pag": "1",
+     "texto": "We are well positioned to execute on the vision we outlined at our recent Investor Day, with total non-handset revenues growing to $40 billion by fiscal 2029 – nearly double the target we shared in November 2024.",
+     "texto_es": "La compañía se ve bien situada para que sus ingresos ajenos al teléfono lleguen a 40.000 millones de USD en el ejercicio 2029."
+    }
+   ],
+   "kpi": "Ingresos no ligados al teléfono",
+   "riesgo_1a": "Our growth depends in part on our ability to extend our technologies and products into new and expanded product areas",
+   "riesgo_es": "Que automoción, IoT y centros de datos crezcan menos de lo prometido y no compensen la caída del teléfono."
+  },
+  {
+   "titulo": "El teléfono se contrae y Apple sale antes",
+   "argumento": {
+    "texto": "Los ingresos de QCT por teléfonos cayeron con fuerza en el tercer trimestre fiscal por el encarecimiento de la memoria. A ello se suma que Apple reducirá más deprisa de lo previsto sus compras de módems. El teléfono sigue siendo la mayor parte de QCT, así que el ejercicio 2027 arranca con un agujero que la diversificación debe tapar."
+   },
+   "evidencias": [
+    {
+     "doc": "8-K 2026-07-29",
+     "pag": "2",
+     "texto": "Handsets $5,086 $6,328 (20%)",
+     "texto_es": "Los ingresos de QCT por teléfonos cayeron un 20 % interanual en el tercer trimestre fiscal de 2026."
+    },
+    {
+     "doc": "10-Q 2026-07-29",
+     "pag": "24",
+     "texto": "In particular, Apple utilizes its own modem (rather than our products) in certain of its smartphones and we expect that Apple will increasingly use its own modem products, rather than our products, in its future devices, which will have a significant negative impact on our QCT revenues, results of operations and cash flows.",
+     "texto_es": "Apple usará cada vez más su propio módem, con un impacto negativo significativo en los ingresos, resultados y flujos de QCT."
+    }
+   ],
+   "kpi": "Ingresos de QCT por teléfonos",
+   "riesgo_1a": "Our business, particularly our semiconductor business, may suffer as a result of our customers vertically integrating",
+   "riesgo_es": "Que más clientes de teléfonos, además de Apple, sustituyan los circuitos de la compañía por diseños propios."
+  },
+  {
+   "titulo": "Márgenes presionados por costes y por la nueva inversión",
+   "argumento": {
+    "texto": "El encarecimiento de obleas, encapsulado y memoria recorta el margen bruto de QCT, y las subidas de precios tardarán trimestres en compensarlo. Además, el silicio a medida para centros de datos tiene menos margen que el negocio actual y los gastos operativos crecen antes que los ingresos. Nuestra estimación central no recupera el margen de mitad de ciclo hasta 2030."
+   },
+   "evidencias": [
+    {
+     "doc": "8-K 2026-07-29",
+     "pag": "2",
+     "texto": "The semiconductor industry is experiencing a broad-based increase in input costs, across wafer fabrication, assembly, test, advanced packaging, memory and other materials.",
+     "texto_es": "El sector de semiconductores sufre un aumento generalizado de los costes de obleas, montaje, pruebas, encapsulado avanzado, memoria y otros materiales."
+    },
+    {
+     "doc": "10-Q 2026-07-29",
+     "pag": "24",
+     "texto": "As a result, we continue to see increased product costs from certain of our key suppliers, which could negatively impact our margins.",
+     "texto_es": "La compañía sigue viendo costes más altos de algunos proveedores clave, que pueden reducir sus márgenes."
+    }
+   ],
+   "kpi": "Margen EBIT",
+   "riesgo_1a": "We depend on a limited number of third-party suppliers",
+   "riesgo_es": "Que la escasez de capacidad en obleas y encapsulado se prolongue y los proveedores sigan subiendo precios."
+  },
+  {
+   "titulo": "Las licencias de QTL sostienen la caja",
+   "argumento": {
+    "texto": "Las patentes esenciales de los estándares celulares se licencian a casi todos los fabricantes de teléfonos. Las regalías tienen márgenes muy altos y se mantienen estables aunque caigan las ventas de circuitos. Este negocio pone un suelo al flujo de caja, pero no crece y no basta por sí solo para justificar el precio."
+   },
+   "evidencias": [
+    {
+     "doc": "10-K",
+     "pag": "10",
+     "texto": "We grant licenses or otherwise provide rights to use our cellular standard-essential patents (including 3G, 4G and 5G) for cellular devices on a worldwide basis.",
+     "texto_es": "Licencia en todo el mundo sus patentes esenciales de los estándares celulares (3G, 4G y 5G) para dispositivos móviles."
+    },
+    {
+     "doc": "10-K",
+     "pag": "7",
+     "texto": "This intellectual property has been incorporated into the most widely accepted and deployed cellular wireless communications technology standards, and we have licensed it to hundreds of companies.",
+     "texto_es": "Su propiedad intelectual está incorporada en los estándares celulares más extendidos y la ha licenciado a cientos de compañías."
+    }
+   ],
+   "kpi": "Ingresos de QTL",
+   "riesgo_1a": "Changes in our patent licensing practices, whether due to governmental investigations",
+   "riesgo_es": "Que investigaciones o litigios obliguen a cambiar el modelo de licencias y rebajen las regalías."
+  },
+  {
+   "titulo": "Retribución y balance amortiguan, sin cambiar la valoración",
+   "argumento": {
+    "texto": "La compañía devuelve casi todo su flujo de caja libre con dividendos y recompras, y su deuda neta es baja frente al EBITDA. Eso limita la caída en un mal ciclo del teléfono. Pero la retribución ya está en el precio y las adquisiciones para centros de datos compiten por la misma caja."
+   },
+   "evidencias": [
+    {
+     "doc": "8-K 2026-07-29",
+     "pag": "2",
+     "texto": "During the third quarter of fiscal 2026, we returned $2.3 billion to stockholders, including $973 million, or $0.92 per share, of cash dividends paid and $1.4 billion through repurchases of 8 million shares of common stock.",
+     "texto_es": "En el tercer trimestre fiscal de 2026 devolvió 2.300 millones de USD al accionista: 973 millones en dividendos y 1.400 millones en recompras."
+    },
+    {
+     "doc": "10-K",
+     "pag": "37",
+     "texto": "We currently intend to continue to pay quarterly cash dividends, subject to capital availability and our view that cash dividends are in the best interests of our stockholders.",
+     "texto_es": "La compañía tiene intención de seguir pagando dividendos trimestrales, según su disponibilidad de capital."
+    }
+   ],
+   "kpi": "Flujo de caja libre",
+   "riesgo_1a": "We operate in the highly cyclical semiconductor industry",
+   "riesgo_es": "Que una caída del ciclo de semiconductores recorte el flujo de caja y obligue a reducir las recompras."
+  }
+ ],
+ "historial": {
+  "causas": {
+   "texto": "El BPA GAAP del 4T FY25 quedó muy por debajo de la guía por un cargo fiscal sin salida de caja. La reforma fiscal estadounidense obligó a dotar una provisión sobre los activos por impuestos diferidos federales. El BPA no GAAP y los ingresos de ese trimestre superaron la guía. Aprendizaje: la guía GAAP no anticipa cargos fiscales extraordinarios, así que el seguimiento se hace con el BPA no GAAP y el flujo de caja libre."
+  },
+  "causas_evidencia": [
+   {
+    "doc": "8-K 2025-11-05",
+    "pag": "1",
+    "texto": "However, this new tax legislation resulted in a non-cash $5.7 billion charge, or $5.29 per share, in the fourth quarter of fiscal 2025 to establish a valuation allowance against our U.S. federal deferred tax assets, as we now expect to be subject to the U.S. corporate alternative minimum tax beginning in fiscal 2026.",
+    "texto_es": "La nueva ley fiscal supuso un cargo sin salida de caja de 5.700 millones de USD en el cuarto trimestre fiscal de 2025 para provisionar los activos por impuestos diferidos federales."
+   }
+  ]
+ },
+ "pos": {
+  "recomendacion": "Vender",
+  "recomendacion_justificacion": {
+   "texto": "La recomendación coincide con la regla: el precio descuenta el plan de 2029 casi completo, mientras nuestra estimación central lo cumple solo en parte con un coste de capital exigente."
+  },
+  "precio_entrada": 125.0,
+  "fecha_entrada": "2026-11-05",
+  "tamano_pct": 1,
+  "drawdown_tolerado": 35,
+  "tamano_porque": {
+   "texto": "Posición pequeña y solo con orden límite cerca del valor ponderado: la tesis es de valoración y el valor tiene volatilidad alta."
+  },
+  "argumento": {
+   "texto": "Qualcomm es un buen negocio a un precio exigente. Las licencias de patentes generan caja estable y la automoción crece con fuerza, pero el teléfono se contrae por la memoria y por la salida acelerada de Apple. El precio actual descuenta que la compañía cumpla casi por completo su plan de diversificación hacia centros de datos para 2029, un negocio en el que aún no ha facturado a escala. Con un coste de capital exigente, nuestro escenario central vale bastante menos que la cotización y el optimista apenas la alcanza. Recomendamos vender y solo abrir posición con una orden límite cerca del valor ponderado, tras los resultados del cuarto trimestre."
+  },
+  "asunciones": [
+   {
+    "texto": "Los ingresos ajenos al teléfono crecen con fuerza en 2027, pero por debajo del plan de la compañía para 2029.",
+    "driver": "esc.base.crecimiento_ingresos",
+    "umbral_invalidacion": "ingresos no ligados al teléfono > +60 % interanual en el FY27 con centros de datos en línea con la guía"
+   },
+   {
+    "texto": "El margen EBIT no vuelve a mitad de ciclo hasta 2030 por costes de producción y por la mezcla de centros de datos.",
+    "driver": "esc.base.margen_ebit",
+    "umbral_invalidacion": "margen EBIT ≥ 26 % en el FY27"
+   },
+   {
+    "texto": "Las regalías de QTL se mantienen estables, sin crecer ni caer de forma relevante.",
+    "driver": "esc.base.crecimiento_ingresos",
+    "umbral_invalidacion": "ingresos de QTL −15 % interanual"
+   },
+   {
+    "texto": "El coste de capital refleja la beta observada del valor y la prima de riesgo de mercado vigente.",
+    "driver": "wacc.erp",
+    "umbral_invalidacion": "prima de riesgo de mercado implícita < 3,5 %"
+   }
+  ],
+  "checklist": [
+   {
+    "id": "variante",
+    "criterio": "Visión propia distinta de lo que descuenta el precio (reverse DCF), en dos frases",
+    "tipo": "manual",
+    "cumplido": "si",
+    "evidencia": "El DCF inverso exige un crecimiento de ingresos muy superior al histórico y al de nuestro escenario central. Nuestra visión es que el plan de 2029 se cumple solo en parte."
+   },
+   {
+    "id": "catalizador_propio",
+    "criterio": "Catalizador negativo fechado que pueda poner a prueba el precio",
+    "tipo": "manual",
+    "cumplido": "si",
+    "evidencia": "Los resultados del cuarto trimestre fiscal recogen la caída acelerada de los ingresos de Apple."
+   }
+  ],
+  "invalidacion": [
+   {
+    "metrica": "ingresos no ligados al teléfono, interanual",
+    "umbral": "> +60 % en el ejercicio, con centros de datos en línea con la guía",
+    "plazo": "FY27"
+   },
+   {
+    "metrica": "margen EBIT del ejercicio",
+    "umbral": "≥ 26 %",
+    "plazo": "FY27"
+   },
+   {
+    "metrica": "ingresos de QCT por teléfonos, interanual",
+    "umbral": "≥ 0 % dos trimestres seguidos",
+    "plazo": "hasta el 4T FY27"
+   }
+  ],
+  "stop": {
+   "texto": "Stop de tesis: se revisa la recomendación si se cumple cualquiera de las invalidaciones o si una revisión de supuestos lleva el valor ponderado por encima del precio."
+  },
+  "kpis": [
+   {
+    "kpi": "Ingresos de QCT por teléfonos",
+    "actual": "",
+    "verde": "≥ 0 % interanual",
+    "rojo": "< −15 % interanual",
+    "fuente": "nota de resultados (8-K)",
+    "frecuencia": "trimestral"
+   },
+   {
+    "kpi": "Ingresos no ligados al teléfono",
+    "actual": "",
+    "verde": "≥ +60 % interanual en el FY27",
+    "rojo": "< +30 % interanual",
+    "fuente": "nota de resultados (8-K) y 10-Q",
+    "frecuencia": "trimestral"
+   },
+   {
+    "kpi": "Margen EBIT",
+    "actual": "",
+    "verde": "≥ 26 %",
+    "rojo": "< 20 %",
+    "fuente": "10-Q y 10-K",
+    "frecuencia": "trimestral"
+   },
+   {
+    "kpi": "Ingresos de QTL",
+    "actual": "",
+    "verde": "≥ 0 % interanual",
+    "rojo": "< −15 % interanual",
+    "fuente": "nota de resultados (8-K)",
+    "frecuencia": "trimestral"
+   },
+   {
+    "kpi": "Flujo de caja libre",
+    "actual": "",
+    "verde": "≥ retribución al accionista",
+    "rojo": "< dividendos pagados",
+    "fuente": "10-Q y 10-K",
+    "frecuencia": "trimestral"
+   }
+  ],
+  "fechas_revision": [
+   "2026-11-04",
+   "2027-02-03",
+   "2027-09-27"
+  ],
+  "salida": [
+   "Objetivo alcanzado: se revalúa la tesis con el motor.",
+   "Tesis invalidada por cualquiera de las invalidaciones.",
+   "Horizonte vencido sin catalizador.",
+   "Una oportunidad mejor con el mismo riesgo."
+  ]
+ },
+ "tesis": {
+  "resumen": {
+   "texto": "Qualcomm une un negocio de licencias muy rentable con una división de semiconductores que se diversifica fuera del teléfono. La automoción crece con fuerza y los centros de datos empiezan a facturar, pero el teléfono se contrae por la memoria y por la salida acelerada de Apple. A la cotización actual, el mercado descuenta que la compañía cumpla casi por completo su plan para 2029. Nuestro escenario central lo cumple solo en parte y, con un coste de capital exigente, queda muy por debajo del precio. Iniciamos cobertura con recomendación de vender."
+  },
+  "por_que_ahora": {
+   "texto": "La acción ha subido con el anuncio del plan de centros de datos, justo antes de dos trimestres en los que Apple reduce sus compras y los costes de producción aprietan el margen."
+  },
+  "vision_vs_mercado": {
+   "texto": "El DCF inverso muestra que el precio exige un crecimiento de ingresos muy superior al histórico y a nuestro escenario central. El mercado da por hecho el plan de centros de datos; nosotros lo tratamos como una opción que aún debe demostrarse con ingresos."
+  }
+ },
+ "revision": {
+  "parrafos": {
+   "resumen_factual": {
+    "propuesta": "7d5f7c051d9a8210",
+    "frases": [
+     [
+      "En el 3T FY26, los ingresos fueron de 9.947 mln USD, dentro del rango de la guía de la compañía (9.200–10.000 mln USD).",
+      "8-K 29/07/2026, Ex. 99.1"
+     ],
+     [
+      "En el ejercicio 2025, la compañía facturó 44.284 mln USD con un margen operativo del 27,9 % (+2,1 p. p. frente al ejercicio anterior).",
+      "10-K 05/11/2025"
+     ],
+     [
+      "La guía vigente de la compañía para el 4T FY26 sitúa los ingresos entre 9.700 y 10.500 mln USD.",
+      "8-K 29/07/2026, Ex. 99.1"
+     ],
+     [
+      "Al cierre del 3T FY26, la deuda neta era de 6.966 mln USD, 0,5 veces el EBITDA del ejercicio 2025.",
+      "10-Q 29/07/2026"
+     ],
+     [
+      "La retribución al accionista del ejercicio 2025, entre dividendos y recompras, sumó 12.596 mln USD: el 98 % del flujo de caja libre.",
+      "10-K 05/11/2025"
+     ]
+    ],
+    "editado": false
+   }
+  }
+ }
+}

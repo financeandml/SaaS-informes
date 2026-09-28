@@ -1,0 +1,7 @@
+# erp.yaml · Prima de riesgo de mercado (ERP) de referencia de la casa: la propone el asistente en wacc.erp (F11) mientras
+# no tenga más de `umbrales.erp_antiguedad_max_dias` días. Es un supuesto del analista (capa S) con su fuente, no un dato
+# de una fuente oficial: ningún organismo oficial publica una ERP. Delegada por el analista el 28/09/2026 y comprobada ese
+# día en la página del autor: «Implied ERP on September 1, 2026 = 4.14% (Trailing 12 month, with adjusted payout)».
+valor: 4.14
+fuente: "Damodaran, implied ERP (trailing 12 meses, payout ajustado), pages.stern.nyu.edu/~adamodar"
+fecha: 2026-09-01

@@ -94,11 +94,11 @@ class ConDatos(_Datos):
 
     def test_erp_solo_con_fuente_y_fecha_vigentes(self):
         """Falla si se propone una ERP sin fichero, sin fuente o más antigua que el umbral."""
-        self.assertIsInstance(proponer.proponer("QCOM", FECHA, {})["wacc.erp"], proponer.SinPropuesta)
         with tempfile.TemporaryDirectory() as tmp:
-            (Path(tmp) / "erp.yaml").write_text("valor: 4.3\nfuente: Analista\nfecha: 2026-09-01\n", encoding="utf-8")
             with mock.patch("tesis.rutas.CONFIG", Path(tmp)):
                 ctx = proponer.Contexto("QCOM", FECHA, {})
+                self.assertIsInstance(proponer._REGISTRO["wacc.erp"](ctx), proponer.SinPropuesta)     # sin fichero
+                (Path(tmp) / "erp.yaml").write_text("valor: 4.3\nfuente: Analista\nfecha: 2026-09-01\n", encoding="utf-8")
                 self.assertEqual(proponer._REGISTRO["wacc.erp"](ctx).valor, 4.3)
                 (Path(tmp) / "erp.yaml").write_text("valor: 4.3\nfuente: Analista\nfecha: 2026-01-01\n", encoding="utf-8")
                 self.assertIsInstance(proponer._REGISTRO["wacc.erp"](ctx), proponer.SinPropuesta)
