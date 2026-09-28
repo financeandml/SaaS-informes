@@ -1,0 +1,21 @@
+# mercados.yaml · Lo que cambia de un mercado a otro y no es un dato del emisor (CLAUDE.md, regla 8: elecciones y
+# umbrales en config, nunca en código). `sec` = emisores de EE. UU. ante la SEC; `bme` = emisores españoles de BME.
+sec:
+  moneda: USD
+  bolsa_precio: nasdaq                 # regla 4: cierre oficial de la bolsa principal
+  rf: tesoro                           # tesoro.rf_10a: curva par del Tesoro de EE. UU., 10 años
+  mercado_beta: {fuente: nasdaq, simbolo: SPY, clase: etf, nombre: "SPDR S&P 500 ETF (SPY), cierres de Nasdaq"}
+  periodicidad: trimestral
+bme:
+  moneda: EUR
+  bolsa_precio: bme
+  rf: bce                              # bce.rf_10a: curva al contado AAA del área del euro, 10 años
+  # El índice oficial de BME frente al que se mide la beta, por segmento del valor (ShareDetailsInfo.mtfSegment; vacío
+  # = Mercado Continuo). Comprobados en la API oficial el 28/09/2026.
+  mercado_beta:
+    BMEGrowth:  {isin: ES0S00001149, nombre: "IBEX Growth Market All Share"}
+    BMEScaleup: {isin: ES0S00001149, nombre: "IBEX Growth Market All Share"}
+    continuo:   {isin: ES0SI0000005, nombre: "IBEX 35"}
+  periodicidad: semestral
+  # Sin calendario publicado por la bolsa: la próxima presentación es la que el emisor anuncie (OIR) o la que el
+  # analista cite; nunca un plazo reglamentario sin la circular citada.

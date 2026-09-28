@@ -239,6 +239,13 @@ class Emisor:
     web: str
     obtenido_en: date
     depositos: List[Deposito] = field(default_factory=list)
+    # el mercado del emisor (`emisores.py`): «sec» (EE. UU., esta fuente) o «bme» (España). Con valor por defecto para
+    # que ningún consumidor de la SEC cambie; un emisor de BME trae cik y sic vacíos y su ISIN y código de la bolsa
+    mercado: str = "sec"
+    moneda: str = "USD"
+    isin: str = ""
+    clave_bolsa: str = ""
+    segmento: str = ""
 
     def ultimo(self, formulario: str) -> Optional[Deposito]:
         for d in self.depositos:

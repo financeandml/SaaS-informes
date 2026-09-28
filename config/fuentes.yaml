@@ -1,0 +1,18 @@
+# fuentes.yaml · Las únicas fuentes admitidas (CLAUDE.md, regla 6). Oficiales: el propio emisor, reguladores y
+# registros, bolsas, bancos centrales y tesoros, organismos estadísticos. Excepción supletoria, solo si la oficial no
+# publica el dato o no responde: Investing y, si falla, Yahoo Finance, rotuladas en el cuerpo, en el 38 y en la QA.
+# `mercados`: a qué emisores sirve (sec = EE. UU. ante la SEC; bme = España, BME Growth, BME Scaleup y Mercado Continuo).
+oficiales:
+  sec:        {nombre: "SEC EDGAR", clase: regulador, mercados: [sec], da: "10-K, 10-Q, 8-K, DEF 14A, 13D/13G, 13F, Form 4 y XBRL"}
+  nasdaq:     {nombre: "Nasdaq", clase: bolsa, mercados: [sec], da: "cierre oficial, histórico, cadena de opciones, 13F, directivos, interés en corto, calendario y consenso"}
+  finra:      {nombre: "FINRA", clase: autorregulador, mercados: [sec], da: "interés en corto fuera de Nasdaq (decisión del analista, 28/09/2026)"}
+  tesoro:     {nombre: "Tesoro de EE. UU.", clase: tesoro, mercados: [sec], da: "curva par diaria (tipo sin riesgo en USD)"}
+  bme:        {nombre: "BME (Bolsas y Mercados Españoles)", clase: bolsa, mercados: [bme], da: "buscador de emisores, ficha del valor, histórico oficial de cierres, cuentas anuales, informes semestrales, información privilegiada y otra información relevante"}
+  bce:        {nombre: "Banco Central Europeo", clase: banco_central, mercados: [bme], da: "curva al contado AAA del área del euro (tipo sin riesgo en EUR)"}
+  cnmv:       {nombre: "CNMV", clase: regulador, mercados: [bme], da: "participaciones significativas y posiciones cortas netas (no responde a consultas automáticas: se declara)"}
+  emisor:     {nombre: "El propio emisor", clase: emisor, mercados: [sec, bme], da: "documentos que el analista adjunta con su página"}
+excepcion:
+  investing:  {nombre: "Investing", nivel: 1, da: "solo si la oficial no publica el dato o no responde"}
+  yahoo:      {nombre: "Yahoo Finance", nivel: 2, da: "volatilidad implícita por contrato (EE. UU.); cualquier otro dato, solo si Investing falla"}
+referencia:
+  damodaran:  {nombre: "Damodaran (NYU Stern)", da: "ERP implícita de referencia: supuesto del analista (capa S), nunca dato oficial (config/erp.yaml)"}
