@@ -1,0 +1,24 @@
+{
+ "parrafos": [
+  {
+   "id": "resumen_factual",
+   "titulo": "Párrafo factual del resumen ejecutivo",
+   "frases": [
+    [
+     "En el ejercicio 2025, la compañía facturó 416.161 mln USD con un margen operativo del 32,0 % (+0,5 p. p. frente al ejercicio anterior).",
+     "10-K 31/10/2025"
+    ],
+    [
+     "Al cierre del 3T FY26, la deuda neta era de 19.948 mln USD, 0,1 veces el EBITDA del ejercicio 2025.",
+     "10-Q 31/07/2026"
+    ],
+    [
+     "La retribución al accionista del ejercicio 2025, entre dividendos y recompras, sumó 106.132 mln USD: el 107 % del flujo de caja libre.",
+     "10-K 31/10/2025"
+    ]
+   ],
+   "huella": "759235b4aaddea8a",
+   "estado": "aceptado"
+  }
+ ]
+}

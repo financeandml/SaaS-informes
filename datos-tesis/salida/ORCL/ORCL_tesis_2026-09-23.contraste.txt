@@ -1,0 +1,424 @@
+Contraste ORCL 2026-09-23 · resumen {'solo_sec': 257, 'confirmado': 83, 'derivado': 19, 'no_aplica': 47, 'hueco': 14, 'solo_documento': 2}
+
+◐  ingresos               FY2022            42,440,000,000.00  sin contraste documental
+◐  ingresos               FY2023            49,954,000,000.00  sin contraste documental
+✓  ingresos               FY2024            52,961,000,000.00  contrastado con 0723dfa7-be5f-4227-9da6-eff3cce376a8.pdf pág. 67
+✓  ingresos               FY2025            57,399,000,000.00  contrastado con 0723dfa7-be5f-4227-9da6-eff3cce376a8.pdf pág. 67
+✓  ingresos               FY2026            67,357,000,000.00  contrastado con 0723dfa7-be5f-4227-9da6-eff3cce376a8.pdf pág. 67
+◐  ingresos               4T25              16,058,000,000.00  sin contraste documental
+◐  ingresos               1T26              17,190,000,000.00  sin contraste documental
+∑  ingresos               2T26              19,184,000,000.00  
+✓  ingresos               3T26              19,345,000,000.00  contrastado con 461fdc14-9ec3-424f-b4fa-96fe6ff788ec.pdf pág. 4
+—  coste_ingresos         FY2022                          N/A  la compañía dejó de declarar CostOfRevenue, CostOfGoodsAndServicesSold en 2011, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  coste_ingresos         FY2023                          N/A  la compañía dejó de declarar CostOfRevenue, CostOfGoodsAndServicesSold en 2011, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  coste_ingresos         FY2024                          N/A  la compañía dejó de declarar CostOfRevenue, CostOfGoodsAndServicesSold en 2011, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  coste_ingresos         FY2025                          N/A  la compañía dejó de declarar CostOfRevenue, CostOfGoodsAndServicesSold en 2011, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  coste_ingresos         FY2026                          N/A  la compañía dejó de declarar CostOfRevenue, CostOfGoodsAndServicesSold en 2011, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  coste_ingresos         4T25                            N/A  la compañía dejó de declarar CostOfRevenue, CostOfGoodsAndServicesSold en 2011, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  coste_ingresos         1T26                            N/A  la compañía dejó de declarar CostOfRevenue, CostOfGoodsAndServicesSold en 2011, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  coste_ingresos         2T26                            N/A  la compañía dejó de declarar CostOfRevenue, CostOfGoodsAndServicesSold en 2011, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  coste_ingresos         3T26                            N/A  la compañía dejó de declarar CostOfRevenue, CostOfGoodsAndServicesSold en 2011, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+◐  marketing              FY2022             8,047,000,000.00  sin contraste documental
+◐  marketing              FY2023             8,833,000,000.00  sin contraste documental
+◐  marketing              FY2024             8,274,000,000.00  sin contraste documental
+◐  marketing              FY2025             8,651,000,000.00  sin contraste documental
+◐  marketing              FY2026             8,331,000,000.00  sin contraste documental
+◐  marketing              4T25               2,149,000,000.00  sin contraste documental
+◐  marketing              1T26               2,052,000,000.00  sin contraste documental
+∑  marketing              2T26               2,068,000,000.00  
+✓  marketing              3T26               1,811,000,000.00  contrastado con 461fdc14-9ec3-424f-b4fa-96fe6ff788ec.pdf pág. 4
+◐  tecnologia             FY2022             7,219,000,000.00  sin contraste documental
+◐  tecnologia             FY2023             8,623,000,000.00  sin contraste documental
+✓  tecnologia             FY2024             8,915,000,000.00  contrastado con 0723dfa7-be5f-4227-9da6-eff3cce376a8.pdf pág. 67
+✓  tecnologia             FY2025             9,860,000,000.00  contrastado con 0723dfa7-be5f-4227-9da6-eff3cce376a8.pdf pág. 67
+✓  tecnologia             FY2026            10,272,000,000.00  contrastado con 0723dfa7-be5f-4227-9da6-eff3cce376a8.pdf pág. 67
+◐  tecnologia             4T25               2,561,000,000.00  sin contraste documental
+◐  tecnologia             1T26               2,607,000,000.00  sin contraste documental
+∑  tecnologia             2T26               2,614,000,000.00  
+✓  tecnologia             3T26               2,401,000,000.00  contrastado con 461fdc14-9ec3-424f-b4fa-96fe6ff788ec.pdf pág. 4
+◐  generales              FY2022             1,317,000,000.00  sin contraste documental
+◐  generales              FY2023             1,579,000,000.00  sin contraste documental
+✓  generales              FY2024             1,548,000,000.00  contrastado con 0723dfa7-be5f-4227-9da6-eff3cce376a8.pdf pág. 67
+✓  generales              FY2025             1,602,000,000.00  contrastado con 0723dfa7-be5f-4227-9da6-eff3cce376a8.pdf pág. 67
+✓  generales              FY2026             1,618,000,000.00  contrastado con 0723dfa7-be5f-4227-9da6-eff3cce376a8.pdf pág. 67
+◐  generales              4T25                 409,000,000.00  sin contraste documental
+◐  generales              1T26                 389,000,000.00  sin contraste documental
+∑  generales              2T26                 444,000,000.00  
+✓  generales              3T26                 376,000,000.00  contrastado con 461fdc14-9ec3-424f-b4fa-96fe6ff788ec.pdf pág. 4
+◐  ebit                   FY2022            10,926,000,000.00  sin contraste documental
+◐  ebit                   FY2023            13,093,000,000.00  sin contraste documental
+✓  ebit                   FY2024            15,353,000,000.00  contrastado con 0723dfa7-be5f-4227-9da6-eff3cce376a8.pdf pág. 67
+✓  ebit                   FY2025            17,678,000,000.00  contrastado con 0723dfa7-be5f-4227-9da6-eff3cce376a8.pdf pág. 67
+✓  ebit                   FY2026            20,606,000,000.00  contrastado con 0723dfa7-be5f-4227-9da6-eff3cce376a8.pdf pág. 67
+◐  ebit                   4T25               4,731,000,000.00  sin contraste documental
+◐  ebit                   1T26               5,464,000,000.00  sin contraste documental
+∑  ebit                   2T26               6,133,000,000.00  
+✓  ebit                   3T26               6,728,000,000.00  contrastado con 461fdc14-9ec3-424f-b4fa-96fe6ff788ec.pdf pág. 4
+◐  intereses              FY2022             2,755,000,000.00  sin contraste documental
+◐  intereses              FY2023             3,505,000,000.00  sin contraste documental
+✓  intereses              FY2024             3,514,000,000.00  contrastado con 0723dfa7-be5f-4227-9da6-eff3cce376a8.pdf pág. 67
+✓  intereses              FY2025             3,578,000,000.00  contrastado con 0723dfa7-be5f-4227-9da6-eff3cce376a8.pdf pág. 67
+✓  intereses              FY2026             4,599,000,000.00  contrastado con 0723dfa7-be5f-4227-9da6-eff3cce376a8.pdf pág. 67
+◐  intereses              4T25               1,057,000,000.00  sin contraste documental
+◐  intereses              1T26               1,180,000,000.00  sin contraste documental
+∑  intereses              2T26               1,439,000,000.00  
+✓  intereses              3T26               1,428,000,000.00  contrastado con 461fdc14-9ec3-424f-b4fa-96fe6ff788ec.pdf pág. 4
+◐  otros_financieros      FY2022               -86,000,000.00  sin contraste documental
+◐  otros_financieros      FY2023                -6,000,000.00  sin contraste documental
+◐  otros_financieros      FY2024               168,000,000.00  sin contraste documental
+◐  otros_financieros      FY2025                91,000,000.00  sin contraste documental
+◐  otros_financieros      FY2026               309,000,000.00  sin contraste documental
+◐  otros_financieros      4T25                  57,000,000.00  sin contraste documental
+◐  otros_financieros      1T26                  47,000,000.00  sin contraste documental
+∑  otros_financieros      2T26                 106,000,000.00  
+◐  otros_financieros      3T26                  17,000,000.00  sin contraste documental
+◐  bai                    FY2022             7,649,000,000.00  sin contraste documental
+◐  bai                    FY2023             9,126,000,000.00  sin contraste documental
+✓  bai                    FY2024            11,741,000,000.00  contrastado con 0723dfa7-be5f-4227-9da6-eff3cce376a8.pdf pág. 67
+✓  bai                    FY2025            14,160,000,000.00  contrastado con 0723dfa7-be5f-4227-9da6-eff3cce376a8.pdf pág. 67
+✓  bai                    FY2026            19,554,000,000.00  contrastado con 0723dfa7-be5f-4227-9da6-eff3cce376a8.pdf pág. 67
+—  bai                    4T25                            N/A  companyfacts no trae bai para 4T25 en ningún 10-K/10-Q; ningún adjunto lo trae
+—  bai                    1T26                            N/A  companyfacts no trae bai para 1T26 en ningún 10-K/10-Q; ningún adjunto lo trae
+—  bai                    2T26                            N/A  companyfacts no trae bai para 2T26 en ningún 10-K/10-Q; ningún adjunto lo trae
+◑  bai                    3T26               5,607,000,000.00  companyfacts no trae bai para 3T26 en ningún 10-K/10-Q; leído en 1 adjunto(s)
+◐  impuestos              FY2022               932,000,000.00  sin contraste documental
+◐  impuestos              FY2023               623,000,000.00  sin contraste documental
+✓  impuestos              FY2024             1,274,000,000.00  contrastado con 0723dfa7-be5f-4227-9da6-eff3cce376a8.pdf pág. 67
+✓  impuestos              FY2025             1,717,000,000.00  contrastado con 0723dfa7-be5f-4227-9da6-eff3cce376a8.pdf pág. 67
+✓  impuestos              FY2026             2,467,000,000.00  contrastado con 0723dfa7-be5f-4227-9da6-eff3cce376a8.pdf pág. 67
+◐  impuestos              4T25                 207,000,000.00  sin contraste documental
+◐  impuestos              1T26                 695,000,000.00  sin contraste documental
+∑  impuestos              2T26               1,065,000,000.00  
+✓  impuestos              3T26                 847,000,000.00  contrastado con 461fdc14-9ec3-424f-b4fa-96fe6ff788ec.pdf pág. 4
+◐  beneficio_neto         FY2022             6,717,000,000.00  sin contraste documental
+◐  beneficio_neto         FY2023             8,503,000,000.00  sin contraste documental
+✓  beneficio_neto         FY2024            10,467,000,000.00  contrastado con 0723dfa7-be5f-4227-9da6-eff3cce376a8.pdf pág. 67
+✓  beneficio_neto         FY2025            12,443,000,000.00  contrastado con 0723dfa7-be5f-4227-9da6-eff3cce376a8.pdf pág. 67
+✓  beneficio_neto         FY2026            17,087,000,000.00  contrastado con 0723dfa7-be5f-4227-9da6-eff3cce376a8.pdf pág. 67
+◐  beneficio_neto         4T25               6,135,000,000.00  sin contraste documental
+◐  beneficio_neto         1T26               3,721,000,000.00  sin contraste documental
+∑  beneficio_neto         2T26               4,304,000,000.00  
+✓  beneficio_neto         3T26               4,760,000,000.00  contrastado con 461fdc14-9ec3-424f-b4fa-96fe6ff788ec.pdf pág. 4
+◐  bpa_basico             FY2022                         2.49  sin contraste documental
+◐  bpa_basico             FY2023                         3.15  sin contraste documental
+✓  bpa_basico             FY2024                         3.82  contrastado con 0723dfa7-be5f-4227-9da6-eff3cce376a8.pdf pág. 67
+✓  bpa_basico             FY2025                         4.46  contrastado con 0723dfa7-be5f-4227-9da6-eff3cce376a8.pdf pág. 67
+✓  bpa_basico             FY2026                         5.94  contrastado con 0723dfa7-be5f-4227-9da6-eff3cce376a8.pdf pág. 67
+◐  bpa_basico             4T25                           2.14  sin contraste documental
+◐  bpa_basico             1T26                           1.29  sin contraste documental
+—  bpa_basico             2T26                            N/A  companyfacts no trae bpa_basico para 2T26 en ningún 10-K/10-Q; ningún adjunto lo trae
+✓  bpa_basico             3T26                           1.58  contrastado con 461fdc14-9ec3-424f-b4fa-96fe6ff788ec.pdf pág. 4
+◐  bpa_diluido            FY2022                         2.41  sin contraste documental
+◐  bpa_diluido            FY2023                         3.07  sin contraste documental
+✓  bpa_diluido            FY2024                         3.71  contrastado con 0723dfa7-be5f-4227-9da6-eff3cce376a8.pdf pág. 67
+✓  bpa_diluido            FY2025                         4.34  contrastado con 0723dfa7-be5f-4227-9da6-eff3cce376a8.pdf pág. 67
+✓  bpa_diluido            FY2026                         5.83  contrastado con 0723dfa7-be5f-4227-9da6-eff3cce376a8.pdf pág. 67
+◐  bpa_diluido            4T25                           2.10  sin contraste documental
+◐  bpa_diluido            1T26                           1.27  sin contraste documental
+—  bpa_diluido            2T26                            N/A  companyfacts no trae bpa_diluido para 2T26 en ningún 10-K/10-Q; ningún adjunto lo trae
+✓  bpa_diluido            3T26                           1.56  contrastado con 461fdc14-9ec3-424f-b4fa-96fe6ff788ec.pdf pág. 4
+◐  acciones_basicas       FY2022             2,700,000,000.00  sin contraste documental
+◐  acciones_basicas       FY2023             2,696,000,000.00  sin contraste documental
+✓  acciones_basicas       FY2024             2,744,000,000.00  contrastado con 0723dfa7-be5f-4227-9da6-eff3cce376a8.pdf pág. 67
+✓  acciones_basicas       FY2025             2,789,000,000.00  contrastado con 0723dfa7-be5f-4227-9da6-eff3cce376a8.pdf pág. 67
+✓  acciones_basicas       FY2026             2,860,000,000.00  contrastado con 0723dfa7-be5f-4227-9da6-eff3cce376a8.pdf pág. 67
+◐  acciones_basicas       4T25               2,864,000,000.00  sin contraste documental
+◐  acciones_basicas       1T26               2,874,000,000.00  sin contraste documental
+—  acciones_basicas       2T26                            N/A  companyfacts no trae acciones_basicas para 2T26 en ningún 10-K/10-Q; ningún adjunto lo trae
+✓  acciones_basicas       3T26               2,966,000,000.00  contrastado con 461fdc14-9ec3-424f-b4fa-96fe6ff788ec.pdf pág. 4
+◐  acciones_diluidas      FY2022             2,786,000,000.00  sin contraste documental
+◐  acciones_diluidas      FY2023             2,766,000,000.00  sin contraste documental
+✓  acciones_diluidas      FY2024             2,823,000,000.00  contrastado con 0723dfa7-be5f-4227-9da6-eff3cce376a8.pdf pág. 67
+✓  acciones_diluidas      FY2025             2,866,000,000.00  contrastado con 0723dfa7-be5f-4227-9da6-eff3cce376a8.pdf pág. 67
+✓  acciones_diluidas      FY2026             2,914,000,000.00  contrastado con 0723dfa7-be5f-4227-9da6-eff3cce376a8.pdf pág. 67
+◐  acciones_diluidas      4T25               2,922,000,000.00  sin contraste documental
+◐  acciones_diluidas      1T26               2,912,000,000.00  sin contraste documental
+—  acciones_diluidas      2T26                            N/A  companyfacts no trae acciones_diluidas para 2T26 en ningún 10-K/10-Q; ningún adjunto lo trae
+✓  acciones_diluidas      3T26               3,000,000,000.00  contrastado con 461fdc14-9ec3-424f-b4fa-96fe6ff788ec.pdf pág. 4
+◐  amortizacion           FY2022             3,122,000,000.00  sin contraste documental
+◐  amortizacion           FY2023             6,108,000,000.00  sin contraste documental
+◐  amortizacion           FY2024             6,139,000,000.00  sin contraste documental
+◐  amortizacion           FY2025             6,174,000,000.00  sin contraste documental
+◐  amortizacion           FY2026             9,294,000,000.00  sin contraste documental
+◐  amortizacion           4T25               2,110,000,000.00  sin contraste documental
+◐  amortizacion           1T26               2,566,000,000.00  sin contraste documental
+∑  amortizacion           2T26               2,847,000,000.00  
+◐  amortizacion           3T26               3,358,000,000.00  sin contraste documental
+—  amortizacion_contenido FY2022                          N/A  la compañía no declara ningún concepto us-gaap para esto en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  amortizacion_contenido FY2023                          N/A  la compañía no declara ningún concepto us-gaap para esto en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  amortizacion_contenido FY2024                          N/A  la compañía no declara ningún concepto us-gaap para esto en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  amortizacion_contenido FY2025                          N/A  la compañía no declara ningún concepto us-gaap para esto en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  amortizacion_contenido FY2026                          N/A  la compañía no declara ningún concepto us-gaap para esto en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  amortizacion_contenido 4T25                            N/A  la compañía no declara ningún concepto us-gaap para esto en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  amortizacion_contenido 1T26                            N/A  la compañía no declara ningún concepto us-gaap para esto en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  amortizacion_contenido 2T26                            N/A  la compañía no declara ningún concepto us-gaap para esto en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  amortizacion_contenido 3T26                            N/A  la compañía no declara ningún concepto us-gaap para esto en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+◐  sbc                    FY2022             2,613,000,000.00  sin contraste documental
+◐  sbc                    FY2023             3,547,000,000.00  sin contraste documental
+◐  sbc                    FY2024             3,974,000,000.00  sin contraste documental
+◐  sbc                    FY2025             4,674,000,000.00  sin contraste documental
+◐  sbc                    FY2026             4,811,000,000.00  sin contraste documental
+◐  sbc                    4T25               1,156,000,000.00  sin contraste documental
+◐  sbc                    1T26               1,328,000,000.00  sin contraste documental
+∑  sbc                    2T26               1,203,000,000.00  
+◐  sbc                    3T26               1,127,000,000.00  sin contraste documental
+◐  caja                   @2021-05-31       30,098,000,000.00  sin contraste documental
+◐  caja                   @2022-05-31       21,383,000,000.00  sin contraste documental
+◐  caja                   @2023-05-31        9,765,000,000.00  sin contraste documental
+◐  caja                   @2024-05-31       10,454,000,000.00  sin contraste documental
+✓  caja                   @2025-05-31       10,786,000,000.00  contrastado con 0723dfa7-be5f-4227-9da6-eff3cce376a8.pdf pág. 66
+◐  caja                   @2025-08-31       10,445,000,000.00  sin contraste documental
+◐  caja                   @2025-11-30       19,241,000,000.00  sin contraste documental
+◐  caja                   @2026-02-28       38,455,000,000.00  sin contraste documental
+✓  caja                   @2026-05-31       31,289,000,000.00  contrastado con 0723dfa7-be5f-4227-9da6-eff3cce376a8.pdf pág. 66
+✓  caja                   @2026-08-31       36,369,000,000.00  contrastado con 461fdc14-9ec3-424f-b4fa-96fe6ff788ec.pdf pág. 3
+◐  inversiones_cp         @2021-05-31       16,456,000,000.00  sin contraste documental
+◐  inversiones_cp         @2022-05-31          519,000,000.00  sin contraste documental
+◐  inversiones_cp         @2023-05-31          422,000,000.00  sin contraste documental
+◐  inversiones_cp         @2024-05-31          207,000,000.00  sin contraste documental
+✓  inversiones_cp         @2025-05-31          417,000,000.00  contrastado con 0723dfa7-be5f-4227-9da6-eff3cce376a8.pdf pág. 66
+◐  inversiones_cp         @2025-08-31          560,000,000.00  sin contraste documental
+◐  inversiones_cp         @2025-11-30          525,000,000.00  sin contraste documental
+◐  inversiones_cp         @2026-02-28          677,000,000.00  sin contraste documental
+✓  inversiones_cp         @2026-05-31          605,000,000.00  contrastado con 0723dfa7-be5f-4227-9da6-eff3cce376a8.pdf pág. 66
+✓  inversiones_cp         @2026-08-31          708,000,000.00  contrastado con 461fdc14-9ec3-424f-b4fa-96fe6ff788ec.pdf pág. 3
+◐  activo_corriente       @2021-05-31       55,567,000,000.00  sin contraste documental
+◐  activo_corriente       @2022-05-31       31,633,000,000.00  sin contraste documental
+◐  activo_corriente       @2023-05-31       21,004,000,000.00  sin contraste documental
+◐  activo_corriente       @2024-05-31       22,554,000,000.00  sin contraste documental
+✓  activo_corriente       @2025-05-31       24,579,000,000.00  contrastado con 0723dfa7-be5f-4227-9da6-eff3cce376a8.pdf pág. 66
+◐  activo_corriente       @2025-08-31       24,634,000,000.00  sin contraste documental
+◐  activo_corriente       @2025-11-30       34,366,000,000.00  sin contraste documental
+◐  activo_corriente       @2026-02-28       54,874,000,000.00  sin contraste documental
+✓  activo_corriente       @2026-05-31       46,567,000,000.00  contrastado con 0723dfa7-be5f-4227-9da6-eff3cce376a8.pdf pág. 66
+✓  activo_corriente       @2026-08-31       55,630,000,000.00  contrastado con 461fdc14-9ec3-424f-b4fa-96fe6ff788ec.pdf pág. 3
+—  contenido              @2021-05-31                     N/A  la compañía no declara ningún concepto us-gaap para esto en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  contenido              @2022-05-31                     N/A  la compañía no declara ningún concepto us-gaap para esto en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  contenido              @2023-05-31                     N/A  la compañía no declara ningún concepto us-gaap para esto en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  contenido              @2024-05-31                     N/A  la compañía no declara ningún concepto us-gaap para esto en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  contenido              @2025-05-31                     N/A  la compañía no declara ningún concepto us-gaap para esto en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  contenido              @2025-08-31                     N/A  la compañía no declara ningún concepto us-gaap para esto en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  contenido              @2025-11-30                     N/A  la compañía no declara ningún concepto us-gaap para esto en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  contenido              @2026-02-28                     N/A  la compañía no declara ningún concepto us-gaap para esto en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  contenido              @2026-05-31                     N/A  la compañía no declara ningún concepto us-gaap para esto en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  contenido              @2026-08-31                     N/A  la compañía no declara ningún concepto us-gaap para esto en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+◐  inmovilizado           @2021-05-31        7,049,000,000.00  sin contraste documental
+◐  inmovilizado           @2022-05-31        9,716,000,000.00  sin contraste documental
+◐  inmovilizado           @2023-05-31       17,069,000,000.00  sin contraste documental
+◐  inmovilizado           @2024-05-31       21,536,000,000.00  sin contraste documental
+◐  inmovilizado           @2025-05-31       43,522,000,000.00  sin contraste documental
+◐  inmovilizado           @2025-08-31       53,194,000,000.00  sin contraste documental
+◐  inmovilizado           @2025-11-30       67,875,000,000.00  sin contraste documental
+◐  inmovilizado           @2026-02-28       83,617,000,000.00  sin contraste documental
+◐  inmovilizado           @2026-05-31       99,957,000,000.00  sin contraste documental
+◐  inmovilizado           @2026-08-31      127,845,000,000.00  sin contraste documental
+◐  fondo_comercio         @2021-05-31       43,935,000,000.00  sin contraste documental
+◐  fondo_comercio         @2022-05-31       43,811,000,000.00  sin contraste documental
+◐  fondo_comercio         @2023-05-31       62,261,000,000.00  sin contraste documental
+◐  fondo_comercio         @2024-05-31       62,230,000,000.00  sin contraste documental
+✓  fondo_comercio         @2025-05-31       62,207,000,000.00  contrastado con 0723dfa7-be5f-4227-9da6-eff3cce376a8.pdf pág. 66
+◐  fondo_comercio         @2025-08-31       62,211,000,000.00  sin contraste documental
+◐  fondo_comercio         @2025-11-30       62,207,000,000.00  sin contraste documental
+◐  fondo_comercio         @2026-02-28       62,274,000,000.00  sin contraste documental
+✓  fondo_comercio         @2026-05-31       62,261,000,000.00  contrastado con 0723dfa7-be5f-4227-9da6-eff3cce376a8.pdf pág. 66
+✓  fondo_comercio         @2026-08-31       62,267,000,000.00  contrastado con 461fdc14-9ec3-424f-b4fa-96fe6ff788ec.pdf pág. 3
+◐  intangibles            @2021-05-31        2,430,000,000.00  sin contraste documental
+◐  intangibles            @2022-05-31        1,440,000,000.00  sin contraste documental
+◐  intangibles            @2023-05-31        9,837,000,000.00  sin contraste documental
+◐  intangibles            @2024-05-31        6,890,000,000.00  sin contraste documental
+◐  intangibles            @2025-05-31        4,587,000,000.00  sin contraste documental
+◐  intangibles            @2025-08-31        4,167,000,000.00  sin contraste documental
+◐  intangibles            @2025-11-30        3,760,000,000.00  sin contraste documental
+◐  intangibles            @2026-02-28        3,641,000,000.00  sin contraste documental
+◐  intangibles            @2026-05-31        3,229,000,000.00  sin contraste documental
+—  intangibles            @2026-08-31                     N/A  companyfacts no trae intangibles para @2026-08-31 en ningún 10-K/10-Q; ningún adjunto lo trae
+◐  total_activo           @2021-05-31      131,107,000,000.00  sin contraste documental
+◐  total_activo           @2022-05-31      109,297,000,000.00  sin contraste documental
+◐  total_activo           @2023-05-31      134,384,000,000.00  sin contraste documental
+◐  total_activo           @2024-05-31      140,976,000,000.00  sin contraste documental
+✓  total_activo           @2025-05-31      168,361,000,000.00  contrastado con 0723dfa7-be5f-4227-9da6-eff3cce376a8.pdf pág. 66
+◐  total_activo           @2025-08-31      180,449,000,000.00  sin contraste documental
+◐  total_activo           @2025-11-30      204,984,000,000.00  sin contraste documental
+◐  total_activo           @2026-02-28      245,240,000,000.00  sin contraste documental
+✓  total_activo           @2026-05-31      261,759,000,000.00  contrastado con 0723dfa7-be5f-4227-9da6-eff3cce376a8.pdf pág. 66
+✓  total_activo           @2026-08-31      303,259,000,000.00  contrastado con 461fdc14-9ec3-424f-b4fa-96fe6ff788ec.pdf pág. 3
+◐  pasivo_corriente       @2021-05-31       24,164,000,000.00  sin contraste documental
+◐  pasivo_corriente       @2022-05-31       19,511,000,000.00  sin contraste documental
+◐  pasivo_corriente       @2023-05-31       23,090,000,000.00  sin contraste documental
+◐  pasivo_corriente       @2024-05-31       31,544,000,000.00  sin contraste documental
+✓  pasivo_corriente       @2025-05-31       32,643,000,000.00  contrastado con 0723dfa7-be5f-4227-9da6-eff3cce376a8.pdf pág. 66
+◐  pasivo_corriente       @2025-08-31       39,874,000,000.00  sin contraste documental
+◐  pasivo_corriente       @2025-11-30       37,795,000,000.00  sin contraste documental
+◐  pasivo_corriente       @2026-02-28       40,737,000,000.00  sin contraste documental
+✓  pasivo_corriente       @2026-05-31       41,764,000,000.00  contrastado con 0723dfa7-be5f-4227-9da6-eff3cce376a8.pdf pág. 66
+✓  pasivo_corriente       @2026-08-31       47,514,000,000.00  contrastado con 461fdc14-9ec3-424f-b4fa-96fe6ff788ec.pdf pág. 3
+◐  deuda_cp               @2021-05-31        8,250,000,000.00  sin contraste documental
+◐  deuda_cp               @2022-05-31        3,749,000,000.00  sin contraste documental
+◐  deuda_cp               @2023-05-31        4,061,000,000.00  sin contraste documental
+◐  deuda_cp               @2024-05-31       10,605,000,000.00  sin contraste documental
+◐  deuda_cp               @2025-05-31        7,271,000,000.00  sin contraste documental
+◐  deuda_cp               @2025-08-31        9,079,000,000.00  sin contraste documental
+◐  deuda_cp               @2025-11-30        8,091,000,000.00  sin contraste documental
+◐  deuda_cp               @2026-02-28        9,887,000,000.00  sin contraste documental
+◐  deuda_cp               @2026-05-31        7,199,000,000.00  sin contraste documental
+◐  deuda_cp               @2026-08-31        7,625,000,000.00  sin contraste documental
+◐  deuda_lp               @2021-05-31       75,995,000,000.00  sin contraste documental
+◐  deuda_lp               @2022-05-31       72,110,000,000.00  sin contraste documental
+◐  deuda_lp               @2023-05-31       86,420,000,000.00  sin contraste documental
+◐  deuda_lp               @2024-05-31       76,264,000,000.00  sin contraste documental
+◐  deuda_lp               @2025-05-31       85,297,000,000.00  sin contraste documental
+◐  deuda_lp               @2025-08-31       82,236,000,000.00  sin contraste documental
+◐  deuda_lp               @2025-11-30       99,984,000,000.00  sin contraste documental
+◐  deuda_lp               @2026-02-28      124,718,000,000.00  sin contraste documental
+◐  deuda_lp               @2026-05-31      122,342,000,000.00  sin contraste documental
+◐  deuda_lp               @2026-08-31      117,712,000,000.00  sin contraste documental
+◐  arrendamientos         @2021-05-31        2,100,000,000.00  sin contraste documental
+◐  arrendamientos         @2022-05-31        2,900,000,000.00  sin contraste documental
+◐  arrendamientos         @2023-05-31        4,000,000,000.00  sin contraste documental
+◐  arrendamientos         @2024-05-31        6,255,000,000.00  reexpresado en 10-K presentado el 2025-06-18 (antes 6,300,000,000 en 10-K de 2024-06-20) · sin contraste documental
+✓  arrendamientos         @2025-05-31       11,536,000,000.00  contrastado con 0723dfa7-be5f-4227-9da6-eff3cce376a8.pdf pág. 91
+◐  arrendamientos         @2025-08-31       14,094,000,000.00  sin contraste documental
+◐  arrendamientos         @2025-11-30       16,311,000,000.00  sin contraste documental
+◐  arrendamientos         @2026-02-28       18,512,000,000.00  sin contraste documental
+✓  arrendamientos         @2026-05-31       26,648,000,000.00  contrastado con 0723dfa7-be5f-4227-9da6-eff3cce376a8.pdf pág. 91
+◐  arrendamientos         @2026-08-31       30,594,000,000.00  sin contraste documental
+◐  pasivo_no_corriente    @2021-05-31      100,991,000,000.00  sin contraste documental
+◐  pasivo_no_corriente    @2022-05-31       95,554,000,000.00  sin contraste documental
+◐  pasivo_no_corriente    @2023-05-31      109,738,000,000.00  sin contraste documental
+◐  pasivo_no_corriente    @2024-05-31      100,193,000,000.00  sin contraste documental
+✓  pasivo_no_corriente    @2025-05-31      114,749,000,000.00  contrastado con 0723dfa7-be5f-4227-9da6-eff3cce376a8.pdf pág. 66
+◐  pasivo_no_corriente    @2025-08-31      115,909,000,000.00  sin contraste documental
+◐  pasivo_no_corriente    @2025-11-30      136,732,000,000.00  sin contraste documental
+◐  pasivo_no_corriente    @2026-02-28      165,452,000,000.00  sin contraste documental
+✓  pasivo_no_corriente    @2026-05-31      176,939,000,000.00  contrastado con 0723dfa7-be5f-4227-9da6-eff3cce376a8.pdf pág. 66
+✓  pasivo_no_corriente    @2026-08-31      188,549,000,000.00  contrastado con 461fdc14-9ec3-424f-b4fa-96fe6ff788ec.pdf pág. 3
+◐  pasivo_total           @2021-05-31      125,155,000,000.00  sin contraste documental
+◐  pasivo_total           @2022-05-31      115,065,000,000.00  sin contraste documental
+◐  pasivo_total           @2023-05-31      132,828,000,000.00  sin contraste documental
+◐  pasivo_total           @2024-05-31      131,737,000,000.00  sin contraste documental
+◐  pasivo_total           @2025-05-31      147,392,000,000.00  sin contraste documental
+◐  pasivo_total           @2025-08-31      155,783,000,000.00  sin contraste documental
+◐  pasivo_total           @2025-11-30      174,527,000,000.00  sin contraste documental
+◐  pasivo_total           @2026-02-28      206,189,000,000.00  sin contraste documental
+◐  pasivo_total           @2026-05-31      218,703,000,000.00  sin contraste documental
+◐  pasivo_total           @2026-08-31      236,063,000,000.00  sin contraste documental
+◐  patrimonio             @2021-05-31        5,238,000,000.00  sin contraste documental
+◐  patrimonio             @2022-05-31       -6,220,000,000.00  sin contraste documental
+◐  patrimonio             @2023-05-31        1,073,000,000.00  sin contraste documental
+◐  patrimonio             @2024-05-31        8,704,000,000.00  sin contraste documental
+✓  patrimonio             @2025-05-31       20,451,000,000.00  contrastado con 0723dfa7-be5f-4227-9da6-eff3cce376a8.pdf pág. 66
+◐  patrimonio             @2025-08-31       24,154,000,000.00  sin contraste documental
+◐  patrimonio             @2025-11-30       29,951,000,000.00  sin contraste documental
+◐  patrimonio             @2026-02-28       38,495,000,000.00  sin contraste documental
+✓  patrimonio             @2026-05-31       42,508,000,000.00  contrastado con 0723dfa7-be5f-4227-9da6-eff3cce376a8.pdf pág. 66
+✓  patrimonio             @2026-08-31       66,772,000,000.00  contrastado con 461fdc14-9ec3-424f-b4fa-96fe6ff788ec.pdf pág. 3
+—  autocartera            @2021-05-31                     N/A  la compañía no declara TreasuryStockValue, TreasuryStockCommonValue en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  autocartera            @2022-05-31                     N/A  la compañía no declara TreasuryStockValue, TreasuryStockCommonValue en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  autocartera            @2023-05-31                     N/A  la compañía no declara TreasuryStockValue, TreasuryStockCommonValue en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  autocartera            @2024-05-31                     N/A  la compañía no declara TreasuryStockValue, TreasuryStockCommonValue en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  autocartera            @2025-05-31                     N/A  la compañía no declara TreasuryStockValue, TreasuryStockCommonValue en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  autocartera            @2025-08-31                     N/A  la compañía no declara TreasuryStockValue, TreasuryStockCommonValue en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  autocartera            @2025-11-30                     N/A  la compañía no declara TreasuryStockValue, TreasuryStockCommonValue en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  autocartera            @2026-02-28                     N/A  la compañía no declara TreasuryStockValue, TreasuryStockCommonValue en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  autocartera            @2026-05-31                     N/A  la compañía no declara TreasuryStockValue, TreasuryStockCommonValue en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  autocartera            @2026-08-31                     N/A  la compañía no declara TreasuryStockValue, TreasuryStockCommonValue en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+◐  acciones_circulacion   @2021-05-31        2,814,000,000.00  sin contraste documental
+◐  acciones_circulacion   @2022-05-31        2,665,000,000.00  sin contraste documental
+◐  acciones_circulacion   @2023-05-31        2,713,000,000.00  sin contraste documental
+◐  acciones_circulacion   @2024-05-31        2,755,000,000.00  sin contraste documental
+◐  acciones_circulacion   @2025-05-31        2,807,000,000.00  sin contraste documental
+◐  acciones_circulacion   @2025-08-31        2,841,000,000.00  sin contraste documental
+◐  acciones_circulacion   @2025-11-30        2,873,000,000.00  sin contraste documental
+◐  acciones_circulacion   @2026-02-28        2,875,000,000.00  sin contraste documental
+◐  acciones_circulacion   @2026-05-31        2,880,000,000.00  sin contraste documental
+◐  acciones_circulacion   @2026-08-31        3,024,000,000.00  sin contraste documental
+◐  cfo                    FY2022             9,539,000,000.00  sin contraste documental
+◐  cfo                    FY2023            17,165,000,000.00  sin contraste documental
+✓  cfo                    FY2024            18,673,000,000.00  contrastado con 0723dfa7-be5f-4227-9da6-eff3cce376a8.pdf pág. 70
+✓  cfo                    FY2025            20,821,000,000.00  contrastado con 0723dfa7-be5f-4227-9da6-eff3cce376a8.pdf pág. 70
+✓  cfo                    FY2026            31,977,000,000.00  contrastado con 0723dfa7-be5f-4227-9da6-eff3cce376a8.pdf pág. 70
+◐  cfo                    4T25               2,066,000,000.00  sin contraste documental
+◐  cfo                    1T26               7,151,000,000.00  sin contraste documental
+∑  cfo                    2T26              14,620,000,000.00  
+✓  cfo                    3T26              23,103,000,000.00  contrastado con 461fdc14-9ec3-424f-b4fa-96fe6ff788ec.pdf pág. 7
+◐  capex                  FY2022             4,511,000,000.00  sin contraste documental
+◐  capex                  FY2023             8,695,000,000.00  sin contraste documental
+✓  capex                  FY2024             6,866,000,000.00  contrastado con 0723dfa7-be5f-4227-9da6-eff3cce376a8.pdf pág. 70
+✓  capex                  FY2025            21,215,000,000.00  contrastado con 0723dfa7-be5f-4227-9da6-eff3cce376a8.pdf pág. 70
+✓  capex                  FY2026            55,663,000,000.00  contrastado con 0723dfa7-be5f-4227-9da6-eff3cce376a8.pdf pág. 70
+◐  capex                  4T25              12,033,000,000.00  sin contraste documental
+◐  capex                  1T26              18,635,000,000.00  sin contraste documental
+∑  capex                  2T26              16,493,000,000.00  
+✓  capex                  3T26              28,499,000,000.00  contrastado con 461fdc14-9ec3-424f-b4fa-96fe6ff788ec.pdf pág. 7
+◐  cfi                    FY2022            11,220,000,000.00  sin contraste documental
+◐  cfi                    FY2023           -36,484,000,000.00  sin contraste documental
+◐  cfi                    FY2024            -7,360,000,000.00  sin contraste documental
+◐  cfi                    FY2025           -21,711,000,000.00  sin contraste documental
+◐  cfi                    FY2026           -51,854,000,000.00  sin contraste documental
+◐  cfi                    4T25              -7,714,000,000.00  sin contraste documental
+◐  cfi                    1T26             -19,544,000,000.00  sin contraste documental
+∑  cfi                    2T26             -15,878,000,000.00  
+◐  cfi                    3T26             -28,580,000,000.00  sin contraste documental
+◐  cff                    FY2022           -29,126,000,000.00  sin contraste documental
+◐  cff                    FY2023             7,910,000,000.00  sin contraste documental
+◐  cff                    FY2024           -10,554,000,000.00  sin contraste documental
+◐  cff                    FY2025             1,098,000,000.00  sin contraste documental
+◐  cff                    FY2026            40,284,000,000.00  sin contraste documental
+◐  cff                    4T25              14,487,000,000.00  sin contraste documental
+◐  cff                    1T26              31,498,000,000.00  sin contraste documental
+∑  cff                    2T26              -5,911,000,000.00  
+✓  cff                    3T26              13,111,000,000.00  contrastado con 461fdc14-9ec3-424f-b4fa-96fe6ff788ec.pdf pág. 7
+◐  dividendos             FY2022             3,457,000,000.00  sin contraste documental
+◐  dividendos             FY2023             3,668,000,000.00  sin contraste documental
+◐  dividendos             FY2024             4,391,000,000.00  sin contraste documental
+◐  dividendos             FY2025             4,743,000,000.00  sin contraste documental
+◐  dividendos             FY2026             5,787,000,000.00  sin contraste documental
+◐  dividendos             4T25               1,435,000,000.00  sin contraste documental
+◐  dividendos             1T26               1,437,000,000.00  sin contraste documental
+∑  dividendos             2T26               1,502,000,000.00  
+◐  dividendos             3T26               1,565,000,000.00  sin contraste documental
+◐  recompras              FY2022            16,248,000,000.00  sin contraste documental
+◐  recompras              FY2023             1,300,000,000.00  sin contraste documental
+◐  recompras              FY2024             1,202,000,000.00  sin contraste documental
+◐  recompras              FY2025               600,000,000.00  sin contraste documental
+◐  recompras              FY2026                95,000,000.00  sin contraste documental
+◐  recompras              4T25                           0.00  sin contraste documental
+◐  recompras              1T26                           0.00  sin contraste documental
+∑  recompras              2T26                           0.00  
+◑  recompras              3T26                           0.00  companyfacts no trae recompras para 3T26 en ningún 10-K/10-Q; leído en 1 adjunto(s)
+◐  adquisiciones          FY2022               148,000,000.00  sin contraste documental
+◐  adquisiciones          FY2023            27,721,000,000.00  sin contraste documental
+◐  adquisiciones          FY2024                63,000,000.00  sin contraste documental
+◐  adquisiciones          FY2025                         0.00  sin contraste documental
+—  adquisiciones          FY2026                          N/A  companyfacts no trae adquisiciones para FY2026 en ningún 10-K/10-Q; ningún adjunto lo trae
+—  adquisiciones          4T25                            N/A  companyfacts no trae adquisiciones para 4T25 en ningún 10-K/10-Q; ningún adjunto lo trae
+—  adquisiciones          1T26                            N/A  companyfacts no trae adquisiciones para 1T26 en ningún 10-K/10-Q; ningún adjunto lo trae
+—  adquisiciones          2T26                            N/A  companyfacts no trae adquisiciones para 2T26 en ningún 10-K/10-Q; ningún adjunto lo trae
+—  adquisiciones          3T26                            N/A  companyfacts no trae adquisiciones para 3T26 en ningún 10-K/10-Q; ningún adjunto lo trae
+◐  emision_deuda          FY2022                         0.00  sin contraste documental
+◐  emision_deuda          FY2023            33,494,000,000.00  sin contraste documental
+◐  emision_deuda          FY2024                         0.00  sin contraste documental
+◐  emision_deuda          FY2025            19,548,000,000.00  sin contraste documental
+◐  emision_deuda          FY2026            46,093,000,000.00  sin contraste documental
+◐  emision_deuda          4T25              17,880,000,000.00  sin contraste documental
+◐  emision_deuda          1T26              26,664,000,000.00  sin contraste documental
+∑  emision_deuda          2T26               1,549,000,000.00  
+—  emision_deuda          3T26                            N/A  companyfacts no trae emision_deuda para 3T26 en ningún 10-K/10-Q; ningún adjunto lo trae
+◐  amortizacion_deuda     FY2022             8,250,000,000.00  sin contraste documental
+◐  amortizacion_deuda     FY2023            21,050,000,000.00  sin contraste documental
+◐  amortizacion_deuda     FY2024             3,500,000,000.00  sin contraste documental
+◐  amortizacion_deuda     FY2025            15,841,000,000.00  sin contraste documental
+◐  amortizacion_deuda     FY2026             6,942,000,000.00  sin contraste documental
+◐  amortizacion_deuda     4T25               1,070,000,000.00  sin contraste documental
+◐  amortizacion_deuda     1T26                  71,000,000.00  sin contraste documental
+∑  amortizacion_deuda     2T26               4,749,000,000.00  
+◐  amortizacion_deuda     3T26               4,202,000,000.00  sin contraste documental
+—  fcf_compania           FY2022                          N/A  la compañía no declara ningún concepto us-gaap para esto en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  fcf_compania           FY2023                          N/A  la compañía no declara ningún concepto us-gaap para esto en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  fcf_compania           FY2024                          N/A  la compañía no declara ningún concepto us-gaap para esto en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  fcf_compania           FY2025                          N/A  la compañía no declara ningún concepto us-gaap para esto en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  fcf_compania           FY2026                          N/A  la compañía no declara ningún concepto us-gaap para esto en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  fcf_compania           4T25                            N/A  la compañía no declara ningún concepto us-gaap para esto en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  fcf_compania           1T26                            N/A  la compañía no declara ningún concepto us-gaap para esto en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  fcf_compania           2T26                            N/A  la compañía no declara ningún concepto us-gaap para esto en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  fcf_compania           3T26                            N/A  la compañía no declara ningún concepto us-gaap para esto en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.

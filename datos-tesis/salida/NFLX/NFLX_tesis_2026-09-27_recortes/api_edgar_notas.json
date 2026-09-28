@@ -1,0 +1,380 @@
+[
+ {
+  "nota_8k_presentada": "2024-07-18",
+  "url": "https://www.sec.gov/Archives/edgar/data/1065280/000106528024000199/ex991_q224.htm",
+  "trimestre_publicado": "2T FY24",
+  "guia": [
+   {
+    "metrica": "ingresos",
+    "trimestre": "3T FY24",
+    "bajo": 9727000000.0,
+    "alto": 9727000000.0,
+    "unidad": "USD"
+   },
+   {
+    "metrica": "ebit",
+    "trimestre": "3T FY24",
+    "bajo": 2730000000.0,
+    "alto": 2730000000.0,
+    "unidad": "USD"
+   },
+   {
+    "metrica": "margen_ebit",
+    "trimestre": "3T FY24",
+    "bajo": 28.1,
+    "alto": 28.1,
+    "unidad": "%"
+   },
+   {
+    "metrica": "beneficio_neto",
+    "trimestre": "3T FY24",
+    "bajo": 2237000000.0,
+    "alto": 2237000000.0,
+    "unidad": "USD"
+   },
+   {
+    "metrica": "bpa_diluido",
+    "trimestre": "3T FY24",
+    "bajo": 5.1,
+    "alto": 5.1,
+    "unidad": "USD/acción"
+   }
+  ]
+ },
+ {
+  "nota_8k_presentada": "2024-10-17",
+  "url": "https://www.sec.gov/Archives/edgar/data/1065280/000106528024000286/ex991_q324.htm",
+  "trimestre_publicado": "3T FY24",
+  "guia": [
+   {
+    "metrica": "ingresos",
+    "trimestre": "4T FY24",
+    "bajo": 10128000000.0,
+    "alto": 10128000000.0,
+    "unidad": "USD"
+   },
+   {
+    "metrica": "ebit",
+    "trimestre": "4T FY24",
+    "bajo": 2190000000.0,
+    "alto": 2190000000.0,
+    "unidad": "USD"
+   },
+   {
+    "metrica": "margen_ebit",
+    "trimestre": "4T FY24",
+    "bajo": 21.6,
+    "alto": 21.6,
+    "unidad": "%"
+   },
+   {
+    "metrica": "beneficio_neto",
+    "trimestre": "4T FY24",
+    "bajo": 1847000000.0,
+    "alto": 1847000000.0,
+    "unidad": "USD"
+   },
+   {
+    "metrica": "bpa_diluido",
+    "trimestre": "4T FY24",
+    "bajo": 4.23,
+    "alto": 4.23,
+    "unidad": "USD/acción"
+   }
+  ]
+ },
+ {
+  "nota_8k_presentada": "2025-01-21",
+  "url": "https://www.sec.gov/Archives/edgar/data/1065280/000106528025000033/ex991_q424.htm",
+  "trimestre_publicado": "4T FY24",
+  "guia": [
+   {
+    "metrica": "ingresos",
+    "trimestre": "1T FY25",
+    "bajo": 10416000000.0,
+    "alto": 10416000000.0,
+    "unidad": "USD"
+   },
+   {
+    "metrica": "ebit",
+    "trimestre": "1T FY25",
+    "bajo": 2940000000.0,
+    "alto": 2940000000.0,
+    "unidad": "USD"
+   },
+   {
+    "metrica": "margen_ebit",
+    "trimestre": "1T FY25",
+    "bajo": 28.2,
+    "alto": 28.2,
+    "unidad": "%"
+   },
+   {
+    "metrica": "beneficio_neto",
+    "trimestre": "1T FY25",
+    "bajo": 2440000000.0,
+    "alto": 2440000000.0,
+    "unidad": "USD"
+   },
+   {
+    "metrica": "bpa_diluido",
+    "trimestre": "1T FY25",
+    "bajo": 5.58,
+    "alto": 5.58,
+    "unidad": "USD/acción"
+   }
+  ]
+ },
+ {
+  "nota_8k_presentada": "2025-04-17",
+  "url": "https://www.sec.gov/Archives/edgar/data/1065280/000106528025000175/ex991_q125.htm",
+  "trimestre_publicado": "1T FY25",
+  "guia": [
+   {
+    "metrica": "ingresos",
+    "trimestre": "2T FY25",
+    "bajo": 11035000000.0,
+    "alto": 11035000000.0,
+    "unidad": "USD"
+   },
+   {
+    "metrica": "ebit",
+    "trimestre": "2T FY25",
+    "bajo": 3675000000.0,
+    "alto": 3675000000.0,
+    "unidad": "USD"
+   },
+   {
+    "metrica": "margen_ebit",
+    "trimestre": "2T FY25",
+    "bajo": 33.3,
+    "alto": 33.3,
+    "unidad": "%"
+   },
+   {
+    "metrica": "beneficio_neto",
+    "trimestre": "2T FY25",
+    "bajo": 3055000000.0,
+    "alto": 3055000000.0,
+    "unidad": "USD"
+   },
+   {
+    "metrica": "bpa_diluido",
+    "trimestre": "2T FY25",
+    "bajo": 7.03,
+    "alto": 7.03,
+    "unidad": "USD/acción"
+   }
+  ]
+ },
+ {
+  "nota_8k_presentada": "2025-07-17",
+  "url": "https://www.sec.gov/Archives/edgar/data/1065280/000106528025000322/ex991_q225.htm",
+  "trimestre_publicado": "2T FY25",
+  "guia": [
+   {
+    "metrica": "ingresos",
+    "trimestre": "3T FY25",
+    "bajo": 11526000000.0,
+    "alto": 11526000000.0,
+    "unidad": "USD"
+   },
+   {
+    "metrica": "ebit",
+    "trimestre": "3T FY25",
+    "bajo": 3625000000.0,
+    "alto": 3625000000.0,
+    "unidad": "USD"
+   },
+   {
+    "metrica": "margen_ebit",
+    "trimestre": "3T FY25",
+    "bajo": 31.5,
+    "alto": 31.5,
+    "unidad": "%"
+   },
+   {
+    "metrica": "beneficio_neto",
+    "trimestre": "3T FY25",
+    "bajo": 2979000000.0,
+    "alto": 2979000000.0,
+    "unidad": "USD"
+   },
+   {
+    "metrica": "bpa_diluido",
+    "trimestre": "3T FY25",
+    "bajo": 6.87,
+    "alto": 6.87,
+    "unidad": "USD/acción"
+   }
+  ]
+ },
+ {
+  "nota_8k_presentada": "2025-10-21",
+  "url": "https://www.sec.gov/Archives/edgar/data/1065280/000106528025000404/ex991_q325.htm",
+  "trimestre_publicado": "3T FY25",
+  "guia": [
+   {
+    "metrica": "ingresos",
+    "trimestre": "4T FY25",
+    "bajo": 11960000000.0,
+    "alto": 11960000000.0,
+    "unidad": "USD"
+   },
+   {
+    "metrica": "ebit",
+    "trimestre": "4T FY25",
+    "bajo": 2860000000.0,
+    "alto": 2860000000.0,
+    "unidad": "USD"
+   },
+   {
+    "metrica": "margen_ebit",
+    "trimestre": "4T FY25",
+    "bajo": 23.9,
+    "alto": 23.9,
+    "unidad": "%"
+   },
+   {
+    "metrica": "beneficio_neto",
+    "trimestre": "4T FY25",
+    "bajo": 2355000000.0,
+    "alto": 2355000000.0,
+    "unidad": "USD"
+   },
+   {
+    "metrica": "bpa_diluido",
+    "trimestre": "4T FY25",
+    "bajo": 5.45,
+    "alto": 5.45,
+    "unidad": "USD/acción"
+   }
+  ]
+ },
+ {
+  "nota_8k_presentada": "2026-01-20",
+  "url": "https://www.sec.gov/Archives/edgar/data/1065280/000106528026000033/ex991_q425.htm",
+  "trimestre_publicado": "4T FY25",
+  "guia": [
+   {
+    "metrica": "ingresos",
+    "trimestre": "1T FY26",
+    "bajo": 12157000000.0,
+    "alto": 12157000000.0,
+    "unidad": "USD"
+   },
+   {
+    "metrica": "ebit",
+    "trimestre": "1T FY26",
+    "bajo": 3906000000.0,
+    "alto": 3906000000.0,
+    "unidad": "USD"
+   },
+   {
+    "metrica": "margen_ebit",
+    "trimestre": "1T FY26",
+    "bajo": 32.1,
+    "alto": 32.1,
+    "unidad": "%"
+   },
+   {
+    "metrica": "beneficio_neto",
+    "trimestre": "1T FY26",
+    "bajo": 3264000000.0,
+    "alto": 3264000000.0,
+    "unidad": "USD"
+   },
+   {
+    "metrica": "bpa_diluido",
+    "trimestre": "1T FY26",
+    "bajo": 0.76,
+    "alto": 0.76,
+    "unidad": "USD/acción"
+   }
+  ]
+ },
+ {
+  "nota_8k_presentada": "2026-04-16",
+  "url": "https://www.sec.gov/Archives/edgar/data/1065280/000106528026000137/ex991_q126.htm",
+  "trimestre_publicado": "1T FY26",
+  "guia": [
+   {
+    "metrica": "ingresos",
+    "trimestre": "2T FY26",
+    "bajo": 12574000000.0,
+    "alto": 12574000000.0,
+    "unidad": "USD"
+   },
+   {
+    "metrica": "ebit",
+    "trimestre": "2T FY26",
+    "bajo": 4105000000.0,
+    "alto": 4105000000.0,
+    "unidad": "USD"
+   },
+   {
+    "metrica": "margen_ebit",
+    "trimestre": "2T FY26",
+    "bajo": 32.6,
+    "alto": 32.6,
+    "unidad": "%"
+   },
+   {
+    "metrica": "beneficio_neto",
+    "trimestre": "2T FY26",
+    "bajo": 3327000000.0,
+    "alto": 3327000000.0,
+    "unidad": "USD"
+   },
+   {
+    "metrica": "bpa_diluido",
+    "trimestre": "2T FY26",
+    "bajo": 0.78,
+    "alto": 0.78,
+    "unidad": "USD/acción"
+   }
+  ]
+ },
+ {
+  "nota_8k_presentada": "2026-07-16",
+  "url": "https://www.sec.gov/Archives/edgar/data/1065280/000106528026000211/ex991_q226.htm",
+  "trimestre_publicado": "2T FY26",
+  "guia": [
+   {
+    "metrica": "ingresos",
+    "trimestre": "3T FY26",
+    "bajo": 12860000000.0,
+    "alto": 12860000000.0,
+    "unidad": "USD"
+   },
+   {
+    "metrica": "ebit",
+    "trimestre": "3T FY26",
+    "bajo": 4268000000.0,
+    "alto": 4268000000.0,
+    "unidad": "USD"
+   },
+   {
+    "metrica": "margen_ebit",
+    "trimestre": "3T FY26",
+    "bajo": 33.2,
+    "alto": 33.2,
+    "unidad": "%"
+   },
+   {
+    "metrica": "beneficio_neto",
+    "trimestre": "3T FY26",
+    "bajo": 3452000000.0,
+    "alto": 3452000000.0,
+    "unidad": "USD"
+   },
+   {
+    "metrica": "bpa_diluido",
+    "trimestre": "3T FY26",
+    "bajo": 0.82,
+    "alto": 0.82,
+    "unidad": "USD/acción"
+   }
+  ]
+ }
+]

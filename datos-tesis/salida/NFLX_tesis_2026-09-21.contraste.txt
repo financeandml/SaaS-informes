@@ -1,0 +1,414 @@
+Contraste NFLX 2026-09-21 · resumen {'solo_sec': 119, 'confirmado': 214, 'derivado': 20, 'solo_documento': 17, 'hueco': 42}
+
+◐  ingresos               FY2021            29,697,844,000.00  sin contraste documental
+◐  ingresos               FY2022            31,615,550,000.00  sin contraste documental
+✓  ingresos               FY2023            33,723,297,000.00  contrastado con 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 42
+✓  ingresos               FY2024            39,000,966,000.00  contrastado con 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 42
+✓  ingresos               FY2025            45,183,036,000.00  contrastado con 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 42
+✓  ingresos               3T25              11,510,307,000.00  contrastado con Q2-26-Website-Financials.xlsx pág. 1
+∑  ingresos               4T25              12,050,762,000.00  4T = FY2025 − 9M; coincide con Q2-26-Website-Financials.xlsx pág. 1
+✓  ingresos               1T26              12,249,757,000.00  contrastado con 13fce243-80be-4f3a-9033-bf415d3cc71f.pdf pág. 3
+✓  ingresos               2T26              12,559,938,000.00  contrastado con 65ef36cc-6598-4deb-a42b-8c59a8e31fd3.pdf pág. 3
+◐  coste_ingresos         FY2021            17,332,683,000.00  sin contraste documental
+◐  coste_ingresos         FY2022            19,168,285,000.00  sin contraste documental
+✓  coste_ingresos         FY2023            19,715,368,000.00  contrastado con 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 42
+✓  coste_ingresos         FY2024            21,038,464,000.00  contrastado con 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 42
+✓  coste_ingresos         FY2025            23,275,329,000.00  contrastado con 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 42
+✓  coste_ingresos         3T25               6,164,250,000.00  contrastado con Q2-26-Website-Financials.xlsx pág. 1
+∑  coste_ingresos         4T25               6,522,621,000.00  4T = FY2025 − 9M; coincide con Q2-26-Website-Financials.xlsx pág. 1
+✓  coste_ingresos         1T26               5,888,238,000.00  contrastado con 13fce243-80be-4f3a-9033-bf415d3cc71f.pdf pág. 3
+✓  coste_ingresos         2T26               6,036,965,000.00  contrastado con 65ef36cc-6598-4deb-a42b-8c59a8e31fd3.pdf pág. 3
+◐  marketing              FY2021             2,545,146,000.00  sin contraste documental
+◐  marketing              FY2022             2,530,502,000.00  sin contraste documental
+✓  marketing              FY2023             2,657,883,000.00  contrastado con 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 42
+✓  marketing              FY2024             2,917,554,000.00  contrastado con 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 42
+✓  marketing              FY2025             3,301,306,000.00  contrastado con 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 42
+✓  marketing              3T25                 786,295,000.00  contrastado con Q2-26-Website-Financials.xlsx pág. 1
+∑  marketing              4T25               1,113,376,000.00  4T = FY2025 − 9M; coincide con Q2-26-Website-Financials.xlsx pág. 1
+✓  marketing              1T26                 842,217,000.00  contrastado con 13fce243-80be-4f3a-9033-bf415d3cc71f.pdf pág. 3
+✓  marketing              2T26                 823,838,000.00  contrastado con 65ef36cc-6598-4deb-a42b-8c59a8e31fd3.pdf pág. 3
+◐  tecnologia             FY2021             2,273,885,000.00  sin contraste documental
+◐  tecnologia             FY2022             2,711,041,000.00  sin contraste documental
+✓  tecnologia             FY2023             2,675,758,000.00  contrastado con 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 42
+✓  tecnologia             FY2024             2,925,295,000.00  contrastado con 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 42
+✓  tecnologia             FY2025             3,391,390,000.00  contrastado con 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 42
+✓  tecnologia             3T25                 853,584,000.00  contrastado con Q2-26-Website-Financials.xlsx pág. 1
+∑  tecnologia             4T25                 890,300,000.00  4T = FY2025 − 9M; coincide con Q2-26-Website-Financials.xlsx pág. 1
+✓  tecnologia             1T26                 959,696,000.00  contrastado con 13fce243-80be-4f3a-9033-bf415d3cc71f.pdf pág. 3
+✓  tecnologia             2T26               1,007,675,000.00  contrastado con 65ef36cc-6598-4deb-a42b-8c59a8e31fd3.pdf pág. 3
+◐  generales              FY2021             1,351,621,000.00  sin contraste documental
+◐  generales              FY2022             1,572,891,000.00  sin contraste documental
+✓  generales              FY2023             1,720,285,000.00  contrastado con 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 42
+✓  generales              FY2024             1,702,039,000.00  contrastado con 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 42
+✓  generales              FY2025             1,888,408,000.00  contrastado con 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 42
+✓  generales              3T25                 457,931,000.00  contrastado con Q2-26-Website-Financials.xlsx pág. 1
+∑  generales              4T25                 567,802,000.00  4T = FY2025 − 9M; coincide con Q2-26-Website-Financials.xlsx pág. 1
+✓  generales              1T26                 602,609,000.00  contrastado con 13fce243-80be-4f3a-9033-bf415d3cc71f.pdf pág. 3
+✓  generales              2T26                 498,850,000.00  contrastado con 65ef36cc-6598-4deb-a42b-8c59a8e31fd3.pdf pág. 3
+◐  ebit                   FY2021             6,194,509,000.00  sin contraste documental
+◐  ebit                   FY2022             5,632,831,000.00  sin contraste documental
+✓  ebit                   FY2023             6,954,003,000.00  contrastado con 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 42
+✓  ebit                   FY2024            10,417,614,000.00  contrastado con 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 42
+✓  ebit                   FY2025            13,326,603,000.00  contrastado con 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 42
+✓  ebit                   3T25               3,248,247,000.00  contrastado con Q2-26-Website-Financials.xlsx pág. 1
+∑  ebit                   4T25               2,956,663,000.00  4T = FY2025 − 9M; coincide con Q2-26-Website-Financials.xlsx pág. 1
+✓  ebit                   1T26               3,956,997,000.00  contrastado con 13fce243-80be-4f3a-9033-bf415d3cc71f.pdf pág. 3
+✓  ebit                   2T26               4,192,610,000.00  contrastado con 65ef36cc-6598-4deb-a42b-8c59a8e31fd3.pdf pág. 3
+◐  intereses              FY2021               765,620,000.00  sin contraste documental
+◐  intereses              FY2022               706,212,000.00  sin contraste documental
+✓  intereses              FY2023               699,826,000.00  contrastado con 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 42
+✓  intereses              FY2024               718,733,000.00  contrastado con 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 42
+✓  intereses              FY2025               776,510,000.00  contrastado con 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 42
+✓  intereses              3T25                 175,294,000.00  contrastado con Q2-26-Website-Financials.xlsx pág. 1
+∑  intereses              4T25                 234,395,000.00  4T = FY2025 − 9M; coincide con Q2-26-Website-Financials.xlsx pág. 1
+✓  intereses              1T26                 262,077,000.00  contrastado con 13fce243-80be-4f3a-9033-bf415d3cc71f.pdf pág. 3
+✓  intereses              2T26                 175,685,000.00  contrastado con 65ef36cc-6598-4deb-a42b-8c59a8e31fd3.pdf pág. 3
+◐  otros_financieros      FY2021               411,214,000.00  sin contraste documental
+◐  otros_financieros      FY2022               337,310,000.00  sin contraste documental
+✓  otros_financieros      FY2023               -48,772,000.00  contrastado con 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 42
+✓  otros_financieros      FY2024               266,776,000.00  contrastado con 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 42
+✓  otros_financieros      FY2025               172,459,000.00  contrastado con 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 42
+✓  otros_financieros      3T25                  36,457,000.00  contrastado con Q2-26-Website-Financials.xlsx pág. 1
+∑  otros_financieros      4T25                  45,473,000.00  4T = FY2025 − 9M; coincide con Q2-26-Website-Financials.xlsx pág. 1
+✓  otros_financieros      1T26               2,852,166,000.00  contrastado con 13fce243-80be-4f3a-9033-bf415d3cc71f.pdf pág. 3
+✓  otros_financieros      2T26                  51,661,000.00  contrastado con 65ef36cc-6598-4deb-a42b-8c59a8e31fd3.pdf pág. 3
+◐  bai                    FY2021             5,840,103,000.00  sin contraste documental
+◐  bai                    FY2022             5,263,929,000.00  sin contraste documental
+✓  bai                    FY2023             6,205,405,000.00  contrastado con 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 42
+✓  bai                    FY2024             9,965,657,000.00  contrastado con 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 42
+✓  bai                    FY2025            12,722,552,000.00  contrastado con 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 42
+✓  bai                    3T25               3,109,410,000.00  contrastado con Q2-26-Website-Financials.xlsx pág. 1
+∑  bai                    4T25               2,767,741,000.00  4T = FY2025 − 9M; coincide con Q2-26-Website-Financials.xlsx pág. 1
+✓  bai                    1T26               6,547,086,000.00  contrastado con 13fce243-80be-4f3a-9033-bf415d3cc71f.pdf pág. 3
+✓  bai                    2T26               4,068,586,000.00  contrastado con 65ef36cc-6598-4deb-a42b-8c59a8e31fd3.pdf pág. 3
+◐  impuestos              FY2021               723,875,000.00  sin contraste documental
+◐  impuestos              FY2022               772,005,000.00  sin contraste documental
+✓  impuestos              FY2023               797,415,000.00  contrastado con 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 42
+✓  impuestos              FY2024             1,254,026,000.00  contrastado con 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 42
+✓  impuestos              FY2025             1,741,351,000.00  contrastado con 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 42
+✓  impuestos              3T25                 562,494,000.00  contrastado con Q2-26-Website-Financials.xlsx pág. 1
+∑  impuestos              4T25                 349,220,000.00  4T = FY2025 − 9M; coincide con Q2-26-Website-Financials.xlsx pág. 1
+✓  impuestos              1T26               1,264,295,000.00  contrastado con 13fce243-80be-4f3a-9033-bf415d3cc71f.pdf pág. 3
+✓  impuestos              2T26                 667,172,000.00  contrastado con 65ef36cc-6598-4deb-a42b-8c59a8e31fd3.pdf pág. 3
+◐  beneficio_neto         FY2021             5,116,228,000.00  sin contraste documental
+◐  beneficio_neto         FY2022             4,491,924,000.00  sin contraste documental
+✓  beneficio_neto         FY2023             5,407,990,000.00  contrastado con 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 42
+✓  beneficio_neto         FY2024             8,711,631,000.00  contrastado con 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 42
+✓  beneficio_neto         FY2025            10,981,201,000.00  contrastado con 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 42
+✓  beneficio_neto         3T25               2,546,916,000.00  contrastado con Q2-26-Website-Financials.xlsx pág. 1
+∑  beneficio_neto         4T25               2,418,521,000.00  4T = FY2025 − 9M; coincide con Q2-26-Website-Financials.xlsx pág. 1
+✓  beneficio_neto         1T26               5,282,791,000.00  contrastado con 13fce243-80be-4f3a-9033-bf415d3cc71f.pdf pág. 3
+✓  beneficio_neto         2T26               3,401,414,000.00  contrastado con 65ef36cc-6598-4deb-a42b-8c59a8e31fd3.pdf pág. 3
+◐  bpa_basico             FY2021                         1.16  reexpresado por split 10:1 del 14/11/2025; el 10-K de 26/01/2024 publicó 11.55 · sin contraste documental
+◐  bpa_basico             FY2022                         1.01  reexpresado por split 10:1 del 14/11/2025; el 10-K de 27/01/2025 publicó 10.10 · sin contraste documental
+✓  bpa_basico             FY2023                         1.22  reexpresado en 10-K presentado el 2026-01-23 (antes 12.25 en 10-K de 2024-01-26) · contrastado con 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 42
+✓  bpa_basico             FY2024                         2.03  reexpresado en 10-K presentado el 2026-01-23 (antes 20.28 en 10-K de 2025-01-27) · contrastado con 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 42
+✓  bpa_basico             FY2025                         2.58  contrastado con 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 42
+✓  bpa_basico             3T25                           0.60  reexpresado por split 10:1 del 14/11/2025; el 10-Q de 22/10/2025 publicó 6.00 · contrastado con Q2-26-Website-Financials.xlsx pág. 1
+◑  bpa_basico             4T25                           0.57  la SEC no presenta el cuarto trimestre como tal; leído en 2 adjunto(s)
+✓  bpa_basico             1T26                           1.25  contrastado con 13fce243-80be-4f3a-9033-bf415d3cc71f.pdf pág. 3
+✓  bpa_basico             2T26                           0.81  contrastado con 65ef36cc-6598-4deb-a42b-8c59a8e31fd3.pdf pág. 3
+◐  bpa_diluido            FY2021                         1.12  reexpresado por split 10:1 del 14/11/2025; el 10-K de 26/01/2024 publicó 11.24 · sin contraste documental
+◐  bpa_diluido            FY2022                         0.99  reexpresado por split 10:1 del 14/11/2025; el 10-K de 27/01/2025 publicó 9.95 · sin contraste documental
+✓  bpa_diluido            FY2023                         1.20  reexpresado en 10-K presentado el 2026-01-23 (antes 12.03 en 10-K de 2024-01-26) · contrastado con 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 42
+✓  bpa_diluido            FY2024                         1.98  reexpresado en 10-K presentado el 2026-01-23 (antes 19.83 en 10-K de 2025-01-27) · contrastado con 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 42
+✓  bpa_diluido            FY2025                         2.53  contrastado con 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 42
+✓  bpa_diluido            3T25                           0.59  reexpresado por split 10:1 del 14/11/2025; el 10-Q de 22/10/2025 publicó 5.87 · contrastado con Q2-26-Website-Financials.xlsx pág. 1
+◑  bpa_diluido            4T25                           0.56  la SEC no presenta el cuarto trimestre como tal; leído en 2 adjunto(s)
+✓  bpa_diluido            1T26                           1.23  contrastado con 13fce243-80be-4f3a-9033-bf415d3cc71f.pdf pág. 3
+✓  bpa_diluido            2T26                           0.80  contrastado con 65ef36cc-6598-4deb-a42b-8c59a8e31fd3.pdf pág. 3
+◐  acciones_basicas       FY2021             4,431,550,000.00  reexpresado por split 10:1 del 14/11/2025; el 10-K de 26/01/2024 publicó 443,155,000.00 · sin contraste documental
+◐  acciones_basicas       FY2022             4,446,980,000.00  reexpresado por split 10:1 del 14/11/2025; el 10-K de 27/01/2025 publicó 444,698,000.00 · sin contraste documental
+✓  acciones_basicas       FY2023             4,415,712,000.00  reexpresado en 10-K presentado el 2026-01-23 (antes 441,571,000 en 10-K de 2024-01-26) · contrastado con 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 42
+✓  acciones_basicas       FY2024             4,295,191,000.00  reexpresado en 10-K presentado el 2026-01-23 (antes 429,519,000 en 10-K de 2025-01-27) · contrastado con 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 42
+✓  acciones_basicas       FY2025             4,249,512,000.00  contrastado con 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 42
+✓  acciones_basicas       3T25               4,244,550,000.00  reexpresado por split 10:1 del 14/11/2025; el 10-Q de 22/10/2025 publicó 424,455,000.00 · contrastado con Q2-26-Website-Financials.xlsx pág. 1
+◑  acciones_basicas       4T25               4,229,221,000.00  la SEC no presenta el cuarto trimestre como tal; leído en 2 adjunto(s)
+✓  acciones_basicas       1T26               4,222,787,000.00  contrastado con 13fce243-80be-4f3a-9033-bf415d3cc71f.pdf pág. 3
+✓  acciones_basicas       2T26               4,189,303,000.00  contrastado con 65ef36cc-6598-4deb-a42b-8c59a8e31fd3.pdf pág. 3
+◐  acciones_diluidas      FY2021             4,553,720,000.00  reexpresado por split 10:1 del 14/11/2025; el 10-K de 26/01/2024 publicó 455,372,000.00 · sin contraste documental
+◐  acciones_diluidas      FY2022             4,512,900,000.00  reexpresado por split 10:1 del 14/11/2025; el 10-K de 27/01/2025 publicó 451,290,000.00 · sin contraste documental
+✓  acciones_diluidas      FY2023             4,494,966,000.00  reexpresado en 10-K presentado el 2026-01-23 (antes 449,498,000 en 10-K de 2024-01-26) · contrastado con 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 42
+✓  acciones_diluidas      FY2024             4,392,608,000.00  reexpresado en 10-K presentado el 2026-01-23 (antes 439,261,000 en 10-K de 2025-01-27) · contrastado con 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 42
+✓  acciones_diluidas      FY2025             4,343,863,000.00  contrastado con 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 42
+✓  acciones_diluidas      3T25               4,340,390,000.00  reexpresado por split 10:1 del 14/11/2025; el 10-Q de 22/10/2025 publicó 434,039,000.00 · contrastado con Q2-26-Website-Financials.xlsx pág. 1
+◑  acciones_diluidas      4T25               4,317,144,000.00  la SEC no presenta el cuarto trimestre como tal; leído en 2 adjunto(s)
+✓  acciones_diluidas      1T26               4,298,437,000.00  contrastado con 13fce243-80be-4f3a-9033-bf415d3cc71f.pdf pág. 3
+✓  acciones_diluidas      2T26               4,261,300,000.00  contrastado con 65ef36cc-6598-4deb-a42b-8c59a8e31fd3.pdf pág. 3
+◐  amortizacion           FY2021               208,412,000.00  sin contraste documental
+◐  amortizacion           FY2022               336,682,000.00  sin contraste documental
+✓  amortizacion           FY2023               356,947,000.00  contrastado con 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 44
+✓  amortizacion           FY2024               328,914,000.00  contrastado con 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 44
+✓  amortizacion           FY2025               333,389,000.00  contrastado con 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 44
+✓  amortizacion           3T25                  87,326,000.00  contrastado con Q2-26-Website-Financials.xlsx pág. 3
+∑  amortizacion           4T25                  85,983,000.00  4T = FY2025 − 9M; coincide con Q2-26-Website-Financials.xlsx pág. 3
+✓  amortizacion           1T26                  98,575,000.00  contrastado con 13fce243-80be-4f3a-9033-bf415d3cc71f.pdf pág. 5
+✓  amortizacion           2T26                 100,530,000.00  contrastado con 65ef36cc-6598-4deb-a42b-8c59a8e31fd3.pdf pág. 5
+—  amortizacion_contenido FY2021                          N/A  la SEC no lo publica y ningún adjunto lo trae; ningún adjunto lo trae
+—  amortizacion_contenido FY2022                          N/A  la SEC no lo publica y ningún adjunto lo trae; ningún adjunto lo trae
+◑  amortizacion_contenido FY2023            14,197,437,000.00  la SEC no lo publica; leído en 1 adjunto(s)
+◑  amortizacion_contenido FY2024            15,301,517,000.00  la SEC no lo publica; leído en 1 adjunto(s)
+◑  amortizacion_contenido FY2025            16,422,166,000.00  la SEC no lo publica; leído en 3 adjunto(s)
+◑  amortizacion_contenido 3T25               4,002,744,000.00  la SEC no lo publica; leído en 2 adjunto(s)
+◑  amortizacion_contenido 4T25               4,764,236,000.00  la SEC no lo publica; leído en 2 adjunto(s)
+◑  amortizacion_contenido 1T26               4,217,900,000.00  la SEC no lo publica; leído en 4 adjunto(s)
+◑  amortizacion_contenido 2T26               4,311,309,000.00  la SEC no lo publica; leído en 4 adjunto(s)
+◐  sbc                    FY2021               403,220,000.00  sin contraste documental
+◐  sbc                    FY2022               575,452,000.00  sin contraste documental
+✓  sbc                    FY2023               339,368,000.00  contrastado con 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 44
+✓  sbc                    FY2024               272,588,000.00  contrastado con 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 44
+✓  sbc                    FY2025               368,449,000.00  contrastado con 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 44
+✓  sbc                    3T25                  80,986,000.00  contrastado con Q2-26-Website-Financials.xlsx pág. 3
+∑  sbc                    4T25                 134,624,000.00  4T = FY2025 − 9M; coincide con Q2-26-Website-Financials.xlsx pág. 3
+✓  sbc                    1T26                 140,405,000.00  contrastado con 13fce243-80be-4f3a-9033-bf415d3cc71f.pdf pág. 5
+✓  sbc                    2T26                 131,312,000.00  contrastado con 65ef36cc-6598-4deb-a42b-8c59a8e31fd3.pdf pág. 5
+◐  caja                   @2020-12-31        8,205,550,000.00  sin contraste documental
+◐  caja                   @2021-12-31        6,027,804,000.00  sin contraste documental
+◐  caja                   @2022-12-31        5,147,176,000.00  sin contraste documental
+◐  caja                   @2023-12-31        7,116,913,000.00  sin contraste documental
+✓  caja                   @2024-12-31        7,804,733,000.00  contrastado con 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 45
+✓  caja                   @2025-06-30        8,177,405,000.00  contrastado con Q2-26-Website-Financials.xlsx pág. 2
+✓  caja                   @2025-09-30        9,287,287,000.00  contrastado con Q2-26-Website-Financials.xlsx pág. 2
+✓  caja                   @2025-12-31        9,033,681,000.00  contrastado con 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 45
+✓  caja                   @2026-03-31       12,259,772,000.00  contrastado con 13fce243-80be-4f3a-9033-bf415d3cc71f.pdf pág. 6
+✓  caja                   @2026-06-30        9,099,232,000.00  contrastado con 65ef36cc-6598-4deb-a42b-8c59a8e31fd3.pdf pág. 6
+—  inversiones_cp         @2020-12-31                     N/A  companyfacts no trae inversiones_cp para @2020-12-31 en ningún 10-K/10-Q; ningún adjunto lo trae
+◐  inversiones_cp         @2021-12-31                    0.00  sin contraste documental
+◐  inversiones_cp         @2022-12-31          911,276,000.00  sin contraste documental
+◐  inversiones_cp         @2023-12-31           20,973,000.00  sin contraste documental
+✓  inversiones_cp         @2024-12-31        1,779,006,000.00  contrastado con 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 45
+✓  inversiones_cp         @2025-06-30          213,115,000.00  contrastado con Q2-26-Website-Financials.xlsx pág. 2
+✓  inversiones_cp         @2025-09-30           37,105,000.00  contrastado con Q2-26-Website-Financials.xlsx pág. 2
+✓  inversiones_cp         @2025-12-31           28,678,000.00  contrastado con 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 45
+✓  inversiones_cp         @2026-03-31           28,678,000.00  contrastado con 13fce243-80be-4f3a-9033-bf415d3cc71f.pdf pág. 6
+✓  inversiones_cp         @2026-06-30           28,678,000.00  contrastado con 65ef36cc-6598-4deb-a42b-8c59a8e31fd3.pdf pág. 6
+◐  activo_corriente       @2020-12-31        9,761,580,000.00  sin contraste documental
+◐  activo_corriente       @2021-12-31        8,069,825,000.00  sin contraste documental
+◐  activo_corriente       @2022-12-31        9,266,473,000.00  sin contraste documental
+◐  activo_corriente       @2023-12-31        9,918,133,000.00  sin contraste documental
+✓  activo_corriente       @2024-12-31       13,100,379,000.00  contrastado con 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 45
+✓  activo_corriente       @2025-06-30       11,993,106,000.00  contrastado con Q2-26-Website-Financials.pdf pág. 2
+✓  activo_corriente       @2025-09-30       12,962,935,000.00  contrastado con Q2-26-Website-Financials.pdf pág. 2
+✓  activo_corriente       @2025-12-31       13,020,191,000.00  contrastado con 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 45
+✓  activo_corriente       @2026-03-31       17,070,982,000.00  contrastado con 13fce243-80be-4f3a-9033-bf415d3cc71f.pdf pág. 6
+✓  activo_corriente       @2026-06-30       13,853,303,000.00  contrastado con 65ef36cc-6598-4deb-a42b-8c59a8e31fd3.pdf pág. 6
+—  contenido              @2020-12-31                     N/A  la SEC no lo publica y ningún adjunto lo trae; ningún adjunto lo trae
+—  contenido              @2021-12-31                     N/A  la SEC no lo publica y ningún adjunto lo trae; ningún adjunto lo trae
+—  contenido              @2022-12-31                     N/A  la SEC no lo publica y ningún adjunto lo trae; ningún adjunto lo trae
+—  contenido              @2023-12-31                     N/A  la SEC no lo publica y ningún adjunto lo trae; ningún adjunto lo trae
+◑  contenido              @2024-12-31       32,452,462,000.00  la SEC no lo publica; leído en 1 adjunto(s)
+◑  contenido              @2025-06-30       32,089,394,000.00  la SEC no lo publica; leído en 2 adjunto(s)
+◑  contenido              @2025-09-30       32,639,879,000.00  la SEC no lo publica; leído en 2 adjunto(s)
+◑  contenido              @2025-12-31       32,778,392,000.00  la SEC no lo publica; leído en 6 adjunto(s)
+◑  contenido              @2026-03-31       33,376,295,000.00  la SEC no lo publica; leído en 3 adjunto(s)
+◑  contenido              @2026-06-30       33,837,573,000.00  la SEC no lo publica; leído en 4 adjunto(s)
+◐  inmovilizado           @2020-12-31          960,183,000.00  sin contraste documental
+◐  inmovilizado           @2021-12-31        1,323,453,000.00  sin contraste documental
+◐  inmovilizado           @2022-12-31        1,398,257,000.00  sin contraste documental
+◐  inmovilizado           @2023-12-31        1,491,444,000.00  sin contraste documental
+✓  inmovilizado           @2024-12-31        1,593,756,000.00  contrastado con 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 45
+✓  inmovilizado           @2025-06-30        1,743,566,000.00  contrastado con Q2-26-Website-Financials.xlsx pág. 2
+✓  inmovilizado           @2025-09-30        1,837,889,000.00  contrastado con Q2-26-Website-Financials.xlsx pág. 2
+✓  inmovilizado           @2025-12-31        2,004,350,000.00  contrastado con 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 45
+✓  inmovilizado           @2026-03-31        2,147,829,000.00  contrastado con 13fce243-80be-4f3a-9033-bf415d3cc71f.pdf pág. 6
+✓  inmovilizado           @2026-06-30        2,398,848,000.00  contrastado con 65ef36cc-6598-4deb-a42b-8c59a8e31fd3.pdf pág. 6
+—  fondo_comercio         @2020-12-31                     N/A  companyfacts no trae fondo_comercio para @2020-12-31 en ningún 10-K/10-Q; ningún adjunto lo trae
+—  fondo_comercio         @2021-12-31                     N/A  companyfacts no trae fondo_comercio para @2021-12-31 en ningún 10-K/10-Q; ningún adjunto lo trae
+—  fondo_comercio         @2022-12-31                     N/A  companyfacts no trae fondo_comercio para @2022-12-31 en ningún 10-K/10-Q; ningún adjunto lo trae
+—  fondo_comercio         @2023-12-31                     N/A  companyfacts no trae fondo_comercio para @2023-12-31 en ningún 10-K/10-Q; ningún adjunto lo trae
+—  fondo_comercio         @2024-12-31                     N/A  companyfacts no trae fondo_comercio para @2024-12-31 en ningún 10-K/10-Q; ningún adjunto lo trae
+—  fondo_comercio         @2025-06-30                     N/A  companyfacts no trae fondo_comercio para @2025-06-30 en ningún 10-K/10-Q; ningún adjunto lo trae
+—  fondo_comercio         @2025-09-30                     N/A  companyfacts no trae fondo_comercio para @2025-09-30 en ningún 10-K/10-Q; ningún adjunto lo trae
+—  fondo_comercio         @2025-12-31                     N/A  companyfacts no trae fondo_comercio para @2025-12-31 en ningún 10-K/10-Q; ningún adjunto lo trae
+—  fondo_comercio         @2026-03-31                     N/A  companyfacts no trae fondo_comercio para @2026-03-31 en ningún 10-K/10-Q; ningún adjunto lo trae
+—  fondo_comercio         @2026-06-30                     N/A  companyfacts no trae fondo_comercio para @2026-06-30 en ningún 10-K/10-Q; ningún adjunto lo trae
+—  intangibles            @2020-12-31                     N/A  companyfacts no trae intangibles para @2020-12-31 en ningún 10-K/10-Q; ningún adjunto lo trae
+—  intangibles            @2021-12-31                     N/A  companyfacts no trae intangibles para @2021-12-31 en ningún 10-K/10-Q; ningún adjunto lo trae
+—  intangibles            @2022-12-31                     N/A  companyfacts no trae intangibles para @2022-12-31 en ningún 10-K/10-Q; ningún adjunto lo trae
+—  intangibles            @2023-12-31                     N/A  companyfacts no trae intangibles para @2023-12-31 en ningún 10-K/10-Q; ningún adjunto lo trae
+—  intangibles            @2024-12-31                     N/A  companyfacts no trae intangibles para @2024-12-31 en ningún 10-K/10-Q; ningún adjunto lo trae
+—  intangibles            @2025-06-30                     N/A  companyfacts no trae intangibles para @2025-06-30 en ningún 10-K/10-Q; ningún adjunto lo trae
+—  intangibles            @2025-09-30                     N/A  companyfacts no trae intangibles para @2025-09-30 en ningún 10-K/10-Q; ningún adjunto lo trae
+—  intangibles            @2025-12-31                     N/A  companyfacts no trae intangibles para @2025-12-31 en ningún 10-K/10-Q; ningún adjunto lo trae
+—  intangibles            @2026-03-31                     N/A  companyfacts no trae intangibles para @2026-03-31 en ningún 10-K/10-Q; ningún adjunto lo trae
+—  intangibles            @2026-06-30                     N/A  companyfacts no trae intangibles para @2026-06-30 en ningún 10-K/10-Q; ningún adjunto lo trae
+◐  total_activo           @2020-12-31       39,280,359,000.00  sin contraste documental
+◐  total_activo           @2021-12-31       44,584,663,000.00  sin contraste documental
+◐  total_activo           @2022-12-31       48,594,768,000.00  sin contraste documental
+◐  total_activo           @2023-12-31       48,731,992,000.00  sin contraste documental
+✓  total_activo           @2024-12-31       53,630,374,000.00  contrastado con 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 45
+✓  total_activo           @2025-06-30       53,099,664,000.00  contrastado con Q2-26-Website-Financials.pdf pág. 2
+✓  total_activo           @2025-09-30       54,934,835,000.00  contrastado con Q2-26-Website-Financials.pdf pág. 2
+✓  total_activo           @2025-12-31       55,596,993,000.00  contrastado con 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 45
+✓  total_activo           @2026-03-31       61,015,914,000.00  contrastado con 13fce243-80be-4f3a-9033-bf415d3cc71f.pdf pág. 6
+✓  total_activo           @2026-06-30       58,450,441,000.00  contrastado con 65ef36cc-6598-4deb-a42b-8c59a8e31fd3.pdf pág. 6
+◐  pasivo_corriente       @2020-12-31        7,805,785,000.00  sin contraste documental
+◐  pasivo_corriente       @2021-12-31        8,488,966,000.00  sin contraste documental
+◐  pasivo_corriente       @2022-12-31        7,930,974,000.00  sin contraste documental
+◐  pasivo_corriente       @2023-12-31        8,860,655,000.00  sin contraste documental
+✓  pasivo_corriente       @2024-12-31       10,755,400,000.00  contrastado con 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 45
+✓  pasivo_corriente       @2025-06-30        8,942,335,000.00  contrastado con Q2-26-Website-Financials.pdf pág. 2
+✓  pasivo_corriente       @2025-09-30        9,731,859,000.00  contrastado con Q2-26-Website-Financials.pdf pág. 2
+✓  pasivo_corriente       @2025-12-31       10,980,930,000.00  contrastado con 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 45
+✓  pasivo_corriente       @2026-03-31       12,131,578,000.00  contrastado con 13fce243-80be-4f3a-9033-bf415d3cc71f.pdf pág. 6
+✓  pasivo_corriente       @2026-06-30       12,134,898,000.00  contrastado con 65ef36cc-6598-4deb-a42b-8c59a8e31fd3.pdf pág. 6
+◐  deuda_cp               @2020-12-31          499,878,000.00  sin contraste documental
+◐  deuda_cp               @2021-12-31          699,823,000.00  sin contraste documental
+◐  deuda_cp               @2022-12-31                    0.00  sin contraste documental
+◐  deuda_cp               @2023-12-31          399,844,000.00  sin contraste documental
+✓  deuda_cp               @2024-12-31        1,784,453,000.00  contrastado con 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 45
+✓  deuda_cp               @2025-06-30                    0.00  contrastado con Q2-26-Website-Financials.xlsx pág. 2
+✓  deuda_cp               @2025-09-30                    0.00  contrastado con Q2-26-Website-Financials.xlsx pág. 2
+✓  deuda_cp               @2025-12-31          998,865,000.00  contrastado con 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 45
+✓  deuda_cp               @2026-03-31          999,185,000.00  contrastado con 13fce243-80be-4f3a-9033-bf415d3cc71f.pdf pág. 6
+✓  deuda_cp               @2026-06-30        2,483,758,000.00  contrastado con 65ef36cc-6598-4deb-a42b-8c59a8e31fd3.pdf pág. 6
+◐  deuda_lp               @2020-12-31       15,809,095,000.00  sin contraste documental
+◐  deuda_lp               @2021-12-31       14,693,072,000.00  sin contraste documental
+◐  deuda_lp               @2022-12-31       14,353,076,000.00  sin contraste documental
+◐  deuda_lp               @2023-12-31       14,143,417,000.00  sin contraste documental
+✓  deuda_lp               @2024-12-31       13,798,351,000.00  contrastado con 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 45
+✓  deuda_lp               @2025-06-30       14,453,206,000.00  contrastado con Q2-26-Website-Financials.xlsx pág. 2
+✓  deuda_lp               @2025-09-30       14,463,020,000.00  contrastado con Q2-26-Website-Financials.xlsx pág. 2
+✓  deuda_lp               @2025-12-31       13,463,971,000.00  contrastado con 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 45
+✓  deuda_lp               @2026-03-31       13,361,331,000.00  contrastado con 13fce243-80be-4f3a-9033-bf415d3cc71f.pdf pág. 6
+✓  deuda_lp               @2026-06-30       11,825,548,000.00  contrastado con 65ef36cc-6598-4deb-a42b-8c59a8e31fd3.pdf pág. 6
+◐  arrendamientos         @2020-12-31        1,945,631,000.00  sin contraste documental
+◐  arrendamientos         @2021-12-31        2,408,486,000.00  sin contraste documental
+◐  arrendamientos         @2022-12-31        2,222,503,000.00  sin contraste documental
+◐  arrendamientos         @2023-12-31        2,046,801,000.00  sin contraste documental
+◐  arrendamientos         @2024-12-31        1,983,688,000.00  sin contraste documental
+◐  arrendamientos         @2025-06-30        2,026,821,000.00  sin contraste documental
+◐  arrendamientos         @2025-09-30        2,163,128,000.00  sin contraste documental
+◐  arrendamientos         @2025-12-31        2,052,526,000.00  sin contraste documental
+◐  arrendamientos         @2026-03-31        1,948,206,000.00  sin contraste documental
+◐  arrendamientos         @2026-06-30        1,899,018,000.00  sin contraste documental
+◐  pasivo_total           @2020-12-31       28,215,119,000.00  sin contraste documental
+◐  pasivo_total           @2021-12-31       28,735,415,000.00  sin contraste documental
+◐  pasivo_total           @2022-12-31       27,817,367,000.00  sin contraste documental
+◐  pasivo_total           @2023-12-31       28,143,679,000.00  sin contraste documental
+✓  pasivo_total           @2024-12-31       28,886,807,000.00  contrastado con 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 45
+✓  pasivo_total           @2025-06-30       28,147,765,000.00  contrastado con Q2-26-Website-Financials.pdf pág. 2
+✓  pasivo_total           @2025-09-30       28,980,800,000.00  contrastado con Q2-26-Website-Financials.pdf pág. 2
+✓  pasivo_total           @2025-12-31       28,981,505,000.00  contrastado con 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 45
+✓  pasivo_total           @2026-03-31       29,889,515,000.00  contrastado con 13fce243-80be-4f3a-9033-bf415d3cc71f.pdf pág. 6
+✓  pasivo_total           @2026-06-30       28,298,389,000.00  contrastado con 65ef36cc-6598-4deb-a42b-8c59a8e31fd3.pdf pág. 6
+◐  patrimonio             @2020-12-31       11,065,240,000.00  sin contraste documental
+◐  patrimonio             @2021-12-31       15,849,248,000.00  sin contraste documental
+◐  patrimonio             @2022-12-31       20,777,401,000.00  sin contraste documental
+◐  patrimonio             @2023-12-31       20,588,313,000.00  sin contraste documental
+✓  patrimonio             @2024-12-31       24,743,567,000.00  contrastado con 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 45
+✓  patrimonio             @2025-06-30       24,951,899,000.00  contrastado con Q2-26-Website-Financials.pdf pág. 2
+✓  patrimonio             @2025-09-30       25,954,035,000.00  contrastado con Q2-26-Website-Financials.pdf pág. 2
+✓  patrimonio             @2025-12-31       26,615,488,000.00  contrastado con 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 45
+✓  patrimonio             @2026-03-31       31,126,399,000.00  contrastado con 13fce243-80be-4f3a-9033-bf415d3cc71f.pdf pág. 6
+✓  patrimonio             @2026-06-30       30,152,052,000.00  contrastado con 65ef36cc-6598-4deb-a42b-8c59a8e31fd3.pdf pág. 6
+◐  autocartera            @2020-12-31                    0.00  sin contraste documental
+◐  autocartera            @2021-12-31          824,190,000.00  sin contraste documental
+◐  autocartera            @2022-12-31          824,190,000.00  sin contraste documental
+◐  autocartera            @2023-12-31        6,922,200,000.00  sin contraste documental
+✓  autocartera            @2024-12-31       13,171,638,000.00  contrastado con 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 45
+✓  autocartera            @2025-06-30       18,392,942,000.00  contrastado con Q2-26-Website-Financials.xlsx pág. 2
+✓  autocartera            @2025-09-30       20,270,631,000.00  contrastado con Q2-26-Website-Financials.xlsx pág. 2
+✓  autocartera            @2025-12-31       22,372,658,000.00  contrastado con 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 45
+✓  autocartera            @2026-03-31       23,681,974,000.00  contrastado con 13fce243-80be-4f3a-9033-bf415d3cc71f.pdf pág. 6
+✓  autocartera            @2026-06-30       28,387,657,000.00  contrastado con 65ef36cc-6598-4deb-a42b-8c59a8e31fd3.pdf pág. 6
+◐  acciones_circulacion   @2020-12-31        4,428,952,610.00  reexpresado por split 10:1 del 14/11/2025; el 10-K de 28/01/2021 publicó 442,895,261.00 · sin contraste documental
+◐  acciones_circulacion   @2021-12-31        4,439,631,070.00  reexpresado por split 10:1 del 14/11/2025; el 10-K de 27/01/2022 publicó 443,963,107.00 · sin contraste documental
+◐  acciones_circulacion   @2022-12-31        4,453,467,760.00  reexpresado por split 10:1 del 14/11/2025; el 10-K de 26/01/2023 publicó 445,346,776.00 · sin contraste documental
+◐  acciones_circulacion   @2023-12-31        4,327,595,840.00  reexpresado por split 10:1 del 14/11/2025; el 10-K de 26/01/2024 publicó 432,759,584.00 · sin contraste documental
+◐  acciones_circulacion   @2024-12-31        4,277,571,000.00  reexpresado por split 10:1 del 14/11/2025; el 10-K de 27/01/2025 publicó 427,757,100.00 · sin contraste documental
+◐  acciones_circulacion   @2025-06-30        4,249,263,460.00  reexpresado por split 10:1 del 14/11/2025; el 10-Q de 18/07/2025 publicó 424,926,346.00 · sin contraste documental
+◐  acciones_circulacion   @2025-09-30        4,237,323,340.00  reexpresado por split 10:1 del 14/11/2025; el 10-Q de 22/10/2025 publicó 423,732,334.00 · sin contraste documental
+◐  acciones_circulacion   @2025-12-31        4,222,162,150.00  sin contraste documental
+◐  acciones_circulacion   @2026-03-31        4,212,794,271.00  sin contraste documental
+◐  acciones_circulacion   @2026-06-30        4,163,939,676.00  sin contraste documental
+◐  cfo                    FY2021               392,610,000.00  sin contraste documental
+◐  cfo                    FY2022             2,026,257,000.00  sin contraste documental
+✓  cfo                    FY2023             7,274,301,000.00  contrastado con 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 44
+✓  cfo                    FY2024             7,361,364,000.00  contrastado con 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 44
+✓  cfo                    FY2025            10,149,273,000.00  contrastado con 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 44
+✓  cfo                    3T25               2,825,174,000.00  contrastado con Q2-26-Website-Financials.xlsx pág. 3
+∑  cfo                    4T25               2,111,642,000.00  4T = FY2025 − 9M; coincide con Q2-26-Website-Financials.xlsx pág. 3
+✓  cfo                    1T26               5,290,205,000.00  contrastado con 13fce243-80be-4f3a-9033-bf415d3cc71f.pdf pág. 5
+✓  cfo                    2T26               1,743,812,000.00  contrastado con 65ef36cc-6598-4deb-a42b-8c59a8e31fd3.pdf pág. 5
+◐  capex                  FY2021               524,585,000.00  sin contraste documental
+◐  capex                  FY2022               407,729,000.00  sin contraste documental
+✓  capex                  FY2023               348,552,000.00  contrastado con 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 44
+✓  capex                  FY2024               439,538,000.00  contrastado con 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 44
+✓  capex                  FY2025               688,220,000.00  contrastado con 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 44
+✓  capex                  3T25                 164,719,000.00  contrastado con Q2-26-Website-Financials.xlsx pág. 3
+∑  capex                  4T25                 239,335,000.00  4T = FY2025 − 9M; coincide con Q2-26-Website-Financials.xlsx pág. 3
+✓  capex                  1T26                 196,130,000.00  contrastado con 13fce243-80be-4f3a-9033-bf415d3cc71f.pdf pág. 5
+✓  capex                  2T26                 218,644,000.00  contrastado con 65ef36cc-6598-4deb-a42b-8c59a8e31fd3.pdf pág. 5
+◐  cfi                    FY2021            -1,339,853,000.00  sin contraste documental
+◐  cfi                    FY2022            -2,076,392,000.00  sin contraste documental
+✓  cfi                    FY2023               541,751,000.00  contrastado con 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 44
+✓  cfi                    FY2024            -2,181,784,000.00  contrastado con 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 44
+✓  cfi                    FY2025             1,041,688,000.00  contrastado con 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 44
+✓  cfi                    3T25                  43,871,000.00  contrastado con Q2-26-Website-Financials.pdf pág. 3
+∑  cfi                    4T25                -256,529,000.00  4T = FY2025 − 9M; coincide con Q2-26-Website-Financials.pdf pág. 3
+✓  cfi                    1T26                -781,874,000.00  contrastado con 13fce243-80be-4f3a-9033-bf415d3cc71f.pdf pág. 5
+✓  cfi                    2T26                -218,644,000.00  contrastado con 65ef36cc-6598-4deb-a42b-8c59a8e31fd3.pdf pág. 5
+◐  cff                    FY2021            -1,149,776,000.00  sin contraste documental
+◐  cff                    FY2022              -664,254,000.00  sin contraste documental
+✓  cff                    FY2023            -5,950,803,000.00  contrastado con 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 44
+✓  cff                    FY2024            -4,074,427,000.00  contrastado con 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 44
+✓  cff                    FY2025           -10,345,623,000.00  contrastado con 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 44
+✓  cff                    3T25              -1,737,029,000.00  contrastado con Q2-26-Website-Financials.pdf pág. 3
+∑  cff                    4T25              -2,077,410,000.00  4T = FY2025 − 9M; coincide con Q2-26-Website-Financials.pdf pág. 3
+✓  cff                    1T26              -1,230,814,000.00  contrastado con 13fce243-80be-4f3a-9033-bf415d3cc71f.pdf pág. 5
+✓  cff                    2T26              -4,669,627,000.00  contrastado con 65ef36cc-6598-4deb-a42b-8c59a8e31fd3.pdf pág. 5
+✓  dividendos             FY2021                         0.00  cero declarado en 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 21: «…common stock. Dividend Policy We have never declared or paid any cash dividends on our capital stock, and we do not cur…»
+✓  dividendos             FY2022                         0.00  cero declarado en 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 21: «…common stock. Dividend Policy We have never declared or paid any cash dividends on our capital stock, and we do not cur…»
+✓  dividendos             FY2023                         0.00  cero declarado en 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 21: «…common stock. Dividend Policy We have never declared or paid any cash dividends on our capital stock, and we do not cur…»
+✓  dividendos             FY2024                         0.00  cero declarado en 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 21: «…common stock. Dividend Policy We have never declared or paid any cash dividends on our capital stock, and we do not cur…»
+✓  dividendos             FY2025                         0.00  cero declarado en 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 21: «…common stock. Dividend Policy We have never declared or paid any cash dividends on our capital stock, and we do not cur…»
+✓  dividendos             3T25                           0.00  cero declarado en 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 21: «…common stock. Dividend Policy We have never declared or paid any cash dividends on our capital stock, and we do not cur…»
+✓  dividendos             4T25                           0.00  cero declarado en 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 21: «…common stock. Dividend Policy We have never declared or paid any cash dividends on our capital stock, and we do not cur…»
+—  dividendos             1T26                            N/A  companyfacts no trae dividendos para 1T26 en ningún 10-K/10-Q; ningún adjunto lo trae
+—  dividendos             2T26                            N/A  companyfacts no trae dividendos para 2T26 en ningún 10-K/10-Q; ningún adjunto lo trae
+◐  recompras              FY2021               600,022,000.00  sin contraste documental
+◐  recompras              FY2022                         0.00  sin contraste documental
+✓  recompras              FY2023             6,045,347,000.00  contrastado con 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 44
+✓  recompras              FY2024             6,263,746,000.00  contrastado con 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 44
+✓  recompras              FY2025             9,127,167,000.00  contrastado con 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 44
+✓  recompras              3T25               1,856,885,000.00  contrastado con Q2-26-Website-Financials.xlsx pág. 3
+∑  recompras              4T25               2,079,559,000.00  4T = FY2025 − 9M; coincide con Q2-26-Website-Financials.xlsx pág. 3
+✓  recompras              1T26               1,270,588,000.00  contrastado con 13fce243-80be-4f3a-9033-bf415d3cc71f.pdf pág. 5
+✓  recompras              2T26               4,714,403,000.00  contrastado con 65ef36cc-6598-4deb-a42b-8c59a8e31fd3.pdf pág. 5
+◐  adquisiciones          FY2021               788,349,000.00  sin contraste documental
+◐  adquisiciones          FY2022               757,387,000.00  sin contraste documental
+◐  adquisiciones          FY2023                         0.00  sin contraste documental
+◐  adquisiciones          FY2024                         0.00  sin contraste documental
+◐  adquisiciones          FY2025                17,194,000.00  sin contraste documental
+—  adquisiciones          3T25                            N/A  companyfacts no trae adquisiciones para 3T25 en ningún 10-K/10-Q; ningún adjunto lo trae
+—  adquisiciones          4T25                            N/A  la SEC no presenta el cuarto trimestre como tal; ningún adjunto lo trae
+◐  adquisiciones          1T26                 585,744,000.00  sin contraste documental
+◐  adquisiciones          2T26                           0.00  sin contraste documental
+◐  emision_deuda          FY2021                         0.00  sin contraste documental
+◐  emision_deuda          FY2022                         0.00  sin contraste documental
+✓  emision_deuda          FY2023                         0.00  contrastado con 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 44
+✓  emision_deuda          FY2024             1,794,460,000.00  contrastado con 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 44
+✓  emision_deuda          FY2025                         0.00  contrastado con 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 44
+◐  emision_deuda          3T25                           0.00  sin contraste documental
+∑  emision_deuda          4T25                           0.00  
+—  emision_deuda          1T26                            N/A  companyfacts no trae emision_deuda para 1T26 en ningún 10-K/10-Q; ningún adjunto lo trae
+—  emision_deuda          2T26                            N/A  companyfacts no trae emision_deuda para 2T26 en ningún 10-K/10-Q; ningún adjunto lo trae
+◐  amortizacion_deuda     FY2021               500,000,000.00  sin contraste documental
+◐  amortizacion_deuda     FY2022               700,000,000.00  sin contraste documental
+✓  amortizacion_deuda     FY2023                         0.00  contrastado con 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 44
+✓  amortizacion_deuda     FY2024               400,000,000.00  contrastado con 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 44
+✓  amortizacion_deuda     FY2025             1,833,450,000.00  contrastado con 99482238-46b2-4d0d-b292-40e6781bdf03.pdf pág. 44
+✓  amortizacion_deuda     3T25                           0.00  contrastado con Q2-26-Website-Financials.xlsx pág. 3
+∑  amortizacion_deuda     4T25                           0.00  4T = FY2025 − 9M; coincide con Q2-26-Website-Financials.xlsx pág. 3
+✓  amortizacion_deuda     1T26                           0.00  contrastado con 13fce243-80be-4f3a-9033-bf415d3cc71f.pdf pág. 5
+✓  amortizacion_deuda     2T26                           0.00  contrastado con 65ef36cc-6598-4deb-a42b-8c59a8e31fd3.pdf pág. 5
+—  fcf_compania           FY2021                          N/A  la SEC no lo publica y ningún adjunto lo trae; ningún adjunto lo trae
+—  fcf_compania           FY2022                          N/A  la SEC no lo publica y ningún adjunto lo trae; ningún adjunto lo trae
+—  fcf_compania           FY2023                          N/A  la SEC no lo publica y ningún adjunto lo trae; ningún adjunto lo trae
+—  fcf_compania           FY2024                          N/A  la SEC no lo publica y ningún adjunto lo trae; ningún adjunto lo trae
+—  fcf_compania           FY2025                          N/A  la SEC no lo publica y ningún adjunto lo trae; ningún adjunto lo trae
+—  fcf_compania           3T25                            N/A  la SEC no lo publica y ningún adjunto lo trae; ningún adjunto lo trae
+—  fcf_compania           4T25                            N/A  la SEC no lo publica y ningún adjunto lo trae; ningún adjunto lo trae
+—  fcf_compania           1T26                            N/A  la SEC no lo publica y ningún adjunto lo trae; ningún adjunto lo trae
+—  fcf_compania           2T26                            N/A  la SEC no lo publica y ningún adjunto lo trae; ningún adjunto lo trae

@@ -1,0 +1,55 @@
+[1/8] Emisor en EDGAR: ORCL
+  ORACLE CORP · CIK 1341439 · NYSE · 1000 depósitos recientes
+[2/8] Expediente: 7 ficheros
+  PROXY            DEF 14A                                  periodo=None fecha=2025-11-18 edgar=True (alta)
+  10K_20260531     10-K                                     periodo=2026-05-31 fecha=2026-06-22 edgar=True (alta)
+  TABLAS_20260831  Cuentas del anexo 99.1 (8-K)             periodo=2026-08-31 fecha=None edgar=None (alta)
+  10Q_20260831     10-Q                                     periodo=2026-08-31 fecha=2026-09-11 edgar=True (alta)
+  NOTA             Nota de resultados (anexo 99.1 del 8-K)  periodo=None fecha=2026-09-10 edgar=None (alta)
+  SLIDES           Presentación de resultados               periodo=None fecha=2026-09-10 edgar=None (media)
+  NOTA             Nota de resultados (anexo 99.1 del 8-K)  periodo=None fecha=2026-09-10 edgar=True (alta)
+[3/8] Hechos XBRL
+  ejercicios ['FY2022', 'FY2023', 'FY2024', 'FY2025', 'FY2026'] · trimestres ['4T25', '1T26', '2T26', '3T26']
+[4/8] Extracción y contraste
+  solo_sec 257 · confirmado 83 · derivado 19 · no_aplica 47 · hueco 14 · solo_documento 2
+    no aplica · coste_ingresos: la compañía dejó de declarar CostOfRevenue, CostOfGoodsAndServicesSold en 2011, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+    no aplica · amortizacion_contenido: la compañía no declara ningún concepto us-gaap para esto en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+    no aplica · contenido: la compañía no declara ningún concepto us-gaap para esto en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+    no aplica · autocartera: la compañía no declara TreasuryStockValue, TreasuryStockCommonValue en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+    no aplica · fcf_compania: la compañía no declara ningún concepto us-gaap para esto en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+[5/8] Recortes de evidencia
+  8 recortes: 10K_20260531 p66, 10K_20260531 p67, 10K_20260531 p70, 10K_20260531 p91, 10Q_20260831 p3, 10Q_20260831 p4, 10Q_20260831 p6, 10Q_20260831 p7
+[6/8] Ficha, gobierno (con retratos), objetivos, regiones, riesgos, historial, precio, DCF, posición
+  retratos: 0 de 0 ejecutivos · 0 de 0 consejeros
+  auditoría de datos: 61 identidades cuadran · 1 no cuadran · 3 despejadas de su identidad · 1 sin datos suficientes
+    ≠ Beneficio neto = BPA diluido × Acciones diluidas · 3T26 · 4,760,000,000 frente a 4,680,000,000 (dif. 80,000,000) · las tres cifras se publican por separado: si no cuadran, o una está mal leída o mal escalada, o el BPA no se calcula sobre todo el beneficio —dividendo preferente, acciones emitidas a mitad de periodo—, o es el redondeo del BPA a céntimos sobre miles de millones de acciones.
+  riesgos: 23 epígrafes del Item 1A (págs. 17–36)
+  historial: 0 sorpresas de consenso (transcripción) · 0 frases de guía frente a real · 0 cartas de EDGAR → 0 previsiones frente a real · 4 trimestres de consenso según la bolsa
+    falta consenso: sin transcripción en el expediente: no hay tabla de consenso frente a real
+    falta guia_vs_real: la carta adjunta no compara el trimestre con la previsión de la compañía con palabras reconocibles
+    falta guias_anteriores: EDGAR no devolvió cartas con tabla de previsión: 0001193125-26-387905: el Exhibit 99 no trae la tabla de resumen con columna «Forecast»; 0001193125-26-265848: el Exhibit 99 no trae la tabla de resumen con columna «Forecast»; 0001193125-26-100148: el Exhibit 99 no trae la tabla de resumen con columna «Forecast»; 0001193125-25-314207: el Exhibit 99 no trae la tabla de resumen con columna «Forecast»; 0001193125-25-199175: el Exhibit 99 no trae la tabla de resumen con columna «Forecast»; 0000950170-25-084831: el Exhibit 99 no trae la tabla de resumen con columna «Forecast»; 0000950170-25-036295: el Exhibit 99 no trae la tabla de resumen con columna «Forecast»; 0000950170-24-134537: el Exhibit 99 no trae la tabla de resumen con columna «Forecast»; 0000950170-24-104753: el Exhibit 99 no trae la tabla de resumen con columna «Forecast»
+    falta carta 0001193125-26-387905: el Exhibit 99 no trae la tabla de resumen con columna «Forecast»
+    falta carta 0001193125-26-265848: el Exhibit 99 no trae la tabla de resumen con columna «Forecast»
+    falta carta 0001193125-26-100148: el Exhibit 99 no trae la tabla de resumen con columna «Forecast»
+    falta carta 0001193125-25-314207: el Exhibit 99 no trae la tabla de resumen con columna «Forecast»
+    falta carta 0001193125-25-199175: el Exhibit 99 no trae la tabla de resumen con columna «Forecast»
+    falta carta 0000950170-25-084831: el Exhibit 99 no trae la tabla de resumen con columna «Forecast»
+    falta carta 0000950170-25-036295: el Exhibit 99 no trae la tabla de resumen con columna «Forecast»
+    falta carta 0000950170-24-134537: el Exhibit 99 no trae la tabla de resumen con columna «Forecast»
+    falta carta 0000950170-24-104753: el Exhibit 99 no trae la tabla de resumen con columna «Forecast»
+  precio: 144.56 USD · Nasdaq (web del mercado), cierre del 23/09/2026; fuera de sesión se cruzó a 144,50 (4:56 PM ET), que no es el precio del informe
+  mercado: sesión Closed · cierre anterior 149.2 · cap. publicada 437111276160.0 · 52 s (114.5, 325.0) · 1Y target 240.0 · cierres pedidos 6 · ✓ el «cierre anterior» de la ficha (149,20) coincide con el histórico del 22/09/2026
+  consenso de la bolsa: 245.75 USD · 32 analistas · rango 110.0–400.0 · ≠ la ficha de Nasdaq dice «1 Year Target» 240,00 y su página de analistas 245,75: dos cifras de la misma bolsa para el mismo hecho
+  sección F (bolsa): cadena ✓ · institucional ✓ · insiders ✓ · short ✓ · IV (Yahoo, excepción) ✓ 4 vencimientos
+  comparables (industria de la bolsa «Computer Software: Prepackaged Software»): MSFT ✓, PLTR ✓, CRWD sin cuentas, SAP ✓, CRM ✓, SHOP ✓, NOW ✓, NET ✓, SNOW ✓, ADBE ✓, DDOG ✓
+  tamaño de mercado: 1 cifras declaradas por la compañía · faltan ['TAM'] · 7 conceptos de otro sector, no se cuentan como huecos
+  agregador: ROE 41.19% · ROA 6.36% · deuda total 169,143 M · EV/EBITDA 17.094 · PEG 0.83 · resultados 2026-12-10
+  próxima presentación: N/A
+  múltiplos TTM: PER N/A · EV / EBITDA 15.48≠ · EV / Ventas 7.32 · P / FCF -15.22 · PEG N/A
+  posición: posiciones\ORCL.json · 9 campos sin rellenar
+[7/8] Narrativa e informe
+  documentación complementaria: 19 piezas en 11 apartados · 8 recortes de estados junto a sus cuadros · 0 retratos
+[8/8] Doble comprobación, HTML y PDF
+  doble comprobación: 1606 cifras releídas · 0 desacuerdos
+  salida\ORCL\ORCL_tesis_2026-09-23.pdf · sha256 20e158f495d0f1d9
+  salida\ORCL\ORCL_tesis_2026-09-23.contraste.txt

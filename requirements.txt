@@ -1,0 +1,11 @@
+# Las dependencias que ya usa el SaaS (CLAUDE.md › Comandos), con las versiones con las que pasa la batería.
+# Nada nuevo: esta lista solo las fija para quien clone el repositorio. Python ≥ 3.11 (se desarrolla con 3.14).
+# Tras instalarlas: `python -m playwright install chromium` (el PDF se imprime con Chromium).
+jinja2==3.1.6
+pypdfium2==5.13.0
+playwright==1.61.0
+matplotlib==3.11.1
+pillow==12.3.0
+openpyxl==3.1.5
+pyyaml==6.0.3
+pytest==9.1.1

@@ -1,0 +1,20 @@
+{
+ "meta": {
+  "fecha_informe": "2026-09-26",
+  "analista": "Sergio",
+  "fecha_valoracion": "2026-09-25",
+  "tipo": "inicio_cobertura",
+  "nombre_presentacion": "Tesis Apple",
+  "sector": "software"
+ },
+ "pos": {
+  "checklist": [
+   {
+    "id": "variante",
+    "criterio": "Visión propia distinta de lo que descuenta el precio (reverse DCF), en dos frases",
+    "tipo": "manual",
+    "eliminatorio": true
+   }
+  ]
+ }
+}

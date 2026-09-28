@@ -1,6 +1,6 @@
 # tesis — tesis de inversión de Warrants & Co.
 App local http://127.0.0.1:8770 · Python ≥ 3.11 · sin IA en tiempo de ejecución.
-Hereda `../../CLAUDE.md`; donde choquen, manda este fichero.
+Hereda `../../CLAUDE.md` (copia en `docs/CLAUDE_warrants.md` para quien clone el repositorio); donde choquen, manda este fichero.
 
 ## No negociable
 1. Índice, títulos, numeración y anclas: solo `docs/spec/01_indice.yaml`.

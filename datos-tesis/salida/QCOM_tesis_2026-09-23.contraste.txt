@@ -1,0 +1,424 @@
+Contraste QCOM 2026-09-23 · resumen {'solo_sec': 213, 'confirmado': 81, 'derivado': 18, 'no_aplica': 75, 'hueco': 35}
+
+◐  ingresos               FY2021            33,566,000,000.00  sin contraste documental
+◐  ingresos               FY2022            44,200,000,000.00  sin contraste documental
+✓  ingresos               FY2023            35,820,000,000.00  contrastado con QCOM-09-28-25-FY2025-10-K-Final.pdf pág. 59
+✓  ingresos               FY2024            38,962,000,000.00  contrastado con QCOM-09-28-25-FY2025-10-K-Final.pdf pág. 59
+✓  ingresos               FY2025            44,284,000,000.00  contrastado con QCOM-09-28-25-FY2025-10-K-Final.pdf pág. 59
+∑  ingresos               3T25              11,271,000,000.00  
+◐  ingresos               4T25              12,252,000,000.00  sin contraste documental
+◐  ingresos               1T26              10,599,000,000.00  sin contraste documental
+✓  ingresos               2T26               9,947,000,000.00  contrastado con QCOM-Q3FY26-10-Q_Final.pdf pág. 5
+◐  coste_ingresos         FY2021            14,262,000,000.00  sin contraste documental
+◐  coste_ingresos         FY2022            18,635,000,000.00  sin contraste documental
+✓  coste_ingresos         FY2023            15,869,000,000.00  contrastado con QCOM-09-28-25-FY2025-10-K-Final.pdf pág. 59
+✓  coste_ingresos         FY2024            17,060,000,000.00  contrastado con QCOM-09-28-25-FY2025-10-K-Final.pdf pág. 59
+✓  coste_ingresos         FY2025            19,738,000,000.00  contrastado con QCOM-09-28-25-FY2025-10-K-Final.pdf pág. 59
+∑  coste_ingresos         3T25               5,034,000,000.00  
+◐  coste_ingresos         4T25               5,568,000,000.00  sin contraste documental
+◐  coste_ingresos         1T26               4,900,000,000.00  sin contraste documental
+✓  coste_ingresos         2T26               4,670,000,000.00  contrastado con QCOM-Q3FY26-10-Q_Final.pdf pág. 5
+—  marketing              FY2021                          N/A  la compañía no declara SellingAndMarketingExpense, MarketingExpense en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  marketing              FY2022                          N/A  la compañía no declara SellingAndMarketingExpense, MarketingExpense en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  marketing              FY2023                          N/A  la compañía no declara SellingAndMarketingExpense, MarketingExpense en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  marketing              FY2024                          N/A  la compañía no declara SellingAndMarketingExpense, MarketingExpense en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  marketing              FY2025                          N/A  la compañía no declara SellingAndMarketingExpense, MarketingExpense en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  marketing              3T25                            N/A  la compañía no declara SellingAndMarketingExpense, MarketingExpense en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  marketing              4T25                            N/A  la compañía no declara SellingAndMarketingExpense, MarketingExpense en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  marketing              1T26                            N/A  la compañía no declara SellingAndMarketingExpense, MarketingExpense en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  marketing              2T26                            N/A  la compañía no declara SellingAndMarketingExpense, MarketingExpense en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+◐  tecnologia             FY2021             7,176,000,000.00  sin contraste documental
+◐  tecnologia             FY2022             8,194,000,000.00  sin contraste documental
+✓  tecnologia             FY2023             8,818,000,000.00  contrastado con QCOM-09-28-25-FY2025-10-K-Final.pdf pág. 59
+✓  tecnologia             FY2024             8,893,000,000.00  contrastado con QCOM-09-28-25-FY2025-10-K-Final.pdf pág. 59
+✓  tecnologia             FY2025             9,042,000,000.00  contrastado con QCOM-09-28-25-FY2025-10-K-Final.pdf pág. 59
+∑  tecnologia             3T25               2,370,000,000.00  
+◐  tecnologia             4T25               2,453,000,000.00  sin contraste documental
+◐  tecnologia             1T26               2,463,000,000.00  sin contraste documental
+✓  tecnologia             2T26               2,607,000,000.00  contrastado con QCOM-Q3FY26-10-Q_Final.pdf pág. 5
+—  generales              FY2021                          N/A  la compañía no declara GeneralAndAdministrativeExpense en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  generales              FY2022                          N/A  la compañía no declara GeneralAndAdministrativeExpense en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  generales              FY2023                          N/A  la compañía no declara GeneralAndAdministrativeExpense en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  generales              FY2024                          N/A  la compañía no declara GeneralAndAdministrativeExpense en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  generales              FY2025                          N/A  la compañía no declara GeneralAndAdministrativeExpense en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  generales              3T25                            N/A  la compañía no declara GeneralAndAdministrativeExpense en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  generales              4T25                            N/A  la compañía no declara GeneralAndAdministrativeExpense en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  generales              1T26                            N/A  la compañía no declara GeneralAndAdministrativeExpense en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  generales              2T26                            N/A  la compañía no declara GeneralAndAdministrativeExpense en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+◐  ebit                   FY2021             9,789,000,000.00  sin contraste documental
+◐  ebit                   FY2022            15,860,000,000.00  sin contraste documental
+✓  ebit                   FY2023             7,788,000,000.00  contrastado con QCOM-09-28-25-FY2025-10-K-Final.pdf pág. 59
+✓  ebit                   FY2024            10,071,000,000.00  contrastado con QCOM-09-28-25-FY2025-10-K-Final.pdf pág. 59
+✓  ebit                   FY2025            12,355,000,000.00  contrastado con QCOM-09-28-25-FY2025-10-K-Final.pdf pág. 59
+∑  ebit                   3T25               2,918,000,000.00  
+◐  ebit                   4T25               3,366,000,000.00  sin contraste documental
+◐  ebit                   1T26               2,309,000,000.00  sin contraste documental
+✓  ebit                   2T26               1,626,000,000.00  contrastado con QCOM-Q3FY26-10-Q_Final.pdf pág. 5
+◐  intereses              FY2021               559,000,000.00  sin contraste documental
+◐  intereses              FY2022               490,000,000.00  sin contraste documental
+✓  intereses              FY2023               694,000,000.00  contrastado con QCOM-09-28-25-FY2025-10-K-Final.pdf pág. 59
+✓  intereses              FY2024               697,000,000.00  contrastado con QCOM-09-28-25-FY2025-10-K-Final.pdf pág. 59
+✓  intereses              FY2025               664,000,000.00  contrastado con QCOM-09-28-25-FY2025-10-K-Final.pdf pág. 59
+∑  intereses              3T25                 171,000,000.00  
+◐  intereses              4T25                 169,000,000.00  sin contraste documental
+◐  intereses              1T26                 171,000,000.00  sin contraste documental
+✓  intereses              2T26                 178,000,000.00  contrastado con QCOM-Q3FY26-10-Q_Final.pdf pág. 5
+◐  otros_financieros      FY2021             1,044,000,000.00  sin contraste documental
+◐  otros_financieros      FY2022              -372,000,000.00  sin contraste documental
+◐  otros_financieros      FY2023               349,000,000.00  sin contraste documental
+◐  otros_financieros      FY2024               962,000,000.00  sin contraste documental
+◐  otros_financieros      FY2025               972,000,000.00  sin contraste documental
+∑  otros_financieros      3T25                 224,000,000.00  
+◐  otros_financieros      4T25                 350,000,000.00  sin contraste documental
+◐  otros_financieros      1T26                  94,000,000.00  sin contraste documental
+◐  otros_financieros      2T26               1,014,000,000.00  sin contraste documental
+◐  bai                    FY2021            10,274,000,000.00  sin contraste documental
+◐  bai                    FY2022            14,998,000,000.00  sin contraste documental
+◐  bai                    FY2023             7,443,000,000.00  sin contraste documental
+◐  bai                    FY2024            10,336,000,000.00  sin contraste documental
+◐  bai                    FY2025            12,663,000,000.00  sin contraste documental
+∑  bai                    3T25               2,971,000,000.00  
+◐  bai                    4T25               3,547,000,000.00  sin contraste documental
+◐  bai                    1T26               2,232,000,000.00  sin contraste documental
+✓  bai                    2T26               2,462,000,000.00  contrastado con QCOM-Q3FY26-10-Q_Final.pdf pág. 5
+◐  impuestos              FY2021             1,231,000,000.00  sin contraste documental
+◐  impuestos              FY2022             2,012,000,000.00  sin contraste documental
+✓  impuestos              FY2023               104,000,000.00  contrastado con QCOM-09-28-25-FY2025-10-K-Final.pdf pág. 59
+✓  impuestos              FY2024               226,000,000.00  contrastado con QCOM-09-28-25-FY2025-10-K-Final.pdf pág. 59
+✓  impuestos              FY2025             7,122,000,000.00  contrastado con QCOM-09-28-25-FY2025-10-K-Final.pdf pág. 59
+∑  impuestos              3T25               6,088,000,000.00  
+◐  impuestos              4T25                 543,000,000.00  sin contraste documental
+◐  impuestos              1T26              -5,138,000,000.00  sin contraste documental
+◐  impuestos              2T26                 460,000,000.00  sin contraste documental
+◐  beneficio_neto         FY2021             9,043,000,000.00  sin contraste documental
+◐  beneficio_neto         FY2022            12,936,000,000.00  sin contraste documental
+✓  beneficio_neto         FY2023             7,232,000,000.00  contrastado con QCOM-09-28-25-FY2025-10-K-Final.pdf pág. 59
+✓  beneficio_neto         FY2024            10,142,000,000.00  contrastado con QCOM-09-28-25-FY2025-10-K-Final.pdf pág. 59
+✓  beneficio_neto         FY2025             5,541,000,000.00  contrastado con QCOM-09-28-25-FY2025-10-K-Final.pdf pág. 59
+∑  beneficio_neto         3T25              -3,117,000,000.00  
+◐  beneficio_neto         4T25               3,004,000,000.00  sin contraste documental
+◐  beneficio_neto         1T26               7,370,000,000.00  sin contraste documental
+✓  beneficio_neto         2T26               2,002,000,000.00  contrastado con QCOM-Q3FY26-10-Q_Final.pdf pág. 5
+◐  bpa_basico             FY2021                         7.99  sin contraste documental
+◐  bpa_basico             FY2022                        11.52  sin contraste documental
+✓  bpa_basico             FY2023                         6.47  contrastado con QCOM-09-28-25-FY2025-10-K-Final.pdf pág. 59
+✓  bpa_basico             FY2024                         9.09  contrastado con QCOM-09-28-25-FY2025-10-K-Final.pdf pág. 59
+✓  bpa_basico             FY2025                         5.05  contrastado con QCOM-09-28-25-FY2025-10-K-Final.pdf pág. 59
+—  bpa_basico             3T25                            N/A  companyfacts no trae bpa_basico para 3T25 en ningún 10-K/10-Q; ningún adjunto lo trae
+◐  bpa_basico             4T25                           2.81  sin contraste documental
+◐  bpa_basico             1T26                           6.92  sin contraste documental
+◐  bpa_basico             2T26                           1.89  sin contraste documental
+◐  bpa_diluido            FY2021                         7.87  sin contraste documental
+◐  bpa_diluido            FY2022                        11.37  sin contraste documental
+✓  bpa_diluido            FY2023                         6.42  contrastado con QCOM-09-28-25-FY2025-10-K-Final.pdf pág. 59
+✓  bpa_diluido            FY2024                         8.97  contrastado con QCOM-09-28-25-FY2025-10-K-Final.pdf pág. 59
+✓  bpa_diluido            FY2025                         5.01  contrastado con QCOM-09-28-25-FY2025-10-K-Final.pdf pág. 59
+—  bpa_diluido            3T25                            N/A  companyfacts no trae bpa_diluido para 3T25 en ningún 10-K/10-Q; ningún adjunto lo trae
+◐  bpa_diluido            4T25                           2.78  sin contraste documental
+◐  bpa_diluido            1T26                           6.88  sin contraste documental
+◐  bpa_diluido            2T26                           1.87  sin contraste documental
+◐  acciones_basicas       FY2021             1,131,000,000.00  sin contraste documental
+◐  acciones_basicas       FY2022             1,123,000,000.00  sin contraste documental
+✓  acciones_basicas       FY2023             1,117,000,000.00  contrastado con QCOM-09-28-25-FY2025-10-K-Final.pdf pág. 59
+✓  acciones_basicas       FY2024             1,116,000,000.00  contrastado con QCOM-09-28-25-FY2025-10-K-Final.pdf pág. 59
+✓  acciones_basicas       FY2025             1,096,000,000.00  contrastado con QCOM-09-28-25-FY2025-10-K-Final.pdf pág. 59
+—  acciones_basicas       3T25                            N/A  companyfacts no trae acciones_basicas para 3T25 en ningún 10-K/10-Q; ningún adjunto lo trae
+◐  acciones_basicas       4T25               1,070,000,000.00  sin contraste documental
+◐  acciones_basicas       1T26               1,066,000,000.00  sin contraste documental
+✓  acciones_basicas       2T26               1,057,000,000.00  contrastado con QCOM-Q3FY26-10-Q_Final.pdf pág. 5
+◐  acciones_diluidas      FY2021             1,149,000,000.00  sin contraste documental
+◐  acciones_diluidas      FY2022             1,137,000,000.00  sin contraste documental
+✓  acciones_diluidas      FY2023             1,126,000,000.00  contrastado con QCOM-09-28-25-FY2025-10-K-Final.pdf pág. 59
+✓  acciones_diluidas      FY2024             1,130,000,000.00  contrastado con QCOM-09-28-25-FY2025-10-K-Final.pdf pág. 59
+✓  acciones_diluidas      FY2025             1,105,000,000.00  contrastado con QCOM-09-28-25-FY2025-10-K-Final.pdf pág. 59
+—  acciones_diluidas      3T25                            N/A  companyfacts no trae acciones_diluidas para 3T25 en ningún 10-K/10-Q; ningún adjunto lo trae
+◐  acciones_diluidas      4T25               1,079,000,000.00  sin contraste documental
+◐  acciones_diluidas      1T26               1,072,000,000.00  sin contraste documental
+✓  acciones_diluidas      2T26               1,069,000,000.00  contrastado con QCOM-Q3FY26-10-Q_Final.pdf pág. 5
+◐  amortizacion           FY2021             1,582,000,000.00  sin contraste documental
+◐  amortizacion           FY2022             1,762,000,000.00  sin contraste documental
+◐  amortizacion           FY2023             1,809,000,000.00  sin contraste documental
+◐  amortizacion           FY2024             1,706,000,000.00  sin contraste documental
+◐  amortizacion           FY2025             1,602,000,000.00  sin contraste documental
+∑  amortizacion           3T25                 371,000,000.00  
+◐  amortizacion           4T25                 393,000,000.00  sin contraste documental
+—  amortizacion           1T26                            N/A  companyfacts no trae amortizacion para 1T26 en ningún 10-K/10-Q; ningún adjunto lo trae
+—  amortizacion           2T26                            N/A  companyfacts no trae amortizacion para 2T26 en ningún 10-K/10-Q; ningún adjunto lo trae
+—  amortizacion_contenido FY2021                          N/A  la compañía no declara ningún concepto us-gaap para esto en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  amortizacion_contenido FY2022                          N/A  la compañía no declara ningún concepto us-gaap para esto en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  amortizacion_contenido FY2023                          N/A  la compañía no declara ningún concepto us-gaap para esto en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  amortizacion_contenido FY2024                          N/A  la compañía no declara ningún concepto us-gaap para esto en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  amortizacion_contenido FY2025                          N/A  la compañía no declara ningún concepto us-gaap para esto en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  amortizacion_contenido 3T25                            N/A  la compañía no declara ningún concepto us-gaap para esto en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  amortizacion_contenido 4T25                            N/A  la compañía no declara ningún concepto us-gaap para esto en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  amortizacion_contenido 1T26                            N/A  la compañía no declara ningún concepto us-gaap para esto en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  amortizacion_contenido 2T26                            N/A  la compañía no declara ningún concepto us-gaap para esto en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+◐  sbc                    FY2021             1,663,000,000.00  sin contraste documental
+◐  sbc                    FY2022             2,031,000,000.00  sin contraste documental
+◐  sbc                    FY2023             2,484,000,000.00  sin contraste documental
+◐  sbc                    FY2024             2,648,000,000.00  sin contraste documental
+◐  sbc                    FY2025             2,783,000,000.00  sin contraste documental
+∑  sbc                    3T25                 663,000,000.00  
+◐  sbc                    4T25                 888,000,000.00  sin contraste documental
+—  sbc                    1T26                            N/A  companyfacts no trae sbc para 1T26 en ningún 10-K/10-Q; ningún adjunto lo trae
+—  sbc                    2T26                            N/A  companyfacts no trae sbc para 2T26 en ningún 10-K/10-Q; ningún adjunto lo trae
+◐  caja                   @2020-09-27        6,707,000,000.00  sin contraste documental
+◐  caja                   @2021-09-26        7,116,000,000.00  sin contraste documental
+◐  caja                   @2022-09-25        2,773,000,000.00  sin contraste documental
+◐  caja                   @2023-09-24        8,450,000,000.00  sin contraste documental
+✓  caja                   @2024-09-29        7,849,000,000.00  contrastado con QCOM-09-28-25-FY2025-10-K-Final.pdf pág. 58
+◐  caja                   @2025-06-29        5,448,000,000.00  sin contraste documental
+✓  caja                   @2025-09-28        5,520,000,000.00  contrastado con QCOM-09-28-25-FY2025-10-K-Final.pdf pág. 58
+◐  caja                   @2025-12-28        7,205,000,000.00  sin contraste documental
+◐  caja                   @2026-03-29        5,435,000,000.00  sin contraste documental
+✓  caja                   @2026-06-28        4,533,000,000.00  contrastado con QCOM-Q3FY26-10-Q_Final.pdf pág. 4
+◐  inversiones_cp         @2020-09-27        4,507,000,000.00  sin contraste documental
+◐  inversiones_cp         @2021-09-26        5,298,000,000.00  sin contraste documental
+◐  inversiones_cp         @2022-09-25        3,609,000,000.00  sin contraste documental
+◐  inversiones_cp         @2023-09-24        2,874,000,000.00  sin contraste documental
+✓  inversiones_cp         @2024-09-29        5,451,000,000.00  contrastado con QCOM-09-28-25-FY2025-10-K-Final.pdf pág. 58
+◐  inversiones_cp         @2025-06-29        4,563,000,000.00  sin contraste documental
+✓  inversiones_cp         @2025-09-28        4,635,000,000.00  contrastado con QCOM-09-28-25-FY2025-10-K-Final.pdf pág. 58
+◐  inversiones_cp         @2025-12-28        4,617,000,000.00  sin contraste documental
+◐  inversiones_cp         @2026-03-29        4,364,000,000.00  sin contraste documental
+✓  inversiones_cp         @2026-06-28        3,771,000,000.00  contrastado con QCOM-Q3FY26-10-Q_Final.pdf pág. 4
+◐  activo_corriente       @2020-09-27       18,519,000,000.00  sin contraste documental
+◐  activo_corriente       @2021-09-26       20,075,000,000.00  sin contraste documental
+◐  activo_corriente       @2022-09-25       20,724,000,000.00  sin contraste documental
+◐  activo_corriente       @2023-09-24       22,464,000,000.00  sin contraste documental
+✓  activo_corriente       @2024-09-29       25,231,000,000.00  contrastado con QCOM-09-28-25-FY2025-10-K-Final.pdf pág. 58
+◐  activo_corriente       @2025-06-29       24,913,000,000.00  sin contraste documental
+✓  activo_corriente       @2025-09-28       25,754,000,000.00  contrastado con QCOM-09-28-25-FY2025-10-K-Final.pdf pág. 58
+◐  activo_corriente       @2025-12-28       24,608,000,000.00  sin contraste documental
+◐  activo_corriente       @2026-03-29       23,112,000,000.00  sin contraste documental
+✓  activo_corriente       @2026-06-28       23,004,000,000.00  contrastado con QCOM-Q3FY26-10-Q_Final.pdf pág. 4
+—  contenido              @2020-09-27                     N/A  la compañía no declara ningún concepto us-gaap para esto en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  contenido              @2021-09-26                     N/A  la compañía no declara ningún concepto us-gaap para esto en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  contenido              @2022-09-25                     N/A  la compañía no declara ningún concepto us-gaap para esto en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  contenido              @2023-09-24                     N/A  la compañía no declara ningún concepto us-gaap para esto en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  contenido              @2024-09-29                     N/A  la compañía no declara ningún concepto us-gaap para esto en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  contenido              @2025-06-29                     N/A  la compañía no declara ningún concepto us-gaap para esto en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  contenido              @2025-09-28                     N/A  la compañía no declara ningún concepto us-gaap para esto en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  contenido              @2025-12-28                     N/A  la compañía no declara ningún concepto us-gaap para esto en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  contenido              @2026-03-29                     N/A  la compañía no declara ningún concepto us-gaap para esto en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  contenido              @2026-06-28                     N/A  la compañía no declara ningún concepto us-gaap para esto en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+◐  inmovilizado           @2020-09-27        3,711,000,000.00  sin contraste documental
+◐  inmovilizado           @2021-09-26        4,559,000,000.00  sin contraste documental
+◐  inmovilizado           @2022-09-25        5,168,000,000.00  sin contraste documental
+◐  inmovilizado           @2023-09-24        5,042,000,000.00  sin contraste documental
+◐  inmovilizado           @2024-09-29        4,665,000,000.00  sin contraste documental
+◐  inmovilizado           @2025-06-29        4,496,000,000.00  sin contraste documental
+◐  inmovilizado           @2025-09-28        4,690,000,000.00  sin contraste documental
+◐  inmovilizado           @2025-12-28        4,893,000,000.00  sin contraste documental
+◐  inmovilizado           @2026-03-29        5,071,000,000.00  sin contraste documental
+◐  inmovilizado           @2026-06-28        5,217,000,000.00  sin contraste documental
+◐  fondo_comercio         @2020-09-27        6,323,000,000.00  sin contraste documental
+◐  fondo_comercio         @2021-09-26        7,246,000,000.00  sin contraste documental
+◐  fondo_comercio         @2022-09-25       10,508,000,000.00  sin contraste documental
+◐  fondo_comercio         @2023-09-24       10,642,000,000.00  sin contraste documental
+✓  fondo_comercio         @2024-09-29       10,799,000,000.00  contrastado con QCOM-09-28-25-FY2025-10-K-Final.pdf pág. 58
+◐  fondo_comercio         @2025-06-29       11,366,000,000.00  sin contraste documental
+✓  fondo_comercio         @2025-09-28       11,358,000,000.00  contrastado con QCOM-09-28-25-FY2025-10-K-Final.pdf pág. 58
+◐  fondo_comercio         @2025-12-28       14,183,000,000.00  sin contraste documental
+◐  fondo_comercio         @2026-03-29       14,251,000,000.00  sin contraste documental
+✓  fondo_comercio         @2026-06-28       14,274,000,000.00  contrastado con QCOM-Q3FY26-10-Q_Final.pdf pág. 4
+◐  intangibles            @2020-09-27        1,653,000,000.00  sin contraste documental
+◐  intangibles            @2021-09-26        1,458,000,000.00  sin contraste documental
+◐  intangibles            @2022-09-25        1,882,000,000.00  sin contraste documental
+◐  intangibles            @2023-09-24        1,408,000,000.00  sin contraste documental
+◐  intangibles            @2024-09-29        1,244,000,000.00  sin contraste documental
+◐  intangibles            @2025-06-29        1,202,000,000.00  sin contraste documental
+◐  intangibles            @2025-09-28        1,148,000,000.00  sin contraste documental
+◐  intangibles            @2025-12-28        1,627,000,000.00  sin contraste documental
+◐  intangibles            @2026-03-29        1,575,000,000.00  sin contraste documental
+◐  intangibles            @2026-06-28        1,510,000,000.00  sin contraste documental
+◐  total_activo           @2020-09-27       35,594,000,000.00  sin contraste documental
+◐  total_activo           @2021-09-26       41,240,000,000.00  sin contraste documental
+◐  total_activo           @2022-09-25       49,014,000,000.00  sin contraste documental
+◐  total_activo           @2023-09-24       51,040,000,000.00  sin contraste documental
+✓  total_activo           @2024-09-29       55,154,000,000.00  contrastado con QCOM-09-28-25-FY2025-10-K-Final.pdf pág. 58
+◐  total_activo           @2025-06-29       54,862,000,000.00  sin contraste documental
+✓  total_activo           @2025-09-28       50,143,000,000.00  contrastado con QCOM-09-28-25-FY2025-10-K-Final.pdf pág. 58
+◐  total_activo           @2025-12-28       53,034,000,000.00  sin contraste documental
+◐  total_activo           @2026-03-29       57,136,000,000.00  sin contraste documental
+✓  total_activo           @2026-06-28       57,367,000,000.00  contrastado con QCOM-Q3FY26-10-Q_Final.pdf pág. 4
+◐  pasivo_corriente       @2020-09-27        8,672,000,000.00  sin contraste documental
+◐  pasivo_corriente       @2021-09-26       11,951,000,000.00  sin contraste documental
+◐  pasivo_corriente       @2022-09-25       11,866,000,000.00  sin contraste documental
+◐  pasivo_corriente       @2023-09-24        9,628,000,000.00  sin contraste documental
+✓  pasivo_corriente       @2024-09-29       10,504,000,000.00  contrastado con QCOM-09-28-25-FY2025-10-K-Final.pdf pág. 58
+◐  pasivo_corriente       @2025-06-29        7,800,000,000.00  sin contraste documental
+✓  pasivo_corriente       @2025-09-28        9,144,000,000.00  contrastado con QCOM-09-28-25-FY2025-10-K-Final.pdf pág. 58
+◐  pasivo_corriente       @2025-12-28        9,822,000,000.00  sin contraste documental
+◐  pasivo_corriente       @2026-03-29        9,767,000,000.00  sin contraste documental
+✓  pasivo_corriente       @2026-06-28       11,413,000,000.00  contrastado con QCOM-Q3FY26-10-Q_Final.pdf pág. 4
+◐  deuda_cp               @2020-09-27          500,000,000.00  sin contraste documental
+◐  deuda_cp               @2021-09-26        2,044,000,000.00  sin contraste documental
+◐  deuda_cp               @2022-09-25        1,945,000,000.00  sin contraste documental
+◐  deuda_cp               @2023-09-24          914,000,000.00  sin contraste documental
+✓  deuda_cp               @2024-09-29        1,364,000,000.00  contrastado con QCOM-09-28-25-FY2025-10-K-Final.pdf pág. 58
+◐  deuda_cp               @2025-06-29                    0.00  sin contraste documental
+✓  deuda_cp               @2025-09-28                    0.00  contrastado con QCOM-09-28-25-FY2025-10-K-Final.pdf pág. 58
+—  deuda_cp               @2025-12-28                     N/A  companyfacts no trae deuda_cp para @2025-12-28 en ningún 10-K/10-Q; ningún adjunto lo trae
+◐  deuda_cp               @2026-03-29          498,000,000.00  sin contraste documental
+✓  deuda_cp               @2026-06-28        2,489,000,000.00  contrastado con QCOM-Q3FY26-10-Q_Final.pdf pág. 4
+◐  deuda_lp               @2020-09-27       15,226,000,000.00  sin contraste documental
+◐  deuda_lp               @2021-09-26       13,701,000,000.00  sin contraste documental
+◐  deuda_lp               @2022-09-25       13,537,000,000.00  sin contraste documental
+◐  deuda_lp               @2023-09-24       14,484,000,000.00  sin contraste documental
+✓  deuda_lp               @2024-09-29       13,270,000,000.00  contrastado con QCOM-09-28-25-FY2025-10-K-Final.pdf pág. 58
+◐  deuda_lp               @2025-06-29       14,788,000,000.00  sin contraste documental
+✓  deuda_lp               @2025-09-28       14,811,000,000.00  contrastado con QCOM-09-28-25-FY2025-10-K-Final.pdf pág. 58
+◐  deuda_lp               @2025-12-28       14,817,000,000.00  sin contraste documental
+◐  deuda_lp               @2026-03-29       14,772,000,000.00  sin contraste documental
+✓  deuda_lp               @2026-06-28       12,781,000,000.00  contrastado con QCOM-Q3FY26-10-Q_Final.pdf pág. 4
+◐  arrendamientos         @2020-09-27          371,000,000.00  sin contraste documental
+◐  arrendamientos         @2021-09-26          428,000,000.00  sin contraste documental
+◐  arrendamientos         @2022-09-25          573,000,000.00  sin contraste documental
+◐  arrendamientos         @2023-09-24          571,000,000.00  sin contraste documental
+◐  arrendamientos         @2024-09-29          708,000,000.00  sin contraste documental
+—  arrendamientos         @2025-06-29                     N/A  companyfacts no trae arrendamientos para @2025-06-29 en ningún 10-K/10-Q; ningún adjunto lo trae
+◐  arrendamientos         @2025-09-28          730,000,000.00  sin contraste documental
+—  arrendamientos         @2025-12-28                     N/A  companyfacts no trae arrendamientos para @2025-12-28 en ningún 10-K/10-Q; ningún adjunto lo trae
+—  arrendamientos         @2026-03-29                     N/A  companyfacts no trae arrendamientos para @2026-03-29 en ningún 10-K/10-Q; ningún adjunto lo trae
+—  arrendamientos         @2026-06-28                     N/A  companyfacts no trae arrendamientos para @2026-06-28 en ningún 10-K/10-Q; ningún adjunto lo trae
+—  pasivo_no_corriente    @2020-09-27                     N/A  la compañía no declara LiabilitiesNoncurrent en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  pasivo_no_corriente    @2021-09-26                     N/A  la compañía no declara LiabilitiesNoncurrent en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  pasivo_no_corriente    @2022-09-25                     N/A  la compañía no declara LiabilitiesNoncurrent en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  pasivo_no_corriente    @2023-09-24                     N/A  la compañía no declara LiabilitiesNoncurrent en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  pasivo_no_corriente    @2024-09-29                     N/A  la compañía no declara LiabilitiesNoncurrent en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  pasivo_no_corriente    @2025-06-29                     N/A  la compañía no declara LiabilitiesNoncurrent en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  pasivo_no_corriente    @2025-09-28                     N/A  la compañía no declara LiabilitiesNoncurrent en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  pasivo_no_corriente    @2025-12-28                     N/A  la compañía no declara LiabilitiesNoncurrent en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  pasivo_no_corriente    @2026-03-29                     N/A  la compañía no declara LiabilitiesNoncurrent en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  pasivo_no_corriente    @2026-06-28                     N/A  la compañía no declara LiabilitiesNoncurrent en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+◐  pasivo_total           @2020-09-27       29,517,000,000.00  sin contraste documental
+◐  pasivo_total           @2021-09-26       31,290,000,000.00  sin contraste documental
+◐  pasivo_total           @2022-09-25       31,001,000,000.00  sin contraste documental
+◐  pasivo_total           @2023-09-24       29,459,000,000.00  sin contraste documental
+✓  pasivo_total           @2024-09-29       28,880,000,000.00  contrastado con QCOM-09-28-25-FY2025-10-K-Final.pdf pág. 58
+◐  pasivo_total           @2025-06-29       27,653,000,000.00  sin contraste documental
+✓  pasivo_total           @2025-09-28       28,937,000,000.00  contrastado con QCOM-09-28-25-FY2025-10-K-Final.pdf pág. 58
+◐  pasivo_total           @2025-12-28       29,961,000,000.00  sin contraste documental
+◐  pasivo_total           @2026-03-29       29,858,000,000.00  sin contraste documental
+✓  pasivo_total           @2026-06-28       29,709,000,000.00  contrastado con QCOM-Q3FY26-10-Q_Final.pdf pág. 4
+◐  patrimonio             @2020-09-27        6,077,000,000.00  sin contraste documental
+◐  patrimonio             @2021-09-26        9,950,000,000.00  sin contraste documental
+◐  patrimonio             @2022-09-25       18,013,000,000.00  sin contraste documental
+◐  patrimonio             @2023-09-24       21,581,000,000.00  sin contraste documental
+✓  patrimonio             @2024-09-29       26,274,000,000.00  contrastado con QCOM-09-28-25-FY2025-10-K-Final.pdf pág. 58
+◐  patrimonio             @2025-06-29       27,209,000,000.00  sin contraste documental
+✓  patrimonio             @2025-09-28       21,206,000,000.00  contrastado con QCOM-09-28-25-FY2025-10-K-Final.pdf pág. 58
+◐  patrimonio             @2025-12-28       23,073,000,000.00  sin contraste documental
+◐  patrimonio             @2026-03-29       27,278,000,000.00  sin contraste documental
+✓  patrimonio             @2026-06-28       27,658,000,000.00  contrastado con QCOM-Q3FY26-10-Q_Final.pdf pág. 4
+—  autocartera            @2020-09-27                     N/A  la compañía no declara TreasuryStockValue, TreasuryStockCommonValue en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  autocartera            @2021-09-26                     N/A  la compañía no declara TreasuryStockValue, TreasuryStockCommonValue en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  autocartera            @2022-09-25                     N/A  la compañía no declara TreasuryStockValue, TreasuryStockCommonValue en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  autocartera            @2023-09-24                     N/A  la compañía no declara TreasuryStockValue, TreasuryStockCommonValue en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  autocartera            @2024-09-29                     N/A  la compañía no declara TreasuryStockValue, TreasuryStockCommonValue en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  autocartera            @2025-06-29                     N/A  la compañía no declara TreasuryStockValue, TreasuryStockCommonValue en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  autocartera            @2025-09-28                     N/A  la compañía no declara TreasuryStockValue, TreasuryStockCommonValue en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  autocartera            @2025-12-28                     N/A  la compañía no declara TreasuryStockValue, TreasuryStockCommonValue en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  autocartera            @2026-03-29                     N/A  la compañía no declara TreasuryStockValue, TreasuryStockCommonValue en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  autocartera            @2026-06-28                     N/A  la compañía no declara TreasuryStockValue, TreasuryStockCommonValue en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+◐  acciones_circulacion   @2020-09-27        1,131,000,000.00  sin contraste documental
+◐  acciones_circulacion   @2021-09-26        1,125,000,000.00  sin contraste documental
+◐  acciones_circulacion   @2022-09-25        1,121,000,000.00  sin contraste documental
+◐  acciones_circulacion   @2023-09-24        1,114,000,000.00  sin contraste documental
+◐  acciones_circulacion   @2024-09-29        1,113,000,000.00  sin contraste documental
+◐  acciones_circulacion   @2025-06-29        1,084,000,000.00  sin contraste documental
+◐  acciones_circulacion   @2025-09-28        1,074,000,000.00  sin contraste documental
+◐  acciones_circulacion   @2025-12-28        1,074,000,000.00  sin contraste documental
+◐  acciones_circulacion   @2026-03-29        1,059,000,000.00  sin contraste documental
+◐  acciones_circulacion   @2026-06-28        1,057,000,000.00  sin contraste documental
+◐  cfo                    FY2021            10,536,000,000.00  sin contraste documental
+◐  cfo                    FY2022             9,096,000,000.00  sin contraste documental
+✓  cfo                    FY2023            11,299,000,000.00  contrastado con QCOM-09-28-25-FY2025-10-K-Final.pdf pág. 61
+✓  cfo                    FY2024            12,202,000,000.00  contrastado con QCOM-09-28-25-FY2025-10-K-Final.pdf pág. 61
+✓  cfo                    FY2025            14,012,000,000.00  contrastado con QCOM-09-28-25-FY2025-10-K-Final.pdf pág. 61
+∑  cfo                    3T25               3,996,000,000.00  
+◐  cfo                    4T25               4,965,000,000.00  sin contraste documental
+—  cfo                    1T26                            N/A  companyfacts no trae cfo para 1T26 en ningún 10-K/10-Q; ningún adjunto lo trae
+—  cfo                    2T26                            N/A  companyfacts no trae cfo para 2T26 en ningún 10-K/10-Q; ningún adjunto lo trae
+◐  capex                  FY2021             1,888,000,000.00  sin contraste documental
+◐  capex                  FY2022             2,262,000,000.00  sin contraste documental
+✓  capex                  FY2023             1,450,000,000.00  contrastado con QCOM-09-28-25-FY2025-10-K-Final.pdf pág. 61
+✓  capex                  FY2024             1,041,000,000.00  contrastado con QCOM-09-28-25-FY2025-10-K-Final.pdf pág. 61
+✓  capex                  FY2025             1,192,000,000.00  contrastado con QCOM-09-28-25-FY2025-10-K-Final.pdf pág. 61
+∑  capex                  3T25                 407,000,000.00  
+◐  capex                  4T25                 549,000,000.00  sin contraste documental
+—  capex                  1T26                            N/A  companyfacts no trae capex para 1T26 en ningún 10-K/10-Q; ningún adjunto lo trae
+—  capex                  2T26                            N/A  companyfacts no trae capex para 2T26 en ningún 10-K/10-Q; ningún adjunto lo trae
+◐  cfi                    FY2021            -3,356,000,000.00  sin contraste documental
+◐  cfi                    FY2022            -5,804,000,000.00  sin contraste documental
+◐  cfi                    FY2023               762,000,000.00  sin contraste documental
+◐  cfi                    FY2024            -3,623,000,000.00  sin contraste documental
+◐  cfi                    FY2025              -800,000,000.00  sin contraste documental
+∑  cfi                    3T25                -471,000,000.00  
+◐  cfi                    4T25              -1,721,000,000.00  sin contraste documental
+—  cfi                    1T26                            N/A  companyfacts no trae cfi para 1T26 en ningún 10-K/10-Q; ningún adjunto lo trae
+—  cfi                    2T26                            N/A  companyfacts no trae cfi para 2T26 en ningún 10-K/10-Q; ningún adjunto lo trae
+◐  cff                    FY2021            -6,798,000,000.00  sin contraste documental
+◐  cff                    FY2022            -7,196,000,000.00  sin contraste documental
+◐  cff                    FY2023            -6,663,000,000.00  sin contraste documental
+◐  cff                    FY2024            -9,269,000,000.00  sin contraste documental
+◐  cff                    FY2025           -13,196,000,000.00  sin contraste documental
+∑  cff                    3T25              -3,436,000,000.00  
+◐  cff                    4T25              -3,882,000,000.00  sin contraste documental
+—  cff                    1T26                            N/A  companyfacts no trae cff para 1T26 en ningún 10-K/10-Q; ningún adjunto lo trae
+—  cff                    2T26                            N/A  companyfacts no trae cff para 2T26 en ningún 10-K/10-Q; ningún adjunto lo trae
+◐  dividendos             FY2021             3,008,000,000.00  sin contraste documental
+◐  dividendos             FY2022             3,212,000,000.00  sin contraste documental
+✓  dividendos             FY2023             3,462,000,000.00  contrastado con QCOM-09-28-25-FY2025-10-K-Final.pdf pág. 61
+✓  dividendos             FY2024             3,687,000,000.00  contrastado con QCOM-09-28-25-FY2025-10-K-Final.pdf pág. 61
+✓  dividendos             FY2025             3,805,000,000.00  contrastado con QCOM-09-28-25-FY2025-10-K-Final.pdf pág. 61
+∑  dividendos             3T25                 957,000,000.00  
+◐  dividendos             4T25                 949,000,000.00  sin contraste documental
+—  dividendos             1T26                            N/A  companyfacts no trae dividendos para 1T26 en ningún 10-K/10-Q; ningún adjunto lo trae
+—  dividendos             2T26                            N/A  companyfacts no trae dividendos para 2T26 en ningún 10-K/10-Q; ningún adjunto lo trae
+◐  recompras              FY2021             3,366,000,000.00  sin contraste documental
+◐  recompras              FY2022             3,129,000,000.00  sin contraste documental
+◐  recompras              FY2023             2,973,000,000.00  sin contraste documental
+◐  recompras              FY2024             4,121,000,000.00  sin contraste documental
+◐  recompras              FY2025             8,791,000,000.00  sin contraste documental
+∑  recompras              3T25               2,444,000,000.00  
+◐  recompras              4T25               2,650,000,000.00  sin contraste documental
+—  recompras              1T26                            N/A  companyfacts no trae recompras para 1T26 en ningún 10-K/10-Q; ningún adjunto lo trae
+—  recompras              2T26                            N/A  companyfacts no trae recompras para 2T26 en ningún 10-K/10-Q; ningún adjunto lo trae
+—  adquisiciones          FY2021                          N/A  la compañía dejó de declarar PaymentsToAcquireBusinessesNetOfCashAcquired en 2011, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  adquisiciones          FY2022                          N/A  la compañía dejó de declarar PaymentsToAcquireBusinessesNetOfCashAcquired en 2011, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  adquisiciones          FY2023                          N/A  la compañía dejó de declarar PaymentsToAcquireBusinessesNetOfCashAcquired en 2011, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  adquisiciones          FY2024                          N/A  la compañía dejó de declarar PaymentsToAcquireBusinessesNetOfCashAcquired en 2011, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  adquisiciones          FY2025                          N/A  la compañía dejó de declarar PaymentsToAcquireBusinessesNetOfCashAcquired en 2011, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  adquisiciones          3T25                            N/A  la compañía dejó de declarar PaymentsToAcquireBusinessesNetOfCashAcquired en 2011, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  adquisiciones          4T25                            N/A  la compañía dejó de declarar PaymentsToAcquireBusinessesNetOfCashAcquired en 2011, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  adquisiciones          1T26                            N/A  la compañía dejó de declarar PaymentsToAcquireBusinessesNetOfCashAcquired en 2011, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  adquisiciones          2T26                            N/A  la compañía dejó de declarar PaymentsToAcquireBusinessesNetOfCashAcquired en 2011, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+◐  emision_deuda          FY2021                         0.00  sin contraste documental
+◐  emision_deuda          FY2022             1,477,000,000.00  sin contraste documental
+◐  emision_deuda          FY2023             1,880,000,000.00  sin contraste documental
+◐  emision_deuda          FY2024                         0.00  sin contraste documental
+◐  emision_deuda          FY2025             1,487,000,000.00  sin contraste documental
+∑  emision_deuda          3T25                           0.00  
+—  emision_deuda          4T25                            N/A  la SEC no presenta el cuarto trimestre como tal; ningún adjunto lo trae
+—  emision_deuda          1T26                            N/A  companyfacts no trae emision_deuda para 1T26 en ningún 10-K/10-Q; ningún adjunto lo trae
+—  emision_deuda          2T26                            N/A  companyfacts no trae emision_deuda para 2T26 en ningún 10-K/10-Q; ningún adjunto lo trae
+◐  amortizacion_deuda     FY2021                         0.00  sin contraste documental
+◐  amortizacion_deuda     FY2022             1,540,000,000.00  sin contraste documental
+—  amortizacion_deuda     FY2023                          N/A  companyfacts no trae amortizacion_deuda para FY2023 en ningún 10-K/10-Q; ningún adjunto lo trae
+—  amortizacion_deuda     FY2024                          N/A  companyfacts no trae amortizacion_deuda para FY2024 en ningún 10-K/10-Q; ningún adjunto lo trae
+—  amortizacion_deuda     FY2025                          N/A  companyfacts no trae amortizacion_deuda para FY2025 en ningún 10-K/10-Q; ningún adjunto lo trae
+—  amortizacion_deuda     3T25                            N/A  companyfacts no trae amortizacion_deuda para 3T25 en ningún 10-K/10-Q; ningún adjunto lo trae
+—  amortizacion_deuda     4T25                            N/A  la SEC no presenta el cuarto trimestre como tal; ningún adjunto lo trae
+—  amortizacion_deuda     1T26                            N/A  companyfacts no trae amortizacion_deuda para 1T26 en ningún 10-K/10-Q; ningún adjunto lo trae
+—  amortizacion_deuda     2T26                            N/A  companyfacts no trae amortizacion_deuda para 2T26 en ningún 10-K/10-Q; ningún adjunto lo trae
+—  fcf_compania           FY2021                          N/A  la compañía no declara ningún concepto us-gaap para esto en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  fcf_compania           FY2022                          N/A  la compañía no declara ningún concepto us-gaap para esto en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  fcf_compania           FY2023                          N/A  la compañía no declara ningún concepto us-gaap para esto en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  fcf_compania           FY2024                          N/A  la compañía no declara ningún concepto us-gaap para esto en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  fcf_compania           FY2025                          N/A  la compañía no declara ningún concepto us-gaap para esto en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  fcf_compania           3T25                            N/A  la compañía no declara ningún concepto us-gaap para esto en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  fcf_compania           4T25                            N/A  la compañía no declara ningún concepto us-gaap para esto en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  fcf_compania           1T26                            N/A  la compañía no declara ningún concepto us-gaap para esto en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  fcf_compania           2T26                            N/A  la compañía no declara ningún concepto us-gaap para esto en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.

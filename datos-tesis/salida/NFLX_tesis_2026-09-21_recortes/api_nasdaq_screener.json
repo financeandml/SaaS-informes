@@ -1,0 +1,76 @@
+{
+ "industria": "Consumer Electronics/Video Chains",
+ "filas_de_la_industria": [
+  {
+   "symbol": "BBY",
+   "name": "Best Buy Co. Inc. Common Stock",
+   "lastsale": "$93.22",
+   "netchange": "0.37",
+   "pctchange": "0.398%",
+   "volume": "2631293",
+   "marketCap": "19550816008.00",
+   "country": "United States",
+   "ipoyear": "",
+   "industry": "Consumer Electronics/Video Chains",
+   "sector": "Consumer Discretionary",
+   "url": "/market-activity/stocks/bby"
+  },
+  {
+   "symbol": "CNVS",
+   "name": "Cineverse Corp. Class A Common Stock",
+   "lastsale": "$2.10",
+   "netchange": "-0.02",
+   "pctchange": "-0.943%",
+   "volume": "106738",
+   "marketCap": "49919913.00",
+   "country": "United States",
+   "ipoyear": "",
+   "industry": "Consumer Electronics/Video Chains",
+   "sector": "Consumer Discretionary",
+   "url": "/market-activity/stocks/cnvs"
+  },
+  {
+   "symbol": "IQ",
+   "name": "iQIYI Inc. American Depositary Shares",
+   "lastsale": "$1.01",
+   "netchange": "0.00",
+   "pctchange": "0.00%",
+   "volume": "14164357",
+   "marketCap": "974674982.00",
+   "country": "China",
+   "ipoyear": "2018",
+   "industry": "Consumer Electronics/Video Chains",
+   "sector": "Consumer Discretionary",
+   "url": "/market-activity/stocks/iq"
+  },
+  {
+   "symbol": "IZM",
+   "name": "ICZOOM Group Inc. Class A Ordinary Shares",
+   "lastsale": "$1.18",
+   "netchange": "-0.08",
+   "pctchange": "-6.349%",
+   "volume": "37023",
+   "marketCap": "2836274.00",
+   "country": "China",
+   "ipoyear": "2023",
+   "industry": "Consumer Electronics/Video Chains",
+   "sector": "Consumer Discretionary",
+   "url": "/market-activity/stocks/izm"
+  },
+  {
+   "symbol": "NFLX",
+   "name": "Netflix Inc. Common Stock",
+   "lastsale": "$73.36",
+   "netchange": "1.57",
+   "pctchange": "2.187%",
+   "volume": "36898343",
+   "marketCap": "305466614631.00",
+   "country": "United States",
+   "ipoyear": "2002",
+   "industry": "Consumer Electronics/Video Chains",
+   "sector": "Consumer Discretionary",
+   "url": "/market-activity/stocks/nflx"
+  }
+ ],
+ "filas_totales_del_screener": 7132
+}

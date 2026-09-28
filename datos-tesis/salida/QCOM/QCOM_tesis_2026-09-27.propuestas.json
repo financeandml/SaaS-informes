@@ -1,0 +1,32 @@
+{
+ "parrafos": [
+  {
+   "id": "resumen_factual",
+   "titulo": "Párrafo factual del resumen ejecutivo",
+   "frases": [
+    [
+     "En el 3T FY26, los ingresos fueron de 9.947 mln USD, dentro del rango de la guía de la compañía (9.200–10.000 mln USD).",
+     "8-K 29/07/2026, Ex. 99.1"
+    ],
+    [
+     "En el ejercicio 2025, la compañía facturó 44.284 mln USD con un margen operativo del 27,9 % (+2,1 p. p. frente al ejercicio anterior).",
+     "10-K 05/11/2025"
+    ],
+    [
+     "La guía vigente de la compañía para el 4T FY26 sitúa los ingresos entre 9.700 y 10.500 mln USD.",
+     "8-K 29/07/2026, Ex. 99.1"
+    ],
+    [
+     "Al cierre del 3T FY26, la deuda neta era de 6.966 mln USD, 0,5 veces el EBITDA del ejercicio 2025.",
+     "10-Q 29/07/2026"
+    ],
+    [
+     "La retribución al accionista del ejercicio 2025, entre dividendos y recompras, sumó 12.596 mln USD: el 98 % del flujo de caja libre.",
+     "10-K 05/11/2025"
+    ]
+   ],
+   "huella": "7d5f7c051d9a8210",
+   "estado": "aceptado"
+  }
+ ]
+}

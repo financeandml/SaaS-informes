@@ -1,0 +1,16 @@
+{
+ "SEC_DEF-14A_2025-11-18_0001193125-25-220801.pdf": {
+  "url": "https://www.sec.gov/Archives/edgar/data/1341439/000119312525220801/d72066ddef14a.htm",
+  "accession": "0001193125-25-220801",
+  "formulario": "DEF 14A",
+  "presentado": "2025-09-26",
+  "periodo": "2025-11-18"
+ },
+ "SEC_8-K_2026-09-10_ex99-1_0001193125-26-387905.pdf": {
+  "url": "https://www.sec.gov/Archives/edgar/data/1341439/000119312526387905/orcl-ex99_1.htm",
+  "accession": "0001193125-26-387905",
+  "formulario": "8-K",
+  "presentado": "2026-09-10",
+  "periodo": "2026-09-10"
+ }
+}

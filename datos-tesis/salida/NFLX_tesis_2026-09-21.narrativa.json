@@ -1,0 +1,1163 @@
+{
+ "redactor": "claude-opus-5 (sesión de Claude Code, 17/09/2026) a partir del dossier del expediente",
+ "fecha": "2026-09-17",
+ "resumen": [
+  [
+   {
+    "texto": "Netflix es uno de los principales servicios de entretenimiento del mundo —series, películas, juegos y programación en directo— y opera como un único segmento cuyos ingresos proceden principalmente de las cuotas mensuales de suscripción.",
+    "apoyos": [
+     {
+      "documento": "10K_20251231",
+      "pagina": 4,
+      "ancla": "one of the world's leading entertainment services offering TV series, films, games"
+     },
+     {
+      "documento": "10K_20251231",
+      "pagina": 4,
+      "ancla": "Our revenues are primarily derived from monthly membership fees"
+     }
+    ],
+    "cifras": []
+   },
+   {
+    "texto": "Su estrategia declarada es crecer globalmente dentro de los parámetros de su objetivo de margen operativo.",
+    "apoyos": [
+     {
+      "documento": "10K_20251231",
+      "pagina": 4,
+      "ancla": "grow our business globally within the parameters of our operating margin target"
+     }
+    ],
+    "cifras": []
+   },
+   {
+    "texto": "En 2025 superó los 325 millones de suscripciones de pago y los ingresos publicitarios se multiplicaron por más de 2,5 hasta superar los 1.500 M USD.",
+    "apoyos": [
+     {
+      "documento": "PROXY",
+      "pagina": 9,
+      "ancla": "surpassed 325 million paid memberships"
+     },
+     {
+      "documento": "PROXY",
+      "pagina": 9,
+      "ancla": "rose more than 2.5 times to over $1.5 billion"
+     }
+    ],
+    "cifras": []
+   },
+   {
+    "texto": "A 31/12/2025 tenía unos 16.000 empleados a tiempo completo, el 68 % de ellos en Estados Unidos y Canadá.",
+    "apoyos": [
+     {
+      "documento": "10K_20251231",
+      "pagina": 5,
+      "ancla": "we had approximately 16,000 full-time employees"
+     },
+     {
+      "documento": "10K_20251231",
+      "pagina": 5,
+      "ancla": "10,900 (68%) were located in the United States and Canada"
+     }
+    ],
+    "cifras": []
+   }
+  ],
+  [
+   {
+    "texto": "En el 2T26 los ingresos crecieron un 13 % interanual hasta 12.560 M USD y el margen operativo fue del 33,4 %, ambos en línea con la guía de la compañía.",
+    "apoyos": [
+     {
+      "documento": "CARTA_20260630",
+      "pagina": 1,
+      "ancla": "Q2 revenue grew 13% year over year"
+     },
+     {
+      "documento": "10Q_20260630",
+      "pagina": 27,
+      "ancla": "Revenues $ 12,559,938 $ 11,079,166"
+     }
+    ],
+    "cifras": [
+     "ingresos:2T26",
+     "margen_ebit:2T26"
+    ]
+   },
+   {
+    "texto": "El beneficio neto del trimestre fue de 3.401 M USD, 0,80 USD por acción diluida (+11 %), ligeramente por encima de la previsión.",
+    "apoyos": [
+     {
+      "documento": "CARTA_20260630",
+      "pagina": 2,
+      "ancla": "Diluted EPS for the quarter amounted to $0.80 vs. $0.72 in Q2'25 (+11% year over year)"
+     },
+     {
+      "documento": "10Q_20260630",
+      "pagina": 27,
+      "ancla": "Net income $ 3,401,414 $ 3,125,413"
+     }
+    ],
+    "cifras": [
+     "beneficio_neto:2T26",
+     "bpa_diluido:2T26"
+    ]
+   },
+   {
+    "texto": "El primer semestre incluye un ingreso extraordinario: la indemnización de 2.800 M USD cobrada en el primer trimestre por la terminación del acuerdo con Warner Bros. Discovery, registrada en «Interest and other income (expense)», que explica que el beneficio neto del 1T26 (5.283 M USD) no sea comparable con el de otros trimestres.",
+    "apoyos": [
+     {
+      "documento": "10Q_20260630",
+      "pagina": 13,
+      "ancla": "paid a $2.8 billion termination fee owed to Netflix"
+     },
+     {
+      "documento": "10Q_20260630",
+      "pagina": 13,
+      "ancla": "recorded in \"Interest and other income (expense)\""
+     }
+    ],
+    "cifras": [
+     "beneficio_neto:1T26"
+    ]
+   },
+   {
+    "texto": "En el ejercicio 2025 los ingresos fueron de 45.183 M USD (+16 %), el resultado operativo de 13.327 M USD (margen del 29,5 %) y el beneficio neto de 10.981 M USD.",
+    "apoyos": [
+     {
+      "documento": "10K_20251231",
+      "pagina": 23,
+      "ancla": "Total revenues $ 45,183,036 $ 39,000,966"
+     },
+     {
+      "documento": "10K_20251231",
+      "pagina": 23,
+      "ancla": "Operating margin 29.5 % 26.7 % 20.6 %"
+     }
+    ],
+    "cifras": [
+     "ingresos:FY2025",
+     "ebit:FY2025",
+     "margen_ebit:FY2025",
+     "beneficio_neto:FY2025"
+    ]
+   },
+   {
+    "texto": "El margen operativo subió unos tres puntos porque los ingresos crecieron más que el coste de los ingresos, el marketing y los gastos generales.",
+    "apoyos": [
+     {
+      "documento": "10K_20251231",
+      "pagina": 23,
+      "ancla": "growth in revenues outpacing the growth in cost of revenues, sales and marketing, and general and administrative expenses"
+     }
+    ],
+    "cifras": []
+   }
+  ],
+  [
+   {
+    "texto": "Para 2026 la compañía ha estrechado su previsión de ingresos a 51.000–51.400 M USD (crecimiento del 13–14 %) y mantiene un margen operativo previsto del 31,5 %, frente al 29,5 % de 2025.",
+    "apoyos": [
+     {
+      "documento": "CARTA_20260630",
+      "pagina": 2,
+      "ancla": "we are narrowing our revenue forecast to $51.0-$51.4B, which represents 13%-14% growth"
+     },
+     {
+      "documento": "CARTA_20260630",
+      "pagina": 2,
+      "ancla": "operating margin of 31.5% for 2026"
+     }
+    ],
+    "cifras": []
+   },
+   {
+    "texto": "La previsión implica un crecimiento del resultado operativo superior al 20 % en 2026, con unos 3.000 M USD de ingresos publicitarios, aproximadamente el doble que en 2025.",
+    "apoyos": [
+     {
+      "documento": "CARTA_20260630",
+      "pagina": 2,
+      "ancla": "Our forecast implies annual operating income growth of 20%+ for 2026"
+     },
+     {
+      "documento": "CARTA_20260630",
+      "pagina": 2,
+      "ancla": "projected rough doubling of our ads revenue to approximately $3 billion"
+     }
+    ],
+    "cifras": []
+   },
+   {
+    "texto": "Para el 3T26 guía ingresos de 12.860 M USD (+12 %, +11 % a tipo de cambio constante) y un margen operativo del 33,2 %, frente al 28,2 % del 3T25.",
+    "apoyos": [
+     {
+      "documento": "CARTA_20260630",
+      "pagina": 2,
+      "ancla": "For Q3, we expect revenue growth of 12% (or 11% F/X neutral)"
+     },
+     {
+      "documento": "CARTA_20260630",
+      "pagina": 1,
+      "ancla": "Revenue $11,079 $11,510 $12,051 $12,250 $12,560 $12,860"
+     }
+    ],
+    "cifras": []
+   },
+   {
+    "texto": "Espera un flujo de caja libre de unos 12.500 M USD en 2026 y una ratio de gasto de caja en contenido sobre amortización de en torno a 1,1 veces.",
+    "apoyos": [
+     {
+      "documento": "CARTA_20260630",
+      "pagina": 6,
+      "ancla": "we continue to expect FCF of approximately $12.5B"
+     },
+     {
+      "documento": "CARTA_20260630",
+      "pagina": 6,
+      "ancla": "annual cash content spend to amortization ratio of ~1.1x"
+     }
+    ],
+    "cifras": []
+   }
+  ],
+  [
+   {
+    "texto": "A 30/06/2026 la caja y equivalentes eran 9.099 M USD y la deuda bruta 14.309 M USD, con lo que la deuda neta queda en 5.181 M USD; la compañía prevé refinanciar los 1.000 M USD que vencen este año.",
+    "apoyos": [
+     {
+      "documento": "10Q_20260630",
+      "pagina": 34,
+      "ancla": "Short-term and long-term debt 14,309,306 14,462,836"
+     },
+     {
+      "documento": "CARTA_20260630",
+      "pagina": 6,
+      "ancla": "We have $1B of debt maturing later this year, which we plan to refinance"
+     }
+    ],
+    "cifras": [
+     "caja:@2026-06-30",
+     "deuda_bruta:@2026-06-30",
+     "deuda_neta:@2026-06-30"
+    ]
+   },
+   {
+    "texto": "En el 2T26 recompró acciones por 4.714 M USD, su mayor trimestre de recompras, y a 30/06/2026 le quedaban 27.100 M USD de autorización tras los 25.000 M USD adicionales aprobados en abril.",
+    "apoyos": [
+     {
+      "documento": "CARTA_20260630",
+      "pagina": 6,
+      "ancla": "our largest quarter of share repurchases, and we currently have $27.1B of capacity"
+     },
+     {
+      "documento": "10Q_20260630",
+      "pagina": 34,
+      "ancla": "authorized the repurchase of an additional $25 billion"
+     }
+    ],
+    "cifras": [
+     "recompras:2T26"
+    ]
+   },
+   {
+    "texto": "El flujo de caja operativo del 2T26 fue de 1.744 M USD y el flujo de caja libre de 1.525 M USD, por debajo del 2T25 por mayores pagos de impuestos ligados en parte a la indemnización de Warner Bros.",
+    "apoyos": [
+     {
+      "documento": "CARTA_20260630",
+      "pagina": 6,
+      "ancla": "This included higher cash tax payments due in part to"
+     },
+     {
+      "documento": "CARTA_20260630",
+      "pagina": 1,
+      "ancla": "Free Cash Flow $2,267 $2,660 $1,872 $5,094 $1,525"
+     }
+    ],
+    "cifras": [
+     "cfo:2T26",
+     "fcf:2T26"
+    ]
+   },
+   {
+    "texto": "Nunca ha declarado ni pagado dividendos en efectivo y no prevé hacerlo: la retribución al accionista se hace por recompras.",
+    "apoyos": [
+     {
+      "documento": "10K_20251231",
+      "pagina": 21,
+      "ancla": "We have never declared or paid any cash dividends on our capital stock"
+     }
+    ],
+    "cifras": []
+   }
+  ]
+ ],
+ "pilares": [
+  {
+   "titulo": "Escala global con mercado por penetrar",
+   "frases": [
+    {
+     "texto": "La dirección cifra su audiencia en cerca de 1.000 millones de personas y su penetración por debajo del 45 % de unos 800 millones de hogares direccionables.",
+     "apoyos": [
+      {
+       "documento": "CALL_20260630",
+       "pagina": 5,
+       "ancla": "We're under 45% penetrated into addressable households around the world"
+      },
+      {
+       "documento": "CALL_20260630",
+       "pagina": 5,
+       "ancla": "entertaining an audience approaching 1 billion people"
+      }
+     ],
+     "cifras": []
+    },
+    {
+     "texto": "Estima que captura solo un 7 % de un mercado de ingresos direccionable de unos 670.000 M USD y en torno al 5 % de la cuota de visionado de televisión global.",
+     "apoyos": [
+      {
+       "documento": "CALL_20260630",
+       "pagina": 5,
+       "ancla": "just 7% of addressable revenue market"
+      },
+      {
+       "documento": "CALL_20260630",
+       "pagina": 5,
+       "ancla": "only about 5% of TV view share globally"
+      }
+     ],
+     "cifras": []
+    },
+    {
+     "texto": "En el 2T26 los ingresos crecieron a doble dígito en las cuatro regiones: UCAN 5.432 M USD (+10 %), EMEA 4.034 M USD (+14 %), LATAM 1.584 M USD (+21 %) y APAC 1.510 M USD (+16 %).",
+     "apoyos": [
+      {
+       "documento": "CARTA_20260630",
+       "pagina": 7,
+       "ancla": "Revenue $4,929 $5,072 $5,339 $5,245 $5,432"
+      },
+      {
+       "documento": "CARTA_20260630",
+       "pagina": 2,
+       "ancla": "We delivered double digit revenue growth in all regions"
+      }
+     ],
+     "cifras": []
+    },
+    {
+     "texto": "Los ingresos anuales pasaron de 33.723 M USD en 2023 a 45.183 M USD en 2025.",
+     "apoyos": [
+      {
+       "documento": "10K_20251231",
+       "pagina": 23,
+       "ancla": "Total revenues $ 45,183,036 $ 39,000,966 $ 33,723,297"
+      }
+     ],
+     "cifras": [
+      "ingresos:FY2023",
+      "ingresos:FY2025"
+     ]
+    }
+   ],
+   "riesgo": {
+    "texto": "Riesgo (10-K, Item 1A): «If our efforts to attract and retain members are not successful, our business will be adversely affected», en un mercado del vídeo de entretenimiento «intensely competitive and subject to rapid change».",
+    "apoyos": [
+     {
+      "documento": "10K_20251231",
+      "pagina": 7,
+      "ancla": "If our efforts to attract and retain members are not successful"
+     },
+     {
+      "documento": "10K_20251231",
+      "pagina": 7,
+      "ancla": "intensely competitive and subject to rapid change"
+     }
+    ],
+    "cifras": []
+   }
+  },
+  {
+   "titulo": "Palanca operativa: margen en expansión con disciplina de contenido",
+   "frases": [
+    {
+     "texto": "El margen operativo pasó del 20,6 % en 2023 al 26,7 % en 2024 y al 29,5 % en 2025.",
+     "apoyos": [
+      {
+       "documento": "10K_20251231",
+       "pagina": 23,
+       "ancla": "Operating margin 29.5 % 26.7 % 20.6 %"
+      }
+     ],
+     "cifras": [
+      "margen_ebit:FY2023",
+      "margen_ebit:FY2024",
+      "margen_ebit:FY2025"
+     ]
+    },
+    {
+     "texto": "El coste de los ingresos bajó del 58 % de las ventas en 2023 al 52 % en 2025, aunque 2025 incluyó 1.116 M USD más de otros costes, sobre todo por liquidaciones de impuestos no sobre beneficios en Brasil.",
+     "apoyos": [
+      {
+       "documento": "10K_20251231",
+       "pagina": 25,
+       "ancla": "As a percentage of revenues 52 % 54 % 58 %"
+      },
+      {
+       "documento": "10K_20251231",
+       "pagina": 25,
+       "ancla": "$1,116 million increase in other cost of revenues, primarily driven by non-income tax assessments in Brazil"
+      }
+     ],
+     "cifras": []
+    },
+    {
+     "texto": "La dirección prevé que el gasto en contenido crezca en torno al 10 % en 2026, por encima del 8 % medio de los últimos cinco años y por debajo del 14 % de la última década, y espera que el margen operativo alcance el 31,5 %.",
+     "apoyos": [
+      {
+       "documento": "CALL_20260630",
+       "pagina": 6,
+       "ancla": "we're forecasting content expense up about 10% this year"
+      },
+      {
+       "documento": "CARTA_20260630",
+       "pagina": 2,
+       "ancla": "We continue to anticipate an operating margin of 31.5% for 2026"
+      }
+     ],
+     "cifras": []
+    },
+    {
+     "texto": "El resultado operativo del 2T26 creció un 11 % hasta 4.193 M USD, menos que los ingresos, porque la amortización de contenido crece más en la primera mitad del año.",
+     "apoyos": [
+      {
+       "documento": "CARTA_20260630",
+       "pagina": 2,
+       "ancla": "Operating income in Q2 was $4.2B, up 11% year over year"
+      },
+      {
+       "documento": "CARTA_20260630",
+       "pagina": 2,
+       "ancla": "our content amortization growth is higher in the first half of the year"
+      }
+     ],
+     "cifras": [
+      "ebit:2T26"
+     ]
+    }
+   ],
+   "riesgo": {
+    "texto": "Riesgo (10-K, Item 1A): «The long-term and largely fixed cost nature of our content commitments may limit our operating flexibility and could adversely affect our liquidity»; las obligaciones contractuales de contenido sumaban 25.107 M USD a 30/06/2026.",
+    "apoyos": [
+     {
+      "documento": "10K_20251231",
+      "pagina": 14,
+      "ancla": "The long-term and largely fixed cost nature of our content commitments"
+     },
+     {
+      "documento": "10Q_20260630",
+      "pagina": 35,
+      "ancla": "Content obligations $ 25,106,705"
+     }
+    ],
+    "cifras": []
+   }
+  },
+  {
+   "titulo": "Nuevas palancas de monetización: publicidad, precio y directo",
+   "frases": [
+    {
+     "texto": "La publicidad, que en 2025 superó los 1.500 M USD tras multiplicarse por más de 2,5, debe rondar los 3.000 M USD en 2026 según la compañía.",
+     "apoyos": [
+      {
+       "documento": "PROXY",
+       "pagina": 9,
+       "ancla": "rose more than 2.5 times to over $1.5 billion"
+      },
+      {
+       "documento": "CARTA_20260630",
+       "pagina": 5,
+       "ancla": "we remain on track to deliver approximately $3 billion in ads revenue in 2026"
+      }
+     ],
+     "cifras": []
+    },
+    {
+     "texto": "Las subidas de precio del primer semestre en mercados como Estados Unidos, México y España han tenido un impacto coherente con cambios anteriores y con las expectativas de la dirección.",
+     "apoyos": [
+      {
+       "documento": "CARTA_20260630",
+       "pagina": 5,
+       "ancla": "Our first half price changes, in markets like the US, Mexico and Spain"
+      }
+     ],
+     "cifras": []
+    },
+    {
+     "texto": "A 31/12/2025 el precio de los planes de pago iba del equivalente a 1 a 37 USD al mes, y el plan con anuncios cuesta 8,99 USD en Estados Unidos.",
+     "apoyos": [
+      {
+       "documento": "10K_20251231",
+       "pagina": 23,
+       "ancla": "pricing on our paid plans ranged from the U.S. dollar equivalent of $1 to $37 per month"
+      },
+      {
+       "documento": "CALL_20260630",
+       "pagina": 10,
+       "ancla": "our ads plan at $8.99 in the United States"
+      }
+     ],
+     "cifras": []
+    },
+    {
+     "texto": "El directo supondrá algo más del 5 % del gasto en contenido de 2026 y solo alrededor del 1 % de las horas vistas, pero seis de los diez mayores días de altas de los últimos cinco años fueron eventos en directo.",
+     "apoyos": [
+      {
+       "documento": "CARTA_20260630",
+       "pagina": 3,
+       "ancla": "live programming to account for just over 5% of our content spend but only ~1% of view hours"
+      },
+      {
+       "documento": "CARTA_20260630",
+       "pagina": 3,
+       "ancla": "live event programming accounted for six of the top 10 new member sign-up days"
+      }
+     ],
+     "cifras": []
+    }
+   ],
+   "riesgo": {
+    "texto": "Riesgo (10-K, Item 1A): «Our advertising offering is subject to various risks and uncertainties, which may adversely affect our business»; la compañía reconoce «limited experience and operating history offering advertising».",
+    "apoyos": [
+     {
+      "documento": "10K_20251231",
+      "pagina": 10,
+      "ancla": "Our advertising offering is subject to various risks and uncertainties"
+     },
+     {
+      "documento": "10K_20251231",
+      "pagina": 10,
+      "ancla": "limited experience and operating history offering advertising"
+     }
+    ],
+    "cifras": []
+   }
+  },
+  {
+   "titulo": "Generación de caja y retribución al accionista por recompras",
+   "frases": [
+    {
+     "texto": "En 2025 el flujo de caja operativo fue de 10.149 M USD y el flujo de caja libre de 9.461 M USD, con un capex de solo 688 M USD.",
+     "apoyos": [
+      {
+       "documento": "10K_20251231",
+       "pagina": 44,
+       "ancla": "Net cash provided by operating activities 10,149,273 7,361,364 7,274,301"
+      },
+      {
+       "documento": "10K_20251231",
+       "pagina": 44,
+       "ancla": "Purchases of property and equipment (688,220)"
+      }
+     ],
+     "cifras": [
+      "cfo:FY2025",
+      "fcf:FY2025",
+      "capex:FY2025"
+     ]
+    },
+    {
+     "texto": "Recompró 86,5 millones de acciones por 9.127 M USD en 2025 y otros 66,4 millones por 5.900 M USD en el primer semestre de 2026.",
+     "apoyos": [
+      {
+       "documento": "10K_20251231",
+       "pagina": 29,
+       "ancla": "the Company repurchased 86,536,215 shares of common stock"
+      },
+      {
+       "documento": "10Q_20260630",
+       "pagina": 34,
+       "ancla": "the Company repurchased 66,431,786 shares of common stock for an aggregate amount of $5.9 billion"
+      }
+     ],
+     "cifras": [
+      "recompras:FY2025"
+     ]
+    },
+    {
+     "texto": "La deuda bruta bajó de 15.583 M USD a cierre de 2024 a 14.309 M USD a 30/06/2026, y los vencimientos de principal e intereses de los próximos doce meses suman 3.149 M USD.",
+     "apoyos": [
+      {
+       "documento": "10K_20251231",
+       "pagina": 28,
+       "ancla": "Short-term and long-term debt 14,462,836 15,582,804"
+      },
+      {
+       "documento": "10Q_20260630",
+       "pagina": 34,
+       "ancla": "due in the next twelve months is $3,149 million"
+      }
+     ],
+     "cifras": [
+      "deuda_bruta:@2024-12-31",
+      "deuda_bruta:@2026-06-30"
+     ]
+    },
+    {
+     "texto": "La compañía se declara «constructora, no compradora» y mantiene un listón muy alto para grandes operaciones de M&A; prioriza la reinversión y devuelve el exceso de caja mediante recompras.",
+     "apoyos": [
+      {
+       "documento": "CALL_20260630",
+       "pagina": 12,
+       "ancla": "we are primarily builders, not buyers"
+      },
+      {
+       "documento": "CARTA_20260630",
+       "pagina": 6,
+       "ancla": "returning excess cash to shareholders via share repurchases"
+      }
+     ],
+     "cifras": []
+    }
+   ],
+   "riesgo": {
+    "texto": "Riesgo (10-K, Item 1A): «We have a substantial amount of indebtedness and other obligations, including streaming content obligations», y la compañía advierte de que podría buscar capital adicional con dilución para el accionista.",
+    "apoyos": [
+     {
+      "documento": "10K_20251231",
+      "pagina": 15,
+      "ancla": "We have a substantial amount of indebtedness and other obligations, including streaming content obligations"
+     },
+     {
+      "documento": "10K_20251231",
+      "pagina": 15,
+      "ancla": "We may seek additional capital that may result in stockholder dilution"
+     }
+    ],
+    "cifras": []
+   }
+  },
+  {
+   "titulo": "Tecnología e IA en producto, producción y publicidad",
+   "frases": [
+    {
+     "texto": "Los flujos de trabajo de IA generativa se han usado en unos 300 títulos en 2026, sobre todo en posproducción, y la dirección afirma obtener mayor calidad más rápido y a menor coste que con los métodos tradicionales.",
+     "apoyos": [
+      {
+       "documento": "CARTA_20260630",
+       "pagina": 4,
+       "ancla": "GenAI workflows have been used in roughly 300 of our titles"
+      },
+      {
+       "documento": "CARTA_20260630",
+       "pagina": 4,
+       "ancla": "deliver higher quality output more quickly and at a lower cost than traditional methods"
+      }
+     ],
+     "cifras": []
+    },
+    {
+     "texto": "En la serie documental «American Experiment», 17 minutos de metraje mejorado con IA se produjeron el doble de rápido y a la mitad de coste que con las opciones anteriores.",
+     "apoyos": [
+      {
+       "documento": "CALL_20260630",
+       "pagina": 12,
+       "ancla": "That series features 17 minutes of AI-enhanced footage"
+      },
+      {
+       "documento": "CALL_20260630",
+       "pagina": 12,
+       "ancla": "produced twice as fast and at half the cost of previous options"
+      }
+     ],
+     "cifras": []
+    },
+    {
+     "texto": "El gasto en tecnología y desarrollo fue de 3.391 M USD en 2025, el 8 % de los ingresos, y la compañía usa modelos de lenguaje para mejorar el descubrimiento de títulos y la búsqueda.",
+     "apoyos": [
+      {
+       "documento": "10K_20251231",
+       "pagina": 26,
+       "ancla": "Technology and development $ 3,391,390"
+      },
+      {
+       "documento": "CARTA_20260630",
+       "pagina": 4,
+       "ancla": "We are leveraging LLMs to improve title discovery"
+      }
+     ],
+     "cifras": [
+      "tecnologia:FY2025"
+     ]
+    },
+    {
+     "texto": "Los jugadores activos mensuales de juegos en la nube se han multiplicado por 11 en ocho meses, en un mercado de consumo de videojuegos que la compañía cifra en unos 150.000 M USD.",
+     "apoyos": [
+      {
+       "documento": "CALL_20260630",
+       "pagina": 11,
+       "ancla": "monthly active players for cloud games have increased 11x"
+      },
+      {
+       "documento": "CALL_20260630",
+       "pagina": 11,
+       "ancla": "roughly $150 billion in consumer spend"
+      }
+     ],
+     "cifras": []
+    }
+   ],
+   "riesgo": {
+    "texto": "Riesgo (10-K, Item 1A): «Any significant disruption in or unauthorized access to our computer systems or those of third parties that we utilize in our operations», incluida la dependencia de Amazon Web Services para operar partes del servicio.",
+    "apoyos": [
+     {
+      "documento": "10K_20251231",
+      "pagina": 12,
+      "ancla": "Any significant disruption in or unauthorized access to our computer systems"
+     },
+     {
+      "documento": "10K_20251231",
+      "pagina": 13,
+      "ancla": "We rely upon Amazon Web Services to operate certain aspects of our service"
+     }
+    ],
+    "cifras": []
+   }
+  }
+ ],
+ "bloques": {
+  "21": [
+   [
+    {
+     "texto": "La compañía sitúa su mercado total en unos 800 millones de hogares direccionables y en unos 670.000 M USD de ingresos direccionables en los países y categorías en los que opera hoy.",
+     "apoyos": [
+      {
+       "documento": "CALL_20260630",
+       "pagina": 5,
+       "ancla": "It's roughly 800 million addressable households"
+      },
+      {
+       "documento": "CALL_20260630",
+       "pagina": 5,
+       "ancla": "It's about $670 billion of addressable revenue in the countries and categories in which we operate today"
+      }
+     ],
+     "cifras": []
+    },
+    {
+     "texto": "De ese mercado captura, según sus propias cifras, menos del 45 % de los hogares y en torno al 7 % de los ingresos, con alrededor del 5 % de la cuota de visionado de televisión global.",
+     "apoyos": [
+      {
+       "documento": "CALL_20260630",
+       "pagina": 5,
+       "ancla": "We're under 45% penetrated into addressable households around the world"
+      },
+      {
+       "documento": "CALL_20260630",
+       "pagina": 5,
+       "ancla": "just 7% of addressable revenue market"
+      },
+      {
+       "documento": "CALL_20260630",
+       "pagina": 5,
+       "ancla": "only about 5% of TV view share globally"
+      }
+     ],
+     "cifras": []
+    },
+    {
+     "texto": "Su audiencia se aproxima a 1.000 millones de personas y en 2025 superó los 325 millones de suscripciones de pago.",
+     "apoyos": [
+      {
+       "documento": "CALL_20260630",
+       "pagina": 5,
+       "ancla": "entertaining an audience approaching 1 billion people"
+      },
+      {
+       "documento": "PROXY",
+       "pagina": 9,
+       "ancla": "surpassed 325 million paid memberships"
+      }
+     ],
+     "cifras": []
+    },
+    {
+     "texto": "En el mercado adyacente de los videojuegos la dirección cita un gasto de consumo de unos 150.000 M USD, sin China ni Rusia y sin contar publicidad.",
+     "apoyos": [
+      {
+       "documento": "CALL_20260630",
+       "pagina": 11,
+       "ancla": "roughly $150 billion in consumer spend ex China, ex Russia"
+      }
+     ],
+     "cifras": []
+    }
+   ],
+   [
+    {
+     "texto": "El mercado obtenido —lo que la compañía factura— fueron 45.183 M USD en 2025 y 24.810 M USD en el primer semestre de 2026, con 12.560 M USD en el 2T26.",
+     "apoyos": [
+      {
+       "documento": "10K_20251231",
+       "pagina": 23,
+       "ancla": "Total revenues $ 45,183,036 $ 39,000,966"
+      },
+      {
+       "documento": "10Q_20260630",
+       "pagina": 26,
+       "ancla": "Revenues $ 12,559,938 $ 11,079,166 $ 24,809,695"
+      }
+     ],
+     "cifras": [
+      "ingresos:FY2025",
+      "ingresos:2T26"
+     ]
+    },
+    {
+     "texto": "Los adjuntos no descomponen el mercado con las etiquetas TAM, SAM y SOM ni dan el mercado direccionable por región: lo impreso es lo que la dirección declaró en la conferencia de resultados, que habla de mucho recorrido de crecimiento por delante.",
+     "apoyos": [
+      {
+       "documento": "CALL_20260630",
+       "pagina": 5,
+       "ancla": "we believe we've got lots and lots of runway for solid growth ahead of us"
+      }
+     ],
+     "cifras": []
+    }
+   ]
+  ],
+  "22": [
+   [
+    {
+     "texto": "El 10-K describe el mercado del vídeo de entretenimiento como intensamente competitivo y sujeto a cambios rápidos, y enumera como competidores la televisión lineal, otros servicios de streaming (incluidos los de contenido pirata), los videojuegos, las plataformas de contenido abierto y las redes sociales.",
+     "apoyos": [
+      {
+       "documento": "10K_20251231",
+       "pagina": 4,
+       "ancla": "The market for entertainment video is intensely competitive and subject to rapid change"
+      },
+      {
+       "documento": "10K_20251231",
+       "pagina": 4,
+       "ancla": "linear television, streaming entertainment providers (including those that provide pirated content)"
+      }
+     ],
+     "cifras": []
+    },
+    {
+     "texto": "También compite por la obtención de contenido, licenciado y original, con otros proveedores de vídeo y productores.",
+     "apoyos": [
+      {
+       "documento": "10K_20251231",
+       "pagina": 4,
+       "ancla": "We also compete against entertainment video providers and content producers in obtaining content for our service"
+      }
+     ],
+     "cifras": []
+    },
+    {
+     "texto": "Las únicas cuotas que los adjuntos cuantifican son las que declara la propia compañía: alrededor del 5 % del visionado de televisión global y un 7 % del mercado de ingresos direccionable.",
+     "apoyos": [
+      {
+       "documento": "CALL_20260630",
+       "pagina": 5,
+       "ancla": "only about 5% of TV view share globally"
+      },
+      {
+       "documento": "CALL_20260630",
+       "pagina": 5,
+       "ancla": "just 7% of addressable revenue market"
+      }
+     ],
+     "cifras": []
+    }
+   ],
+   [
+    {
+     "texto": "Según la dirección, los suscriptores estadounidenses pagan lo mínimo por hora de visionado frente a ofertas SVOD comparables y en algunos casos pagarían el doble por un servicio competidor.",
+     "apoyos": [
+      {
+       "documento": "CALL_20260630",
+       "pagina": 10,
+       "ancla": "they pay the least per hour of viewing compared to comparable SVOD offerings"
+      },
+      {
+       "documento": "CALL_20260630",
+       "pagina": 10,
+       "ancla": "In some cases, they would have to pay twice as much per hour for a competitive service"
+      }
+     ],
+     "cifras": []
+    },
+    {
+     "texto": "La transcripción recoge que el sector lleva más de diez años consolidándose y que la compañía se considera constructora, no compradora.",
+     "apoyos": [
+      {
+       "documento": "CALL_20260630",
+       "pagina": 11,
+       "ancla": "the industry has been consolidating for over 10 years"
+      },
+      {
+       "documento": "CALL_20260630",
+       "pagina": 12,
+       "ancla": "we are primarily builders, not buyers"
+      }
+     ],
+     "cifras": []
+    },
+    {
+     "texto": "El 10-K no nombra competidores concretos ni publica cuotas de mercado de terceros; los comparables que siguen son los valores que la bolsa agrupa con la compañía, no una selección del sistema.",
+     "apoyos": [
+      {
+       "documento": "10K_20251231",
+       "pagina": 4,
+       "ancla": "We compete with a broad set of activities for consumers' leisure time"
+      }
+     ],
+     "cifras": []
+    }
+   ]
+  ],
+  "23": [
+   [
+    {
+     "texto": "La compañía atribuye su ventaja a la escala: la mayor audiencia y la más comprometida del mundo, que amortiza la programación sobre una base global y le da, según dice, mejor retorno por título y liderazgo en monetización.",
+     "apoyos": [
+      {
+       "documento": "CALL_20260630",
+       "pagina": 11,
+       "ancla": "We have the biggest, most engaged audience in the world"
+      },
+      {
+       "documento": "CALL_20260630",
+       "pagina": 11,
+       "ancla": "We have better programming ROI because we amortize across this global footprint"
+      }
+     ],
+     "cifras": []
+    },
+    {
+     "texto": "Invierte miles de millones al año en tecnología —3.391 M USD en 2025— y cita como resultado el descubrimiento y la personalización, además de su propia red de entrega de contenido, Open Connect.",
+     "apoyos": [
+      {
+       "documento": "CALL_20260630",
+       "pagina": 11,
+       "ancla": "we spend billions of dollars every year"
+      },
+      {
+       "documento": "10K_20251231",
+       "pagina": 26,
+       "ancla": "Technology and development $ 3,391,390"
+      },
+      {
+       "documento": "10K_20251231",
+       "pagina": 25,
+       "ancla": "We have built our own Open Connect network"
+      }
+     ],
+     "cifras": [
+      "tecnologia:FY2025"
+     ]
+    },
+    {
+     "texto": "Los planes de pago iban del equivalente a 1 a 37 USD al mes a 31/12/2025 y la dirección afirma una retención líder en la industria.",
+     "apoyos": [
+      {
+       "documento": "10K_20251231",
+       "pagina": 23,
+       "ancla": "pricing on our paid plans ranged from the U.S. dollar equivalent of $1 to $37 per month"
+      },
+      {
+       "documento": "CALL_20260630",
+       "pagina": 10,
+       "ancla": "We've got retention, which is industry-leading"
+      }
+     ],
+     "cifras": []
+    },
+    {
+     "texto": "El contenido no inglés supuso más de un tercio del visionado en el primer semestre de 2026 y la compañía produce series y películas en más de 50 países.",
+     "apoyos": [
+      {
+       "documento": "CARTA_20260630",
+       "pagina": 3,
+       "ancla": "Non-English content again drove more than a third of all viewing this half"
+      },
+      {
+       "documento": "CARTA_20260630",
+       "pagina": 6,
+       "ancla": "producing TV series and films in more than 50 countries"
+      }
+     ],
+     "cifras": []
+    }
+   ],
+   [
+    {
+     "texto": "Sostenibilidad: el propio 10-K advierte de que estudios y titulares de derechos pueden negarse a licenciar contenido en términos aceptables, y de que atraer y retener miembros es condición del negocio.",
+     "apoyos": [
+      {
+       "documento": "10K_20251231",
+       "pagina": 11,
+       "ancla": "If studios, content providers or other rights holders refuse to license streaming content"
+      },
+      {
+       "documento": "10K_20251231",
+       "pagina": 7,
+       "ancla": "If our efforts to attract and retain members are not successful"
+      }
+     ],
+     "cifras": []
+    },
+    {
+     "texto": "El foso exige seguir gastando: las obligaciones de contenido sumaban 25.107 M USD a 30/06/2026, 11.940 M USD de ellas exigibles en los próximos doce meses.",
+     "apoyos": [
+      {
+       "documento": "10Q_20260630",
+       "pagina": 35,
+       "ancla": "Content obligations $ 25,106,705 $ 11,939,734"
+      }
+     ],
+     "cifras": []
+    }
+   ]
+  ],
+  "31": [
+   [
+    {
+     "texto": "El bear case documentado es el que la propia compañía enumera entre sus riesgos: no atraer ni retener miembros, no competir con eficacia por el ocio del consumidor, no mejorar la variedad y la calidad de la oferta, y que la adopción del plan con anuncios y del pago compartido no cumpla.",
+     "apoyos": [
+      {
+       "documento": "CARTA_20260630",
+       "pagina": 8,
+       "ancla": "our ability to attract new members and engage and retain existing members"
+      },
+      {
+       "documento": "CARTA_20260630",
+       "pagina": 8,
+       "ancla": "adoption of the ads plan and paid sharing"
+      }
+     ],
+     "cifras": []
+    },
+    {
+     "texto": "En cifras, la tesis descansa en la guía de 51.000–51.400 M USD de ingresos y 31,5 % de margen operativo para 2026 y en unos 3.000 M USD de publicidad; la carta advierte de que las previsiones son su estimación interna y de que los resultados reales variarán.",
+     "apoyos": [
+      {
+       "documento": "CARTA_20260630",
+       "pagina": 2,
+       "ancla": "we are narrowing our revenue forecast to $51.0-$51.4B"
+      },
+      {
+       "documento": "CARTA_20260630",
+       "pagina": 2,
+       "ancla": "operating margin of 31.5% for 2026"
+      },
+      {
+       "documento": "CARTA_20260630",
+       "pagina": 2,
+       "ancla": "approximately $3 billion"
+      },
+      {
+       "documento": "CARTA_20260630",
+       "pagina": 8,
+       "ancla": "Investors should anticipate that actual performance will vary from these forecast numbers"
+      }
+     ],
+     "cifras": []
+    },
+    {
+     "texto": "Las horas vistas crecieron un 2 % en el primer semestre de 2026 y la compañía dejará de publicar su informe de visionado con los resultados para hacerlo una vez al año desde 2027: un deterioro del engagement sería menos visible para el inversor.",
+     "apoyos": [
+      {
+       "documento": "CARTA_20260630",
+       "pagina": 3,
+       "ancla": "our members watched more than 97 billion hours, up 2% year over year"
+      },
+      {
+       "documento": "CARTA_20260630",
+       "pagina": 5,
+       "ancla": "we will shift to publishing this report annually in the first quarter, beginning in 2027"
+      }
+     ],
+     "cifras": []
+    }
+   ],
+   [
+    {
+     "texto": "El coste del contenido es fijo y a largo plazo: 25.107 M USD de obligaciones, de las que 19.600 M USD no están en balance, y una amortización de contenido que crecerá en torno al 10 % en 2026.",
+     "apoyos": [
+      {
+       "documento": "10Q_20260630",
+       "pagina": 35,
+       "ancla": "Content obligations $ 25,106,705"
+      },
+      {
+       "documento": "10Q_20260630",
+       "pagina": 35,
+       "ancla": "$19.6 billion of obligations that are not reflected on the Consolidated Balance Sheets"
+      },
+      {
+       "documento": "CARTA_20260630",
+       "pagina": 2,
+       "ancla": "increase ~10% for 2026"
+      }
+     ],
+     "cifras": []
+    },
+    {
+     "texto": "La deuda bruta es de 14.309 M USD y el 10-K advierte de que la compañía podría captar capital con dilución para el accionista y de que su acción es volátil.",
+     "apoyos": [
+      {
+       "documento": "10Q_20260630",
+       "pagina": 34,
+       "ancla": "Short-term and long-term debt 14,309,306 14,462,836"
+      },
+      {
+       "documento": "10K_20251231",
+       "pagina": 15,
+       "ancla": "We may seek additional capital that may result in stockholder dilution"
+      },
+      {
+       "documento": "10K_20251231",
+       "pagina": 17,
+       "ancla": "Our stock price is volatile."
+      }
+     ],
+     "cifras": [
+      "deuda_bruta:@2026-06-30"
+     ]
+    },
+    {
+     "texto": "El primer semestre de 2026 incluyó 2.800 M USD no recurrentes por la terminación del acuerdo con WBD y 729 M USD de pagos no rutinarios por liquidaciones fiscales en Brasil; ninguno de los dos se repite.",
+     "apoyos": [
+      {
+       "documento": "10Q_20260630",
+       "pagina": 13,
+       "ancla": "paid a $2.8 billion termination fee owed to Netflix"
+      },
+      {
+       "documento": "10Q_20260630",
+       "pagina": 36,
+       "ancla": "$729 million of non-routine payments made in connection with non-income tax assessments in Brazil"
+      }
+     ],
+     "cifras": []
+    },
+    {
+     "texto": "En los últimos cuatro trimestres el BPA quedó por debajo del consenso en dos, el 3T25 y el 1T26, según la tabla de estimaciones de la portada de la transcripción.",
+     "apoyos": [
+      {
+       "documento": "CALL_20260630",
+       "pagina": 1,
+       "ancla": "FQ3 2025 0.70 0.59 (15.71 %)"
+      },
+      {
+       "documento": "CALL_20260630",
+       "pagina": 1,
+       "ancla": "FQ1 2026 1.32 1.23 (6.82 %)"
+      }
+     ],
+     "cifras": []
+    }
+   ]
+  ]
+ }
+}

@@ -1,0 +1,433 @@
+Contraste AAPL 2026-09-26 · resumen {'solo_sec': 219, 'discrepante': 68, 'derivado': 21, 'confirmado': 44, 'hueco': 31, 'no_aplica': 48}
+
+◐  ingresos               FY2021           365,817,000,000.00  sin contraste documental
+◐  ingresos               FY2022           394,328,000,000.00  sin contraste documental
+≠  ingresos               FY2023           383,285,000,000.00  SEC 383.285.000.000,00 frente a SEC_10-K_2025-09-27_0000320193-25-000079.pdf pág. 32 = 383.285.000,00
+≠  ingresos               FY2024           391,035,000,000.00  SEC 391.035.000.000,00 frente a SEC_10-K_2025-09-27_0000320193-25-000079.pdf pág. 32 = 391.035.000,00
+≠  ingresos               FY2025           416,161,000,000.00  SEC 416.161.000.000,00 frente a SEC_10-K_2025-09-27_0000320193-25-000079.pdf pág. 32 = 416.161.000,00
+∑  ingresos               3T25             102,466,000,000.00  
+✓  ingresos               4T25             143,756,000,000.00  contrastado con SEC_10-Q_2025-12-27_0000320193-26-000006.pdf pág. 9
+✓  ingresos               1T26             111,184,000,000.00  contrastado con SEC_10-Q_2026-03-28_0000320193-26-000013.pdf pág. 9
+✓  ingresos               2T26             109,417,000,000.00  contrastado con SEC_10-Q_2026-06-27_0000320193-26-000020.pdf pág. 9
+◐  coste_ingresos         FY2021           212,981,000,000.00  sin contraste documental
+◐  coste_ingresos         FY2022           223,546,000,000.00  sin contraste documental
+◐  coste_ingresos         FY2023           214,137,000,000.00  sin contraste documental
+◐  coste_ingresos         FY2024           210,352,000,000.00  sin contraste documental
+◐  coste_ingresos         FY2025           220,960,000,000.00  sin contraste documental
+∑  coste_ingresos         3T25              54,125,000,000.00  
+◐  coste_ingresos         4T25              74,525,000,000.00  sin contraste documental
+◐  coste_ingresos         1T26              56,403,000,000.00  sin contraste documental
+◐  coste_ingresos         2T26              54,647,000,000.00  sin contraste documental
+—  marketing              FY2021                          N/A  la SEC no publica «Ventas y marketing» para FY2021 en ningún 10-K ni 10-Q; ningún adjunto lo trae
+—  marketing              FY2022                          N/A  la SEC no publica «Ventas y marketing» para FY2022 en ningún 10-K ni 10-Q; ningún adjunto lo trae
+◐  marketing              FY2023            18,260,000,000.00  sin contraste documental
+◐  marketing              FY2024            18,639,000,000.00  sin contraste documental
+◐  marketing              FY2025            19,524,000,000.00  sin contraste documental
+∑  marketing              3T25               4,923,000,000.00  
+◐  marketing              4T25               5,397,000,000.00  sin contraste documental
+◐  marketing              1T26               5,201,000,000.00  sin contraste documental
+◐  marketing              2T26               5,034,000,000.00  sin contraste documental
+◐  tecnologia             FY2021            21,914,000,000.00  sin contraste documental
+◐  tecnologia             FY2022            26,251,000,000.00  sin contraste documental
+≠  tecnologia             FY2023            29,915,000,000.00  SEC 29.915.000.000,00 frente a SEC_10-K_2025-09-27_0000320193-25-000079.pdf pág. 32 = 29.915.000,00
+≠  tecnologia             FY2024            31,370,000,000.00  SEC 31.370.000.000,00 frente a SEC_10-K_2025-09-27_0000320193-25-000079.pdf pág. 32 = 31.370.000,00
+≠  tecnologia             FY2025            34,550,000,000.00  SEC 34.550.000.000,00 frente a SEC_10-K_2025-09-27_0000320193-25-000079.pdf pág. 32 = 34.550.000,00
+∑  tecnologia             3T25               8,866,000,000.00  
+≠  tecnologia             4T25              10,887,000,000.00  SEC 10.887.000.000,00 frente a SEC_10-Q_2025-12-27_0000320193-26-000006.pdf pág. 4 = 10.887.000,00; SEC_10-Q_2025-12-27_0000320193-26-000006.pdf pág. 19 = 8.268.000.000,00
+≠  tecnologia             1T26              11,419,000,000.00  SEC 11.419.000.000,00 frente a SEC_10-Q_2026-03-28_0000320193-26-000013.pdf pág. 4 = 11.419.000,00
+≠  tecnologia             2T26              11,729,000,000.00  SEC 11.729.000.000,00 frente a SEC_10-Q_2026-06-27_0000320193-26-000020.pdf pág. 4 = 11.729.000,00
+—  generales              FY2021                          N/A  la SEC no publica «Generales y administrativos» para FY2021 en ningún 10-K ni 10-Q; ningún adjunto lo trae
+—  generales              FY2022                          N/A  la SEC no publica «Generales y administrativos» para FY2022 en ningún 10-K ni 10-Q; ningún adjunto lo trae
+◐  generales              FY2023             6,672,000,000.00  sin contraste documental
+◐  generales              FY2024             7,458,000,000.00  sin contraste documental
+◐  generales              FY2025             8,077,000,000.00  sin contraste documental
+∑  generales              3T25               2,125,000,000.00  
+◐  generales              4T25               2,095,000,000.00  sin contraste documental
+◐  generales              1T26               2,276,000,000.00  sin contraste documental
+◐  generales              2T26               2,312,000,000.00  sin contraste documental
+◐  sga                    FY2021            21,973,000,000.00  sin contraste documental
+◐  sga                    FY2022            25,094,000,000.00  sin contraste documental
+≠  sga                    FY2023            24,932,000,000.00  SEC 24.932.000.000,00 frente a SEC_10-K_2025-09-27_0000320193-25-000079.pdf pág. 32 = 24.932.000,00
+≠  sga                    FY2024            26,097,000,000.00  SEC 26.097.000.000,00 frente a SEC_10-K_2025-09-27_0000320193-25-000079.pdf pág. 32 = 26.097.000,00
+≠  sga                    FY2025            27,601,000,000.00  SEC 27.601.000.000,00 frente a SEC_10-K_2025-09-27_0000320193-25-000079.pdf pág. 32 = 27.601.000,00
+∑  sga                    3T25               7,048,000,000.00  
+≠  sga                    4T25               7,492,000,000.00  SEC 7.492.000.000,00 frente a SEC_10-Q_2025-12-27_0000320193-26-000006.pdf pág. 4 = 7.492.000,00; SEC_10-Q_2025-12-27_0000320193-26-000006.pdf pág. 19 = 7.175.000.000,00
+≠  sga                    1T26               7,477,000,000.00  SEC 7.477.000.000,00 frente a SEC_10-Q_2026-03-28_0000320193-26-000013.pdf pág. 4 = 7.477.000,00
+≠  sga                    2T26               7,346,000,000.00  SEC 7.346.000.000,00 frente a SEC_10-Q_2026-06-27_0000320193-26-000020.pdf pág. 4 = 7.346.000,00
+◐  ebit                   FY2021           108,949,000,000.00  sin contraste documental
+◐  ebit                   FY2022           119,437,000,000.00  sin contraste documental
+≠  ebit                   FY2023           114,301,000,000.00  SEC 114.301.000.000,00 frente a SEC_10-K_2025-09-27_0000320193-25-000079.pdf pág. 32 = 114.301.000,00
+≠  ebit                   FY2024           123,216,000,000.00  SEC 123.216.000.000,00 frente a SEC_10-K_2025-09-27_0000320193-25-000079.pdf pág. 32 = 123.216.000,00
+≠  ebit                   FY2025           133,050,000,000.00  SEC 133.050.000.000,00 frente a SEC_10-K_2025-09-27_0000320193-25-000079.pdf pág. 32 = 133.050.000,00
+∑  ebit                   3T25              32,427,000,000.00  
+≠  ebit                   4T25              50,852,000,000.00  SEC 50.852.000.000,00 frente a SEC_10-Q_2025-12-27_0000320193-26-000006.pdf pág. 4 = 50.852.000,00
+≠  ebit                   1T26              35,885,000,000.00  SEC 35.885.000.000,00 frente a SEC_10-Q_2026-03-28_0000320193-26-000013.pdf pág. 4 = 35.885.000,00
+≠  ebit                   2T26              35,695,000,000.00  SEC 35.695.000.000,00 frente a SEC_10-Q_2026-06-27_0000320193-26-000020.pdf pág. 4 = 35.695.000,00
+◐  intereses              FY2021             2,645,000,000.00  sin contraste documental
+◐  intereses              FY2022             2,931,000,000.00  sin contraste documental
+◐  intereses              FY2023             3,933,000,000.00  sin contraste documental
+—  intereses              FY2024                          N/A  la SEC no publica «Gastos financieros» para FY2024 en ningún 10-K ni 10-Q; ningún adjunto lo trae
+—  intereses              FY2025                          N/A  la SEC no publica «Gastos financieros» para FY2025 en ningún 10-K ni 10-Q; ningún adjunto lo trae
+—  intereses              3T25                            N/A  la SEC no presenta el cuarto trimestre fiscal como tal; ningún adjunto lo trae
+—  intereses              4T25                            N/A  la SEC no publica «Gastos financieros» para 4T25 en ningún 10-K ni 10-Q; ningún adjunto lo trae
+—  intereses              1T26                            N/A  la SEC no publica «Gastos financieros» para 1T26 en ningún 10-K ni 10-Q; ningún adjunto lo trae
+—  intereses              2T26                            N/A  la SEC no publica «Gastos financieros» para 2T26 en ningún 10-K ni 10-Q; ningún adjunto lo trae
+◐  otros_financieros      FY2021               258,000,000.00  sin contraste documental
+◐  otros_financieros      FY2022              -334,000,000.00  sin contraste documental
+◐  otros_financieros      FY2023              -565,000,000.00  sin contraste documental
+◐  otros_financieros      FY2024               269,000,000.00  sin contraste documental
+◐  otros_financieros      FY2025              -321,000,000.00  sin contraste documental
+∑  otros_financieros      3T25                 377,000,000.00  
+◐  otros_financieros      4T25                 150,000,000.00  sin contraste documental
+◐  otros_financieros      1T26                 -52,000,000.00  sin contraste documental
+◐  otros_financieros      2T26                 572,000,000.00  sin contraste documental
+◐  bai                    FY2021           109,207,000,000.00  sin contraste documental
+◐  bai                    FY2022           119,103,000,000.00  sin contraste documental
+≠  bai                    FY2023           113,736,000,000.00  SEC 113.736.000.000,00 frente a SEC_10-K_2025-09-27_0000320193-25-000079.pdf pág. 32 = 113.736.000,00
+≠  bai                    FY2024           123,485,000,000.00  SEC 123.485.000.000,00 frente a SEC_10-K_2025-09-27_0000320193-25-000079.pdf pág. 32 = 123.485.000,00
+≠  bai                    FY2025           132,729,000,000.00  SEC 132.729.000.000,00 frente a SEC_10-K_2025-09-27_0000320193-25-000079.pdf pág. 32 = 132.729.000,00
+∑  bai                    3T25              32,804,000,000.00  
+≠  bai                    4T25              51,002,000,000.00  SEC 51.002.000.000,00 frente a SEC_10-Q_2025-12-27_0000320193-26-000006.pdf pág. 4 = 51.002.000,00
+≠  bai                    1T26              35,833,000,000.00  SEC 35.833.000.000,00 frente a SEC_10-Q_2026-03-28_0000320193-26-000013.pdf pág. 4 = 35.833.000,00
+≠  bai                    2T26              36,267,000,000.00  SEC 36.267.000.000,00 frente a SEC_10-Q_2026-06-27_0000320193-26-000020.pdf pág. 4 = 36.267.000,00
+◐  impuestos              FY2021            14,527,000,000.00  sin contraste documental
+◐  impuestos              FY2022            19,300,000,000.00  sin contraste documental
+≠  impuestos              FY2023            16,741,000,000.00  SEC 16.741.000.000,00 frente a SEC_10-K_2025-09-27_0000320193-25-000079.pdf pág. 32 = 16.741.000,00
+≠  impuestos              FY2024            29,749,000,000.00  SEC 29.749.000.000,00 frente a SEC_10-K_2025-09-27_0000320193-25-000079.pdf pág. 32 = 29.749.000,00
+≠  impuestos              FY2025            20,719,000,000.00  SEC 20.719.000.000,00 frente a SEC_10-K_2025-09-27_0000320193-25-000079.pdf pág. 32 = 20.719.000,00
+∑  impuestos              3T25               5,338,000,000.00  
+✓  impuestos              4T25               8,905,000,000.00  contrastado con SEC_10-Q_2025-12-27_0000320193-26-000006.pdf pág. 20
+✓  impuestos              1T26               6,255,000,000.00  contrastado con SEC_10-Q_2026-03-28_0000320193-26-000013.pdf pág. 20
+✓  impuestos              2T26               6,478,000,000.00  contrastado con SEC_10-Q_2026-06-27_0000320193-26-000020.pdf pág. 20
+◐  beneficio_neto         FY2021            94,680,000,000.00  sin contraste documental
+◐  beneficio_neto         FY2022            99,803,000,000.00  sin contraste documental
+✓  beneficio_neto         FY2023            96,995,000,000.00  contrastado con SEC_10-K_2025-09-27_0000320193-25-000079.pdf pág. 33
+✓  beneficio_neto         FY2024            93,736,000,000.00  contrastado con SEC_10-K_2025-09-27_0000320193-25-000079.pdf pág. 33
+✓  beneficio_neto         FY2025           112,010,000,000.00  contrastado con SEC_10-K_2025-09-27_0000320193-25-000079.pdf pág. 33
+∑  beneficio_neto         3T25              27,466,000,000.00  
+✓  beneficio_neto         4T25              42,097,000,000.00  contrastado con SEC_10-Q_2025-12-27_0000320193-26-000006.pdf pág. 5
+✓  beneficio_neto         1T26              29,578,000,000.00  contrastado con SEC_10-Q_2026-03-28_0000320193-26-000013.pdf pág. 5
+✓  beneficio_neto         2T26              29,789,000,000.00  contrastado con SEC_10-Q_2026-06-27_0000320193-26-000020.pdf pág. 5
+◐  bpa_basico             FY2021                         5.67  sin contraste documental
+◐  bpa_basico             FY2022                         6.15  sin contraste documental
+✓  bpa_basico             FY2023                         6.16  contrastado con SEC_10-K_2025-09-27_0000320193-25-000079.pdf pág. 32
+✓  bpa_basico             FY2024                         6.11  contrastado con SEC_10-K_2025-09-27_0000320193-25-000079.pdf pág. 32
+✓  bpa_basico             FY2025                         7.49  contrastado con SEC_10-K_2025-09-27_0000320193-25-000079.pdf pág. 32
+◐  bpa_basico             3T25                           1.85  sin contraste documental
+✓  bpa_basico             4T25                           2.85  contrastado con SEC_10-Q_2025-12-27_0000320193-26-000006.pdf pág. 4
+✓  bpa_basico             1T26                           2.02  contrastado con SEC_10-Q_2026-03-28_0000320193-26-000013.pdf pág. 4
+✓  bpa_basico             2T26                           2.03  contrastado con SEC_10-Q_2026-06-27_0000320193-26-000020.pdf pág. 4
+◐  bpa_diluido            FY2021                         5.61  sin contraste documental
+◐  bpa_diluido            FY2022                         6.11  sin contraste documental
+✓  bpa_diluido            FY2023                         6.13  contrastado con SEC_10-K_2025-09-27_0000320193-25-000079.pdf pág. 32
+✓  bpa_diluido            FY2024                         6.08  contrastado con SEC_10-K_2025-09-27_0000320193-25-000079.pdf pág. 32
+✓  bpa_diluido            FY2025                         7.46  contrastado con SEC_10-K_2025-09-27_0000320193-25-000079.pdf pág. 32
+◐  bpa_diluido            3T25                           1.85  sin contraste documental
+✓  bpa_diluido            4T25                           2.84  contrastado con SEC_10-Q_2025-12-27_0000320193-26-000006.pdf pág. 4
+✓  bpa_diluido            1T26                           2.01  contrastado con SEC_10-Q_2026-03-28_0000320193-26-000013.pdf pág. 4
+✓  bpa_diluido            2T26                           2.02  contrastado con SEC_10-Q_2026-06-27_0000320193-26-000020.pdf pág. 4
+◐  acciones_basicas       FY2021            16,701,272,000.00  sin contraste documental
+◐  acciones_basicas       FY2022            16,215,963,000.00  sin contraste documental
+✓  acciones_basicas       FY2023            15,744,231,000.00  contrastado con SEC_10-K_2025-09-27_0000320193-25-000079.pdf pág. 32
+✓  acciones_basicas       FY2024            15,343,783,000.00  contrastado con SEC_10-K_2025-09-27_0000320193-25-000079.pdf pág. 32
+✓  acciones_basicas       FY2025            14,948,500,000.00  contrastado con SEC_10-K_2025-09-27_0000320193-25-000079.pdf pág. 32
+◐  acciones_basicas       3T25              14,815,306,000.00  sin contraste documental
+✓  acciones_basicas       4T25              14,748,158,000.00  contrastado con SEC_10-Q_2025-12-27_0000320193-26-000006.pdf pág. 4
+✓  acciones_basicas       1T26              14,673,278,000.00  contrastado con SEC_10-Q_2026-03-28_0000320193-26-000013.pdf pág. 4
+✓  acciones_basicas       2T26              14,656,110,000.00  contrastado con SEC_10-Q_2026-06-27_0000320193-26-000020.pdf pág. 4
+◐  acciones_diluidas      FY2021            16,864,919,000.00  sin contraste documental
+◐  acciones_diluidas      FY2022            16,325,819,000.00  sin contraste documental
+✓  acciones_diluidas      FY2023            15,812,547,000.00  contrastado con SEC_10-K_2025-09-27_0000320193-25-000079.pdf pág. 32
+✓  acciones_diluidas      FY2024            15,408,095,000.00  contrastado con SEC_10-K_2025-09-27_0000320193-25-000079.pdf pág. 32
+✓  acciones_diluidas      FY2025            15,004,697,000.00  contrastado con SEC_10-K_2025-09-27_0000320193-25-000079.pdf pág. 32
+◐  acciones_diluidas      3T25              14,863,610,000.00  sin contraste documental
+✓  acciones_diluidas      4T25              14,810,356,000.00  contrastado con SEC_10-Q_2025-12-27_0000320193-26-000006.pdf pág. 4
+✓  acciones_diluidas      1T26              14,725,873,000.00  contrastado con SEC_10-Q_2026-03-28_0000320193-26-000013.pdf pág. 4
+✓  acciones_diluidas      2T26              14,714,676,000.00  contrastado con SEC_10-Q_2026-06-27_0000320193-26-000020.pdf pág. 4
+◐  amortizacion           FY2021            11,284,000,000.00  sin contraste documental
+◐  amortizacion           FY2022            11,104,000,000.00  sin contraste documental
+✓  amortizacion           FY2023            11,519,000,000.00  contrastado con SEC_10-K_2025-09-27_0000320193-25-000079.pdf pág. 36
+✓  amortizacion           FY2024            11,445,000,000.00  contrastado con SEC_10-K_2025-09-27_0000320193-25-000079.pdf pág. 36
+✓  amortizacion           FY2025            11,698,000,000.00  contrastado con SEC_10-K_2025-09-27_0000320193-25-000079.pdf pág. 36
+∑  amortizacion           3T25               3,127,000,000.00  
+✓  amortizacion           4T25               3,214,000,000.00  contrastado con SEC_10-Q_2025-12-27_0000320193-26-000006.pdf pág. 8
+◐  amortizacion           1T26               3,439,000,000.00  sin contraste documental
+◐  amortizacion           2T26               3,320,000,000.00  sin contraste documental
+—  amortizacion_contenido FY2021                          N/A  la compañía no declara esta partida en ningún 10-K ni 10-Q, y tampoco la imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  amortizacion_contenido FY2022                          N/A  la compañía no declara esta partida en ningún 10-K ni 10-Q, y tampoco la imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  amortizacion_contenido FY2023                          N/A  la compañía no declara esta partida en ningún 10-K ni 10-Q, y tampoco la imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  amortizacion_contenido FY2024                          N/A  la compañía no declara esta partida en ningún 10-K ni 10-Q, y tampoco la imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  amortizacion_contenido FY2025                          N/A  la compañía no declara esta partida en ningún 10-K ni 10-Q, y tampoco la imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  amortizacion_contenido 3T25                            N/A  la compañía no declara esta partida en ningún 10-K ni 10-Q, y tampoco la imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  amortizacion_contenido 4T25                            N/A  la compañía no declara esta partida en ningún 10-K ni 10-Q, y tampoco la imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  amortizacion_contenido 1T26                            N/A  la compañía no declara esta partida en ningún 10-K ni 10-Q, y tampoco la imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  amortizacion_contenido 2T26                            N/A  la compañía no declara esta partida en ningún 10-K ni 10-Q, y tampoco la imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+◐  sbc                    FY2021             7,906,000,000.00  sin contraste documental
+◐  sbc                    FY2022             9,038,000,000.00  sin contraste documental
+◐  sbc                    FY2023            10,833,000,000.00  sin contraste documental
+◐  sbc                    FY2024            11,688,000,000.00  sin contraste documental
+◐  sbc                    FY2025            12,863,000,000.00  sin contraste documental
+∑  sbc                    3T25               3,183,000,000.00  
+◐  sbc                    4T25               3,594,000,000.00  sin contraste documental
+◐  sbc                    1T26               3,528,000,000.00  sin contraste documental
+◐  sbc                    2T26               3,401,000,000.00  sin contraste documental
+◐  caja                   @2020-09-26       38,016,000,000.00  sin contraste documental
+◐  caja                   @2021-09-25       34,940,000,000.00  sin contraste documental
+◐  caja                   @2022-09-24       23,646,000,000.00  sin contraste documental
+◐  caja                   @2023-09-30       29,965,000,000.00  sin contraste documental
+≠  caja                   @2024-09-28       29,943,000,000.00  SEC 29.943.000.000,00 frente a SEC_10-K_2025-09-27_0000320193-25-000079.pdf pág. 34 = 29.943.000,00
+◐  caja                   @2025-06-28       36,269,000,000.00  sin contraste documental
+≠  caja                   @2025-09-27       35,934,000,000.00  SEC 35.934.000.000,00 frente a SEC_10-K_2025-09-27_0000320193-25-000079.pdf pág. 34 = 35.934.000,00; SEC_10-Q_2025-12-27_0000320193-26-000006.pdf pág. 6 = 35.934.000,00; SEC_10-Q_2026-03-28_0000320193-26-000013.pdf pág. 6 = 35.934.000,00; SEC_10-Q_2026-06-27_0000320193-26-000020.pdf pág. 6 = 35.934.000,00
+≠  caja                   @2025-12-27       45,317,000,000.00  SEC 45.317.000.000,00 frente a SEC_10-Q_2025-12-27_0000320193-26-000006.pdf pág. 6 = 45.317.000,00
+≠  caja                   @2026-03-28       45,572,000,000.00  SEC 45.572.000.000,00 frente a SEC_10-Q_2026-03-28_0000320193-26-000013.pdf pág. 6 = 45.572.000,00
+≠  caja                   @2026-06-27       39,544,000,000.00  SEC 39.544.000.000,00 frente a SEC_10-Q_2026-06-27_0000320193-26-000020.pdf pág. 6 = 39.544.000,00
+◐  inversiones_cp         @2020-09-26       52,927,000,000.00  sin contraste documental
+◐  inversiones_cp         @2021-09-25       27,699,000,000.00  sin contraste documental
+◐  inversiones_cp         @2022-09-24       24,658,000,000.00  sin contraste documental
+◐  inversiones_cp         @2023-09-30       31,590,000,000.00  sin contraste documental
+≠  inversiones_cp         @2024-09-28       35,228,000,000.00  SEC 35.228.000.000,00 frente a SEC_10-K_2025-09-27_0000320193-25-000079.pdf pág. 34 = 35.228.000,00; SEC_10-K_2025-09-27_0000320193-25-000079.pdf pág. 34 = 91.479.000,00
+◐  inversiones_cp         @2025-06-28       19,103,000,000.00  sin contraste documental
+≠  inversiones_cp         @2025-09-27       18,763,000,000.00  SEC 18.763.000.000,00 frente a SEC_10-K_2025-09-27_0000320193-25-000079.pdf pág. 34 = 18.763.000,00; SEC_10-K_2025-09-27_0000320193-25-000079.pdf pág. 34 = 77.723.000,00; SEC_10-Q_2025-12-27_0000320193-26-000006.pdf pág. 6 = 18.763.000,00; SEC_10-Q_2025-12-27_0000320193-26-000006.pdf pág. 6 = 77.723.000,00
+≠  inversiones_cp         @2025-12-27       21,590,000,000.00  SEC 21.590.000.000,00 frente a SEC_10-Q_2025-12-27_0000320193-26-000006.pdf pág. 6 = 21.590.000,00; SEC_10-Q_2025-12-27_0000320193-26-000006.pdf pág. 6 = 77.888.000,00
+≠  inversiones_cp         @2026-03-28       22,935,000,000.00  SEC 22.935.000.000,00 frente a SEC_10-Q_2026-03-28_0000320193-26-000013.pdf pág. 6 = 22.935.000,00; SEC_10-Q_2026-03-28_0000320193-26-000013.pdf pág. 6 = 78.088.000,00
+≠  inversiones_cp         @2026-06-27       22,855,000,000.00  SEC 22.855.000.000,00 frente a SEC_10-Q_2026-06-27_0000320193-26-000020.pdf pág. 6 = 22.855.000,00; SEC_10-Q_2026-06-27_0000320193-26-000020.pdf pág. 6 = 84.118.000,00
+◐  activo_corriente       @2020-09-26      143,713,000,000.00  sin contraste documental
+◐  activo_corriente       @2021-09-25      134,836,000,000.00  sin contraste documental
+◐  activo_corriente       @2022-09-24      135,405,000,000.00  sin contraste documental
+◐  activo_corriente       @2023-09-30      143,566,000,000.00  sin contraste documental
+≠  activo_corriente       @2024-09-28      152,987,000,000.00  SEC 152.987.000.000,00 frente a SEC_10-K_2025-09-27_0000320193-25-000079.pdf pág. 34 = 152.987.000,00
+◐  activo_corriente       @2025-06-28      122,491,000,000.00  sin contraste documental
+≠  activo_corriente       @2025-09-27      147,957,000,000.00  SEC 147.957.000.000,00 frente a SEC_10-K_2025-09-27_0000320193-25-000079.pdf pág. 34 = 147.957.000,00; SEC_10-Q_2025-12-27_0000320193-26-000006.pdf pág. 6 = 147.957.000,00; SEC_10-Q_2026-03-28_0000320193-26-000013.pdf pág. 6 = 147.957.000,00; SEC_10-Q_2026-06-27_0000320193-26-000020.pdf pág. 6 = 147.957.000,00
+≠  activo_corriente       @2025-12-27      158,104,000,000.00  SEC 158.104.000.000,00 frente a SEC_10-Q_2025-12-27_0000320193-26-000006.pdf pág. 6 = 158.104.000,00
+≠  activo_corriente       @2026-03-28      144,114,000,000.00  SEC 144.114.000.000,00 frente a SEC_10-Q_2026-03-28_0000320193-26-000013.pdf pág. 6 = 144.114.000,00
+≠  activo_corriente       @2026-06-27      149,818,000,000.00  SEC 149.818.000.000,00 frente a SEC_10-Q_2026-06-27_0000320193-26-000020.pdf pág. 6 = 149.818.000,00
+—  contenido              @2020-09-26                     N/A  la compañía no declara esta partida en ningún 10-K ni 10-Q, y tampoco la imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  contenido              @2021-09-25                     N/A  la compañía no declara esta partida en ningún 10-K ni 10-Q, y tampoco la imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  contenido              @2022-09-24                     N/A  la compañía no declara esta partida en ningún 10-K ni 10-Q, y tampoco la imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  contenido              @2023-09-30                     N/A  la compañía no declara esta partida en ningún 10-K ni 10-Q, y tampoco la imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  contenido              @2024-09-28                     N/A  la compañía no declara esta partida en ningún 10-K ni 10-Q, y tampoco la imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  contenido              @2025-06-28                     N/A  la compañía no declara esta partida en ningún 10-K ni 10-Q, y tampoco la imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  contenido              @2025-09-27                     N/A  la compañía no declara esta partida en ningún 10-K ni 10-Q, y tampoco la imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  contenido              @2025-12-27                     N/A  la compañía no declara esta partida en ningún 10-K ni 10-Q, y tampoco la imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  contenido              @2026-03-28                     N/A  la compañía no declara esta partida en ningún 10-K ni 10-Q, y tampoco la imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  contenido              @2026-06-27                     N/A  la compañía no declara esta partida en ningún 10-K ni 10-Q, y tampoco la imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+◐  inmovilizado           @2020-09-26       36,766,000,000.00  sin contraste documental
+◐  inmovilizado           @2021-09-25       39,440,000,000.00  sin contraste documental
+◐  inmovilizado           @2022-09-24       42,117,000,000.00  sin contraste documental
+◐  inmovilizado           @2023-09-30       43,715,000,000.00  sin contraste documental
+◐  inmovilizado           @2024-09-28       45,680,000,000.00  sin contraste documental
+◐  inmovilizado           @2025-06-28       48,508,000,000.00  sin contraste documental
+◐  inmovilizado           @2025-09-27       49,834,000,000.00  sin contraste documental
+◐  inmovilizado           @2025-12-27       50,159,000,000.00  sin contraste documental
+◐  inmovilizado           @2026-03-28       50,116,000,000.00  sin contraste documental
+◐  inmovilizado           @2026-06-27       51,431,000,000.00  sin contraste documental
+—  fondo_comercio         @2020-09-26                     N/A  la compañía dejó de declarar esta partida en 2017, y tampoco la imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  fondo_comercio         @2021-09-25                     N/A  la compañía dejó de declarar esta partida en 2017, y tampoco la imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  fondo_comercio         @2022-09-24                     N/A  la compañía dejó de declarar esta partida en 2017, y tampoco la imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  fondo_comercio         @2023-09-30                     N/A  la compañía dejó de declarar esta partida en 2017, y tampoco la imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  fondo_comercio         @2024-09-28                     N/A  la compañía dejó de declarar esta partida en 2017, y tampoco la imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  fondo_comercio         @2025-06-28                     N/A  la compañía dejó de declarar esta partida en 2017, y tampoco la imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  fondo_comercio         @2025-09-27                     N/A  la compañía dejó de declarar esta partida en 2017, y tampoco la imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  fondo_comercio         @2025-12-27                     N/A  la compañía dejó de declarar esta partida en 2017, y tampoco la imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  fondo_comercio         @2026-03-28                     N/A  la compañía dejó de declarar esta partida en 2017, y tampoco la imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  fondo_comercio         @2026-06-27                     N/A  la compañía dejó de declarar esta partida en 2017, y tampoco la imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  intangibles            @2020-09-26                     N/A  la SEC no publica «Intangibles» para 26/09/2020 en ningún 10-K ni 10-Q; ningún adjunto lo trae
+—  intangibles            @2021-09-25                     N/A  la SEC no publica «Intangibles» para 25/09/2021 en ningún 10-K ni 10-Q; ningún adjunto lo trae
+—  intangibles            @2022-09-24                     N/A  la SEC no publica «Intangibles» para 24/09/2022 en ningún 10-K ni 10-Q; ningún adjunto lo trae
+—  intangibles            @2023-09-30                     N/A  la SEC no publica «Intangibles» para 30/09/2023 en ningún 10-K ni 10-Q; ningún adjunto lo trae
+—  intangibles            @2024-09-28                     N/A  la SEC no publica «Intangibles» para 28/09/2024 en ningún 10-K ni 10-Q; ningún adjunto lo trae
+—  intangibles            @2025-06-28                     N/A  la SEC no publica «Intangibles» para 28/06/2025 en ningún 10-K ni 10-Q; ningún adjunto lo trae
+≠  intangibles            @2025-09-27       13,301,000,000.00  SEC 13.301.000.000,00 frente a SEC_10-Q_2026-03-28_0000320193-26-000013.pdf pág. 6 = 11.093.000,00; SEC_10-Q_2026-06-27_0000320193-26-000020.pdf pág. 6 = 11.093.000,00
+—  intangibles            @2025-12-27                     N/A  la SEC no publica «Intangibles» para 27/12/2025 en ningún 10-K ni 10-Q; ningún adjunto lo trae
+≠  intangibles            @2026-03-28       25,797,000,000.00  SEC 25.797.000.000,00 frente a SEC_10-Q_2026-03-28_0000320193-26-000013.pdf pág. 6 = 21.334.000,00
+≠  intangibles            @2026-06-27       25,417,000,000.00  SEC 25.417.000.000,00 frente a SEC_10-Q_2026-06-27_0000320193-26-000020.pdf pág. 6 = 20.342.000,00
+◐  total_activo           @2020-09-26      323,888,000,000.00  sin contraste documental
+◐  total_activo           @2021-09-25      351,002,000,000.00  sin contraste documental
+◐  total_activo           @2022-09-24      352,755,000,000.00  sin contraste documental
+◐  total_activo           @2023-09-30      352,583,000,000.00  sin contraste documental
+≠  total_activo           @2024-09-28      364,980,000,000.00  SEC 364.980.000.000,00 frente a SEC_10-K_2025-09-27_0000320193-25-000079.pdf pág. 34 = 364.980.000,00
+◐  total_activo           @2025-06-28      331,495,000,000.00  sin contraste documental
+≠  total_activo           @2025-09-27      359,241,000,000.00  SEC 359.241.000.000,00 frente a SEC_10-K_2025-09-27_0000320193-25-000079.pdf pág. 34 = 359.241.000,00; SEC_10-Q_2025-12-27_0000320193-26-000006.pdf pág. 6 = 359.241.000,00; SEC_10-Q_2026-03-28_0000320193-26-000013.pdf pág. 6 = 359.241.000,00; SEC_10-Q_2026-06-27_0000320193-26-000020.pdf pág. 6 = 359.241.000,00
+≠  total_activo           @2025-12-27      379,297,000,000.00  SEC 379.297.000.000,00 frente a SEC_10-Q_2025-12-27_0000320193-26-000006.pdf pág. 6 = 379.297.000,00
+≠  total_activo           @2026-03-28      371,082,000,000.00  SEC 371.082.000.000,00 frente a SEC_10-Q_2026-03-28_0000320193-26-000013.pdf pág. 6 = 371.082.000,00
+≠  total_activo           @2026-06-27      383,266,000,000.00  SEC 383.266.000.000,00 frente a SEC_10-Q_2026-06-27_0000320193-26-000020.pdf pág. 6 = 383.266.000,00
+◐  pasivo_corriente       @2020-09-26      105,392,000,000.00  sin contraste documental
+◐  pasivo_corriente       @2021-09-25      125,481,000,000.00  sin contraste documental
+◐  pasivo_corriente       @2022-09-24      153,982,000,000.00  sin contraste documental
+◐  pasivo_corriente       @2023-09-30      145,308,000,000.00  sin contraste documental
+≠  pasivo_corriente       @2024-09-28      176,392,000,000.00  SEC 176.392.000.000,00 frente a SEC_10-K_2025-09-27_0000320193-25-000079.pdf pág. 34 = 176.392.000,00
+◐  pasivo_corriente       @2025-06-28      141,120,000,000.00  sin contraste documental
+≠  pasivo_corriente       @2025-09-27      165,631,000,000.00  SEC 165.631.000.000,00 frente a SEC_10-K_2025-09-27_0000320193-25-000079.pdf pág. 34 = 165.631.000,00; SEC_10-Q_2025-12-27_0000320193-26-000006.pdf pág. 6 = 165.631.000,00; SEC_10-Q_2026-03-28_0000320193-26-000013.pdf pág. 6 = 165.631.000,00; SEC_10-Q_2026-06-27_0000320193-26-000020.pdf pág. 6 = 165.631.000,00
+≠  pasivo_corriente       @2025-12-27      162,367,000,000.00  SEC 162.367.000.000,00 frente a SEC_10-Q_2025-12-27_0000320193-26-000006.pdf pág. 6 = 162.367.000,00
+≠  pasivo_corriente       @2026-03-28      134,641,000,000.00  SEC 134.641.000.000,00 frente a SEC_10-Q_2026-03-28_0000320193-26-000013.pdf pág. 6 = 134.641.000,00
+≠  pasivo_corriente       @2026-06-27      149,326,000,000.00  SEC 149.326.000.000,00 frente a SEC_10-Q_2026-06-27_0000320193-26-000020.pdf pág. 6 = 149.326.000,00
+◐  deuda_cp               @2020-09-26        8,773,000,000.00  sin contraste documental
+◐  deuda_cp               @2021-09-25        9,613,000,000.00  sin contraste documental
+◐  deuda_cp               @2022-09-24       11,128,000,000.00  sin contraste documental
+◐  deuda_cp               @2023-09-30        9,822,000,000.00  sin contraste documental
+◐  deuda_cp               @2024-09-28       10,912,000,000.00  sin contraste documental
+◐  deuda_cp               @2025-06-28        9,345,000,000.00  sin contraste documental
+◐  deuda_cp               @2025-09-27       12,350,000,000.00  sin contraste documental
+◐  deuda_cp               @2025-12-27       11,827,000,000.00  sin contraste documental
+◐  deuda_cp               @2026-03-28        8,310,000,000.00  sin contraste documental
+◐  deuda_cp               @2026-06-27       11,007,000,000.00  sin contraste documental
+◐  deuda_lp               @2020-09-26       98,667,000,000.00  sin contraste documental
+◐  deuda_lp               @2021-09-25      109,106,000,000.00  sin contraste documental
+◐  deuda_lp               @2022-09-24       98,959,000,000.00  sin contraste documental
+◐  deuda_lp               @2023-09-30       95,281,000,000.00  sin contraste documental
+◐  deuda_lp               @2024-09-28       85,750,000,000.00  sin contraste documental
+◐  deuda_lp               @2025-06-28       82,430,000,000.00  sin contraste documental
+◐  deuda_lp               @2025-09-27       78,328,000,000.00  sin contraste documental
+◐  deuda_lp               @2025-12-27       76,685,000,000.00  sin contraste documental
+◐  deuda_lp               @2026-03-28       74,404,000,000.00  sin contraste documental
+◐  deuda_lp               @2026-06-27       71,340,000,000.00  sin contraste documental
+◐  arrendamientos         @2020-09-26        7,745,000,000.00  sin contraste documental
+◐  arrendamientos         @2021-09-25        9,506,000,000.00  sin contraste documental
+◐  arrendamientos         @2022-09-24        9,936,000,000.00  sin contraste documental
+◐  arrendamientos         @2023-09-30       10,408,000,000.00  sin contraste documental
+◐  arrendamientos         @2024-09-28       10,046,000,000.00  sin contraste documental
+—  arrendamientos         @2025-06-28                     N/A  la SEC no publica «Pasivos por arrendamiento (no corrientes)» para 28/06/2025 en ningún 10-K ni 10-Q; ningún adjunto lo trae
+◐  arrendamientos         @2025-09-27       10,911,000,000.00  sin contraste documental
+—  arrendamientos         @2025-12-27                     N/A  la SEC no publica «Pasivos por arrendamiento (no corrientes)» para 27/12/2025 en ningún 10-K ni 10-Q; ningún adjunto lo trae
+—  arrendamientos         @2026-03-28                     N/A  la SEC no publica «Pasivos por arrendamiento (no corrientes)» para 28/03/2026 en ningún 10-K ni 10-Q; ningún adjunto lo trae
+—  arrendamientos         @2026-06-27                     N/A  la SEC no publica «Pasivos por arrendamiento (no corrientes)» para 27/06/2026 en ningún 10-K ni 10-Q; ningún adjunto lo trae
+◐  pasivo_no_corriente    @2020-09-26      153,157,000,000.00  sin contraste documental
+◐  pasivo_no_corriente    @2021-09-25      162,431,000,000.00  sin contraste documental
+◐  pasivo_no_corriente    @2022-09-24      148,101,000,000.00  sin contraste documental
+◐  pasivo_no_corriente    @2023-09-30      145,129,000,000.00  sin contraste documental
+≠  pasivo_no_corriente    @2024-09-28      131,638,000,000.00  SEC 131.638.000.000,00 frente a SEC_10-K_2025-09-27_0000320193-25-000079.pdf pág. 34 = 131.638.000,00
+◐  pasivo_no_corriente    @2025-06-28      124,545,000,000.00  sin contraste documental
+≠  pasivo_no_corriente    @2025-09-27      119,877,000,000.00  SEC 119.877.000.000,00 frente a SEC_10-K_2025-09-27_0000320193-25-000079.pdf pág. 34 = 119.877.000,00; SEC_10-Q_2025-12-27_0000320193-26-000006.pdf pág. 6 = 119.877.000,00; SEC_10-Q_2026-03-28_0000320193-26-000013.pdf pág. 6 = 119.877.000,00; SEC_10-Q_2026-06-27_0000320193-26-000020.pdf pág. 6 = 119.877.000,00
+≠  pasivo_no_corriente    @2025-12-27      128,740,000,000.00  SEC 128.740.000.000,00 frente a SEC_10-Q_2025-12-27_0000320193-26-000006.pdf pág. 6 = 128.740.000,00
+≠  pasivo_no_corriente    @2026-03-28      129,950,000,000.00  SEC 129.950.000.000,00 frente a SEC_10-Q_2026-03-28_0000320193-26-000013.pdf pág. 6 = 129.950.000,00
+≠  pasivo_no_corriente    @2026-06-27      126,420,000,000.00  SEC 126.420.000.000,00 frente a SEC_10-Q_2026-06-27_0000320193-26-000020.pdf pág. 6 = 126.420.000,00
+◐  pasivo_total           @2020-09-26      258,549,000,000.00  sin contraste documental
+◐  pasivo_total           @2021-09-25      287,912,000,000.00  sin contraste documental
+◐  pasivo_total           @2022-09-24      302,083,000,000.00  sin contraste documental
+◐  pasivo_total           @2023-09-30      290,437,000,000.00  sin contraste documental
+≠  pasivo_total           @2024-09-28      308,030,000,000.00  SEC 308.030.000.000,00 frente a SEC_10-K_2025-09-27_0000320193-25-000079.pdf pág. 34 = 308.030.000,00
+◐  pasivo_total           @2025-06-28      265,665,000,000.00  sin contraste documental
+≠  pasivo_total           @2025-09-27      285,508,000,000.00  SEC 285.508.000.000,00 frente a SEC_10-K_2025-09-27_0000320193-25-000079.pdf pág. 34 = 285.508.000,00; SEC_10-Q_2025-12-27_0000320193-26-000006.pdf pág. 6 = 285.508.000,00; SEC_10-Q_2026-03-28_0000320193-26-000013.pdf pág. 6 = 285.508.000,00; SEC_10-Q_2026-06-27_0000320193-26-000020.pdf pág. 6 = 285.508.000,00
+≠  pasivo_total           @2025-12-27      291,107,000,000.00  SEC 291.107.000.000,00 frente a SEC_10-Q_2025-12-27_0000320193-26-000006.pdf pág. 6 = 291.107.000,00
+≠  pasivo_total           @2026-03-28      264,591,000,000.00  SEC 264.591.000.000,00 frente a SEC_10-Q_2026-03-28_0000320193-26-000013.pdf pág. 6 = 264.591.000,00
+≠  pasivo_total           @2026-06-27      275,746,000,000.00  SEC 275.746.000.000,00 frente a SEC_10-Q_2026-06-27_0000320193-26-000020.pdf pág. 6 = 275.746.000,00
+◐  patrimonio             @2020-09-26       65,339,000,000.00  sin contraste documental
+◐  patrimonio             @2021-09-25       63,090,000,000.00  sin contraste documental
+◐  patrimonio             @2022-09-24       50,672,000,000.00  sin contraste documental
+◐  patrimonio             @2023-09-30       62,146,000,000.00  sin contraste documental
+◐  patrimonio             @2024-09-28       56,950,000,000.00  sin contraste documental
+◐  patrimonio             @2025-06-28       65,830,000,000.00  sin contraste documental
+◐  patrimonio             @2025-09-27       73,733,000,000.00  sin contraste documental
+◐  patrimonio             @2025-12-27       88,190,000,000.00  sin contraste documental
+◐  patrimonio             @2026-03-28      106,491,000,000.00  sin contraste documental
+◐  patrimonio             @2026-06-27      107,520,000,000.00  sin contraste documental
+—  autocartera            @2020-09-26                     N/A  la compañía no declara esta partida en ningún 10-K ni 10-Q, y tampoco la imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  autocartera            @2021-09-25                     N/A  la compañía no declara esta partida en ningún 10-K ni 10-Q, y tampoco la imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  autocartera            @2022-09-24                     N/A  la compañía no declara esta partida en ningún 10-K ni 10-Q, y tampoco la imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  autocartera            @2023-09-30                     N/A  la compañía no declara esta partida en ningún 10-K ni 10-Q, y tampoco la imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  autocartera            @2024-09-28                     N/A  la compañía no declara esta partida en ningún 10-K ni 10-Q, y tampoco la imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  autocartera            @2025-06-28                     N/A  la compañía no declara esta partida en ningún 10-K ni 10-Q, y tampoco la imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  autocartera            @2025-09-27                     N/A  la compañía no declara esta partida en ningún 10-K ni 10-Q, y tampoco la imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  autocartera            @2025-12-27                     N/A  la compañía no declara esta partida en ningún 10-K ni 10-Q, y tampoco la imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  autocartera            @2026-03-28                     N/A  la compañía no declara esta partida en ningún 10-K ni 10-Q, y tampoco la imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  autocartera            @2026-06-27                     N/A  la compañía no declara esta partida en ningún 10-K ni 10-Q, y tampoco la imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+◐  acciones_circulacion   @2020-09-26       16,976,763,000.00  sin contraste documental
+◐  acciones_circulacion   @2021-09-25       16,426,786,000.00  sin contraste documental
+◐  acciones_circulacion   @2022-09-24       15,943,425,000.00  sin contraste documental
+◐  acciones_circulacion   @2023-09-30       15,550,061,000.00  sin contraste documental
+◐  acciones_circulacion   @2024-09-28       15,116,786,000.00  sin contraste documental
+◐  acciones_circulacion   @2025-06-28       14,856,722,000.00  sin contraste documental
+◐  acciones_circulacion   @2025-09-27       14,773,260,000.00  sin contraste documental
+◐  acciones_circulacion   @2025-12-27       14,702,703,000.00  sin contraste documental
+◐  acciones_circulacion   @2026-03-28       14,667,688,000.00  sin contraste documental
+◐  acciones_circulacion   @2026-06-27       14,608,963,000.00  sin contraste documental
+◐  cfo                    FY2021           104,038,000,000.00  sin contraste documental
+◐  cfo                    FY2022           122,151,000,000.00  sin contraste documental
+◐  cfo                    FY2023           110,543,000,000.00  sin contraste documental
+◐  cfo                    FY2024           118,254,000,000.00  sin contraste documental
+◐  cfo                    FY2025           111,482,000,000.00  sin contraste documental
+∑  cfo                    3T25              29,728,000,000.00  
+◐  cfo                    4T25              53,925,000,000.00  sin contraste documental
+◐  cfo                    1T26              28,702,000,000.00  sin contraste documental
+◐  cfo                    2T26              34,369,000,000.00  sin contraste documental
+◐  capex                  FY2021            11,085,000,000.00  sin contraste documental
+◐  capex                  FY2022            10,708,000,000.00  sin contraste documental
+◐  capex                  FY2023            10,959,000,000.00  sin contraste documental
+◐  capex                  FY2024             9,447,000,000.00  sin contraste documental
+◐  capex                  FY2025            12,715,000,000.00  sin contraste documental
+∑  capex                  3T25               3,242,000,000.00  
+◐  capex                  4T25               2,373,000,000.00  sin contraste documental
+◐  capex                  1T26               1,971,000,000.00  sin contraste documental
+◐  capex                  2T26               2,455,000,000.00  sin contraste documental
+◐  cfi                    FY2021           -14,545,000,000.00  sin contraste documental
+◐  cfi                    FY2022           -22,354,000,000.00  sin contraste documental
+◐  cfi                    FY2023             3,705,000,000.00  sin contraste documental
+◐  cfi                    FY2024             2,935,000,000.00  sin contraste documental
+◐  cfi                    FY2025            15,195,000,000.00  sin contraste documental
+∑  cfi                    3T25              -2,587,000,000.00  
+◐  cfi                    4T25              -4,886,000,000.00  sin contraste documental
+◐  cfi                    1T26              -6,168,000,000.00  sin contraste documental
+◐  cfi                    2T26              -7,757,000,000.00  sin contraste documental
+◐  cff                    FY2021           -93,353,000,000.00  sin contraste documental
+◐  cff                    FY2022          -110,749,000,000.00  sin contraste documental
+◐  cff                    FY2023          -108,488,000,000.00  sin contraste documental
+◐  cff                    FY2024          -121,983,000,000.00  sin contraste documental
+◐  cff                    FY2025          -120,686,000,000.00  sin contraste documental
+∑  cff                    3T25             -27,476,000,000.00  
+◐  cff                    4T25             -39,656,000,000.00  sin contraste documental
+◐  cff                    1T26             -22,279,000,000.00  sin contraste documental
+◐  cff                    2T26             -32,640,000,000.00  sin contraste documental
+◐  dividendos             FY2021            14,467,000,000.00  sin contraste documental
+◐  dividendos             FY2022            14,841,000,000.00  sin contraste documental
+◐  dividendos             FY2023            15,025,000,000.00  sin contraste documental
+◐  dividendos             FY2024            15,234,000,000.00  sin contraste documental
+◐  dividendos             FY2025            15,421,000,000.00  sin contraste documental
+∑  dividendos             3T25               3,862,000,000.00  
+◐  dividendos             4T25               3,921,000,000.00  sin contraste documental
+◐  dividendos             1T26               3,822,000,000.00  sin contraste documental
+◐  dividendos             2T26               4,035,000,000.00  sin contraste documental
+◐  recompras              FY2021            85,971,000,000.00  sin contraste documental
+◐  recompras              FY2022            89,402,000,000.00  sin contraste documental
+✓  recompras              FY2023            77,550,000,000.00  contrastado con SEC_10-K_2025-09-27_0000320193-25-000079.pdf pág. 36
+✓  recompras              FY2024            94,949,000,000.00  contrastado con SEC_10-K_2025-09-27_0000320193-25-000079.pdf pág. 36
+✓  recompras              FY2025            90,711,000,000.00  contrastado con SEC_10-K_2025-09-27_0000320193-25-000079.pdf pág. 36
+∑  recompras              3T25              20,132,000,000.00  
+✓  recompras              4T25              24,701,000,000.00  contrastado con SEC_10-Q_2025-12-27_0000320193-26-000006.pdf pág. 8
+◐  recompras              1T26              12,288,000,000.00  sin contraste documental
+◐  recompras              2T26              25,105,000,000.00  sin contraste documental
+◐  adquisiciones          FY2021                33,000,000.00  sin contraste documental
+◐  adquisiciones          FY2022               306,000,000.00  sin contraste documental
+—  adquisiciones          FY2023                          N/A  la SEC no publica «Adquisiciones (caja)» para FY2023 en ningún 10-K ni 10-Q; ningún adjunto lo trae
+—  adquisiciones          FY2024                          N/A  la SEC no publica «Adquisiciones (caja)» para FY2024 en ningún 10-K ni 10-Q; ningún adjunto lo trae
+—  adquisiciones          FY2025                          N/A  la SEC no publica «Adquisiciones (caja)» para FY2025 en ningún 10-K ni 10-Q; ningún adjunto lo trae
+—  adquisiciones          3T25                            N/A  la SEC no presenta el cuarto trimestre fiscal como tal; ningún adjunto lo trae
+—  adquisiciones          4T25                            N/A  la SEC no publica «Adquisiciones (caja)» para 4T25 en ningún 10-K ni 10-Q; ningún adjunto lo trae
+—  adquisiciones          1T26                            N/A  la SEC no publica «Adquisiciones (caja)» para 1T26 en ningún 10-K ni 10-Q; ningún adjunto lo trae
+—  adquisiciones          2T26                            N/A  la SEC no publica «Adquisiciones (caja)» para 2T26 en ningún 10-K ni 10-Q; ningún adjunto lo trae
+◐  emision_deuda          FY2021            20,393,000,000.00  sin contraste documental
+◐  emision_deuda          FY2022             5,465,000,000.00  sin contraste documental
+◐  emision_deuda          FY2023             5,228,000,000.00  sin contraste documental
+◐  emision_deuda          FY2024                         0.00  sin contraste documental
+◐  emision_deuda          FY2025             4,481,000,000.00  sin contraste documental
+∑  emision_deuda          3T25                           0.00  
+—  emision_deuda          4T25                            N/A  la SEC no publica «Emisión de deuda» para 4T25 en ningún 10-K ni 10-Q; ningún adjunto lo trae
+—  emision_deuda          1T26                            N/A  la SEC no publica «Emisión de deuda» para 1T26 en ningún 10-K ni 10-Q; ningún adjunto lo trae
+—  emision_deuda          2T26                            N/A  la SEC no publica «Emisión de deuda» para 2T26 en ningún 10-K ni 10-Q; ningún adjunto lo trae
+◐  amortizacion_deuda     FY2021             8,750,000,000.00  sin contraste documental
+◐  amortizacion_deuda     FY2022             9,543,000,000.00  sin contraste documental
+◐  amortizacion_deuda     FY2023            11,151,000,000.00  sin contraste documental
+◐  amortizacion_deuda     FY2024             9,958,000,000.00  sin contraste documental
+◐  amortizacion_deuda     FY2025            10,932,000,000.00  sin contraste documental
+∑  amortizacion_deuda     3T25               1,250,000,000.00  
+◐  amortizacion_deuda     4T25               2,164,000,000.00  sin contraste documental
+◐  amortizacion_deuda     1T26               5,750,000,000.00  sin contraste documental
+◐  amortizacion_deuda     2T26                 232,000,000.00  sin contraste documental
+—  fcf_compania           FY2021                          N/A  la compañía no declara esta partida en ningún 10-K ni 10-Q, y tampoco la imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  fcf_compania           FY2022                          N/A  la compañía no declara esta partida en ningún 10-K ni 10-Q, y tampoco la imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  fcf_compania           FY2023                          N/A  la compañía no declara esta partida en ningún 10-K ni 10-Q, y tampoco la imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  fcf_compania           FY2024                          N/A  la compañía no declara esta partida en ningún 10-K ni 10-Q, y tampoco la imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  fcf_compania           FY2025                          N/A  la compañía no declara esta partida en ningún 10-K ni 10-Q, y tampoco la imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  fcf_compania           3T25                            N/A  la compañía no declara esta partida en ningún 10-K ni 10-Q, y tampoco la imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  fcf_compania           4T25                            N/A  la compañía no declara esta partida en ningún 10-K ni 10-Q, y tampoco la imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  fcf_compania           1T26                            N/A  la compañía no declara esta partida en ningún 10-K ni 10-Q, y tampoco la imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+—  fcf_compania           2T26                            N/A  la compañía no declara esta partida en ningún 10-K ni 10-Q, y tampoco la imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.

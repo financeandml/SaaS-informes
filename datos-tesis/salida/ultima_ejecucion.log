@@ -1,0 +1,35 @@
+[1/8] Emisor en EDGAR: NFLX
+  NETFLIX INC · CIK 1065280 · Nasdaq · 1000 depósitos recientes
+[2/8] Expediente: 8 ficheros
+  10K_20251231     10-K                                     periodo=2025-12-31 fecha=2026-01-23 edgar=True (alta)
+  10Q_20260331     10-Q                                     periodo=2026-03-31 fecha=2026-04-17 edgar=True (alta)
+  PROXY            DEF 14A                                  periodo=None fecha=2026-06-04 edgar=True (alta)
+  FINWEB_20260630  Cuentas trimestrales (web del emisor)    periodo=2026-06-30 fecha=None edgar=None (media)
+  XLSX_20260630    Hoja de cálculo de cuentas               periodo=2026-06-30 fecha=None edgar=None (media)
+  CARTA_20260630   Carta a accionistas                      periodo=2026-06-30 fecha=2026-07-16 edgar=None (alta)
+  CALL_20260630    Transcripción de la call                 periodo=2026-06-30 fecha=2026-07-16 edgar=None (alta)
+  10Q_20260630     10-Q                                     periodo=2026-06-30 fecha=2026-07-17 edgar=True (alta)
+[3/8] Hechos XBRL
+  ejercicios ['FY2021', 'FY2022', 'FY2023', 'FY2024', 'FY2025'] · trimestres ['3T25', '4T25', '1T26', '2T26']
+[4/8] Extracción y contraste
+  solo_sec 105 · confirmado 203 · derivado 20 · solo_documento 16 · hueco 36
+[5/8] Recortes de evidencia
+  11 recortes: 10K_20251231 p42, 10K_20251231 p44, 10K_20251231 p45, 10Q_20260331 p3, 10Q_20260331 p5, 10Q_20260331 p6, 10Q_20260630 p3, 10Q_20260630 p5, 10Q_20260630 p6, FINWEB_20260630 p2, FINWEB_20260630 p3
+[6/8] Ficha, gobierno (con retratos), objetivos, regiones, riesgos, historial, precio, DCF, posición
+  retratos: 5 de 5 ejecutivos · 13 de 13 consejeros
+  riesgos: 33 epígrafes del Item 1A (págs. 7–18)
+  historial: 5 sorpresas de consenso · 3 frases de guía frente a real
+  precio: 75.31 USD · Nasdaq (web del mercado), cierre del 17/09/2026; fuera de sesión se cruzó a 75,51 (5:16 PM ET), que no es el precio del informe
+  mercado: sesión Closed · cierre anterior 76.41 · cap. publicada 313586297000.0 · 52 s (65.08, 124.86) · 1Y target 94.5 · cierres pedidos 7 · ✓ el «cierre anterior» de la ficha (76,41) coincide con el histórico del 16/09/2026
+  consenso de la bolsa: 95.82 USD · 32 analistas · rango 70.0–135.0 · ≠ la ficha de Nasdaq dice «1 Year Target» 94,50 y su página de analistas 95,82: dos cifras de la misma bolsa para el mismo hecho
+  sección F (bolsa): cadena ✓ · institucional ✓ · insiders ✓ · short ✓ · IV (Yahoo, excepción) ✓ 4 vencimientos
+  comparables (industria de la bolsa «Consumer Electronics/Video Chains»): BBY ✓, IQ ✓, CNVS ✓, IZM ✓
+  tamaño de mercado: 8 cifras declaradas por la compañía
+  DCF: Modelo_DCF_NFLX_Sergio_2026-09-15.xlsx · 23 supuestos · 3 escenarios · cuadre: Precio de mercado (USD/acció ✓ · Acciones en circulación (mil ✓ · Acciones diluidas (millones) ≠ · Deuda financiera total (M US ≠ · Caja e inversiones a corto ( ✓ · Ingresos 2025 (M USD) — año  ✓ · Margen operativo 2025 ✓
+[7/8] Narrativa e informe
+  narrativa: narrativas/NFLX_2026-09-17.json (redactor: claude-opus-5 (sesión de Claude Code, 17/09/2026) a partir del dossier del expediente)
+  evidencia visual: 94 recortes de texto · 11 recortes de estados · 18 retratos
+  narrativa verificada: 5 documentos citados · certeza alta · 0 frases retiradas · 0 reparos
+[8/8] HTML y PDF
+  salida\NFLX_tesis_2026-09-17.pdf · sha256 0c57a8e2830c65ca
+  salida\NFLX_tesis_2026-09-17.contraste.txt

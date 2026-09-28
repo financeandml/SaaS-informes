@@ -1,0 +1,119 @@
+[
+ {
+  "carta_8k_presentada": "2026-07-16",
+  "accession": "0001065280-26-000211",
+  "url": "https://www.sec.gov/Archives/edgar/data/1065280/000106528026000211/ex991_q226.htm",
+  "trimestre_publicado": "2T26",
+  "prevision_para_el_trimestre_siguiente": {
+   "3T26 · Revenue": 12860.0,
+   "3T26 · Operating Income": 4268.0,
+   "3T26 · Operating Margin": 33.2,
+   "3T26 · Net Income": 3452.0,
+   "3T26 · Diluted EPS": 0.82
+  }
+ },
+ {
+  "carta_8k_presentada": "2026-04-16",
+  "accession": "0001065280-26-000137",
+  "url": "https://www.sec.gov/Archives/edgar/data/1065280/000106528026000137/ex991_q126.htm",
+  "trimestre_publicado": "1T26",
+  "prevision_para_el_trimestre_siguiente": {
+   "2T26 · Revenue": 12574.0,
+   "2T26 · Operating Income": 4105.0,
+   "2T26 · Operating Margin": 32.6,
+   "2T26 · Net Income": 3327.0,
+   "2T26 · Diluted EPS": 0.78
+  }
+ },
+ {
+  "carta_8k_presentada": "2026-01-20",
+  "accession": "0001065280-26-000033",
+  "url": "https://www.sec.gov/Archives/edgar/data/1065280/000106528026000033/ex991_q425.htm",
+  "trimestre_publicado": "4T25",
+  "prevision_para_el_trimestre_siguiente": {
+   "1T26 · Revenue": 12157.0,
+   "1T26 · Operating Income": 3906.0,
+   "1T26 · Operating Margin": 32.1,
+   "1T26 · Net Income": 3264.0,
+   "1T26 · Diluted EPS": 0.76
+  }
+ },
+ {
+  "carta_8k_presentada": "2025-10-21",
+  "accession": "0001065280-25-000404",
+  "url": "https://www.sec.gov/Archives/edgar/data/1065280/000106528025000404/ex991_q325.htm",
+  "trimestre_publicado": "3T25",
+  "prevision_para_el_trimestre_siguiente": {
+   "4T25 · Revenue": 11960.0,
+   "4T25 · Operating Income": 2860.0,
+   "4T25 · Operating Margin": 23.9,
+   "4T25 · Net Income": 2355.0,
+   "4T25 · Diluted EPS": 5.45
+  }
+ },
+ {
+  "carta_8k_presentada": "2025-07-17",
+  "accession": "0001065280-25-000322",
+  "url": "https://www.sec.gov/Archives/edgar/data/1065280/000106528025000322/ex991_q225.htm",
+  "trimestre_publicado": "2T25",
+  "prevision_para_el_trimestre_siguiente": {
+   "3T25 · Revenue": 11526.0,
+   "3T25 · Operating Income": 3625.0,
+   "3T25 · Operating Margin": 31.5,
+   "3T25 · Net Income": 2979.0,
+   "3T25 · Diluted EPS": 6.87
+  }
+ },
+ {
+  "carta_8k_presentada": "2025-04-17",
+  "accession": "0001065280-25-000175",
+  "url": "https://www.sec.gov/Archives/edgar/data/1065280/000106528025000175/ex991_q125.htm",
+  "trimestre_publicado": "1T25",
+  "prevision_para_el_trimestre_siguiente": {
+   "2T25 · Revenue": 11035.0,
+   "2T25 · Operating Income": 3675.0,
+   "2T25 · Operating Margin": 33.3,
+   "2T25 · Net Income": 3055.0,
+   "2T25 · Diluted EPS": 7.03
+  }
+ },
+ {
+  "carta_8k_presentada": "2025-01-21",
+  "accession": "0001065280-25-000033",
+  "url": "https://www.sec.gov/Archives/edgar/data/1065280/000106528025000033/ex991_q424.htm",
+  "trimestre_publicado": "4T24",
+  "prevision_para_el_trimestre_siguiente": {
+   "1T25 · Revenue": 10416.0,
+   "1T25 · Operating Income": 2940.0,
+   "1T25 · Operating Margin": 28.2,
+   "1T25 · Net Income": 2440.0,
+   "1T25 · Diluted EPS": 5.58
+  }
+ },
+ {
+  "carta_8k_presentada": "2024-10-17",
+  "accession": "0001065280-24-000286",
+  "url": "https://www.sec.gov/Archives/edgar/data/1065280/000106528024000286/ex991_q324.htm",
+  "trimestre_publicado": "3T24",
+  "prevision_para_el_trimestre_siguiente": {
+   "4T24 · Revenue": 10128.0,
+   "4T24 · Operating Income": 2190.0,
+   "4T24 · Operating Margin": 21.6,
+   "4T24 · Net Income": 1847.0,
+   "4T24 · Diluted EPS": 4.23
+  }
+ },
+ {
+  "carta_8k_presentada": "2024-07-18",
+  "accession": "0001065280-24-000199",
+  "url": "https://www.sec.gov/Archives/edgar/data/1065280/000106528024000199/ex991_q224.htm",
+  "trimestre_publicado": "2T24",
+  "prevision_para_el_trimestre_siguiente": {
+   "3T24 · Revenue": 9727.0,
+   "3T24 · Operating Income": 2730.0,
+   "3T24 · Operating Margin": 28.1,
+   "3T24 · Net Income": 2237.0,
+   "3T24 · Diluted EPS": 5.1
+  }
+ }
+]

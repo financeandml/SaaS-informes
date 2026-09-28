@@ -1,0 +1,44 @@
+{
+ "meta": {
+  "fecha_informe": "2026-09-28",
+  "analista": "Sergio",
+  "fecha_valoracion": "2026-09-25",
+  "tipo": "inicio_cobertura",
+  "nombre_presentacion": "Tesis Apple",
+  "sector": "software"
+ },
+ "pos": {
+  "checklist": [
+   {
+    "id": "variante",
+    "criterio": "Visión propia distinta de lo que descuenta el precio (reverse DCF), en dos frases",
+    "tipo": "manual",
+    "eliminatorio": true
+   }
+  ],
+  "recomendacion": "Comprar"
+ },
+ "_revisar": true,
+ "docs": {
+  "sin_call": true
+ },
+ "verif": {
+  "solo_documento_ok": true
+ },
+ "tesis": {
+  "resumen": {
+   "texto": "BLbalabalablabalba"
+  },
+  "por_que_ahora": {
+   "texto": "BLABALBALABALBA"
+  }
+ },
+ "pilares": [
+  {
+   "titulo": "Volúmenes de opciones",
+   "argumento": "tiene mucho volumen",
+   "evidencias": [],
+   "kpi": "Que supere el Opnt int....."
+  }
+ ]
+}

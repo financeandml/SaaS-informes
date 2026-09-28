@@ -1,0 +1,44 @@
+{
+ "SEC_10-K_2025-09-27_0000320193-25-000079.pdf": {
+  "url": "https://www.sec.gov/Archives/edgar/data/320193/000032019325000079/aapl-20250927.htm",
+  "accession": "0000320193-25-000079",
+  "formulario": "10-K",
+  "presentado": "2025-10-31",
+  "periodo": "2025-09-27"
+ },
+ "SEC_10-Q_2026-06-27_0000320193-26-000020.pdf": {
+  "url": "https://www.sec.gov/Archives/edgar/data/320193/000032019326000020/aapl-20260627.htm",
+  "accession": "0000320193-26-000020",
+  "formulario": "10-Q",
+  "presentado": "2026-07-31",
+  "periodo": "2026-06-27"
+ },
+ "SEC_10-Q_2026-03-28_0000320193-26-000013.pdf": {
+  "url": "https://www.sec.gov/Archives/edgar/data/320193/000032019326000013/aapl-20260328.htm",
+  "accession": "0000320193-26-000013",
+  "formulario": "10-Q",
+  "presentado": "2026-05-01",
+  "periodo": "2026-03-28"
+ },
+ "SEC_10-Q_2025-12-27_0000320193-26-000006.pdf": {
+  "url": "https://www.sec.gov/Archives/edgar/data/320193/000032019326000006/aapl-20251227.htm",
+  "accession": "0000320193-26-000006",
+  "formulario": "10-Q",
+  "presentado": "2026-01-30",
+  "periodo": "2025-12-27"
+ },
+ "SEC_DEF-14A_2026-02-24_0001308179-26-000008.pdf": {
+  "url": "https://www.sec.gov/Archives/edgar/data/320193/000130817926000008/aapl014016-def14a.htm",
+  "accession": "0001308179-26-000008",
+  "formulario": "DEF 14A",
+  "presentado": "2026-01-08",
+  "periodo": "2026-02-24"
+ },
+ "SEC_8-K_2026-07-30_ex99-1_0000320193-26-000018.pdf": {
+  "url": "https://www.sec.gov/Archives/edgar/data/320193/000032019326000018/a8-kex991q3202606272026.htm",
+  "accession": "0000320193-26-000018",
+  "formulario": "8-K",
+  "presentado": "2026-07-30",
+  "periodo": "2026-07-30"
+ }
+}

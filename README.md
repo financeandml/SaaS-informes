@@ -63,3 +63,25 @@ impide que otro módulo empiece a depender de él. Retirarlo es F9.
 Sin red: `tests/fixtures/cache_sec/` (QCOM, NFLX, WMT, JPM), `tests/fixtures/cache_bolsa/` (Nasdaq y Yahoo) y
 `tests/fixtures/<TICKER>/entradas.json` (entradas de prueba, que nunca dan «EMITIDO»). Cada prueba nueva se ha visto
 fallar al reintroducir el fallo que caza (CLAUDE.md, regla 16). Estado: `docs/fases/` y la sección «Estado» de `CLAUDE.md`.
+
+## Desarrollo desde el repositorio
+
+```
+git clone <url> && cd <carpeta>
+python -m venv .venv && .venv\Scripts\activate            # Windows (en Linux/macOS: source .venv/bin/activate)
+pip install -r requirements.txt
+python -m playwright install chromium
+copy .env.ejemplo .env                                     # y rellenar WC_SEC_CONTACTO (nombre y correo, lo exige la SEC)
+pytest -q                                                  # la batería, sin red: ~10 min; `-m "not lenta"` para iterar
+```
+
+- **Reglas.** `CLAUDE.md` (las del SaaS) y `docs/CLAUDE_warrants.md` (las de Warrants & Co., que hereda). Los contratos, en
+  `docs/spec/`; el estado y lo siguiente, en `CLAUDE.md › Estado`; el plan de corrección de la auditoría del 27/09/2026 (78
+  fallos, uno por prueba en `tests/prueba_auditoria_27_09.py`, `pytest -m auditoria`), en `docs/fases/A.md`.
+- **Datos de ejemplo.** `datos-tesis/` es una instantánea (29/09/2026) de los datos de trabajo: adjuntos de AAPL, NFLX,
+  ORCL y QCOM (documentos públicos de la SEC y de las compañías), las entradas del analista y los informes emitidos. Con
+  `WC_DATOS=./datos-tesis` en `.env`, el SaaS arranca con ellos. Las pruebas de la auditoría necesitan esos adjuntos.
+- **Modelos y posiciones.** `dcf/` (libros DCF del analista, solo lectura para el programa) y `posiciones/` (solo se leen
+  para migrarlas). `Claude outputs/` guarda informes de control.
+- **Cachés.** `cache_sec/` y `cache_bolsa/` no se versionan: crecen con cada consulta y se rehacen solas con red. Las
+  pruebas usan las respuestas congeladas de `tests/fixtures/`.

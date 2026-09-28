@@ -1,0 +1,380 @@
+[
+ {
+  "nota_8k_presentada": "2024-07-31",
+  "url": "https://www.sec.gov/Archives/edgar/data/804328/000080432824000055/qcom062324erex991.htm",
+  "trimestre_publicado": "3T FY24",
+  "guia": [
+   {
+    "metrica": "ingresos",
+    "trimestre": "4T FY24",
+    "bajo": 9500000000.0,
+    "alto": 10300000000.0,
+    "unidad": "USD"
+   },
+   {
+    "metrica": "ingresos_segmento:QCT",
+    "trimestre": "4T FY24",
+    "bajo": 8100000000.0,
+    "alto": 8700000000.0,
+    "unidad": "USD"
+   },
+   {
+    "metrica": "ingresos_segmento:QTL",
+    "trimestre": "4T FY24",
+    "bajo": 1350000000.0,
+    "alto": 1550000000.0,
+    "unidad": "USD"
+   },
+   {
+    "metrica": "bpa_diluido",
+    "trimestre": "4T FY24",
+    "bajo": 2.38,
+    "alto": 2.58,
+    "unidad": "USD/acción"
+   },
+   {
+    "metrica": "bpa_no_gaap",
+    "trimestre": "4T FY24",
+    "bajo": 2.45,
+    "alto": 2.65,
+    "unidad": "USD/acción"
+   }
+  ]
+ },
+ {
+  "nota_8k_presentada": "2024-11-06",
+  "url": "https://www.sec.gov/Archives/edgar/data/804328/000080432824000074/qcom092924erex991.htm",
+  "trimestre_publicado": "4T FY24",
+  "guia": [
+   {
+    "metrica": "ingresos",
+    "trimestre": "1T FY25",
+    "bajo": 10500000000.0,
+    "alto": 11300000000.0,
+    "unidad": "USD"
+   },
+   {
+    "metrica": "ingresos_segmento:QCT",
+    "trimestre": "1T FY25",
+    "bajo": 9000000000.0,
+    "alto": 9600000000.0,
+    "unidad": "USD"
+   },
+   {
+    "metrica": "ingresos_segmento:QTL",
+    "trimestre": "1T FY25",
+    "bajo": 1450000000.0,
+    "alto": 1650000000.0,
+    "unidad": "USD"
+   },
+   {
+    "metrica": "bpa_diluido",
+    "trimestre": "1T FY25",
+    "bajo": 2.39,
+    "alto": 2.59,
+    "unidad": "USD/acción"
+   },
+   {
+    "metrica": "bpa_no_gaap",
+    "trimestre": "1T FY25",
+    "bajo": 2.85,
+    "alto": 3.05,
+    "unidad": "USD/acción"
+   }
+  ]
+ },
+ {
+  "nota_8k_presentada": "2025-02-05",
+  "url": "https://www.sec.gov/Archives/edgar/data/804328/000080432825000010/qcom122924erex991.htm",
+  "trimestre_publicado": "1T FY25",
+  "guia": [
+   {
+    "metrica": "ingresos",
+    "trimestre": "2T FY25",
+    "bajo": 10300000000.0,
+    "alto": 11200000000.0,
+    "unidad": "USD"
+   },
+   {
+    "metrica": "ingresos_segmento:QCT",
+    "trimestre": "2T FY25",
+    "bajo": 8900000000.0,
+    "alto": 9500000000.0,
+    "unidad": "USD"
+   },
+   {
+    "metrica": "ingresos_segmento:QTL",
+    "trimestre": "2T FY25",
+    "bajo": 1250000000.0,
+    "alto": 1450000000.0,
+    "unidad": "USD"
+   },
+   {
+    "metrica": "bpa_diluido",
+    "trimestre": "2T FY25",
+    "bajo": 2.38,
+    "alto": 2.58,
+    "unidad": "USD/acción"
+   },
+   {
+    "metrica": "bpa_no_gaap",
+    "trimestre": "2T FY25",
+    "bajo": 2.7,
+    "alto": 2.9,
+    "unidad": "USD/acción"
+   }
+  ]
+ },
+ {
+  "nota_8k_presentada": "2025-04-30",
+  "url": "https://www.sec.gov/Archives/edgar/data/804328/000080432825000029/qcom033025erex991.htm",
+  "trimestre_publicado": "2T FY25",
+  "guia": [
+   {
+    "metrica": "ingresos",
+    "trimestre": "3T FY25",
+    "bajo": 9900000000.0,
+    "alto": 10700000000.0,
+    "unidad": "USD"
+   },
+   {
+    "metrica": "ingresos_segmento:QCT",
+    "trimestre": "3T FY25",
+    "bajo": 8700000000.0,
+    "alto": 9300000000.0,
+    "unidad": "USD"
+   },
+   {
+    "metrica": "ingresos_segmento:QTL",
+    "trimestre": "3T FY25",
+    "bajo": 1150000000.0,
+    "alto": 1350000000.0,
+    "unidad": "USD"
+   },
+   {
+    "metrica": "bpa_diluido",
+    "trimestre": "3T FY25",
+    "bajo": 2.14,
+    "alto": 2.34,
+    "unidad": "USD/acción"
+   },
+   {
+    "metrica": "bpa_no_gaap",
+    "trimestre": "3T FY25",
+    "bajo": 2.6,
+    "alto": 2.8,
+    "unidad": "USD/acción"
+   }
+  ]
+ },
+ {
+  "nota_8k_presentada": "2025-07-30",
+  "url": "https://www.sec.gov/Archives/edgar/data/804328/000080432825000044/qcom062925erex991.htm",
+  "trimestre_publicado": "3T FY25",
+  "guia": [
+   {
+    "metrica": "ingresos",
+    "trimestre": "4T FY25",
+    "bajo": 10300000000.0,
+    "alto": 11100000000.0,
+    "unidad": "USD"
+   },
+   {
+    "metrica": "ingresos_segmento:QCT",
+    "trimestre": "4T FY25",
+    "bajo": 9000000000.0,
+    "alto": 9600000000.0,
+    "unidad": "USD"
+   },
+   {
+    "metrica": "ingresos_segmento:QTL",
+    "trimestre": "4T FY25",
+    "bajo": 1250000000.0,
+    "alto": 1450000000.0,
+    "unidad": "USD"
+   },
+   {
+    "metrica": "bpa_diluido",
+    "trimestre": "4T FY25",
+    "bajo": 2.23,
+    "alto": 2.43,
+    "unidad": "USD/acción"
+   },
+   {
+    "metrica": "bpa_no_gaap",
+    "trimestre": "4T FY25",
+    "bajo": 2.75,
+    "alto": 2.95,
+    "unidad": "USD/acción"
+   }
+  ]
+ },
+ {
+  "nota_8k_presentada": "2025-11-05",
+  "url": "https://www.sec.gov/Archives/edgar/data/804328/000080432825000084/qcom092825erex991.htm",
+  "trimestre_publicado": "4T FY25",
+  "guia": [
+   {
+    "metrica": "ingresos",
+    "trimestre": "1T FY26",
+    "bajo": 11800000000.0,
+    "alto": 12600000000.0,
+    "unidad": "USD"
+   },
+   {
+    "metrica": "ingresos_segmento:QCT",
+    "trimestre": "1T FY26",
+    "bajo": 10300000000.0,
+    "alto": 10900000000.0,
+    "unidad": "USD"
+   },
+   {
+    "metrica": "ingresos_segmento:QTL",
+    "trimestre": "1T FY26",
+    "bajo": 1400000000.0,
+    "alto": 1600000000.0,
+    "unidad": "USD"
+   },
+   {
+    "metrica": "bpa_diluido",
+    "trimestre": "1T FY26",
+    "bajo": 2.55,
+    "alto": 2.75,
+    "unidad": "USD/acción"
+   },
+   {
+    "metrica": "bpa_no_gaap",
+    "trimestre": "1T FY26",
+    "bajo": 3.3,
+    "alto": 3.5,
+    "unidad": "USD/acción"
+   }
+  ]
+ },
+ {
+  "nota_8k_presentada": "2026-02-04",
+  "url": "https://www.sec.gov/Archives/edgar/data/804328/000080432826000016/qcom122825erex991.htm",
+  "trimestre_publicado": "1T FY26",
+  "guia": [
+   {
+    "metrica": "ingresos",
+    "trimestre": "2T FY26",
+    "bajo": 10200000000.0,
+    "alto": 11000000000.0,
+    "unidad": "USD"
+   },
+   {
+    "metrica": "ingresos_segmento:QCT",
+    "trimestre": "2T FY26",
+    "bajo": 8800000000.0,
+    "alto": 9400000000.0,
+    "unidad": "USD"
+   },
+   {
+    "metrica": "ingresos_segmento:QTL",
+    "trimestre": "2T FY26",
+    "bajo": 1200000000.0,
+    "alto": 1400000000.0,
+    "unidad": "USD"
+   },
+   {
+    "metrica": "bpa_diluido",
+    "trimestre": "2T FY26",
+    "bajo": 1.69,
+    "alto": 1.89,
+    "unidad": "USD/acción"
+   },
+   {
+    "metrica": "bpa_no_gaap",
+    "trimestre": "2T FY26",
+    "bajo": 2.45,
+    "alto": 2.65,
+    "unidad": "USD/acción"
+   }
+  ]
+ },
+ {
+  "nota_8k_presentada": "2026-04-29",
+  "url": "https://www.sec.gov/Archives/edgar/data/804328/000080432826000060/qcom032926erex991.htm",
+  "trimestre_publicado": "2T FY26",
+  "guia": [
+   {
+    "metrica": "ingresos",
+    "trimestre": "3T FY26",
+    "bajo": 9200000000.0,
+    "alto": 10000000000.0,
+    "unidad": "USD"
+   },
+   {
+    "metrica": "ingresos_segmento:QCT",
+    "trimestre": "3T FY26",
+    "bajo": 7900000000.0,
+    "alto": 8500000000.0,
+    "unidad": "USD"
+   },
+   {
+    "metrica": "ingresos_segmento:QTL",
+    "trimestre": "3T FY26",
+    "bajo": 1150000000.0,
+    "alto": 1350000000.0,
+    "unidad": "USD"
+   },
+   {
+    "metrica": "bpa_diluido",
+    "trimestre": "3T FY26",
+    "bajo": 1.26,
+    "alto": 1.46,
+    "unidad": "USD/acción"
+   },
+   {
+    "metrica": "bpa_no_gaap",
+    "trimestre": "3T FY26",
+    "bajo": 2.1,
+    "alto": 2.3,
+    "unidad": "USD/acción"
+   }
+  ]
+ },
+ {
+  "nota_8k_presentada": "2026-07-29",
+  "url": "https://www.sec.gov/Archives/edgar/data/804328/000080432826000085/qcom062826erex991.htm",
+  "trimestre_publicado": "3T FY26",
+  "guia": [
+   {
+    "metrica": "ingresos",
+    "trimestre": "4T FY26",
+    "bajo": 9700000000.0,
+    "alto": 10500000000.0,
+    "unidad": "USD"
+   },
+   {
+    "metrica": "ingresos_segmento:QCT",
+    "trimestre": "4T FY26",
+    "bajo": 8400000000.0,
+    "alto": 9000000000.0,
+    "unidad": "USD"
+   },
+   {
+    "metrica": "ingresos_segmento:QTL",
+    "trimestre": "4T FY26",
+    "bajo": 1200000000.0,
+    "alto": 1400000000.0,
+    "unidad": "USD"
+   },
+   {
+    "metrica": "bpa_diluido",
+    "trimestre": "4T FY26",
+    "bajo": 1.22,
+    "alto": 1.42,
+    "unidad": "USD/acción"
+   },
+   {
+    "metrica": "bpa_no_gaap",
+    "trimestre": "4T FY26",
+    "bajo": 2.05,
+    "alto": 2.25,
+    "unidad": "USD/acción"
+   }
+  ]
+ }
+]

@@ -1,0 +1,135 @@
+[1/8] Emisor en EDGAR: AAPL
+  Apple Inc. · CIK 320193 · Nasdaq · 1000 depósitos recientes
+[2/8] Expediente: 6 ficheros
+  10K_20250927     10-K                                     periodo=2025-09-27 fecha=2025-10-31 edgar=True (alta)
+  10Q_20251227     10-Q                                     periodo=2025-12-27 fecha=2026-01-30 edgar=True (alta)
+  PROXY            DEF 14A                                  periodo=None fecha=2026-02-24 edgar=True (alta)
+  10Q_20260328     10-Q                                     periodo=2026-03-28 fecha=2026-05-01 edgar=True (alta)
+  10Q_20260627     10-Q                                     periodo=2026-06-27 fecha=2026-07-31 edgar=True (alta)
+  DOC              desconocido                              periodo=None fecha=2026-07-30 edgar=True (baja)
+  [grave] SEC_8-K_2026-07-30_ex99-1_0000320193-26-000018.pdf: Ninguna pista reconocible en la primera página. Traído de EDGAR: anexo del 8-K 0000320193-26-000018, presentado el 30/07/2026.
+  [grave] Falta el apartado «guidance» del expediente.
+[3/8] Hechos XBRL
+  ejercicios ['FY2021', 'FY2022', 'FY2023', 'FY2024', 'FY2025'] · trimestres ['3T25', '4T25', '1T26', '2T26']
+[4/8] Extracción y contraste
+  solo_sec 219 · discrepante 68 · derivado 21 · confirmado 44 · hueco 31 · no_aplica 48
+    no aplica · amortizacion_contenido: la compañía no declara esta partida en ningún 10-K ni 10-Q, y tampoco la imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+    no aplica · contenido: la compañía no declara esta partida en ningún 10-K ni 10-Q, y tampoco la imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+    no aplica · fondo_comercio: la compañía dejó de declarar esta partida en 2017, y tampoco la imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+    no aplica · autocartera: la compañía no declara esta partida en ningún 10-K ni 10-Q, y tampoco la imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+    no aplica · fcf_compania: la compañía no declara esta partida en ningún 10-K ni 10-Q, y tampoco la imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+[5/8] Recortes de evidencia
+  16 recortes: 10K_20250927 p32, 10K_20250927 p33, 10K_20250927 p36, 10Q_20251227 p4, 10Q_20251227 p5, 10Q_20251227 p8, 10Q_20251227 p9, 10Q_20251227 p20, 10Q_20260328 p4, 10Q_20260328 p5, 10Q_20260328 p9, 10Q_20260328 p20, 10Q_20260627 p4, 10Q_20260627 p5, 10Q_20260627 p9, 10Q_20260627 p20
+[6/8] Ficha, gobierno (con retratos), objetivos, regiones, riesgos, historial, precio, DCF, posición
+    gobierno · falta accionistas: no se reconoció la tabla de propiedad en la DEF 14A de EDGAR: pídasela al analista con cita
+    gobierno · falta ejecutivos: ni el 10-K ni la DEF 14A traen la lista de ejecutivos con edad y cargo reconocible
+    gobierno · falta filiales: el índice del último 10-K no incluye el Exhibit 21
+    gobierno · falta consejo: no se hallaron fichas de consejeros («Nombre CARGO», «DIRECTOR SINCE», «AGE») en la proxy
+  retratos: 0 de 0 ejecutivos · 0 de 0 consejeros
+  auditoría de datos: 66 identidades cuadran · 0 no cuadran · 0 despejadas de su identidad · 0 sin datos suficientes
+  riesgos: 27 epígrafes del Item 1A (págs. 8–20)
+  historial: 0 sorpresas de consenso (transcripción) · 0 frases de guía frente a real · 0 cartas de EDGAR → 0 previsiones frente a real · 4 trimestres de consenso según la bolsa
+    falta consenso: sin transcripción en el expediente: no hay tabla de consenso frente a real
+    falta guia_vs_real: sin carta a accionistas en el expediente
+    falta guias_anteriores: EDGAR no devolvió cartas con tabla de previsión: 0000320193-26-000018: el Exhibit 99 no trae la tabla de resumen con columna «Forecast»; 0000320193-26-000011: el Exhibit 99 no trae la tabla de resumen con columna «Forecast»; 0000320193-26-000005: el Exhibit 99 no trae la tabla de resumen con columna «Forecast»; 0000320193-25-000077: el Exhibit 99 no trae la tabla de resumen con columna «Forecast»; 0000320193-25-000071: el Exhibit 99 no trae la tabla de resumen con columna «Forecast»; 0000320193-25-000055: el Exhibit 99 no trae la tabla de resumen con columna «Forecast»; 0000320193-25-000007: el Exhibit 99 no trae la tabla de resumen con columna «Forecast»; 0000320193-24-000120: el Exhibit 99 no trae la tabla de resumen con columna «Forecast»; 0000320193-24-000080: el Exhibit 99 no trae la tabla de resumen con columna «Forecast»
+    falta carta 0000320193-26-000018: el Exhibit 99 no trae la tabla de resumen con columna «Forecast»
+    falta carta 0000320193-26-000011: el Exhibit 99 no trae la tabla de resumen con columna «Forecast»
+    falta carta 0000320193-26-000005: el Exhibit 99 no trae la tabla de resumen con columna «Forecast»
+    falta carta 0000320193-25-000077: el Exhibit 99 no trae la tabla de resumen con columna «Forecast»
+    falta carta 0000320193-25-000071: el Exhibit 99 no trae la tabla de resumen con columna «Forecast»
+    falta carta 0000320193-25-000055: el Exhibit 99 no trae la tabla de resumen con columna «Forecast»
+    falta carta 0000320193-25-000007: el Exhibit 99 no trae la tabla de resumen con columna «Forecast»
+    falta carta 0000320193-24-000120: el Exhibit 99 no trae la tabla de resumen con columna «Forecast»
+    falta carta 0000320193-24-000080: el Exhibit 99 no trae la tabla de resumen con columna «Forecast»
+  precio: N/A — la cotización de Nasdaq (web del mercado) es del 24/09/2026, no del día de emisión
+  mercado: sesión Closed · cierre anterior 335.92 · cap. publicada 4977636972600.0 · 52 s (243.42, 345.34) · 1Y target 335.0 · cierres pedidos 7 · ✓ el «cierre anterior» de la ficha (335,92) coincide con el histórico del 23/09/2026
+  consenso de la bolsa: 334.9 USD · 28 analistas · rango 245.0–400.0 · ✓ el «1 Year Target» de la ficha (335,00) coincide con el consenso de analistas (334,90)
+  sección F (bolsa): cadena ✓ · institucional ✓ · insiders ✓ · short ✓ · IV (Yahoo, excepción) ✓ 4 vencimientos
+  comparables (industria de la bolsa «Computer Manufacturing»): DELL ✓, IBM ✓, SMCIP ✓, HPQ ✓, SMCI ✓, XNDU sin cuentas, OMCL ✓, OSS ✓, ZEPP ✓, SCKT ✓
+  tamaño de mercado: 1 cifras declaradas por la compañía · faltan ['TAM'] · 7 conceptos de otro sector, no se cuentan como huecos
+  próxima presentación: 29/10/2026  (esperada según la bolsa) · — sin segunda fuente con que cuadrarla
+  múltiplos TTM: PER N/A · EV / EBITDA N/A · EV / Ventas N/A · P / FCF N/A · PEG N/A
+  parte B: entradas C:\Users\Sergi\Downloads\Warrants&co\PROYECTOS VERANO\datos-tesis\entradas\AAPL\2026-09-26\entradas.json · 9 notas de resultados · 0 candidatos de guía (0 confirmados) · 5 faltas
+    falta perfil.descripcion: falta el texto del analista (apartado 4)
+    falta perfil.segmentos_ok: el analista no ha confirmado el cuadro de segmentos
+    falta equipo.track_record: mínimo CEO y CFO
+    falta equipo.asignacion_capital: falta el texto del analista
+    falta catalizadores: 0 (mínimo 3)
+[7/8] Informe
+  párrafos de plantilla: Párrafo factual del resumen ejecutivo (sin validar)
+  documentación complementaria: 14 piezas en 10 apartados · 16 recortes de estados junto a sus cuadros · 0 retratos
+[8/8] Doble comprobación, HTML y PDF
+  doble comprobación: 1433 cifras releídas · 0 desacuerdos
+  puerta de calidad: 130 bloqueos · 3 avisos · BORRADOR (hoja 0 con los bloqueos)
+  C:\Users\Sergi\Downloads\Warrants&co\PROYECTOS VERANO\datos-tesis\salida\AAPL\AAPL_tesis_2026-09-26.pdf · sha256 446a83b7bad3855e
+  C:\Users\Sergi\Downloads\Warrants&co\PROYECTOS VERANO\datos-tesis\salida\AAPL\AAPL_tesis_2026-09-26.contraste.txt
+
+BORRADOR: 68 discrepancias sin decidir bloquean la emisión:
+  ≠ Ingresos FY2023: SEC 383.285.000.000,00 frente a SEC_10-K_2025-09-27_0000320193-25-000079.pdf pág. 32 = 383.285.000,00
+  ≠ Ingresos FY2024: SEC 391.035.000.000,00 frente a SEC_10-K_2025-09-27_0000320193-25-000079.pdf pág. 32 = 391.035.000,00
+  ≠ Ingresos FY2025: SEC 416.161.000.000,00 frente a SEC_10-K_2025-09-27_0000320193-25-000079.pdf pág. 32 = 416.161.000,00
+  ≠ Investigación y desarrollo FY2023: SEC 29.915.000.000,00 frente a SEC_10-K_2025-09-27_0000320193-25-000079.pdf pág. 32 = 29.915.000,00
+  ≠ Investigación y desarrollo FY2024: SEC 31.370.000.000,00 frente a SEC_10-K_2025-09-27_0000320193-25-000079.pdf pág. 32 = 31.370.000,00
+  ≠ Investigación y desarrollo FY2025: SEC 34.550.000.000,00 frente a SEC_10-K_2025-09-27_0000320193-25-000079.pdf pág. 32 = 34.550.000,00
+  ≠ Investigación y desarrollo 4T25: SEC 10.887.000.000,00 frente a SEC_10-Q_2025-12-27_0000320193-26-000006.pdf pág. 4 = 10.887.000,00; SEC_10-Q_2025-12-27_0000320193-26-000006.pdf pág. 19 = 8.268.000.000,00
+  ≠ Investigación y desarrollo 1T26: SEC 11.419.000.000,00 frente a SEC_10-Q_2026-03-28_0000320193-26-000013.pdf pág. 4 = 11.419.000,00
+  ≠ Investigación y desarrollo 2T26: SEC 11.729.000.000,00 frente a SEC_10-Q_2026-06-27_0000320193-26-000020.pdf pág. 4 = 11.729.000,00
+  ≠ Ventas, generales y administrativos FY2023: SEC 24.932.000.000,00 frente a SEC_10-K_2025-09-27_0000320193-25-000079.pdf pág. 32 = 24.932.000,00
+  ≠ Ventas, generales y administrativos FY2024: SEC 26.097.000.000,00 frente a SEC_10-K_2025-09-27_0000320193-25-000079.pdf pág. 32 = 26.097.000,00
+  ≠ Ventas, generales y administrativos FY2025: SEC 27.601.000.000,00 frente a SEC_10-K_2025-09-27_0000320193-25-000079.pdf pág. 32 = 27.601.000,00
+  ≠ Ventas, generales y administrativos 4T25: SEC 7.492.000.000,00 frente a SEC_10-Q_2025-12-27_0000320193-26-000006.pdf pág. 4 = 7.492.000,00; SEC_10-Q_2025-12-27_0000320193-26-000006.pdf pág. 19 = 7.175.000.000,00
+  ≠ Ventas, generales y administrativos 1T26: SEC 7.477.000.000,00 frente a SEC_10-Q_2026-03-28_0000320193-26-000013.pdf pág. 4 = 7.477.000,00
+  ≠ Ventas, generales y administrativos 2T26: SEC 7.346.000.000,00 frente a SEC_10-Q_2026-06-27_0000320193-26-000020.pdf pág. 4 = 7.346.000,00
+  ≠ EBIT (resultado operativo) FY2023: SEC 114.301.000.000,00 frente a SEC_10-K_2025-09-27_0000320193-25-000079.pdf pág. 32 = 114.301.000,00
+  ≠ EBIT (resultado operativo) FY2024: SEC 123.216.000.000,00 frente a SEC_10-K_2025-09-27_0000320193-25-000079.pdf pág. 32 = 123.216.000,00
+  ≠ EBIT (resultado operativo) FY2025: SEC 133.050.000.000,00 frente a SEC_10-K_2025-09-27_0000320193-25-000079.pdf pág. 32 = 133.050.000,00
+  ≠ EBIT (resultado operativo) 4T25: SEC 50.852.000.000,00 frente a SEC_10-Q_2025-12-27_0000320193-26-000006.pdf pág. 4 = 50.852.000,00
+  ≠ EBIT (resultado operativo) 1T26: SEC 35.885.000.000,00 frente a SEC_10-Q_2026-03-28_0000320193-26-000013.pdf pág. 4 = 35.885.000,00
+  ≠ EBIT (resultado operativo) 2T26: SEC 35.695.000.000,00 frente a SEC_10-Q_2026-06-27_0000320193-26-000020.pdf pág. 4 = 35.695.000,00
+  ≠ Resultado antes de impuestos FY2023: SEC 113.736.000.000,00 frente a SEC_10-K_2025-09-27_0000320193-25-000079.pdf pág. 32 = 113.736.000,00
+  ≠ Resultado antes de impuestos FY2024: SEC 123.485.000.000,00 frente a SEC_10-K_2025-09-27_0000320193-25-000079.pdf pág. 32 = 123.485.000,00
+  ≠ Resultado antes de impuestos FY2025: SEC 132.729.000.000,00 frente a SEC_10-K_2025-09-27_0000320193-25-000079.pdf pág. 32 = 132.729.000,00
+  ≠ Resultado antes de impuestos 4T25: SEC 51.002.000.000,00 frente a SEC_10-Q_2025-12-27_0000320193-26-000006.pdf pág. 4 = 51.002.000,00
+  ≠ Resultado antes de impuestos 1T26: SEC 35.833.000.000,00 frente a SEC_10-Q_2026-03-28_0000320193-26-000013.pdf pág. 4 = 35.833.000,00
+  ≠ Resultado antes de impuestos 2T26: SEC 36.267.000.000,00 frente a SEC_10-Q_2026-06-27_0000320193-26-000020.pdf pág. 4 = 36.267.000,00
+  ≠ Impuesto sobre beneficios FY2023: SEC 16.741.000.000,00 frente a SEC_10-K_2025-09-27_0000320193-25-000079.pdf pág. 32 = 16.741.000,00
+  ≠ Impuesto sobre beneficios FY2024: SEC 29.749.000.000,00 frente a SEC_10-K_2025-09-27_0000320193-25-000079.pdf pág. 32 = 29.749.000,00
+  ≠ Impuesto sobre beneficios FY2025: SEC 20.719.000.000,00 frente a SEC_10-K_2025-09-27_0000320193-25-000079.pdf pág. 32 = 20.719.000,00
+  ≠ Tesorería y equivalentes @2024-09-28: SEC 29.943.000.000,00 frente a SEC_10-K_2025-09-27_0000320193-25-000079.pdf pág. 34 = 29.943.000,00
+  ≠ Tesorería y equivalentes @2025-09-27: SEC 35.934.000.000,00 frente a SEC_10-K_2025-09-27_0000320193-25-000079.pdf pág. 34 = 35.934.000,00; SEC_10-Q_2025-12-27_0000320193-26-000006.pdf pág. 6 = 35.934.000,00; SEC_10-Q_2026-03-28_0000320193-26-000013.pdf pág. 6 = 35.934.000,00; SEC_10-Q_2026-06-27_0000320193-26-000020.pdf pág. 6 = 35.934.000,00
+  ≠ Tesorería y equivalentes @2025-12-27: SEC 45.317.000.000,00 frente a SEC_10-Q_2025-12-27_0000320193-26-000006.pdf pág. 6 = 45.317.000,00
+  ≠ Tesorería y equivalentes @2026-03-28: SEC 45.572.000.000,00 frente a SEC_10-Q_2026-03-28_0000320193-26-000013.pdf pág. 6 = 45.572.000,00
+  ≠ Tesorería y equivalentes @2026-06-27: SEC 39.544.000.000,00 frente a SEC_10-Q_2026-06-27_0000320193-26-000020.pdf pág. 6 = 39.544.000,00
+  ≠ Inversiones a corto plazo @2024-09-28: SEC 35.228.000.000,00 frente a SEC_10-K_2025-09-27_0000320193-25-000079.pdf pág. 34 = 35.228.000,00; SEC_10-K_2025-09-27_0000320193-25-000079.pdf pág. 34 = 91.479.000,00
+  ≠ Inversiones a corto plazo @2025-09-27: SEC 18.763.000.000,00 frente a SEC_10-K_2025-09-27_0000320193-25-000079.pdf pág. 34 = 18.763.000,00; SEC_10-K_2025-09-27_0000320193-25-000079.pdf pág. 34 = 77.723.000,00; SEC_10-Q_2025-12-27_0000320193-26-000006.pdf pág. 6 = 18.763.000,00; SEC_10-Q_2025-12-27_0000320193-26-000006.pdf pág. 6 = 77.723.000,00
+  ≠ Inversiones a corto plazo @2025-12-27: SEC 21.590.000.000,00 frente a SEC_10-Q_2025-12-27_0000320193-26-000006.pdf pág. 6 = 21.590.000,00; SEC_10-Q_2025-12-27_0000320193-26-000006.pdf pág. 6 = 77.888.000,00
+  ≠ Inversiones a corto plazo @2026-03-28: SEC 22.935.000.000,00 frente a SEC_10-Q_2026-03-28_0000320193-26-000013.pdf pág. 6 = 22.935.000,00; SEC_10-Q_2026-03-28_0000320193-26-000013.pdf pág. 6 = 78.088.000,00
+  ≠ Inversiones a corto plazo @2026-06-27: SEC 22.855.000.000,00 frente a SEC_10-Q_2026-06-27_0000320193-26-000020.pdf pág. 6 = 22.855.000,00; SEC_10-Q_2026-06-27_0000320193-26-000020.pdf pág. 6 = 84.118.000,00
+  ≠ Activo corriente @2024-09-28: SEC 152.987.000.000,00 frente a SEC_10-K_2025-09-27_0000320193-25-000079.pdf pág. 34 = 152.987.000,00
+  ≠ Activo corriente @2025-09-27: SEC 147.957.000.000,00 frente a SEC_10-K_2025-09-27_0000320193-25-000079.pdf pág. 34 = 147.957.000,00; SEC_10-Q_2025-12-27_0000320193-26-000006.pdf pág. 6 = 147.957.000,00; SEC_10-Q_2026-03-28_0000320193-26-000013.pdf pág. 6 = 147.957.000,00; SEC_10-Q_2026-06-27_0000320193-26-000020.pdf pág. 6 = 147.957.000,00
+  ≠ Activo corriente @2025-12-27: SEC 158.104.000.000,00 frente a SEC_10-Q_2025-12-27_0000320193-26-000006.pdf pág. 6 = 158.104.000,00
+  ≠ Activo corriente @2026-03-28: SEC 144.114.000.000,00 frente a SEC_10-Q_2026-03-28_0000320193-26-000013.pdf pág. 6 = 144.114.000,00
+  ≠ Activo corriente @2026-06-27: SEC 149.818.000.000,00 frente a SEC_10-Q_2026-06-27_0000320193-26-000020.pdf pág. 6 = 149.818.000,00
+  ≠ Intangibles @2025-09-27: SEC 13.301.000.000,00 frente a SEC_10-Q_2026-03-28_0000320193-26-000013.pdf pág. 6 = 11.093.000,00; SEC_10-Q_2026-06-27_0000320193-26-000020.pdf pág. 6 = 11.093.000,00
+  ≠ Intangibles @2026-03-28: SEC 25.797.000.000,00 frente a SEC_10-Q_2026-03-28_0000320193-26-000013.pdf pág. 6 = 21.334.000,00
+  ≠ Intangibles @2026-06-27: SEC 25.417.000.000,00 frente a SEC_10-Q_2026-06-27_0000320193-26-000020.pdf pág. 6 = 20.342.000,00
+  ≠ Total activo @2024-09-28: SEC 364.980.000.000,00 frente a SEC_10-K_2025-09-27_0000320193-25-000079.pdf pág. 34 = 364.980.000,00
+  ≠ Total activo @2025-09-27: SEC 359.241.000.000,00 frente a SEC_10-K_2025-09-27_0000320193-25-000079.pdf pág. 34 = 359.241.000,00; SEC_10-Q_2025-12-27_0000320193-26-000006.pdf pág. 6 = 359.241.000,00; SEC_10-Q_2026-03-28_0000320193-26-000013.pdf pág. 6 = 359.241.000,00; SEC_10-Q_2026-06-27_0000320193-26-000020.pdf pág. 6 = 359.241.000,00
+  ≠ Total activo @2025-12-27: SEC 379.297.000.000,00 frente a SEC_10-Q_2025-12-27_0000320193-26-000006.pdf pág. 6 = 379.297.000,00
+  ≠ Total activo @2026-03-28: SEC 371.082.000.000,00 frente a SEC_10-Q_2026-03-28_0000320193-26-000013.pdf pág. 6 = 371.082.000,00
+  ≠ Total activo @2026-06-27: SEC 383.266.000.000,00 frente a SEC_10-Q_2026-06-27_0000320193-26-000020.pdf pág. 6 = 383.266.000,00
+  ≠ Pasivo corriente @2024-09-28: SEC 176.392.000.000,00 frente a SEC_10-K_2025-09-27_0000320193-25-000079.pdf pág. 34 = 176.392.000,00
+  ≠ Pasivo corriente @2025-09-27: SEC 165.631.000.000,00 frente a SEC_10-K_2025-09-27_0000320193-25-000079.pdf pág. 34 = 165.631.000,00; SEC_10-Q_2025-12-27_0000320193-26-000006.pdf pág. 6 = 165.631.000,00; SEC_10-Q_2026-03-28_0000320193-26-000013.pdf pág. 6 = 165.631.000,00; SEC_10-Q_2026-06-27_0000320193-26-000020.pdf pág. 6 = 165.631.000,00
+  ≠ Pasivo corriente @2025-12-27: SEC 162.367.000.000,00 frente a SEC_10-Q_2025-12-27_0000320193-26-000006.pdf pág. 6 = 162.367.000,00
+  ≠ Pasivo corriente @2026-03-28: SEC 134.641.000.000,00 frente a SEC_10-Q_2026-03-28_0000320193-26-000013.pdf pág. 6 = 134.641.000,00
+  ≠ Pasivo corriente @2026-06-27: SEC 149.326.000.000,00 frente a SEC_10-Q_2026-06-27_0000320193-26-000020.pdf pág. 6 = 149.326.000,00
+  ≠ Pasivo no corriente @2024-09-28: SEC 131.638.000.000,00 frente a SEC_10-K_2025-09-27_0000320193-25-000079.pdf pág. 34 = 131.638.000,00
+  ≠ Pasivo no corriente @2025-09-27: SEC 119.877.000.000,00 frente a SEC_10-K_2025-09-27_0000320193-25-000079.pdf pág. 34 = 119.877.000,00; SEC_10-Q_2025-12-27_0000320193-26-000006.pdf pág. 6 = 119.877.000,00; SEC_10-Q_2026-03-28_0000320193-26-000013.pdf pág. 6 = 119.877.000,00; SEC_10-Q_2026-06-27_0000320193-26-000020.pdf pág. 6 = 119.877.000,00
+  ≠ Pasivo no corriente @2025-12-27: SEC 128.740.000.000,00 frente a SEC_10-Q_2025-12-27_0000320193-26-000006.pdf pág. 6 = 128.740.000,00
+  ≠ Pasivo no corriente @2026-03-28: SEC 129.950.000.000,00 frente a SEC_10-Q_2026-03-28_0000320193-26-000013.pdf pág. 6 = 129.950.000,00
+  ≠ Pasivo no corriente @2026-06-27: SEC 126.420.000.000,00 frente a SEC_10-Q_2026-06-27_0000320193-26-000020.pdf pág. 6 = 126.420.000,00
+  ≠ Total pasivo @2024-09-28: SEC 308.030.000.000,00 frente a SEC_10-K_2025-09-27_0000320193-25-000079.pdf pág. 34 = 308.030.000,00
+  ≠ Total pasivo @2025-09-27: SEC 285.508.000.000,00 frente a SEC_10-K_2025-09-27_0000320193-25-000079.pdf pág. 34 = 285.508.000,00; SEC_10-Q_2025-12-27_0000320193-26-000006.pdf pág. 6 = 285.508.000,00; SEC_10-Q_2026-03-28_0000320193-26-000013.pdf pág. 6 = 285.508.000,00; SEC_10-Q_2026-06-27_0000320193-26-000020.pdf pág. 6 = 285.508.000,00
+  ≠ Total pasivo @2025-12-27: SEC 291.107.000.000,00 frente a SEC_10-Q_2025-12-27_0000320193-26-000006.pdf pág. 6 = 291.107.000,00
+  ≠ Total pasivo @2026-03-28: SEC 264.591.000.000,00 frente a SEC_10-Q_2026-03-28_0000320193-26-000013.pdf pág. 6 = 264.591.000,00
+  ≠ Total pasivo @2026-06-27: SEC 275.746.000.000,00 frente a SEC_10-Q_2026-06-27_0000320193-26-000020.pdf pág. 6 = 275.746.000,00

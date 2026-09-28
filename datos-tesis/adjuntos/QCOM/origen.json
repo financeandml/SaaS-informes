@@ -1,0 +1,16 @@
+{
+ "SEC_DEF-14A_2026-03-17_0001104659-26-005781.pdf": {
+  "url": "https://www.sec.gov/Archives/edgar/data/804328/000110465926005781/tm2528704-1_def14a.htm",
+  "accession": "0001104659-26-005781",
+  "formulario": "DEF 14A",
+  "presentado": "2026-01-22",
+  "periodo": "2026-03-17"
+ },
+ "SEC_8-K_2026-07-29_ex99-1_0000804328-26-000085.pdf": {
+  "url": "https://www.sec.gov/Archives/edgar/data/804328/000080432826000085/qcom062826erex991.htm",
+  "accession": "0000804328-26-000085",
+  "formulario": "8-K",
+  "presentado": "2026-07-29",
+  "periodo": "2026-07-29"
+ }
+}

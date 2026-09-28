@@ -1,0 +1,65 @@
+[1/8] Emisor en EDGAR: QCOM
+  QUALCOMM INC/DE · CIK 804328 · Nasdaq · 1000 depósitos recientes
+[2/8] Expediente: 8 ficheros
+  10K_20250928     10-K                                     periodo=2025-09-28 fecha=2025-11-05 edgar=True (alta)
+  PROXY            DEF 14A                                  periodo=None fecha=2026-03-17 edgar=True (alta)
+  PROXY            DEF 14A                                  periodo=None fecha=2026-03-17 edgar=True (alta)
+  10Q_20260628     10-Q                                     periodo=2026-06-28 fecha=2026-07-29 edgar=True (alta)
+  SLIDES           Presentación de resultados               periodo=None fecha=2026-07-29 edgar=None (media)
+  CALL             Transcripción de la call                 periodo=None fecha=2026-07-29 edgar=None (alta)
+  NOTA             Nota de resultados (anexo 99.1 del 8-K)  periodo=None fecha=2026-07-29 edgar=True (alta)
+  DOC              Hecho relevante (8-K)                    periodo=None fecha=2026-09-03 edgar=True (alta)
+[3/8] Hechos XBRL
+  ejercicios ['FY2021', 'FY2022', 'FY2023', 'FY2024', 'FY2025'] · trimestres ['3T25', '4T25', '1T26', '2T26']
+[4/8] Extracción y contraste
+  solo_sec 200 · confirmado 72 · derivado 16 · no_aplica 75 · hueco 50 · solo_documento 9
+    no aplica · marketing: la compañía no declara SellingAndMarketingExpense, MarketingExpense en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+    no aplica · generales: la compañía no declara GeneralAndAdministrativeExpense en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+    no aplica · amortizacion_contenido: la compañía no declara ningún concepto us-gaap para esto en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+    no aplica · contenido: la compañía no declara ningún concepto us-gaap para esto en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+    no aplica · pasivo_no_corriente: la compañía no declara LiabilitiesNoncurrent en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+    no aplica · autocartera: la compañía no declara TreasuryStockValue, TreasuryStockCommonValue en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+    no aplica · adquisiciones: la compañía dejó de declarar PaymentsToAcquireBusinessesNetOfCashAcquired en 2011, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+    no aplica · fcf_compania: la compañía no declara ningún concepto us-gaap para esto en ningún depósito, y tampoco lo imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.
+[5/8] Recortes de evidencia
+  5 recortes: 10K_20250928 p58, 10K_20250928 p59, 10K_20250928 p61, 10Q_20260628 p4, 10Q_20260628 p5
+[6/8] Ficha, gobierno (con retratos), objetivos, regiones, riesgos, historial, precio, DCF, posición
+  retratos: 0 de 0 ejecutivos · 0 de 0 consejeros
+  auditoría de datos: 38 identidades cuadran · 1 no cuadran · 10 despejadas de su identidad · 17 sin datos suficientes
+    ≠ Beneficio neto = Resultado antes de impuestos − Impuesto sobre beneficios · FY2023 · 7,232,000,000 frente a 7,339,000,000 (dif. -107,000,000) · el impuesto se guarda con su signo contable; aquí se resta del resultado antes de impuestos.
+  riesgos: 24 epígrafes del Item 1A (págs. 14–34)
+  historial: 0 sorpresas de consenso (transcripción) · 0 frases de guía frente a real · 0 cartas de EDGAR → 0 previsiones frente a real · 4 trimestres de consenso según la bolsa
+    falta consenso: la transcripción adjunta no trae la tabla de consenso/real/sorpresa de la portada
+    falta guia_vs_real: la carta adjunta no compara el trimestre con la previsión de la compañía con palabras reconocibles
+    falta guias_anteriores: EDGAR no devolvió cartas con tabla de previsión: 0000804328-26-000085: el Exhibit 99 no trae la tabla de resumen con columna «Forecast»; 0000804328-26-000060: el Exhibit 99 no trae la tabla de resumen con columna «Forecast»; 0000804328-26-000016: el Exhibit 99 no trae la tabla de resumen con columna «Forecast»; 0000804328-25-000084: el Exhibit 99 no trae la tabla de resumen con columna «Forecast»; 0000804328-25-000044: el Exhibit 99 no trae la tabla de resumen con columna «Forecast»; 0000804328-25-000029: el Exhibit 99 no trae la tabla de resumen con columna «Forecast»; 0000804328-25-000010: el Exhibit 99 no trae la tabla de resumen con columna «Forecast»; 0000804328-24-000074: el Exhibit 99 no trae la tabla de resumen con columna «Forecast»; 0000804328-24-000055: el Exhibit 99 no trae la tabla de resumen con columna «Forecast»
+    falta carta 0000804328-26-000085: el Exhibit 99 no trae la tabla de resumen con columna «Forecast»
+    falta carta 0000804328-26-000060: el Exhibit 99 no trae la tabla de resumen con columna «Forecast»
+    falta carta 0000804328-26-000016: el Exhibit 99 no trae la tabla de resumen con columna «Forecast»
+    falta carta 0000804328-25-000084: el Exhibit 99 no trae la tabla de resumen con columna «Forecast»
+    falta carta 0000804328-25-000044: el Exhibit 99 no trae la tabla de resumen con columna «Forecast»
+    falta carta 0000804328-25-000029: el Exhibit 99 no trae la tabla de resumen con columna «Forecast»
+    falta carta 0000804328-25-000010: el Exhibit 99 no trae la tabla de resumen con columna «Forecast»
+    falta carta 0000804328-24-000074: el Exhibit 99 no trae la tabla de resumen con columna «Forecast»
+    falta carta 0000804328-24-000055: el Exhibit 99 no trae la tabla de resumen con columna «Forecast»
+  precio: 197.24 USD · Nasdaq (web del mercado), cierre del 23/09/2026; fuera de sesión se cruzó a 197,39 (5:56 PM ET), que no es el precio del informe
+  mercado: sesión Closed · cierre anterior 198.27 · cap. publicada 207148138578.0 · 52 s (121.99, 259.92) · 1Y target 177.5 · cierres pedidos 6 · ✓ el «cierre anterior» de la ficha (198,27) coincide con el histórico del 22/09/2026
+  consenso de la bolsa: 204.16 USD · 25 analistas · rango 159.0–400.0 · ≠ la ficha de Nasdaq dice «1 Year Target» 177,50 y su página de analistas 204,16: dos cifras de la misma bolsa para el mismo hecho
+  sección F (bolsa): cadena ✓ · institucional ✓ · insiders ✓ · short ✓ · IV (Yahoo, excepción) ✓ 4 vencimientos
+  comparables (industria de la bolsa «Radio And Television Broadcasting And Communications Equipment»): MSI ✓, NOK ✓, UI ✓, ERIC ✓, PL ✓, ONDS ✓, VISN ✓, HLIT ✓, UMAC ✓, BKSY ✓, SATL ✓
+  tamaño de mercado: 1 cifras declaradas por la compañía · faltan ['TAM'] · 7 conceptos de otro sector, no se cuentan como huecos
+  agregador: ROE 33.75% · ROA 11.61% · deuda total 15,270 M · EV/EBITDA 17.934 · PEG 0.88 · resultados 2026-11-04
+  próxima presentación: 04/11/2026  (anunciada según la bolsa) · ✓ el agregador publica la misma fecha (04/11/2026, que no marca como estimada)
+  múltiplos TTM: PER N/A · EV / EBITDA 18.15✓ · EV / Ventas 4.86 · P / FCF N/A · PEG N/A
+  DCF: QCOM.xlsx · 52 supuestos · 2 escenarios · cuadre: Caja mínima operativa / Ingr ≠ · Acciones diluidas = en circu ≠ · Deuda financiera total ✓ · Caja y equivalentes ≠
+    falta escenario_pesimista: la hoja «Escenario Pesimista» no tiene fila de años (2026E…) con proyecciones debajo
+    falta escenario_base: el libro no tiene hoja del escenario base
+    falta escenario_optimista: la hoja «Escenario Optimista» no tiene fila de años (2026E…) con proyecciones debajo
+    falta sensibilidad: la hoja «Sensibilidad» no tiene una matriz con cabecera «WACC \ g»
+    falta tabla_escenarios: la hoja «01 Summary» tiene un bloque de escenarios cuyas filas no traen WACC y crecimiento reconocibles (p. ej. «Equity Value»): no se lee
+  posición: C:\Users\Sergi\Downloads\Warrants&co\PROYECTOS VERANO\SAAS-INFORMES\posiciones\QCOM.json · 9 campos sin rellenar
+[7/8] Narrativa e informe
+  documentación complementaria: 20 piezas en 12 apartados · 5 recortes de estados junto a sus cuadros · 0 retratos
+[8/8] Doble comprobación, HTML y PDF
+  doble comprobación: 2060 cifras releídas · 1 desacuerdos
+    ≠ cuadro 13 «Upside / (Downside) sobre el precio actual» (01 Summary!G19): impreso «0,12», releído del libro «11,54 %»
+  EMISIÓN DETENIDA: hay cifras impresas que no coinciden con su fuente al releerlas.

@@ -1,0 +1,472 @@
+{
+ "ticker": "NFLX",
+ "fecha": "2026-09-27",
+ "emitido": null,
+ "pdf_sha256": "809a71472b05dbf74cd6242b888b7df16ebf57d8a7754bc3f74be2348f988ba2",
+ "entradas": {
+  "fichero": "C:\\Users\\Sergi\\AppData\\Local\\Temp\\claude\\C--Users-Sergi-Downloads\\a9031e36-81b9-4c2a-b48c-25bd4d0cb1bf\\scratchpad\\informes\\NFLX\\entradas.json",
+  "prueba": false
+ },
+ "bloqueos": [
+  "Gobierno · retratos: la proxy no trae retrato asociable a: David Hyman, Spencer Neumann, Greg Peters, Ted Sarandos, Clete Willems",
+  "Gobierno · retratos: la proxy no trae retrato asociable a: David Hyman, Spencer Neumann, Greg Peters, Ted Sarandos, Clete Willems",
+  "Discrepancia abierta: BPA básico 3T25: SEC 0,60 frente a SEC_10-Q_2025-09-30_0001065280-25-000406.pdf pág. 3 = 6,00; SEC_10-Q_2025-09-30_0001065280-25-000406.pdf pág. 9 = 2.546.916,00 · razón 0.1 entre SEC y documento: posible ajuste por split de acciones (el formulario original no está reexpresado)",
+  "Discrepancia abierta: BPA diluido 3T25: SEC 0,59 frente a SEC_10-Q_2025-09-30_0001065280-25-000406.pdf pág. 3 = 5,87; SEC_10-Q_2025-09-30_0001065280-25-000406.pdf pág. 9 = 2.546.916,00 · razón 0.1 entre SEC y documento: posible ajuste por split de acciones (el formulario original no está reexpresado)",
+  "Discrepancia abierta: Acciones medias básicas 3T25: SEC 4.244.550.000,00 frente a SEC_10-Q_2025-09-30_0001065280-25-000406.pdf pág. 3 = 424.455.000,00 · razón 10 entre SEC y documento: posible ajuste por split de acciones (el formulario original no está reexpresado)",
+  "Discrepancia abierta: Acciones medias diluidas 3T25: SEC 4.340.390.000,00 frente a SEC_10-Q_2025-09-30_0001065280-25-000406.pdf pág. 3 = 434.039.000,00 · razón 10 entre SEC y documento: posible ajuste por split de acciones (el formulario original no está reexpresado)"
+ ],
+ "avisos": [
+  "Fechas clave · próxima presentación: la compañía no la anuncia en ningún adjunto ni en la SEC; se imprime la que publica la bolsa (20/10/2026, esperada) y su cuadre con el agregador: sin segunda fuente con que cuadrarla",
+  "pos.fecha_entrada: fecha futura (28/09/2026): orden límite"
+ ],
+ "faltan": [
+  "Gobierno · retratos: la proxy no trae retrato asociable a: David Hyman, Spencer Neumann, Greg Peters, Ted Sarandos, Clete Willems",
+  "Gobierno · retratos: la proxy no trae retrato asociable a: David Hyman, Spencer Neumann, Greg Peters, Ted Sarandos, Clete Willems"
+ ],
+ "discrepancias": [
+  "BPA básico 3T25: SEC 0,60 frente a SEC_10-Q_2025-09-30_0001065280-25-000406.pdf pág. 3 = 6,00; SEC_10-Q_2025-09-30_0001065280-25-000406.pdf pág. 9 = 2.546.916,00 · razón 0.1 entre SEC y documento: posible ajuste por split de acciones (el formulario original no está reexpresado)",
+  "BPA diluido 3T25: SEC 0,59 frente a SEC_10-Q_2025-09-30_0001065280-25-000406.pdf pág. 3 = 5,87; SEC_10-Q_2025-09-30_0001065280-25-000406.pdf pág. 9 = 2.546.916,00 · razón 0.1 entre SEC y documento: posible ajuste por split de acciones (el formulario original no está reexpresado)",
+  "Acciones medias básicas 3T25: SEC 4.244.550.000,00 frente a SEC_10-Q_2025-09-30_0001065280-25-000406.pdf pág. 3 = 424.455.000,00 · razón 10 entre SEC y documento: posible ajuste por split de acciones (el formulario original no está reexpresado)",
+  "Acciones medias diluidas 3T25: SEC 4.340.390.000,00 frente a SEC_10-Q_2025-09-30_0001065280-25-000406.pdf pág. 3 = 434.039.000,00 · razón 10 entre SEC y documento: posible ajuste por split de acciones (el formulario original no está reexpresado)"
+ ],
+ "solo_sec": [
+  "Ingresos FY2021",
+  "Ingresos FY2022",
+  "Coste de los ingresos FY2021",
+  "Coste de los ingresos FY2022",
+  "Ventas y marketing FY2021",
+  "Ventas y marketing FY2022",
+  "Investigación y desarrollo FY2021",
+  "Investigación y desarrollo FY2022",
+  "Generales y administrativos FY2021",
+  "Generales y administrativos FY2022",
+  "EBIT (resultado operativo) FY2021",
+  "EBIT (resultado operativo) FY2022",
+  "Gastos financieros FY2021",
+  "Gastos financieros FY2022",
+  "Otros ingresos y gastos FY2021",
+  "Otros ingresos y gastos FY2022",
+  "Resultado antes de impuestos FY2021",
+  "Resultado antes de impuestos FY2022",
+  "Impuesto sobre beneficios FY2021",
+  "Impuesto sobre beneficios FY2022",
+  "Beneficio neto FY2021",
+  "Beneficio neto FY2022",
+  "BPA básico FY2021",
+  "BPA básico FY2022",
+  "BPA básico 4T25",
+  "BPA diluido FY2021",
+  "BPA diluido FY2022",
+  "BPA diluido 4T25",
+  "Acciones medias básicas FY2021",
+  "Acciones medias básicas FY2022",
+  "Acciones medias básicas 4T25",
+  "Acciones medias diluidas FY2021",
+  "Acciones medias diluidas FY2022",
+  "Acciones medias diluidas 4T25",
+  "Amortización del inmovilizado FY2021",
+  "Amortización del inmovilizado FY2022",
+  "Retribución en acciones FY2021",
+  "Retribución en acciones FY2022",
+  "Tesorería y equivalentes @2020-12-31",
+  "Tesorería y equivalentes @2021-12-31",
+  "Tesorería y equivalentes @2022-12-31",
+  "Tesorería y equivalentes @2023-12-31",
+  "Tesorería y equivalentes @2025-06-30",
+  "Inversiones a corto plazo @2021-12-31",
+  "Inversiones a corto plazo @2022-12-31",
+  "Inversiones a corto plazo @2023-12-31",
+  "Inversiones a corto plazo @2025-06-30",
+  "Activo corriente @2020-12-31",
+  "Activo corriente @2021-12-31",
+  "Activo corriente @2022-12-31",
+  "Activo corriente @2023-12-31",
+  "Activo corriente @2025-06-30",
+  "Inmovilizado material, neto @2020-12-31",
+  "Inmovilizado material, neto @2021-12-31",
+  "Inmovilizado material, neto @2022-12-31",
+  "Inmovilizado material, neto @2023-12-31",
+  "Inmovilizado material, neto @2025-06-30",
+  "Intangibles @2024-12-31",
+  "Intangibles @2025-06-30",
+  "Intangibles @2025-09-30",
+  "Intangibles @2025-12-31",
+  "Intangibles @2026-03-31",
+  "Intangibles @2026-06-30",
+  "Total activo @2020-12-31",
+  "Total activo @2021-12-31",
+  "Total activo @2022-12-31",
+  "Total activo @2023-12-31",
+  "Total activo @2025-06-30",
+  "Pasivo corriente @2020-12-31",
+  "Pasivo corriente @2021-12-31",
+  "Pasivo corriente @2022-12-31",
+  "Pasivo corriente @2023-12-31",
+  "Pasivo corriente @2025-06-30",
+  "Deuda a corto plazo @2020-12-31",
+  "Deuda a corto plazo @2021-12-31",
+  "Deuda a corto plazo @2022-12-31",
+  "Deuda a corto plazo @2023-12-31",
+  "Deuda a corto plazo @2025-06-30",
+  "Deuda a largo plazo @2020-12-31",
+  "Deuda a largo plazo @2021-12-31",
+  "Deuda a largo plazo @2022-12-31",
+  "Deuda a largo plazo @2023-12-31",
+  "Deuda a largo plazo @2025-06-30",
+  "Pasivos por arrendamiento (no corrientes) @2020-12-31",
+  "Pasivos por arrendamiento (no corrientes) @2021-12-31",
+  "Pasivos por arrendamiento (no corrientes) @2022-12-31",
+  "Pasivos por arrendamiento (no corrientes) @2023-12-31",
+  "Pasivos por arrendamiento (no corrientes) @2024-12-31",
+  "Pasivos por arrendamiento (no corrientes) @2025-06-30",
+  "Pasivos por arrendamiento (no corrientes) @2025-09-30",
+  "Pasivos por arrendamiento (no corrientes) @2025-12-31",
+  "Pasivos por arrendamiento (no corrientes) @2026-03-31",
+  "Pasivos por arrendamiento (no corrientes) @2026-06-30",
+  "Total pasivo @2020-12-31",
+  "Total pasivo @2021-12-31",
+  "Total pasivo @2022-12-31",
+  "Total pasivo @2023-12-31",
+  "Total pasivo @2025-06-30",
+  "Patrimonio neto @2020-12-31",
+  "Patrimonio neto @2021-12-31",
+  "Patrimonio neto @2022-12-31",
+  "Patrimonio neto @2023-12-31",
+  "Patrimonio neto @2025-06-30",
+  "Autocartera @2020-12-31",
+  "Autocartera @2021-12-31",
+  "Autocartera @2022-12-31",
+  "Autocartera @2023-12-31",
+  "Autocartera @2024-12-31",
+  "Autocartera @2025-06-30",
+  "Autocartera @2025-09-30",
+  "Autocartera @2026-03-31",
+  "Acciones en circulación @2020-12-31",
+  "Acciones en circulación @2021-12-31",
+  "Acciones en circulación @2022-12-31",
+  "Acciones en circulación @2023-12-31",
+  "Acciones en circulación @2024-12-31",
+  "Acciones en circulación @2025-06-30",
+  "Acciones en circulación @2025-09-30",
+  "Acciones en circulación @2025-12-31",
+  "Acciones en circulación @2026-03-31",
+  "Acciones en circulación @2026-06-30",
+  "Flujo de caja operativo FY2021",
+  "Flujo de caja operativo FY2022",
+  "Capex FY2021",
+  "Capex FY2022",
+  "Flujo de caja de inversión FY2021",
+  "Flujo de caja de inversión FY2022",
+  "Flujo de caja de financiación FY2021",
+  "Flujo de caja de financiación FY2022",
+  "Recompra de acciones FY2021",
+  "Recompra de acciones FY2022",
+  "Adquisiciones (caja) FY2021",
+  "Adquisiciones (caja) FY2022",
+  "Adquisiciones (caja) FY2023",
+  "Adquisiciones (caja) FY2024",
+  "Adquisiciones (caja) FY2025",
+  "Adquisiciones (caja) 1T26",
+  "Adquisiciones (caja) 2T26",
+  "Emisión de deuda FY2021",
+  "Emisión de deuda FY2022",
+  "Amortización de deuda FY2021",
+  "Amortización de deuda FY2022"
+ ],
+ "huecos": [
+  "Ventas, generales y administrativos FY2021: la compañía no declara esta partida en ningún 10-K ni 10-Q, y tampoco la imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.",
+  "Ventas, generales y administrativos FY2022: la compañía no declara esta partida en ningún 10-K ni 10-Q, y tampoco la imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.",
+  "Ventas, generales y administrativos FY2023: la compañía no declara esta partida en ningún 10-K ni 10-Q, y tampoco la imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.",
+  "Ventas, generales y administrativos FY2024: la compañía no declara esta partida en ningún 10-K ni 10-Q, y tampoco la imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.",
+  "Ventas, generales y administrativos FY2025: la compañía no declara esta partida en ningún 10-K ni 10-Q, y tampoco la imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.",
+  "Ventas, generales y administrativos 3T25: la compañía no declara esta partida en ningún 10-K ni 10-Q, y tampoco la imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.",
+  "Ventas, generales y administrativos 4T25: la compañía no declara esta partida en ningún 10-K ni 10-Q, y tampoco la imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.",
+  "Ventas, generales y administrativos 1T26: la compañía no declara esta partida en ningún 10-K ni 10-Q, y tampoco la imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.",
+  "Ventas, generales y administrativos 2T26: la compañía no declara esta partida en ningún 10-K ni 10-Q, y tampoco la imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.",
+  "Amortización de contenido FY2021: la SEC no lo publica y ningún adjunto lo trae; ningún adjunto lo trae",
+  "Amortización de contenido FY2022: la SEC no lo publica y ningún adjunto lo trae; ningún adjunto lo trae",
+  "Amortización de contenido 4T25: la SEC no lo publica y ningún adjunto lo trae; ningún adjunto lo trae",
+  "Inversiones a corto plazo @2020-12-31: la SEC no publica «Inversiones a corto plazo» para 31/12/2020 en ningún 10-K ni 10-Q; ningún adjunto lo trae",
+  "Activos de contenido, neto @2020-12-31: la SEC no lo publica y ningún adjunto lo trae; ningún adjunto lo trae",
+  "Activos de contenido, neto @2021-12-31: la SEC no lo publica y ningún adjunto lo trae; ningún adjunto lo trae",
+  "Activos de contenido, neto @2022-12-31: la SEC no lo publica y ningún adjunto lo trae; ningún adjunto lo trae",
+  "Activos de contenido, neto @2023-12-31: la SEC no lo publica y ningún adjunto lo trae; ningún adjunto lo trae",
+  "Activos de contenido, neto @2025-06-30: la SEC no lo publica y ningún adjunto lo trae; ningún adjunto lo trae",
+  "Fondo de comercio @2020-12-31: la compañía no declara esta partida en ningún 10-K ni 10-Q, y tampoco la imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.",
+  "Fondo de comercio @2021-12-31: la compañía no declara esta partida en ningún 10-K ni 10-Q, y tampoco la imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.",
+  "Fondo de comercio @2022-12-31: la compañía no declara esta partida en ningún 10-K ni 10-Q, y tampoco la imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.",
+  "Fondo de comercio @2023-12-31: la compañía no declara esta partida en ningún 10-K ni 10-Q, y tampoco la imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.",
+  "Fondo de comercio @2024-12-31: la compañía no declara esta partida en ningún 10-K ni 10-Q, y tampoco la imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.",
+  "Fondo de comercio @2025-06-30: la compañía no declara esta partida en ningún 10-K ni 10-Q, y tampoco la imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.",
+  "Fondo de comercio @2025-09-30: la compañía no declara esta partida en ningún 10-K ni 10-Q, y tampoco la imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.",
+  "Fondo de comercio @2025-12-31: la compañía no declara esta partida en ningún 10-K ni 10-Q, y tampoco la imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.",
+  "Fondo de comercio @2026-03-31: la compañía no declara esta partida en ningún 10-K ni 10-Q, y tampoco la imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.",
+  "Fondo de comercio @2026-06-30: la compañía no declara esta partida en ningún 10-K ni 10-Q, y tampoco la imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.",
+  "Intangibles @2020-12-31: la SEC no publica «Intangibles» para 31/12/2020 en ningún 10-K ni 10-Q; ningún adjunto lo trae",
+  "Intangibles @2021-12-31: la SEC no publica «Intangibles» para 31/12/2021 en ningún 10-K ni 10-Q; ningún adjunto lo trae",
+  "Intangibles @2022-12-31: la SEC no publica «Intangibles» para 31/12/2022 en ningún 10-K ni 10-Q; ningún adjunto lo trae",
+  "Intangibles @2023-12-31: la SEC no publica «Intangibles» para 31/12/2023 en ningún 10-K ni 10-Q; ningún adjunto lo trae",
+  "Pasivo no corriente @2020-12-31: la compañía no declara esta partida en ningún 10-K ni 10-Q, y tampoco la imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.",
+  "Pasivo no corriente @2021-12-31: la compañía no declara esta partida en ningún 10-K ni 10-Q, y tampoco la imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.",
+  "Pasivo no corriente @2022-12-31: la compañía no declara esta partida en ningún 10-K ni 10-Q, y tampoco la imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.",
+  "Pasivo no corriente @2023-12-31: la compañía no declara esta partida en ningún 10-K ni 10-Q, y tampoco la imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.",
+  "Pasivo no corriente @2024-12-31: la compañía no declara esta partida en ningún 10-K ni 10-Q, y tampoco la imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.",
+  "Pasivo no corriente @2025-06-30: la compañía no declara esta partida en ningún 10-K ni 10-Q, y tampoco la imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.",
+  "Pasivo no corriente @2025-09-30: la compañía no declara esta partida en ningún 10-K ni 10-Q, y tampoco la imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.",
+  "Pasivo no corriente @2025-12-31: la compañía no declara esta partida en ningún 10-K ni 10-Q, y tampoco la imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.",
+  "Pasivo no corriente @2026-03-31: la compañía no declara esta partida en ningún 10-K ni 10-Q, y tampoco la imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.",
+  "Pasivo no corriente @2026-06-30: la compañía no declara esta partida en ningún 10-K ni 10-Q, y tampoco la imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.",
+  "Dividendos pagados 1T26: la SEC no publica «Dividendos pagados» para 1T26 en ningún 10-K ni 10-Q; ningún adjunto lo trae",
+  "Dividendos pagados 2T26: la SEC no publica «Dividendos pagados» para 2T26 en ningún 10-K ni 10-Q; ningún adjunto lo trae",
+  "Adquisiciones (caja) 3T25: la SEC no publica «Adquisiciones (caja)» para 3T25 en ningún 10-K ni 10-Q; ningún adjunto lo trae",
+  "Adquisiciones (caja) 4T25: la SEC no presenta el cuarto trimestre fiscal como tal; ningún adjunto lo trae",
+  "Emisión de deuda 1T26: la SEC no publica «Emisión de deuda» para 1T26 en ningún 10-K ni 10-Q; ningún adjunto lo trae",
+  "Emisión de deuda 2T26: la SEC no publica «Emisión de deuda» para 2T26 en ningún 10-K ni 10-Q; ningún adjunto lo trae",
+  "Free cash flow (definición de la compañía) FY2021: la compañía no declara esta partida en ningún 10-K ni 10-Q, y tampoco la imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.",
+  "Free cash flow (definición de la compañía) FY2022: la compañía no declara esta partida en ningún 10-K ni 10-Q, y tampoco la imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.",
+  "Free cash flow (definición de la compañía) FY2023: la compañía no declara esta partida en ningún 10-K ni 10-Q, y tampoco la imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.",
+  "Free cash flow (definición de la compañía) FY2024: la compañía no declara esta partida en ningún 10-K ni 10-Q, y tampoco la imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.",
+  "Free cash flow (definición de la compañía) FY2025: la compañía no declara esta partida en ningún 10-K ni 10-Q, y tampoco la imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.",
+  "Free cash flow (definición de la compañía) 3T25: la compañía no declara esta partida en ningún 10-K ni 10-Q, y tampoco la imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.",
+  "Free cash flow (definición de la compañía) 4T25: la compañía no declara esta partida en ningún 10-K ni 10-Q, y tampoco la imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.",
+  "Free cash flow (definición de la compañía) 1T26: la compañía no declara esta partida en ningún 10-K ni 10-Q, y tampoco la imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.",
+  "Free cash flow (definición de la compañía) 2T26: la compañía no declara esta partida en ningún 10-K ni 10-Q, y tampoco la imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte."
+ ],
+ "no_son_partidas": {
+  "sga": "la compañía no declara esta partida en ningún 10-K ni 10-Q, y tampoco la imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.",
+  "fondo_comercio": "la compañía no declara esta partida en ningún 10-K ni 10-Q, y tampoco la imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.",
+  "pasivo_no_corriente": "la compañía no declara esta partida en ningún 10-K ni 10-Q, y tampoco la imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte.",
+  "fcf_compania": "la compañía no declara esta partida en ningún 10-K ni 10-Q, y tampoco la imprime en los documentos del expediente: no es una línea de sus cuentas, no un dato que falte."
+ },
+ "fallos_de_las_fuentes": [],
+ "relleno": [
+  {
+   "pagina": 1,
+   "ocupado": 0.248,
+   "fin_de_parte": true
+  },
+  {
+   "pagina": 2,
+   "ocupado": 0.668,
+   "fin_de_parte": true
+  },
+  {
+   "pagina": 3,
+   "ocupado": 0.753,
+   "fin_de_parte": true
+  },
+  {
+   "pagina": 4,
+   "ocupado": 0.998,
+   "fin_de_parte": false
+  },
+  {
+   "pagina": 5,
+   "ocupado": 0.983,
+   "fin_de_parte": false
+  },
+  {
+   "pagina": 6,
+   "ocupado": 0.186,
+   "fin_de_parte": true
+  },
+  {
+   "pagina": 7,
+   "ocupado": 0.917,
+   "fin_de_parte": false
+  },
+  {
+   "pagina": 8,
+   "ocupado": 0.805,
+   "fin_de_parte": false
+  },
+  {
+   "pagina": 9,
+   "ocupado": 0.973,
+   "fin_de_parte": false
+  },
+  {
+   "pagina": 10,
+   "ocupado": 0.097,
+   "fin_de_parte": true
+  },
+  {
+   "pagina": 11,
+   "ocupado": 0.842,
+   "fin_de_parte": false
+  },
+  {
+   "pagina": 12,
+   "ocupado": 0.769,
+   "fin_de_parte": false
+  },
+  {
+   "pagina": 13,
+   "ocupado": 0.793,
+   "fin_de_parte": false
+  },
+  {
+   "pagina": 14,
+   "ocupado": 0.795,
+   "fin_de_parte": false
+  },
+  {
+   "pagina": 15,
+   "ocupado": 0.793,
+   "fin_de_parte": false
+  },
+  {
+   "pagina": 16,
+   "ocupado": 0.804,
+   "fin_de_parte": false
+  },
+  {
+   "pagina": 17,
+   "ocupado": 0.743,
+   "fin_de_parte": false
+  },
+  {
+   "pagina": 18,
+   "ocupado": 0.793,
+   "fin_de_parte": false
+  },
+  {
+   "pagina": 19,
+   "ocupado": 0.824,
+   "fin_de_parte": true
+  },
+  {
+   "pagina": 20,
+   "ocupado": 0.954,
+   "fin_de_parte": false
+  },
+  {
+   "pagina": 21,
+   "ocupado": 0.766,
+   "fin_de_parte": false
+  },
+  {
+   "pagina": 22,
+   "ocupado": 0.914,
+   "fin_de_parte": false
+  },
+  {
+   "pagina": 23,
+   "ocupado": 0.97,
+   "fin_de_parte": false
+  },
+  {
+   "pagina": 24,
+   "ocupado": 0.508,
+   "fin_de_parte": true
+  },
+  {
+   "pagina": 25,
+   "ocupado": 0.979,
+   "fin_de_parte": false
+  },
+  {
+   "pagina": 26,
+   "ocupado": 0.329,
+   "fin_de_parte": true
+  },
+  {
+   "pagina": 27,
+   "ocupado": 0.97,
+   "fin_de_parte": false
+  },
+  {
+   "pagina": 28,
+   "ocupado": 0.985,
+   "fin_de_parte": false
+  },
+  {
+   "pagina": 29,
+   "ocupado": 0.068,
+   "fin_de_parte": true
+  },
+  {
+   "pagina": 30,
+   "ocupado": 0.968,
+   "fin_de_parte": false
+  },
+  {
+   "pagina": 31,
+   "ocupado": 0.602,
+   "fin_de_parte": true
+  },
+  {
+   "pagina": 32,
+   "ocupado": 0.955,
+   "fin_de_parte": false
+  },
+  {
+   "pagina": 33,
+   "ocupado": 0.997,
+   "fin_de_parte": false
+  },
+  {
+   "pagina": 34,
+   "ocupado": 0.613,
+   "fin_de_parte": true
+  },
+  {
+   "pagina": 35,
+   "ocupado": 0.992,
+   "fin_de_parte": false
+  },
+  {
+   "pagina": 36,
+   "ocupado": 0.993,
+   "fin_de_parte": false
+  },
+  {
+   "pagina": 37,
+   "ocupado": 0.997,
+   "fin_de_parte": false
+  },
+  {
+   "pagina": 38,
+   "ocupado": 0.977,
+   "fin_de_parte": false
+  },
+  {
+   "pagina": 39,
+   "ocupado": 0.864,
+   "fin_de_parte": false
+  },
+  {
+   "pagina": 40,
+   "ocupado": 0.784,
+   "fin_de_parte": false
+  },
+  {
+   "pagina": 41,
+   "ocupado": 0.938,
+   "fin_de_parte": false
+  },
+  {
+   "pagina": 42,
+   "ocupado": 0.672,
+   "fin_de_parte": false
+  },
+  {
+   "pagina": 43,
+   "ocupado": 0.676,
+   "fin_de_parte": false
+  },
+  {
+   "pagina": 44,
+   "ocupado": 0.676,
+   "fin_de_parte": true
+  }
+ ],
+ "parrafos": [
+  {
+   "id": "resumen_factual",
+   "estado": "aceptado",
+   "huella": "b200fa02ed6ebba9"
+  }
+ ],
+ "confirmados_desde_propuesta": {}
+}

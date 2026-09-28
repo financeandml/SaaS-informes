@@ -1,0 +1,24 @@
+{
+ "parrafos": [
+  {
+   "id": "resumen_factual",
+   "titulo": "Párrafo factual del resumen ejecutivo",
+   "frases": [
+    [
+     "En el ejercicio 2026, la compañía facturó 67.357 mln USD con un margen operativo del 30,6 % (−0,2 p. p. frente al ejercicio anterior).",
+     "10-K 22/06/2026"
+    ],
+    [
+     "Al cierre del 1T FY27, la deuda neta era de 88.260 mln USD, 3,0 veces el EBITDA del ejercicio 2026.",
+     "10-Q 11/09/2026"
+    ],
+    [
+     "La retribución al accionista del ejercicio 2026, entre dividendos y recompras, sumó 5.882 mln USD: el −25 % del flujo de caja libre.",
+     "10-K 22/06/2026"
+    ]
+   ],
+   "huella": "de0aec9d61a5c54f",
+   "estado": "editado"
+  }
+ ]
+}

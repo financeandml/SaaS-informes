@@ -1,0 +1,44 @@
+{
+ "SEC_8-K_2026-07-16_ex99-1_0001065280-26-000211.pdf": {
+  "url": "https://www.sec.gov/Archives/edgar/data/1065280/000106528026000211/ex991_q226.htm",
+  "accession": "0001065280-26-000211",
+  "formulario": "8-K",
+  "presentado": "2026-07-16",
+  "periodo": "2026-07-16"
+ },
+ "SEC_10-K_2025-12-31_0001065280-26-000034.pdf": {
+  "url": "https://www.sec.gov/Archives/edgar/data/1065280/000106528026000034/nflx-20251231.htm",
+  "accession": "0001065280-26-000034",
+  "formulario": "10-K",
+  "presentado": "2026-01-23",
+  "periodo": "2025-12-31"
+ },
+ "SEC_10-Q_2026-06-30_0001065280-26-000212.pdf": {
+  "url": "https://www.sec.gov/Archives/edgar/data/1065280/000106528026000212/nflx-20260630.htm",
+  "accession": "0001065280-26-000212",
+  "formulario": "10-Q",
+  "presentado": "2026-07-17",
+  "periodo": "2026-06-30"
+ },
+ "SEC_10-Q_2026-03-31_0001065280-26-000138.pdf": {
+  "url": "https://www.sec.gov/Archives/edgar/data/1065280/000106528026000138/nflx-20260331.htm",
+  "accession": "0001065280-26-000138",
+  "formulario": "10-Q",
+  "presentado": "2026-04-17",
+  "periodo": "2026-03-31"
+ },
+ "SEC_10-Q_2025-09-30_0001065280-25-000406.pdf": {
+  "url": "https://www.sec.gov/Archives/edgar/data/1065280/000106528025000406/nflx-20250930.htm",
+  "accession": "0001065280-25-000406",
+  "formulario": "10-Q",
+  "presentado": "2025-10-22",
+  "periodo": "2025-09-30"
+ },
+ "SEC_DEF-14A_2026-06-04_0001193125-26-159286.pdf": {
+  "url": "https://www.sec.gov/Archives/edgar/data/1065280/000119312526159286/d20613ddef14a.htm",
+  "accession": "0001193125-26-159286",
+  "formulario": "DEF 14A",
+  "presentado": "2026-04-16",
+  "periodo": "2026-06-04"
+ }
+}
