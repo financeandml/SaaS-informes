@@ -87,16 +87,25 @@ def barras_con_linea(barras: Sequence[Hecho], linea: Sequence[Optional[Hecho]], 
         ax_l = None
     xs = list(range(len(barras)))
     alturas = [h.valor / 1e6 if h.hay_dato else 0 for h in barras]
-    tope = max(alturas + [1]) * 1.18
+    # con valores negativos (caja neta: deuda neta < 0) el eje baja de cero. Antes empezaba siempre en 0: las cifras de
+    # las barras negativas quedaban fuera, el recorte «tight» las incluía y el gráfico medía 4,8 millones de puntos de
+    # alto, que el PDF convertía en 7.130 páginas en blanco (Microsoft, 28/09/2026)
+    arriba, abajo = max(alturas + [0]), min(alturas + [0])
+    rango = (arriba - abajo) or 1.0
     colores = [MARINO if h.hay_dato else PAPEL for h in barras]
     bordes = [MARINO if h.hay_dato else GRIS for h in barras]
     ax.bar(xs, alturas, color=colores, edgecolor=bordes, linewidth=0.6, width=0.6, label=rotulo_barras, zorder=2)
+    if abajo < 0:
+        ax.axhline(0, color=TINTA, linewidth=0.6, zorder=3)
     for x, h in zip(xs, barras):
         if h.hay_dato:
-            # la cifra va dentro de la barra, en blanco sobre el marino; en una barra baja no cabe y sale encima, en tinta
-            alta = h.valor / 1e6 > tope * 0.18
-            ax.text(x, h.valor / 1e6 - (tope * 0.02 if alta else -tope * 0.01), _millones(h.valor), ha="center",
-                    va="top" if alta else "bottom", fontsize=6.5, color=PAPEL if alta else TINTA, zorder=4)
+            # la cifra va dentro de la barra, en blanco sobre el marino; en una barra baja no cabe y sale fuera, en tinta
+            v = h.valor / 1e6
+            alta = abs(v) > rango * 0.18
+            hacia = 1 if v >= 0 else -1
+            y = v - hacia * rango * 0.02 if alta else v + hacia * rango * 0.01
+            va = ("top" if hacia > 0 else "bottom") if alta else ("bottom" if hacia > 0 else "top")
+            ax.text(x, y, _millones(h.valor).replace("-", "−"), ha="center", va=va, fontsize=6.5, color=PAPEL if alta else TINTA, zorder=4)
         else:
             ax.text(x, 0, "N/A", ha="center", va="bottom", fontsize=6.5, color=GRIS)
             avisos.append(f"{rotulo_barras} {h.periodo.clave}: {h.motivo}")
@@ -105,7 +114,7 @@ def barras_con_linea(barras: Sequence[Hecho], linea: Sequence[Optional[Hecho]], 
     ax.tick_params(axis="y", labelsize=6.5)
     ax.yaxis.grid(True, color=GRIS_CLARO, linewidth=0.4)
     ax.set_axisbelow(True)
-    ax.set_ylim(0, tope)
+    ax.set_ylim(abajo - (rango * 0.18 if abajo < 0 else 0), arriba + (rango * 0.18 if arriba > 0 else 0))
     asas, nombres = ax.get_legend_handles_labels()
     if hay_linea:
         ys = [l.valor * (100 if unidad_linea == "%" else 1) if (l is not None and l.hay_dato) else None for l in linea]

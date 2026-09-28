@@ -257,6 +257,58 @@ function pintarContraste(c) {
   p.className = "ayuda" + (c.bloquean ? " error" : "");
   p.textContent = `${t("ejercicios")}: ${(c.ejercicios || []).join(", ")} · ${t("trimestres")}: ${(c.trimestres || []).join(", ")}`
     + (c.bloquean ? ` · ${c.bloquean} ${t("bloquean")}` : "");
+  pintarDiscrepancias(tarjeta, c);
+}
+
+// Las discrepancias SEC ↔ documento las decide el analista aquí (antes solo con un JSON por línea de comandos, así que
+// desde la web ningún informe con una discrepancia podía salir EMITIDO). El sistema no elige: enseña las dos cifras con
+// su documento y su página, y guarda la que el analista toma con su motivo, que el informe imprime al pie.
+const cifra = (v, unidad) => (v === null || v === undefined ? t("na")
+  : unidad === "USD" && Math.abs(v) >= 1e5 ? `${num(v / 1e6, 0)} mln USD` : num(v, Math.abs(v) < 100 ? 2 : 0));
+function pintarDiscrepancias(tarjeta, c) {
+  let caja = document.getElementById("discrepancias");
+  if (!caja) { caja = elemento("div", { id: "discrepancias" }, []); tarjeta.appendChild(caja); }
+  vaciar(caja);
+  const abiertas = c.discrepancias || [], decididas = c.decididas || [];
+  if (!abiertas.length && !decididas.length) return;
+  if (abiertas.length) {
+    caja.appendChild(elemento("h3", {}, [`Discrepancias por decidir (${abiertas.length}): el informe no se emite mientras quede alguna`]));
+  }
+  abiertas.forEach((d) => {
+    const motivo = elemento("input", { type: "text", placeholder: "Por qué eliges esa cifra (queda como nota al pie)" });
+    const aviso = elemento("span", { class: "ayuda" }, []);
+    const tomar = async (valor) => {
+      aviso.className = "ayuda"; aviso.textContent = "Guardando y volviendo a contrastar…";
+      try {
+        const r = await enviarJson(con("/api/decisiones"), { campo: d.campo, periodo: d.periodo, valor, motivo: motivo.value });
+        pintarEstado(r.estado);
+      } catch (e) { aviso.className = "ayuda error"; aviso.textContent = e.message; }
+    };
+    const botones = [elemento("button", { type: "button", class: "secundario" }, [`Tomar la SEC: ${cifra(d.sec, d.unidad)}`])];
+    botones[0].addEventListener("click", () => tomar(d.sec));
+    (d.documentos || []).slice(0, 2).forEach((doc) => {
+      const b = elemento("button", { type: "button", class: "secundario" }, [`Tomar ${doc.documento} pág. ${doc.pagina}: ${cifra(doc.valor, d.unidad)}`]);
+      b.addEventListener("click", () => tomar(doc.valor));
+      botones.push(b);
+    });
+    caja.appendChild(elemento("div", { class: "fila-lista discrepancia" }, [
+      elemento("strong", {}, [`≠ ${d.rotulo} · ${d.periodo}`]),
+      elemento("div", { class: "ayuda" }, [`SEC ${cifra(d.sec, d.unidad)} · `
+        + (d.documentos || []).map((x) => `${x.documento} pág. ${x.pagina} = ${cifra(x.valor, d.unidad)}`).join(" · ") + (d.pista ? ` · ${d.pista}` : "")]),
+      motivo, elemento("div", { class: "acciones-fila" }, botones), aviso]));
+  });
+  if (decididas.length) {
+    caja.appendChild(elemento("h3", {}, [`Decididas por el analista (${decididas.length})`]));
+    decididas.forEach((d) => {
+      const quitar = elemento("button", { type: "button", class: "secundario" }, ["Deshacer"]);
+      quitar.addEventListener("click", async () => {
+        try { pintarEstado((await enviarJson(con("/api/decisiones"), { campo: d.campo, periodo: d.periodo, valor: null })).estado); }
+        catch (e) { quitar.textContent = e.message; }
+      });
+      caja.appendChild(elemento("div", { class: "fila-lista" }, [
+        `✓ ${d.campo} · ${d.periodo}: ${cifra(d.valor)} — ${d.motivo} (${d.analista}, ${fecha(d.fecha)}) `, quitar]));
+    });
+  }
 }
 
 // ---------------------------------------------------------------- paso 2
@@ -416,7 +468,13 @@ function buscador() {
         });
         lista.hidden = false;
         entrada.setAttribute("aria-expanded", "true");
-      } catch (e) { document.getElementById("mensaje").textContent = e.message; }
+      } catch (e) {
+        // junto al buscador, donde se está mirando: al pie de la página nadie lo veía (29/09/2026)
+        const carga = document.getElementById("carga");
+        carga.className = "ayuda error";
+        carga.textContent = e.message;
+        configuracion();
+      }
     }, 250);
   });
   entrada.addEventListener("keydown", (ev) => { if (ev.key === "ArrowDown" && lista.firstChild) { ev.preventDefault(); lista.firstChild.focus(); } if (ev.key === "Escape") cerrar(); });
@@ -449,8 +507,45 @@ function zona(id, entradaId, manejar) {
   entrada.addEventListener("change", () => manejar(entrada.files));
 }
 
+// ---------------------------------------------------------------- primera vez: el contacto que exige la SEC
+// Sin él la SEC rechaza toda petición y no se puede buscar ninguna empresa. No hay valor por defecto (cada usuario se
+// identifica a sí mismo): se pide aquí, se guarda en .env y el buscador funciona sin reiniciar el servidor.
+async function configuracion() {
+  let c;
+  try { c = await pedir("/api/configuracion"); } catch (e) { return; }
+  const previo = document.getElementById("tarjeta-configuracion");
+  if (c.sec_contacto) { if (previo) previo.remove(); return; }
+  if (previo) return;
+  const campo = elemento("input", { type: "text", id: "contacto-sec", autocomplete: "name email", placeholder: "Ana Pérez ana@ejemplo.com" });
+  const boton = elemento("button", { type: "button", id: "guardar-contacto" }, ["Guardar"]);
+  const aviso = elemento("p", { class: "ayuda", id: "aviso-contacto" }, []);
+  const tarjeta = elemento("section", { class: "tarjeta", id: "tarjeta-configuracion" }, [
+    elemento("h2", {}, [elemento("span", { class: "num" }, ["0"]), " Antes de empezar"]),
+    elemento("p", {}, ["La SEC exige que quien consulta EDGAR se identifique con su nombre y su correo. Sin eso no se puede "
+      + "buscar ninguna empresa. Se guarda solo en este ordenador (fichero .env) y solo se envía a la SEC."]),
+    elemento("div", { class: "acciones-fila" }, [campo, boton]), aviso]);
+  const guardar = async () => {
+    aviso.className = "ayuda";
+    aviso.textContent = "Guardando…";
+    try {
+      await enviarJson("/api/configuracion", { contacto: campo.value });
+      tarjeta.remove();
+      const carga = document.getElementById("carga");
+      if (carga) { carga.className = "ayuda ok"; carga.textContent = "Listo: ya puedes buscar la empresa por su ticker o su nombre."; }
+      const busqueda = document.getElementById("busqueda");
+      if (busqueda) { busqueda.focus(); busqueda.dispatchEvent(new Event("input")); }
+    } catch (e) { aviso.className = "ayuda error"; aviso.textContent = e.message; }
+  };
+  boton.addEventListener("click", guardar);
+  campo.addEventListener("keydown", (ev) => { if (ev.key === "Enter") guardar(); });
+  const main = document.querySelector("main");
+  main.insertBefore(tarjeta, main.firstChild);
+  campo.focus();
+}
+
 // ---------------------------------------------------------------- arranque
 pintarPasos(null);
+configuracion();
 pintarRotulos();
 if (PAGINA === "inicio") {
   buscador();

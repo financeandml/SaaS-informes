@@ -224,8 +224,58 @@ def traer(ticker: str, claves: List[str]) -> None:
     contrastar(ticker)
 
 
+def ruta_decisiones(ticker: str) -> Path:
+    """Las decisiones del analista sobre las discrepancias SEC ↔ documento: junto a sus entradas, y las lee la emisión."""
+    return entorno.carpeta("entradas") / ticker / "decisiones.json"
+
+
+def leer_decisiones(ticker: str) -> List[dict]:
+    ruta = ruta_decisiones(ticker)
+    try:
+        return json.loads(ruta.read_text(encoding="utf-8")) if ruta.exists() else []
+    except ValueError:
+        return []
+
+
+def decidir(ticker: str, campo: str, periodo: str, valor: Optional[float], motivo: str) -> Optional[str]:
+    """Guarda (o quita, con `valor` None) la decisión del analista sobre una discrepancia. None si fue bien; el motivo
+    si no. Nunca decide el sistema: solo registra la cifra que el analista elige y por qué (03, «El sistema no las toma
+    nunca por él»)."""
+    decisiones = [d for d in leer_decisiones(ticker) if (d.get("campo"), d.get("periodo")) != (campo, periodo)]
+    if valor is not None:
+        motivo = " ".join(str(motivo or "").split())
+        if len(motivo) < 5:
+            return "Escribe en una frase por qué eliges esa cifra: queda como nota al pie en el informe."
+        ruta_ent = _entradas_analista(ticker)
+        analista = ""
+        if ruta_ent is not None:
+            try:
+                analista = str((json.loads(ruta_ent.read_text(encoding="utf-8")).get("meta") or {}).get("analista") or "")
+            except ValueError:
+                pass
+        decisiones.append({"campo": campo, "periodo": periodo, "valor": float(valor), "motivo": motivo,
+                           "analista": analista or "analista", "fecha": date.today().isoformat()})
+    ruta = ruta_decisiones(ticker)
+    ruta.parent.mkdir(parents=True, exist_ok=True)
+    ruta.write_text(json.dumps(decisiones, ensure_ascii=False, indent=1), encoding="utf-8")
+    return None
+
+
+def _discrepancias(tab) -> List[dict]:
+    """Cada discrepancia abierta con lo que el analista necesita para decidir: la cifra de la SEC y la de cada
+    documento con su página."""
+    salida = []
+    for r in tab.bloquea:
+        docs = [{"documento": c.documento, "pagina": c.pagina, "valor": c.valor} for c in (r.candidatos or [])[:4]]
+        salida.append({"campo": r.campo.clave, "rotulo": r.campo.rotulo, "periodo": r.periodo.clave,
+                       "sec": r.sec.valor if r.sec is not None and r.sec.hay_dato else None, "documentos": docs,
+                       "unidad": r.campo.unidad, "pista": r.nota or ""})
+    return salida
+
+
 def contrastar(ticker: str) -> None:
-    """El contraste campo × periodo del expediente con los hechos XBRL (el mismo que hace emitir.py), resumido."""
+    """El contraste campo × periodo del expediente con los hechos XBRL (el mismo que hace emitir.py), resumido, con las
+    decisiones del analista ya aplicadas y las discrepancias que quedan abiertas."""
     e = estado(ticker)
     exp, facts = e.get("expediente"), e.get("facts")
     if exp is None or facts is None:
@@ -236,9 +286,10 @@ def contrastar(ticker: str) -> None:
         from ..verificacion import contraste
         periodos = contraste.periodos_del_informe(exp, facts=facts[0])
         with _CERROJO_PDF:
-            tab = contraste.contrastar(exp, facts[0], facts[1], periodos)
+            tab = contraste.contrastar(exp, facts[0], facts[1], periodos, ruta_decisiones(ticker))
         e["contraste"] = {"estado": "listo", "resumen": {str(k): v for k, v in tab.resumen.items()}, "bloquean": len(tab.bloquea), "no_aplican": dict(tab.no_aplican),
                           "ejercicios": [p.clave for p in periodos["anuales"]], "trimestres": [p.clave for p in periodos["trimestres"]],
+                          "discrepancias": _discrepancias(tab), "decididas": leer_decisiones(ticker),
                           "mensaje": " · ".join(f"{k} {v}" for k, v in tab.resumen.items())}
     except ValueError as ex:      # sin 10-K no hay ejercicio base: se dice, no se inventa
         e["contraste"] = {"estado": "pendiente", "mensaje": str(ex)}
@@ -275,8 +326,30 @@ def _entradas_analista(ticker: str) -> Optional[Path]:
 
 def entradas(ticker: str) -> List[Path]:
     """Todo lo que alimenta al informe: adjuntos, libro y entradas del analista."""
-    fuentes = _rutas(ticker) + [DCF / f"{ticker}.xlsx"] + [x for x in [_entradas_analista(ticker)] if x is not None]
+    fuentes = (_rutas(ticker) + [DCF / f"{ticker}.xlsx"] + [x for x in [_entradas_analista(ticker)] if x is not None]
+               + [ruta_decisiones(ticker)])
     return [p for p in fuentes if p.exists()]
+
+
+_CONTACTO = re.compile(r"^\S.*\s[^@\s]+@[^@\s]+\.[^@\s]+$")
+
+
+def configuracion() -> dict:
+    """Lo que la página necesita saber para no fallar en silencio: si hay contacto para la SEC (sin él no se puede buscar
+    ninguna empresa), de dónde salen los precios y dónde están los datos."""
+    contacto = entorno.variable("WC_SEC_CONTACTO")
+    return {"sec_contacto": bool(contacto and "@" in contacto), "precio": entorno.variable("WC_PRECIO_FUENTE"),
+            "datos": str(ADJUNTOS.parent)}
+
+
+def guardar_contacto(contacto: str) -> Optional[str]:
+    """Guarda en `.env` el contacto que la SEC exige en cada petición («Nombre correo@dominio»). None si fue bien; el
+    motivo si no. Solo se envía a data.sec.gov y www.sec.gov (`fuentes.sec.contacto`)."""
+    contacto = " ".join(contacto.split())
+    if not _CONTACTO.match(contacto):
+        return "Escribe tu nombre y tu correo, separados por un espacio: «Ana Pérez ana@ejemplo.com»."
+    entorno.guardar("WC_SEC_CONTACTO", contacto)
+    return None
 
 
 _HUELLAS: Dict[Tuple[str, int, int], str] = {}
@@ -355,6 +428,8 @@ def emitir(ticker: str) -> dict:
     orden = [sys.executable, "-u", "emitir.py", ticker, "--carpeta", str(ADJUNTOS / ticker), "--salida", str(salida)]
     if (DCF / f"{ticker}.xlsx").exists():
         orden += ["--dcf", str(DCF / f"{ticker}.xlsx")]
+    if ruta_decisiones(ticker).exists():   # las discrepancias que el analista decidió en la página del expediente
+        orden += ["--decisiones", str(ruta_decisiones(ticker))]
     ruta_entradas = _entradas_analista(ticker)
     if ruta_entradas is not None:          # la fecha del informe es la de las entradas guardadas, no la del día en que se pulsa
         orden += ["--fecha", ruta_entradas.parent.name, "--entradas", str(ruta_entradas)]
@@ -485,6 +560,9 @@ class _Manejador(BaseHTTPRequestHandler):
         if camino.startswith("/informes/"):
             self._informe(camino)
             return
+        if camino == "/api/configuracion":
+            self._json(200, configuracion())
+            return
         if camino == "/api/tickers":
             q = (qs.get("q") or [""])[0]
             try:
@@ -558,6 +636,13 @@ class _Manejador(BaseHTTPRequestHandler):
         camino, qs = u.path, parse_qs(u.query)
         t = self._ticker(qs)
         try:
+            if camino == "/api/configuracion":
+                if not self._es_propia(("application/json",)):
+                    self._tragar(); self._json(403, {"error": "solo desde la propia página"}); return
+                datos = json.loads(self._cuerpo().decode("utf-8") or "{}")
+                error = guardar_contacto(str(datos.get("contacto") or ""))
+                self._json(400 if error else 200, {"error": error} if error else configuracion())
+                return
             if camino == "/api/preparar":
                 if not self._es_propia(("application/json",)):
                     self._tragar(); self._json(403, {"error": "solo desde la propia página"}); return
@@ -605,6 +690,18 @@ class _Manejador(BaseHTTPRequestHandler):
                 e = estado(t)
                 e["adjuntos"] = clasificar(t)
                 threading.Thread(target=contrastar, args=(t,), daemon=True).start()
+                self._json(200, {"estado": resumen_ticker(t)})
+                return
+            if camino == "/api/decisiones":
+                if not self._es_propia(("application/json",)):
+                    self._tragar(); self._json(403, {"error": "solo desde la propia página"}); return
+                datos = json.loads(self._cuerpo().decode("utf-8") or "{}")
+                valor = datos.get("valor")
+                error = decidir(t, str(datos.get("campo") or ""), str(datos.get("periodo") or ""),
+                                None if valor is None else float(valor), str(datos.get("motivo") or ""))
+                if error:
+                    self._json(400, {"error": error}); return
+                contrastar(t)                     # en el acto: la tarjeta se repinta con la discrepancia ya decidida
                 self._json(200, {"estado": resumen_ticker(t)})
                 return
             if camino == "/api/traer":

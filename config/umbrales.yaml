@@ -38,6 +38,7 @@ sector:
   pensiones_cap_max: 0.02         # industrial: déficit de pensiones sin ajuste del puente por encima del 2 % de la capitalización
   apalancamiento_max: 0.60        # utilities: D / (D + E) de mercado
 relleno_pagina_min: 0.25
+paginas_max: 150               # un PDF más largo es una maquetación desbordada: bloquea la emisión (28/09/2026)
 # motor (05 §8)
 sensibilidad: {wacc_pp: [-1.0, -0.5, 0.0, 0.5, 1.0], g_pp: [-0.5, -0.25, 0.0, 0.25, 0.5]}
 reverse_rangos: {cagr: [-0.50, 1.00], margen: [-0.50, 0.95], fcff: [-0.50, 1.00]}

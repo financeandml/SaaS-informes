@@ -10,8 +10,9 @@ Regla del día de emisión: un precio que no sea del día en que se emite el
 informe (o del último día de mercado anterior) no se imprime; sale N/A con el
 motivo. Un informe con un precio de hace una semana afirma algo que no es.
 
-La fuente es `WC_PRECIO_FUENTE=nasdaq` (en el entorno o en `.env`), la única admitida (CLAUDE.md, regla 6). Sin
-configurar, todo lo que depende del precio es N/A y el informe lo dice; nunca se toma un precio de ningún sitio por defecto.
+La fuente es `WC_PRECIO_FUENTE=nasdaq` (en el entorno o en `.env`), la única admitida (CLAUDE.md, regla 6); sin
+configurar, vale «nasdaq» (`entorno._POR_DEFECTO`: no es una elección, es la única). Cualquier otro valor deja el precio
+N/A con su motivo; nunca se toma un precio de otra fuente.
 
 De Nasdaq se toma además lo que la propia bolsa publica en la ficha del valor
 —volumen, rango de 52 semanas, cierre anterior, capitalización, «1 Year Target»—

@@ -64,23 +64,42 @@ Sin red: `tests/fixtures/cache_sec/` (QCOM, NFLX, WMT, JPM), `tests/fixtures/cac
 `tests/fixtures/<TICKER>/entradas.json` (entradas de prueba, que nunca dan «EMITIDO»). Cada prueba nueva se ha visto
 fallar al reintroducir el fallo que caza (CLAUDE.md, regla 16). Estado: `docs/fases/` y la sección «Estado» de `CLAUDE.md`.
 
-## Desarrollo desde el repositorio
+## Empezar tras descargar el repositorio (ZIP o `git clone`)
+
+Hace falta Python 3.11 o posterior (se desarrolla con 3.14). Nada más que configurar: el `.env` es opcional.
 
 ```
-git clone <url> && cd <carpeta>
-python -m venv .venv && .venv\Scripts\activate            # Windows (en Linux/macOS: source .venv/bin/activate)
+cd SaaS-informes-main                                      # la carpeta descomprimida (o la del clon)
+python -m venv .venv
+.venv\Scripts\activate                                     # Windows (Linux/macOS: source .venv/bin/activate)
 pip install -r requirements.txt
-python -m playwright install chromium
-copy .env.ejemplo .env                                     # y rellenar WC_SEC_CONTACTO (nombre y correo, lo exige la SEC)
-pytest -q                                                  # la batería, sin red: ~10 min; `-m "not lenta"` para iterar
+python -m playwright install chromium                      # el PDF del informe se imprime con Chromium
+python -m tesis servir                                     # abre http://127.0.0.1:8770
 ```
 
+1. **Antes de empezar.** La primera vez, la página pide tu nombre y tu correo: la SEC exige que quien consulta EDGAR se
+   identifique. Se guarda en `.env`, solo en tu ordenador, y solo se envía a la SEC. Sin eso no se puede buscar ninguna
+   empresa. (También vale copiar `.env.ejemplo` a `.env` y rellenar `WC_SEC_CONTACTO`.)
+2. **Expediente.** Escribe el ticker o el nombre (MSFT, «micro»…) y elige la empresa. «Traer de la SEC lo que falte» baja
+   el 10-K, los 10-Q, la proxy y la nota de resultados, los clasifica y contrasta cada cifra con la SEC. Si un documento
+   y la SEC no coinciden, la tarjeta «Contraste con la SEC» enseña las dos cifras con su página: tomas una y escribes por
+   qué (va al pie del informe). Mientras quede alguna sin decidir, el informe sale en borrador.
+3. **DCF** (opcional). El libro Excel del analista, solo para compararlo con el motor.
+4. **Analista.** El asistente de 9 pasos. Muchos campos traen una propuesta del sistema con su fuente (◇): se confirma o
+   se cambia. Lo que falta en cada paso se lista abajo.
+5. **Informe.** «Emitir informe» genera el HTML y el PDF (unos minutos). Con bloqueos sale «BORRADOR — NO EMITIDO» y la
+   hoja 0 dice qué falta; con cero, «EMITIDO».
+
+**Datos de ejemplo.** `datos-tesis/` trae AAPL, NFLX, ORCL y QCOM: documentos, informes emitidos y, a 27/09/2026, unas
+entradas completas de ejemplo (analista «Ejemplo de analista senior»), para ver el recorrido entero sin teclear nada. Con
+el `.env` vacío el SaaS usa esa carpeta; `WC_DATOS` en `.env` la lleva a otra.
+
+## Desarrollo
+
+- `pytest -q` recorre la batería sin red (~10 min); `pytest -m "not lenta"` para iterar.
 - **Reglas.** `CLAUDE.md` (las del SaaS) y `docs/CLAUDE_warrants.md` (las de Warrants & Co., que hereda). Los contratos, en
   `docs/spec/`; el estado y lo siguiente, en `CLAUDE.md › Estado`; el plan de corrección de la auditoría del 27/09/2026 (78
   fallos, uno por prueba en `tests/prueba_auditoria_27_09.py`, `pytest -m auditoria`), en `docs/fases/A.md`.
-- **Datos de ejemplo.** `datos-tesis/` es una instantánea (29/09/2026) de los datos de trabajo: adjuntos de AAPL, NFLX,
-  ORCL y QCOM (documentos públicos de la SEC y de las compañías), las entradas del analista y los informes emitidos. Con
-  `WC_DATOS=./datos-tesis` en `.env`, el SaaS arranca con ellos. Las pruebas de la auditoría necesitan esos adjuntos.
 - **Modelos y posiciones.** `dcf/` (libros DCF del analista, solo lectura para el programa) y `posiciones/` (solo se leen
   para migrarlas). `Claude outputs/` guarda informes de control.
 - **Cachés.** `cache_sec/` y `cache_bolsa/` no se versionan: crecen con cada consulta y se rehacen solas con red. Las

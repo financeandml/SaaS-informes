@@ -1,0 +1,929 @@
+{
+ "meta": {
+  "analista": "Ejemplo de analista senior (entradas de prueba del 27/09/2026)",
+  "fecha_informe": "2026-09-27",
+  "fecha_valoracion": "2026-09-25",
+  "tipo": "inicio_cobertura",
+  "nombre_presentacion": "Netflix",
+  "sector": "media_contenido"
+ },
+ "perfil": {
+  "descripcion": {
+   "texto": "Netflix es un servicio de entretenimiento por suscripción que ofrece series, películas, juegos y programación en directo en más de 190 países. Opera como un único segmento y sus ingresos proceden sobre todo de las cuotas mensuales de sus planes, a las que se suma una línea publicitaria en rápido crecimiento dentro del plan con anuncios. Su estrategia es crecer en todo el mundo sin salirse de su objetivo de margen operativo. Para ello combina un catálogo propio y licenciado en muchas lenguas, subidas de precio periódicas y nuevas formas de entretenimiento como el directo, los pódcast en vídeo y los juegos en la televisión. El mayor coste es la amortización del contenido, que se reconoce de forma acelerada; el gasto en caja en contenido supera a esa amortización, y la diferencia pesa en el flujo de caja libre.",
+   "evidencias": [
+    {
+     "doc": "10-K",
+     "pag": "3",
+     "texto": "Our core strategy is to grow our business globally within the parameters of our operating margin target.",
+     "texto_es": "Su estrategia central es crecer en todo el mundo dentro de los límites de su objetivo de margen operativo."
+    },
+    {
+     "doc": "10-K",
+     "pag": "23",
+     "texto": "Revenues for the year ended December 31, 2025 increased 16% as compared to the year ended December 31, 2024, primarily due to the growth in memberships, price increases, and increased advertising revenue, partially offset by unfavorable changes in foreign exchange rates, net of hedging.",
+     "texto_es": "Los ingresos de 2025 crecieron un 16 % frente a 2024, sobre todo por el aumento de suscripciones, las subidas de precio y la mayor publicidad, compensados en parte por el efecto desfavorable del tipo de cambio."
+    }
+   ]
+  },
+  "segmentos_ok": true,
+  "fundacion": 1997,
+  "empleados": 16000
+ },
+ "equipo": {
+  "track_record": [
+   {
+    "persona": "Ted Sarandos",
+    "juicio": "positivo",
+    "texto": "Responsable del contenido desde 2000 y consejero delegado conjunto; dirigió el paso a la producción propia que hoy sostiene el catálogo. La oferta fallida por Warner Bros. se cerró con disciplina y dejó una comisión de ruptura a favor de la compañía.",
+    "evidencias": [
+     {
+      "doc": "DEF 14A",
+      "pag": "18",
+      "texto": "Mr. Sarandos has been responsible for all content operations since 2000, and led the Company’s transition into original content production that began in 2013 with the launch of series such as House of Cards, Arrested Development and Orange is the New Black.",
+      "texto_es": "El Sr. Sarandos es responsable de todas las operaciones de contenido desde 2000 y dirigió la transición de la compañía a la producción original, iniciada en 2013 con series como «House of Cards»."
+     },
+     {
+      "doc": "10-Q 2026-07-17",
+      "pag": "13",
+      "texto": "Concurrently with the termination of the Amended and Restated Merger Agreement and entry into such agreement between WBD and PSKY, PSKY, on behalf of WBD, paid a $2.8 billion termination fee owed to Netflix in accordance with the terms of the Amended and Restated Merger Agreement.",
+      "texto_es": "Al resolverse el acuerdo, PSKY pagó en nombre de WBD a Netflix la comisión de ruptura de 2.800 mln USD prevista en el contrato."
+     }
+    ]
+   },
+   {
+    "persona": "Greg Peters",
+    "juicio": "positivo",
+    "texto": "Consejero delegado conjunto tras pasar por producto y operaciones desde 2008; bajo su dirección llegaron el plan con anuncios, el cobro por cuentas compartidas y una tecnología publicitaria propia que ya sostiene el crecimiento de los ingresos.",
+    "evidencias": [
+     {
+      "doc": "DEF 14A",
+      "pag": "17",
+      "texto": "Mr. Peters, our co-Chief Executive Officer, has served in roles of increasing responsibility at Netflix since 2008, including Chief Operating Officer and Chief Product Officer.",
+      "texto_es": "El Sr. Peters, consejero delegado conjunto, ha ocupado puestos de responsabilidad creciente en Netflix desde 2008, entre ellos director de operaciones y director de producto."
+     }
+    ]
+   },
+   {
+    "persona": "Spencer Neumann",
+    "juicio": "positivo",
+    "texto": "Director financiero desde 2019; ha llevado la compañía a generar caja libre de forma recurrente, a guiar por margen operativo con precisión y a devolver el excedente con recompras sin dañar el balance.",
+    "evidencias": [
+     {
+      "doc": "DEF 14A",
+      "pag": "38",
+      "texto": "Spencer was named CFO of Netflix in January of 2019, utilizing his finance, strategy, and accounting experience in media, entertainment and service oriented companies to continue to build on the company’s track record of success and innovation.",
+      "texto_es": "Spencer Neumann fue nombrado director financiero de Netflix en enero de 2019, con experiencia financiera, estratégica y contable en medios, entretenimiento y servicios."
+     }
+    ]
+   }
+  ],
+  "asignacion_capital": {
+   "texto": "La compañía no paga dividendo: reinvierte primero en contenido y tecnología, hace adquisiciones selectivas y devuelve el excedente con recompras. Tras la ruptura del acuerdo con Warner Bros. retomó las recompras con fuerza y el consejo amplió la autorización en abril; mantiene deuda de grado de inversión y prevé refinanciar el vencimiento de este año.",
+   "evidencias": [
+    {
+     "doc": "8-K 2026-07-16",
+     "pag": "5",
+     "texto": "Our capital allocation approach is unchanged. We prioritize reinvestment in the business, both organically and through selective M&A, while maintaining a healthy balance sheet and ample liquidity, and then returning excess cash to shareholders via share repurchases.",
+     "texto_es": "La política de asignación de capital no cambia: primero reinvertir en el negocio, orgánicamente y con M&A selectivo, con un balance sano y liquidez amplia, y después devolver el exceso de caja con recompras."
+    },
+    {
+     "doc": "8-K 2026-07-16",
+     "pag": "5",
+     "texto": "In April, our Board of Directors authorized the repurchase of an additional $25B of our stock on top of the $6.8B of capacity we had remaining as of the end of Q1.",
+     "texto_es": "En abril el consejo autorizó recomprar otros 25.000 mln USD de acciones, además de los 6.800 mln USD que quedaban disponibles al cierre del primer trimestre."
+    }
+   ]
+  }
+ },
+ "catalizadores": [
+  {
+   "fecha": "2026-10-20",
+   "evento": "Resultados del tercer trimestre de 2026 y previsión del cuarto",
+   "tipo": "resultados",
+   "pilar": "1",
+   "impacto": "positivo",
+   "probabilidad": 90,
+   "evidencia": [
+    {
+     "doc": "8-K 2026-07-16",
+     "pag": "2",
+     "texto": "For Q3, we expect revenue growth of 12% (or 11% F/X neutral) driven by growth in memberships, pricing, and ad revenue.",
+     "texto_es": "Para el tercer trimestre espera un crecimiento de ingresos del 12 % (11 % sin efecto divisa), por suscripciones, precios y publicidad."
+    }
+   ]
+  },
+  {
+   "fecha": "2026-T4",
+   "evento": "Partidos de la NFL en Acción de Gracias y Navidad: directo e inventario publicitario de alto valor",
+   "tipo": "producto",
+   "pilar": "2",
+   "impacto": "positivo",
+   "probabilidad": 90,
+   "evidencia": [
+    {
+     "doc": "8-K 2026-07-16",
+     "pag": "4",
+     "texto": "We also recently announced an expanded agreement with the NFL, securing a premium slate of games that includes a week-one matchup in Q3, as well as a Thanksgiving Eve game and NFL Christmas Gameday in Q4, and a final week contest in Q1 of next year.",
+     "texto_es": "Anunció un acuerdo ampliado con la NFL que incluye un partido de la primera jornada en el tercer trimestre, uno en la víspera de Acción de Gracias y la jornada de Navidad en el cuarto, y uno de la última jornada en el primer trimestre del año próximo."
+    }
+   ]
+  },
+  {
+   "fecha": "2027-T1",
+   "evento": "Cierre del ejercicio 2026: ingresos publicitarios del año y previsión de margen para 2027",
+   "tipo": "resultados",
+   "pilar": "3",
+   "impacto": "positivo",
+   "probabilidad": 70,
+   "evidencia": [
+    {
+     "doc": "8-K 2026-07-16",
+     "pag": "5",
+     "texto": "Building out our ads business continues to be a top priority and we remain on track to deliver approximately $3 billion in ads revenue in 2026.",
+     "texto_es": "Desarrollar el negocio publicitario sigue siendo una prioridad máxima y la compañía mantiene el rumbo para facturar unos 3.000 mln USD en publicidad en 2026."
+    }
+   ]
+  },
+  {
+   "fecha": "2026-T4",
+   "evento": "Refinanciación del vencimiento de deuda de este año",
+   "tipo": "corporativo",
+   "pilar": "5",
+   "impacto": "positivo",
+   "probabilidad": 85,
+   "evidencia": [
+    {
+     "doc": "8-K 2026-07-16",
+     "pag": "5",
+     "texto": "We ended the quarter with gross debt of $14.4B and cash and cash equivalents of $9.1B. We have $1B of debt maturing later this year, which we plan to refinance.",
+     "texto_es": "Cerró el trimestre con una deuda bruta de 14.400 mln USD y caja de 9.100 mln USD; vencen 1.000 mln USD de deuda este año, que prevé refinanciar."
+    }
+   ]
+  }
+ ],
+ "direccion": {
+  "citas": [
+   {
+    "doc": "8-K 2026-07-16",
+    "pag": "2",
+    "texto": "Our goal is to sustain healthy revenue growth, expand operating profit and margin, and deliver growing free cash flow.",
+    "texto_es": "Su objetivo es sostener un crecimiento sano de los ingresos, ampliar el beneficio y el margen operativos y generar un flujo de caja libre creciente."
+   },
+   {
+    "doc": "8-K 2026-07-16",
+    "pag": "1",
+    "texto": "The entertainment industry remains dynamic and competitive. We aim to stay ahead by executing against our three areas of focus: delivering more entertainment value, leveraging technology to improve every aspect of our service, and improving monetization.",
+    "texto_es": "El sector del entretenimiento sigue siendo dinámico y competitivo; la compañía quiere mantenerse por delante con tres focos: más valor de entretenimiento, tecnología para mejorar todo el servicio y mejor monetización."
+   },
+   {
+    "doc": "8-K 2026-07-16",
+    "pag": "5",
+    "texto": "Building out our ads business continues to be a top priority and we remain on track to deliver approximately $3 billion in ads revenue in 2026.",
+    "texto_es": "Desarrollar el negocio publicitario sigue siendo una prioridad máxima y la compañía mantiene el rumbo para facturar unos 3.000 mln USD en publicidad en 2026."
+   }
+  ]
+ },
+ "guia": {
+  "confirmadas": [
+   "2024-07-18|3T FY24|ingresos",
+   "2024-07-18|3T FY24|ebit",
+   "2024-07-18|3T FY24|margen_ebit",
+   "2024-07-18|3T FY24|beneficio_neto",
+   "2024-07-18|3T FY24|bpa_diluido",
+   "2024-10-17|4T FY24|ingresos",
+   "2024-10-17|4T FY24|ebit",
+   "2024-10-17|4T FY24|margen_ebit",
+   "2024-10-17|4T FY24|beneficio_neto",
+   "2024-10-17|4T FY24|bpa_diluido",
+   "2025-01-21|1T FY25|ingresos",
+   "2025-01-21|1T FY25|ebit",
+   "2025-01-21|1T FY25|margen_ebit",
+   "2025-01-21|1T FY25|beneficio_neto",
+   "2025-01-21|1T FY25|bpa_diluido",
+   "2025-04-17|2T FY25|ingresos",
+   "2025-04-17|2T FY25|ebit",
+   "2025-04-17|2T FY25|margen_ebit",
+   "2025-04-17|2T FY25|beneficio_neto",
+   "2025-04-17|2T FY25|bpa_diluido",
+   "2025-07-17|3T FY25|ingresos",
+   "2025-07-17|3T FY25|ebit",
+   "2025-07-17|3T FY25|margen_ebit",
+   "2025-07-17|3T FY25|beneficio_neto",
+   "2025-07-17|3T FY25|bpa_diluido",
+   "2025-10-21|4T FY25|ingresos",
+   "2025-10-21|4T FY25|ebit",
+   "2025-10-21|4T FY25|margen_ebit",
+   "2025-10-21|4T FY25|beneficio_neto",
+   "2025-10-21|4T FY25|bpa_diluido",
+   "2026-01-20|1T FY26|ingresos",
+   "2026-01-20|1T FY26|ebit",
+   "2026-01-20|1T FY26|margen_ebit",
+   "2026-01-20|1T FY26|beneficio_neto",
+   "2026-01-20|1T FY26|bpa_diluido",
+   "2026-04-16|2T FY26|ingresos",
+   "2026-04-16|2T FY26|ebit",
+   "2026-04-16|2T FY26|margen_ebit",
+   "2026-04-16|2T FY26|beneficio_neto",
+   "2026-04-16|2T FY26|bpa_diluido",
+   "2026-07-16|3T FY26|ingresos",
+   "2026-07-16|3T FY26|ebit",
+   "2026-07-16|3T FY26|margen_ebit",
+   "2026-07-16|3T FY26|beneficio_neto",
+   "2026-07-16|3T FY26|bpa_diluido"
+  ]
+ },
+ "val": {
+  "anio_base": "ultimo_ejercicio",
+  "periodo_explicito": 10,
+  "mitad_de_anio": true,
+  "horizonte_meses": 12,
+  "sbc": "coste_de_caja",
+  "arrendamientos": "fuera_de_deuda"
+ },
+ "wacc": {
+  "erp": 4.14,
+  "erp_fuente": "Damodaran, «Implied ERP on September 1, 2026 = 4.14% (Trailing 12 month, with adjusted payout)», pages.stern.nyu.edu/~adamodar (consultada el 27/09/2026)",
+  "beta_metodo": "regresion",
+  "prima": 0,
+  "kd_metodo": "rendimiento_bonos",
+  "kd": 5.0,
+  "kd_fuente": "10-K 2025, nota 7 (Debt): bonos senior sin garantía a tipo fijo con cupones del 4,375 % al 6,375 % en USD (cupón medio ponderado de los tramos en USD ≈ 5,3 %) y valor razonable de nivel 2 de 14.951 mln USD frente a 14.519 mln USD de nominal, es decir, por encima de la par; el rendimiento de mercado queda por debajo del cupón medio y se estima en el 5,0 % (juicio del analista)",
+  "tipo_marginal": 21
+ },
+ "tv": {
+  "metodo": "value_driver"
+ },
+ "esc": {
+  "pesimista": {
+   "impuesto_caja": {
+    "1": 15,
+    "3": 16,
+    "5": 17,
+    "N": 18
+   },
+   "da_pct": 0.8,
+   "capex_pct": {
+    "1": 1.7,
+    "3": 1.6,
+    "N": 1.5
+   },
+   "fm_pct_incremental": 2.0,
+   "sbc_pct": 1.0,
+   "probabilidad": 25,
+   "narrativa": "La competencia por el tiempo de pantalla frena las altas y las subidas de precio; la publicidad crece menos de lo previsto y el margen apenas sube desde el nivel de 2026.",
+   "crecimiento_ingresos": {
+    "1": 13.0,
+    "2": 8.0,
+    "3": 6.5,
+    "5": 5.0,
+    "N": 3.0
+   },
+   "margen_ebit": {
+    "1": 31.0,
+    "2": 31.5,
+    "3": 32.0,
+    "5": 33.0,
+    "N": 34.0
+   },
+   "paquete": {
+    "desfase_contenido": {
+     "1": 3.5,
+     "2": 3.5,
+     "3": 3.2,
+     "5": 3.0,
+     "N": 2.5
+    }
+   },
+   "wacc_ajuste_pp": 0,
+   "g": 2.5,
+   "ronic": 12
+  },
+  "base": {
+   "impuesto_caja": {
+    "1": 15,
+    "3": 16,
+    "5": 17,
+    "N": 18
+   },
+   "da_pct": 0.8,
+   "capex_pct": {
+    "1": 1.7,
+    "3": 1.6,
+    "N": 1.5
+   },
+   "fm_pct_incremental": 2.0,
+   "sbc_pct": 1.0,
+   "probabilidad": 50,
+   "narrativa": "Precio, suscripciones y publicidad sostienen un crecimiento de dos dígitos unos años; el margen sigue subiendo con la escala y el gasto en contenido converge hacia su amortización.",
+   "crecimiento_ingresos": {
+    "1": 13.3,
+    "2": 11.5,
+    "3": 10.5,
+    "5": 9.0,
+    "N": 4.5
+   },
+   "margen_ebit": {
+    "1": 31.5,
+    "2": 33.5,
+    "3": 35.0,
+    "5": 37.5,
+    "N": 40.0
+   },
+   "paquete": {
+    "desfase_contenido": {
+     "1": 3.5,
+     "2": 3.0,
+     "3": 2.7,
+     "5": 2.3,
+     "N": 1.5
+    }
+   },
+   "wacc_ajuste_pp": 0,
+   "g": 3.0,
+   "ronic": 20
+  },
+  "optimista": {
+   "impuesto_caja": {
+    "1": 15,
+    "3": 16,
+    "5": 17,
+    "N": 18
+   },
+   "da_pct": 0.8,
+   "capex_pct": {
+    "1": 1.7,
+    "3": 1.6,
+    "N": 1.5
+   },
+   "fm_pct_incremental": 2.0,
+   "sbc_pct": 1.0,
+   "probabilidad": 25,
+   "narrativa": "La publicidad y el directo aceleran los ingresos y el poder de fijación de precios se mantiene; el margen se acerca al de un negocio de software maduro.",
+   "crecimiento_ingresos": {
+    "1": 13.6,
+    "2": 13.0,
+    "3": 12.5,
+    "5": 11.0,
+    "N": 5.5
+   },
+   "margen_ebit": {
+    "1": 31.8,
+    "2": 34.5,
+    "3": 37.0,
+    "5": 40.0,
+    "N": 44.0
+   },
+   "paquete": {
+    "desfase_contenido": {
+     "1": 3.5,
+     "2": 2.8,
+     "3": 2.3,
+     "5": 1.8,
+     "N": 1.0
+    }
+   },
+   "wacc_ajuste_pp": 0,
+   "g": 3.5,
+   "ronic": 25
+  }
+ },
+ "comparables": [
+  {
+   "ticker": "DIS",
+   "justificacion": "Estudio y plataforma de vídeo por suscripción con escala mundial",
+   "usar_en_multiplos": true
+  },
+  {
+   "ticker": "WBD",
+   "justificacion": "Catálogo propio y plataforma HBO Max en competencia directa",
+   "usar_en_multiplos": true
+  },
+  {
+   "ticker": "PSKY",
+   "justificacion": "Estudio y plataforma Paramount+ que compite por contenido y audiencia",
+   "usar_en_multiplos": true
+  },
+  {
+   "ticker": "CMCSA",
+   "justificacion": "Grupo de medios con estudio y plataforma de vídeo propia",
+   "usar_en_multiplos": true
+  },
+  {
+   "ticker": "ROKU",
+   "justificacion": "Plataforma de distribución de vídeo con ingresos publicitarios",
+   "usar_en_multiplos": true
+  }
+ ],
+ "mercado": {
+  "cifras": [
+   {
+    "etiqueta": "Ingresos de entretenimiento en los mercados donde opera (declarado por la compañía)",
+    "clase": "TAM",
+    "valor": 650000,
+    "unidad": "millones USD",
+    "anio": 2024,
+    "metodo": "declarado_compania",
+    "evidencia": [
+     {
+      "doc": "8-K 2025-01-21",
+      "pag": "3",
+      "texto": "We estimate there are now 750M+ broadband households (excluding China and Russia) and $650B+7 of entertainment revenue in the markets we operate in, of which we only captured ~6% in 2024.",
+      "texto_es": "La compañía estima más de 750 millones de hogares con banda ancha (sin China ni Rusia) y más de 650.000 mln USD de ingresos de entretenimiento en sus mercados, de los que captó ~6 % en 2024."
+     }
+    ]
+   },
+   {
+    "etiqueta": "Ingresos de la compañía en 2025 (mercado ya capturado)",
+    "clase": "SOM",
+    "valor": 45183,
+    "unidad": "millones USD",
+    "anio": 2025,
+    "metodo": "declarado_compania",
+    "evidencia": [
+     {
+      "doc": "10-K",
+      "pag": "22",
+      "texto": "Revenues $ 45,183,036 $ 39,000,966 $ 33,723,297 $ 6,182,070 16 %",
+      "texto_es": "Ingresos: 45.183.036 miles USD en 2025, 39.000.966 en 2024 y 33.723.297 en 2023; +16 % en 2025."
+     }
+    ]
+   }
+  ]
+ },
+ "competencia": {
+  "competidores": [
+   {
+    "nombre": "YouTube (Alphabet)",
+    "ticker": "GOOGL",
+    "por_que": "Compite por el tiempo de televisión con contenido de creadores y profesional, gratuito y con anuncios.",
+    "evidencia": [
+     {
+      "doc": "8-K 2024-07-18",
+      "pag": "3",
+      "texto": "So looking to the future, we believe our biggest opportunity is winning a larger share of the 80%+ of TV time (primarily linear and streaming) that neither Netflix nor YouTube has today.",
+      "texto_es": "La mayor oportunidad es ganar cuota en el 80 % largo del tiempo de televisión (lineal y en streaming) que hoy no tienen ni Netflix ni YouTube."
+     }
+    ]
+   },
+   {
+    "nombre": "Disney",
+    "ticker": "DIS",
+    "por_que": "Disney+ compite por suscriptores y por derechos de contenido y deportes.",
+    "evidencia": [
+     {
+      "doc": "8-K 2024-07-18",
+      "pag": "5",
+      "texto": "We haven’t bundled Netflix solely with other streamers like Disney+ or Max9 because Netflix already operates as a go-to destination for entertainment thanks to the breadth and variety of our slate and superior product experience.",
+      "texto_es": "No ha empaquetado Netflix solo con otras plataformas como Disney+ o Max porque ya es un destino de referencia gracias a la amplitud de su catálogo y a su producto."
+     }
+    ]
+   },
+   {
+    "nombre": "Paramount Skydance",
+    "ticker": "PSKY",
+    "por_que": "Paramount+ y, tras el acuerdo con Warner Bros. Discovery, HBO Max bajo un mismo grupo.",
+    "evidencia": [
+     {
+      "doc": "8-K 2026-01-20",
+      "pag": "6",
+      "texto": "For example, the Golden Globes were available simultaneously on CBS and Paramount+, while last year’s Super Bowl was simulcast on Fox and Tubi.",
+      "texto_es": "Por ejemplo, los Globos de Oro se emitieron a la vez en CBS y Paramount+, y la última Super Bowl, en Fox y Tubi."
+     },
+     {
+      "doc": "10-Q 2026-07-17",
+      "pag": "13",
+      "texto": "On February 27, 2026, WBD provided notice to the Company that it had terminated the Amended and Restated Merger Agreement in accordance with its terms in order to enter into an Agreement and Plan of Merger with Paramount Skydance Corporation (“PSKY”).",
+      "texto_es": "El 27 de febrero de 2026 WBD notificó la resolución del acuerdo de fusión con Netflix para firmar otro con Paramount Skydance (PSKY)."
+     }
+    ]
+   },
+   {
+    "nombre": "Amazon",
+    "ticker": "AMZN",
+    "por_que": "Prime Video compite en suscripción, deportes en directo y publicidad.",
+    "evidencia": [
+     {
+      "doc": "10-K",
+      "pag": "12",
+      "texto": "While the retail side of Amazon competes with us, we do not believe that Amazon will use the AWS operation in a manner to gain competitive advantage against our service, although if it were to do so it could harm our business.",
+      "texto_es": "Aunque el negocio minorista de Amazon compite con la compañía, esta no cree que Amazon use AWS para ganar ventaja frente a su servicio, aunque si lo hiciera podría perjudicarla."
+     }
+    ]
+   }
+  ]
+ },
+ "moat": {
+  "fuentes": [
+   {
+    "tipo": "escala_eficiente",
+    "durabilidad_anios": 10,
+    "tendencia": "se_amplia",
+    "evidencias": [
+     {
+      "doc": "8-K 2026-07-16",
+      "pag": "3",
+      "texto": "In addition to a high-quality slate, we also need a wide variety of programming because we serve a massive audience (approaching 1B people) with broad and diverse tastes, moods and needs.",
+      "texto_es": "Además de un catálogo de calidad, necesita mucha variedad porque sirve a una audiencia enorme (cerca de 1.000 millones de personas) con gustos y necesidades muy diversos."
+     },
+     {
+      "doc": "8-K 2026-04-16",
+      "pag": "3",
+      "texto": "We’ve come a long way since we started streaming in 2007 (we’re now entertaining an audience approaching 1 billion people), but we’re also still incredibly small; we account for an estimated ~5% of TV view share globally, and as of the end of 2025 we penetrated less than 45% of our Total Addressable Market (TAM) of broadband households.",
+      "texto_es": "Desde 2007 ha llegado a una audiencia de casi 1.000 millones de personas, pero su cuota estimada del tiempo de televisión mundial es ~5 % y al cierre de 2025 penetraba menos del 45 % de su TAM de hogares con banda ancha."
+     }
+    ]
+   },
+   {
+    "tipo": "intangibles",
+    "durabilidad_anios": 8,
+    "tendencia": "estable",
+    "evidencias": [
+     {
+      "doc": "8-K 2026-07-16",
+      "pag": "3",
+      "texto": "Non-English content again drove more than a third of all viewing this half, with standout titles from Korea, Japan, Spain, and India.",
+      "texto_es": "El contenido en lenguas distintas del inglés volvió a superar un tercio del visionado del semestre, con títulos destacados de Corea, Japón, España e India."
+     }
+    ]
+   }
+  ],
+  "amenazas": {
+   "texto": "YouTube y las redes sociales ganan tiempo de pantalla sin pagar por el contenido; la fusión de Paramount Skydance con Warner Bros. Discovery crea un rival con más catálogo propio, y las obligaciones de inversión local y los impuestos en algunos países encarecen operar."
+  }
+ },
+ "riesgos": {
+  "top": [
+   {
+    "origen": {
+     "epigrafe": "Changes in competitive offerings for entertainment video could adversely impact our business."
+    },
+    "texto_es": "Rivales con más catálogo o gratuitos, como YouTube o el grupo Paramount–Warner, restan tiempo de pantalla y poder de precio.",
+    "familia": "competitivo",
+    "probabilidad": 4,
+    "impacto": 4,
+    "mitigante": "Catálogo local en muchas lenguas, directo y un producto que concentra la mayor audiencia de pago del sector.",
+    "senal": "Crecimiento de ingresos interanual"
+   },
+   {
+    "origen": {
+     "epigrafe": "If our efforts to attract and retain members are not successful, our business will be adversely affected."
+    },
+    "texto_es": "Las subidas de precio y el fin del efecto de las cuentas compartidas pueden frenar las altas y elevar las bajas.",
+    "familia": "ejecucion",
+    "probabilidad": 3,
+    "impacto": 4,
+    "mitigante": "Planes escalonados, incluido el plan con anuncios, que retienen al cliente sensible al precio.",
+    "senal": "Crecimiento de ingresos interanual"
+   },
+   {
+    "origen": {
+     "epigrafe": "The long-term and largely fixed cost nature of our content commitments may limit our operating flexibility and could adversely affect our liquidity and results of operations."
+    },
+    "texto_es": "Los compromisos de contenido son largos y casi fijos: si los ingresos se frenan, el margen y la caja lo notan enseguida.",
+    "familia": "financiero",
+    "probabilidad": 2,
+    "impacto": 4,
+    "mitigante": "La relación entre gasto en caja y amortización se gestiona cerca de la unidad y el margen se guía cada año.",
+    "senal": "Gasto en contenido en caja frente a amortización"
+   },
+   {
+    "origen": {
+     "epigrafe": "Our advertising offering is subject to various risks and uncertainties, which may adversely affect our business."
+    },
+    "texto_es": "La publicidad puede crecer menos de lo previsto por la competencia en el mercado de anuncios y la medición de audiencias.",
+    "familia": "ejecucion",
+    "probabilidad": 3,
+    "impacto": 3,
+    "mitigante": "Tecnología publicitaria propia, compra programática y un inventario de directo muy demandado.",
+    "senal": "Ingresos publicitarios"
+   },
+   {
+    "origen": {
+     "epigrafe": "We could be subject to economic, political, regulatory and other risks arising from our international operations."
+    },
+    "texto_es": "Más de la mitad de los ingresos llega en otras monedas y algunos países imponen impuestos indirectos y cuotas de inversión local.",
+    "familia": "regulatorio",
+    "probabilidad": 3,
+    "impacto": 3,
+    "mitigante": "Coberturas de divisa, precios locales y producción en los mismos mercados que factura.",
+    "senal": "Margen operativo"
+   }
+  ]
+ },
+ "bear": {
+  "disparadores": [
+   {
+    "descripcion": "El crecimiento de ingresos se frena por debajo de un dígito alto sin efecto divisa.",
+    "metrica": "crecimiento de ingresos interanual sin efecto divisa",
+    "umbral": 8,
+    "unidad": "%",
+    "plazo": "4T 2027",
+    "driver": "esc.pesimista.crecimiento_ingresos"
+   },
+   {
+    "descripcion": "El margen operativo anual deja de subir y se estanca en el nivel de la guía de este año.",
+    "metrica": "margen operativo del ejercicio",
+    "umbral": 31.5,
+    "unidad": "%",
+    "plazo": "ejercicio 2027",
+    "driver": "esc.pesimista.margen_ebit"
+   },
+   {
+    "descripcion": "El gasto en contenido en caja se dispara frente a la amortización y consume la caja libre.",
+    "metrica": "gasto en contenido en caja / amortización",
+    "umbral": 1.2,
+    "unidad": "x",
+    "plazo": "ejercicio 2027",
+    "driver": "esc.pesimista.paquete.desfase_contenido"
+   }
+  ]
+ },
+ "pilares": [
+  {
+   "titulo": "Precio y suscripciones sostienen el crecimiento de doble dígito",
+   "argumento": {
+    "texto": "Los ingresos crecen por tres vías a la vez: más suscripciones, subidas de precio periódicas que los clientes aceptan y publicidad. La guía de 2026 apunta a otro año de doble dígito, lo que muestra que el servicio conserva poder de fijación de precios pese a la competencia."
+   },
+   "evidencias": [
+    {
+     "doc": "10-K",
+     "pag": "23",
+     "texto": "Revenues for the year ended December 31, 2025 increased 16% as compared to the year ended December 31, 2024, primarily due to the growth in memberships, price increases, and increased advertising revenue, partially offset by unfavorable changes in foreign exchange rates, net of hedging.",
+     "texto_es": "Los ingresos de 2025 crecieron un 16 % frente a 2024, sobre todo por el aumento de suscripciones, las subidas de precio y la mayor publicidad, compensados en parte por el efecto desfavorable del tipo de cambio."
+    },
+    {
+     "doc": "8-K 2026-07-16",
+     "pag": "5",
+     "texto": "Our first half price changes, in markets like the US, Mexico and Spain, have gone well with the impact consistent with prior price changes and our expectations.",
+     "texto_es": "Los cambios de precio del primer semestre, en mercados como EE. UU., México y España, han ido bien, con un efecto acorde con los anteriores y con lo esperado."
+    }
+   ],
+   "kpi": "Crecimiento de ingresos interanual",
+   "riesgo_1a": "If our efforts to attract and retain members are not successful, our business will be adversely affected.",
+   "riesgo_es": "Que las subidas de precio frenen las altas o eleven las bajas.",
+   "catalizador": "1"
+  },
+  {
+   "titulo": "La publicidad, segunda palanca de ingresos",
+   "argumento": {
+    "texto": "El negocio publicitario casi se duplica este año y se apoya en tecnología propia, compra programática y un inventario de directo muy demandado. Monetiza la audiencia del plan con anuncios sin subir su precio y abre ingresos con un coste de contenido que ya está pagado."
+   },
+   "evidencias": [
+    {
+     "doc": "8-K 2026-07-16",
+     "pag": "2",
+     "texto": "Our 2026 outlook is consistent with our prior forecast: we are narrowing our revenue forecast to $51.0-$51.4B, which represents 13%-14% growth (~12% F/X neutral), driven by growth in memberships and pricing, and a projected rough doubling of our ads revenue to approximately $3 billion.",
+     "texto_es": "La previsión para 2026 no cambia: estrecha la de ingresos a 51.000–51.400 mln USD, un crecimiento del 13 %–14 % (~12 % sin efecto divisa), por suscripciones, precios y una publicidad que casi se duplica hasta unos 3.000 mln USD."
+    },
+    {
+     "doc": "8-K 2026-07-16",
+     "pag": "4",
+     "texto": "We're also automating more of the workflow around how advertisers transact with us by extending programmatic access to Pause Ads and live inventory this summer.",
+     "texto_es": "También automatiza la contratación de los anunciantes y abre este verano la compra programática a los anuncios en pausa y al inventario en directo."
+    }
+   ],
+   "kpi": "Ingresos publicitarios",
+   "riesgo_1a": "Our advertising offering is subject to various risks and uncertainties, which may adversely affect our business.",
+   "riesgo_es": "Que los anunciantes no paguen lo previsto y la publicidad crezca menos.",
+   "catalizador": "2"
+  },
+  {
+   "titulo": "Apalancamiento operativo y margen creciente",
+   "argumento": {
+    "texto": "El coste del contenido crece menos que los ingresos, así que cada año el margen operativo sube. La compañía guía y cumple ese margen con precisión, y el objetivo de 2026 vuelve a superar al de 2025; la tesis supone que la expansión continúa varios años."
+   },
+   "evidencias": [
+    {
+     "doc": "10-K",
+     "pag": "22",
+     "texto": "Operating margin for the year ended December 31, 2025 increased by approximately three percentage points as compared to the prior comparative period, primarily driven by the growth in revenues outpacing the growth in cost of revenues, sales and marketing, and general and administrative expenses.",
+     "texto_es": "El margen operativo de 2025 subió unos tres puntos frente al ejercicio anterior, porque los ingresos crecieron más que el coste de ventas, los gastos comerciales y los generales."
+    },
+    {
+     "doc": "8-K 2026-07-16",
+     "pag": "2",
+     "texto": "We continue to anticipate an operating margin of 31.5% for 2026 both on a reported basis and based on F/X rates as of January 1, 2026 vs. 29.5% in 2025.",
+     "texto_es": "Sigue previendo un margen operativo del 31,5 % en 2026, tanto publicado como a los tipos de cambio del 1 de enero de 2026, frente al 29,5 % de 2025."
+    }
+   ],
+   "kpi": "Margen operativo",
+   "riesgo_1a": "The long-term and largely fixed cost nature of our content commitments may limit our operating flexibility and could adversely affect our liquidity and results of operations.",
+   "riesgo_es": "Que los compromisos de contenido, casi fijos, frenen el margen si los ingresos se desaceleran.",
+   "catalizador": "3"
+  },
+  {
+   "titulo": "Escala de audiencia y catálogo difícil de replicar",
+   "argumento": {
+    "texto": "Con una audiencia cercana a los mil millones de personas, el coste de cada título se reparte entre muchos más clientes que en cualquier rival. Esa escala financia producción local en muchas lenguas, que atrae y retiene clientes fuera de Estados Unidos y refuerza la ventaja."
+   },
+   "evidencias": [
+    {
+     "doc": "8-K 2026-07-16",
+     "pag": "3",
+     "texto": "In addition to a high-quality slate, we also need a wide variety of programming because we serve a massive audience (approaching 1B people) with broad and diverse tastes, moods and needs.",
+     "texto_es": "Además de un catálogo de calidad, necesita mucha variedad porque sirve a una audiencia enorme (cerca de 1.000 millones de personas) con gustos y necesidades muy diversos."
+    },
+    {
+     "doc": "8-K 2026-07-16",
+     "pag": "3",
+     "texto": "Non-English content again drove more than a third of all viewing this half, with standout titles from Korea, Japan, Spain, and India.",
+     "texto_es": "El contenido en lenguas distintas del inglés volvió a superar un tercio del visionado del semestre, con títulos destacados de Corea, Japón, España e India."
+    }
+   ],
+   "kpi": "Gasto en contenido en caja frente a amortización",
+   "riesgo_1a": "Changes in competitive offerings for entertainment video could adversely impact our business.",
+   "riesgo_es": "Que rivales con catálogo propio o gratuito resten tiempo de pantalla.",
+   "catalizador": "2"
+  },
+  {
+   "titulo": "Caja libre creciente y recompras",
+   "argumento": {
+    "texto": "El flujo de caja libre ya financia todo el contenido y deja excedente, que vuelve al accionista con recompras. Tras la ruptura con Warner Bros., la compañía cobró la comisión, amplió la autorización y aceleró las compras sin endeudarse más."
+   },
+   "evidencias": [
+    {
+     "doc": "8-K 2026-07-16",
+     "pag": "5",
+     "texto": "For the full year, we continue to expect FCF of approximately $12.5B, and an annual cash content spend to amortization ratio of ~1.1x.",
+     "texto_es": "Para el conjunto del año sigue esperando un flujo de caja libre de unos 12.500 mln USD y una relación entre gasto en contenido en caja y amortización de ~1,1x."
+    },
+    {
+     "doc": "8-K 2026-07-16",
+     "pag": "5",
+     "texto": "In April, our Board of Directors authorized the repurchase of an additional $25B of our stock on top of the $6.8B of capacity we had remaining as of the end of Q1.",
+     "texto_es": "En abril el consejo autorizó recomprar otros 25.000 mln USD de acciones, además de los 6.800 mln USD que quedaban disponibles al cierre del primer trimestre."
+    }
+   ],
+   "kpi": "Flujo de caja libre",
+   "riesgo_1a": "We have a substantial amount of indebtedness and other obligations, including streaming content obligations, which could adversely affect our financial position, and we may not be able to generate sufficient cash to service our debt and other obligations.",
+   "riesgo_es": "Que la deuda y las obligaciones de contenido limiten la caja disponible para recompras.",
+   "catalizador": "4"
+  }
+ ],
+ "historial": {
+  "causas": {
+   "texto": "En el tercer trimestre de 2025 el beneficio quedó por debajo de lo esperado por un gasto no previsto en la guía. Era la disputa con la administración tributaria de Brasil por impuestos indirectos, contabilizada como coste de ventas y que abarcaba varios ejercicios. En el primer trimestre de 2026 el BPA diluido superó la previsión de la compañía por la comisión de ruptura de Warner Bros.; la compañía no explica la diferencia con el consenso que publica la bolsa. Aprendizaje: seguir el margen operativo guiado y aislar partidas no recurrentes antes de comparar el BPA."
+  }
+ },
+ "pos": {
+  "recomendacion": "Comprar",
+  "precio_entrada": 71.15,
+  "fecha_entrada": "2026-09-28",
+  "tamano_pct": 2,
+  "drawdown_tolerado": 30,
+  "recomendacion_justificacion": {
+   "texto": "La regla sugiere Mantener porque el recorrido/riesgo queda por debajo del mínimo, aunque el potencial es del 25,9 %. Se recomienda Comprar con tamaño reducido porque el escenario pesimista ya supone un frenazo del crecimiento y un margen casi plano, que contradicen la guía vigente de la compañía. El criterio de datos limpios no se cumple por cuatro discrepancias de acciones y BPA del tercer trimestre de 2025. Se explican por el split de diez por una de noviembre de 2025, no por un error en las cifras."
+  },
+  "tamano_porque": {
+   "texto": "Posición reducida: la tesis depende de que el margen siga subiendo y la publicidad cumpla; el drawdown tolerado limita el tamaño por debajo del máximo de la cartera."
+  },
+  "argumento": {
+   "texto": "Netflix combina el mayor servicio de vídeo por suscripción del mundo con dos palancas que aún están a medio recorrer. La primera es la publicidad, que casi se duplica este año; la segunda, un margen operativo que sube porque el coste del contenido crece menos que los ingresos. La acción cae desde los máximos del año tras el intento de compra de Warner Bros., que se cerró con una comisión de ruptura a favor de la compañía y la vuelta a las recompras. El precio descuenta un crecimiento y un margen inferiores a los del escenario base del modelo. El riesgo principal es la competencia por el tiempo de pantalla, que se sigue con el crecimiento de ingresos y el margen de cada trimestre."
+  },
+  "asunciones": [
+   {
+    "texto": "Los ingresos crecen a doble dígito en 2026 y 2027 por precio, suscripciones y publicidad.",
+    "driver": "esc.base.crecimiento_ingresos",
+    "umbral_invalidacion": "crecimiento de ingresos sin efecto divisa < 8 % interanual dos trimestres seguidos"
+   },
+   {
+    "texto": "El margen operativo anual sigue subiendo con la escala.",
+    "driver": "esc.base.margen_ebit",
+    "umbral_invalidacion": "margen operativo de 2027 ≤ margen de 2026"
+   },
+   {
+    "texto": "El gasto en contenido en caja converge hacia su amortización.",
+    "driver": "esc.base.paquete.desfase_contenido",
+    "umbral_invalidacion": "gasto en contenido en caja / amortización > 1,2x en un ejercicio"
+   }
+  ],
+  "checklist": [
+   {
+    "id": "variante",
+    "criterio": "Visión propia distinta de lo que descuenta el precio (reverse DCF), en dos frases",
+    "tipo": "manual",
+    "cumplido": "si",
+    "evidencia": "El DCF inverso descuenta un crecimiento y un margen por debajo de la guía de la compañía. La tesis espera que publicidad y escala sostengan la expansión del margen varios años más.",
+    "eliminatorio": true
+   },
+   {
+    "id": "wbd",
+    "criterio": "Sin adquisición transformadora pendiente que cambie el perfil de riesgo",
+    "tipo": "manual",
+    "cumplido": "si",
+    "evidencia": "El acuerdo con Warner Bros. Discovery se resolvió el 27/02/2026 y la compañía cobró la comisión de ruptura (10-Q 2T 2026, nota 6).",
+    "eliminatorio": false
+   }
+  ],
+  "invalidacion": [
+   {
+    "metrica": "crecimiento de ingresos sin efecto divisa, interanual",
+    "umbral": "< 8 % dos trimestres seguidos",
+    "plazo": "hasta el 4T 2027"
+   },
+   {
+    "metrica": "margen operativo del ejercicio",
+    "umbral": "≤ 31,5 %",
+    "plazo": "ejercicio 2027"
+   },
+   {
+    "metrica": "gasto en contenido en caja / amortización",
+    "umbral": "> 1,2x",
+    "plazo": "ejercicio 2027"
+   }
+  ],
+  "stop": {
+   "texto": "Stop de tesis: se revisa la posición si se cumple cualquiera de las invalidaciones, no por un precio concreto."
+  },
+  "kpis": [
+   {
+    "kpi": "Crecimiento de ingresos interanual",
+    "actual": "",
+    "verde": "≥ 12 % interanual",
+    "rojo": "< 8 % interanual",
+    "fuente": "carta a accionistas (8-K) y 10-Q",
+    "frecuencia": "trimestral"
+   },
+   {
+    "kpi": "Margen operativo",
+    "actual": "",
+    "verde": "≥ margen guiado del año",
+    "rojo": "< margen del año anterior",
+    "fuente": "10-Q / 10-K (SEC EDGAR)",
+    "frecuencia": "trimestral"
+   },
+   {
+    "kpi": "Ingresos publicitarios",
+    "actual": "",
+    "verde": "≈ 3.000 mln USD en 2026 y creciendo en 2027",
+    "rojo": "< 2.500 mln USD en 2026",
+    "fuente": "carta a accionistas (8-K)",
+    "frecuencia": "anual"
+   },
+   {
+    "kpi": "Gasto en contenido en caja frente a amortización",
+    "actual": "",
+    "verde": "≤ 1,1x",
+    "rojo": "> 1,2x",
+    "fuente": "10-Q / 10-K (SEC EDGAR)",
+    "frecuencia": "trimestral"
+   },
+   {
+    "kpi": "Flujo de caja libre",
+    "actual": "",
+    "verde": "≥ 12.500 mln USD en 2026",
+    "rojo": "< 11.000 mln USD en 2026",
+    "fuente": "carta a accionistas (8-K) y 10-Q",
+    "frecuencia": "trimestral"
+   }
+  ],
+  "fechas_revision": [
+   "2026-10-20",
+   "2027-01-20",
+   "2027-09-27"
+  ],
+  "salida": [
+   "Objetivo alcanzado: se revalúa la tesis con el motor.",
+   "Tesis invalidada por cualquiera de las invalidaciones.",
+   "Horizonte vencido sin catalizador.",
+   "Una oportunidad mejor con el mismo riesgo."
+  ]
+ },
+ "tesis": {
+  "resumen": {
+   "texto": "Netflix es el mayor servicio de vídeo por suscripción del mundo y está en una fase en la que crece a doble dígito y a la vez amplía el margen. La tesis es que la publicidad, las subidas de precio y la escala de su audiencia sostienen ese crecimiento varios años. El coste del contenido sigue creciendo menos que los ingresos y la caja libre financia recompras crecientes. Tras la ruptura del acuerdo con Warner Bros., la compañía vuelve a centrarse en su negocio orgánico con un balance holgado."
+  },
+  "por_que_ahora": {
+   "texto": "La acción cotiza lejos de sus máximos del año mientras la compañía mantiene la guía de 2026, con un margen operativo del 31,5 % frente al 29,5 % de 2025, y acelera las recompras."
+  },
+  "vision_vs_mercado": {
+   "texto": "El DCF inverso indica que el precio descuenta menos crecimiento y menos margen que la guía y que el escenario base. La visión propia es que la publicidad y la escala permiten seguir ampliando el margen operativo varios años, algo que el mercado no está pagando."
+  }
+ },
+ "revision": {
+  "parrafos": {
+   "resumen_factual": {
+    "propuesta": "b200fa02ed6ebba9",
+    "frases": [
+     [
+      "En el ejercicio 2025, la compañía facturó 45.183 mln USD con un margen operativo del 29,5 % (+2,8 p. p. frente al ejercicio anterior).",
+      "10-K 23/01/2026"
+     ],
+     [
+      "Para el 3T FY26, la compañía prevé unos ingresos de 12.860 mln USD.",
+      "8-K 16/07/2026, Ex. 99.1"
+     ],
+     [
+      "Al cierre del 2T FY26, la deuda neta era de 5.181 mln USD, 0,4 veces el EBITDA del ejercicio 2025.",
+      "10-Q 17/07/2026"
+     ],
+     [
+      "La retribución al accionista del ejercicio 2025, entre dividendos y recompras, sumó 9.127 mln USD: el 96 % del flujo de caja libre.",
+      "10-K 23/01/2026"
+     ]
+    ],
+    "editado": false
+   }
+  }
+ }
+}

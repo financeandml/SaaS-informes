@@ -1,0 +1,966 @@
+{
+ "meta": {
+  "analista": "Ejemplo de analista senior (entradas de prueba del 27/09/2026)",
+  "fecha_informe": "2026-09-27",
+  "fecha_valoracion": "2026-09-25",
+  "tipo": "inicio_cobertura",
+  "nombre_presentacion": "Oracle",
+  "sector": "software"
+ },
+ "perfil": {
+  "descripcion": {
+   "texto": "Oracle vende software empresarial e infraestructura en la nube. Se organiza en tres negocios: nube y software, hardware y servicios. El primero concentra la mayor parte de los ingresos e incluye la infraestructura en la nube (OCI), las aplicaciones en la nube (Fusion, NetSuite y Oracle Health), las licencias y el soporte de su base de datos. La compañía está en plena transformación: la demanda de capacidad para entrenar y ejecutar modelos de inteligencia artificial ha convertido a OCI en el principal motor del crecimiento, con contratos plurianuales de gran tamaño y concentrados en pocos clientes. Esa expansión exige una inversión en centros de datos sin precedentes en su historia, financiada con caja operativa, deuda, acciones preferentes convertibles, ampliaciones de capital y prepagos de clientes. El negocio tradicional de licencias y soporte migra gradualmente a la nube y aporta una base de ingresos recurrentes y muy rentables.",
+   "evidencias": [
+    {
+     "doc": "10-K",
+     "pag": "4",
+     "texto": "After an initial purchase of Oracle products and services, our customers can continue to benefit from our offerings, research and development efforts and deep IT expertise by electing to purchase and renew Oracle support offerings for their software and hardware deployments",
+     "texto_es": "Tras la compra inicial, los clientes pueden seguir beneficiándose de su oferta, de su investigación y de su experiencia contratando y renovando el soporte de sus despliegues de software y hardware."
+    }
+   ]
+  },
+  "segmentos_ok": true,
+  "rotulos": {
+   "orcl:CloudAndSoftwareBusinessMember": "Nube y software",
+   "orcl:ServicesBusinessMember": "Servicios",
+   "orcl:HardwareBusinessMember": "Hardware",
+   "orcl:CloudRevenuesMember": "Nube",
+   "orcl:SoftwareRevenuesMember": "Software",
+   "orcl:SoftwareSupportMember": "Soporte de software",
+   "orcl:CloudInfrastructureMember": "Infraestructura en la nube (OCI)",
+   "orcl:CloudApplicationsMember": "Aplicaciones en la nube (SaaS)",
+   "orcl:SoftwareLicenseMember": "Licencias de software"
+  },
+  "fundacion": 1977,
+  "fundacion_evidencia": [
+   {
+    "doc": "10-K",
+    "pag": "15",
+    "texto": "He served as our Chief Executive Officer from June 1977, when he founded Oracle, until September 2014.",
+    "texto_es": "Fue consejero delegado desde junio de 1977, cuando fundó Oracle, hasta septiembre de 2014."
+   }
+  ],
+  "empleados": 141000
+ },
+ "equipo": {
+  "track_record": [
+   {
+    "persona": "Clayton M. Magouyrk",
+    "juicio": "positivo",
+    "texto": "Consejero delegado desde septiembre de 2025 tras dirigir la ingeniería de OCI desde 2019. Ha liderado la construcción de la infraestructura que hoy explica la aceleración de los ingresos, aunque su etapa al frente de toda la compañía es todavía corta.",
+    "evidencias": [
+     {
+      "doc": "10-K",
+      "pag": "15",
+      "texto": "Mr. Magouyrk, 39, has been our Chief Executive Officer since September 2025. He served as our President, Oracle Cloud Infrastructure from June to September 2025."
+     }
+    ]
+   },
+   {
+    "persona": "Michael D. Sicilia",
+    "juicio": "mixto",
+    "texto": "Consejero delegado desde septiembre de 2025, junto a Magouyrk, tras dirigir las unidades sectoriales. La codirección reparte bien los negocios, pero añade riesgo de coordinación en una etapa de inversión muy intensa.",
+    "evidencias": [
+     {
+      "doc": "10-K",
+      "pag": "15",
+      "texto": "Mr. Sicilia, 55, has been our Chief Executive Officer since September 2025. He served as our President, Industries from June to September 2025."
+     }
+    ]
+   },
+   {
+    "persona": "Hilary Maxson",
+    "juicio": "mixto",
+    "texto": "Directora financiera desde abril de 2026, procedente de Schneider Electric. Aporta experiencia en grupos industriales intensivos en capital, pero llega en mitad del mayor programa de financiación de la historia de la compañía y aún no tiene historial propio.",
+    "evidencias": [
+     {
+      "doc": "10-K",
+      "pag": "15",
+      "texto": "Ms. Maxson, 48, has been our Chief Financial Officer since April 2026."
+     }
+    ]
+   }
+  ],
+  "asignacion_capital": {
+   "texto": "La prioridad es la inversión en centros de datos: las recompras son testimoniales y el dividendo trimestral se mantiene. Para financiar el capex la compañía ha combinado emisiones de bonos, acciones preferentes convertibles obligatoriamente y una ampliación de capital en el mercado, además de prepagos de clientes. El precio de esa estrategia es una dilución visible y una deuda creciente.",
+   "evidencias": [
+    {
+     "doc": "10-Q 2026-09-11",
+     "texto": "During the first quarter ended August 31, 2026, we fully utilized the ATM Program and issued 141 million shares of common stock under the ATM Program for net proceeds of $19.9 billion."
+    },
+    {
+     "doc": "10-K",
+     "pag": "56",
+     "texto": "We repurchased 0.4 million shares for $93 million and 3.9 million shares for $600 million in fiscal 2026 and 2025, respectively."
+    }
+   ]
+  }
+ },
+ "catalizadores": [
+  {
+   "fecha": "2026-T4",
+   "evento": "Resultados del segundo trimestre fiscal de 2027 frente a la guía de ingresos y beneficio",
+   "tipo": "resultados",
+   "pilar": "2",
+   "impacto": "positivo",
+   "probabilidad": 70,
+   "evidencia": [
+    {
+     "doc": "8-K 2026-09-10",
+     "texto": "Total revenues are expected to grow between 30% and 34% in constant currency and USD.",
+     "texto_es": "Se espera que los ingresos totales crezcan entre un 30 % y un 34 %, en moneda constante y en dólares."
+    }
+   ]
+  },
+  {
+   "fecha": "2027-T2",
+   "evento": "Cierre del ejercicio fiscal 2027 y cumplimiento del objetivo de ingresos anual",
+   "tipo": "resultados",
+   "pilar": "1",
+   "impacto": "positivo",
+   "probabilidad": 75,
+   "evidencia": [
+    {
+     "doc": "8-K 2026-09-10",
+     "texto": "For fiscal year 2027, we now expect total revenue to be at least $90 billion, and non-GAAP EPS to be at $8.10.",
+     "texto_es": "Para el ejercicio fiscal 2027 la compañía espera ahora unos ingresos totales de al menos 90.000 millones de dólares y un BPA no GAAP de 8,10 dólares."
+    }
+   ]
+  },
+  {
+   "fecha": "2027-T1",
+   "evento": "Nuevas emisiones de deuda o capital para completar la financiación del ejercicio",
+   "tipo": "corporativo",
+   "pilar": "4",
+   "impacto": "negativo",
+   "probabilidad": 70,
+   "evidencia": [
+    {
+     "doc": "8-K 2026-06-10",
+     "texto": "In fiscal year 2027, Oracle expects to raise approximately $40 billion through a combination of debt and equity financing including its previously announced $20 billion at-the-market equity issuance. Oracle does not expect to issue additional debt in calendar year 2026.",
+     "texto_es": "En el ejercicio fiscal 2027 Oracle espera captar unos 40.000 millones de dólares combinando deuda y capital, incluida la ampliación de 20.000 millones en el mercado ya anunciada; no prevé emitir más deuda en el año natural 2026."
+    }
+   ]
+  }
+ ],
+ "direccion": {
+  "citas": [
+   {
+    "doc": "8-K 2025-12-10",
+    "texto": "Oracle is very good at building and running high-performance and cost-efficient cloud datacenters",
+    "texto_es": "Oracle es muy buena construyendo y operando centros de datos en la nube de alto rendimiento y eficientes en costes"
+   },
+   {
+    "doc": "8-K 2025-12-10",
+    "texto": "We are now committed to a policy of chip neutrality where we work closely with all our CPU and GPU suppliers.",
+    "texto_es": "Ahora estamos comprometidos con una política de neutralidad en chips, en la que trabajamos estrechamente con todos nuestros proveedores de CPU y GPU."
+   },
+   {
+    "doc": "8-K 2026-03-10",
+    "texto": "AI code generation is making our SaaS application suites more competitive and more profitable.",
+    "texto_es": "La generación de código con IA está haciendo nuestras suites de aplicaciones SaaS más competitivas y más rentables."
+   }
+  ]
+ },
+ "guia": {
+  "confirmadas": []
+ },
+ "val": {
+  "anio_base": "ultimo_ejercicio",
+  "periodo_explicito": 10,
+  "mitad_de_anio": true,
+  "horizonte_meses": 12,
+  "sbc": "coste_de_caja",
+  "arrendamientos": "fuera_de_deuda",
+  "ajustes_puente": [
+   {
+    "concepto": "preferentes",
+    "importe": 5000,
+    "evidencia": [
+     {
+      "doc": "10-K",
+      "pag": "55",
+      "texto": "On February 5, 2026, we issued 100,000,000 depositary shares, representing 50,000 shares of our 6.50% Series D Mandatory Convertible Preferred Stock (Mandatory Convertible Preferred Stock). We received cash proceeds of $5.0 billion, net of issuance costs.",
+      "texto_es": "El 5 de febrero de 2026 emitió 100 millones de acciones de depósito que representan 50.000 acciones preferentes convertibles obligatoriamente de la serie D al 6,50 %, por las que obtuvo 5.000 millones de dólares netos de costes."
+     }
+    ]
+   }
+  ]
+ },
+ "wacc": {
+  "erp": 4.14,
+  "erp_fuente": "Damodaran Online (pages.stern.nyu.edu/~adamodar), «Implied ERP on September 1, 2026 = 4.14% (Trailing 12 month, with adjusted payout)», consultado el 27/09/2026",
+  "beta_metodo": "regresion",
+  "prima": 0,
+  "kd_metodo": "rendimiento_bonos",
+  "kd": 5.7,
+  "kd_fuente": "Cupón de las notas senior al 5,70 % con vencimiento en febrero de 2036, emitidas en el ejercicio 2026 (10-K del ejercicio 2026, «Recent Financing Activities: Senior Notes»): referencia del coste marginal de la deuda a 10 años",
+  "tipo_marginal": 21
+ },
+ "tv": {
+  "metodo": "value_driver"
+ },
+ "esc": {
+  "pesimista": {
+   "probabilidad": 30,
+   "narrativa": "Algún gran cliente de IA renegocia o incumple, la cartera contratada se convierte más despacio, la compañía recorta el capex tarde y la amortización de los centros de datos comprime el margen.",
+   "crecimiento_ingresos": {
+    "1": 32,
+    "2": 25,
+    "3": 12,
+    "5": 6,
+    "N": 3
+   },
+   "margen_ebit": {
+    "1": 30,
+    "3": 23,
+    "5": 22,
+    "N": 24
+   },
+   "impuesto_caja": {
+    "1": 17,
+    "5": 19,
+    "N": 21
+   },
+   "da_pct": {
+    "1": 18,
+    "3": 23,
+    "5": 23,
+    "N": 16
+   },
+   "capex_pct": {
+    "1": 115,
+    "2": 50,
+    "3": 28,
+    "5": 20,
+    "N": 16
+   },
+   "fm_pct_incremental": -5,
+   "sbc_pct": {
+    "1": 6.0,
+    "5": 5.0,
+    "N": 4.5
+   },
+   "wacc_ajuste_pp": 1.0,
+   "wacc_ajuste_justificacion": "Más riesgo financiero: con la cartera convirtiéndose más despacio, la deuda y los compromisos de arrendamiento pesan más sobre flujos de caja libres negativos durante más años.",
+   "g": 2.0,
+   "ronic": 11
+  },
+  "base": {
+   "probabilidad": 45,
+   "narrativa": "La cartera contratada se convierte en ingresos al ritmo que declara la compañía, el capex alcanza su máximo este ejercicio y el margen operativo resiste pese a la mayor amortización.",
+   "crecimiento_ingresos": {
+    "1": 34,
+    "2": 40,
+    "3": 22,
+    "5": 11,
+    "N": 4
+   },
+   "margen_ebit": {
+    "1": 33,
+    "3": 30,
+    "5": 30,
+    "N": 31
+   },
+   "impuesto_caja": {
+    "1": 17,
+    "5": 19,
+    "N": 21
+   },
+   "da_pct": {
+    "1": 18,
+    "3": 22,
+    "5": 22,
+    "N": 17
+   },
+   "capex_pct": {
+    "1": 120,
+    "2": 70,
+    "3": 40,
+    "5": 25,
+    "N": 19
+   },
+   "fm_pct_incremental": -15,
+   "sbc_pct": {
+    "1": 6.0,
+    "5": 4.5,
+    "N": 4.0
+   },
+   "g": 2.5,
+   "ronic": 12
+  },
+  "optimista": {
+   "probabilidad": 25,
+   "narrativa": "La demanda de capacidad para IA supera la oferta durante años, los contratos se amplían con más clientes y la escala de OCI lleva el margen operativo por encima del histórico.",
+   "crecimiento_ingresos": {
+    "1": 36,
+    "2": 48,
+    "3": 28,
+    "5": 14,
+    "N": 4.5
+   },
+   "margen_ebit": {
+    "1": 34,
+    "3": 33,
+    "5": 35,
+    "N": 36
+   },
+   "impuesto_caja": {
+    "1": 17,
+    "5": 19,
+    "N": 21
+   },
+   "da_pct": {
+    "1": 18,
+    "3": 22,
+    "5": 22,
+    "N": 17
+   },
+   "capex_pct": {
+    "1": 120,
+    "2": 72,
+    "3": 42,
+    "5": 26,
+    "N": 19
+   },
+   "fm_pct_incremental": -20,
+   "sbc_pct": {
+    "1": 6.0,
+    "5": 4.5,
+    "N": 4.0
+   },
+   "g": 3.0,
+   "ronic": 15
+  }
+ },
+ "comparables": [
+  {
+   "ticker": "MSFT",
+   "justificacion": "Nube pública (Azure), base de datos y aplicaciones empresariales en competencia directa",
+   "usar_en_multiplos": true
+  },
+  {
+   "ticker": "AMZN",
+   "justificacion": "Primer proveedor de infraestructura en la nube con AWS, competidor directo de OCI",
+   "usar_en_multiplos": true
+  },
+  {
+   "ticker": "GOOGL",
+   "justificacion": "Google Cloud compite en infraestructura para IA y bases de datos gestionadas",
+   "usar_en_multiplos": true
+  },
+  {
+   "ticker": "CRM",
+   "justificacion": "Aplicaciones empresariales en la nube, competidor de las suites Fusion y NetSuite",
+   "usar_en_multiplos": true
+  },
+  {
+   "ticker": "WDAY",
+   "justificacion": "Aplicaciones de recursos humanos y finanzas en la nube frente a Fusion",
+   "usar_en_multiplos": true
+  },
+  {
+   "ticker": "IBM",
+   "justificacion": "Software de infraestructura, base de datos y servicios a grandes empresas",
+   "usar_en_multiplos": true
+  },
+  {
+   "ticker": "CRWV",
+   "justificacion": "Proveedor especializado de capacidad de cómputo con GPU para inteligencia artificial",
+   "usar_en_multiplos": false
+  }
+ ],
+ "mercado": {
+  "cifras": [
+   {
+    "etiqueta": "Cartera contratada aún sin reconocer (RPO): demanda comprometida por contrato, no un tamaño de mercado estimado",
+    "clase": "TAM",
+    "valor": 664000,
+    "unidad": "millones USD",
+    "anio": 2026,
+    "metodo": "declarado_compania",
+    "evidencia": [
+     {
+      "doc": "10-Q 2026-09-11",
+      "texto": "Remaining performance obligations were $664 billion as of August 31, 2026, of which we expect to recognize approximately 13% as revenues over the next twelve months, 37% over the subsequent month 13 to month 36, 34% over the subsequent month 37 to month 60 and the remainder thereafter.",
+      "texto_es": "Las obligaciones de desempeño pendientes sumaban 664.000 millones de dólares a 31 de agosto de 2026; la compañía espera reconocer como ingresos en torno al 13 % en los próximos doce meses, el 37 % entre los meses 13 y 36, el 34 % entre los meses 37 y 60 y el resto después."
+     }
+    ]
+   },
+   {
+    "etiqueta": "Ingresos totales del ejercicio fiscal 2026",
+    "clase": "SOM",
+    "valor": 67357,
+    "unidad": "millones USD",
+    "anio": 2026,
+    "metodo": "declarado_compania",
+    "evidencia": [
+     {
+      "doc": "10-K",
+      "pag": "67",
+      "texto": "Total revenues 67,357 57,399 52,961",
+      "texto_es": "Ingresos totales: 67.357, 57.399 y 52.961 millones de dólares en los ejercicios 2026, 2025 y 2024."
+     }
+    ]
+   }
+  ]
+ },
+ "competencia": {
+  "competidores": [
+   {
+    "nombre": "Amazon (AWS)",
+    "ticker": "AMZN",
+    "por_que": "Mayor proveedor de infraestructura en la nube; compite con OCI por las cargas de trabajo de IA.",
+    "evidencia": [
+     {
+      "doc": "10-K",
+      "pag": "13",
+      "texto": "Our enterprise cloud, software and hardware offerings compete directly with certain offerings from some of the largest and most competitive companies in the world, including Adobe Systems Incorporated, Alphabet Inc., Amazon.com, Inc., Cisco Systems, Inc., Intel Corporation, International Business Machines Corporation, Microsoft Corporation, Salesforce, Inc. and SAP SE",
+      "texto_es": "Su oferta de nube, software y hardware compite directamente con algunas de las mayores compañías del mundo, entre ellas Adobe, Alphabet, Amazon, Cisco, Intel, IBM, Microsoft, Salesforce y SAP."
+     }
+    ]
+   },
+   {
+    "nombre": "Microsoft",
+    "ticker": "MSFT",
+    "por_que": "Azure compite en infraestructura y bases de datos; Dynamics, en aplicaciones empresariales.",
+    "evidencia": [
+     {
+      "doc": "10-K",
+      "pag": "13",
+      "texto": "Our enterprise cloud, software and hardware offerings compete directly with certain offerings from some of the largest and most competitive companies in the world, including Adobe Systems Incorporated, Alphabet Inc., Amazon.com, Inc., Cisco Systems, Inc., Intel Corporation, International Business Machines Corporation, Microsoft Corporation, Salesforce, Inc. and SAP SE",
+      "texto_es": "Su oferta de nube, software y hardware compite directamente con algunas de las mayores compañías del mundo, entre ellas Adobe, Alphabet, Amazon, Cisco, Intel, IBM, Microsoft, Salesforce y SAP."
+     }
+    ]
+   },
+   {
+    "nombre": "Alphabet (Google Cloud)",
+    "ticker": "GOOGL",
+    "por_que": "Compite en capacidad de cómputo para IA y en servicios de datos gestionados.",
+    "evidencia": [
+     {
+      "doc": "10-K",
+      "pag": "13",
+      "texto": "Our enterprise cloud, software and hardware offerings compete directly with certain offerings from some of the largest and most competitive companies in the world, including Adobe Systems Incorporated, Alphabet Inc., Amazon.com, Inc., Cisco Systems, Inc., Intel Corporation, International Business Machines Corporation, Microsoft Corporation, Salesforce, Inc. and SAP SE",
+      "texto_es": "Su oferta de nube, software y hardware compite directamente con algunas de las mayores compañías del mundo, entre ellas Adobe, Alphabet, Amazon, Cisco, Intel, IBM, Microsoft, Salesforce y SAP."
+     }
+    ]
+   },
+   {
+    "nombre": "SAP",
+    "por_que": "Principal rival en planificación de recursos empresariales frente a Fusion Cloud ERP.",
+    "evidencia": [
+     {
+      "doc": "10-K",
+      "pag": "13",
+      "texto": "Our enterprise cloud, software and hardware offerings compete directly with certain offerings from some of the largest and most competitive companies in the world, including Adobe Systems Incorporated, Alphabet Inc., Amazon.com, Inc., Cisco Systems, Inc., Intel Corporation, International Business Machines Corporation, Microsoft Corporation, Salesforce, Inc. and SAP SE",
+      "texto_es": "Su oferta de nube, software y hardware compite directamente con algunas de las mayores compañías del mundo, entre ellas Adobe, Alphabet, Amazon, Cisco, Intel, IBM, Microsoft, Salesforce y SAP."
+     }
+    ]
+   },
+   {
+    "nombre": "Salesforce",
+    "ticker": "CRM",
+    "por_que": "Compite con las aplicaciones de clientes y ventas de Fusion Cloud CX.",
+    "evidencia": [
+     {
+      "doc": "10-K",
+      "pag": "13",
+      "texto": "Our enterprise cloud, software and hardware offerings compete directly with certain offerings from some of the largest and most competitive companies in the world, including Adobe Systems Incorporated, Alphabet Inc., Amazon.com, Inc., Cisco Systems, Inc., Intel Corporation, International Business Machines Corporation, Microsoft Corporation, Salesforce, Inc. and SAP SE",
+      "texto_es": "Su oferta de nube, software y hardware compite directamente con algunas de las mayores compañías del mundo, entre ellas Adobe, Alphabet, Amazon, Cisco, Intel, IBM, Microsoft, Salesforce y SAP."
+     }
+    ]
+   }
+  ]
+ },
+ "moat": {
+  "fuentes": [
+   {
+    "tipo": "costes_de_cambio",
+    "durabilidad_anios": 15,
+    "tendencia": "estable",
+    "evidencias": [
+     {
+      "doc": "10-K",
+      "pag": "4",
+      "texto": "After an initial purchase of Oracle products and services, our customers can continue to benefit from our offerings, research and development efforts and deep IT expertise by electing to purchase and renew Oracle support offerings for their software and hardware deployments",
+      "texto_es": "Tras la compra inicial, los clientes siguen contratando y renovando el soporte de sus despliegues de software y hardware."
+     },
+     {
+      "doc": "10-K",
+      "pag": "6",
+      "texto": "Our infrastructure technologies offerings include Oracle AI Database and MySQL Database, the world’s most popular database management systems",
+      "texto_es": "Su oferta de infraestructura incluye Oracle AI Database y MySQL, los sistemas de gestión de bases de datos más extendidos del mundo."
+     }
+    ]
+   },
+   {
+    "tipo": "escala_eficiente",
+    "durabilidad_anios": 5,
+    "tendencia": "se_amplia",
+    "evidencias": [
+     {
+      "doc": "8-K 2025-12-10",
+      "texto": "Oracle is very good at building and running high-performance and cost-efficient cloud datacenters",
+      "texto_es": "Oracle es muy buena construyendo y operando centros de datos en la nube de alto rendimiento y eficientes en costes."
+     },
+     {
+      "doc": "8-K 2026-09-10",
+      "texto": "Customer demand for AI Cloud Training and Inferencing Services continues to grow faster than supply.",
+      "texto_es": "La demanda de servicios en la nube para entrenar y ejecutar modelos de IA sigue creciendo más deprisa que la oferta."
+     }
+    ]
+   }
+  ],
+  "amenazas": {
+   "texto": "La ventaja en infraestructura para IA es reciente y depende de la capacidad de conseguir energía, chips y emplazamientos antes que rivales con más caja. Los grandes proveedores de nube pueden bajar precios, los clientes de IA están concentrados y la estrategia multinube facilita que las cargas de trabajo se muevan entre proveedores."
+  }
+ },
+ "riesgos": {
+  "top": [
+   {
+    "origen": {
+     "evidencia": [
+      {
+       "doc": "10-K",
+       "pag": "20",
+       "texto": "If we are unable to secure data center capacity at affordable rates or do not accurately plan for and manage our infrastructure capacity requirements, our profitability may decline.",
+       "texto_es": "Si no consigue capacidad de centros de datos a precios asumibles o no planifica y gestiona bien sus necesidades de infraestructura, su rentabilidad puede caer."
+      }
+     ]
+    },
+    "texto_es": "Contratos de arrendamiento y compras de chips a largo plazo sin ingresos equivalentes si la demanda de IA se enfría o un gran cliente no paga.",
+    "familia": "ejecucion",
+    "probabilidad": 3,
+    "impacto": 5,
+    "mitigante": "Prepagos de clientes y hardware aportado por los propios clientes en los grandes contratos de IA.",
+    "senal": "RPO (obligaciones de desempeño pendientes)"
+   },
+   {
+    "origen": {
+     "evidencia": [
+      {
+       "doc": "10-K",
+       "pag": "34",
+       "texto": "There are risks associated with our outstanding and future indebtedness.",
+       "texto_es": "Hay riesgos asociados a su endeudamiento actual y futuro."
+      }
+     ]
+    },
+    "texto_es": "La deuda crece para financiar el capex mientras el flujo de caja libre es negativo; una rebaja de calificación encarecería la financiación.",
+    "familia": "financiero",
+    "probabilidad": 3,
+    "impacto": 4,
+    "mitigante": "Vencimientos escalonados a largo plazo, flujo de caja operativo creciente y acceso demostrado al mercado de capitales.",
+    "senal": "Flujo de caja libre"
+   },
+   {
+    "origen": {
+     "evidencia": [
+      {
+       "doc": "10-K",
+       "pag": "23",
+       "texto": "If we are unable to compete effectively, the results of operations and prospects for our business could be harmed.",
+       "texto_es": "Si no compite con eficacia, sus resultados y sus perspectivas pueden verse perjudicados."
+      }
+     ]
+    },
+    "texto_es": "Rivales con más escala y caja pueden bajar precios de cómputo para IA y restar margen a los contratos de OCI.",
+    "familia": "competitivo",
+    "probabilidad": 3,
+    "impacto": 4,
+    "mitigante": "Contratos plurianuales ya firmados y oferta multinube integrada en las nubes de los rivales.",
+    "senal": "Margen operativo"
+   },
+   {
+    "origen": {
+     "evidencia": [
+      {
+       "doc": "10-K",
+       "pag": "22",
+       "texto": "Our cloud offerings and hardware offerings are complex, and if we cannot successfully manage this complexity, including the sourcing of technologies and components, the results of these businesses will suffer.",
+       "texto_es": "Su oferta de nube y de hardware es compleja y, si no gestiona esa complejidad, incluido el suministro de tecnologías y componentes, los resultados de esos negocios se resentirán."
+      }
+     ]
+    },
+    "texto_es": "Dependencia de pocos proveedores de GPU, memoria y energía; retrasos en la entrega de componentes aplazan ingresos y encarecen la capacidad.",
+    "familia": "ejecucion",
+    "probabilidad": 3,
+    "impacto": 3,
+    "mitigante": "Política de neutralidad en chips con varios proveedores y fabricación externalizada.",
+    "senal": "Ingresos de infraestructura en la nube (OCI), interanual"
+   },
+   {
+    "origen": {
+     "evidencia": [
+      {
+       "doc": "10-K",
+       "pag": "29",
+       "texto": "Our international sales and operations and global customer base subject us to additional risks, including trade restrictions, export controls and sanctions, that can adversely affect our operating results.",
+       "texto_es": "Sus ventas y operaciones internacionales la exponen a riesgos adicionales, como restricciones comerciales, controles de exportación y sanciones, que pueden perjudicar sus resultados."
+      }
+     ]
+    },
+    "texto_es": "Controles de exportación de chips avanzados y restricciones a la IA soberana pueden limitar dónde y a quién vende capacidad.",
+    "familia": "regulatorio",
+    "probabilidad": 2,
+    "impacto": 3,
+    "mitigante": "Oferta de nube soberana y regiones dedicadas adaptadas a cada jurisdicción.",
+    "senal": "Crecimiento de ingresos interanual"
+   }
+  ]
+ },
+ "bear": {
+  "disparadores": [
+   {
+    "descripcion": "La cartera contratada deja de crecer o cae por cancelaciones o renegociaciones de grandes clientes de IA.",
+    "metrica": "RPO, variación trimestral",
+    "umbral": -5,
+    "unidad": "%",
+    "plazo": "2T FY27",
+    "driver": "esc.pesimista.crecimiento_ingresos"
+   },
+   {
+    "descripcion": "El margen operativo GAAP se hunde por la amortización de los centros de datos sin mejora de precios.",
+    "metrica": "margen operativo GAAP del trimestre",
+    "umbral": 25,
+    "unidad": "%",
+    "plazo": "4T FY27",
+    "driver": "esc.pesimista.margen_ebit"
+   },
+   {
+    "descripcion": "El capex sigue por encima de los ingresos más allá del ejercicio en curso y exige más ampliaciones de capital.",
+    "metrica": "capex sobre ingresos del ejercicio",
+    "umbral": 100,
+    "unidad": "%",
+    "plazo": "FY28",
+    "driver": "esc.pesimista.capex_pct"
+   }
+  ]
+ },
+ "pilares": [
+  {
+   "titulo": "Cartera contratada que asegura años de crecimiento",
+   "argumento": {
+    "texto": "La cartera contratada aún sin reconocer multiplica varias veces los ingresos anuales y la compañía detalla cuándo espera convertirla. Mientras los clientes cumplan, el crecimiento de los próximos ejercicios depende más de la capacidad de entregar centros de datos que de la demanda, lo que reduce la incertidumbre comercial habitual en el software."
+   },
+   "evidencias": [
+    {
+     "doc": "10-Q 2026-09-11",
+     "texto": "Remaining performance obligations were $664 billion as of August 31, 2026, of which we expect to recognize approximately 13% as revenues over the next twelve months, 37% over the subsequent month 13 to month 36, 34% over the subsequent month 37 to month 60 and the remainder thereafter.",
+     "texto_es": "Las obligaciones de desempeño pendientes sumaban 664.000 millones de dólares a 31 de agosto de 2026, con un 13 % a reconocer en doce meses, un 37 % entre los meses 13 y 36 y un 34 % entre los meses 37 y 60."
+    },
+    {
+     "doc": "8-K 2026-09-10",
+     "texto": "Oracle booked more than $30 billion of additional AI cloud contracts in Q1 increasing its RPO to $664 billion.",
+     "texto_es": "Oracle firmó más de 30.000 millones de dólares en nuevos contratos de nube para IA en el primer trimestre y elevó su cartera contratada a 664.000 millones."
+    }
+   ],
+   "kpi": "RPO (obligaciones de desempeño pendientes)",
+   "riesgo_1a": "If we are unable to secure data center capacity at affordable rates",
+   "riesgo_es": "Que falten energía, emplazamientos o chips para entregar la capacidad comprometida a tiempo, o que un gran cliente no pague."
+  },
+  {
+   "titulo": "OCI se convierte en el motor del crecimiento",
+   "argumento": {
+    "texto": "La infraestructura en la nube crece a tres dígitos y ya supera a las aplicaciones dentro de los ingresos de nube. Ese cambio de mezcla acelera los ingresos totales por primera vez en más de una década y convierte a Oracle en uno de los grandes proveedores de capacidad para inteligencia artificial."
+   },
+   "evidencias": [
+    {
+     "doc": "8-K 2026-09-10",
+     "texto": "Cloud revenues (IaaS + SaaS) increased 62% to $11.6 billion, driven by 121% growth in Cloud Infrastructure (IaaS), and 10% growth in Cloud Applications (SaaS).",
+     "texto_es": "Los ingresos de nube crecieron un 62 %, hasta 11.600 millones de dólares, impulsados por un aumento del 121 % en infraestructura y del 10 % en aplicaciones."
+    },
+    {
+     "doc": "10-K",
+     "pag": "7",
+     "texto": "Our cloud infrastructure revenues represented 53%, 42% and 35% of our total cloud revenues during fiscal 2026, 2025 and 2024, respectively.",
+     "texto_es": "La infraestructura en la nube supuso el 53 %, el 42 % y el 35 % de los ingresos totales de nube en los ejercicios 2026, 2025 y 2024."
+    }
+   ],
+   "kpi": "Ingresos de infraestructura en la nube (OCI), interanual",
+   "riesgo_1a": "If we do not successfully execute our Oracle Cloud strategy",
+   "riesgo_es": "Que la ejecución de la estrategia de nube falle o que la presión de precios reduzca la rentabilidad de OCI."
+  },
+  {
+   "titulo": "Base instalada con altos costes de cambio",
+   "argumento": {
+    "texto": "La base de datos de Oracle y sus aplicaciones sostienen procesos críticos de miles de empresas, que renuevan el soporte año tras año. Esa base genera ingresos recurrentes y muy rentables, y es el canal por el que la compañía migra a sus clientes a la nube y les vende servicios de datos e IA."
+   },
+   "evidencias": [
+    {
+     "doc": "10-K",
+     "pag": "4",
+     "texto": "After an initial purchase of Oracle products and services, our customers can continue to benefit from our offerings, research and development efforts and deep IT expertise by electing to purchase and renew Oracle support offerings for their software and hardware deployments",
+     "texto_es": "Tras la compra inicial, los clientes siguen contratando y renovando el soporte de sus despliegues de software y hardware."
+    },
+    {
+     "doc": "8-K 2026-06-10",
+     "texto": "The Oracle Multicloud AI Database grew 404% in Q4—making it our fastest growing business ever.",
+     "texto_es": "La base de datos multinube con IA de Oracle creció un 404 % en el cuarto trimestre y es su negocio de crecimiento más rápido."
+    }
+   ],
+   "kpi": "Ingresos de aplicaciones en la nube (SaaS), interanual",
+   "riesgo_1a": "If we are unable to compete effectively",
+   "riesgo_es": "Que la migración a la nube lleve a los clientes a bases de datos y aplicaciones de la competencia."
+  },
+  {
+   "titulo": "Prepagos de clientes que aligeran la financiación",
+   "argumento": {
+    "texto": "En los grandes contratos de IA los clientes adelantan el pago de las GPU o las aportan ellos mismos. Esa estructura reduce el capital que Oracle debe captar para construir los centros de datos y traslada parte del riesgo de obsolescencia del hardware al cliente, lo que mitiga el principal punto débil de la tesis."
+   },
+   "evidencias": [
+    {
+     "doc": "8-K 2026-06-10",
+     "texto": "The prepaid and customer supplied hardware portions of our large AI contracts now total $75 billion. This substantially reduces the amount of capital Oracle must raise to build out our AI datacenters.",
+     "texto_es": "La parte prepagada o con hardware aportado por el cliente de sus grandes contratos de IA suma ya 75.000 millones de dólares, lo que reduce sustancialmente el capital que Oracle debe captar para construir sus centros de datos."
+    },
+    {
+     "doc": "8-K 2026-09-10",
+     "texto": "Based on the structuring of those new contracts, the Company confirms there is no incremental impact on its plans to raise capital.",
+     "texto_es": "Por la estructura de esos nuevos contratos, la compañía confirma que no cambian sus planes de captación de capital."
+    }
+   ],
+   "kpi": "Flujo de caja libre",
+   "riesgo_1a": "There are risks associated with our outstanding and future indebtedness",
+   "riesgo_es": "Que la deuda y las nuevas emisiones de capital crezcan más de lo previsto si los prepagos no se repiten."
+  },
+  {
+   "titulo": "Margen operativo que resiste la inversión",
+   "argumento": {
+    "texto": "Pese al salto de la amortización, el beneficio operativo crece más deprisa que los ingresos gracias a la contención de los gastos comerciales y de desarrollo. La automatización con IA del desarrollo de software refuerza esa palanca y compensa el menor margen bruto de la infraestructura para IA."
+   },
+   "evidencias": [
+    {
+     "doc": "8-K 2026-09-10",
+     "texto": "Oracle generated Q1 GAAP operating income of $6.7 billion, up 57%, while non-GAAP operating income rose to $8.2 billion, up 31%",
+     "texto_es": "Oracle obtuvo en el primer trimestre un beneficio operativo GAAP de 6.700 millones de dólares, un 57 % más, y un beneficio operativo no GAAP de 8.200 millones, un 31 % más."
+    },
+    {
+     "doc": "8-K 2026-03-10",
+     "texto": "AI code generation is making our SaaS application suites more competitive and more profitable.",
+     "texto_es": "La generación de código con IA hace sus suites de aplicaciones SaaS más competitivas y más rentables."
+    }
+   ],
+   "kpi": "Margen operativo",
+   "riesgo_1a": "Our cloud offerings and hardware offerings are complex",
+   "riesgo_es": "Que el coste de componentes, energía y amortización crezca más que los precios y comprima el margen."
+  }
+ ],
+ "historial": {
+  "guia_manual": [
+   {
+    "periodo": "2T FY27",
+    "metrica": "crecimiento de ingresos totales, interanual (%)",
+    "bajo": 30,
+    "alto": 34,
+    "evidencia": [
+     {
+      "doc": "8-K 2026-09-10",
+      "texto": "Total revenues are expected to grow between 30% and 34% in constant currency and USD.",
+      "texto_es": "Se espera que los ingresos totales crezcan entre un 30 % y un 34 %, en moneda constante y en dólares."
+     }
+    ]
+   },
+   {
+    "periodo": "2T FY27",
+    "metrica": "BPA no GAAP en dólares (USD/acción)",
+    "bajo": 1.85,
+    "alto": 1.93,
+    "evidencia": [
+     {
+      "doc": "8-K 2026-09-10",
+      "texto": "Non-GAAP earnings per share is expected to be between $1.83 and $1.91 in constant currency and between $1.85 and $1.93 in USD",
+      "texto_es": "Se espera un BPA no GAAP de entre 1,83 y 1,91 dólares en moneda constante y de entre 1,85 y 1,93 dólares en dólares corrientes."
+     }
+    ]
+   },
+   {
+    "periodo": "1T FY27",
+    "metrica": "crecimiento de ingresos totales, interanual (%)",
+    "bajo": 27,
+    "alto": 29,
+    "evidencia": [
+     {
+      "doc": "8-K 2026-06-10",
+      "texto": "Total Revenues are expected to grow from 27% to 29% in both constant currency and USD.",
+      "texto_es": "Se esperaba que los ingresos totales crecieran entre un 27 % y un 29 %, en moneda constante y en dólares."
+     }
+    ]
+   }
+  ],
+  "causas": {
+   "texto": "La compañía comunica su guía en el texto de la nota de resultados, no en una tabla, por lo que el sistema no la detecta de forma automática y se introduce a mano con su cita. En el primer trimestre fiscal de 2027 los ingresos crecieron por encima del rango anunciado gracias a la infraestructura en la nube. Aprendizaje: el seguimiento se hace con los ingresos de OCI y la cartera contratada, que anticipan la guía."
+  }
+ },
+ "pos": {
+  "recomendacion": "Mantener",
+  "recomendacion_justificacion": {
+   "texto": "La regla sugiere vender porque el precio supera el valor del motor. Sin embargo, el valor terminal pesa mucho y depende de cómo se convierta la cartera contratada. No se abre posición al precio actual: solo una orden límite por debajo del valor del escenario base."
+  },
+  "precio_entrada": 100.0,
+  "fecha_entrada": "2026-09-28",
+  "tamano_pct": 1.5,
+  "drawdown_tolerado": 45,
+  "tamano_porque": {
+   "texto": "Posición reducida: la visibilidad de ingresos es alta, pero la volatilidad del valor, el flujo de caja libre negativo y la dependencia de la financiación externa limitan el tamaño."
+  },
+  "argumento": {
+   "texto": "Oracle ha pasado de ser un proveedor maduro de software a uno de los grandes constructores de capacidad para inteligencia artificial, con una cartera contratada que cubre varios años de ingresos. La tesis es que esa cartera se convierte en ingresos al ritmo que la compañía declara, que el margen operativo resiste la mayor amortización y que los prepagos de los clientes contienen la necesidad de capital. Aun así, el precio actual descuenta más crecimiento del que asume nuestro escenario base, así que no hay margen de seguridad: la entrada se limita a una orden por debajo del valor de ese escenario. El riesgo principal es que un gran cliente de IA no cumpla sus contratos; se sigue con la cartera contratada, los ingresos de OCI y el flujo de caja libre."
+  },
+  "asunciones": [
+   {
+    "texto": "La cartera contratada se convierte en ingresos al ritmo que declara la compañía.",
+    "driver": "esc.base.crecimiento_ingresos",
+    "umbral_invalidacion": "crecimiento de ingresos totales < 25 % interanual dos trimestres seguidos en FY27"
+   },
+   {
+    "texto": "El margen operativo resiste el aumento de la amortización de los centros de datos.",
+    "driver": "esc.base.margen_ebit",
+    "umbral_invalidacion": "margen operativo GAAP < 25 % en un trimestre"
+   },
+   {
+    "texto": "El capex toca techo en el ejercicio 2027 y baja en proporción a los ingresos desde el siguiente.",
+    "driver": "esc.base.capex_pct",
+    "umbral_invalidacion": "capex > 100 % de los ingresos en FY28"
+   },
+   {
+    "texto": "Los prepagos y el hardware aportado por los clientes contienen la dilución y la deuda.",
+    "driver": "esc.base.fm_pct_incremental",
+    "umbral_invalidacion": "nueva ampliación de capital en el mercado antes del cierre de FY27 no prevista en el plan de financiación"
+   }
+  ],
+  "checklist": [
+   {
+    "id": "variante",
+    "criterio": "Visión propia distinta de lo que descuenta el precio (reverse DCF), en dos frases",
+    "tipo": "manual",
+    "cumplido": "si",
+    "evidencia": "El precio descuenta un crecimiento de ingresos y un margen terminal superiores a los del escenario base. Nuestra visión es más prudente en la conversión de la cartera y en el coste de financiarla, por eso solo se entra con descuento.",
+    "eliminatorio": true
+   }
+  ],
+  "invalidacion": [
+   {
+    "metrica": "RPO, variación trimestral",
+    "umbral": "< −5 %",
+    "plazo": "cualquier trimestre hasta el 4T FY27"
+   },
+   {
+    "metrica": "ingresos de OCI, interanual",
+    "umbral": "< +50 %",
+    "plazo": "FY27"
+   },
+   {
+    "metrica": "margen operativo GAAP del trimestre",
+    "umbral": "< 25 %",
+    "plazo": "hasta el 4T FY27"
+   }
+  ],
+  "stop": {
+   "texto": "Stop de tesis: se revisa la posición si se cumple cualquiera de las invalidaciones, sin stop de precio por la alta volatilidad del valor."
+  },
+  "kpis": [
+   {
+    "kpi": "RPO (obligaciones de desempeño pendientes)",
+    "actual": "",
+    "verde": "crece trimestre a trimestre",
+    "rojo": "cae más de un 5 % en un trimestre",
+    "fuente": "10-Q y nota de resultados (8-K)",
+    "frecuencia": "trimestral"
+   },
+   {
+    "kpi": "Ingresos de infraestructura en la nube (OCI), interanual",
+    "actual": "",
+    "verde": "≥ +80 % interanual",
+    "rojo": "< +50 % interanual",
+    "fuente": "nota de resultados (8-K)",
+    "frecuencia": "trimestral"
+   },
+   {
+    "kpi": "Ingresos de aplicaciones en la nube (SaaS), interanual",
+    "actual": "",
+    "verde": "≥ +10 % interanual",
+    "rojo": "< +5 % interanual",
+    "fuente": "nota de resultados (8-K)",
+    "frecuencia": "trimestral"
+   },
+   {
+    "kpi": "Crecimiento de ingresos interanual",
+    "actual": "",
+    "verde": "≥ +30 % interanual",
+    "rojo": "< +25 % interanual",
+    "fuente": "10-Q / 10-K (SEC EDGAR)",
+    "frecuencia": "trimestral"
+   },
+   {
+    "kpi": "Margen operativo",
+    "actual": "",
+    "verde": "≥ 30 %",
+    "rojo": "< 25 %",
+    "fuente": "10-Q / 10-K (SEC EDGAR)",
+    "frecuencia": "trimestral"
+   },
+   {
+    "kpi": "Flujo de caja libre",
+    "actual": "",
+    "verde": "mejora interanual del flujo negativo",
+    "rojo": "empeora dos trimestres seguidos",
+    "fuente": "nota de resultados (8-K)",
+    "frecuencia": "trimestral"
+   },
+   {
+    "kpi": "SBC sobre ingresos",
+    "actual": "",
+    "verde": "≤ 6 %",
+    "rojo": "> 8 %",
+    "fuente": "10-Q / 10-K (SEC EDGAR)",
+    "frecuencia": "trimestral"
+   }
+  ],
+  "fechas_revision": [
+   "2026-12-15",
+   "2027-03-16",
+   "2027-09-27"
+  ],
+  "salida": [
+   "Objetivo alcanzado: se revalúa la tesis con el motor.",
+   "Tesis invalidada por cualquiera de las invalidaciones.",
+   "Horizonte vencido sin catalizador.",
+   "Una oportunidad mejor con el mismo riesgo."
+  ]
+ },
+ "tesis": {
+  "resumen": {
+   "texto": "Oracle se ha convertido en uno de los grandes proveedores de capacidad de cómputo para inteligencia artificial sin dejar de ser el dueño de una base instalada de bases de datos y aplicaciones muy rentable. Su cartera contratada da visibilidad a varios años de crecimiento, pero exige una inversión en centros de datos que mantiene negativo el flujo de caja libre y obliga a financiarse con deuda y nuevas acciones. Al precio actual el motor no ve potencial: mantenemos una visión neutral y solo entraríamos con descuento."
+  },
+  "por_que_ahora": {
+   "texto": "La cotización ha caído con fuerza desde sus máximos por el temor a la financiación y a la concentración de clientes, justo cuando los ingresos de infraestructura aceleran y la compañía confirma su objetivo anual."
+  },
+  "vision_vs_mercado": {
+   "texto": "El mercado descuenta un crecimiento sostenido de ingresos y un margen terminal más altos que los de nuestro escenario base. Somos más prudentes con la conversión de la cartera contratada, la intensidad del capex y el coste de financiarla, por lo que el DCF no deja margen de seguridad al precio actual."
+  }
+ },
+ "revision": {
+  "parrafos": {
+   "resumen_factual": {
+    "propuesta": "de0aec9d61a5c54f",
+    "frases": [
+     [
+      "En el ejercicio 2026, la compañía facturó 67.357 mln USD con un margen operativo del 30,6 % (−0,2 p. p. frente al ejercicio anterior).",
+      "10-K 22/06/2026"
+     ],
+     [
+      "Al cierre del 1T FY27, la deuda neta era de 88.260 mln USD.",
+      "10-Q 11/09/2026"
+     ],
+     [
+      "La retribución al accionista del ejercicio 2026, entre dividendos y recompras, sumó 5.882 mln USD, con un flujo de caja libre negativo en el ejercicio.",
+      "10-K 22/06/2026"
+     ]
+    ],
+    "editado": true
+   }
+  }
+ }
+}

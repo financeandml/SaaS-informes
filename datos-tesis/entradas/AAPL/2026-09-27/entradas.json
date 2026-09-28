@@ -1,0 +1,843 @@
+{
+ "meta": {
+  "analista": "Ejemplo de analista senior (entradas de prueba del 27/09/2026)",
+  "fecha_informe": "2026-09-27",
+  "fecha_valoracion": "2026-09-25",
+  "tipo": "inicio_cobertura",
+  "nombre_presentacion": "Apple",
+  "sector": "general"
+ },
+ "perfil": {
+  "descripcion": {
+   "texto": "Apple diseña, fabrica a través de socios y vende teléfonos inteligentes, ordenadores personales, tabletas, dispositivos vestibles y accesorios. Además cobra por un conjunto creciente de servicios: publicidad, AppleCare, almacenamiento en la nube, la App Store y otras plataformas de contenido digital, suscripciones y pagos. El iPhone es la mayor categoría de ingresos y Servicios la de mayor margen bruto. La compañía se gestiona por áreas geográficas y publica cinco segmentos: América, Europa, Gran China, Japón y Resto de Asia-Pacífico. Vende en sus tiendas físicas y en línea y a través de operadores de telefonía y distribuidores, y encarga la fabricación y el montaje a socios situados sobre todo en Asia. Diseña casi toda la solución de sus productos, del hardware y los chips al sistema operativo y los servicios, y su posición descansa en una base instalada creciente y en un ecosistema de desarrolladores que encarece cambiar de plataforma.",
+   "evidencias": [
+    {
+     "doc": "10-K",
+     "texto": "The Company designs, manufactures and markets smartphones, personal computers, tablets, wearables and accessories, and sells a variety of related services.",
+     "texto_es": "La compañía diseña, fabrica y comercializa teléfonos inteligentes, ordenadores personales, tabletas, dispositivos vestibles y accesorios, y vende diversos servicios asociados."
+    },
+    {
+     "doc": "10-K",
+     "texto": "The Company designs and develops nearly the entire solution for its products, including the hardware, operating system, numerous software applications and related services.",
+     "texto_es": "La compañía diseña y desarrolla casi toda la solución de sus productos: el hardware, el sistema operativo, numerosas aplicaciones y los servicios asociados."
+    }
+   ]
+  },
+  "segmentos_ok": true,
+  "empleados": 166000,
+  "empleados_evidencia": [
+   {
+    "doc": "10-K",
+    "texto": "As of September 27, 2025, the Company had approximately 166,000 full-time equivalent employees.",
+    "texto_es": "A 27 de septiembre de 2025 la compañía tenía unos 166.000 empleados equivalentes a tiempo completo."
+   }
+  ],
+  "rotulos": {
+   "aapl:EuropeSegmentMember": "Europa",
+   "aapl:GreaterChinaSegmentMember": "Gran China",
+   "aapl:RestOfAsiaPacificSegmentMember": "Resto de Asia-Pacífico",
+   "aapl:WearablesHomeandAccessoriesMember": "Dispositivos vestibles, hogar y accesorios",
+   "aapl:MacMember": "Mac"
+  }
+ },
+ "equipo": {
+  "track_record": [
+   {
+    "persona": "Tim Cook",
+    "juicio": "positivo",
+    "texto": "Consejero delegado desde 2011 y antes director de operaciones, ha convertido Servicios en el segundo motor del grupo y ha mantenido la disciplina de la cadena de suministro. La dependencia del iPhone y el frente regulatorio siguen abiertos bajo su mandato.",
+    "evidencias": [
+     {
+      "doc": "DEF 14A",
+      "pag": "27",
+      "texto": "Mr. Cook, 65, has served as Apple’s Chief Executive Officer since 2011, having previously served as Apple’s Chief Operating Officer from October 2005.",
+      "texto_es": "Cook, de 65 años, es consejero delegado de Apple desde 2011 y fue antes su director de operaciones desde octubre de 2005."
+     }
+    ]
+   },
+   {
+    "persona": "Kevan Parekh",
+    "juicio": "mixto",
+    "texto": "Director financiero desde enero de 2025 tras una transición planificada; lleva en la compañía desde 2013 en planificación financiera. Ha mantenido la política de retorno de capital, pero su trayectoria en el cargo aún es corta para juzgarla.",
+    "evidencias": [
+     {
+      "doc": "DEF 14A",
+      "pag": "34",
+      "texto": "Kevan joined Apple in June 2013 and assumed his current position in January 2025.",
+      "texto_es": "Parekh entró en Apple en junio de 2013 y asumió su cargo actual en enero de 2025."
+     }
+    ]
+   }
+  ],
+  "asignacion_capital": {
+   "texto": "La compañía destina la mayor parte de su flujo de caja libre a recompras de acciones y a un dividendo trimestral que sube cada año, y apenas hace adquisiciones relevantes. El consejo sigue ampliando los programas de recompra, lo que reduce el número de acciones de forma sostenida y sostiene el crecimiento del beneficio por acción.",
+   "evidencias": [
+    {
+     "doc": "10-Q 2026-07-31",
+     "texto": "During the third quarter of 2026, the Company repurchased $25.8 billion of its common stock and paid dividends and dividend equivalents of $4.0 billion.",
+     "texto_es": "En el tercer trimestre fiscal de 2026 recompró acciones por 25.800 millones USD y pagó 4.000 millones USD en dividendos y equivalentes."
+    },
+    {
+     "doc": "8-K 2026-04-30",
+     "pag": "1",
+     "texto": "The board of directors has also authorized an additional program to repurchase up to $100 billion of the Company’s common stock.",
+     "texto_es": "El consejo autorizó un programa adicional de recompra de acciones de hasta 100.000 millones USD."
+    }
+   ]
+  }
+ },
+ "catalizadores": [
+  {
+   "fecha": "2026-10-29",
+   "evento": "Resultados del cuarto trimestre fiscal, con la memoria más cara y sin devolución de aranceles",
+   "tipo": "resultados",
+   "pilar": "2",
+   "impacto": "negativo",
+   "probabilidad": 50,
+   "evidencia": [
+    {
+     "doc": "10-Q 2026-07-31",
+     "texto": "For example, the Company is experiencing a period of supply constraints and increasing costs for components driven by factors such as industry supply-demand imbalances for components, including advanced semiconductors, storage (NAND) and memory (DRAM), which adversely affects the Company’s ability to obtain sufficient quantities of components and products on commercially reasonable terms, or at all.",
+     "texto_es": "La compañía atraviesa un periodo de escasez y de subida de costes de componentes, entre ellos semiconductores avanzados, almacenamiento NAND y memoria DRAM, que dificulta obtenerlos en cantidad suficiente y a precios razonables."
+    }
+   ]
+  },
+  {
+   "fecha": "2027-T1",
+   "evento": "Resultados del trimestre navideño frente a una base de comparación récord",
+   "tipo": "resultados",
+   "pilar": "4",
+   "impacto": "negativo",
+   "probabilidad": 55,
+   "evidencia": [
+    {
+     "doc": "10-K",
+     "texto": "The Company has historically experienced higher net sales in its first quarter compared to other quarters in its fiscal year due in part to seasonal holiday demand.",
+     "texto_es": "Históricamente la compañía vende más en su primer trimestre fiscal que en los demás, en parte por la demanda de la temporada navideña."
+    }
+   ]
+  },
+  {
+   "fecha": "2027-T2",
+   "evento": "Decisión del Tribunal Supremo sobre el desacato en el caso Epic Games",
+   "tipo": "regulatorio",
+   "pilar": "3",
+   "impacto": "negativo",
+   "probabilidad": 50,
+   "evidencia": [
+    {
+     "doc": "10-Q 2026-07-31",
+     "texto": "On June 30, 2026, the Supreme Court granted the Company’s petition to review the applicable legal standard for civil contempt.",
+     "texto_es": "El 30 de junio de 2026 el Tribunal Supremo de EE. UU. admitió el recurso de la compañía para revisar el criterio jurídico aplicable al desacato civil."
+    }
+   ]
+  },
+  {
+   "fecha": "2027-T2",
+   "evento": "Subida anual del dividendo y posible ampliación de las recompras",
+   "tipo": "corporativo",
+   "pilar": "5",
+   "impacto": "positivo",
+   "probabilidad": 85,
+   "evidencia": [
+    {
+     "doc": "10-Q 2026-07-31",
+     "texto": "The Company intends to increase its dividend on an annual basis, subject to declaration by the Board of Directors.",
+     "texto_es": "La compañía tiene intención de subir el dividendo cada año, sujeto a la aprobación del consejo."
+    }
+   ]
+  }
+ ],
+ "direccion": {
+  "citas": [
+   {
+    "doc": "8-K 2026-07-30",
+    "pag": "1",
+    "texto": "Today, Apple is proud to report our strongest June quarter ever, with double-digit revenue growth across iPhone, Mac and Services, and in every geographic segment,",
+    "texto_es": "Apple presenta el mejor trimestre de junio de su historia, con crecimiento de dos dígitos en iPhone, Mac y Servicios y en todos los segmentos geográficos."
+   },
+   {
+    "doc": "8-K 2026-07-30",
+    "pag": "1",
+    "texto": "We are very pleased with our record business performance during the quarter, which set new June quarter records for both EPS and operating cash flow,",
+    "texto_es": "El trimestre marcó récords de junio tanto en beneficio por acción como en flujo de caja de las operaciones."
+   },
+   {
+    "doc": "8-K 2026-01-29",
+    "pag": "1",
+    "texto": "We are also excited to announce that our installed base now has more than 2.5 billion active devices, which is a testament to incredible customer satisfaction for the very best products and services in the world.",
+    "texto_es": "La base instalada supera ya los 2.500 millones de dispositivos activos, lo que según la compañía refleja la satisfacción de sus clientes."
+   }
+  ]
+ },
+ "guia": {
+  "confirmadas": []
+ },
+ "val": {
+  "anio_base": "ultimo_ejercicio",
+  "periodo_explicito": 10,
+  "mitad_de_anio": true,
+  "horizonte_meses": 12,
+  "sbc": "coste_de_caja",
+  "arrendamientos": "fuera_de_deuda",
+  "ajustes_puente": [
+   {
+    "concepto": "otros",
+    "importe": 84118,
+    "signo": 1,
+    "descripcion": "Valores negociables no corrientes, activo no operativo que el puente estándar no recoge",
+    "evidencia": [
+     {
+      "doc": "10-Q 2026-07-31",
+      "texto": "Marketable securities 84,118 77,723",
+      "texto_es": "Valores negociables no corrientes: 84.118 millones USD a 27 de junio de 2026 (77.723 millones a 27 de septiembre de 2025)."
+     }
+    ]
+   }
+  ]
+ },
+ "wacc": {
+  "erp": 4.14,
+  "erp_fuente": "Damodaran, prima de riesgo implícita del S&P 500 a 1 de septiembre de 2026 (4,14 %; pages.stern.nyu.edu/~adamodar, consultada el 27/09/2026)",
+  "beta_metodo": "regresion",
+  "prima": 0,
+  "kd_metodo": "rendimiento_bonos",
+  "kd": 4.83,
+  "kd_fuente": "10-K FY2025, nota 9: tipo efectivo de la emisión de 2025, entre el 4,07 % y el 4,83 %; se toma el extremo alto, el de los bonos más largos, como coste marginal",
+  "tipo_marginal": 21
+ },
+ "tv": {
+  "metodo": "value_driver"
+ },
+ "esc": {
+  "pesimista": {
+   "impuesto_caja": {
+    "1": 17.6,
+    "5": 18.5,
+    "N": 19.0
+   },
+   "da_pct": 2.8,
+   "fm_pct_incremental": 0.0,
+   "probabilidad": 25,
+   "narrativa": "El superciclo del iPhone se agota, la memoria encarece el hardware y la regulación recorta la comisión de la App Store y los pagos por búsqueda; los márgenes vuelven a niveles de hace tres ejercicios.",
+   "crecimiento_ingresos": {
+    "1": 13.5,
+    "2": 1.0,
+    "3": 2.0,
+    "5": 3.0,
+    "N": 2.5
+   },
+   "margen_ebit": {
+    "1": 32.5,
+    "2": 30.5,
+    "3": 30.0,
+    "5": 29.5,
+    "N": 29.0
+   },
+   "capex_pct": {
+    "1": 2.5,
+    "2": 3.5,
+    "N": 3.5
+   },
+   "sbc_pct": 3.2,
+   "g": 2.5,
+   "ronic": 15
+  },
+  "base": {
+   "impuesto_caja": {
+    "1": 17.6,
+    "5": 18.5,
+    "N": 19.0
+   },
+   "da_pct": 2.8,
+   "fm_pct_incremental": 0.0,
+   "probabilidad": 50,
+   "narrativa": "El ejercicio 2026 cierra con crecimiento de dos dígitos y después las ventas se normalizan; Servicios gana peso en la mezcla y compensa la presión de costes, con un margen operativo algo superior al actual.",
+   "crecimiento_ingresos": {
+    "1": 14.5,
+    "2": 7.0,
+    "3": 6.0,
+    "5": 5.0,
+    "N": 3.5
+   },
+   "margen_ebit": {
+    "1": 33.0,
+    "2": 32.5,
+    "3": 33.0,
+    "5": 33.5,
+    "N": 34.0
+   },
+   "capex_pct": {
+    "1": 2.5,
+    "2": 3.0,
+    "N": 3.0
+   },
+   "sbc_pct": 3.0,
+   "g": 3.0,
+   "ronic": 25
+  },
+  "optimista": {
+   "impuesto_caja": {
+    "1": 17.6,
+    "5": 18.5,
+    "N": 19.0
+   },
+   "da_pct": 2.8,
+   "fm_pct_incremental": 0.0,
+   "probabilidad": 25,
+   "narrativa": "Siri AI impulsa un nuevo ciclo de renovación, Servicios mantiene su ritmo sin daño regulatorio y la mezcla eleva el margen operativo de forma sostenida durante toda la década.",
+   "crecimiento_ingresos": {
+    "1": 15.5,
+    "2": 10.0,
+    "3": 8.5,
+    "5": 7.0,
+    "N": 4.0
+   },
+   "margen_ebit": {
+    "1": 33.5,
+    "2": 34.0,
+    "3": 35.0,
+    "5": 36.0,
+    "N": 37.0
+   },
+   "capex_pct": {
+    "1": 2.5,
+    "2": 2.8,
+    "N": 2.8
+   },
+   "sbc_pct": 2.9,
+   "g": 3.5,
+   "ronic": 27
+  }
+ },
+ "comparables": [
+  {
+   "ticker": "MSFT",
+   "justificacion": "Plataforma de software y nube con ecosistema propio y márgenes altos",
+   "usar_en_multiplos": true
+  },
+  {
+   "ticker": "GOOGL",
+   "justificacion": "Rival en sistemas operativos móviles y socio en búsqueda y publicidad",
+   "usar_en_multiplos": true
+  },
+  {
+   "ticker": "AMZN",
+   "justificacion": "Dispositivos de consumo, suscripciones y contenido digital a gran escala",
+   "usar_en_multiplos": true
+  },
+  {
+   "ticker": "META",
+   "justificacion": "Plataforma de consumo con publicidad y apuesta por dispositivos propios",
+   "usar_en_multiplos": true
+  },
+  {
+   "ticker": "DELL",
+   "justificacion": "Fabricante de ordenadores personales, referencia para el negocio Mac",
+   "usar_en_multiplos": true
+  },
+  {
+   "ticker": "HPQ",
+   "justificacion": "Fabricante de ordenadores personales e impresión con márgenes de hardware",
+   "usar_en_multiplos": true
+  }
+ ],
+ "mercado": {
+  "cifras": [
+   {
+    "etiqueta": "Base instalada de dispositivos activos, mercado cautivo de Servicios (declarada por la compañía)",
+    "clase": "TAM",
+    "valor": 2500,
+    "unidad": "millones de dispositivos",
+    "anio": 2026,
+    "metodo": "declarado_compania",
+    "evidencia": [
+     {
+      "doc": "8-K 2026-01-29",
+      "pag": "1",
+      "texto": "We are also excited to announce that our installed base now has more than 2.5 billion active devices, which is a testament to incredible customer satisfaction for the very best products and services in the world.",
+      "texto_es": "La base instalada supera ya los 2.500 millones de dispositivos activos, lo que según la compañía refleja la satisfacción de sus clientes."
+     }
+    ]
+   },
+   {
+    "etiqueta": "Ingresos del ejercicio 2025, cuota que ya captura la compañía",
+    "clase": "SOM",
+    "valor": 416161,
+    "unidad": "millones USD",
+    "anio": 2025,
+    "metodo": "declarado_compania",
+    "evidencia": [
+     {
+      "doc": "8-K 2025-10-30",
+      "pag": "1",
+      "texto": "Our September quarter results capped off a record fiscal year, with revenue reaching $416 billion, as well as double-digit EPS growth,",
+      "texto_es": "El trimestre de septiembre cerró un ejercicio récord, con ingresos de 416.000 millones USD y un crecimiento de dos dígitos del beneficio por acción."
+     }
+    ]
+   }
+  ]
+ },
+ "competencia": {
+  "competidores": [
+   {
+    "nombre": "Alphabet (Android)",
+    "ticker": "GOOGL",
+    "por_que": "Android es la plataforma rival en teléfonos y tabletas, y compite por los desarrolladores.",
+    "evidencia": [
+     {
+      "doc": "10-K",
+      "texto": "The Company believes that third-party developer support depends on the perceived benefits of creating software and services for the Company’s products compared to competitors’ platforms, such as Android for smartphones and tablets, Windows for personal computers and tablets, and PlayStation, Nintendo and Xbox for gaming platforms.",
+      "texto_es": "El apoyo de los desarrolladores depende del beneficio que perciben frente a plataformas rivales como Android en teléfonos y tabletas, Windows en ordenadores y tabletas, y PlayStation, Nintendo y Xbox en videojuegos."
+     }
+    ]
+   },
+   {
+    "nombre": "Microsoft (Windows y Xbox)",
+    "ticker": "MSFT",
+    "por_que": "Windows compite con el Mac en ordenadores y tabletas, y Xbox en videojuegos.",
+    "evidencia": [
+     {
+      "doc": "10-K",
+      "texto": "The Company believes that third-party developer support depends on the perceived benefits of creating software and services for the Company’s products compared to competitors’ platforms, such as Android for smartphones and tablets, Windows for personal computers and tablets, and PlayStation, Nintendo and Xbox for gaming platforms.",
+      "texto_es": "El apoyo de los desarrolladores depende del beneficio que perciben frente a plataformas rivales como Android en teléfonos y tabletas, Windows en ordenadores y tabletas, y PlayStation, Nintendo y Xbox en videojuegos."
+     }
+    ]
+   },
+   {
+    "nombre": "Sony (PlayStation)",
+    "ticker": "SONY",
+    "por_que": "PlayStation compite por el tiempo de juego y por los desarrolladores de videojuegos.",
+    "evidencia": [
+     {
+      "doc": "10-K",
+      "texto": "The Company believes that third-party developer support depends on the perceived benefits of creating software and services for the Company’s products compared to competitors’ platforms, such as Android for smartphones and tablets, Windows for personal computers and tablets, and PlayStation, Nintendo and Xbox for gaming platforms.",
+      "texto_es": "El apoyo de los desarrolladores depende del beneficio que perciben frente a plataformas rivales como Android en teléfonos y tabletas, Windows en ordenadores y tabletas, y PlayStation, Nintendo y Xbox en videojuegos."
+     }
+    ]
+   },
+   {
+    "nombre": "Nintendo",
+    "por_que": "Compite en videojuegos con plataforma propia y atrae a desarrolladores fuera del ecosistema de la compañía.",
+    "evidencia": [
+     {
+      "doc": "10-K",
+      "texto": "The Company believes that third-party developer support depends on the perceived benefits of creating software and services for the Company’s products compared to competitors’ platforms, such as Android for smartphones and tablets, Windows for personal computers and tablets, and PlayStation, Nintendo and Xbox for gaming platforms.",
+      "texto_es": "El apoyo de los desarrolladores depende del beneficio que perciben frente a plataformas rivales como Android en teléfonos y tabletas, Windows en ordenadores y tabletas, y PlayStation, Nintendo y Xbox en videojuegos."
+     }
+    ]
+   }
+  ]
+ },
+ "moat": {
+  "fuentes": [
+   {
+    "tipo": "costes_de_cambio",
+    "durabilidad_anios": 10,
+    "tendencia": "estable",
+    "evidencias": [
+     {
+      "doc": "8-K 2026-01-29",
+      "pag": "1",
+      "texto": "We are also excited to announce that our installed base now has more than 2.5 billion active devices, which is a testament to incredible customer satisfaction for the very best products and services in the world.",
+      "texto_es": "La base instalada supera ya los 2.500 millones de dispositivos activos, lo que según la compañía refleja la satisfacción de sus clientes."
+     },
+     {
+      "doc": "10-K",
+      "texto": "The Company designs and develops nearly the entire solution for its products, including the hardware, operating system, numerous software applications and related services.",
+      "texto_es": "La compañía diseña y desarrolla casi toda la solución de sus productos: el hardware, el sistema operativo, numerosas aplicaciones y los servicios asociados."
+     }
+    ]
+   },
+   {
+    "tipo": "efectos_de_red",
+    "durabilidad_anios": 10,
+    "tendencia": "se_estrecha",
+    "evidencias": [
+     {
+      "doc": "10-K",
+      "texto": "The Company believes decisions by customers to purchase its hardware products depend in part on the availability of third-party software applications and services.",
+      "texto_es": "La compañía considera que la decisión de comprar su hardware depende en parte de que haya aplicaciones y servicios de terceros disponibles."
+     },
+     {
+      "doc": "10-K",
+      "texto": "The Company believes that third-party developer support depends on the perceived benefits of creating software and services for the Company’s products compared to competitors’ platforms, such as Android for smartphones and tablets, Windows for personal computers and tablets, and PlayStation, Nintendo and Xbox for gaming platforms.",
+      "texto_es": "El apoyo de los desarrolladores depende del beneficio que perciben frente a plataformas rivales como Android en teléfonos y tabletas, Windows en ordenadores y tabletas, y PlayStation, Nintendo y Xbox en videojuegos."
+     }
+    ]
+   },
+   {
+    "tipo": "intangibles",
+    "durabilidad_anios": 15,
+    "tendencia": "estable",
+    "evidencias": [
+     {
+      "doc": "10-K",
+      "texto": "The Company currently holds a broad collection of intellectual property rights relating to certain aspects of its hardware, software and services.",
+      "texto_es": "La compañía posee una amplia cartera de derechos de propiedad intelectual sobre su hardware, su software y sus servicios."
+     }
+    ]
+   }
+  ],
+  "amenazas": {
+   "texto": "La regulación de la competencia en EE. UU. y la Unión Europea obliga a abrir la App Store a pagos y tiendas alternativas y a dar interoperabilidad a terceros, lo que debilita la comisión y el efecto de red. Además, la inteligencia artificial puede trasladar el valor del sistema operativo a asistentes de otros proveedores."
+  }
+ },
+ "riesgos": {
+  "top": [
+   {
+    "origen": {
+     "epigrafe": "The technology industry, including, in some instances, the Company, is subject to intense media, political and regulatory scrutiny"
+    },
+    "texto_es": "La presión regulatoria y los litigios antimonopolio pueden recortar la comisión de la App Store y los pagos de Google por la búsqueda.",
+    "familia": "regulatorio",
+    "probabilidad": 4,
+    "impacto": 4,
+    "mitigante": "Servicios diversificados entre publicidad, nube y suscripciones; recursos judiciales en curso con recorrido.",
+    "senal": "Ingresos de Servicios"
+   },
+   {
+    "origen": {
+     "epigrafe": "Future operating results depend upon the Company’s ability to obtain components"
+    },
+    "texto_es": "La escasez y el encarecimiento de memoria y semiconductores avanzados presionan el margen bruto de Productos y pueden limitar las ventas.",
+    "familia": "ejecucion",
+    "probabilidad": 4,
+    "impacto": 3,
+    "mitigante": "Escala de compras, contratos de suministro a largo plazo y capacidad de subir precios en la gama alta.",
+    "senal": "Margen bruto"
+   },
+   {
+    "origen": {
+     "epigrafe": "The Company’s business can be impacted by political events, trade and other international disputes"
+    },
+    "texto_es": "Aranceles, tensiones con China y dependencia de socios de fabricación en Asia pueden encarecer los productos o frenar las ventas en Gran China.",
+    "familia": "regulatorio",
+    "probabilidad": 3,
+    "impacto": 4,
+    "mitigante": "Diversificación del montaje hacia India y Vietnam y devolución de aranceles tras la sentencia del Tribunal Supremo.",
+    "senal": "Ingresos de Gran China"
+   },
+   {
+    "origen": {
+     "epigrafe": "Global markets for the Company’s products and services are highly competitive"
+    },
+    "texto_es": "Competidores con precios agresivos y asistentes de inteligencia artificial de terceros pueden restar cuota y poder de precio al iPhone.",
+    "familia": "competitivo",
+    "probabilidad": 3,
+    "impacto": 4,
+    "mitigante": "Integración de hardware, software y chips propios, y una base instalada fiel que renueva sus dispositivos.",
+    "senal": "Ingresos de iPhone"
+   },
+   {
+    "origen": {
+     "epigrafe": "The Company’s net sales and gross margins are subject to volatility and downward pressure"
+    },
+    "texto_es": "La dependencia de una sola categoría de producto expone ventas y margen bruto a un mal ciclo de renovación del iPhone.",
+    "familia": "financiero",
+    "probabilidad": 3,
+    "impacto": 3,
+    "mitigante": "Peso creciente de Servicios, con margen bruto muy superior al de Productos.",
+    "senal": "Margen bruto"
+   }
+  ]
+ },
+ "bear": {
+  "disparadores": [
+   {
+    "descripcion": "Servicios se desacelera con fuerza por la pérdida de comisiones o de los pagos por búsqueda.",
+    "metrica": "ingresos de Servicios, interanual",
+    "umbral": 8,
+    "unidad": "%",
+    "plazo": "4T FY27",
+    "driver": "esc.pesimista.crecimiento_ingresos"
+   },
+   {
+    "descripcion": "El coste de la memoria y los componentes hunde el margen bruto sin que las subidas de precio lo compensen.",
+    "metrica": "margen bruto del ejercicio",
+    "umbral": 45,
+    "unidad": "%",
+    "plazo": "FY27",
+    "driver": "esc.pesimista.margen_ebit"
+   },
+   {
+    "descripcion": "Las ventas en Gran China vuelven a caer por la competencia local o por represalias comerciales.",
+    "metrica": "ingresos de Gran China, interanual",
+    "umbral": -10,
+    "unidad": "%",
+    "plazo": "FY27",
+    "driver": "esc.pesimista.crecimiento_ingresos"
+   },
+   {
+    "descripcion": "El margen operativo retrocede a niveles previos al superciclo actual del iPhone.",
+    "metrica": "margen EBIT del ejercicio",
+    "umbral": 30,
+    "unidad": "%",
+    "plazo": "FY27",
+    "driver": "esc.pesimista.margen_ebit"
+   }
+  ]
+ },
+ "pilares": [
+  {
+   "titulo": "Un precio que exige un crecimiento sin precedentes",
+   "argumento": {
+    "texto": "El DCF inverso muestra que el precio solo se sostiene si los ingresos crecen durante una década a un ritmo muy superior al de los últimos cinco ejercicios. La compañía es líder, pero tiene una cuota minoritaria en mercados maduros que a veces se estancan, y depende de una sola categoría de producto."
+   },
+   "evidencias": [
+    {
+     "doc": "10-K",
+     "texto": "The Company has a minority market share in the global smartphone, personal computer, tablet and wearables markets, and some of the markets in which the Company competes have from time to time experienced little to no growth or contracted overall.",
+     "texto_es": "La compañía tiene una cuota minoritaria en los mercados mundiales de teléfonos inteligentes, ordenadores, tabletas y dispositivos vestibles, y algunos de esos mercados han crecido poco o se han contraído."
+    },
+    {
+     "doc": "10-K",
+     "texto": "Further, the Company generates a significant portion of its net sales from a single product category and a decline in demand for that product could significantly impact net sales and gross margins.",
+     "texto_es": "La compañía obtiene buena parte de sus ventas de una sola categoría de producto, y una caída de su demanda afectaría de forma significativa a las ventas y al margen bruto."
+    }
+   ],
+   "kpi": "Ingresos de iPhone",
+   "riesgo_1a": "To remain competitive and stimulate customer demand, the Company must successfully manage frequent introductions",
+   "riesgo_es": "Que el ciclo del iPhone y Siri AI sostengan un crecimiento de doble dígito durante varios ejercicios.",
+   "catalizador": "2"
+  },
+  {
+   "titulo": "Márgenes en máximos con un viento de cola pasajero",
+   "argumento": {
+    "texto": "El margen bruto del último trimestre incluye la devolución de aranceles, un efecto que no se repetirá, mientras la compañía reconoce que el encarecimiento de la memoria y de los semiconductores avanzados se intensificará. El margen operativo actual es un punto de partida exigente para proyectar."
+   },
+   "evidencias": [
+    {
+     "doc": "8-K 2026-07-30",
+     "pag": "1",
+     "texto": "Company gross margin was 50.1 percent, including a favorable impact of approximately 2 percentage points from tariff refunds.",
+     "texto_es": "El margen bruto de la compañía fue del 50,1 %, con un efecto favorable de unos 2 puntos por la devolución de aranceles."
+    },
+    {
+     "doc": "10-Q 2026-07-31",
+     "texto": "For example, the Company is experiencing a period of supply constraints and increasing costs for components driven by factors such as industry supply-demand imbalances for components, including advanced semiconductors, storage (NAND) and memory (DRAM), which adversely affects the Company’s ability to obtain sufficient quantities of components and products on commercially reasonable terms, or at all.",
+     "texto_es": "La compañía atraviesa un periodo de escasez y de subida de costes de componentes, entre ellos semiconductores avanzados, almacenamiento NAND y memoria DRAM, que dificulta obtenerlos en cantidad suficiente y a precios razonables."
+    }
+   ],
+   "kpi": "Margen bruto",
+   "riesgo_1a": "Future operating results depend upon the Company’s ability to obtain components",
+   "riesgo_es": "Que la compañía traslade el coste de la memoria a sus precios sin perder demanda y sostenga el margen.",
+   "catalizador": "1"
+  },
+  {
+   "titulo": "Servicios, expuesto a la regulación de las comisiones",
+   "argumento": {
+    "texto": "Una parte del beneficio de Servicios depende de la comisión de la App Store y de los pagos de Google por la búsqueda, y ambos están en tribunales o bajo investigación en EE. UU. y Europa. Cualquier recorte cae casi entero al resultado operativo, porque es el negocio de mayor margen."
+   },
+   "evidencias": [
+    {
+     "doc": "10-Q 2026-07-31",
+     "texto": "If the Company is ultimately unsuccessful in defending its commission structure or if similar restrictions are imposed or expanded in other jurisdictions, and as a result the Company’s commission is narrowed or eliminated, the Company’s business, results of operations, and financial condition could be materially and adversely affected.",
+     "texto_es": "Si la compañía no logra defender su estructura de comisiones, o si se imponen restricciones parecidas en otras jurisdicciones y la comisión se reduce o desaparece, su negocio y sus resultados podrían verse afectados de forma material."
+    },
+    {
+     "doc": "10-K",
+     "texto": "For example, the Company earns revenue from licensing arrangements with Google LLC (“Google”) and other companies to offer their search services on the Company’s platforms and applications, and certain of these arrangements are currently subject to government investigations and legal proceedings.",
+     "texto_es": "La compañía ingresa por acuerdos de licencia con Google y otras empresas para ofrecer sus buscadores en sus plataformas, y algunos de esos acuerdos están sometidos a investigaciones y procesos judiciales."
+    }
+   ],
+   "kpi": "Ingresos de Servicios",
+   "riesgo_1a": "The technology industry, including, in some instances, the Company, is subject to intense media, political and regulatory scrutiny",
+   "riesgo_es": "Que los tribunales avalen la comisión y los acuerdos de búsqueda con Google sobrevivan a los recursos.",
+   "catalizador": "3"
+  },
+  {
+   "titulo": "Un superciclo del iPhone que tenderá a normalizarse",
+   "argumento": {
+    "texto": "El ejercicio 2026 recoge una demanda del iPhone que la propia compañía califica de extraordinaria. Los ciclos de renovación terminan por normalizarse, y a partir del trimestre navideño la comparación interanual será mucho más exigente, justo cuando el mercado descuenta crecimiento sostenido."
+   },
+   "evidencias": [
+    {
+     "doc": "8-K 2026-01-29",
+     "pag": "1",
+     "texto": "iPhone had its best-ever quarter driven by unprecedented demand, with all-time records across every geographic segment, and Services also achieved an all-time revenue record, up 14 percent from a year ago.",
+     "texto_es": "El iPhone firmó su mejor trimestre por una demanda sin precedentes, con récords en todos los segmentos geográficos, y Servicios marcó un récord histórico de ingresos, un 14 % más que un año antes."
+    },
+    {
+     "doc": "8-K 2026-04-30",
+     "pag": "1",
+     "texto": "iPhone achieved a March quarter revenue record, fueled by such extraordinary demand for the iPhone 17 lineup.",
+     "texto_es": "El iPhone logró un récord de ingresos en un trimestre de marzo, impulsado por la demanda de la gama iPhone 17."
+    }
+   ],
+   "kpi": "Ingresos de iPhone",
+   "riesgo_1a": "Global markets for the Company’s products and services are highly competitive",
+   "riesgo_es": "Que la base instalada renueve antes de lo previsto y el ciclo de producto se alargue.",
+   "catalizador": "2"
+  },
+  {
+   "titulo": "Recompras a múltiplos altos que rinden menos",
+   "argumento": {
+    "texto": "La compañía devuelve casi todo su flujo de caja libre, sobre todo con recompras. A la valoración actual, cada dólar recomprado retira menos acciones y aporta menos al beneficio por acción, así que el apoyo del retorno de capital al precio es menor que en ciclos anteriores."
+   },
+   "evidencias": [
+    {
+     "doc": "10-Q 2026-07-31",
+     "texto": "During the third quarter of 2026, the Company repurchased $25.8 billion of its common stock and paid dividends and dividend equivalents of $4.0 billion.",
+     "texto_es": "En el tercer trimestre fiscal de 2026 recompró acciones por 25.800 millones USD y pagó 4.000 millones USD en dividendos y equivalentes."
+    },
+    {
+     "doc": "8-K 2026-04-30",
+     "pag": "1",
+     "texto": "The board of directors has also authorized an additional program to repurchase up to $100 billion of the Company’s common stock.",
+     "texto_es": "El consejo autorizó un programa adicional de recompra de acciones de hasta 100.000 millones USD."
+    }
+   ],
+   "kpi": "Flujo de caja libre",
+   "riesgo_1a": "The price of the Company’s stock is subject to volatility",
+   "riesgo_es": "Que el retorno de capital sostenga el beneficio por acción y el múltiplo más tiempo del previsto.",
+   "catalizador": "4"
+  }
+ ],
+ "historial": {},
+ "pos": {
+  "recomendacion": "Vender",
+  "precio_entrada": 342.0,
+  "fecha_entrada": "2026-09-28",
+  "tamano_pct": 1,
+  "drawdown_tolerado": 30,
+  "tamano_porque": {
+   "texto": "Posición corta pequeña: la valoración es muy exigente, pero la calidad del negocio y su caja hacen que el precio pueda tardar en converger, y el drawdown tolerado limita el tamaño."
+  },
+  "argumento": {
+   "texto": "Apple es un negocio excepcional, con una base instalada creciente, un ecosistema difícil de abandonar y un retorno de capital enorme, pero el precio ya descuenta mucho más que eso. El DCF inverso exige un crecimiento de ingresos muy superior al de los últimos cinco ejercicios y a nuestro escenario base, y los tres escenarios del motor quedan por debajo de la cotización. El momento importa: el margen bruto del último trimestre incluye la devolución de aranceles, el coste de la memoria sube y la comparación interanual se endurece tras el superciclo del iPhone. Además, la comisión de la App Store y los pagos por búsqueda siguen en los tribunales. Iniciamos cobertura con recomendación de venta y una posición corta pequeña, que se cierra si se cumple cualquiera de las invalidaciones."
+  },
+  "asunciones": [
+   {
+    "texto": "El crecimiento de ingresos se normaliza por debajo de los dos dígitos tras el ejercicio 2026.",
+    "driver": "esc.base.crecimiento_ingresos",
+    "umbral_invalidacion": "ingresos del ejercicio 2027 > +10 % interanual"
+   },
+   {
+    "texto": "El margen operativo no supera de forma sostenida el nivel del último año.",
+    "driver": "esc.base.margen_ebit",
+    "umbral_invalidacion": "margen EBIT > 36 % en un ejercicio"
+   },
+   {
+    "texto": "Servicios se desacelera por la presión regulatoria sobre comisiones y pagos por búsqueda.",
+    "driver": "esc.base.crecimiento_ingresos",
+    "umbral_invalidacion": "ingresos de Servicios ≥ +15 % interanual dos trimestres seguidos"
+   }
+  ],
+  "checklist": [
+   {
+    "id": "variante",
+    "criterio": "Visión propia distinta de lo que descuenta el precio (reverse DCF), en dos frases",
+    "tipo": "manual",
+    "cumplido": "si",
+    "evidencia": "El DCF inverso exige un crecimiento de ingresos muy superior al histórico de cinco años. Nuestra visión es que el superciclo del iPhone se normaliza y la regulación limita Servicios."
+   }
+  ],
+  "invalidacion": [
+   {
+    "metrica": "ingresos de Servicios, interanual",
+    "umbral": "≥ +15 % dos trimestres seguidos",
+    "plazo": "hasta el 4T FY27"
+   },
+   {
+    "metrica": "margen EBIT del ejercicio",
+    "umbral": "> 36 %",
+    "plazo": "FY27"
+   },
+   {
+    "metrica": "ingresos del ejercicio, interanual",
+    "umbral": "> +10 %",
+    "plazo": "FY27"
+   }
+  ],
+  "stop": {
+   "texto": "Stop de tesis: el corto se cierra si se cumple cualquiera de las invalidaciones o si la pérdida alcanza el drawdown tolerado."
+  },
+  "kpis": [
+   {
+    "kpi": "Ingresos de Servicios",
+    "actual": "",
+    "verde": "< +10 % interanual",
+    "rojo": "≥ +15 % interanual",
+    "fuente": "nota de resultados (8-K)",
+    "frecuencia": "trimestral"
+   },
+   {
+    "kpi": "Ingresos de iPhone",
+    "actual": "",
+    "verde": "< 0 % interanual",
+    "rojo": "≥ +10 % interanual",
+    "fuente": "nota de resultados (8-K)",
+    "frecuencia": "trimestral"
+   },
+   {
+    "kpi": "Margen bruto",
+    "actual": "",
+    "verde": "< 47 %",
+    "rojo": "≥ 50 % sin efectos extraordinarios",
+    "fuente": "10-Q y 10-K",
+    "frecuencia": "trimestral"
+   },
+   {
+    "kpi": "Ingresos de Gran China",
+    "actual": "",
+    "verde": "< 0 % interanual",
+    "rojo": "≥ +15 % interanual",
+    "fuente": "10-Q y 10-K (segmentos)",
+    "frecuencia": "trimestral"
+   },
+   {
+    "kpi": "Flujo de caja libre",
+    "actual": "",
+    "verde": "< retribución al accionista",
+    "rojo": "crecimiento > +15 % interanual",
+    "fuente": "10-Q y 10-K",
+    "frecuencia": "trimestral"
+   }
+  ],
+  "fechas_revision": [
+   "2026-10-29",
+   "2027-01-28",
+   "2027-09-27"
+  ],
+  "salida": [
+   "Objetivo alcanzado: se revalúa la tesis con el motor y se recompra el corto.",
+   "Tesis invalidada por cualquiera de las invalidaciones.",
+   "Horizonte vencido sin catalizador.",
+   "Una oportunidad mejor con el mismo riesgo."
+  ]
+ },
+ "tesis": {
+  "resumen": {
+   "texto": "Apple es uno de los mejores negocios del mundo: una base instalada que marca máximos, Servicios con margen muy alto y un retorno de capital sin paralelo. Pero a la cotización actual el mercado paga por un crecimiento que el histórico no respalda. Nuestro DCF, con tres escenarios, sitúa el valor razonable muy por debajo del precio, y el DCF inverso exige crecer durante una década mucho más deprisa que en los últimos cinco ejercicios. Con márgenes en máximos, el coste de la memoria al alza y la comisión de la App Store en los tribunales, iniciamos cobertura con recomendación de venta."
+  },
+  "por_que_ahora": {
+   "texto": "El margen del último trimestre incluye la devolución de aranceles, la memoria se encarece y, tras el superciclo del iPhone, la comparación interanual se endurece desde el trimestre navideño, cuando la cotización está cerca de máximos."
+  },
+  "vision_vs_mercado": {
+   "texto": "El mercado descuenta que el crecimiento reciente se prolongue una década; el DCF inverso lo sitúa muy por encima del histórico de cinco años y de nuestro escenario base. Creemos que el ciclo del iPhone se normaliza, que la regulación limita Servicios y que los márgenes actuales son un techo, no un suelo."
+  }
+ },
+ "revision": {
+  "parrafos": {
+   "resumen_factual": {
+    "propuesta": "759235b4aaddea8a",
+    "frases": [
+     [
+      "En el ejercicio 2025, la compañía facturó 416.161 mln USD con un margen operativo del 32,0 % (+0,5 p. p. frente al ejercicio anterior).",
+      "10-K 31/10/2025"
+     ],
+     [
+      "Al cierre del 3T FY26, la deuda neta era de 19.948 mln USD, 0,1 veces el EBITDA del ejercicio 2025.",
+      "10-Q 31/07/2026"
+     ],
+     [
+      "La retribución al accionista del ejercicio 2025, entre dividendos y recompras, sumó 106.132 mln USD: el 107 % del flujo de caja libre.",
+      "10-K 31/10/2025"
+     ]
+    ],
+    "editado": false
+   }
+  }
+ }
+}

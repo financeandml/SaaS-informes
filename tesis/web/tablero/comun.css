@@ -203,3 +203,9 @@ button:disabled, a.boton[aria-disabled="true"] { opacity: .45; cursor: default; 
   .cabecera, .pasos { padding-left: 12px; padding-right: 12px; }
   .cabecera .cik { display: none; }
 }
+
+/* discrepancias SEC ↔ documento que decide el analista (tarjeta 4 del expediente) */
+#discrepancias h3 { font-size: 12px; text-transform: uppercase; letter-spacing: .04em; color: var(--acento); margin: 14px 0 6px; }
+#discrepancias .fila-lista { border: 1px solid var(--gris-claro); padding: 8px; margin: 6px 0; background: var(--gris-fondo); }
+#discrepancias .discrepancia { border-left: 3px solid var(--error); }
+#discrepancias input[type="text"] { width: 100%; margin-top: 6px; }

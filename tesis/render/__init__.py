@@ -153,5 +153,13 @@ def emitir(informe: Informe, salida_pdf: Path, hoy=None, casa: str = "Warrants &
         html = a_html(informe, casa)
         huella = a_pdf(html, salida_pdf, informe=informe, casa=casa)
     medidas = qa.relleno(Path(salida_pdf))
-    puerta.avisos += [f"Página {k} ocupada al {fraccion:.0%} sin ser fin de parte" for k, fraccion, fin in medidas if fraccion < minimo and not fin]
+    bajas = [(k, fraccion) for k, fraccion, fin in medidas if fraccion < minimo and not fin]
+    maximo = int(umbral("paginas_max"))
+    if len(medidas) > maximo:
+        # un PDF desbordado (Microsoft, 28/09/2026: un gráfico de 4,8 millones de puntos de alto dio 7.130 páginas) no es
+        # un informe: se bloquea con una línea en vez de enterrar la puerta en miles de avisos de «página vacía»
+        puerta.bloqueos.append(f"Maquetación desbordada: el PDF tiene {len(medidas)} páginas (máximo {maximo}); "
+                               f"{len(bajas)} casi vacías, la primera la {bajas[0][0] if bajas else '—'}")
+    else:
+        puerta.avisos += [f"Página {k} ocupada al {fraccion:.0%} sin ser fin de parte" for k, fraccion in bajas]
     return puerta, huella, html, medidas
