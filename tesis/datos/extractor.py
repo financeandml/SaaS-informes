@@ -21,6 +21,16 @@ lo pone al lado del hecho SEC o el analista lo confirma.
 
 Para hojas de cálculo la mecánica es la misma con filas y columnas en lugar de
 puntos, y la referencia es la celda («Income Statement!F8»).
+
+Las cuentas españolas (PGC y NIIF, cuentas anuales y semestrales) se leen por
+un camino propio (`_leer_es`) porque se imprimen de otra manera: cabeceras
+«Notas 2025 2024» o «31/12/2025 31/12/2024*» sin el tipo de periodo, que se
+deduce del estado (balance → instante) y del documento (anuales → 12 meses,
+semestral → 6); punto de millar y coma decimal; columnas de notas, de códigos
+del PGC y de casillas del modelo normalizado del Registro Mercantil, cuyos
+números caen cerca de las cifras. Ahí manda la geometría: cada número va a la
+columna cuyo centro tiene más cerca, y si lo más cercano es la columna de notas
+o de casillas, no es un importe. El camino de EE. UU. no cambia.
 """
 
 from __future__ import annotations
@@ -45,6 +55,8 @@ _ES_MILLARES = re.compile(r"^\d{1,3}(?:\.\d{3})+$")          # 10.542.801
 _ES_DECIMAL = re.compile(r"^\d{1,3}(?:\.\d{3})*,\d+$")        # 0,68 · 1.234,5
 _ES_INEQUIVOCO = re.compile(r"^\d{1,3}(?:\.\d{3})*,\d{1,2}$")  # «28,678» es ambiguo; «0,68» no
 _EN_ESTANDAR = re.compile(r"^\d{1,3}(?:,\d{3})*(?:\.\d+)?$|^\d+(?:\.\d+)?$")
+# formato inglés inequívoco: coma de millar y punto decimal a la vez, o dos grupos de millar con coma
+_EN_INEQUIVOCO = re.compile(r"^\d{1,3}(?:,\d{3})+\.\d{1,2}$|^\d{1,3}(?:,\d{3}){2,}$")
 _GUION = {"—", "–", "-", "— ", "—$"}
 
 
@@ -119,6 +131,9 @@ class Candidato:
     rect: Tuple[float, float, float, float]     # del número (puntos, origen abajo-izq) o (fila, col, fila, col)
     rect_fila: Tuple[float, float, float, float]
     referencia: str = ""     # celda de hoja de cálculo
+    # la moneda del documento, no la del mercado: la cifra y su unidad salen del mismo sitio (regla 13); "" si el
+    # documento no la dice
+    moneda: str = "USD"
 
 
 @dataclass
@@ -131,13 +146,18 @@ class PaginaLeida:
     filas: List[Fila]
     ancho: float = 0
     alto: float = 0
+    # solo en cuentas españolas: qué estado es la página («balance», «resultados», «flujos», «patrimonio» o "" si es
+    # una nota) y si es del grupo (True), de la sociedad (False) o no se sabe (None)
+    estado: str = ""
+    consolidado: Optional[bool] = None
+    anclas: List[float] = field(default_factory=list)   # centros de las columnas de notas, códigos y casillas
 
 
 # ---------------------------------------------------------------------------
 # Del PDF a líneas y tokens
 # ---------------------------------------------------------------------------
 
-def _lineas_de(page) -> List[Linea]:
+def _lineas_de(page, sin_girados: bool = False) -> List[Linea]:
     """Agrupa los caracteres en líneas (por altura) y en tokens (por hueco horizontal).
 
     Cada carácter se lee por su índice con `FPDFText_GetUnicode`, no del texto
@@ -145,13 +165,30 @@ def _lineas_de(page) -> List[Linea]:
     cajas de `get_charbox` (pdfium inserta y omite caracteres al linealizar), y
     con el texto plano salían rótulos sin espacios y cifras a las que les
     faltaba el primer grupo de dígitos.
+
+    `sin_girados` deja fuera el texto girado cuando es minoría en la página: el código de verificación de la firma
+    electrónica que las cuentas españolas imprimen en vertical en el margen caía, letra a letra, en cada renglón de
+    la tabla («f ACTIVO CORRIENTE», un «7» junto a cada cifra).
     """
+    import math
+
     import pypdfium2.raw as pdfium_c
     tp = page.get_textpage()
     n = tp.count_chars()
+    girados = set()
+    if sin_girados:
+        for i in range(n):
+            angulo = pdfium_c.FPDFText_GetCharAngle(tp, i)
+            # −1 es «no se sabe»: se trata como horizontal
+            if angulo >= 0 and min(angulo, 2 * math.pi - angulo) > 0.05:
+                girados.add(i)
+        if len(girados) * 2 >= n:
+            girados = set()      # una página girada entera no es un margen: se deja como estaba
     chars = []
     espacio = False
     for i in range(n):
+        if i in girados:
+            continue
         codigo = pdfium_c.FPDFText_GetUnicode(tp, i)
         ch = chr(codigo) if codigo else ""
         if not ch or ch in "\r\n":
@@ -211,7 +248,8 @@ def _tokens_de(caracteres) -> List[Token]:
 
 
 def _es_numero(t: str) -> bool:
-    t = t.replace(" ", "")
+    # el «€» va pegado a la cifra en algunas cuentas españolas («1.856.554,35 €»): se quita como el «$»
+    t = t.replace(" ", "").replace("€", "")
     return bool(_NUMERO.match(t)) or t in _GUION
 
 
@@ -223,7 +261,7 @@ def _valor_de(t: str, locale_es: bool = False) -> Tuple[Optional[float], bool, b
     no por token: «1.234» solo es mil doscientos treinta y cuatro si el resto
     de la página lo es.
     """
-    s = t.replace(" ", "")
+    s = t.replace(" ", "").replace("€", "")
     if s in _GUION:
         return 0.0, True, False
     pct = s.endswith("%") or s.endswith("%)")
@@ -258,13 +296,25 @@ def _locale_es(lineas: Sequence[Linea]) -> bool:
     return False
 
 
-def _escala_de(lineas: Sequence[Linea], hasta: Optional[int] = None) -> int:
+def _locale_en(lineas: Sequence[Linea]) -> bool:
+    """Coma de millar y punto decimal en algún token: la página está en formato inglés aunque el documento sea
+    español (hay semestrales que anexan estados impresos así, «1,914,716.70 €»)."""
+    return any(_EN_INEQUIVOCO.match(tok.texto.replace(" ", "").replace("€", "").strip("()$%-"))
+               for l in lineas for tok in l.tokens)
+
+
+def _escala_de(lineas: Sequence[Linea], hasta: Optional[int] = None, espanol: bool = False, por_defecto: int = 1) -> int:
     """La escala declarada en la página («in thousands»), tomando la última declaración
     que precede a la cabecera de la tabla (`hasta`) o, si no hay ninguna antes, la
     primera de la página. En un estado va en la cabecera; en una nota va donde el
     redactor la puso, a veces 17 líneas más abajo, y con solo doce líneas la nota de
-    ingresos por región salía sin escala y las regiones no cuadraban con el total."""
+    ingresos por región salía sin escala y las regiones no cuadraban con el total.
+
+    En un documento español la declaración es «(Expresados en euros)», «Miles de euros» o «en millones de euros»;
+    solo cuenta en una línea corta —la de la cabecera o la del título—: en la prosa de una nota, «19,4 miles de
+    euros» es una cifra, no la escala de la tabla."""
     def escala_en(t: str) -> int:
+        corta = len(t) <= 80
         t = t.lower().replace(" ", "")
         if "inthousands" in t:
             return 1_000
@@ -272,10 +322,17 @@ def _escala_de(lineas: Sequence[Linea], hasta: Optional[int] = None) -> int:
             return 1_000_000
         if "inbillions" in t:
             return 1_000_000_000
+        if espanol and corta:
+            if re.search(r"milesdeeuros|enmiles\b|\(miles\)|milesde€|miles€|k€", t):
+                return 1_000
+            if re.search(r"millonesdeeuros|enmillones|millonesde€|m€\)", t):
+                return 1_000_000
+            if re.search(r"(?:expresad[oa]s?|cifras|importes)en(?:unidadesde)?(?:euros|€)|\(euros\)|eneuros\)|^euros$", t):
+                return 1
         return 0
     declaraciones = [(k, escala_en(l.texto)) for k, l in enumerate(lineas) if escala_en(l.texto)]
     if not declaraciones:
-        return 1
+        return por_defecto
     if hasta is not None:
         previas = [e for k, e in declaraciones if k < hasta]
         if previas:
@@ -283,10 +340,16 @@ def _escala_de(lineas: Sequence[Linea], hasta: Optional[int] = None) -> int:
     return declaraciones[0][1]
 
 
-def _titulo_de(lineas: Sequence[Linea]) -> str:
+_TITULO_ES = re.compile(r"(?i)\bbalance\b|situaci[óo]n financiera|p[ée]rdidas y ganancias|cuenta de (?:resultados|explotaci[óo]n)"
+                        r"|flujos? de efectivo|ingresos y gastos reconocidos|cambios en el patrimonio|resultado global")
+
+
+def _titulo_de(lineas: Sequence[Linea], espanol: bool = False) -> str:
     for l in lineas[:6]:
         t = l.texto.strip()
         if re.search(r"(?i)consolidated ?(statements?|balance)", t):
+            return t
+        if espanol and _TITULO_ES.search(t):
             return t
     return lineas[0].texto.strip() if lineas else ""
 
@@ -460,7 +523,14 @@ def _repartir(tipos, xcs):
 # Filas y candidatos
 # ---------------------------------------------------------------------------
 
-def leer_pagina(page, numero: int, documento: str) -> PaginaLeida:
+def leer_pagina(page, numero: int, documento: str, espanol: bool = False, cierre: Optional[date] = None,
+                meses: Optional[int] = None, moneda: str = "USD", previa: Optional["PaginaLeida"] = None) -> PaginaLeida:
+    """Una página de estados. Con `espanol`, la de unas cuentas españolas: `cierre` es el del documento (el año de la
+    cabecera «2025» lleva su día y su mes), `meses` la duración de sus columnas de flujo (12 en las anuales, 6 en el
+    semestral) y `previa` la página anterior, cuya cabecera hereda una continuación que no la repite."""
+    if espanol:
+        ancho, alto = page.get_size()
+        return _leer_es(_lineas_de(page, sin_girados=True), numero, documento, ancho, alto, cierre, meses, moneda, previa)
     lineas = _lineas_de(page)
     ancho, alto = page.get_size()
     titulo = _titulo_de(lineas)
@@ -518,24 +588,339 @@ def _columna_de(columnas: Sequence[Columna], xc: float) -> Optional[int]:
 
 
 def extraer_pdf(adjunto: Adjunto, paginas: Optional[Iterable[int]] = None) -> List[PaginaLeida]:
-    """Lee las páginas con tablas (cabecera de años + filas con cifras). Solo PDF."""
+    """Lee las páginas con tablas (cabecera de años + filas con cifras). Solo PDF.
+
+    En unas cuentas españolas, además, cada página sabe si es del grupo o de la sociedad: lo dice ella misma («Y
+    SOCIEDADES DEPENDIENTES», «Empresa: … S.A.») o lo dijo la portada de su sección —el informe de auditoría de las
+    cuentas consolidadas, el de las individuales—, que es lo único que distingue dos balances con el mismo modelo."""
     import pypdfium2 as pdfium
+    espanol = adjunto.tipo in (Tipo.CCAA, Tipo.SEMESTRAL)
+    moneda = moneda_de(adjunto) if espanol else "USD"
+    meses = 6 if adjunto.tipo is Tipo.SEMESTRAL else 12
     doc = pdfium.PdfDocument(str(adjunto.ruta))
     try:
         indices = list(paginas) if paginas is not None else range(1, len(doc) + 1)
         salida = []
+        ambito: Optional[bool] = None
+        previa: Optional[PaginaLeida] = None
         for n in indices:
             texto = adjunto.paginas[n - 1] if n - 1 < len(adjunto.paginas) else ""
-            if not re.search(r"\b(19|20)\d{2}\b", texto) or not re.search(r"\d{1,3}(,\d{3})+|\d+\.\d+", texto):
+            if espanol:
+                seccion = _ambito_de_seccion(texto)
+                if seccion is not None:
+                    ambito = seccion
+                # la continuación de un estado no repite la cabecera ni, a veces, ningún año: basta con que traiga cifras
+                if not re.search(r"\d{1,3}(?:[.,]\d{3})+|\d+,\d+", texto):
+                    previa = None
+                    continue
+            elif not re.search(r"\b(19|20)\d{2}\b", texto) or not re.search(r"\d{1,3}(,\d{3})+|\d+\.\d+", texto):
                 continue
             pagina = doc[n - 1]
-            p = leer_pagina(pagina, n, adjunto.nombre)
+            if espanol:
+                p = leer_pagina(pagina, n, adjunto.nombre, espanol=True, cierre=adjunto.periodo_fin, meses=meses,
+                                moneda=moneda, previa=previa if previa is not None and previa.numero == n - 1 else None)
+                if p.consolidado is not None:
+                    ambito = p.consolidado
+                p.consolidado = ambito
+                previa = p if p.columnas and p.estado in ("balance", "resultados", "flujos") else None
+            else:
+                p = leer_pagina(pagina, n, adjunto.nombre)
             pagina.close()
             if p.columnas and p.filas:
                 salida.append(p)
     finally:
         doc.close()      # en Windows un PDF que no se cierra queda bloqueado: el analista no podría ni quitarlo
     return salida
+
+
+# ---------------------------------------------------------------------------
+# Cuentas españolas (PGC y NIIF): anuales y semestrales
+# ---------------------------------------------------------------------------
+
+MESES_ES = {m: i for i, m in enumerate(["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto",
+                                        "septiembre", "octubre", "noviembre", "diciembre"], 1)}
+MESES_ES["setiembre"] = 9
+# el año puede venir partido por la capa de texto («31 de diciembre de 202 5»)
+FECHA_ES = re.compile(r"(\d{1,2})\s+de\s+(" + "|".join(MESES_ES) + r")\s+(?:de|del)\s+((?:\d\s?){3}\d)\b", re.I)
+_ANIO_CAB = re.compile(r"^((?:19|20)\d{2})\*?$")
+_FECHA_CAB = re.compile(r"^(\d{1,2})[/.](\d{1,2})[/.]((?:19|20)\d{2})\*?$")
+# columnas de la cabecera que no son importes: sus números —notas de la memoria, códigos del PGC, casillas del modelo
+# del Registro Mercantil— caen cerca de las cifras, y leídos como importes serían cifras inventadas
+_ANCLA = re.compile(r"(?i)^(?:notas?|n\.?º|casillas?|is|l[íi]nea|c[óo]digo|ref\.?|referencia)$")
+# lo que acompaña a los años en la cabecera sin ser una columna
+_ACOMPANA = re.compile(r"(?i)^(?:eur|euros|€|\(\*\)|\*)$")
+# una referencia a notas de la memoria: «6», «9 y 15», «18.e», «9, 9.a, 19», «19 (c)», «4,13,23», «14,»
+_REFERENCIA_NOTA = re.compile(r"^\(?\d{1,2}(?:\.\w{1,3})?(?:\s*\(\w\))?\)?"
+                              r"(?:\s*(?:,|y|e|-)\s*\d{1,2}(?:\.\w{1,3})?(?:\s*\(\w\))?)*,?$")
+# prefijos de partida del PGC («A)», «A-1)», «A.1)», «1.», «a)», «a1)», «VII.») y sufijos de fórmula («(A+B)»,
+# «(1+2+…+13)», «( A.4 + 21 )», «(del 1 al 13)»): no son parte del nombre de la partida
+_PREFIJO = re.compile(r"^(?:[A-Z](?:[.-]\d{1,2})?\)|\d{1,2}\.(?!\d)|[a-z]\d?\)|[IVXL]{1,5}\.)\s*")
+_FORMULA = re.compile(r"\s*\(\s*[A-Z0-9][A-Z0-9.]*(?:\s*[+\-−]\s*[A-Z0-9][A-Z0-9.]*)+\s*\)\s*$")
+_FORMULA_DEL = re.compile(r"\s*\((?:del|de la) \d+ al \d+\)\s*$", re.I)
+# un rótulo que acaba en preposición, artículo o conjunción sigue en la línea de abajo
+_CONTINUA = re.compile(r"(?i)\b(?:de|del|la|las|los|el|al|a|y|e|o|u|en|por|para|con|sobre|entre)$")
+# filas que abren una sección del balance aunque traigan su subtotal: el contexto de lo que va debajo
+_ENCABEZADO = re.compile(r"(?i)^(?:total )?(?:activos?|pasivos?) (?:no )?corrientes?$|^patrimonio neto$"
+                         r"|^deudas a (?:largo|corto) plazo$")
+_TITULO_SECCION = re.compile(r"(?i)informe de auditor[íi]a (?:independiente )?de (?:las )?cuentas anuales"
+                             r"|informe de revisi[óo]n limitada|estados financieros intermedios")
+_TITULO_CUENTAS = re.compile(r"(?i)cuentas anuales(?: consolidadas)? (?:al|a) \d{1,2} de ")
+_DEL_GRUPO = re.compile(r"(?i)consolidad|sociedades dependientes|\bgrupo\b")
+_INDIVIDUAL = re.compile(r"(?i)\bindividual(?:es)?\b")
+_SOCIEDAD = re.compile(r"^(?:Empresa:\s*\d*\s*)?[A-ZÁÉÍÓÚÑ0-9][A-ZÁÉÍÓÚÑ0-9 .,&'-]{2,},?\s+S\.?\s?[AL]\.?(?:U\.?)?$")
+
+
+def fecha_es(texto: str) -> Optional[date]:
+    """La primera fecha larga en español del texto («31 de diciembre de 2025»)."""
+    m = FECHA_ES.search(texto or "")
+    if not m:
+        return None
+    try:
+        return date(int(m.group(3).replace(" ", "")), MESES_ES[m.group(2).lower()], int(m.group(1)))
+    except ValueError:
+        return None
+
+
+def limpiar_rotulo_es(r: str) -> str:
+    """El nombre de la partida sin su prefijo del PGC ni su fórmula: «A.1) RESULTADO DE EXPLOTACIÓN (1+2+…+13)» es
+    «RESULTADO DE EXPLOTACIÓN»."""
+    r = _PREFIJO.sub("", r.strip())
+    r = _FORMULA_DEL.sub("", _FORMULA.sub("", r))
+    return re.sub(r"\s+", " ", r).strip(" :")
+
+
+def moneda_de(adjunto: Adjunto) -> str:
+    """La moneda en que el documento dice que expresa sus cifras; "" si no lo dice."""
+    texto = " ".join(adjunto.paginas)
+    eur = len(re.findall(r"(?i)\beuros?\b|€|\bEUR\b", texto))
+    usd = len(re.findall(r"(?i)d[óo]lares|\bUSD\b|US\$", texto))
+    if not eur and not usd:
+        return ""
+    return "EUR" if eur >= usd else "USD"
+
+
+def _ambito_de_seccion(texto: str) -> Optional[bool]:
+    """Si la página abre una sección del documento —el informe de auditoría o de revisión, la portada de las cuentas—,
+    de quién es lo que sigue: del grupo (True) o de la sociedad (False). None si no abre ninguna."""
+    cabeza = " ".join((texto or "").split())[:700]
+    m = _TITULO_SECCION.search(cabeza) or _TITULO_CUENTAS.search(cabeza[:250])
+    if not m:
+        return None
+    trozo = cabeza[max(0, m.start() - 150):m.end() + 120]
+    if _INDIVIDUAL.search(trozo):
+        return False
+    return bool(_DEL_GRUPO.search(trozo))
+
+
+def _ambito_de_pagina(titulo: Sequence[Linea]) -> Optional[bool]:
+    """Lo que dice de sí mismo el título de un estado: «… Y SOCIEDADES DEPENDIENTES» o «consolidado» es del grupo, el
+    nombre de la sociedad a secas es de la sociedad. Solo las líneas de encima de la cabecera: más abajo, «empresas
+    del grupo» es una partida, no un título."""
+    for l in titulo[:6]:
+        if _INDIVIDUAL.search(l.texto):
+            return False
+        if _DEL_GRUPO.search(l.texto):
+            return True
+    if any(_SOCIEDAD.match(l.texto.strip()) for l in titulo[:4]):
+        return False
+    return None
+
+
+def _partir(tok: Token) -> List[Token]:
+    """Las palabras de un token con su tramo horizontal, repartido a lo ancho por su posición en el texto: la cabecera
+    «31/12/2024 Casilla IS» llega como un solo token, y la fecha y la casilla son dos columnas distintas."""
+    palabras = list(re.finditer(r"\S+", tok.texto))
+    if len(palabras) <= 1:
+        return [tok]
+    ancho, largo = max(tok.x1 - tok.x0, 1e-6), max(len(tok.texto), 1)
+    return [Token(m.group(0), tok.x0 + ancho * m.start() / largo, tok.y0, tok.x0 + ancho * m.end() / largo, tok.y1)
+            for m in palabras]
+
+
+def _es_fecha_cab(t: str) -> bool:
+    return bool(_ANIO_CAB.match(t) or _FECHA_CAB.match(t))
+
+
+def _columnas_es(lineas: Sequence[Linea], cierre: Optional[date]) -> Tuple[List[Columna], int, List[float]]:
+    """La cabecera de un estado español: «Notas 2025 2024», «Nota 31/12/2025 31/12/2024*» o «Línea Descripción Notas
+    30/06/2025 31/12/2024 Casilla IS». El año solo trae su día y su mes del cierre del documento; el tipo de periodo
+    no lo dice la cabecera, lo dice el estado (balance → instante) y el documento (anuales → 12 meses). Devuelve las
+    columnas sin periodo, el índice de la línea de cabecera y los centros de las columnas que no son importes."""
+    for i, l in enumerate(lineas[:30]):
+        palabras = [w for t in l.tokens for w in _partir(t)]
+        k0 = next((k for k, w in enumerate(palabras) if _es_fecha_cab(w.texto)), None)
+        if k0 is None:
+            continue
+        cola = palabras[k0:]
+        fechas = [w for w in cola if _es_fecha_cab(w.texto)]
+        if len(fechas) < 2 or not all(_es_fecha_cab(w.texto) or _ANCLA.match(w.texto) or _ACOMPANA.match(w.texto)
+                                      for w in cola):
+            continue
+        # el rótulo no puede traer importes: «Vencimientos 1.250 2026 2027» es una fila, no una cabecera
+        if re.search(r"\d{1,3}(?:[.,]\d{3})+|\d+,\d", " ".join(w.texto for w in palabras[:k0])):
+            continue
+        columnas = []
+        for w in fechas:
+            m = _FECHA_CAB.match(w.texto)
+            try:
+                if m:
+                    fin = date(int(m.group(3)), int(m.group(2)), int(m.group(1)))
+                elif cierre is not None:
+                    fin = _cierre(int(_ANIO_CAB.match(w.texto).group(1)), cierre.month, cierre.day)
+                else:
+                    fin = None       # sin cierre del documento ni fecha en la cabecera, el año solo no dice qué día
+            except ValueError:
+                fin = None
+            columnas.append(Columna(periodo=None, xc=w.xc, etiqueta=w.texto, fin=fin))
+        return columnas, i, [w.xc for w in palabras if _ANCLA.match(w.texto)]
+    return [], -1, []
+
+
+def _estado_de(lineas: Sequence[Linea], idx: int) -> str:
+    """Qué estado es la página, por su título y su cabecera. Una nota no es ninguno ("")."""
+    cabeza = " ".join(l.texto for l in lineas[:idx + 1])
+    if re.search(r"(?i)ingresos y gastos reconocidos|cambios en el patrimonio|resultado global|resultado integral", cabeza):
+        return "patrimonio"
+    if re.search(r"(?i)flujos? de (?:efectivo|caja)", cabeza):
+        return "flujos"
+    if re.search(r"(?i)p[ée]rdidas y ganancias|cuenta de (?:resultados|explotaci[óo]n)|\(debe\)\s*/\s*haber"
+                 r"|resultados? (?:intermedi|consolidad)", cabeza):
+        return "resultados"
+    if re.search(r"(?i)\bbalance\b|situaci[óo]n financiera", cabeza) \
+            or re.match(r"(?i)\s*(?:activo|pasivo|patrimonio neto)\b", lineas[idx].texto if idx >= 0 else ""):
+        return "balance"
+    return ""
+
+
+def _destino(columnas: Sequence[Columna], anclas: Sequence[float], xc: float) -> Optional[int]:
+    """La columna de importes a la que va un número, o None si lo más cercano es una columna de notas, de códigos o de
+    casillas, o si no cae cerca de ninguna."""
+    mejor, distancia = None, None
+    for k, c in enumerate(columnas):
+        if distancia is None or abs(c.xc - xc) < distancia:
+            mejor, distancia = k, abs(c.xc - xc)
+    for a in anclas:
+        if distancia is None or abs(a - xc) < distancia:
+            mejor, distancia = None, abs(a - xc)
+    if mejor is None or distancia > 70:
+        return None
+    return mejor
+
+
+def _sin_notas(lineas: Sequence[Linea], columnas: Sequence[Columna], anclas: Sequence[float]) -> List[Linea]:
+    """Fuera los números y las referencias a notas que caen en las columnas de notas, códigos o casillas: ni son
+    importes ni son parte del nombre de la partida («Importe neto de la cifra de negocios 18.a»)."""
+    if not anclas:
+        return list(lineas)
+    salida = []
+    for l in lineas:
+        toks = [t for t in l.tokens
+                if not ((_es_numero(t.texto) or _REFERENCIA_NOTA.match(t.texto.strip()))
+                        and min(abs(a - t.xc) for a in anclas) < min((abs(c.xc - t.xc) for c in columnas), default=1e9))]
+        if toks:
+            salida.append(Linea(toks))
+    return salida
+
+
+def _solo_cifras(l: Linea) -> bool:
+    return all(_es_numero(t.texto) for t in l.tokens)
+
+
+def _fundir(lineas: Sequence[Linea]) -> List[Linea]:
+    """Un rótulo en negrita y sus cifras en redonda comparten renglón pero no altura exacta, y la capa de texto los da
+    como dos líneas: «TOTAL ACTIVO» por un lado y «10.314.343,63 11.763.690,19» por otro. Se juntan cuando una es
+    solo rótulo, la otra solo cifras y se solapan en vertical más de media altura."""
+    salida: List[Linea] = []
+    for l in lineas:
+        if salida:
+            a = salida[-1]
+            rotulo_y_cifras = (not any(_es_numero(t.texto) for t in a.tokens) and _solo_cifras(l)) or \
+                              (_solo_cifras(a) and not any(_es_numero(t.texto) for t in l.tokens))
+            solape = min(a.y1, l.y1) - max(a.y0, l.y0)
+            if rotulo_y_cifras and solape >= 0.5 * min(a.y1 - a.y0, l.y1 - l.y0):
+                salida[-1] = Linea(sorted(a.tokens + l.tokens, key=lambda t: t.x0))
+                continue
+        salida.append(l)
+    return salida
+
+
+def _alinea(lineas: Sequence[Linea], columnas: Sequence[Columna], anclas: Sequence[float]) -> bool:
+    """Si las primeras líneas de una página sin cabecera traen cifras en las columnas de la página anterior: es la
+    continuación del mismo estado. Una nota que empieza con prosa no lo es."""
+    for l in lineas[:4]:
+        for t in l.tokens:
+            v, _, _ = _valor_de(t.texto, True)
+            if v is not None and _destino(columnas, anclas, t.xc) is not None:
+                return True
+    return False
+
+
+def _leer_es(lineas: List[Linea], numero: int, documento: str, ancho: float, alto: float, cierre: Optional[date],
+             meses: Optional[int], moneda: str, previa: Optional[PaginaLeida] = None) -> PaginaLeida:
+    """Las filas de una página de unas cuentas españolas (ver `leer_pagina`)."""
+    titulo = _titulo_de(lineas, espanol=True)
+    cierre = cierre or fecha_es(" ".join(l.texto for l in lineas[:8]))
+    columnas, idx, anclas = _columnas_es(lineas, cierre)
+    estado = _estado_de(lineas, idx) if idx >= 0 else ""
+    escala = _escala_de(lineas, idx if idx >= 0 else None, espanol=True)
+    consolidado = _ambito_de_pagina(lineas[:idx]) if idx >= 0 else None
+    for c in columnas:
+        if c.fin is not None:
+            c.periodo = Periodo.instante(c.fin) if estado == "balance" else Periodo.de_meses(c.fin, meses or 12)
+    cuerpo = lineas[idx + 1:] if idx >= 0 else []
+    if idx < 0 and previa is not None and not any(_TITULO_ES.search(l.texto) for l in lineas[:3]) \
+            and _alinea(lineas, previa.columnas, previa.anclas):
+        # la continuación de un estado no repite su cabecera: hereda columnas, periodos, estado y escala
+        columnas, anclas, estado = previa.columnas, previa.anclas, previa.estado
+        escala = _escala_de(lineas, None, espanol=True, por_defecto=previa.escala)
+        cuerpo = lineas
+    # formato de la página: español salvo que traiga cifras inequívocamente inglesas («1,914,716.70 €»)
+    locale_es = _locale_es(lineas) or not _locale_en(lineas)
+    filas: List[Fila] = []
+    contexto = ""
+    recien = False           # la línea anterior acaba de dar una fila: la siguiente puede ser el resto de su rótulo
+    for l in _fundir(_sin_notas(cuerpo, columnas, anclas)):
+        numericos = [t for t in l.tokens if _es_numero(t.texto)]
+        rotulo = " ".join(t.texto for t in l.tokens if t not in numericos).strip(" :")
+        sigue, recien = recien, False
+        if not numericos:
+            if rotulo and sigue and _CONTINUA.search(filas[-1].rotulo) and filas[-1].rect[1] - l.y1 < max(l.y1 - l.y0, 1):
+                f = filas[-1]
+                f.rotulo = f"{f.rotulo} {rotulo}"
+                for cand in f.celdas.values():
+                    cand.rotulo = f.rotulo
+                if _ENCABEZADO.match(limpiar_rotulo_es(f.rotulo)):
+                    contexto = f.rotulo
+            elif rotulo and not _PREFIJO.match(rotulo):
+                # una partida sin importe del modelo normalizado («2. Deudas con entidades de crédito») no es un epígrafe
+                contexto = rotulo
+            continue
+        if not rotulo:
+            continue
+        bloque = contexto + " " + rotulo
+        es_por_accion = bool(re.search(r"(?i)por acci[óo]n", bloque)) and \
+            not re.search(r"(?i)n[úu]mero (?:medio )?(?:ponderado )?de acciones|acciones (?:medias|en circulaci)", bloque)
+        celdas: Dict[int, Candidato] = {}
+        for t in numericos:
+            v, guion, pct = _valor_de(t.texto, locale_es)
+            if v is None:
+                continue
+            j = _destino(columnas, anclas, t.xc)
+            if j is None:
+                continue
+            col = columnas[j]
+            celdas[j] = Candidato(documento=documento, pagina=numero, rotulo=rotulo, contexto=contexto,
+                                  periodo=col.periodo, etiqueta_columna=col.etiqueta,
+                                  valor=v if (es_por_accion or pct) else v * escala, crudo=t.texto, escala=escala,
+                                  por_accion=es_por_accion, guion=guion, porcentaje=pct,
+                                  rect=(t.x0, t.y0, t.x1, t.y1), rect_fila=(l.x0, l.y0, l.x1, l.y1), moneda=moneda)
+        if celdas:
+            filas.append(Fila(rotulo=rotulo, contexto=contexto, celdas=celdas, rect=(l.x0, l.y0, l.x1, l.y1)))
+            recien = True
+        if _ENCABEZADO.match(limpiar_rotulo_es(rotulo)):
+            contexto = rotulo
+    return PaginaLeida(numero=numero, lineas=lineas, escala=escala, titulo=titulo, columnas=columnas, filas=filas,
+                       ancho=ancho, alto=alto, estado=estado, consolidado=consolidado, anclas=list(anclas))
 
 
 # ---------------------------------------------------------------------------

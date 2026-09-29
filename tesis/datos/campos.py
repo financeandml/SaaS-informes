@@ -16,6 +16,15 @@ rótulo. Sin eso el extractor atribuía 4.249.512 (miles de acciones) a un BPA.
 salidas de caja van en negativo, como en la maqueta de referencia. Los
 documentos y la SEC los traen cada uno con su signo, y el contraste compara en
 valor absoluto precisamente porque un paréntesis no es una discrepancia.
+
+Las cuentas españolas (PGC y NIIF) nombran las partidas en castellano y con el
+prefijo y la fórmula del modelo («A.1) RESULTADO DE EXPLOTACIÓN (1+…+13)»); el
+contraste quita prefijo y fórmula antes de casar, y los patrones españoles van
+después de los de EE. UU. en cada campo. Allí el signo sí dice algo: el modelo
+se imprime en Debe/Haber, un gasto va en negativo y un impuesto en positivo es
+un ingreso. `signo_debe_haber` dice cómo imprime el modelo cada partida para
+guardarla con la convención de la SEC (el gasto en positivo) sin perder el signo
+de lo que no es un gasto.
 """
 
 from __future__ import annotations
@@ -23,7 +32,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Optional, Tuple
 
-__all__ = ["Campo", "CAMPOS", "DERIVADOS", "Derivado", "campo", "por_seccion"]
+__all__ = ["Campo", "CAMPOS", "CONTROLES", "DERIVADOS", "Derivado", "campo", "por_seccion"]
 
 FLUJO = "flujo"          # un periodo con inicio y fin (cuenta de resultados, flujos de caja)
 INSTANTE = "instante"    # una fecha (balance)
@@ -48,17 +57,36 @@ class Campo:
     contexto_excluido: Optional[str] = None  # patrón que la cabecera NO debe cumplir
     solo_documento: bool = False             # la SEC no lo publica como concepto propio
     nota: str = ""                           # lo que el informe dice al pie sobre este campo
+    # (patrón de fila, patrón que debe cumplir la cabecera de bloque): el mismo rótulo es dos partidas según el bloque
+    # del balance en que va. «Deudas con entidades de crédito» es deuda a largo bajo el pasivo no corriente y a corto
+    # bajo el corriente; en los estados de EE. UU. el rótulo ya lo dice, por eso el requisito va por patrón y no por campo
+    filas_con_contexto: Tuple[Tuple[str, str], ...] = ()
+    # cómo imprime la partida el modelo español (Debe/Haber): −1 si es un gasto o una salida (va en negativo). None =
+    # la del informe. La amortización es un gasto que el informe imprime en positivo, y por eso lo declara
+    signo_pgc: Optional[int] = None
+    # los contrastes en que existe la partida: «sec» (emisor de EE. UU.) y «es» (cuentas españolas). Los gastos de
+    # personal por naturaleza no son una línea de los estados de EE. UU.: pedirlos ahí sería contar un hueco que no lo es
+    marcos: Tuple[str, ...] = ("sec", "es")
+
+    @property
+    def signo_debe_haber(self) -> int:
+        if self.signo_pgc is not None:
+            return self.signo_pgc
+        return -1 if self.signo_informe < 0 else 1
 
 
 CAMPOS: Tuple[Campo, ...] = (
     # ------------------------------------------------------------- 8. Estado de resultados
     Campo("ingresos", "Ingresos", "Revenues", 8,
           conceptos=("Revenues", "RevenueFromContractWithCustomerExcludingAssessedTax", "SalesRevenueNet"),
-          filas=(r"^Revenues?$", r"^Total (net )?revenues?$", r"^(Total )?net sales$"),
+          filas=(r"^Revenues?$", r"^Total (net )?revenues?$", r"^(Total )?net sales$",
+                r"^Importe neto de (?:la )?cifra de negocios?$", r"^Cifra de negocios$",
+                r"^Ingresos (?:de actividades )?ordinari[oa]s$"),
           contexto_excluido=r"(?i)region|segment|UCAN|EMEA|LATAM|APAC"),
     Campo("coste_ingresos", "Coste de los ingresos", "Cost of revenues", 8, signo_informe=-1,
           conceptos=("CostOfRevenue", "CostOfGoodsAndServicesSold"),
-          filas=(r"^Cost of revenues?$", r"^Cost of sales$")),
+          filas=(r"^Cost of revenues?$", r"^Cost of sales$", r"^Aprovisionamientos$"),
+          nota="En las cuentas españolas, los aprovisionamientos: el coste de ventas del modelo por naturaleza."),
     Campo("marketing", "Ventas y marketing", "Sales and marketing", 8, signo_informe=-1,
           conceptos=("SellingAndMarketingExpense", "MarketingExpense"),
           filas=(r"^Sales and marketing$", r"^Marketing$")),
@@ -73,27 +101,39 @@ CAMPOS: Tuple[Campo, ...] = (
     Campo("sga", "Ventas, generales y administrativos", "Selling, general and administrative", 8, signo_informe=-1,
           conceptos=("SellingGeneralAndAdministrativeExpense",),
           filas=(r"^Selling, general and administrative$",)),
+    # El modelo español presenta los gastos por naturaleza: el de personal es una línea propia de sus cuentas, y en
+    # los estados de EE. UU. (por función) no existe, así que allí ni se pide ni cuenta como hueco.
+    Campo("gastos_personal", "Gastos de personal", "Staff costs", 8, signo_informe=-1,
+          filas=(r"^Gastos de personal$",), marcos=("es",)),
     Campo("ebit", "EBIT (resultado operativo)", "Operating income (EBIT)", 8,
           conceptos=("OperatingIncomeLoss",),
-          filas=(r"^Operating income$", r"^Income from operations$")),
+          filas=(r"^Operating income$", r"^Income from operations$", r"^Resultado (?:de )?explotaci[óo]n$",
+                r"^Resultado de (?:las )?operaciones$", r"^Beneficio (?:\(p[ée]rdida\) )?de explotaci[óo]n$")),
     Campo("intereses", "Gastos financieros", "Interest expense", 8, signo_informe=-1,
           conceptos=("InterestExpense", "InterestExpenseNonoperating", "InterestExpenseDebt"),
-          filas=(r"^Interest expense$",)),
+          filas=(r"^Interest expense$", r"^Gastos financieros$")),
     Campo("otros_financieros", "Otros ingresos y gastos", "Interest and other income (expense)", 8,
           conceptos=("NonoperatingIncomeExpense", "OtherNonoperatingIncomeExpense"),
-          filas=(r"^Interest and other income \(expense\)$", r"^Other income \(expense\),? net$")),
+          filas=(r"^Interest and other income \(expense\)$", r"^Other income \(expense\),? net$", r"^Resultado financiero$"),
+          nota="En las cuentas españolas es el resultado financiero entero: lleva dentro los gastos financieros, que se leen también aparte."),
     Campo("bai", "Resultado antes de impuestos", "Income before income taxes", 8,
           conceptos=("IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest",
                      "IncomeLossFromContinuingOperationsBeforeIncomeTaxesMinorityInterestAndIncomeLossFromEquityMethodInvestments"),
           conceptos_suma=(("IncomeLossFromContinuingOperationsBeforeIncomeTaxesDomestic",
                            "IncomeLossFromContinuingOperationsBeforeIncomeTaxesForeign"),),
-          filas=(r"^Income before (provision for )?income taxes$",)),
+          filas=(r"^Income before (provision for )?income taxes$", r"^Resultado (?:consolidado )?antes de impuestos$",
+                r"^Resultado del (?:ejercicio|periodo) antes de impuestos$", r"^Beneficio (?:\(p[ée]rdida\) )?antes de impuestos$")),
     Campo("impuestos", "Impuesto sobre beneficios", "Provision for income taxes", 8, signo_informe=-1,
           conceptos=("IncomeTaxExpenseBenefit",),
-          filas=(r"^Provision for income taxes$", r"^Income tax expense$")),
+          filas=(r"^Provision for income taxes$", r"^Income tax expense$", r"^Impuestos? sobre (?:los )?beneficios$",
+                r"^Gasto por impuesto sobre (?:las )?ganancias$")),
     Campo("beneficio_neto", "Beneficio neto", "Net income", 8,
           conceptos=("NetIncomeLoss", "ProfitLoss"),
-          filas=(r"^Net income$",),
+          # en unas cuentas consolidadas con socios externos, el resultado atribuido a la dominante es el del grupo, como
+          # «NetIncomeLoss»: va antes que el del ejercicio, que en la misma página lleva dentro la parte de los minoritarios
+          filas=(r"^Net income$", r"^Resultado (?:del (?:ejercicio|periodo) )?atribuid[oa] a (?:la )?sociedad dominante$",
+                r"^Resultado atribuible a (?:los )?(?:accionistas|propietarios|tenedores de instrumentos de patrimonio neto) de la (?:sociedad )?dominante$",
+                r"^Resultado (?:consolidado )?del (?:ejercicio|periodo)$", r"^Beneficio (?:\(p[ée]rdida\) )?del (?:ejercicio|periodo)$"),
           contexto_excluido=r"(?i)per share|shares"),
     # Dos maquetas del mismo bloque: la fila se llama «Basic» bajo «Earnings per share», o el bloque se llama «Basic
     # earnings per share» y la fila es «Net income» (Qualcomm, que además desglosa actividades continuadas). El
@@ -115,7 +155,9 @@ CAMPOS: Tuple[Campo, ...] = (
     Campo("amortizacion", "Amortización del inmovilizado", "Depreciation and amortization of property, equipment and intangibles", 8,
           conceptos=("DepreciationDepletionAndAmortization", "DepreciationAndAmortization", "DepreciationAmortizationAndAccretionNet"),
           conceptos_suma=(("Depreciation", "AmortizationOfIntangibleAssets"),),
-          filas=(r"^Depreciation and amortization( of property, equipment and intangibles)?$",),
+          filas=(r"^Depreciation and amortization( of property, equipment and intangibles)?$", r"^Amortizaci[óo]n del inmovilizado$",
+                r"^Dotaci[óo]n (?:a la |para )?amortizaci[óo]n(?: del inmovilizado)?$", r"^Amortizaciones$"),
+          signo_pgc=-1,
           nota="Sin la amortización de contenido: esa es coste de los ingresos y no se devuelve al EBITDA."),
     Campo("amortizacion_contenido", "Amortización de contenido", "Amortization of content assets", 8, signo_informe=-1,
           filas=(r"^Amortization of content assets$",), solo_documento=True,
@@ -126,7 +168,9 @@ CAMPOS: Tuple[Campo, ...] = (
     # ------------------------------------------------------------- 9. Balance
     Campo("caja", "Tesorería y equivalentes", "Cash and cash equivalents", 9, tipo=INSTANTE,
           conceptos=("CashAndCashEquivalentsAtCarryingValue",),
-          filas=(r"^Cash and cash equivalents$",), contexto_excluido=r"(?i)cash flows|beginning|end of period"),
+          filas=(r"^Cash and cash equivalents$", r"^Efectivo y otros activos l[íi]quidos equiv(?:alentes|\.)?$",
+                r"^Efectivo y equivalentes (?:al|de) efectivo$"),
+          contexto_excluido=r"(?i)cash flows|beginning|end of period"),
     Campo("inversiones_cp", "Inversiones a corto plazo", "Short-term investments", 9, tipo=INSTANTE,
           conceptos=("ShortTermInvestments", "MarketableSecuritiesCurrent", "AvailableForSaleSecuritiesDebtSecuritiesCurrent"),
           filas=(r"^Short-term investments$", r"^Marketable securities$")),
@@ -136,7 +180,7 @@ CAMPOS: Tuple[Campo, ...] = (
     Campo("inversiones_lp", "Valores negociables a largo plazo", "Non-current marketable securities", 9, tipo=INSTANTE,
           conceptos=("MarketableSecuritiesNoncurrent", "AvailableForSaleSecuritiesDebtSecuritiesNoncurrent")),
     Campo("activo_corriente", "Activo corriente", "Total current assets", 9, tipo=INSTANTE,
-          conceptos=("AssetsCurrent",), filas=(r"^Total current assets$",)),
+          conceptos=("AssetsCurrent",), filas=(r"^Total current assets$", r"^Activo corriente$", r"^Total activos? corrientes?$")),
     Campo("contenido", "Activos de contenido, neto", "Content assets, net", 9, tipo=INSTANTE,
           filas=(r"^Content assets, net$",), solo_documento=True,
           nota="Extensión propia de Netflix; companyfacts no la sirve."),
@@ -148,14 +192,15 @@ CAMPOS: Tuple[Campo, ...] = (
           conceptos=("IntangibleAssetsNetExcludingGoodwill", "FiniteLivedIntangibleAssetsNet"),
           filas=(r"^Intangible assets, net$",)),
     Campo("total_activo", "Total activo", "Total assets", 9, tipo=INSTANTE,
-          conceptos=("Assets",), filas=(r"^Total assets$",)),
+          conceptos=("Assets",), filas=(r"^Total assets$", r"^Total activos?$")),
     Campo("pasivo_corriente", "Pasivo corriente", "Total current liabilities", 9, tipo=INSTANTE,
-          conceptos=("LiabilitiesCurrent",), filas=(r"^Total current liabilities$",)),
+          conceptos=("LiabilitiesCurrent",), filas=(r"^Total current liabilities$", r"^Pasivo corriente$", r"^Total pasivos? corrientes?$")),
     Campo("deuda_cp", "Deuda a corto plazo", "Short-term debt", 9, tipo=INSTANTE,
           # primero el total —«Short-term debt» del balance— y luego sus partes: Qualcomm imprime 2.489 (1.991 de
           # vencimiento corriente del largo plazo más 498 de pagarés), y leer solo la parte discrepaba del documento
           conceptos=("DebtCurrent", "LongTermDebtCurrent", "ShortTermBorrowings", "NotesPayableCurrent"),
-          filas=(r"^Short-term debt$", r"^Current portion of long-term debt$", r"^Notes payable, current$")),
+          filas=(r"^Short-term debt$", r"^Current portion of long-term debt$", r"^Notes payable, current$"),
+          filas_con_contexto=((r"^Deudas? con entidades de cr[ée]dito$", r"(?i)(?<!no )corriente|corto plazo"),)),
     # A4 (fallo [7]): quien presenta el papel comercial en su propia línea —Apple: «Commercial paper» junto a «Term
     # debt»— lo deja fuera de `LongTermDebtCurrent`; la deuda bruta lo suma entonces (`derivados.incluye_papel_comercial`).
     Campo("papel_comercial", "Papel comercial", "Commercial paper", 9, tipo=INSTANTE,
@@ -166,11 +211,17 @@ CAMPOS: Tuple[Campo, ...] = (
           # viaja en «LongTermNotesPayable», que es la misma cifra que el balance imprime
           # y en sus trimestres cambia de nombre otra vez, a «LongTermNotesAndLoans»: es la misma línea del balance
           conceptos=("LongTermDebtNoncurrent", "LongTermNotesPayable", "LongTermNotesAndLoans", "LongTermDebt"),
-          filas=(r"^Long-term debt$", r"^Notes payable, non-current$")),
+          filas=(r"^Long-term debt$", r"^Notes payable, non-current$"),
+          filas_con_contexto=((r"^Deudas? con entidades de cr[ée]dito$", r"(?i)no corriente|largo plazo"),)),
     Campo("arrendamientos", "Pasivos por arrendamiento (no corrientes)", "Operating lease liabilities, non-current", 9, tipo=INSTANTE,
-          conceptos=("OperatingLeaseLiabilityNoncurrent",), filas=(r"^Operating lease liabilities, non-current$",)),
+          conceptos=("OperatingLeaseLiabilityNoncurrent",), filas=(r"^Operating lease liabilities, non-current$",),
+          # en las cuentas españolas, los acreedores por arrendamiento del pasivo no corriente: fuera de la deuda bruta,
+          # como aquí se imprimen los arrendamientos
+          filas_con_contexto=((r"^Acreedores por arrendamiento financiero$", r"(?i)no corriente|largo plazo"),
+                              (r"^Pasivos? por arrendamientos?$", r"(?i)no corriente|largo plazo"))),
     Campo("pasivo_no_corriente", "Pasivo no corriente", "Non-current liabilities", 9, tipo=INSTANTE,
-          conceptos=("LiabilitiesNoncurrent",), filas=(r"^Total non-?current liabilities$",),
+          conceptos=("LiabilitiesNoncurrent",), filas=(r"^Total non-?current liabilities$", r"^Pasivo no corriente$",
+                                                     r"^Total pasivos? no corrientes?$"),
           nota="Muchos balances no imprimen el total del pasivo, pero sí sus dos mitades: con esta y el pasivo "
                "corriente, el total se despeja (auditoría de datos)."),
     Campo("pasivo_total", "Total pasivo", "Total liabilities", 9, tipo=INSTANTE,
@@ -182,7 +233,8 @@ CAMPOS: Tuple[Campo, ...] = (
           # un sinónimo: es el total con minoritarios, y solo entra cuando la compañía dejó de etiquetar el primero
           # —Qualcomm lo hizo en 2019— porque si no el patrimonio sale N/A en todos los ejercicios del informe.
           conceptos=("StockholdersEquity", "StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest"),
-          filas=(r"^Total (?!liabilities\b)[\w .,'’&-]{2,40}? stockholders['’] equity$", r"^Total stockholders['’] equity$")),
+          filas=(r"^Total (?!liabilities\b)[\w .,'’&-]{2,40}? stockholders['’] equity$", r"^Total stockholders['’] equity$",
+                r"^(?:Total )?patrimonio neto atribuid[oa] a (?:la )?sociedad dominante$", r"^(?:Total )?patrimonio neto$")),
     Campo("autocartera", "Autocartera", "Treasury stock", 9, tipo=INSTANTE, signo_informe=-1,
           conceptos=("TreasuryStockValue", "TreasuryStockCommonValue"), filas=(r"^Treasury stock",)),
     Campo("acciones_circulacion", "Acciones en circulación", "Shares outstanding", 9, tipo=INSTANTE, unidad="acciones",
@@ -191,7 +243,9 @@ CAMPOS: Tuple[Campo, ...] = (
     # ------------------------------------------------------------- 10. Flujo de caja
     Campo("cfo", "Flujo de caja operativo", "Net cash provided by operating activities", 10,
           conceptos=("NetCashProvidedByUsedInOperatingActivities",),
-          filas=(r"^Net cash provided by (\(used in\) )?operating activities$",)),
+          filas=(r"^Net cash provided by (\(used in\) )?operating activities$",
+                r"^Flujos? (?:netos? )?(?:de )?efectivo (?:de (?:las )?)?activ(?:idades|\.) (?:de )?explot(?:aci[óo]n|\.)$",
+                r"^Efectivo neto (?:generado|procedente|utilizado|aplicado)(?: (?:por|en|de))? (?:las )?actividades de explotaci[óo]n$")),
     Campo("capex", "Capex", "Purchases of property and equipment", 10, signo_informe=-1,
           # «ProductiveAssets» es como etiqueta el capex quien compra equipos y otros activos productivos en la misma
           # línea del flujo de inversión; sin él, Qualcomm no tiene capex en ningún ejercicio y con él se caen el FCF,
@@ -200,13 +254,18 @@ CAMPOS: Tuple[Campo, ...] = (
           filas=(r"^Purchases of property and equipment$", r"^Capital expenditures$")),
     Campo("cfi", "Flujo de caja de inversión", "Net cash used in investing activities", 10,
           conceptos=("NetCashProvidedByUsedInInvestingActivities",),
-          filas=(r"^Net cash (provided by|used in|provided by \(used in\)) investing activities$",)),
+          filas=(r"^Net cash (provided by|used in|provided by \(used in\)) investing activities$",
+                r"^Flujos? (?:netos? )?(?:de )?efectivo (?:de (?:las )?)?activ(?:idades|\.) (?:de )?invers(?:i[óo]n|\.)$",
+                r"^Efectivo neto (?:generado|procedente|utilizado|aplicado)(?: (?:por|en|de))? (?:las )?actividades de inversi[óo]n$")),
     Campo("cff", "Flujo de caja de financiación", "Net cash used in financing activities", 10,
           conceptos=("NetCashProvidedByUsedInFinancingActivities",),
-          filas=(r"^Net cash (provided by|used in|provided by \(used in\)) financing activities$",)),
+          filas=(r"^Net cash (provided by|used in|provided by \(used in\)) financing activities$",
+                r"^Flujos? (?:netos? )?(?:de )?efectivo (?:de (?:las )?)?activ(?:idades|\.) (?:de )?financ(?:iaci[óo]n|\.)$",
+                r"^Efectivo neto (?:generado|procedente|utilizado|aplicado)(?: (?:por|en|de))? (?:las )?actividades de financiaci[óo]n$")),
     Campo("dividendos", "Dividendos pagados", "Dividends paid", 10, signo_informe=-1,
           conceptos=("PaymentsOfDividends", "PaymentsOfOrdinaryDividends", "PaymentsOfDividendsCommonStock"),
-          filas=(r"^Dividends paid$", r"^Payments of dividends$"),
+          filas=(r"^Dividends paid$", r"^Payments of dividends$", r"^Dividendos$",
+                r"^Pagos por dividendos(?: y remuneraciones de otros instrumentos de patrimonio)?$"),
           nota="Si el 10-K declara que nunca se han pagado, es un cero con cita; si no lo dice, N/A."),
     Campo("recompras", "Recompra de acciones", "Repurchases of common stock", 10, signo_informe=-1,
           conceptos=("PaymentsForRepurchaseOfCommonStock",),
@@ -223,6 +282,20 @@ CAMPOS: Tuple[Campo, ...] = (
     Campo("fcf_compania", "Free cash flow (definición de la compañía)", "Free cash flow (company definition)", 10,
           filas=(r"^Free cash flow$",), solo_documento=True,
           nota="No-GAAP, tal como lo define la compañía en su carta; el FCF del informe es CFO − capex."),
+)
+
+
+# Cifras de control: se leen de las cuentas españolas para comprobar que los estados cuadran entre sí (el auditor de
+# datos), no se imprimen ni se piden. Una es el mismo hecho que el total del activo dicho en la otra mitad del balance;
+# la otra, la caja del balance dicha al final del estado de flujos. Cada par se afirma igual (regla 13).
+CONTROLES: Tuple[Campo, ...] = (
+    Campo("pasivo_y_patrimonio", "Total patrimonio neto y pasivo", "Total equity and liabilities", 9, tipo=INSTANTE,
+          filas=(r"^Total patrimonio neto y pasivos?$", r"^Total pasivos? y patrimonio neto$"), solo_documento=True,
+          marcos=("es",)),
+    Campo("efectivo_final", "Efectivo al final del periodo (estado de flujos)", "Cash at end of period", 10,
+          filas=(r"^Efectivo (?:o|y) (?:otros activos l[íi]quidos )?equivalentes al final (?:del )?(?:ejercicio|periodo)$",
+                 r"^Efectivo y equivalentes al efectivo al final (?:del )?(?:ejercicio|periodo)$"),
+          solo_documento=True, marcos=("es",)),
 )
 
 
@@ -263,7 +336,7 @@ DERIVADOS: Tuple[Derivado, ...] = (
     Derivado("payout", "Pay-out", "Pay-out", 11, "Dividendos pagados / Beneficio neto", ("dividendos", "beneficio_neto"), "%"),
 )
 
-_POR_CLAVE = {c.clave: c for c in CAMPOS}
+_POR_CLAVE = {c.clave: c for c in CAMPOS + CONTROLES}
 
 
 def campo(clave: str) -> Campo:

@@ -21,6 +21,10 @@ la ficha contra el histórico (la misma fuente no puede decir dos cosas) y el
 precio que el analista tecleó en su libro contra el cierre oficial de esa fecha.
 Con la sesión abierta, el precio es el último cruce y el informe lo rotula así,
 con su hora, en lugar de llamarlo cierre.
+
+Un emisor de BME (clave «XXX.MC», `emisores.py`) no pasa por Nasdaq ni por `WC_PRECIO_FUENTE`: su precio es el cierre
+oficial de BME de la última sesión con negociación (`_mercado_bme`), en euros, y del mismo histórico oficial salen el
+volumen, el rango de 52 semanas y el volumen medio.
 """
 
 from __future__ import annotations
@@ -97,6 +101,9 @@ class Mercado:
     contraste_consenso: Optional[Tuple[Contraste, str]] = None   # el «1 Year Target» de la ficha frente al consenso de analistas: misma bolsa, dos cifras
     crudos: Dict[str, Tuple[str, str, datetime]] = field(default_factory=dict)   # nombre → (url, cuerpo literal, hora): la evidencia
     faltan: Dict[str, str] = field(default_factory=dict)
+    # campo de la cotización → cómo se calculó o por qué no está, cuando la bolsa no lo publica hecho (BME: rango y volumen
+    # medio salen del histórico oficial; la capitalización de la ficha es de otra fecha). Vacío en Nasdaq.
+    notas: Dict[str, str] = field(default_factory=dict)
 
 
 _CRUDOS: Dict[str, Tuple[str, datetime]] = {}      # url → (cuerpo literal, hora): lo que se pinta como evidencia
@@ -364,12 +371,116 @@ def _cotizacion(ticker: str, hoy: date) -> Tuple[Optional[Cotizacion], Hecho]:
 
 def obtener(ticker: str, hoy: date) -> Hecho:
     """El precio del día de emisión como `Hecho`, o N/A con el motivo exacto."""
+    from .emisores import es_bme
+    if es_bme(ticker):
+        return mercado(ticker, hoy).precio
     return _cotizacion(ticker, hoy)[1]
 
 
-def mercado(ticker: str, hoy: date, fechas: Tuple[date, ...] = ()) -> Mercado:
+_FUENTE_BME = "BME (histórico oficial de cierres)"
+_SEMANAS_RANGO = timedelta(weeks=52)       # el «rango de 52 semanas» es la definición, no un umbral
+
+
+def _pagina_con(isin: str, desde: date, hasta: date, dia: date) -> Optional[str]:
+    """La URL de la página del histórico de BME que trae la sesión `dia`: la evidencia del precio (03 §7)."""
+    from . import bme
+    marca = f'"date":"{dia:%Y%m%d}"'
+    for pagina in range(0, 60):
+        url = bme.url_sesiones(isin, desde, hasta, pagina)
+        if url not in _CRUDOS:
+            return None
+        if marca in _CRUDOS[url][0]:
+            return url
+    return None
+
+
+def _mercado_bme(e, hoy: date, fechas: Tuple[date, ...] = ()) -> Mercado:
+    """Un emisor de BME. Precio = cierre oficial de la última sesión con negociación ≤ `hoy` (regla 4: en BME un día sin
+    negociación repite ese cierre), dentro de `umbrales.bme_cierre_ventana_dias`. Del mismo histórico oficial salen el
+    volumen de la sesión, el cierre anterior que publica la propia sesión (contrastado con la sesión previa), el rango y
+    el volumen medio de 52 semanas y los cierres pedidos. La capitalización de la ficha del valor solo sirve para
+    contrastar, y solo si es de la misma sesión. BME no publica consenso: `consenso` queda None y no es un fallo."""
+    from . import bme
+    moneda = e.moneda or "EUR"
+    unidad = f"{moneda}/acción"
+    p = Periodo.instante(hoy)
+    inicio_rango = hoy - _SEMANAS_RANGO
+    desde = min([inicio_rango, _ventana(hoy, tuple(fechas))[0]])
+    try:
+        historico = bme.sesiones(e.isin, desde, hoy)
+    except (HTTPError, URLError, KeyError, ValueError, TypeError) as ex:
+        return Mercado(precio=na("precio", p, f"el histórico oficial de BME no respondió: {fallo(ex)}", unidad=unidad))
+    negociadas = bme.con_negociacion(historico)
+    previas = sorted(d for d in negociadas if d <= hoy)
+    ventana = bme.ventana_cierre()
+    if not previas or (hoy - previas[-1]).days > ventana:
+        return Mercado(precio=na("precio", p, f"sin sesiones con negociación en BME en los {ventana} días anteriores al {hoy:%d/%m/%Y}: "
+                                 "no hay cierre oficial vigente", unidad=unidad))
+    dia = previas[-1]
+    s = negociadas[dia]
+    anio = [d for d in previas if d >= inicio_rango]
+    cierres_anio = [negociadas[d].cierre for d in anio]
+    volumenes = [negociadas[d].volumen for d in anio]
+    url = _pagina_con(e.isin, desde, hoy, dia) or bme.url_sesiones(e.isin, desde, hoy)
+    que = f"cierre del {dia:%d/%m/%Y}" + ("" if dia == hoy else f", última sesión con negociación hasta el {hoy:%d/%m/%Y}")
+    m = Mercado(precio=de_valor("precio", Periodo.instante(dia), s.cierre, Capa.DOCUMENTO, Origen(documento=_FUENTE_BME, presentado=dia, referencia=url),
+                                unidad=unidad, certeza=Certeza.ALTA, motivo="cotización del mercado", nota=f"{_FUENTE_BME}, {que}"))
+    m.notas["rango_52s"] = (f"mínimo y máximo de los cierres oficiales de BME de las 52 semanas hasta el {hoy:%d/%m/%Y} "
+                            f"({len(anio)} sesiones con negociación)")
+    m.notas["volumen_medio"] = f"media del volumen (acciones) de esas {len(anio)} sesiones con negociación del histórico oficial de BME"
+    m.notas["consenso"] = "BME no publica consenso de analistas"
+    cap, ficha = None, None
+    try:
+        ficha = bme.valor(e.isin)
+    except (HTTPError, URLError, KeyError, ValueError, TypeError) as ex:
+        m.notas["cap_mercado_fuente"] = f"la ficha del valor de BME no respondió: {fallo(ex)}"
+    if ficha is not None:
+        if ficha.fecha_ultimo == dia and ficha.capitalizacion is not None:
+            cap = ficha.capitalizacion
+        else:
+            # la ficha da la capitalización de su último cierre: con otra fecha no es un contraste del precio del informe
+            de_cuando = f"del {ficha.fecha_ultimo:%d/%m/%Y}" if ficha.fecha_ultimo else "sin fecha"
+            m.notas["cap_mercado_fuente"] = f"la ficha de BME publica la capitalización {de_cuando}, no la de la sesión del precio ({dia:%d/%m/%Y})"
+        if ficha.url in _CRUDOS:
+            m.crudos["cotizacion"] = (ficha.url, *_CRUDOS[ficha.url])
+    c = Cotizacion(precio=s.cierre, fecha=dia, fuente=_FUENTE_BME, oficial=True, url=url, moneda=moneda, volumen=s.volumen,
+                   volumen_medio=sum(volumenes) / len(volumenes) if volumenes else None, cierre_anterior=s.anterior,
+                   rango_52s=(min(cierres_anio), max(cierres_anio)) if cierres_anio else None, cap_mercado_fuente=cap)
+    m.cotizacion = c
+    ventana_desde = _ventana(hoy, tuple(fechas))[0]
+    m.cierres = {d: negociadas[d].cierre for d in previas if d >= ventana_desde}
+    if url in _CRUDOS:
+        m.crudos["historico"] = (url, *_CRUDOS[url])
+    # el cierre anterior que publica la sesión frente a la sesión previa del mismo histórico: un hecho, una fuente
+    anteriores = [d for d in previas if d < dia]
+    if s.anterior is not None and anteriores:
+        f_ant, v_ant = anteriores[-1], negociadas[anteriores[-1]].cierre
+        if abs(v_ant - s.anterior) <= 0.005 * abs(v_ant):
+            m.contraste_cierre = (Contraste.CONFIRMADO, f"el cierre anterior de la sesión ({numero(s.anterior, 2)}) coincide con el histórico del {f_ant:%d/%m/%Y}")
+        else:
+            m.contraste_cierre = (Contraste.DISCREPANTE, f"la sesión del {dia:%d/%m/%Y} publica cierre anterior {numero(s.anterior, 2)} y el histórico del {f_ant:%d/%m/%Y} dice {numero(v_ant, 2)}")
+    elif s.anterior is None:
+        m.faltan["cierre_anterior"] = "el histórico oficial de BME no trae el cierre anterior de la sesión"
+    return m
+
+
+def mercado(ticker: str, hoy: date, fechas: Tuple[date, ...] = (), emisor=None) -> Mercado:
     """Precio del día de emisión, cierres oficiales de las `fechas` pedidas (las que el analista tecleó en su
-    libro) y el contraste interno de la fuente: su «cierre anterior» frente a su propio histórico."""
+    libro) y el contraste interno de la fuente: su «cierre anterior» frente a su propio histórico.
+
+    Un emisor de BME (clave «XXX.MC» o ISIN español, o `emisor` ya resuelto con `mercado == "bme"`) va a `_mercado_bme`;
+    cualquier otro, a Nasdaq, como siempre."""
+    from . import emisores
+    if emisor is None and emisores.es_bme(ticker):
+        unidad = f"{(emisores.mercados().get('bme') or {}).get('moneda', 'EUR')}/acción"
+        try:
+            emisor = emisores.emisor(ticker)
+        except (HTTPError, URLError, KeyError, ValueError, TypeError) as ex:
+            return Mercado(precio=na("precio", Periodo.instante(hoy), f"BME no respondió al buscar {ticker}: {fallo(ex)}", unidad=unidad))
+        if emisor is None:
+            return Mercado(precio=na("precio", Periodo.instante(hoy), f"BME no tiene un valor cotizado con la clave {ticker}", unidad=unidad))
+    if emisor is not None and getattr(emisor, "mercado", "sec") == "bme":
+        return _mercado_bme(emisor, hoy, tuple(fechas))
     c, hecho = _cotizacion(ticker, hoy)
     m = Mercado(precio=hecho, cotizacion=c)
     if c is None or variable("WC_PRECIO_FUENTE").lower() != "nasdaq":

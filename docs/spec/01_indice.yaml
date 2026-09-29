@@ -1,6 +1,14 @@
 # 01_indice.yaml · Fuente única del índice. Formulario, informe, numeración, anclas y QA leen de aquí.
 # resp: sistema | motor | analista | mixto · fuentes: sec | nasdaq | tesoro | yahoo_iv | analista | motor
-# entradas: ids de 04_entradas.yaml · bloques: contenido obligatorio, en orden de impresión.
+# entradas: ids de 04_entradas.yaml; atribuyen al apartado las faltas que llevan su id («pilares[2].kpi: …» → 3).
+# puntos: lo que trae el apartado, en orden de impresión (sistema por puntos, `tesis/plantillas/puntos.py`). Cada punto queda
+#   en cumple · no aplica (motivo) · falta (motivo). Claves: id («8.2»), texto, requiere (capacidades del mercado del emisor,
+#   `tesis/fuentes/emisores.py › Perfil`: sin ellas el punto es «no aplica» con su motivo y sus faltas no bloquean),
+#   comprueba (comprobación de `puntos.py` sobre el HTML del apartado), obligatorio (por defecto true: si su comprobación
+#   falla, falta; si es false, no aplica) y faltas (prefijos de las faltas que son de ese punto).
+# faltas: prefijos de origen de las faltas del informe («Gobierno · accionistas: …») que son del apartado. Manda el prefijo
+#   más largo (del apartado, de sus puntos o de sus entradas); lo que no se atribuye a un único apartado va al 0 y bloquea.
+# sin_na: true → ningún «N/A» impreso en el apartado (06 §3.10).
 version: 1
 reglas:
   - "Letras A–I consecutivas en orden de impresión; anclas parte-<letra> y ap-<n>."
@@ -37,159 +45,181 @@ apartados:
     resp: sistema
     fuentes: [sec, nasdaq]
     entradas: [meta.nombre_presentacion, meta.sector, perfil.fundacion, perfil.empleados]
-    bloques:
-      - "Cuadro Ficha (dato · valor · fuente): nombre de presentación y registral, ticker · bolsa, CIK · SIC, sector del analista y paquete DCF, constitución, sede, cierre fiscal descrito (p. ej. «último domingo de septiembre, 52/53 semanas»), fundación, empleados, auditor, acciones en circulación, free float, precio y cierre anterior, capitalización, rango 52 semanas, volumen medio 3 meses, últimas presentaciones"
+    faltas: [Ficha, Mercado, Paso 1]
+    puntos:
+      - {id: "1.1", comprueba: cuadro, faltas: [Ficha, Mercado, Paso 1], texto: "Cuadro Ficha (dato · valor · fuente): nombre de presentación y registral, ticker · bolsa, identificadores oficiales del emisor y su actividad, sector del analista y paquete DCF, constitución, sede, cierre fiscal descrito (p. ej. «último domingo de septiembre, 52/53 semanas»), fundación, empleados, auditor, acciones en circulación, free float, precio y cierre anterior, capitalización, rango 52 semanas, volumen medio 3 meses, últimas presentaciones"}
   2:
     parte: A
     titulo: "Resumen ejecutivo y contexto de la tesis"
     resp: mixto
     fuentes: [sec, nasdaq, motor, analista]
     entradas: [tesis.resumen, tesis.por_que_ahora, tesis.vision_vs_mercado]
-    bloques:
-      - "Texto del analista: resumen, por qué ahora y visión frente a lo que descuenta el precio"
-      - "Párrafo factual de plantilla: último trimestre, ejercicio, guía vigente, balance y retribución; una cita por frase"
-      - "Cuadro 1 (5 ejercicios): ingresos, EBITDA, margen operativo, beneficio neto, BPA diluido, FCF, deuda neta, DN/EBITDA"
-      - "Cuadro 2: objetivos vigentes de la compañía (métrica, periodo, rango, fecha, documento, página)"
-      - "Hitos: 8-K de los últimos 12 meses con los ítems traducidos"
+    sin_na: true
+    faltas: [Objetivos]
+    puntos:
+      - {id: "2.1", faltas: [tesis], texto: "Texto del analista: resumen, por qué ahora y visión frente a lo que descuenta el precio"}
+      - {id: "2.2", faltas: ["Parte A · Párrafo factual", revision.parrafos.resumen_factual], texto: "Párrafo factual de plantilla: último periodo publicado, ejercicio, guía vigente, balance y retribución; una cita por frase"}
+      - {id: "2.3", comprueba: cuadro, texto: "Cuadro 1 (5 ejercicios): ingresos, EBITDA, margen operativo, beneficio neto, BPA diluido, FCF, deuda neta, DN/EBITDA"}
+      - {id: "2.4", faltas: [guía, Objetivos], texto: "Cuadro 2: objetivos vigentes de la compañía (métrica, periodo, rango, fecha, documento, página)"}
+      - {id: "2.5", obligatorio: false, texto: "Hitos: hechos relevantes de los últimos 12 meses publicados por el emisor, con su documento"}
   3:
     parte: A
     titulo: "Caso de inversión — los 5 pilares de la tesis"
     resp: analista
     fuentes: [analista, sec]
     entradas: [pilares]
-    bloques:
-      - "Exactamente 5 pilares: título, argumento con citas, KPI de seguimiento y recuadro «Riesgo (10-K, Item 1A)» con la versión en español del analista y su página (literal, en el HTML)"
+    sin_na: true
+    faltas: ["Parte A · pilares"]
+    puntos:
+      - {id: "3.1", faltas: [pilares, pilares.titulo, pilares.argumento, pilares.evidencias, pilares.kpi, pilares.catalizador], texto: "Exactamente 5 pilares: título, argumento con citas y KPI de seguimiento"}
+      - {id: "3.2", faltas: [pilares, pilares.riesgo_1a, pilares.riesgo_es], texto: "Recuadro «Riesgo» de cada pilar: el factor de riesgo que publica el emisor, en la versión en español del analista y con su página (literal, en el HTML)"}
   4:
     parte: B
     titulo: "¿Qué hace la empresa? — Productos, servicios y mercados"
     resp: mixto
     fuentes: [sec, analista]
     entradas: [perfil.descripcion, perfil.segmentos_ok]
-    bloques:
-      - "Descripción del analista, apoyada en tarjetas del Item 1"
-      - "Cuadro ingresos por segmento, producto y geografía (XBRL dimensional; 3 ejercicios y últimos 12 meses) y gráfico de mezcla"
+    faltas: [Regiones, "Parte B · segmentos", "Ficha · descripcion"]
+    puntos:
+      - {id: "4.1", faltas: [perfil.descripcion, "Ficha · descripcion"], texto: "Descripción del analista, apoyada en tarjetas de la descripción del negocio que publica el emisor"}
+      - {id: "4.2", comprueba: cuadro, faltas: [perfil.segmentos_ok, "Parte B · segmentos", Regiones], texto: "Cuadro de ingresos por segmento, producto y geografía (3 ejercicios y últimos 12 meses) con su fuente oficial, y gráfico de mezcla"}
   5:
     parte: B
     titulo: "Estructura corporativa — Accionariado, filiales y participaciones"
     resp: sistema
     fuentes: [sec]
-    bloques:
-      - "Cuadro accionistas ≥ 5 % (DEF 14A y 13D/13G vigentes) y participación de consejeros y directivos"
-      - "Cuadro filiales significativas (Exhibit 21 del índice del 10-K en EDGAR)"
-      - "Clases de acciones y participaciones relevantes, si existen"
+    faltas: ["Gobierno · accionistas", "Gobierno · filiales", "Gobierno · proxy", "Gobierno · edgar"]
+    puntos:
+      - {id: "5.1", comprueba: cuadro, faltas: ["Gobierno · accionistas", "Gobierno · proxy"], texto: "Cuadro de accionistas significativos con su fuente oficial y participación de consejeros y directivos"}
+      - {id: "5.2", faltas: ["Gobierno · filiales"], texto: "Cuadro de filiales significativas (sociedades del grupo) con su fuente oficial"}
+      - {id: "5.3", obligatorio: false, texto: "Clases de acciones y participaciones relevantes, si existen"}
   6:
     parte: B
     titulo: "Equipo directivo — CEO, CFO y principales ejecutivos; trayectoria"
     resp: mixto
     fuentes: [sec, analista]
     entradas: [equipo.track_record, equipo.asignacion_capital]
-    bloques:
-      - "Cuadro ejecutivos: nombre, edad, cargo, desde (10-K o DEF 14A)"
-      - "Cuadro Summary Compensation Table (DEF 14A)"
-      - "Track record y asignación de capital: juicio del analista con evidencias"
+    faltas: ["Gobierno · ejecutivos", "Gobierno · retribucion", "Gobierno · consejo", "Gobierno · retratos", "Gobierno · traducir"]
+    puntos:
+      - {id: "6.1", comprueba: cuadro, faltas: ["Gobierno · ejecutivos", "Gobierno · consejo", "Gobierno · retratos", "Gobierno · traducir"], texto: "Cuadro de ejecutivos: nombre, edad, cargo y desde, con su fuente oficial"}
+      - {id: "6.2", requiere: [proxy], faltas: ["Gobierno · retribucion"], texto: "Cuadro Summary Compensation Table (DEF 14A)"}
+      - {id: "6.3", faltas: [equipo], texto: "Track record y asignación de capital: juicio del analista con evidencias"}
   7:
     parte: B
     titulo: "Proyectos y catalizadores — Hoja de ruta, fechas clave y palancas de la tesis"
     resp: mixto
     fuentes: [nasdaq, sec, analista]
     entradas: [catalizadores, direccion.citas]
-    bloques:
-      - "Cuadro fechas clave: próximos resultados (Nasdaq, anunciada o estimada, siempre ≥ fecha del informe), junta, dividendo"
-      - "Cuadro catalizadores: fecha o ventana, evento, pilar, impacto, probabilidad, fuente"
-      - "Lo que dijo la dirección: citas de la última call elegidas por el analista, en español (literal, en el HTML)"
+    puntos:
+      - {id: "7.1", comprueba: fechas_futuras, texto: "Cuadro fechas clave: próximos resultados (los que anuncia el emisor o publica la bolsa, siempre ≥ fecha del informe), junta, dividendo"}
+      - {id: "7.2", faltas: [catalizadores], texto: "Cuadro catalizadores: fecha o ventana, evento, pilar, impacto, probabilidad, fuente"}
+      - {id: "7.3", faltas: [direccion.citas], texto: "Lo que dijo la dirección: citas de la última presentación de resultados elegidas por el analista, en español (literal, en el HTML)"}
   8:
     parte: C
     titulo: "Estado de resultados — Ingresos, EBITDA, EBIT, margen operativo, margen neto y BPA"
     resp: sistema
     fuentes: [sec]
     entradas: [val.normalizaciones]
-    bloques:
-      - "Gráficos: ingresos y margen operativo; deuda neta y DN/EBITDA"
-      - "Cuadro 5 ejercicios + 4 últimos trimestres fiscales («nT FYaa» y fecha de cierre); líneas tal como las publica la compañía; trimestre derivado marcado"
-      - "Bloque normalizado (si hay normalizaciones), separado de las cifras publicadas"
-      - "Recortes de la cuenta de resultados"
+    puntos:
+      - {id: "8.1", comprueba: grafico, texto: "Gráficos: ingresos y margen operativo; deuda neta y DN/EBITDA"}
+      - {id: "8.2", comprueba: cuadro, texto: "Cuadro 5 ejercicios + los últimos periodos intermedios publicados (trimestres o semestres, con su etiqueta y fecha de cierre); líneas tal como las publica la compañía; periodo derivado marcado"}
+      - {id: "8.3", obligatorio: false, faltas: [val.normalizaciones], texto: "Bloque normalizado (si hay normalizaciones), separado de las cifras publicadas"}
+      - {id: "8.4", obligatorio: false, comprueba: recortes, texto: "Recortes de la cuenta de resultados"}
   9:
     parte: C
     titulo: "Balance de situación — Activos, deuda neta, caja, patrimonio neto"
     resp: sistema
     fuentes: [sec]
-    bloques:
-      - "Cuadro 5 ejercicios + 4 trimestres; deuda neta con la definición única (06 §5); arrendamientos aparte; acciones ajustadas por splits detectados"
-      - "Recortes del balance"
+    puntos:
+      - {id: "9.1", comprueba: cuadro, texto: "Cuadro 5 ejercicios + los últimos cierres intermedios; deuda neta con la definición única (06 §5); arrendamientos aparte; acciones ajustadas por splits detectados"}
+      - {id: "9.2", obligatorio: false, comprueba: recortes, texto: "Recortes del balance"}
   10:
     parte: C
     titulo: "Flujo de caja — FCF, capex, dividendos y recompras"
     resp: sistema
     fuentes: [sec]
-    bloques:
-      - "Cuadro flujo operativo, capex, FCF, FCF/ingresos, retribución en acciones, adquisiciones, dividendos, recompras, deuda emitida y amortizada, retribución total y su peso sobre el FCF; FCF de la compañía si lo publica"
-      - "Recortes del estado de flujos"
+    puntos:
+      - {id: "10.1", comprueba: cuadro, texto: "Cuadro flujo operativo, capex, FCF, FCF/ingresos, retribución en acciones, adquisiciones, dividendos, recompras, deuda emitida y amortizada, retribución total y su peso sobre el FCF; FCF de la compañía si lo publica"}
+      - {id: "10.2", obligatorio: false, comprueba: recortes, texto: "Recortes del estado de flujos"}
   11:
     parte: C
     titulo: "Rentabilidad y eficiencia — ROE, ROIC, ROA y márgenes"
     resp: sistema
     fuentes: [sec, motor]
-    bloques:
-      - "Cuadro ROE, ROA, ROIC, márgenes, cobertura de intereses, conversión de caja, rotación de activos, payout, capex/ingresos"
-      - "Cuadro últimos 12 meses"
-      - "ROIC frente a WACC, 5 años"
+    puntos:
+      - {id: "11.1", comprueba: cuadro, texto: "Cuadro ROE, ROA, ROIC, márgenes, cobertura de intereses, conversión de caja, rotación de activos, payout, capex/ingresos"}
+      - {id: "11.2", texto: "Cuadro últimos 12 meses"}
+      - {id: "11.3", texto: "ROIC frente a WACC, 5 años"}
   12:
     parte: D
     titulo: "Valoración intrínseca — DCF (descuento de flujos de caja)"
     resp: motor
     fuentes: [motor, sec, nasdaq, tesoro, analista]
     entradas: ["val.*", "wacc.*", "tv.*"]
-    bloques:
-      - "Cuadro escenarios: probabilidad, WACC, g, valor hoy, valor a h meses; valor razonable ponderado"
-      - "Cuadro construcción del WACC"
-      - "Cuadro puente: valor de empresa → fondos propios → por acción"
-      - "Cuadro entradas del modelo frente al dato oficial (deben coincidir)"
-      - "Cuadro supuestos generales con origen y justificación"
-      - "Cuadro motor frente al Excel del analista (solo si se importó)"
+    sin_na: true
+    faltas: [DCF]
+    puntos:
+      - {id: "12.1", comprueba: cuadro, texto: "Cuadro escenarios: probabilidad, WACC, g, valor hoy, valor a h meses; valor razonable ponderado"}
+      - {id: "12.2", texto: "Cuadro construcción del WACC"}
+      - {id: "12.3", texto: "Cuadro puente: valor de empresa → fondos propios → por acción"}
+      - {id: "12.4", texto: "Cuadro entradas del modelo frente al dato oficial (deben coincidir)"}
+      - {id: "12.5", texto: "Cuadro supuestos generales con origen y justificación"}
+      - {id: "12.6", obligatorio: false, texto: "Cuadro motor frente al Excel del analista (solo si se importó)"}
   13:
     parte: D
     titulo: "Escenario pesimista — Supuestos, FCF y valoración"
     resp: motor
     entradas: ["esc.pesimista.*"]
-    bloques:
-      - "Narrativa del escenario (analista)"
-      - "Cuadro: drivers por año, FCFF, valor terminal y sus contrastes, valor de empresa, puente, valor por acción hoy y a h meses, recorrido"
+    sin_na: true
+    puntos:
+      - {id: "13.1", faltas: [esc.pesimista], texto: "Narrativa del escenario (analista)"}
+      - {id: "13.2", comprueba: cuadro, texto: "Cuadro: drivers por año, FCFF, valor terminal y sus contrastes, valor de empresa, puente, valor por acción hoy y a h meses, recorrido"}
   14:
     parte: D
     titulo: "Escenario base — Supuestos, FCF y valoración"
     resp: motor
     entradas: ["esc.base.*"]
-    bloques: ["Igual que 13"]
+    sin_na: true
+    puntos:
+      - {id: "14.1", faltas: [esc.base], texto: "Narrativa del escenario (analista)"}
+      - {id: "14.2", comprueba: cuadro, texto: "Cuadro: drivers por año, FCFF, valor terminal y sus contrastes, valor de empresa, puente, valor por acción hoy y a h meses, recorrido"}
   15:
     parte: D
     titulo: "Escenario optimista — Supuestos, FCF y valoración"
     resp: motor
     entradas: ["esc.optimista.*"]
-    bloques: ["Igual que 13"]
+    sin_na: true
+    puntos:
+      - {id: "15.1", faltas: [esc.optimista], texto: "Narrativa del escenario (analista)"}
+      - {id: "15.2", comprueba: cuadro, texto: "Cuadro: drivers por año, FCFF, valor terminal y sus contrastes, valor de empresa, puente, valor por acción hoy y a h meses, recorrido"}
   16:
     parte: D
     titulo: "Análisis de sensibilidad — WACC y crecimiento terminal"
     resp: motor
-    bloques:
-      - "Matriz 5×5 WACC × g del escenario base (05 §8), celda base marcada y color frente al precio"
-      - "Matriz opcional crecimiento de ingresos × margen terminal"
+    sin_na: true
+    puntos:
+      - {id: "16.1", comprueba: cuadro, texto: "Matriz 5×5 WACC × g del escenario base (05 §8), celda base marcada y color frente al precio"}
+      - {id: "16.2", obligatorio: false, texto: "Matriz opcional crecimiento de ingresos × margen terminal"}
   17:
     parte: D
     titulo: "Valoración por múltiplos — PER, EV/EBITDA, EV/Ventas, P/FCF, PEG"
     resp: mixto
     fuentes: [sec, nasdaq, motor, analista]
     entradas: [comparables, mult.objetivos]
-    bloques:
-      - "Cuadro múltiplos actuales TTM y NTM, con su cálculo"
-      - "Cuadro histórico propio de 5 años (mínimo, mediana, máximo)"
-      - "Cuadro comparables del analista con medianas; excluidos marcados"
-      - "Valor implícito por acción (mediana de comparables y múltiplos objetivo justificados), solo como contraste"
+    sin_na: true
+    faltas: [Múltiplos]
+    puntos:
+      - {id: "17.1", comprueba: cuadro, faltas: [Múltiplos], texto: "Cuadro múltiplos actuales TTM y NTM, con su cálculo"}
+      - {id: "17.2", texto: "Cuadro histórico propio de 5 años (mínimo, mediana, máximo)"}
+      - {id: "17.3", texto: "Cuadro comparables del analista con medianas; excluidos marcados"}
+      - {id: "17.4", faltas: [mult.objetivos], texto: "Valor implícito por acción (mediana de comparables y múltiplos objetivo justificados), solo como contraste"}
   18:
     parte: D
     titulo: "DCF inverso — Expectativas implícitas en el precio actual"
     resp: motor
-    bloques:
-      - "Crecimiento de ingresos implícito, margen terminal implícito y crecimiento constante del FCFF implícito, frente al escenario base y al histórico de 5 años"
+    sin_na: true
+    puntos:
+      - {id: "18.1", comprueba: cuadro, texto: "Crecimiento de ingresos implícito, margen terminal implícito y crecimiento constante del FCFF implícito, frente al escenario base y al histórico de 5 años"}
   19:
     parte: D
     titulo: "Valoración por suma de partes (SOTP, cuando aplique)"
@@ -197,165 +227,198 @@ apartados:
     entradas: [sotp.aplica, sotp.segmentos]
     aplica: "≥ 2 segmentos con resultado operativo en XBRL y sotp.aplica"
     si_no_aplica: "Motivo en español con la cita de la nota de segmentos (literal, en el HTML)"
-    bloques:
-      - "Cuadro por segmento: métrica, múltiplo o método, justificación, valor; costes corporativos; puente; por acción; frente al DCF"
+    sin_na: true
+    puntos:
+      - {id: "19.1", obligatorio: false, faltas: [sotp], texto: "Cuadro por segmento: métrica, múltiplo o método, justificación, valor; costes corporativos; puente; por acción; frente al DCF"}
+      - {id: "19.2", texto: "Si no aplica: «No aplica» con el motivo en español y la cita de la nota de segmentos (literal, en el HTML)"}
   20:
     parte: D
     titulo: "Precio objetivo y margen de seguridad — Valor razonable, potencial alcista y bajista, y consenso"
     resp: motor
     fuentes: [motor, nasdaq]
-    bloques:
-      - "Cuadro: PO, valor razonable hoy, potencial, margen de seguridad, downside pesimista, recorrido/riesgo (definiciones de 05 §7)"
-      - "Contraste: rango por múltiplos, consenso Nasdaq (media, nº de analistas, compra/mantener/venta, rango) y 1 Year Target; aviso si divergen > 20 %"
-      - "Recomendación sugerida por la regla frente a la del analista"
+    sin_na: true
+    puntos:
+      - {id: "20.1", comprueba: cuadro, texto: "Cuadro: PO, valor razonable hoy, potencial, margen de seguridad, downside pesimista, recorrido/riesgo (definiciones de 05 §7)"}
+      - {id: "20.2", texto: "Contraste con el rango por múltiplos"}
+      - {id: "20.3", requiere: [consenso], faltas: ["Mercado · consenso"], texto: "Contraste con el consenso Nasdaq (media, nº de analistas, compra/mantener/venta, rango) y 1 Year Target; aviso si divergen > 20 %"}
+      - {id: "20.4", texto: "Recomendación sugerida por la regla frente a la del analista"}
   21:
     parte: E
     titulo: "Tamaño de mercado — TAM / SAM / SOM"
     resp: analista
     entradas: [mercado.cifras]
-    bloques:
-      - "Texto de plantilla con las cifras del analista y sus citas"
-      - "Cuadro: cifra, clase, año, método, fuente; cuota implícita = ingresos / SAM"
+    faltas: ["Parte E", Mercado objetivo]
+    puntos:
+      - {id: "21.1", faltas: [mercado.cifras, Mercado objetivo], texto: "Texto de plantilla con las cifras del analista y sus citas"}
+      - {id: "21.2", faltas: [mercado.cifras], texto: "Cuadro: cifra, clase, año, método, fuente; cuota implícita = ingresos / SAM"}
   22:
     parte: E
     titulo: "Análisis competitivo — Competidores, cuotas de mercado y comparables"
     resp: analista
     entradas: [competencia.competidores, comparables]
-    bloques:
-      - "Competidores y por qué compiten (analista, con evidencias del Item 1)"
-      - "Cuotas con fuente"
-      - "Cuadro comparables: cifras SEC y cotización Nasdaq"
-      - "Gráfico crecimiento frente a margen"
+    faltas: ["Parte E", Comparables]
+    puntos:
+      - {id: "22.1", faltas: [competencia.competidores], texto: "Competidores y por qué compiten (analista, con evidencias de la descripción del negocio que publica el emisor)"}
+      - {id: "22.2", obligatorio: false, texto: "Cuotas con fuente"}
+      - {id: "22.3", faltas: [comparables, Comparables], texto: "Cuadro comparables: cifras oficiales de cada compañía y su cotización en bolsa"}
+      - {id: "22.4", obligatorio: false, texto: "Gráfico crecimiento frente a margen"}
   23:
     parte: E
     titulo: "Ventajas competitivas y foso defensivo — Barreras de entrada y sostenibilidad"
     resp: analista
     entradas: [moat.fuentes, moat.amenazas]
-    bloques:
-      - "Fuentes del moat con evidencias, durabilidad y tendencia"
-      - "Datos de apoyo del sistema: ROIC − WACC 5 años, estabilidad del margen, I+D/ingresos"
-      - "Amenazas"
+    faltas: ["Parte E"]
+    puntos:
+      - {id: "23.1", faltas: [moat.fuentes], texto: "Fuentes del moat con evidencias, durabilidad y tendencia"}
+      - {id: "23.2", texto: "Datos de apoyo del sistema: ROIC − WACC 5 años, estabilidad del margen, I+D/ingresos"}
+      - {id: "23.3", faltas: [moat.amenazas], texto: "Amenazas"}
   24:
     parte: F
     titulo: "Riesgos principales — Regulatorio, financiero, competitivo y ejecución"
     resp: mixto
     entradas: [riesgos.top]
-    bloques:
-      - "Matriz probabilidad × impacto de los 5 riesgos del analista, con mitigante y señal temprana"
-      - "Recuento por familia de los riesgos del Item 1A (clasificación por reglas, corregible); epígrafes literales solo en el HTML y en 39"
+    faltas: ["Parte F", Riesgos]
+    puntos:
+      - {id: "24.1", faltas: [riesgos.top, Riesgos], texto: "Matriz probabilidad × impacto de los 5 riesgos del analista, con mitigante y señal temprana"}
+      - {id: "24.2", faltas: [riesgos.familias], texto: "Recuento por familia de los factores de riesgo que publica el emisor (clasificación por reglas, corregible); epígrafes literales solo en el HTML y en 39"}
   25:
     parte: F
     titulo: "Caso bajista — Qué tendría que salir mal para invalidar la tesis"
     resp: mixto
     entradas: [bear.disparadores]
-    bloques:
-      - "Disparadores cuantificados: métrica, umbral y plazo"
-      - "Riesgo de cada pilar (del apartado 3)"
-      - "Valor y probabilidad del escenario pesimista (plantilla)"
+    faltas: ["Parte F"]
+    puntos:
+      - {id: "25.1", faltas: [bear.disparadores], texto: "Disparadores cuantificados: métrica, umbral y plazo"}
+      - {id: "25.2", texto: "Riesgo de cada pilar (del apartado 3)"}
+      - {id: "25.3", texto: "Valor y probabilidad del escenario pesimista (plantilla)"}
   26:
     parte: F
     titulo: "Historial de resultados — ¿Ha fallado antes? Causas y aprendizajes"
     resp: mixto
     entradas: [historial.guia_manual, historial.causas]
-    bloques:
-      - "Cuadro guía → real por trimestre (8 trimestres) con desvío"
-      - "Cuadro consenso frente a BPA publicado (Nasdaq)"
-      - "Objetivos a largo plazo frente a real, si los hay"
-      - "Causas y aprendizajes (analista; obligatorio si hay fallos)"
+    faltas: ["Parte F", Historial]
+    puntos:
+      - {id: "26.1", faltas: [historial.guia_manual, Historial], texto: "Cuadro guía → real por periodo publicado (8 trimestres o sus semestres) con desvío"}
+      - {id: "26.2", requiere: [consenso], texto: "Cuadro consenso frente a BPA publicado (Nasdaq)"}
+      - {id: "26.3", obligatorio: false, texto: "Objetivos a largo plazo frente a real, si los hay"}
+      - {id: "26.4", obligatorio: false, faltas: [historial.causas], texto: "Causas y aprendizajes (analista; obligatorio si hay fallos)"}
   27:
     parte: G
     titulo: "Tesis de inversión consolidada — Argumento, asunciones clave y horizonte temporal"
     resp: analista
     entradas: [pos.argumento, pos.asunciones, val.horizonte_meses]
-    bloques: ["Argumento literal, asunciones con su driver y umbral, horizonte"]
+    sin_na: true
+    faltas: ["Parte G"]
+    puntos:
+      - {id: "27.1", faltas: [pos.argumento], texto: "Argumento literal"}
+      - {id: "27.2", faltas: [pos.asunciones], texto: "Asunciones con su driver y umbral"}
+      - {id: "27.3", faltas: [pos.recomendacion, val.horizonte_meses], texto: "Recomendación del analista y horizonte"}
   28:
     parte: G
     titulo: "Lista de comprobación de entrada — Criterios mínimos antes de abrir posición"
     resp: mixto
     entradas: [pos.checklist]
-    bloques: ["Cuadro criterio · tipo · ¿cumplido? · evidencia, con recuento sí/no/parcial sin maquillar"]
+    sin_na: true
+    faltas: ["Parte G"]
+    puntos:
+      - {id: "28.1", comprueba: cuadro, faltas: [pos.checklist], texto: "Cuadro criterio · tipo · ¿cumplido? · evidencia, con recuento sí/no/parcial sin maquillar"}
   29:
     parte: G
     titulo: "Gestión del riesgo — Invalidación de tesis, tamaño de posición y volatilidad"
     resp: mixto
     entradas: [pos.invalidacion, pos.tamano_pct, pos.tamano_porque, pos.stop, pos.drawdown_tolerado]
-    bloques:
-      - "Invalidaciones medibles"
-      - "Tamaño y justificación frente al tamaño sugerido"
-      - "Volatilidad: realizada 1 año, IV ATM 30 días, máximo drawdown 1 y 3 años, beta"
+    sin_na: true
+    faltas: ["Parte G"]
+    puntos:
+      - {id: "29.1", faltas: [pos.invalidacion], texto: "Invalidaciones medibles"}
+      - {id: "29.2", faltas: [pos.precio_entrada, pos.fecha_entrada, pos.tamano_pct, pos.tamano_porque, pos.stop, pos.drawdown_tolerado], texto: "Entrada (precio y fecha), tamaño y justificación frente al tamaño sugerido"}
+      - {id: "29.3", texto: "Volatilidad: realizada 1 año, máximo drawdown 1 y 3 años, beta"}
+      - {id: "29.4", requiere: [opciones], obligatorio: false, texto: "Volatilidad implícita ATM a 30 días"}
   30:
     parte: G
     titulo: "Seguimiento tras la entrada — KPI, fechas de revisión y criterios de salida"
     resp: mixto
     entradas: [pos.kpis, pos.fechas_revision, pos.salida]
-    bloques: ["Cuadro KPIs (actual, verde, rojo, fuente, frecuencia); fechas de revisión; criterios de salida"]
+    sin_na: true
+    faltas: ["Parte G"]
+    puntos:
+      - {id: "30.1", faltas: [pos.kpis], texto: "Cuadro KPIs (actual, verde, rojo, fuente, frecuencia)"}
+      - {id: "30.2", faltas: [pos.fechas_revision], texto: "Fechas de revisión"}
+      - {id: "30.3", faltas: [pos.salida], texto: "Criterios de salida"}
   31:
     parte: H
     titulo: "Cadena de opciones — Ratio put/call, volumen y sesgo implícito"
     resp: sistema
     fuentes: [nasdaq]
-    bloques:
-      - "Por vencimiento: volumen e interés abierto de calls y puts, P/C por volumen y por OI, nº de strikes; total"
-      - "Strikes con más OI y max pain del vencimiento mensual más próximo"
+    faltas: ["Parte H · cadena"]
+    puntos:
+      - {id: "31.1", requiere: [opciones], comprueba: cuadro, faltas: ["Parte H · cadena"], texto: "Por vencimiento: volumen e interés abierto de calls y puts, P/C por volumen y por OI, nº de strikes; total"}
+      - {id: "31.2", requiere: [opciones], faltas: ["Parte H · cadena"], texto: "Strikes con más OI y max pain del vencimiento mensual más próximo"}
   32:
     parte: H
     titulo: "Posicionamiento en derivados — Volatilidad implícita, interés abierto (ratio put/call), volumen y sesgo implícito"
     resp: sistema
     fuentes: [nasdaq, yahoo_iv]
-    bloques:
-      - "Estructura temporal de IV (ATM, 90 %, 110 %) y sesgo put − call, solo en vencimientos cuyo OI cuadra con Nasdaq"
-      - "IV frente a volatilidad realizada a 30 y 90 días"
-      - "Movimiento esperado en resultados (straddle ATM de la cadena Nasdaq)"
+    faltas: ["Parte H · iv"]
+    puntos:
+      - {id: "32.1", requiere: [opciones], obligatorio: false, faltas: ["Parte H · iv"], texto: "Estructura temporal de IV (ATM, 90 %, 110 %) y sesgo put − call, solo en vencimientos cuyo OI cuadra con Nasdaq"}
+      - {id: "32.2", requiere: [opciones], obligatorio: false, faltas: ["Parte H · iv"], texto: "IV frente a volatilidad realizada a 30 y 90 días"}
+      - {id: "32.3", requiere: [opciones], texto: "Movimiento esperado en resultados (straddle ATM de la cadena Nasdaq)"}
   33:
     parte: H
     titulo: "Posicionamiento institucional — 13F, fondos y principales accionistas"
     resp: sistema
     fuentes: [nasdaq, sec]
-    bloques:
-      - "Resumen 13F"
-      - "15 mayores tenedores con la fecha de su 13F (antiguos marcados)"
-      - "Titulares ≥ 5 % según 13D/13G"
+    faltas: ["Parte H · institucional"]
+    puntos:
+      - {id: "33.1", requiere: [trece_f], comprueba: cuadro, faltas: ["Parte H · institucional"], texto: "Resumen 13F"}
+      - {id: "33.2", requiere: [trece_f], faltas: ["Parte H · institucional"], texto: "15 mayores tenedores con la fecha de su 13F (antiguos marcados)"}
+      - {id: "33.3", texto: "Titulares de participaciones significativas con su fuente oficial"}
   34:
     parte: H
     titulo: "Operaciones de directivos — Compras, ventas y participación de la dirección"
     resp: sistema
     fuentes: [nasdaq, sec]
-    bloques:
-      - "Recuento a 3 y 12 meses"
-      - "Últimas 15 operaciones cruzadas con el Form 4 de EDGAR (código, acciones, precio, plan 10b5-1)"
-      - "Participación del management (proxy)"
+    faltas: ["Parte H · insiders"]
+    puntos:
+      - {id: "34.1", comprueba: cuadro, faltas: ["Parte H · insiders"], texto: "Recuento de compras y ventas de directivos a 3 y 12 meses, con su fuente oficial"}
+      - {id: "34.2", requiere: [form4], texto: "Últimas 15 operaciones cruzadas con el Form 4 de EDGAR (código, acciones, precio, plan 10b5-1)"}
+      - {id: "34.3", texto: "Participación de la dirección, con su fuente oficial"}
   35:
     parte: H
     titulo: "Posicionamiento en corto — Interés en corto y días para cubrir"
     resp: sistema
     fuentes: [nasdaq]
-    bloques: ["12 fechas de liquidación: interés en corto, volumen medio, días para cubrir, % de acciones en circulación; tendencia"]
+    faltas: ["Parte H · short"]
+    puntos:
+      - {id: "35.1", requiere: [corto], comprueba: cuadro, faltas: ["Parte H · short"], texto: "12 fechas de liquidación: interés en corto, volumen medio, días para cubrir, % de acciones en circulación; tendencia"}
   36:
     parte: I
     titulo: "Modelo financiero y supuestos detallados"
     resp: motor
-    bloques:
-      - "Todas las entradas: valor, unidad, origen y autor"
-      - "Proyección completa del escenario base"
-      - "Excel exportado (nombre y huella) y, si lo hubo, comparación con el del analista"
+    puntos:
+      - {id: "36.1", comprueba: cuadro, texto: "Todas las entradas: valor, unidad, origen y autor"}
+      - {id: "36.2", texto: "Proyección completa del escenario base"}
+      - {id: "36.3", obligatorio: false, texto: "Excel exportado (nombre y huella) y, si lo hubo, comparación con el del analista"}
   37:
     parte: I
     titulo: "Fuentes y referencias"
     resp: sistema
-    bloques: ["Documentos (tipo, periodo, fecha, nº de registro, verificado en EDGAR, huella), APIs (URL, hora, huella) y versión del fichero de entradas"]
+    puntos:
+      - {id: "37.1", comprueba: cuadro, texto: "Documentos (tipo, periodo, fecha, nº de registro, verificado en el registro oficial, huella), APIs (URL, hora, huella) y versión del fichero de entradas"}
   38:
     parte: I
     titulo: "Datos complementarios y notas metodológicas"
     resp: sistema
-    bloques:
-      - "Recuento por estado de verificación"
-      - "Discrepancias: debe decir «Ninguna»"
-      - "Huecos materiales (≤ 15 líneas; el resto en auditoria.json)"
-      - "Definiciones y convenciones (06 §5)"
+    puntos:
+      - {id: "38.1", texto: "Recuento por estado de verificación"}
+      - {id: "38.2", texto: "Discrepancias: debe decir «Ninguna»"}
+      - {id: "38.3", texto: "Huecos materiales (≤ 15 líneas; el resto en auditoria.json)"}
+      - {id: "38.4", texto: "Definiciones y convenciones (06 §5)"}
   39:
     parte: I
     titulo: "Documentación complementaria — recortes de las páginas citadas y respuestas literales de las fuentes"
     resp: sistema
-    bloques:
-      - "Recortes por apartado, en el orden del índice"
-      - "Por cada fuente consultada: URL, hora, huella y campos usados con su valor, en un cuadro en español (la respuesta completa queda en disco)"
+    puntos:
+      - {id: "39.1", obligatorio: false, comprueba: recortes, texto: "Recortes por apartado, en el orden del índice"}
+      - {id: "39.2", comprueba: cuadro, texto: "Por cada fuente consultada: URL, hora, huella y campos usados con su valor, en un cuadro en español (la respuesta completa queda en disco)"}

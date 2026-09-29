@@ -33,32 +33,47 @@ prueba paralela dejaron a la vista:
 Las decisiones del analista sobre las discrepancias se leen de un fichero JSON
 (`decisiones.json`) y se imprimen como nota al pie de la cifra. El sistema no
 las toma nunca por él.
+
+**Sin SEC** (emisor español: `facts` es None) el contraste es documento contra
+documento: la columna comparativa de las cuentas del año siguiente, el balance
+comparativo del semestral. Dos que coinciden → ◑ con certeza alta; que difieren
+→ ≠ y decide el analista. El segundo semestre no lo publica nadie: sale del
+ejercicio menos el primero, marcado ∑. Si un documento trae las cuentas del grupo
+y las de la sociedad, mandan las del grupo; si solo hay individuales, se usan y
+se dice.
 """
 
 from __future__ import annotations
 
 import json
 import re
+from collections import Counter
 from dataclasses import dataclass, field
 from datetime import date, timedelta
 from pathlib import Path
-from typing import Dict, Iterable, List, Optional, Sequence, Tuple
+from typing import Dict, Iterable, List, Optional, Sequence, Set, Tuple
 
 from ..fuentes import sec as sec_mod
-from ..datos.campos import CAMPOS, Campo, campo as campo_de
+from ..datos.campos import CAMPOS, CONTROLES, Campo, campo as campo_de
 
-_POR_CLAVE = {c.clave: c for c in CAMPOS}
+_POR_CLAVE = {c.clave: c for c in CAMPOS + CONTROLES}
 from ..datos.expediente import Adjunto, Expediente, Tipo
-from ..datos.extractor import Candidato, PaginaLeida, extraer_pdf, extraer_xlsx
+from ..datos.extractor import Candidato, PaginaLeida, extraer_pdf, extraer_xlsx, limpiar_rotulo_es
 from ..formato import numero
 from ..datos.hechos import Capa, Certeza, Contraste, Estado, Hecho, Origen, Periodo, de_valor, derivar, na
 
 __all__ = ["Decision", "Resultado", "Tablero", "contrastar", "periodos_del_informe"]
 
 # Prioridad del documento como evidencia: el formulario depositado antes que la
-# copia de la web, y esta antes que la carta, que redondea.
+# copia de la web, y esta antes que la carta, que redondea. Las cuentas anuales
+# auditadas antes que el semestral, como el 10-K antes que el 10-Q: la columna
+# comparativa del año siguiente es la última reexpresión de la cifra.
 PRIORIDAD = {Tipo.K10: 0, Tipo.Q10: 1, Tipo.XLSX: 2, Tipo.FINWEB: 3, Tipo.TABLAS: 4, Tipo.CARTA: 5, Tipo.NOTA: 6, Tipo.CALL: 7,
-             Tipo.DEF14A: 8, Tipo.PRESENTACION: 9}
+             Tipo.DEF14A: 8, Tipo.PRESENTACION: 9, Tipo.CCAA: 0, Tipo.SEMESTRAL: 1}
+ESPANOLES = (Tipo.CCAA, Tipo.SEMESTRAL)
+# el estado del que sale cada apartado del informe: en unas cuentas españolas, una fila de otro estado con el mismo
+# rótulo no es la partida («Amortización del inmovilizado» del estado de flujos es un ajuste, con el signo contrario)
+_ESTADO_DE_SECCION = {8: "resultados", 9: "balance", 10: "flujos"}
 
 # Frases que convierten un N/A en un cero con cita. Solo se buscan en el 10-K.
 DECLARACIONES_CERO = {
@@ -104,6 +119,10 @@ class Tablero:
     splits: List[Tuple[date, float]] = field(default_factory=list)
     # cuánto se aparta la numeración del ejercicio del año en que cierra (sec.desfase_fiscal)
     desfase_fiscal: int = 0
+    # cifras de control (`campos.CONTROLES`): no se imprimen; el auditor comprueba con ellas que los estados cuadran
+    controles: Dict[Tuple[str, Periodo], Hecho] = field(default_factory=dict)
+    # la moneda de las cifras: la de los documentos, o la de la SEC
+    moneda: str = "USD"
 
     def de(self, campo: str, periodo: Periodo) -> Optional[Resultado]:
         for r in self.resultados:
@@ -178,6 +197,8 @@ def periodos_del_informe(exp: Expediente, ejercicios: int = 5, trimestres: int =
     from datetime import timedelta
     k = exp.de_tipo(Tipo.K10)
     q = exp.de_tipo(Tipo.Q10) + exp.de_tipo(Tipo.FINWEB) + exp.de_tipo(Tipo.XLSX) + exp.de_tipo(Tipo.TABLAS)
+    if not k and exp.de_tipo(Tipo.CCAA):
+        return _periodos_semestrales(exp, ejercicios, trimestres)
     if k:
         fin_fy = max(a.periodo_fin for a in k if a.periodo_fin)
         ultimo_q = max((a.periodo_fin for a in q if a.periodo_fin), default=fin_fy)
@@ -220,6 +241,32 @@ def periodos_del_informe(exp: Expediente, ejercicios: int = 5, trimestres: int =
     return {"anuales": anuales, "trimestres": trims, "instantes": instantes}
 
 
+def _periodos_semestrales(exp: Expediente, ejercicios: int, semestres: int) -> Dict[str, List[Periodo]]:
+    """Los periodos de un emisor que publica cuentas anuales y un semestral (BME): la base son las cuentas anuales,
+    los intermedios son semestres de seis meses («1S25», «2S25») hasta el último cierre publicado. La clave
+    «trimestres» es la de los periodos intermedios, sean de tres meses o de seis: la duración la dice cada periodo."""
+    import calendar
+    fines = [a.periodo_fin for a in exp.de_tipo(Tipo.CCAA) if a.periodo_fin]
+    if not fines:
+        raise ValueError("Las cuentas anuales del expediente no declaran su fecha de cierre: sin ella no hay ejercicio base.")
+    fin_fy = max(fines)
+    ultimo = max([a.periodo_fin for a in exp.de_tipo(Tipo.SEMESTRAL) if a.periodo_fin] + [fin_fy])
+
+    def cierre_de(anio: int) -> date:
+        return date(anio, fin_fy.month, min(fin_fy.day, calendar.monthrange(anio, fin_fy.month)[1]))
+    anuales = [Periodo.anual(cierre_de(fin_fy.year - i)) for i in range(ejercicios - 1, -1, -1)]
+    semestrales, fin = [], ultimo
+    for _ in range(semestres):
+        semestrales.append(Periodo.semestre(fin, fin_fy))
+        fin = Periodo.de_meses(fin, 6).inicio - timedelta(days=1)
+    semestrales.reverse()
+    instantes = [Periodo.instante(p.fin) for p in anuales + semestrales]
+    instantes.append(Periodo.instante(anuales[0].inicio - timedelta(days=1)))
+    if semestrales:
+        instantes.append(Periodo.instante(semestrales[0].inicio - timedelta(days=1)))
+    return {"anuales": anuales, "trimestres": semestrales, "instantes": sorted(set(instantes))}
+
+
 # ---------------------------------------------------------------------------
 # Candidatos por campo
 # ---------------------------------------------------------------------------
@@ -229,19 +276,26 @@ def _leer_todo(exp: Expediente) -> Dict[str, List[PaginaLeida]]:
     for a in exp.adjuntos:
         if a.tipo is Tipo.XLSX:
             paginas[a.clave] = extraer_xlsx(a)
-        elif a.tipo in (Tipo.K10, Tipo.Q10, Tipo.FINWEB, Tipo.CARTA, Tipo.TABLAS, Tipo.NOTA):
+        elif a.tipo in (Tipo.K10, Tipo.Q10, Tipo.FINWEB, Tipo.CARTA, Tipo.TABLAS, Tipo.NOTA) + ESPANOLES:
             paginas[a.clave] = extraer_pdf(a)
     return paginas
 
 
 def _limpiar_rotulo(r: str) -> str:
-    return re.sub(r"[\*†‡:]+$", "", r).strip()
+    # sin el prefijo del modelo español ni su fórmula: «A.3) Resultado antes de impuestos (A.1+A.2)»
+    return re.sub(r"[\*†‡:]+$", "", limpiar_rotulo_es(r)).strip()
 
 
 def _indice_fila(c: Campo, cand: Candidato) -> Optional[int]:
-    """Cuál de los patrones del campo casa con el rótulo; el primero es el más específico."""
+    """Cuál de los patrones del campo casa con el rótulo; el primero es el más específico. Los patrones que exigen su
+    bloque (`filas_con_contexto`) van detrás de los demás y solo cuentan si la cabecera de bloque también casa."""
     rotulo = _limpiar_rotulo(cand.rotulo)
-    return next((i for i, p in enumerate(c.filas) if re.search(p, rotulo, re.I)), None)
+    i = next((i for i, p in enumerate(c.filas) if re.search(p, rotulo, re.I)), None)
+    if i is not None or not c.filas_con_contexto:
+        return i
+    contexto = _limpiar_rotulo(cand.contexto)
+    return next((len(c.filas) + j for j, (p, ctx) in enumerate(c.filas_con_contexto)
+                 if re.search(p, rotulo, re.I) and re.search(ctx, contexto)), None)
 
 
 def _casa(c: Campo, cand: Candidato) -> bool:
@@ -274,19 +328,38 @@ def es_conciliacion(p: PaginaLeida) -> bool:
     return bool(_NO_GAAP.search(cabecera) or _DESGLOSE.search(cabecera))
 
 
-def _candidatos_por_campo(exp: Expediente, paginas: Dict[str, List[PaginaLeida]]) -> Dict[str, List[Tuple[Adjunto, Candidato]]]:
-    salida: Dict[str, List[Tuple[Adjunto, Candidato]]] = {c.clave: [] for c in CAMPOS}
+def _ambito(exp: Expediente, paginas: Dict[str, List[PaginaLeida]]) -> Tuple[Set[Tuple[str, int]], bool]:
+    """Qué páginas de cuentas españolas se descartan y si las cifras salen de cuentas individuales.
+
+    El informe es del grupo: si algún documento trae las cuentas consolidadas, las individuales de la sociedad
+    dominante —que vienen en el mismo PDF con el mismo modelo y otras cifras— no son candidatas, porque discreparían
+    de las del grupo sin que haya discrepancia ninguna. Si ninguno las trae, se usan las individuales y se dice."""
     por_clave = {a.clave: a for a in exp.adjuntos}
+    espanolas = [(clave, p) for clave, pags in paginas.items()
+                 if clave in por_clave and por_clave[clave].tipo in ESPANOLES for p in pags if p.filas]
+    hay_grupo = any(p.consolidado for _, p in espanolas)
+    descartar = {(clave, p.numero) for clave, p in espanolas if hay_grupo and p.consolidado is False}
+    individuales = bool(espanolas) and not hay_grupo and any(p.consolidado is False for _, p in espanolas)
+    return descartar, individuales
+
+
+def _candidatos_por_campo(exp: Expediente, paginas: Dict[str, List[PaginaLeida]]) -> Dict[str, List[Tuple[Adjunto, Candidato]]]:
+    salida: Dict[str, List[Tuple[Adjunto, Candidato]]] = {c.clave: [] for c in CAMPOS + CONTROLES}
+    por_clave = {a.clave: a for a in exp.adjuntos}
+    descartar, _ = _ambito(exp, paginas)
     for clave, pags in paginas.items():
         a = por_clave[clave]
+        espanol = a.tipo in ESPANOLES
         for p in pags:
-            if es_conciliacion(p):
+            if es_conciliacion(p) or (clave, p.numero) in descartar:
                 continue
             for f in p.filas:
                 for cand in f.celdas.values():
                     if cand.periodo is None or cand.porcentaje:
                         continue
-                    for c in CAMPOS:
+                    for c in CAMPOS + CONTROLES:
+                        if espanol and p.estado and _ESTADO_DE_SECCION.get(c.seccion) != p.estado:
+                            continue
                         if _casa(c, cand):
                             salida[c.clave].append((a, cand))
     # Dentro de una misma página, si un campo tiene una fila más específica que otra —«Total Oracle Corporation
@@ -338,9 +411,27 @@ def _ordenar_evidencia(pares: Sequence[Tuple[Adjunto, Candidato]]) -> List[Tuple
     return sorted(pares, key=lambda ac: (PRIORIDAD.get(ac[0].tipo, 9), ac[1].pagina))
 
 
-def _normalizar(valor: float, c: Campo) -> float:
-    """Los costes y salidas se guardan en positivo, como la SEC; el signo lo pone el informe al imprimir."""
+def _normalizar(valor: float, c: Campo, espanol: bool = False) -> float:
+    """Los costes y salidas se guardan en positivo, como la SEC; el signo lo pone el informe al imprimir.
+
+    En unas cuentas españolas el signo no es tipografía: el modelo se imprime en Debe/Haber y un impuesto en positivo
+    es un ingreso por impuesto. `abs()` lo convertiría en un gasto. Allí se le da la vuelta a lo que el modelo imprime
+    en negativo (`Campo.signo_debe_haber`): el gasto queda en positivo, como en la SEC, y el ingreso en negativo."""
+    if espanol:
+        return valor * c.signo_debe_haber
     return abs(valor) if c.signo_informe < 0 else valor
+
+
+def _unidad(c: Campo, cand: Optional[Candidato], moneda: str = "") -> str:
+    """La unidad del hecho: la moneda del documento del que sale la cifra (regla 13), no la de EE. UU. por defecto."""
+    m = (cand.moneda if cand is not None and cand.moneda else "") or moneda
+    if not m:
+        return c.unidad
+    if c.unidad == "USD":
+        return m
+    if c.unidad == "USD/acción":
+        return f"{m}/acción"
+    return c.unidad
 
 
 def _origen_de(a: Adjunto, cand: Candidato) -> Origen:
@@ -361,7 +452,8 @@ def _cargar_decisiones(ruta: Optional[Path]) -> Dict[Tuple[str, str], Decision]:
 
 def _contrastar_celda(c: Campo, p: Periodo, hecho_sec: Optional[Hecho],
                       pares: Sequence[Tuple[Adjunto, Candidato]],
-                      decision: Optional[Decision]) -> Resultado:
+                      decision: Optional[Decision], sin_sec: bool = False, moneda: str = "") -> Resultado:
+    """`sin_sec`: el emisor no presenta ante la SEC (cuentas españolas); el contraste es documento contra documento."""
     cands = [cand for _, cand in pares]
     sec_ok = hecho_sec is not None and hecho_sec.hay_dato
     if sec_ok:
@@ -391,24 +483,43 @@ def _contrastar_celda(c: Campo, p: Periodo, hecho_sec: Optional[Hecho],
     if pares:
         ordenados = _ordenar_evidencia(pares)
         a, ev = ordenados[0]
+        espanol = a.tipo in ESPANOLES
+        unidad = _unidad(c, ev, moneda)
         # ¿los adjuntos coinciden entre sí? (cada uno con su tolerancia)
         distintos = [cand for _, cand in ordenados if abs(abs(cand.valor) - abs(ev.valor)) > max(_tolerancia(cand, c), _tolerancia(ev, c))]
+        lecturas = "; ".join(f"{aa.nombre} pág. {cc.pagina} = {numero(cc.valor, 2)}" for aa, cc in ordenados[:4])
         if distintos and decision is None:
-            lecturas = "; ".join(f"{aa.nombre} pág. {cc.pagina} = {numero(cc.valor, 2)}" for aa, cc in ordenados[:4])
-            hecho = Hecho(campo=c.clave, periodo=p, valor=_normalizar(ev.valor, c), estado=Estado.CERO if ev.valor == 0 else Estado.VALOR,
-                          capa=Capa.DOCUMENTO, unidad=c.unidad, origen=_origen_de(a, ev), certeza=Certeza.BAJA,
+            hecho = Hecho(campo=c.clave, periodo=p, valor=_normalizar(ev.valor, c, espanol), estado=Estado.CERO if ev.valor == 0 else Estado.VALOR,
+                          capa=Capa.DOCUMENTO, unidad=unidad, origen=_origen_de(a, ev), certeza=Certeza.BAJA,
                           contraste=Contraste.DISCREPANTE, motivo="los adjuntos no coinciden entre sí",
-                          nota=f"la SEC no lo publica y los adjuntos difieren: {lecturas}")
+                          nota=(f"el emisor no presenta ante la SEC y los documentos difieren: {lecturas}; decide el analista"
+                                if sin_sec else f"la SEC no lo publica y los adjuntos difieren: {lecturas}"))
             return Resultado(c, p, hecho, hecho_sec, cands, [], ev, nota=hecho.nota)
+        if distintos and sin_sec:
+            # la decisión del analista entre documentos que difieren: su cifra, con el documento que la trae si alguno
+            # la trae (y si no, es un supuesto suyo), y la discrepancia en la nota
+            elegido = next(((aa, cc) for aa, cc in ordenados if abs(abs(cc.valor) - abs(decision.valor)) <= _tolerancia(cc, c)), None)
+            aa, cc = elegido or (a, ev)
+            hecho = de_valor(c.clave, p, _normalizar(decision.valor, c, espanol), Capa.DOCUMENTO if elegido else Capa.SUPUESTO,
+                             _origen_de(aa, cc), unidad=unidad, certeza=Certeza.ALTA, motivo="los documentos difieren y decidió el analista",
+                             nota=f"discrepancia entre documentos ({lecturas}) resuelta por {decision.analista} el {decision.fecha}: {decision.motivo}")
+            hecho = hecho.con(contraste=Contraste.SOLO_DOCUMENTO)
+            return Resultado(c, p, hecho, hecho_sec, cands, [cc], cc, nota=hecho.nota)
         docs = {aa.clave for aa, _ in ordenados}
         certeza = Certeza.ALTA if len(docs) >= 2 else Certeza.MEDIA
-        motivo = (hecho_sec.motivo if hecho_sec is not None else "la SEC no lo publica") + f"; leído en {len(docs)} adjunto(s)"
-        hecho = de_valor(c.clave, p, _normalizar(ev.valor, c), Capa.DOCUMENTO, _origen_de(a, ev), unidad=c.unidad,
+        if sin_sec:
+            motivo = f"el emisor no presenta ante la SEC; leído en {len(docs)} documento(s)"
+        else:
+            motivo = (hecho_sec.motivo if hecho_sec is not None else "la SEC no lo publica") + f"; leído en {len(docs)} adjunto(s)"
+        hecho = de_valor(c.clave, p, _normalizar(ev.valor, c, espanol), Capa.DOCUMENTO, _origen_de(a, ev), unidad=unidad,
                          certeza=certeza, motivo=motivo, nota=f"según {a.nombre} pág. {ev.pagina}" + (f" ({ev.referencia})" if ev.referencia else ""))
         hecho = hecho.con(contraste=Contraste.SOLO_DOCUMENTO)
         return Resultado(c, p, hecho, hecho_sec, cands, [cand for _, cand in ordenados], ev)
+    if sin_sec:
+        return Resultado(c, p, na(c.clave, p, "el emisor no presenta ante la SEC y ningún documento del expediente lo trae",
+                                  unidad=_unidad(c, None, moneda)), hecho_sec, [], [], None)
     motivo = hecho_sec.motivo if hecho_sec is not None else "la SEC no lo publica y ningún adjunto lo trae"
-    return Resultado(c, p, na(c.clave, p, motivo + "; ningún adjunto lo trae", unidad=c.unidad), hecho_sec, [], [], None)
+    return Resultado(c, p, na(c.clave, p, motivo + "; ningún adjunto lo trae", unidad=_unidad(c, None, moneda)), hecho_sec, [], [], None)
 
 
 def _cero_declarado(c: Campo, p: Periodo, exp: Expediente) -> Optional[Hecho]:

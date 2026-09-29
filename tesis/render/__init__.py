@@ -127,13 +127,16 @@ def emitir(informe: Informe, salida_pdf: Path, hoy=None, casa: str = "Warrants &
     """La emisión de 06 §3–§4: puerta de calidad sobre el HTML, «EMITIDO dd/mm/aaaa» solo con 0 bloqueos (y nunca con
     entradas de prueba), hoja 0 con los bloqueos en el borrador y PDF paginado: si una página queda por debajo de
     `umbrales.relleno_pagina_min` sin ser fin de parte, el cuadro que abre la página siguiente se deja partir y se vuelve a
-    imprimir (máximo `pasadas`). Devuelve (puerta, huella del PDF, HTML, relleno por página)."""
+    imprimir (máximo `pasadas`). Un bloqueo que solo se ve al medir el PDF (maquetación desbordada) lo devuelve a borrador
+    y se reimprime con su hoja 0. Devuelve (puerta, huella del PDF, HTML, relleno por página)."""
     import re
     from .. import qa
+    from ..plantillas import puntos
     from ..umbrales import umbral
     html = a_html(informe, casa)
     puerta = qa.revisar(informe, html, hoy)
     informe.bloqueos_qa = list(puerta.bloqueos)
+    informe.puntos_qa = puntos.resumen(puerta.puntos)              # hoja 0 y web: el estado de cada apartado, punto a punto
     informe.emitido = (hoy or informe.fecha_emision) if puerta.emitible and not prueba else None
     html = a_html(informe, casa)
     huella = a_pdf(html, salida_pdf, informe=informe, casa=casa)
@@ -162,4 +165,11 @@ def emitir(informe: Informe, salida_pdf: Path, hoy=None, casa: str = "Warrants &
                                f"{len(bajas)} casi vacías, la primera la {bajas[0][0] if bajas else '—'}")
     else:
         puerta.avisos += [f"Página {k} ocupada al {fraccion:.0%} sin ser fin de parte" for k, fraccion in bajas]
+    if puerta.bloqueos != informe.bloqueos_qa:
+        # la cabecera, la hoja 0 y la puerta dicen lo mismo (regla 13): un PDF con un bloqueo no puede decir «EMITIDO»
+        informe.bloqueos_qa = list(puerta.bloqueos)
+        informe.emitido = None
+        html = a_html(informe, casa)
+        huella = a_pdf(html, salida_pdf, informe=informe, casa=casa)
+        medidas = qa.relleno(Path(salida_pdf))
     return puerta, huella, html, medidas

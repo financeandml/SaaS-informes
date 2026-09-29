@@ -5,6 +5,15 @@ bloqueo_v1:
 bloqueo_biotech:   # 05 §2: por debajo de `umbrales.biotech_ingresos_min_musd`, el valor está en la cartera de ensayos (rNPV)
   sic: [[2834, 2836], [8731, 8731]]
   motivo: "biotecnológica {ingresos} (mínimo de la v1: {minimo} mln USD): su valor está en la cartera de ensayos y la v1 descuenta flujos de la empresa"
+# B4 · Emisores de BME (sin SIC): no se propone paquete (el analista lo elige en el paso 1), pero la regla 7 sigue: el
+# bloqueo sale de la clasificación sectorial que publica la bolsa en la ficha del valor («sector/subsector» de
+# ShareDetailsInfo; comprobados en la API el 28/09/2026: Santander 05/01, Mapfre 05/02, Alantra 05/03, Renta 4 05/06,
+# Merlin 07/02, Grifols, Rovi y Oryzon 03/05).
+bloqueo_bme:
+  sectores: ["05", "07"]          # servicios financieros · servicios inmobiliarios (SOCIMI): el mismo alcance que SIC 6000–6799
+  motivo: "banca, seguros, cartera, servicios de inversión, inmobiliarias y SOCIMI (sector {sector} de BME) quedan fuera de la v1 (motor de flujos de la empresa, no de los accionistas)"
+  biotech: ["03/05"]              # productos farmacéuticos y biotecnología: bloqueo por ingresos, como `bloqueo_biotech`
+  motivo_biotech: "farmacéutica o biotecnológica de BME {ingresos} (mínimo de la v1: {minimo} mln EUR): su valor está en la cartera de ensayos y la v1 descuenta flujos de la empresa"
 paquetes:
   general:      {periodo: [5, 10], drivers: [], comprobaciones: []}
   software:     {sic: [[7370, 7374]], periodo: [10, 10], drivers: [], comprobaciones: [regla_40, sbc_ingresos]}

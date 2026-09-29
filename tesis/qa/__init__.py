@@ -1,9 +1,11 @@
 """Puerta de calidad (06 §3) y medidas del render (06 §4).
 
-`revisar(informe, html)` devuelve los bloqueos (impiden emitir) y los avisos (página interna de QA, nunca en el cuerpo):
-entradas y fuentes que faltan, discrepancias abiertas, bloqueos del motor, índice, texto técnico en el cuerpo, apartados
-obligatorios vacíos o con «N/A» donde no puede haberlo, valores únicos (precio, PO, recomendación, horizonte) y fechas
-«próximas» anteriores al informe. `relleno(pdf)` mide lo ocupado de cada página para el aviso de páginas casi vacías.
+`revisar(informe, html)` devuelve los bloqueos (impiden emitir) y los avisos (página interna de QA, nunca en el cuerpo).
+Lo que es de un apartado se decide punto a punto (`plantillas/puntos.py`, sistema por puntos): entradas y fuentes que
+faltan, apartados vacíos, con contenido pendiente o con «N/A» donde no puede haberlo, cuadros que no salen y fechas
+«próximas» anteriores al informe; cada bloqueo dice su apartado y su punto. Lo que no es de un apartado conserva su texto:
+discrepancias abiertas, bloqueos del motor, índice, texto técnico en el cuerpo y valores únicos (precio, PO, recomendación,
+horizonte). `relleno(pdf)` mide lo ocupado de cada página para el aviso de páginas casi vacías.
 """
 
 from __future__ import annotations
@@ -15,20 +17,30 @@ from datetime import date
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 
-__all__ = ["Puerta", "revisar", "texto_tecnico", "apartados", "valores_unicos", "relleno", "paginas_de", "posicion", "extension"]
+from ..plantillas import indice
+
+__all__ = ["Puerta", "revisar", "texto_tecnico", "apartados", "trozos", "visible", "pendiente", "valores_unicos", "relleno",
+           "paginas_de", "posicion", "extension"]
 
 # rutas, comandos, etiquetas XBRL (con prefijo o como nombre de concepto: «SellingGeneralAndAdministrativeExpense»),
 # nombres de las API, excepciones y mensajes de parser o de red (06 §3.6); las URL se admiten en 37 y 39
 _TECNICO = re.compile(r"(?:\b[A-Za-z]:\\|/home/|/tmp/|/Users/|\b\w+\.py\b|python -m|\bus-gaap\b|\bdei:|\bifrs-full:|companyfacts|"
                       r"\bno trae\b|\bpatrón\b|Traceback|\bNone\b|\bnan\b|https?://|\bXBRL\b|\bconfig/|\.yaml\b|\.json\b|"
                       r"\b(?:[A-Z][a-z]+){4,}\b|\b[A-Z]\w*Member\b|\b[A-Z]\w*Error\b|\burlopen\b|\bErrno\b)")
-_SIN_NA = {"2", "3"} | {str(k) for k in range(12, 21)} | {str(k) for k in range(27, 31)}      # 06 §3.10
+_SIN_NA = frozenset(str(n) for n in indice.sin_na())          # 06 §3.10, de `01_indice.yaml › sin_na`
+# Lo que marca contenido pendiente: «Pendiente del analista…», «PENDIENTE», «Texto pendiente de redacción…», «N/A —
+# pendiente de la API», un bloque de clase «pendiente» o un elemento que dice solo «pendiente». En minúscula y suelta la
+# palabra es también adjetivo de contenido («sin adquisición transformadora pendiente», criterio de la lista del 28;
+# «obligaciones de desempeño pendientes»): esa no bloquea.
+_PENDIENTE = re.compile(r"\b(?:Pendiente|PENDIENTE)\b|\bpendiente de (?:redacción|la API)\b")
+_MARCA_PENDIENTE = re.compile(r'class="[^"]*\bpendiente\b|>\s*pendiente\b', re.I)
 
 
 @dataclass
 class Puerta:
     bloqueos: List[str] = field(default_factory=list)
     avisos: List[str] = field(default_factory=list)
+    puntos: Dict[int, list] = field(default_factory=dict)          # apartado → [puntos.Punto] (0: lo que no es de ninguno)
 
     @property
     def emitible(self) -> bool:
@@ -41,17 +53,41 @@ def _visible(fragmento: str) -> str:
     return " ".join(html_mod.unescape(re.sub(r"<[^>]+>", " ", fragmento)).split())
 
 
-def apartados(html: str) -> Dict[str, str]:
-    """Número impreso del apartado → su texto visible; «portada», la portada."""
+visible = _visible                     # para el sistema por puntos, que mira el mismo texto que la puerta
+
+
+def trozos(html: str) -> Dict[str, str]:
+    """Número impreso del apartado → su HTML, de su título al siguiente título de apartado o de parte; «parte-<letra>», lo
+    que va del título de una parte a su primer apartado; «portada», la portada. Se corta también en cada <h2: el arranque
+    de una parte (la fuente de la parte H, los gráficos de la C) no es del último apartado de la parte anterior."""
     salida: Dict[str, str] = {}
-    marcas = list(re.finditer(r'<h3 id="ap-(\d+)"', html))
-    for k, m in enumerate(marcas):
-        fin = marcas[k + 1].start() if k + 1 < len(marcas) else len(html)
-        salida[m.group(1)] = _visible(html[m.start():fin])
+    marcas: List[Tuple[int, str]] = []
+    for m in re.finditer(r"<h([23])\b([^>]*)>", html):
+        ident = re.search(r'\bid="([^"]+)"', m.group(2))
+        ident = ident.group(1) if ident else ""
+        if m.group(1) == "3":
+            if re.fullmatch(r"ap-\d+", ident):
+                marcas.append((m.start(), ident[3:]))
+        else:                          # un <h2> sin ancla de parte (hoja 0, índice) corta, pero no es de nadie
+            marcas.append((m.start(), ident if ident.startswith("parte-") else ""))
+    for k, (inicio, clave) in enumerate(marcas):
+        if clave:
+            fin = marcas[k + 1][0] if k + 1 < len(marcas) else len(html)
+            salida[clave] = salida.get(clave, "") + html[inicio:fin]
     i, j = html.find("PORTADA"), html.find("ÍNDICE")
     if i >= 0 and j > i:
-        salida["portada"] = _visible(html[i:j])
+        salida["portada"] = html[i:j]
     return salida
+
+
+def apartados(html: str) -> Dict[str, str]:
+    """Número impreso del apartado → su texto visible; «parte-<letra>», el arranque de cada parte; «portada», la portada."""
+    return {clave: _visible(trozo) for clave, trozo in trozos(html).items()}
+
+
+def pendiente(trozo: str) -> bool:
+    """Queda contenido pendiente en este trozo de HTML (ver `_PENDIENTE`)."""
+    return bool(_PENDIENTE.search(_visible(trozo)) or _MARCA_PENDIENTE.search(trozo))
 
 
 def texto_tecnico(html: str) -> List[str]:
@@ -105,9 +141,14 @@ def valores_unicos(html: str) -> List[str]:
 
 
 def revisar(inf, html: str, hoy: Optional[date] = None) -> Puerta:
+    from ..fuentes import emisores
+    from ..plantillas import puntos
     p = Puerta()
     hoy = hoy or inf.fecha_emision
-    p.bloqueos += list(inf.faltan)                                                         # 1 · entradas y fuentes
+    # 1, 9 y 10 · punto a punto: lo que el mercado del emisor no publica es «no aplica» y sus faltas no bloquean; el resto
+    # bloquea por apartado y punto; lo que no es de ningún apartado, con su texto
+    p.puntos = puntos.evaluar(inf, html, emisores.perfil(getattr(inf, "emisor", None)), hoy)
+    p.bloqueos += puntos.bloqueos(p.puntos)
     p.bloqueos += [f"Discrepancia abierta: {d}" for d in inf.discrepancias]                # 2
     pd = getattr(inf, "parte_d", None)
     if pd is not None:
@@ -124,17 +165,14 @@ def revisar(inf, html: str, hoy: Optional[date] = None) -> Puerta:
         p.bloqueos.append(f"Índice: {len(numeros)} apartados y partes {''.join(letras)} (se piden 39 y A–I)")   # 5
     p.bloqueos += [f"Texto técnico en el cuerpo, apartado {x}" for x in texto_tecnico(html)]              # 6
     p.bloqueos += [f"Valor único: {x}" for x in valores_unicos(html)]                                      # 3
-    textos = apartados(html)
-    for clave, texto in textos.items():                                                    # 10
-        if "Pendiente" in texto:
-            p.bloqueos.append(f"Apartado {clave}: queda contenido pendiente")
-        if (clave in _SIN_NA or clave == "portada") and re.search(r"\bN/A\b", texto):
-            p.bloqueos.append(f"Apartado {clave}: «N/A» donde no puede haberlo")
-    for d in re.findall(r"[Pp]róxim\w+[^.]{0,80}?(\d{2}/\d{2}/\d{4})", textos.get("7", "")):             # 9
-        dia = date(int(d[6:]), int(d[3:5]), int(d[:2]))
-        if dia < hoy:
-            p.bloqueos.append(f"Fecha «próxima» anterior al informe: {d}")
+    portada = trozos(html).get("portada")                                                  # 10 · la portada no es un apartado
+    if portada is not None and pendiente(portada):
+        p.bloqueos.append("Apartado portada: queda contenido pendiente")
+    if portada is not None and re.search(r"\bN/A\b", _visible(portada)):
+        p.bloqueos.append("Apartado portada: «N/A» donde no puede haberlo")
+    p.bloqueos = list(dict.fromkeys(p.bloqueos))                   # la misma línea dos veces en la hoja 0 es ruido, no dos bloqueos
     p.avisos += list(inf.avisos) + ([f"Rótulo de la bolsa sin traducir: {x}" for x in sorted(_sin_traducir())])
+    p.avisos += puntos.cubiertas(p.puntos)
     if pg is not None:
         p.avisos += list(pg.avisos)
     return p

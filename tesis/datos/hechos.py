@@ -65,6 +65,10 @@ class Periodo:
     """
     fin: date
     inicio: Optional[date] = None
+    # «1S25» / «2S25»: el semestre de un emisor que publica por semestres. No entra en la igualdad —es el mismo periodo
+    # que el «6M25» que lee el extractor—, solo en la clave: con «6M25» el segundo semestre (julio a diciembre) y el
+    # primero (enero a junio) de un mismo año tendrían la misma clave, y una decisión o un rótulo del uno pisaría al otro
+    etiqueta: str = field(default="", compare=False)
 
     @property
     def es_instante(self) -> bool:
@@ -87,6 +91,8 @@ class Periodo:
         """`FY2025`, `2T26`, `6M26`, `9M25` o `@2026-06-30`. Por cierre, no por año natural."""
         if self.inicio is None:
             return f"@{self.fin.isoformat()}"
+        if self.etiqueta:
+            return self.etiqueta
         aa = f"{self.fin.year % 100:02d}"
         m = self.meses
         if m == 12:
@@ -113,6 +119,15 @@ class Periodo:
             anio -= 1
         return Periodo(fin=fin, inicio=date(anio, mes, 1))
 
+    @staticmethod
+    def semestre(fin: date, cierre_ejercicio: date) -> "Periodo":
+        """El semestre de seis meses que acaba en `fin`, rotulado por su lugar en el ejercicio que cierra el día y el
+        mes de `cierre_ejercicio`: «2S25» acaba con el ejercicio, «1S25» seis meses antes. El año es el del ejercicio."""
+        p = Periodo.de_meses(fin, 6)
+        mitad = 2 if (fin.month, fin.day) == (cierre_ejercicio.month, cierre_ejercicio.day) else 1
+        anio = fin.year if mitad == 2 or fin.month <= cierre_ejercicio.month else fin.year + 1
+        return Periodo(fin=p.fin, inicio=p.inicio, etiqueta=f"{mitad}S{anio % 100:02d}")
+
 
 def _un_dia():
     from datetime import timedelta
@@ -132,6 +147,8 @@ def etiqueta_fiscal(p: Periodo, cierre: Optional[date] = None, desfase: int = 0)
     from datetime import timedelta
     if p.meses == 12:
         return str((p.fin - timedelta(days=7)).year + desfase)
+    if p.etiqueta:
+        return p.etiqueta          # el semestre ya se rotula por su lugar en el ejercicio («1S25», «2S25»)
     if p.meses != 3 or cierre is None:
         return p.clave
     mes_cierre = (cierre - timedelta(days=7)).month

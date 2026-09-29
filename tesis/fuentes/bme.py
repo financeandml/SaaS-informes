@@ -17,8 +17,8 @@ from pathlib import Path
 from typing import Dict, List, Optional
 from urllib.parse import urlencode
 
-__all__ = ["API", "Empresa", "Valor", "Sesion", "Documento", "buscar", "empresa", "valor", "sesiones", "indice", "cierre_oficial",
-           "documentos", "informacion_financiera", "url_documento", "descargar"]
+__all__ = ["API", "Empresa", "Valor", "Sesion", "Documento", "buscar", "empresa", "valor", "sesiones", "con_negociacion", "indice",
+           "cierre_oficial", "ventana_cierre", "documentos", "informacion_financiera", "url_documento", "descargar"]
 
 API = "https://apiweb.bolsasymercados.es/Market/v1/EQ/"
 WEB = "https://www.bolsasymercados.es"
@@ -54,6 +54,10 @@ class Valor:
     sistema: str
     segmento: str
     url: str
+    # la clasificación sectorial de la bolsa («05»/«01» = servicios financieros/banca): sin SIC, es lo único oficial que
+    # dice si el emisor cae en un paquete bloqueado (regla 7; `config/sectores.yaml › bloqueo_bme`)
+    sector: str = ""
+    subsector: str = ""
 
 
 @dataclass(frozen=True)
@@ -137,7 +141,8 @@ def valor(isin: str) -> Optional[Valor]:
                  clave=str(d.get("issuerCode") or ""), acciones=_num(d.get("shares")), capitalizacion=_num(d.get("capitalisation")),
                  ultimo_cierre=_num(d.get("lastClosePrice")), fecha_ultimo=_fecha(d.get("lastClosePriceDate")),
                  moneda=str(d.get("currency") or ""), nominal=_num(d.get("nominal")), sistema=str(d.get("tradingSystem") or ""),
-                 segmento=str(d.get("mtfSegment") or ""), url=API + "ShareDetailsInfo?" + urlencode(parametros))
+                 segmento=str(d.get("mtfSegment") or ""), url=API + "ShareDetailsInfo?" + urlencode(parametros),
+                 sector=str(d.get("sector") or ""), subsector=str(d.get("subsector") or ""))
 
 
 def url_sesiones(isin: str, desde: date, hasta: date, pagina: int = 0) -> str:
@@ -186,9 +191,26 @@ def indice(isin: str, desde: date, hasta: date) -> Dict[date, float]:
     return dict(sorted(salida.items()))
 
 
-def cierre_oficial(isin: str, fecha: date, ventana_dias: int = 21) -> Optional[Sesion]:
-    """La última sesión con cierre oficial ≤ `fecha` (regla 4: nunca intradía, nunca posterior a la valoración)."""
-    previas = [s for d, s in sesiones(isin, fecha - timedelta(days=ventana_dias), fecha).items() if d <= fecha]
+def con_negociacion(historico: Dict[date, Sesion]) -> Dict[date, Sesion]:
+    """Solo las sesiones en que el valor se negoció (volumen > 0).
+
+    En un valor poco líquido, un día sin negociación repite el cierre anterior: como precio es el mismo, pero en una
+    regresión cuenta como rentabilidad cero del valor frente a un índice que sí se movió y hunde la beta hacia 0. Un
+    volumen nulo (la bolsa no lo da) tampoco prueba negociación: fuera también."""
+    return {d: s for d, s in historico.items() if s.volumen is not None and s.volumen > 0}
+
+
+def ventana_cierre() -> int:
+    """Días naturales hacia atrás en que se busca la última sesión con negociación (`config/umbrales.yaml`)."""
+    from ..umbrales import umbral
+    return int(umbral("bme_cierre_ventana_dias"))
+
+
+def cierre_oficial(isin: str, fecha: date, ventana_dias: Optional[int] = None) -> Optional[Sesion]:
+    """La última sesión con negociación ≤ `fecha` (regla 4: nunca intradía, nunca posterior a la valoración). En BME un
+    día sin negociación repite ese mismo cierre, así que es el cierre oficial vigente en `fecha`."""
+    dias = ventana_cierre() if ventana_dias is None else ventana_dias
+    previas = [s for d, s in con_negociacion(sesiones(isin, fecha - timedelta(days=dias), fecha)).items() if d <= fecha]
     return previas[-1] if previas else None
 
 

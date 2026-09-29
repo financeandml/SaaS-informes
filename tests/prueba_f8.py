@@ -24,6 +24,11 @@ PRUEBA = "Parte B · entradas de PRUEBA (fixture), no del analista: no se puede 
 
 
 @pytest.mark.lenta
+
+def _sin_apartado(bloqueo: str) -> str:
+    """El texto de un bloqueo sin el «Apartado N · punto ·» que le antepone el sistema por puntos (fase B)."""
+    return re.sub(r"^Apartado \S+ · (?:[\d.]+(?:, [\d.]+)* · )?", "", bloqueo)
+
 class EmisionCompleta(unittest.TestCase):
     """QCOM a 23/09/2026 por el mismo camino que el botón «Emitir» del SaaS: adjuntos traídos de EDGAR y `emitir.py`."""
 
@@ -104,7 +109,7 @@ class NetflixPuerta(_Informes):
         """Falla si la caída de la excepción de Yahoo bloquea la emisión (06 §3 la pone entre los avisos) o si deja de
         avisarse."""
         puerta = qa.revisar(self.inf, self.html, self.HOY)
-        self.assertFalse([b for b in puerta.bloqueos if b.startswith("Parte H · iv")])
+        self.assertFalse([b for b in puerta.bloqueos if "Parte H · iv" in b], puerta.bloqueos)   # con o sin apartado delante
         self.assertTrue([a for a in puerta.avisos if a.startswith("Parte H · iv")])
 
     def test_sin_valores_contradictorios(self):
@@ -114,8 +119,9 @@ class NetflixPuerta(_Informes):
     def test_parrafo_de_plantilla_sin_validar_bloquea_y_se_ve_en_el_borrador(self):
         """Falla si el párrafo factual sin aceptar ni editar deja de bloquear (06 §1) o si el borrador deja de enseñarlo."""
         puerta = qa.revisar(self.inf, self.html, self.HOY)
-        self.assertIn("Parte A · Párrafo factual del resumen ejecutivo: párrafo de plantilla sin aceptar ni editar (paso 9 del asistente)",
-                      puerta.bloqueos)
+        self.assertTrue([b for b in puerta.bloqueos if b.endswith(
+            "Parte A · Párrafo factual del resumen ejecutivo: párrafo de plantilla sin aceptar ni editar (paso 9 del asistente)")],
+            puerta.bloqueos)
         self.assertTrue(self.inf.parrafos and self.inf.parrafos[0].estado == "sin validar")
         self.assertIn(self.inf.parrafos[0].frases[0][0], self.html)
 
@@ -246,7 +252,7 @@ class QualcommParrafoEditado(_Informes):
         self.assertIn(f"{self.NUEVA} <span class=\"cita\">[8-K 29/07/2026, Ex. 99.1]</span>", self.html)
         self.assertEqual(self.inf.parrafos[0].estado, "editado")
         puerta = qa.revisar(self.inf, self.html, self.HOY)
-        self.assertTrue([b for b in puerta.bloqueos if b.startswith("Linter · revision.parrafos.resumen_factual[5]: cifra sin respaldo «15.437 mln USD»")],
+        self.assertTrue([b for b in puerta.bloqueos if "Linter · revision.parrafos.resumen_factual[5]: cifra sin respaldo «15.437 mln USD»" in b],
                         puerta.bloqueos)
         self.assertFalse([b for b in puerta.bloqueos if "sin aceptar ni editar" in b])
 
@@ -489,7 +495,7 @@ class QualcommSinPaso1(_Informes):
     def test_bloquea_y_el_sector_vuelve_a_la_propuesta(self):
         """Falla si el paso 1 vacío no bloquea, o si el sector y la fecha de valoración no salen del paso 1 (`meta`)."""
         puerta = qa.revisar(self.inf, self.html, self.HOY)
-        self.assertEqual([b for b in puerta.bloqueos if b.startswith("Paso 1")],
+        self.assertEqual([_sin_apartado(b) for b in puerta.bloqueos if "Paso 1 ·" in b],
                          [f"Paso 1 · meta.{x}: obligatorio (paso 1)" for x in ("analista", "tipo", "nombre_presentacion", "sector")])
         self.assertEqual((self.motor.parametros.paquete, self.motor.parametros.paquete_confirmado), ("industrial", False))
         self.assertEqual(self.motor.parametros.fecha_valoracion, date(2026, 9, 22))      # la de `meta`, no la del informe

@@ -15,11 +15,15 @@ import re
 from dataclasses import dataclass, field
 from datetime import date
 from functools import lru_cache
-from typing import Dict, FrozenSet, List, Optional
+from typing import TYPE_CHECKING, Dict, FrozenSet, List, Optional, Tuple
 
 from .sec import Emisor
 
-__all__ = ["Perfil", "SUFIJO_BME", "es_bme", "clave_bme", "emisor", "buscar", "perfil", "mercados"]
+if TYPE_CHECKING:
+    from .tesoro import Rf
+
+__all__ = ["Perfil", "SUFIJO_BME", "es_bme", "clave_bme", "emisor", "buscar", "perfil", "mercados", "bolsa_precio",
+           "fuente_cuentas", "antiguedad_max_cierre", "cierres", "indice_beta", "cierres_mercado", "rf", "clasificacion_bolsa"]
 
 SUFIJO_BME = ".MC"
 _ISIN_ES = re.compile(r"^ES[A-Z0-9]{9}\d$")
@@ -173,3 +177,82 @@ def buscar(consulta: str, maximo: int = 12) -> List[dict]:
     if not salida and errores:
         raise RuntimeError("; ".join(errores))
     return salida[: 2 * maximo]
+
+
+# ---------------------------------------------------------------------------
+# B4 · El mercado del emisor para el motor y la cotización: por despacho según `emisor.mercado` y `config/mercados.yaml`.
+# Para la SEC, las mismas peticiones de siempre (Nasdaq, SPY, Tesoro): ni una URL cambia.
+# ---------------------------------------------------------------------------
+
+def _config(e: Optional[Emisor]) -> dict:
+    return mercados().get("bme" if e is not None and e.mercado == "bme" else "sec") or {}
+
+
+def bolsa_precio(e: Optional[Emisor]) -> str:
+    """La bolsa cuyo cierre oficial es el precio (regla 4), como se nombra en los motivos: «Nasdaq» o «BME»."""
+    return {"nasdaq": "Nasdaq", "bme": "BME"}.get(_config(e).get("bolsa_precio", "nasdaq"), "Nasdaq")
+
+
+def fuente_cuentas(e: Optional[Emisor]) -> str:
+    """De dónde salen las cuentas del emisor, como se nombra en los rótulos: «SEC» o «cuentas publicadas en BME»."""
+    return "cuentas publicadas en BME" if _config(e).get("bolsa_precio") == "bme" else "SEC"
+
+
+def antiguedad_max_cierre(e: Optional[Emisor]) -> Optional[int]:
+    """Días naturales que puede tener la última sesión con negociación para ser el cierre vigente (BME, valores que no
+    cotizan todos los días); None en Nasdaq, que publica todas las sesiones."""
+    if _config(e).get("bolsa_precio") != "bme":
+        return None
+    from . import bme
+    return bme.ventana_cierre()
+
+
+def cierres(e: Emisor, desde: date, hasta: date) -> Dict[date, float]:
+    """Cierres oficiales del valor entre dos fechas. SEC: el histórico de Nasdaq, como hasta ahora. BME: el histórico
+    oficial, solo las sesiones con negociación (`bme.con_negociacion`: un día sin volumen repite el cierre y hunde la beta)."""
+    if _config(e).get("bolsa_precio") == "bme":
+        from . import bme
+        return {d: s.cierre for d, s in bme.con_negociacion(bme.sesiones(e.isin, desde, hasta)).items()}
+    from . import precio
+    return precio.cierres_nasdaq(e.ticker, desde, hasta, limite=2000)
+
+
+def indice_beta(e: Emisor) -> dict:
+    """El índice oficial de BME frente al que se mide la beta, según el segmento del valor (`config/mercados.yaml`;
+    segmento vacío = Mercado Continuo). Un segmento sin índice configurado es un error de configuración, no un «SPY»."""
+    tabla = (mercados().get("bme") or {}).get("mercado_beta") or {}
+    segmento = e.segmento or "continuo"
+    if segmento not in tabla:
+        raise KeyError(f"sin índice de la beta para el segmento «{segmento}» de BME en config/mercados.yaml")
+    return tabla[segmento]
+
+
+def cierres_mercado(e: Emisor, desde: date, hasta: date) -> Tuple[Dict[date, float], str]:
+    """(cierres del mercado de la beta, rótulo de la regresión): la serie y lo que dice el informe de ella salen de aquí
+    (regla 13). SEC: SPY con cierres de Nasdaq. BME: el índice oficial del segmento, con los cierres de BME."""
+    cfg = _config(e)
+    if cfg.get("bolsa_precio") == "bme":
+        from . import bme
+        ind = indice_beta(e)
+        return (bme.indice(ind["isin"], desde, hasta),
+                f"de los cierres oficiales de BME (solo sesiones con negociación) frente al {ind['nombre']}")
+    from . import precio
+    mb = cfg["mercado_beta"]
+    return (precio.cierres_nasdaq(mb["simbolo"], desde, hasta, limite=2000, clase=mb["clase"]),
+            f"frente a {mb['simbolo']} (cierres de Nasdaq)")
+
+
+def rf(e: Optional[Emisor], fecha: date) -> Tuple[Optional["Rf"], str]:
+    """(tipo sin riesgo a 10 años de la moneda del emisor, rótulo de su fuente). None si la fuente no publicó en la fecha."""
+    if _config(e).get("rf") == "bce":
+        from . import bce
+        return bce.rf_10a(fecha), "BCE, curva al contado AAA del área del euro a 10 años"
+    from . import tesoro
+    return tesoro.rf_10a(fecha), "Tesoro de EE. UU., curva par a 10 años"
+
+
+def clasificacion_bolsa(e: Emisor) -> Tuple[str, str]:
+    """(sector, subsector) de la clasificación de BME en la ficha del valor; vacíos si la bolsa no los publica."""
+    from . import bme
+    v = bme.valor(e.isin)
+    return (v.sector, v.subsector) if v is not None else ("", "")

@@ -17,6 +17,11 @@ ronic_max_x_wacc: 3
 peso_vt_aviso: 0.75
 vt_contraste_aviso: 0.15
 beta_r2_min: 0.10
+# B4 · Emisores de BME: el histórico oficial solo trae las sesiones con negociación. Con menos de estas sesiones en la
+# ventana de la regresión (2 años semanal, 5 años mensual) la beta no se calcula y el motor lo dice (nunca SPY en su lugar)
+beta_sesiones_min: 100
+bme_cierre_ventana_dias: 21     # la última sesión con negociación ≤ fecha se busca en estos días naturales; más atrás, N/A
+biotech_ingresos_min_meur: 50   # regla 7 para emisores en EUR (BME 03/05): la misma cifra que la de USD, sin convertir (por confirmar por el analista)
 atipicos_iqr: 3
 comparables_antiguedad_max_meses: 15
 tolerancia_oi_yahoo_nasdaq: 0.02

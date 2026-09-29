@@ -45,6 +45,9 @@ class Tipo(str, Enum):
     PRESENTACION = "Presentación de resultados"
     OCHOK = "Hecho relevante (8-K)"         # la carátula del 8-K: el contenido va en sus anexos
     XLSX = "Hoja de cálculo de cuentas"
+    # emisores españoles (BME): las cuentas anuales auditadas y el informe financiero semestral, en PDF
+    CCAA = "Cuentas anuales"
+    SEMESTRAL = "Informe financiero semestral"
     DESCONOCIDO = "desconocido"
 
 
@@ -59,12 +62,13 @@ APARTADO_DE = {
     Tipo.Q10: Apartado.TRIMESTRALES, Tipo.FINWEB: Apartado.TRIMESTRALES, Tipo.XLSX: Apartado.TRIMESTRALES,
     Tipo.CARTA: Apartado.GUIDANCE, Tipo.CALL: Apartado.GUIDANCE,
     Tipo.NOTA: Apartado.GUIDANCE, Tipo.PRESENTACION: Apartado.GUIDANCE, Tipo.TABLAS: Apartado.TRIMESTRALES,
+    Tipo.CCAA: Apartado.ANUALES, Tipo.SEMESTRAL: Apartado.TRIMESTRALES,
 }
 
 # la clave con la que cada tipo se nombra en el expediente y en la lista de documentos del paso 1 (`documentos.py`)
 CLAVE_DE = {Tipo.K10: "10K", Tipo.Q10: "10Q", Tipo.DEF14A: "PROXY", Tipo.CARTA: "CARTA",
             Tipo.CALL: "CALL", Tipo.FINWEB: "FINWEB", Tipo.XLSX: "XLSX", Tipo.NOTA: "NOTA",
-            Tipo.TABLAS: "TABLAS", Tipo.PRESENTACION: "SLIDES"}
+            Tipo.TABLAS: "TABLAS", Tipo.PRESENTACION: "SLIDES", Tipo.CCAA: "CCAA", Tipo.SEMESTRAL: "SEMESTRAL"}
 TIPO_DE_CLAVE = {v: k for k, v in CLAVE_DE.items()}
 
 MESES = {m: i for i, m in enumerate(
@@ -72,6 +76,11 @@ MESES = {m: i for i, m in enumerate(
      "August", "September", "October", "November", "December"], 1)}
 _FECHA_LARGA = re.compile(r"(January|February|March|April|May|June|July|August|September|"
                           r"October|November|December)\s+(\d{1,2}),?\s+(\d{4})", re.I)   # las transcripciones van en versales
+MESES_ES = {m: i for i, m in enumerate(["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto",
+                                        "septiembre", "octubre", "noviembre", "diciembre"], 1)}
+MESES_ES["setiembre"] = 9
+# «31 de diciembre de 2025»; la capa de texto a veces parte el año («de 202 5») y el día («3 1 de»)
+_FECHA_ES = "(?:\\d\\s?)?\\d\\s+de\\s+(?:" + "|".join(MESES_ES) + ")\\s+(?:de|del)\\s+(?:\\d\\s?){3}\\d\\b"
 
 
 def _fecha_larga(texto: str) -> Optional[date]:
@@ -79,6 +88,20 @@ def _fecha_larga(texto: str) -> Optional[date]:
     if not m:
         return None
     return date(int(m.group(3)), MESES[m.group(1).capitalize()], int(m.group(2)))
+
+
+def _fecha_es(texto: str) -> Optional[date]:
+    """Una fecha en español: larga («31 de diciembre de 2025») o numérica («30/06/2025», «30.06.2025»)."""
+    m = re.search(r"((?:\d\s?)?\d)\s+de\s+(" + "|".join(MESES_ES) + r")\s+(?:de|del)\s+((?:\d\s?){3}\d)\b", texto or "", re.I)
+    try:
+        if m:
+            return date(int(m.group(3).replace(" ", "")), MESES_ES[m.group(2).lower()], int(m.group(1).replace(" ", "")))
+        m = re.search(r"\b(\d{1,2})[/.](\d{1,2})[/.]((?:19|20)\d{2})\b", texto or "")
+        if m:
+            return date(int(m.group(3)), int(m.group(2)), int(m.group(1)))
+    except ValueError:
+        return None
+    return None
 
 
 def _fin_trimestre(trimestre: int, anio: int, cierre_mes: int = 12) -> date:
@@ -114,14 +137,16 @@ class Adjunto:
         base = CLAVE_DE.get(self.tipo, "DOC")
         if self.periodo_fin:
             base += "_" + self.periodo_fin.strftime("%Y%m%d")
-        return base
+        # con la huella: tipo y periodo no bastan para distinguir dos documentos. Dos notas de resultados sin periodo
+        # declarado daban la misma clave y la segunda pisaba a la primera en las páginas leídas del contraste
+        return base + ("_" + self.huella[:8] if self.huella else "")
 
     @property
     def orden(self) -> Tuple[date, date, int]:
         """Cronológico: por cierre del periodo, luego por fecha del documento; los 10-K/10-Q al final de su periodo."""
         pf = self.periodo_fin or self.fecha or date.min
         f = self.fecha or pf
-        peso = 1 if self.tipo in (Tipo.K10, Tipo.Q10, Tipo.DEF14A) else 0
+        peso = 1 if self.tipo in (Tipo.K10, Tipo.Q10, Tipo.DEF14A, Tipo.CCAA, Tipo.SEMESTRAL) else 0
         return (pf, f, peso)
 
 
@@ -194,6 +219,10 @@ def clasificar(p1: str, titulo_pdf: str, primeras: str) -> dict:
                     accession=accession, certeza=Certeza.ALTA,
                     motivo="La carátula dice «FORM 8-K · CURRENT REPORT»: es el hecho relevante. Las cifras van en sus "
                            "anexos (99.1), no en la carátula.")
+    es = _clasificar_es(p1, primeras)
+    if es is not None:
+        es["accession"] = accession
+        return es
     if "Fellow shareholders" in p1:
         m = re.search(r"\bQ([1-4])\b(?:'|’)?(\d{2})?\s+revenue", p1)
         fecha = _fecha_larga(p1)
@@ -255,6 +284,56 @@ def clasificar(p1: str, titulo_pdf: str, primeras: str) -> dict:
                            + ": es la presentación de resultados. Material de apoyo: las cifras se toman de las cuentas.")
     return dict(tipo=Tipo.DESCONOCIDO, accession=accession, certeza=Certeza.BAJA,
                 motivo="Ninguna pista reconocible en la primera página.")
+
+
+# Cuentas españolas. En la primera página vale la mención débil («primer semestre», «cuentas anuales»): es la carta
+# con la que el emisor las remite a BME o la portada del informe. En las siguientes solo la fuerte —el informe de
+# auditoría o de revisión, los estados intermedios—, porque una presentación de resultados anuales habla también de su
+# primer semestre y una semestral cita las cuentas anuales del año anterior. Si hay dos, manda la que aparece antes.
+_ES_SEMESTRAL_FUERTE = r"estados financieros intermedios|informe financiero semestral|periodo de seis meses (?:terminado|cerrado|finalizado)|informe de revisi[óo]n limitada"
+_ES_CCAA_FUERTE = (r"informe de auditor[íi]a (?:independiente )?de (?:las )?cuentas anuales"
+                   r"|cuentas anuales(?: consolidadas)?(?: e informe de gesti[óo]n)? (?:al|a|correspondientes al ejercicio|del ejercicio)\b")
+_ES_SEMESTRAL = _ES_SEMESTRAL_FUERTE + r"|primer semestre|1er semestre|informaci[óo]n financiera (?:semestral|intermedia)"
+_ES_CCAA = _ES_CCAA_FUERTE + r"|cuentas anuales|informaci[óo]n financiera (?:anual|del ejercicio)"
+_CIERRE_CCAA = (r"ejercicio (?:anual )?(?:terminado|cerrado|finalizado) (?:el|a|al|en) (" + _FECHA_ES + ")",
+                r"cuentas anuales(?: consolidadas)?(?: e informe de gesti[óo]n)? (?:al|a) (" + _FECHA_ES + ")",
+                r"balance[^.]{0,60}?\b(?:a|al) (" + _FECHA_ES + ")")
+_CIERRE_SEMESTRAL = (r"seis meses (?:terminado|cerrado|finalizado) (?:el|a|al|en) (" + _FECHA_ES + ")",
+                     r"(?:balance|situaci[óo]n financiera)[^.]{0,60}?\b(?:a|al) (" + _FECHA_ES + ")",
+                     r"estados financieros intermedios[^.]{0,80}?\b(?:a|al) (" + _FECHA_ES + ")")
+
+
+def _clasificar_es(p1: str, primeras: str) -> Optional[dict]:
+    """Las cuentas anuales o el semestral de un emisor español, por lo que dicen de sí mismos; None si no lo son."""
+    t1, tp = " ".join(p1.split()), " ".join(primeras.split())
+    tipo = None
+    for texto, semestral, anual in ((t1, _ES_SEMESTRAL, _ES_CCAA), (tp, _ES_SEMESTRAL_FUERTE, _ES_CCAA_FUERTE)):
+        s, a = re.search(semestral, texto, re.I), re.search(anual, texto, re.I)
+        if s or a:
+            m = s if (s and (not a or s.start() <= a.start())) else a
+            tipo, frase = (Tipo.SEMESTRAL if m is s else Tipo.CCAA), m.group(0)
+            break
+    if tipo is None:
+        return None
+    fin, deducido = None, False
+    for patron in (_CIERRE_SEMESTRAL if tipo is Tipo.SEMESTRAL else _CIERRE_CCAA):
+        m = re.search(patron, t1, re.I) or re.search(patron, tp, re.I)
+        if m:
+            fin = _fecha_es(m.group(1))
+            break
+    if fin is None and tipo is Tipo.SEMESTRAL:
+        # «primer semestre de 2025» sin fecha escrita: el cierre es el 30 de junio, y se dice que es una deducción
+        m = re.search(r"(?:primer|1er) semestre (?:del ejercicio |de |del )?((?:19|20)\d{2})", tp, re.I)
+        if m:
+            fin, deducido = date(int(m.group(1)), 6, 30), True
+    # la carta con que el emisor lo remite a BME lleva la fecha de la comunicación en su primera línea
+    fecha = _fecha_es(t1[:200]) if re.search(r"art[íi]culo 17 del Reglamento|informaci[óo]n relevante|informaci[óo]n privilegiada",
+                                              t1, re.I) else None
+    nombre = "las cuentas anuales" if tipo is Tipo.CCAA else "el informe financiero semestral"
+    cierre = (f", con cierre el {fin:%d/%m/%Y}" + (" (deducido de «primer semestre»: no escribe la fecha)" if deducido else "")
+              if fin else "; no declara la fecha de cierre, así que no se le atribuye ninguna")
+    return dict(tipo=tipo, periodo_fin=fin, fecha=fecha, certeza=Certeza.MEDIA if deducido else Certeza.ALTA,
+                motivo=f"El documento dice ser {nombre} («{frase}»){cierre}.")
 
 
 # el rótulo de un estado de resultados como encabezado de su propia línea: mencionarlo en la prosa no es traerlo
@@ -370,8 +449,10 @@ def cargar_adjunto(ruta: Path) -> Adjunto:
                        certeza=Certeza.BAJA, motivo=f"Formato {ruta.suffix} no admitido: se aceptan PDF con capa de texto, XLSX y Word (solo para ordenar).")
     paginas, titulo = _leer_pdf(ruta)
     if not any(p.strip() for p in paginas[:3]):
+        # regla 12: sin capa de texto no hay cifra con su página y su recorte; se pide, no se adivina (ni OCR)
         return Adjunto(ruta=ruta, huella=huella, paginas=paginas, tipo=Tipo.DESCONOCIDO, apartado=None,
-                       certeza=Certeza.BAJA, motivo="El PDF no tiene capa de texto (escaneado): OCR fuera de alcance en v0.")
+                       certeza=Certeza.BAJA, motivo="sin texto: pide las cifras al analista. El PDF no tiene capa de texto "
+                                                    "(está escaneado) y no se lee con OCR.")
     c = clasificar(paginas[0], titulo, "\n".join(paginas[:8]))
     fecha = c.get("fecha")
     if fecha is None and c["tipo"] in (Tipo.K10, Tipo.Q10):

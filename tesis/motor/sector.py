@@ -33,11 +33,20 @@ def _anuales(hechos, periodos, campo: str):
             if hechos.get((campo, p)) is not None and hechos[(campo, p)].hay_dato]
 
 
-def _regla_40(hechos, periodos, u: Mapping) -> List[str]:
+def _fuente(m) -> str:
+    """Dónde se buscan las cuentas, como se nombra en los avisos: «la SEC» o «las cuentas publicadas» (BME)."""
+    return "la SEC" if getattr(m, "mercado", "sec") == "sec" else "las cuentas publicadas"
+
+
+def _moneda(m) -> str:
+    return getattr(m, "moneda", "") or "USD"
+
+
+def _regla_40(hechos, periodos, u: Mapping, m=None) -> List[str]:
     ingresos, fcf = dict(_anuales(hechos, periodos, "ingresos")), dict(_anuales(hechos, periodos, "fcf"))
     anios = sorted(ingresos, key=lambda p: p.fin)
     if len(anios) < 2 or anios[-1] not in fcf or not ingresos[anios[-2]]:
-        return ["Regla del 40 (software): sin dos ejercicios de ingresos y el FCF del último en la SEC; no se comprueba"]
+        return [f"Regla del 40 (software): sin dos ejercicios de ingresos y el FCF del último en {_fuente(m)}; no se comprueba"]
     ult, ant = anios[-1], anios[-2]
     crec, margen = ingresos[ult] / ingresos[ant] - 1, fcf[ult] / ingresos[ult]
     if crec + margen < float(u.get("regla_40_min", 0.40)):
@@ -46,11 +55,11 @@ def _regla_40(hechos, periodos, u: Mapping) -> List[str]:
     return []
 
 
-def _sbc(hechos, periodos, p, u: Mapping) -> List[str]:
+def _sbc(hechos, periodos, p, u: Mapping, m=None) -> List[str]:
     ingresos, sbc = dict(_anuales(hechos, periodos, "ingresos")), dict(_anuales(hechos, periodos, "sbc"))
     comunes = [x for x in sorted(ingresos, key=lambda x: x.fin) if x in sbc and ingresos[x]]
     if not comunes:
-        return ["SBC sobre ingresos (software): sin SBC del último ejercicio en la SEC; no se comprueba"]
+        return [f"SBC sobre ingresos (software): sin SBC del último ejercicio en {_fuente(m)}; no se comprueba"]
     ult = comunes[-1]
     ratio = abs(sbc[ult]) / ingresos[ult]
     salida = []
@@ -66,7 +75,10 @@ def _sbc(hechos, periodos, p, u: Mapping) -> List[str]:
     return salida
 
 
-def _ciclo(facts, p, u: Mapping) -> List[str]:
+def _ciclo(facts, p, u: Mapping, m=None) -> List[str]:
+    if getattr(m, "mercado", "sec") != "sec":
+        # la mediana de ciclo se lee hoy de los ejercicios de la SEC (`historico.margen_ciclo`): sin XBRL no se comprueba
+        return ["Ciclo (semiconductores): la mediana de ciclo sale de los ejercicios de la SEC y el emisor no presenta ante ella; no se comprueba"]
     # la misma mediana que propone el asistente como margen terminal del base (F12, regla 13)
     from .historico import margen_ciclo
     minimo, maximo = (int(x) for x in u.get("ciclo_anios", [7, 10]))
@@ -94,13 +106,15 @@ def _arrendamientos(p, m, arrend: Optional[float], u: Mapping) -> List[str]:
         return []
     peso = arrend / m.ev_mercado
     if peso > float(u.get("arrendamientos_ve_max", 0.05)):
-        return [f"Arrendamientos de {mln(arrend)} mln USD ({pct(peso)} del VE de mercado) fuera de la deuda del puente: en este "
+        return [f"Arrendamientos de {mln(arrend)} mln {_moneda(m)} ({pct(peso)} del VE de mercado) fuera de la deuda del puente: en este "
                 "sector suelen tratarse como deuda (paso 7, arrendamientos)"]
     return []
 
 
 def _pensiones(facts, p, m, u: Mapping) -> List[str]:
-    filas = (((facts.get("facts") or {}).get("us-gaap") or {}).get("DefinedBenefitPlanFundedStatusOfPlan") or {}).get("units", {}).get("USD", [])
+    if getattr(m, "mercado", "sec") != "sec":
+        return ["Pensiones (industrial): sin XBRL, el estado del plan de prestación definida no se lee de las cuentas; no se comprueba"]
+    filas = ((((facts or {}).get("facts") or {}).get("us-gaap") or {}).get("DefinedBenefitPlanFundedStatusOfPlan") or {}).get("units", {}).get("USD", [])
     filas = [f for f in filas if "start" not in f and date.fromisoformat(f["end"]) <= p.fecha_valoracion]
     if not filas or not m.cap_mercado:
         return []                                          # sin plan de prestación definida en la SEC: no es una partida suya
@@ -129,11 +143,11 @@ def comprobar(p, hechos, periodos: Mapping, facts: dict, m, w, arrend: Optional[
     salida: List[str] = []
     for c in lista:
         if c == "regla_40":
-            salida += _regla_40(hechos, periodos, u)
+            salida += _regla_40(hechos, periodos, u, m)
         elif c == "sbc_ingresos":
-            salida += _sbc(hechos, periodos, p, u)
+            salida += _sbc(hechos, periodos, p, u, m)
         elif c == "ciclo":
-            salida += _ciclo(facts, p, u)
+            salida += _ciclo(facts, p, u, m)
         elif c == "arrendamientos":
             salida += _arrendamientos(p, m, arrend, u)
         elif c == "pensiones":

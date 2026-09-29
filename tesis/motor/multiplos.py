@@ -18,28 +18,35 @@ cotización sea la oficial de la bolsa. Aquí se hace eso, y nada más:
 Donde el agregador publica el mismo múltiplo (EV/EBITDA, ROE, ROA) se cuadra con él; donde
 publica otra definición (PEG sobre crecimiento esperado a cinco años) se imprime al lado
 rotulado como definición distinta, sin cuadrar.
+
+B4 · Un emisor semestral (BME) no tiene cuatro trimestres: sus doce meses son ejercicio + 1S en
+curso − 1S anterior (`udm`), sus cifras van en su moneda (`Multiplos.moneda`, «M EUR») y los
+motivos dicen de dónde salen sus cuentas. `udm` y `etiqueta` son los mismos que usa el motor.
 """
 
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from datetime import date
-from typing import Dict, List, Optional, Tuple
+from datetime import date, timedelta
+from typing import Dict, List, Mapping, Optional, Sequence, Tuple
 
 from ..datos import campos as campos_mod
 from ..fuentes import sec
-from ..datos.hechos import Contraste, Hecho, Periodo
+from ..datos.hechos import Contraste, Hecho, Periodo, etiqueta_fiscal
 
-__all__ = ["Multiplos", "Linea", "construir"]
+__all__ = ["Multiplos", "Linea", "construir", "semestres_de", "udm", "etiqueta"]
 
 TOLERANCIA = 0.02   # diferencia relativa admitida frente al agregador (redondeos y fecha de la cotización)
+# Un semestre casa con su ejercicio si empieza el día siguiente a un cierre (o el mismo día que el ejercicio): se admite
+# una semana de holgura, la misma que `etiqueta_fiscal` concede a quien cierra por semanas.
+_HOLGURA = timedelta(days=7)
 
 
 @dataclass
 class Linea:
     rotulo: str
     valor: Optional[float]
-    unidad: str                         # «x» · «%» · «musd» · «usd»
+    unidad: str                         # «x» · «%» · «musd» (millones de la moneda del emisor, `Multiplos.moneda`) · «usd»
     formula: str
     componentes: str                    # las cifras que entran, impresas
     motivo: str = ""                    # si N/A, por qué
@@ -58,9 +65,69 @@ class Multiplos:
     lineas: List[Linea] = field(default_factory=list)
     faltan: Dict[str, str] = field(default_factory=dict)
     por_acumulados: Dict[str, str] = field(default_factory=dict)   # magnitudes cuyo TTM sale de los acumulados, y por qué
+    moneda: str = "USD"                 # la de las cifras en millones («musd») y la del rótulo («M EUR»): una sola fuente
+    periodicidad: str = "trimestral"    # «semestral»: `trimestres` son los periodos del UDM («2025», «1S26», «1S25»)
 
     def linea(self, rotulo: str) -> Optional[Linea]:
         return next((l for l in self.lineas if l.rotulo == rotulo), None)
+
+
+def semestres_de(periodos: Mapping) -> List[Periodo]:
+    """Los semestres de los periodos del informe: la lista «semestres» o, si no la hay, los periodos de seis meses que
+    vengan con los trimestres. Vacía para un emisor trimestral (la SEC), que así no cambia de camino."""
+    lista = list(periodos.get("semestres") or []) or [p for p in periodos.get("trimestres") or [] if p.meses == 6]
+    return sorted((p for p in lista if not p.es_instante and p.meses == 6), key=lambda p: p.fin)
+
+
+def _casa(a: date, b: date) -> bool:
+    return abs((a - b).days) <= _HOLGURA.days
+
+
+def etiqueta(p: Periodo, anuales: Sequence[Periodo] = (), desfase: int = 0) -> str:
+    """El rótulo impreso de un periodo: el de `etiqueta_fiscal` («2025», «4T FY25») y, para un semestre, «1S26» o «2S25».
+
+    1S es el semestre que empieza con el ejercicio; 2S el que acaba con él. El año es el del ejercicio al que pertenece,
+    como el de los trimestres. Si `etiqueta_fiscal` llega a rotular los semestres, manda la suya."""
+    cierre = max((a.fin for a in anuales), default=None)
+    rotulo = etiqueta_fiscal(p, cierre, desfase)
+    if p.meses != 6 or p.inicio is None or rotulo != p.clave:
+        return rotulo
+    empieza = any(_casa(p.inicio, a.inicio) or _casa(p.inicio, a.fin + timedelta(days=1)) for a in anuales)
+    acaba = any(_casa(p.fin, a.fin) for a in anuales)
+    if empieza or (not anuales and p.inicio.month == 1):
+        anio = (p.inicio + timedelta(days=364) - _HOLGURA).year
+        return f"1S{(anio + desfase) % 100:02d}"
+    if acaba or (not anuales and p.inicio.month == 7):
+        return f"2S{((p.fin - _HOLGURA).year + desfase) % 100:02d}"
+    return rotulo
+
+
+def udm(hechos: Mapping, campo: str, anuales: Sequence[Periodo], semestres: Sequence[Periodo]) -> Tuple[Optional[float], List[Periodo], str]:
+    """Los últimos doce meses de un emisor semestral (B.md, decisión 5): ejercicio + 1S en curso − 1S del ejercicio
+    cerrado. Si no hay semestre posterior al último ejercicio, los doce meses son el propio ejercicio.
+
+    Devuelve (valor, periodos que entran —el último publicado primero si es el 1S—, motivo si no hay valor). Los tres
+    sumandos son cifras publicadas; la resta es la definición de UDM. Sin uno de ellos, N/A con su motivo: nunca se
+    rellena el semestre que falta con la mitad del ejercicio."""
+    anuales = sorted(anuales, key=lambda a: a.fin)
+    if not anuales:
+        return None, [], "sin ejercicio cerrado publicado: no hay doce meses"
+    fy = anuales[-1]
+    seis = [s for s in semestres if s.meses == 6 and s.inicio is not None]
+    en_curso = [s for s in seis if s.fin > fy.fin and _casa(s.inicio, fy.fin + timedelta(days=1))]
+    usados = [fy] if not en_curso else [fy, max(en_curso, key=lambda s: s.fin)]
+    if en_curso:
+        anterior = next((s for s in seis if _casa(s.inicio, fy.inicio) and s.fin < fy.fin), None)
+        if anterior is None:
+            return None, usados, f"sin el 1S del ejercicio {etiqueta(fy, anuales)} que restar: no hay doce meses a {etiqueta(usados[1], anuales)}"
+        usados.append(anterior)
+    valores = [hechos.get((campo, p)) for p in usados]
+    faltan = [etiqueta(p, anuales) for p, h in zip(usados, valores) if h is None or not h.hay_dato]
+    if faltan:
+        return None, usados, f"{campo} {', '.join(faltan)} sin dato"
+    if len(usados) == 1:
+        return valores[0].valor, usados, ""
+    return valores[0].valor + valores[1].valor - valores[2].valor, usados, ""
 
 
 def _suma(hechos: Dict[Tuple[str, Periodo], Hecho], campo: str, trimestres: List[Periodo]) -> Tuple[Optional[float], str]:
@@ -154,32 +221,70 @@ def _cierre_de_hace_un_anio(facts: Optional[dict], fin: Periodo) -> date:
     return cercano if cercano is not None and abs((cercano - objetivo).days) <= 10 else objetivo
 
 
+def _moneda_de(hechos: Mapping) -> str:
+    """La moneda en que vienen los ingresos publicados («USD», «EUR»); USD si no hay ninguno con unidad de moneda."""
+    for (campo, _), h in sorted(hechos.items(), key=lambda kv: kv[0][1].fin, reverse=True):
+        if campo == "ingresos" and h.hay_dato and len(h.unidad or "") == 3 and h.unidad.isalpha() and h.unidad.isupper():
+            return h.unidad
+    return "USD"
+
+
 def construir(hechos: Dict[Tuple[str, Periodo], Hecho], trimestres: List[Periodo], anuales: List[Periodo], precio: Optional[Hecho],
               acciones: Optional[float], agregador=None, facts: Optional[dict] = None, obtenido: Optional[date] = None,
-              no_aplican: Optional[Dict[str, str]] = None) -> Multiplos:
-    """Los múltiplos y rentabilidades TTM; cada línea con su fórmula, sus componentes y su contraste."""
-    ultimos = sorted(trimestres, key=lambda p: p.fin)[-4:]
-    fin = ultimos[-1] if ultimos else None
-    m = Multiplos(fin=fin.clave if fin else "", trimestres=[p.clave for p in ultimos], cierre=fin.fin if fin else None,
-                  precio=precio.valor if precio is not None and precio.hay_dato else None, acciones=acciones)
-    if len(ultimos) < 4:
-        m.faltan["ttm"] = f"solo {len(ultimos)} trimestres contrastados: no hay TTM"
-        return m
+              no_aplican: Optional[Dict[str, str]] = None, moneda: Optional[str] = None, semestres: Optional[Sequence[Periodo]] = None,
+              fuente: str = "la SEC") -> Multiplos:
+    """Los múltiplos y rentabilidades TTM; cada línea con su fórmula, sus componentes y su contraste.
+
+    `moneda` es la del emisor (rótulos «M EUR»); sin ella, la unidad de los propios ingresos (la cifra y su rótulo, de la
+    misma fuente: regla 13) y, sin ingresos, USD. `fuente`, de dónde salen las cuentas («la SEC», «las cuentas publicadas en
+    BME»). Con `semestres` (o semestres entre los `trimestres`), los doce meses son los de un emisor semestral: ejercicio +
+    1S en curso − 1S anterior (`udm`)."""
+    campos = ("ingresos", "ebit", "amortizacion", "beneficio_neto", "bpa_diluido", "cfo", "capex")
+    moneda = moneda or _moneda_de(hechos)
+    semestres = sorted(semestres or [p for p in trimestres if p.meses == 6], key=lambda p: p.fin)
+    precio_valor = precio.valor if precio is not None and precio.hay_dato else None
+    if semestres:
+        _, usados, motivo_udm = udm(hechos, "ingresos", anuales, semestres)
+        fin = max(usados, key=lambda p: p.fin) if usados else None
+        m = Multiplos(fin=etiqueta(fin, anuales) if fin else "", trimestres=[etiqueta(p, anuales) for p in usados],
+                      cierre=fin.fin if fin else None, precio=precio_valor, acciones=acciones, moneda=moneda, periodicidad="semestral")
+        if fin is None:
+            m.faltan["ttm"] = motivo_udm
+            return m
+        sumas: Dict[str, Tuple[Optional[float], str]] = {}
+        for c in campos:
+            valor_c, _, motivo_c = udm(hechos, c, anuales, semestres)
+            sumas[c] = (valor_c, motivo_c)
+        if len(usados) > 1:
+            # el BPA no se suma ni se resta (el número de acciones cambia dentro del año): con semestre de por medio, el
+            # del UDM sale del beneficio entre las acciones diluidas del último semestre, y la fórmula lo dice
+            sumas["bpa_diluido"] = (None, "el BPA no se suma ni se resta entre periodos")
+        rango = (f"UDM a {m.fin}: {' + '.join(m.trimestres[:2])} − {m.trimestres[2]}" if len(usados) == 3
+                 else f"ejercicio {m.fin}")
+    else:
+        ultimos = sorted(trimestres, key=lambda p: p.fin)[-4:]
+        fin = ultimos[-1] if ultimos else None
+        m = Multiplos(fin=fin.clave if fin else "", trimestres=[p.clave for p in ultimos], cierre=fin.fin if fin else None,
+                      precio=precio_valor, acciones=acciones, moneda=moneda)
+        if len(ultimos) < 4:
+            m.faltan["ttm"] = f"solo {len(ultimos)} trimestres contrastados: no hay TTM"
+            return m
+        sumas = {c: _suma(hechos, c, ultimos) for c in campos}
+        # lo que no se publica por trimestres se saca de los acumulados; el BPA no se suma ni se resta así (el número de
+        # acciones cambia dentro del año), y se queda N/A con su motivo antes que salir aproximado
+        for c, (valor, motivo) in list(sumas.items()):
+            if valor is None and c != "bpa_diluido":
+                por_acumulado, motivo_ac = _por_acumulados(facts, obtenido, c, fin, anuales)
+                if por_acumulado is not None:
+                    sumas[c] = (por_acumulado, "")
+                    m.por_acumulados[c] = f"ejercicio + acumulado del año − el del año anterior ({motivo or 'el trimestre suelto no se publica'})"
+                else:
+                    sumas[c] = (None, f"{motivo}; {motivo_ac}")
+        rango = f"{ultimos[0].clave}–{fin.clave}"
     if m.precio is None:
         m.faltan["precio"] = "sin cotización oficial (apartado 1): los múltiplos sobre precio quedan N/A"
     if acciones is None:
         m.faltan["acciones"] = "sin acciones en circulación de la portada: capitalización N/A"
-    sumas: Dict[str, Tuple[Optional[float], str]] = {c: _suma(hechos, c, ultimos) for c in ("ingresos", "ebit", "amortizacion", "beneficio_neto", "bpa_diluido", "cfo", "capex")}
-    # lo que no se publica por trimestres se saca de los acumulados; el BPA no se suma ni se resta así (el número de
-    # acciones cambia dentro del año), y se queda N/A con su motivo antes que salir aproximado
-    for c, (valor, motivo) in list(sumas.items()):
-        if valor is None and c != "bpa_diluido":
-            por_acumulado, motivo_ac = _por_acumulados(facts, obtenido, c, fin, anuales)
-            if por_acumulado is not None:
-                sumas[c] = (por_acumulado, "")
-                m.por_acumulados[c] = f"ejercicio + acumulado del año − el del año anterior ({motivo or 'el trimestre suelto no se publica'})"
-            else:
-                sumas[c] = (None, f"{motivo}; {motivo_ac}")
     v = {c: s[0] for c, s in sumas.items()}
     cierre = Periodo.instante(fin.fin)
     deuda = _instante(hechos, "deuda_bruta", cierre)
@@ -196,17 +301,16 @@ def construir(hechos: Dict[Tuple[str, Periodo], Hecho], trimestres: List[Periodo
     mln = lambda x: _numero(x / 1e6)
     dos = lambda x: _numero(x, 2)
     unod = lambda x: _numero(x, 1)
-    rango = f"{ultimos[0].clave}–{fin.clave}"
 
     def linea(rotulo, valor, unidad, formula, componentes, motivo=""):
         m.lineas.append(Linea(rotulo, valor, unidad, formula, componentes, motivo if valor is None else ""))
         return m.lineas[-1]
 
-    linea("Capitalización (M USD)", cap, "musd", "cotización oficial × acciones de la portada",
+    linea(f"Capitalización (M {moneda})", cap, "musd", "cotización oficial × acciones de la portada",
           f"{dos(m.precio)} × {mln(acciones)} M" if cap is not None else "", m.faltan.get("precio") or m.faltan.get("acciones") or "")
-    linea("Valor de empresa, EV (M USD)", ev, "musd", "capitalización + deuda bruta − tesorería − inversiones a corto plazo",
+    linea(f"Valor de empresa, EV (M {moneda})", ev, "musd", "capitalización + deuda bruta − tesorería − inversiones a corto plazo",
           f"{mln(cap)} + {mln(deuda)} − {mln(caja)} − {mln(inv)}" if ev is not None else "", "sin capitalización o sin saldos contrastados de deuda, tesorería e inversiones a corto plazo al cierre")
-    l = linea("EBITDA TTM (M USD)", ebitda, "musd", f"EBIT + amortización del inmovilizado, {rango}", f"{mln(v['ebit'])} + {mln(v['amortizacion'])}" if ebitda is not None else "",
+    l = linea(f"EBITDA TTM (M {moneda})", ebitda, "musd", f"EBIT + amortización del inmovilizado, {rango}", f"{mln(v['ebit'])} + {mln(v['amortizacion'])}" if ebitda is not None else "",
               sumas["ebit"][1] or sumas["amortizacion"][1])
     _cuadrar(l, agregador.ebitda_ttm if agregador is not None else None, "el EBITDA TTM")
     bpa, formula_per = v["bpa_diluido"], "cotización oficial / BPA diluido TTM"
@@ -216,7 +320,7 @@ def construir(hechos: Dict[Tuple[str, Periodo], Hecho], trimestres: List[Periodo
         acc_diluidas = hechos.get(("acciones_diluidas", fin))
         if acc_diluidas is not None and acc_diluidas.hay_dato and acc_diluidas.valor:
             bpa = v["beneficio_neto"] / acc_diluidas.valor
-            formula_per = f"cotización oficial / (beneficio neto TTM / acciones medias diluidas del {fin.clave})"
+            formula_per = f"cotización oficial / (beneficio neto TTM / acciones medias diluidas del {m.fin})"
     per = m.precio / bpa if m.precio is not None and bpa and bpa > 0 else None   # con BPA negativo no hay PER, como en comparables
     linea("PER (TTM)", per, "x", formula_per, f"{dos(m.precio)} / {dos(bpa)}" if per is not None else "",
           m.faltan.get("precio") or ("" if bpa is not None else sumas["bpa_diluido"][1]) or ("BPA TTM negativo: PER no definido" if bpa else "BPA TTM nulo"))
@@ -250,6 +354,6 @@ def construir(hechos: Dict[Tuple[str, Periodo], Hecho], trimestres: List[Periodo
         valor = v["beneficio_neto"] / ((ahora + antes) / 2) if v["beneficio_neto"] is not None and ahora and antes else None
         l = linea(rotulo, valor, "%", f"beneficio neto TTM / {campos_mod.campo(campo).rotulo.lower()} medio ({hace_un_anio.fin:%d/%m/%Y} y {cierre.fin:%d/%m/%Y})",
                   f"{mln(v['beneficio_neto'])} / (({mln(antes)} + {mln(ahora)}) / 2)" if valor is not None else "",
-                  sumas["beneficio_neto"][1] or f"sin {campos_mod.campo(campo).rotulo.lower()} a {hace_un_anio.fin:%d/%m/%Y} en la SEC")
+                  sumas["beneficio_neto"][1] or f"sin {campos_mod.campo(campo).rotulo.lower()} a {hace_un_anio.fin:%d/%m/%Y} en {fuente}")
         _cuadrar(l, getattr(agregador, "roe" if que == "ROE" else "roa", None) if agregador is not None else None, f"el {que} TTM")
     return m

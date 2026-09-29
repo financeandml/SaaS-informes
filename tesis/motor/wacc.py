@@ -1,5 +1,6 @@
-"""WACC (05 §5): rf del Tesoro, beta por regresión frente a SPY (o bottom-up), Ke por CAPM, Kd del analista o por
-rating sintético, pesos a valor de mercado."""
+"""WACC (05 §5): rf a 10 años de la moneda del emisor (Tesoro de EE. UU. o BCE), beta por regresión frente al mercado de
+su bolsa (SPY o el índice de BME del segmento) o bottom-up, Ke por CAPM, Kd del analista o por rating sintético, pesos a
+valor de mercado."""
 
 from __future__ import annotations
 
@@ -33,10 +34,13 @@ def _muestreo(cierres: Dict[date, float], frecuencia: str) -> Dict[Tuple[int, in
 
 
 def beta_regresion(valor: Dict[date, float], mercado: Dict[date, float], hasta: date, anios: int = 2,
-                   frecuencia: str = "semanal") -> Optional[Beta]:
+                   frecuencia: str = "semanal", solo_dias_comunes: bool = False) -> Optional[Beta]:
+    """`solo_dias_comunes`: el mercado se toma solo en los días en que hay cierre del valor. Para un valor que no cotiza
+    todos los días (BME, solo sesiones con negociación), su último cierre de la semana puede ser el martes y el del índice
+    el viernes: dos rentabilidades de ventanas distintas, y la beta se atenúa. Así las dos series comparten fechas."""
     desde = date(hasta.year - anios, hasta.month, min(hasta.day, 28))
     v = {d: c for d, c in valor.items() if desde <= d <= hasta}
-    m = {d: c for d, c in mercado.items() if desde <= d <= hasta}
+    m = {d: c for d, c in mercado.items() if desde <= d <= hasta and (not solo_dias_comunes or d in v)}
     mv, mm = _muestreo(v, frecuencia), _muestreo(m, frecuencia)
     claves = sorted(set(mv) & set(mm))
     ry, rx = [], []
@@ -83,6 +87,9 @@ class Wacc:
     beta_mensual: Optional[Beta] = None
     avisos: List[str] = field(default_factory=list)
     bloqueos: List[str] = field(default_factory=list)
+    # de dónde sale el rf («Tesoro de EE. UU., curva par a 10 años», «BCE, curva al contado AAA…»): el rótulo viaja con la
+    # cifra (regla 13), del mismo sitio que la pidió (`emisores.rf`)
+    rf_fuente: str = ""
 
 
 def calcular(rf: float, rf_fecha: date, beta: float, beta_origen: str, erp: float, prima: float, kd: Optional[float],
