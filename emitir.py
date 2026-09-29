@@ -42,7 +42,7 @@ def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description="Tesis de inversión desde el expediente del analista y la SEC.")
     ap.add_argument("ticker")
     ap.add_argument("--adjuntos", nargs="*", default=[], help="rutas de los adjuntos (PDF, XLSX)")
-    ap.add_argument("--carpeta", help="carpeta con los adjuntos (se toman todos los PDF y XLSX)")
+    ap.add_argument("--carpeta", help="carpeta con los adjuntos (se toman todos los PDF y XLSX); por defecto <datos>/adjuntos/<TICKER>")
     ap.add_argument("--dcf", help="libro Excel con el DCF del analista (sección D: apartados 12–20)")
     ap.add_argument("--decisiones", help="JSON con las decisiones del analista sobre discrepancias")
     ap.add_argument("--entradas", help="JSON con las entradas del analista (04_entradas.yaml); por defecto <datos>/entradas/<TICKER>/<fecha>/entradas.json")
@@ -53,10 +53,14 @@ def main(argv=None) -> int:
 
     hoy = date.fromisoformat(args.fecha) if args.fecha else date.today()
     rutas = [Path(r) for r in args.adjuntos]
+    # sin nada indicado, el expediente que la web ya dejó en <datos>/adjuntos/<TICKER>: el mismo que usa «Generar»
+    por_defecto = entorno.carpeta("adjuntos") / args.ticker.upper()
+    if not args.carpeta and not rutas and por_defecto.is_dir():
+        args.carpeta = str(por_defecto)
     if args.carpeta:
         rutas += sorted(p for p in Path(args.carpeta).iterdir() if p.suffix.lower() in (".pdf", ".xlsx", ".xlsm"))
     if not rutas:
-        ap.error("hacen falta adjuntos (--adjuntos o --carpeta)")
+        ap.error(f"hacen falta adjuntos (--adjuntos o --carpeta; o tráelos en la web a {por_defecto})")
 
     from tesis.fuentes import emisores
     bme = emisores.es_bme(args.ticker)
@@ -121,7 +125,8 @@ def main(argv=None) -> int:
     hechos = derivados.calcular(tab.hechos(), flujos, instantes)
     # auditoría: que las cifras cuadren entre ellas, no solo con su fuente. Lo que falte y la identidad determine se
     # despeja y entra marcado como derivado; lo despejado puede alimentar a su vez otros derivados, así que se recalculan.
-    aud = auditor.auditar(hechos, flujos, instantes)
+    # con las cifras de control (no se imprimen): la parte de los socios externos cierra el resultado de un grupo
+    aud = auditor.auditar({**tab.controles, **hechos}, flujos, instantes)
     if aud.derivadas:
         hechos = derivados.calcular(auditor.aplicar(hechos, aud), flujos, instantes)
     r = aud.resumen

@@ -323,6 +323,12 @@ CONTROLES: Tuple[Campo, ...] = (
     Campo("pagos_intangible", "Pagos por inversiones en inmovilizado intangible", "Payments for intangible assets", 10,
           filas=(), filas_con_contexto=((r"^Inmovilizado intangible$", r"(?i)^pagos por inversiones"),),
           solo_documento=True, marcos=("es",), signo_pgc=-1),
+    # la parte del resultado de un grupo que es de sus socios externos: sin ella, «beneficio neto = BAI − impuesto» no
+    # cierra en unas consolidadas con minoritarios, porque el beneficio del informe es el atribuido a la dominante
+    Campo("minoritarios", "Resultado atribuido a socios externos", "Net income attributable to noncontrolling interests", 8,
+          filas=(r"^Resultado (?:del (?:ejercicio|periodo) )?atribuid[oa] a (?:los )?(?:socios externos|intereses minoritarios|participaciones no dominantes)$",
+                 r"^Resultado atribuible a (?:los )?(?:socios externos|intereses minoritarios|participaciones no dominantes)$"),
+          solo_documento=True, marcos=("es",)),
     Campo("pagos_material", "Pagos por inversiones en inmovilizado material", "Payments for property and equipment", 10,
           filas=(), filas_con_contexto=((r"^Inmovilizado material$", r"(?i)^pagos por inversiones"),),
           solo_documento=True, marcos=("es",), signo_pgc=-1),

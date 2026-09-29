@@ -139,6 +139,12 @@ def _comprobar(hechos: Hechos, ident: Identidad, p: Periodo) -> Tuple[Comprobaci
         if incluye_papel_comercial(_valor(hechos, "deuda_cp", p), _valor(hechos, "papel_comercial", p)):
             from dataclasses import replace
             ident = replace(ident, rotulo=ident.rotulo + " + Papel comercial", partes=ident.partes + (("papel_comercial", 1),))
+    if ident.clave == "resultado" and _valor(hechos, "minoritarios", p) is not None:
+        # un grupo con socios externos: el beneficio del informe es el atribuido a la dominante (cifra de control
+        # `campos.CONTROLES`, solo cuando la cuenta de resultados la publica)
+        from dataclasses import replace
+        ident = replace(ident, rotulo=ident.rotulo + " − Resultado atribuido a socios externos",
+                        partes=ident.partes + (("minoritarios", -1),))
     total = _valor(hechos, ident.total, p)
     partes = {k: _valor(hechos, k, p) for k, _ in ident.partes}
     ausentes = [k for k, h in partes.items() if h is None] + ([] if total is not None else [ident.total])

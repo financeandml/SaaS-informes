@@ -48,6 +48,9 @@ class Tipo(str, Enum):
     # emisores españoles (BME): las cuentas anuales auditadas y el informe financiero semestral, en PDF
     CCAA = "Cuentas anuales"
     SEMESTRAL = "Informe financiero semestral"
+    # otras comunicaciones de BME que el sistema trae y usa sin leer cifras de ellas
+    PARTICIPACIONES = "Participaciones significativas"
+    INCORPORACION = "Documento de incorporación"
     DESCONOCIDO = "desconocido"
 
 
@@ -68,7 +71,8 @@ APARTADO_DE = {
 # la clave con la que cada tipo se nombra en el expediente y en la lista de documentos del paso 1 (`documentos.py`)
 CLAVE_DE = {Tipo.K10: "10K", Tipo.Q10: "10Q", Tipo.DEF14A: "PROXY", Tipo.CARTA: "CARTA",
             Tipo.CALL: "CALL", Tipo.FINWEB: "FINWEB", Tipo.XLSX: "XLSX", Tipo.NOTA: "NOTA",
-            Tipo.TABLAS: "TABLAS", Tipo.PRESENTACION: "SLIDES", Tipo.CCAA: "CCAA", Tipo.SEMESTRAL: "SEMESTRAL"}
+            Tipo.TABLAS: "TABLAS", Tipo.PRESENTACION: "SLIDES", Tipo.CCAA: "CCAA", Tipo.SEMESTRAL: "SEMESTRAL",
+            Tipo.PARTICIPACIONES: "PARTICIPACIONES", Tipo.INCORPORACION: "INCORPORACION"}
 TIPO_DE_CLAVE = {v: k for k, v in CLAVE_DE.items()}
 
 MESES = {m: i for i, m in enumerate(
@@ -527,7 +531,8 @@ def _de_bme(a: Adjunto, dato: dict) -> None:
     a.fecha = publicado or a.fecha              # la de publicación en la bolsa, no una fecha cualquiera del texto
     periodo, ejercicio = str(dato.get("periodo") or ""), dato.get("ejercicio")
     tipo = Tipo.CCAA if periodo == "AN" else Tipo.SEMESTRAL if periodo.endswith("S") else \
-        Tipo.PRESENTACION if dato.get("clave") == "presentacion" else None
+        {"presentacion": Tipo.PRESENTACION, "participaciones": Tipo.PARTICIPACIONES,
+         "incorporacion": Tipo.INCORPORACION}.get(dato.get("clave"))
     if tipo is not None and a.tipo in (Tipo.DESCONOCIDO, tipo):
         if a.tipo is Tipo.DESCONOCIDO:
             a.certeza = Certeza.ALTA if tipo in (Tipo.CCAA, Tipo.SEMESTRAL) else Certeza.MEDIA

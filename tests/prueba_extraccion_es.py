@@ -108,6 +108,35 @@ class Lectura(unittest.TestCase):
         _, _, tab = tablero("TRTK")
         self.assertTrue([a for a in tab.avisos if "individuales" in a])
 
+    def test_socios_externos_cierran_el_resultado(self):
+        """Falla si en Redegal (grupo con socios externos) «beneficio neto = BAI − impuesto» no cuadra: el beneficio del
+        informe es el atribuido a la dominante y la parte de los minoritarios (4.212,68 EUR en 2025, publicada en la
+        cuenta de resultados; la del 2S, ejercicio − 1S) tiene que entrar en la identidad."""
+        from tesis.verificacion import auditor
+        _, periodos, tab = tablero("RDG")
+        self.assertAlmostEqual(next(h.valor for (c, p), h in tab.controles.items()
+                                    if c == "minoritarios" and p.clave == "FY2025"), -4212.68, places=2)
+        a = auditor.auditar({**tab.controles, **tab.hechos()}, periodos["anuales"] + periodos["trimestres"],
+                            periodos["instantes"])
+        resultado = {c.periodo: c for c in a.comprobaciones if c.identidad == "resultado" and c.estado != "sin datos"}
+        for clave in ("FY2025", "2S25"):
+            self.assertEqual(resultado[clave].estado, "cuadra", resultado[clave].linea)
+            self.assertIn("socios externos", resultado[clave].rotulo)
+
+    def test_comunicaciones_de_bme_con_su_destino(self):
+        """Falla si las participaciones significativas o el documento de incorporación que trae BME salen como
+        «desconocido · no se usa en el informe»: las participaciones son el accionariado del apartado 5 (regla 13: lo
+        que dice la tabla de adjuntos y lo que hace el informe, de la misma fuente)."""
+        from tesis.datos import documentos
+        from tesis.datos.expediente import Adjunto, Certeza, Tipo, _de_bme
+        for clave, tipo in (("participaciones", Tipo.PARTICIPACIONES), ("incorporacion", Tipo.INCORPORACION)):
+            a = Adjunto(ruta=Path(f"bme_2026_{clave}.pdf"), huella="", paginas=["Comunicación"], tipo=Tipo.DESCONOCIDO,
+                        apartado=None, certeza=Certeza.BAJA, motivo="")
+            _de_bme(a, {"clave": clave, "titulo": clave, "publicado": "2026-07-03", "periodo": "", "ejercicio": None})
+            self.assertIs(a.tipo, tipo)
+            self.assertNotEqual(documentos.destino(a.tipo), documentos.SIN_DESTINO)
+        self.assertIn("5 accionariado", documentos.destino(Tipo.PARTICIPACIONES))
+
     def test_sin_ceros_con_signo(self):
         """Falla si un cero del modelo en Debe/Haber sale como «−0»."""
         for t in ("BYTE", "TRTK", "RDG"):

@@ -783,6 +783,21 @@ def _derivados_espanoles(resultados: List[Resultado], periodos: Dict[str, List[P
             pares = [(a, cand) for a, cand in por_campo.get(c.clave, []) if _mismo_periodo(cand.periodo, p)]
             r = _contrastar_celda(c, p, None, pares, decs.get((c.clave, p.clave)), sin_sec=True, moneda=moneda)
             controles[(c.clave, p)] = r.hecho
+    # la parte de los socios externos del segundo semestre, como cualquier flujo: ejercicio − primer semestre (∑). Sin
+    # ella, la identidad del resultado del 2S no cierra en un grupo con minoritarios
+    anuales = {p.fin: p for p in periodos["anuales"]}
+    for p in flujos:
+        actual = controles.get(("minoritarios", p))
+        if p.meses != 6 or p.fin not in anuales or (actual is not None and actual.hay_dato):
+            continue
+        fy = controles.get(("minoritarios", anuales[p.fin]))
+        s1 = next((h for (cl, q), h in controles.items()
+                   if cl == "minoritarios" and q.meses == 6 and q.fin == p.inicio - timedelta(days=1)), None)
+        if fy is not None and s1 is not None and fy.hay_dato and s1.hay_dato:
+            controles[("minoritarios", p)] = derivar("minoritarios", p, f"{fy.periodo.clave} − {s1.periodo.clave}",
+                                                     {"ejercicio": fy, "primer_semestre": s1},
+                                                     lambda ejercicio, primer_semestre: ejercicio - primer_semestre,
+                                                     unidad=fy.unidad)
     por_clave = {(r.campo.clave, r.periodo): k for k, r in enumerate(resultados)}
     for destino, alternativas in _SUMAS_ES.items():
         for p in (periodos["instantes"] if campo_de(destino).tipo == "instante" else flujos):

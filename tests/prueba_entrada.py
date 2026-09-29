@@ -54,6 +54,22 @@ class LasTresOrdenes(unittest.TestCase):
             emitir.main = original
         self.assertEqual(recibido, [["QCOM", "--fecha", "2026-09-24", "--casa"]])
 
+    def test_generar_sin_carpeta_usa_el_expediente_de_la_web(self):
+        """Falla si `generar RDG.MC` sin `--carpeta` se niega a emitir cuando la web ya dejó el expediente en
+        <datos>/adjuntos/RDG.MC: es la misma carpeta que usa «Generar» y el analista no tiene por qué repetirla."""
+        import tempfile
+        from unittest import mock
+        from tesis.fuentes import emisores
+        emitir = entrada._emitir()
+        with tempfile.TemporaryDirectory() as tmp:
+            (Path(tmp) / "RDG.MC").mkdir()
+            (Path(tmp) / "RDG.MC" / "bme_2025_AN_1.pdf").write_bytes(b"%PDF-1.4")
+            with mock.patch.object(entorno, "carpeta", lambda nombre: Path(tmp)), \
+                    mock.patch.object(emisores, "emisor", lambda ticker: None):
+                self.assertEqual(emitir.main(["RDG.MC", "--fecha", "2026-09-29"]), 2)   # llega al emisor
+                with self.assertRaises(SystemExit):                                     # sin expediente, sí se niega
+                    emitir.main(["BYTE.MC", "--fecha", "2026-09-29"])
+
     def test_servir_le_pasa_a_saas_sus_opciones_tal_cual(self):
         """Falla si `servir` deja de ser `tesis.saas`: el puerto y `--sin-navegador` son los de siempre."""
         from tesis.web import saas

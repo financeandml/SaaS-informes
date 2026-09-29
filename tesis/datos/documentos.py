@@ -110,6 +110,16 @@ CATALOGO_BME: Tuple[Documento, ...] = (
         aporta="7 lo que dijo la dirección · 21 tamaño de mercado (apoyo); las cifras se siguen tomando de las cuentas",
         sin_el="Nada esencial: es material de apoyo.",
         donde="BME, otra información relevante del emisor (se trae con «Traer de BME»)"),
+    Documento(
+        clave="PARTICIPACIONES", tipo=Tipo.PARTICIPACIONES, titulo="Participaciones significativas", exigencia=RECOMENDADO,
+        aporta="5 accionariado (participaciones ≥ 5 %, con su fecha de corte)",
+        sin_el="El accionariado del apartado 5 lo aporta el analista con su cita.",
+        donde="BME, otra información relevante del emisor (se trae con «Traer de BME»)"),
+    Documento(
+        clave="INCORPORACION", tipo=Tipo.INCORPORACION, titulo="Documento de incorporación al mercado", exigencia=OPCIONAL,
+        aporta="4 y 6 apoyo para las citas del analista (negocio, consejo y dirección); no se toman cifras de él",
+        sin_el="Nada automático: el analista cita la web del emisor o la memoria de las cuentas.",
+        donde="BME, documentos de incorporación del emisor (se trae con «Traer de BME»)"),
 )
 
 POR_CLAVE: Dict[str, Documento] = {d.clave: d for d in CATALOGO}
