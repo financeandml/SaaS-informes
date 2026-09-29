@@ -30,7 +30,7 @@ Todo en español: informe, interfaz (sin interruptor ES/EN), documentación y re
 - En Windows, `PYTHONIOENCODING=utf-8`; los heredocs de Bash se comen las barras invertidas: edita con Write/Edit.
 
 ## Mapa
-`tesis/fuentes` (sec, edgar, precio, calendario, posicionamiento, tesoro, yahoo) · `tesis/datos` (hechos, campos, derivados,
+`tesis/fuentes` (emisores, sec, edgar, bme, bce, precio, calendario, posicionamiento, tesoro, yahoo) · `tesis/datos` (hechos, campos, derivados,
 expediente, extractor, segmentos, ficha, gobierno, item1a, guia…) · `tesis/verificacion` (contraste, auditor, revision) ·
 `tesis/entradas` (Entradas, asistente, propuestas, tarjetas) · `tesis/motor` (supuestos, wacc, proyeccion, terminal, puente,
 escenarios, sensibilidad, comparables, multiplos, sector, excel, datos) · `tesis/plantillas` (indice, informe, parte_a…i,
@@ -51,10 +51,10 @@ secciones, frases, graficos, maqueta/) · `tesis/qa` (puerta, linter) · `tesis/
 - Dependencias: `jinja2`, `pypdfium2`, `playwright`, `matplotlib`, `pillow`, `openpyxl` y `pyyaml`. LibreOffice (opcional) solo para la prueba de recálculo del Excel exportado.
 
 ## Estado
-F0 ☑ · F1 ☑ esqueleto + C · F2 ☑ B · F3 ☑ D · F4 ☑ E · F5 ☑ F · F6 ☑ G + portada + asistente · F7 ☑ A + H + I + cierre · F8 ☑ cierre de fallos (25/09/2026) · T0 ☑ base en verde (26/09/2026) · F9 ☑ camino antiguo fuera de la emisión, Form 4 y participación de la dirección (26/09/2026) · F10 ☑ estado «propuesto» y rúbrica (26/09/2026) · F11 ☑ propuestas deterministas (28/09/2026)
+F0 ☑ · F1 ☑ esqueleto + C · F2 ☑ B · F3 ☑ D · F4 ☑ E · F5 ☑ F · F6 ☑ G + portada + asistente · F7 ☑ A + H + I + cierre · F8 ☑ cierre de fallos (25/09/2026) · T0 ☑ base en verde (26/09/2026) · F9 ☑ camino antiguo fuera de la emisión, Form 4 y participación de la dirección (26/09/2026) · F10 ☑ estado «propuesto» y rúbrica (26/09/2026) · F11 ☑ propuestas deterministas (28/09/2026) · B (en curso, 29/09/2026) ☑ B1–B7 cualquier emisor: España por BME y BCE, cuentas en PDF contrastadas documento contra documento, sistema por puntos por apartado (`docs/fases/B.md`)
 Protocolo: `docs/fases/00_protocolo.md`. Lo que queda fuera, en `docs/fases/F7.md` y `F8.md` › «No hecho».
 Alcance (analista, 26/09/2026): cualquier emisor, cualquier fecha de informe y cualquier documento; la tesis de 39 apartados y, en F31, los formatos cortos. Idioma: solo español. Cumplimiento normativo: fuera de alcance, no se toca. Validación (F33): solo avisa, nunca bloquea. Plan: T0 → F9 → F10–F33.
-Siguiente: F12; la emisión real de QCOM (`docs/emision_real.md`) sigue pendiente.
+Siguiente: B8 (entradas de ejemplo de las empresas españolas) y B9 (fallos de la auditoría del 27/09 aún abiertos, `docs/fases/A.md`); la emisión real de QCOM (`docs/emision_real.md`) sigue pendiente.
 «confirmo borrar» (analista, 24/09/2026): hecho en F1 (sin `narrativa.py`, SDK `anthropic`, `--redactar`, `narrativas/` ni restos).
 Batería: 346 en verde en 8 min 36 s (27/09/2026); `pytest -m "not lenta"` para iterar. `python -m tesis regresiones` → **33 de 33**.
 F2: segmentos (XBRL inline), accionistas/13G/ejecutivos/retribución/filiales de EDGAR, guía de los Ex. 99.1 confirmada, fechas de Nasdaq.

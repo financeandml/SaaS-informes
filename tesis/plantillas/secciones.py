@@ -14,6 +14,7 @@ de un documento es el recorte de la región de esa tabla. Se producen aquí, con
 """
 
 from __future__ import annotations
+from . import lexico
 
 import re
 from dataclasses import dataclass, field
@@ -339,11 +340,12 @@ def cuadro_multiplos_sec(n: Cuadros, m) -> Cuadro:
     filas = [_linea_multiplo(l) for l in m.lineas if not l.rotulo.startswith("RO") and l.valor is not None]
     notas: List[str] = [f"{l.rotulo}: no se calcula ({l.motivo or 'sin dato'})." for l in m.lineas
                         if not l.rotulo.startswith("RO") and l.valor is None]
-    fuente = (f"Fuente: cifras de la SEC contrastadas en la sección C, en suma de los cuatro últimos trimestres ({', '.join(m.trimestres)}) y saldos al "
+    fuente = (f"Fuente: cifras {lexico.de_las_cuentas()} contrastadas en la sección C, en suma de los "
+              f"{'periodos intermedios' if lexico.es_bme() else 'cuatro últimos trimestres'} ({', '.join(m.trimestres)}) y saldos al "
               f"{f_fecha(m.cierre)}; cotización oficial de la bolsa; acciones de la portada del último formulario.")
     if m.faltan:
         fuente += " " + " ".join(f"{k}: {v}." for k, v in m.faltan.items())
-    return Cuadro(n.siguiente(), "Múltiplos sobre las últimas cifras de la SEC y la cotización oficial", ["Valor", "Cálculo"], filas, fuente, notas)
+    return Cuadro(n.siguiente(), f"Múltiplos sobre las últimas cifras {lexico.de_las_cuentas()} y la cotización oficial", ["Valor", "Cálculo"], filas, fuente, notas)
 
 
 def cuadro_rentabilidad_ttm(n: Cuadros, m) -> Optional[Cuadro]:
@@ -356,7 +358,7 @@ def cuadro_rentabilidad_ttm(n: Cuadros, m) -> Optional[Cuadro]:
     notas.append("Los formularios de la compañía no publican ROE, ROA ni ROIC como cifras; el 10-K define el ROE (beneficio después de impuestos / patrimonio medio) para su plan de "
                  "incentivos y esa es la definición que se aplica. El ROIC no lo publica ninguna fuente: solo la fórmula del cuadro anterior.")
     return Cuadro(n.siguiente(), f"Rentabilidad de los últimos doce meses ({m.trimestres[0]}–{m.fin})", ["Valor", "Cálculo"], filas,
-                  "Fuente: beneficio neto TTM y saldos medios de la SEC (sección C).", notas)
+                  f"Fuente: beneficio neto {'de los últimos doce meses' if lexico.es_bme() else 'TTM'} y saldos medios {lexico.de_las_cuentas()} (sección C).", notas)
 
 
 # ---------------------------------------------------------------------------
@@ -691,7 +693,10 @@ def recortes_f(p, mercado, salida: Optional[Path], comparables=None, agregador=N
                 r = bloque.respuesta
                 piezas.append((apartado, clave, r.url, r.cuerpo, r.obtenido, rotulo))
     for apartado, clave, url, cuerpo, obtenido, rotulo in piezas:
-        rec = volcado_api(url, cuerpo, obtenido, salida, f"nasdaq_{clave}", rotulo, FUENTE, extracto=_extracto_api(cuerpo, clave))
+        # rotulada por quien respondió de verdad: la cotización de un emisor de BME no es de Nasdaq
+        quien = ("BME (API oficial de la bolsa)" if "bolsasymercados" in url else "BCE" if "ecb.europa.eu" in url else FUENTE)
+        rec = volcado_api(url, cuerpo, obtenido, salida, f"{'bme' if 'bolsasymercados' in url else 'nasdaq'}_{clave}", rotulo, quien,
+                          extracto=_extracto_api(cuerpo, clave))
         if rec is not None:
             recs.setdefault(apartado, []).append(rec)
     if p is not None and p.iv is not None and p.iv.respuesta is not None:

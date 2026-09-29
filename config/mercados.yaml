@@ -6,6 +6,8 @@ sec:
   rf: tesoro                           # tesoro.rf_10a: curva par del Tesoro de EE. UU., 10 años
   mercado_beta: {fuente: nasdaq, simbolo: SPY, clase: etf, nombre: "SPDR S&P 500 ETF (SPY), cierres de Nasdaq"}
   periodicidad: trimestral
+  valores:
+    wacc.tipo_marginal: 21            # tipo federal del impuesto de sociedades de EE. UU. (26 U.S.C. § 11(b))
 bme:
   moneda: EUR
   bolsa_precio: bme
@@ -17,5 +19,7 @@ bme:
     BMEScaleup: {isin: ES0S00001149, nombre: "IBEX Growth Market All Share"}
     continuo:   {isin: ES0SI0000005, nombre: "IBEX 35"}
   periodicidad: semestral
+  valores:
+    wacc.tipo_marginal: 25            # tipo general del Impuesto sobre Sociedades (Ley 27/2014, art. 29.1)
   # Sin calendario publicado por la bolsa: la próxima presentación es la que el emisor anuncie (OIR) o la que el
   # analista cite; nunca un plazo reglamentario sin la circular citada.

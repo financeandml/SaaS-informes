@@ -8,6 +8,7 @@ versión en español del analista, con su página; el literal, en el HTML).
 """
 
 from __future__ import annotations
+from . import lexico
 
 from dataclasses import dataclass, field
 from datetime import timedelta
@@ -52,13 +53,13 @@ def _texto(v) -> str:
 def _cita(h) -> str:
     o = h.origen or next((x.origen for x in h.entradas if x.origen is not None), None)
     if o is None:
-        return "SEC EDGAR"
+        return lexico.cuentas()
     doc = o.formulario or o.documento
     return f"{doc} {o.presentado:%d/%m/%Y}" if o.presentado else doc
 
 
 def _mln(v: float) -> str:
-    return f"{numero(v / 1e6)} mln USD"
+    return f"{numero(v / 1e6)} mln {lexico.moneda()}"
 
 
 def _dato(hechos, clave: str, p):

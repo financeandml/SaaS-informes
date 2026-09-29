@@ -8,6 +8,7 @@ real de las notas de resultados (F2), consenso → BPA publicado de la bolsa y, 
 """
 
 from __future__ import annotations
+from . import lexico
 
 from dataclasses import dataclass, field
 from typing import Callable, Dict, List, Sequence
@@ -119,7 +120,10 @@ def _riesgos(d: ParteF, n, e: Entradas, textos, umbral, item, alias) -> None:
     else:
         d.pendientes["top"] = "Pendiente del analista: los cinco riesgos principales con probabilidad, impacto, mitigante y señal (paso 6)."
     if item is None or not item.epigrafes:
-        d.pendientes["familias"] = "Pendiente: el 10-K no tiene epígrafes de riesgo reconocibles en el Item 1A; el analista los aporta con su cita."
+        d.pendientes["familias"] = ("No aplica: sin 10-K no hay epígrafes del Item 1A que contar; los factores de riesgo del emisor "
+                                    "están en su documento de incorporación y los cita el analista en sus riesgos."
+                                    if lexico.es_bme() else
+                                    "Pendiente: el 10-K no tiene epígrafes de riesgo reconocibles en el Item 1A; el analista los aporta con su cita.")
         return
     por = item.por_familia()
     total = len(item.epigrafes)
@@ -175,8 +179,8 @@ def _bajista(d: ParteF, n, e: Entradas, item, motor) -> None:
     pes = v.resultados.get("pesimista") if v is not None else None
     if pes is not None:
         d.texto_pesimista = (f"En el escenario pesimista, con una probabilidad del {pct(pes.escenario.probabilidad, 0)}, el valor por acción "
-                             f"a {v.parametros.horizonte_meses} meses sería de {numero(pes.vh, 2)} USD: un {pct(v.downside)} frente al precio "
-                             f"de {numero(v.precio, 2)} USD del {f_fecha(getattr(motor, 'fecha_precio', None))} (supuestos y flujos en el apartado 13).")
+                             f"a {v.parametros.horizonte_meses} meses sería de {numero(pes.vh, 2)} {lexico.moneda()}: un {pct(v.downside)} frente al precio "
+                             f"de {numero(v.precio, 2)} {lexico.moneda()} del {f_fecha(getattr(motor, 'fecha_precio', None))} (supuestos y flujos en el apartado 13).")
 
 
 def _historial(d: ParteF, n, e: Entradas, comparaciones, sorpresas, hechos, trimestres, etiqueta, umbral_fallo) -> None:

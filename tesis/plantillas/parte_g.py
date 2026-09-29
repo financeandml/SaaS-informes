@@ -7,6 +7,7 @@ apartado dice qué falta y el informe no se emite (R30); nunca «N/A» en lugar 
 """
 
 from __future__ import annotations
+from . import lexico
 
 import math
 import statistics
@@ -137,7 +138,7 @@ def _automatico(cid: str, cfg: dict, ctx: dict) -> Tuple[str, str]:
         x = ctx.get("mercado", {}).get("liquidez")
         if x is None:
             return "sin_dato", "sin volumen de la bolsa"
-        return ("si" if x >= cfg["umbral"] else "no"), f"{numero(x / 1e6)} M USD diarios (3 meses, Nasdaq)"
+        return ("si" if x >= cfg["umbral"] else "no"), f"{numero(x / 1e6)} M {lexico.moneda()} diarios (3 meses, {lexico.bolsa()})"
     if cid == "evento":
         prox, hoy = ctx.get("proxima"), ctx["fecha_informe"]
         if prox is None:
@@ -250,15 +251,15 @@ def construir(n, e: Entradas, motor, hechos, anuales, etiqueta, sesiones: Mappin
     if texto(e, "pos.stop"):
         filas.append(FilaCuadro("Stop", [_c(texto(e, "pos.stop")), _c("del analista")], capa="S"))
     if mercado.get("vol_1a") is not None:
-        filas.append(FilaCuadro("Volatilidad realizada (1 año)", [_c(pct(mercado["vol_1a"]), capa="H"), _c("desviación típica de los rendimientos diarios × √252 (Nasdaq)", capa="H")], capa="H"))
+        filas.append(FilaCuadro("Volatilidad realizada (1 año)", [_c(pct(mercado["vol_1a"]), capa="H"), _c(f"desviación típica de los rendimientos diarios × √252 ({lexico.bolsa()})", capa="H")], capa="H"))
     for clave, rot in (("dd_1a", "Drawdown máximo (1 año)"), ("dd_5a", "Drawdown máximo (5 años)")):
         if mercado.get(clave) is not None:
-            filas.append(FilaCuadro(rot, [_c(pct(mercado[clave]), capa="H"), _c("mayor caída desde un máximo previo, con cierres oficiales de Nasdaq", capa="H")], capa="H"))
+            filas.append(FilaCuadro(rot, [_c(pct(mercado[clave]), capa="H"), _c(f"mayor caída desde un máximo previo, con cierres oficiales de {lexico.bolsa()}", capa="H")], capa="H"))
     if v is not None:
         filas.append(FilaCuadro("Beta", [_c(numero(v.wacc.beta, 2), capa="D"), _c(v.wacc.beta_origen, capa="D")], capa="D"))
     if filas:
         g.cuadros["riesgo"] = Cuadro(n.siguiente(), "Tamaño, volatilidad y drawdown", ["Valor", "Detalle"], filas,
-                                     "Fuente: analista (tamaño, drawdown tolerado y stop); Nasdaq y motor de valoración (el resto).")
+                                     f"Fuente: analista (tamaño, drawdown tolerado y stop); {lexico.bolsa()} y motor de valoración (el resto).")
     if ctx["tamano"] is None:
         g.pendientes["tamano"] = "Pendiente del analista: tamaño de la posición y drawdown tolerado (paso 8)."
     # 30 · seguimiento
@@ -281,7 +282,7 @@ def construir(n, e: Entradas, motor, hechos, anuales, etiqueta, sesiones: Mappin
     # portada
     pe, fe = e.valor("pos.precio_entrada"), e.valor("pos.fecha_entrada")
     if isinstance(pe, (int, float)) and fe:
-        g.entrada["precio"] = f"{numero(float(pe), 2)} USD"
+        g.entrada["precio"] = f"{numero(float(pe), 2)} {lexico.moneda()}"
         g.entrada["fecha"] = f_fecha(date.fromisoformat(str(fe)))
     if ctx["tamano"] is not None:
         g.entrada["tamano"] = pct(ctx["tamano"], 1)

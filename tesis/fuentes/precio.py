@@ -522,3 +522,17 @@ def mercado(ticker: str, hoy: date, fechas: Tuple[date, ...] = (), emisor=None) 
     elif c.cierre_anterior is None:
         m.faltan["cierre_anterior"] = "la ficha de Nasdaq no trae «Previous Close»"
     return m
+
+
+def sesiones(ticker: str, desde: date, hasta: date, limite: int = 2000) -> Dict[date, "Sesion"]:
+    """Las sesiones oficiales de la bolsa del emisor (Nasdaq en EE. UU., BME en España) con apertura, máximo, mínimo,
+    cierre y volumen: una sola entrada para liquidez, volatilidad y drawdown, sea cual sea el mercado."""
+    from . import emisores
+    if not emisores.es_bme(ticker):
+        return sesiones_nasdaq(ticker, desde, hasta, limite=limite)
+    from . import bme
+    e = emisores.emisor(ticker)
+    if e is None or not e.isin:
+        return {}
+    return {d: Sesion(apertura=None, maximo=s.maximo, minimo=s.minimo, cierre=s.cierre, volumen=s.volumen)
+            for d, s in bme.sesiones(e.isin, desde, hasta).items()}

@@ -45,3 +45,20 @@ Growth) para contrastar datos.
 - Cada apartado de los siete informes de control (AAPL, NFLX, ORCL, QCOM y las tres españolas) sale con todos sus
   puntos en «cumple» o «no aplica» con motivo; lo que falta, en la hoja 0 por apartado.
 - Batería completa y regresiones en verde; los informes de EE. UU. no pierden nada de lo que ya imprimían.
+
+## Estado (29/09/2026)
+- B1 ☑ perfil de emisor, BME (buscador, ficha del valor, cierres, índices, documentos) y BCE.
+- B2 ☑ cuentas españolas: modelo normalizado y libre, consolidadas antes que individuales, semestres, 2S derivado,
+  reexpresiones (manda el documento más reciente), capex y deuda financiera como suma de sus partes publicadas;
+  `tests/prueba_extraccion_es.py` contra las cifras publicadas por IEAF (oráculo) de las tres empresas.
+- B3 ☑ sistema por puntos en `01_indice.yaml` + `plantillas/puntos.py`; la puerta bloquea por apartado y punto.
+- B4 ☑ motor y mercado en EUR: cierre oficial de BME, beta frente al índice de BME del segmento, rf del BCE, UDM
+  semestral, tipo marginal por mercado (`config/mercados.yaml`), acciones admitidas cuando no hay dilución publicada.
+- B5 ☑ tubería por mercado: `emitir.py RDG.MC` de principio a fin; ficha (auditor con ROAC, constitución), accionistas
+  de las participaciones significativas, ejecutivos y filiales del analista con su cita (paso 4; cierra el fallo 74).
+- B6 ☑ plantillas con el léxico del mercado (`plantillas/lexico.py`): moneda, bolsa, cuentas, rf y beta; sin columnas
+  ni filas de lo que la compañía no publica; «No aplica» con motivo en 2 (Cuadro 2), 26 y 31–35.
+- B7 ☑ web: buscador de los dos mercados, «Traer de la fuente oficial» (EDGAR o BME), catálogo de documentos de BME.
+- Pendiente: B8 entradas de ejemplo de las tres empresas españolas; B9 los fallos de la auditoría del 27/09 que siguen
+  abiertos (plan A); segmentos por actividad de la memoria, operaciones de directivos de BME como cuadro, comparables de
+  BME en el apartado 22, documentos del Mercado Continuo (CNMV no responde: se adjuntan).

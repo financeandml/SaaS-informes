@@ -49,7 +49,8 @@ def _m(x: float) -> str:
 
 def acciones_diluidas(basicas: Optional[float], opciones: Optional[float], precio_ejercicio: Optional[float],
                       rsu: Optional[float], precio: float, diluidas_medias: Optional[float], trimestre: str,
-                      basicas_medias: Optional[float] = None, adicional: Sequence[dict] = ()) -> tuple:
+                      basicas_medias: Optional[float] = None, adicional: Sequence[dict] = (),
+                      sin_dilucion_publicada: bool = False) -> tuple:
     """(acciones, nota). Una sola cifra para el valor por acción y para el peso de los fondos propios (A4, fallo [8]).
 
     Método de autocartera: cada opción en dinero añade N × (1 − K / P). Sin todas sus piezas, las básicas de la portada
@@ -75,6 +76,11 @@ def acciones_diluidas(basicas: Optional[float], opciones: Optional[float], preci
     if diluidas_medias is not None:
         return diluidas_medias + extra, (f"diluidas medias del {trimestre}: la SEC no publica todas las piezas del método de "
                                          "autocartera (opciones con su precio de ejercicio y RSU pendientes)" + cola)
+    if basicas is not None and sin_dilucion_publicada:
+        # un emisor que no publica acciones medias ni instrumentos dilutivos en cifras (cuentas del PGC): las acciones
+        # que publica la bolsa, más lo que el analista cite (val.dilucion_adicional); nunca una dilución estimada
+        return basicas + extra, ("acciones admitidas a negociación que publica la bolsa (incluyen la autocartera): el emisor no "
+                                 "publica acciones medias ni instrumentos dilutivos en cifras" + cola)
     return None, "sin acciones: ni componentes de la dilución ni diluidas medias"
 
 

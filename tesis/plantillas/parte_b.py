@@ -5,6 +5,7 @@ no se rellena: queda en `faltas` para la puerta de calidad y el asistente.
 """
 
 from __future__ import annotations
+from . import lexico
 
 from dataclasses import dataclass, field
 from datetime import date, timedelta
@@ -148,6 +149,10 @@ def cuadro_fechas(n, hoy: date, proxima, dividendos: Sequence, junta: Optional[d
         texto = f_fecha(proxima.fecha) + (f", {proxima.momento}" if proxima.momento else "")
         filas.append(FilaCuadro("Próximos resultados" + (f" ({trimestre})" if trimestre else ""),
                                 [Celda(texto, "", "H", "valor", proxima.texto), Celda(f"Nasdaq · {calificativo}", "", "", "valor", "")]))
+    elif lexico.es_bme():
+        # BME no publica calendario de resultados: la fecha es la que anuncie el emisor, nunca un plazo supuesto
+        filas.append(FilaCuadro("Próximos resultados", [Celda("sin anunciar", "", "", "valor", "el emisor no ha anunciado la fecha en BME"),
+                                                         Celda("comunicaciones del emisor en BME", "", "", "valor", "")]))
     else:
         filas.append(FilaCuadro("Próximos resultados", [Celda("N/A", "", "", "na", "la bolsa no publica una fecha posterior a la del informe"),
                                                          Celda("Nasdaq", "", "", "valor", "")]))
@@ -162,6 +167,11 @@ def cuadro_fechas(n, hoy: date, proxima, dividendos: Sequence, junta: Optional[d
         ultimo = max(dividendos, key=lambda d: d.ex or date.min)
         filas.append(FilaCuadro("Dividendo", [Celda(f"sin anunciar; el último, ex-dividendo el {f_fecha(ultimo.ex)}", "", "H", "valor", ""),
                                               Celda("Nasdaq", "", "", "valor", url_dividendos)]))
+    elif lexico.es_bme():
+        # sin calendario de dividendos de la bolsa no se puede afirmar que no paga: lo dicen las cuentas (estado de flujos,
+        # apartado 10) y lo que anuncie el emisor
+        filas.append(FilaCuadro("Dividendo", [Celda("sin anunciar", "", "", "valor", "BME no publica calendario de dividendos; los pagados, en el apartado 10"),
+                                              Celda("comunicaciones del emisor en BME", "", "", "valor", "")]))
     else:
         filas.append(FilaCuadro("Dividendo", [Celda("no paga dividendo", "", "H", "cero", "la bolsa no registra dividendos"),
                                               Celda("Nasdaq", "", "", "valor", url_dividendos)]))
@@ -171,7 +181,9 @@ def cuadro_fechas(n, hoy: date, proxima, dividendos: Sequence, junta: Optional[d
         filas.append(FilaCuadro("Junta de accionistas", [Celda(f"sin convocar; la última, el {f_fecha(junta)}", "", "H", "valor", ""),
                                                          Celda("DEF 14A", "", "", "valor", getattr(origen_junta, "referencia", ""))]))
     return Cuadro(n.siguiente(), "Fechas clave", ["Fecha", "Fuente"], filas,
-                  "Fuente: Nasdaq (calendario de resultados y dividendos) y SEC EDGAR (DEF 14A). Solo fechas iguales o posteriores a la del informe.")
+                  ("Fuente: comunicaciones del emisor en BME y entradas del analista. Solo fechas iguales o posteriores a la del informe."
+                   if lexico.es_bme() else
+                   "Fuente: Nasdaq (calendario de resultados y dividendos) y SEC EDGAR (DEF 14A). Solo fechas iguales o posteriores a la del informe."))
 
 
 def _fecha_catalizador(texto: str) -> str:

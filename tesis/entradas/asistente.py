@@ -31,7 +31,7 @@ _DERIVADOS = {
     "wacc.beta_desapalancada": [{"id": "wacc.beta_fuente", "tipo": "texto", "oblig": False, "nota": "fuente y fecha (método bottom-up)"}],
     "wacc.prima": [{"id": "wacc.prima_justificacion", "tipo": "texto", "oblig": False, "nota": "obligatoria si la prima no es cero"}],
     "wacc.kd": [{"id": "wacc.kd_fuente", "tipo": "texto", "oblig": False, "nota": "fuente del coste de la deuda"}],
-    "wacc.tipo_marginal": [{"id": "wacc.tipo_marginal_justificacion", "tipo": "texto", "oblig": False, "nota": "obligatoria si no es el 21 %"}],
+    "wacc.tipo_marginal": [{"id": "wacc.tipo_marginal_justificacion", "tipo": "texto", "oblig": False, "nota": "obligatoria si no es el tipo marginal de referencia del mercado (21 % en EE. UU., 25 % en España)"}],
 }
 
 

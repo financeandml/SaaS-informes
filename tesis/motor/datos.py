@@ -292,7 +292,7 @@ def ejecutar(emisor, facts: dict, hechos, periodos: Dict[str, List[Periodo]], da
     from ..fuentes import emisores as emisores_mod
     ingresos_fy, _ = _ultimo(hechos, "ingresos", periodos["anuales"])
     paquete, bloqueo_v1 = paquete_del_emisor(emisor, ingresos_fy, umbrales)
-    p = leer(datos_entradas, fecha_informe, paquete)
+    p = leer(datos_entradas, fecha_informe, paquete, getattr(emisor, "mercado", "sec"))
     de_la_sec = getattr(emisor, "mercado", "sec") != "bme"
     m = Motor(parametros=p, precio=None, fecha_precio=None, moneda=getattr(emisor, "moneda", "") or "USD",
               mercado="sec" if de_la_sec else "bme")
@@ -358,7 +358,8 @@ def ejecutar(emisor, facts: dict, hechos, periodos: Dict[str, List[Periodo]], da
         etq = (lambda q: etiqueta_fiscal(q, cierre_fy, desfase_fiscal)) if cierre_fy else (lambda q: q.clave)  # noqa: E731
     acciones, nota = acciones_diluidas(acciones_portada, opciones[0] if opciones else None, ejercicio[0] if ejercicio else None,
                                        rsu[0] if rsu else None, m.precio, diluidas_medias, etq(q_dil) if q_dil else "",
-                                       basicas_medias, p.dilucion_adicional)
+                                       basicas_medias, p.dilucion_adicional,
+                                       sin_dilucion_publicada=getattr(emisor, "mercado", "sec") != "sec")
     if acciones is None:
         m.bloqueos.append(f"acciones: {nota}")
         return m

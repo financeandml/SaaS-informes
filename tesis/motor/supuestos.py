@@ -104,7 +104,7 @@ class Parametros:
     faltas: List[str] = field(default_factory=list)       # lo que falta o no valida: bloqueos del paso 7
 
 
-def leer(datos: Mapping, fecha_informe: date, paquete_propuesto: str = "general") -> Parametros:
+def leer(datos: Mapping, fecha_informe: date, paquete_propuesto: str = "general", mercado: str = "") -> Parametros:
     """`datos`: el JSON de entradas completo. Lo que falta queda en `faltas`, nunca con un valor inventado."""
     val, wacc, tv = datos.get("val") or {}, datos.get("wacc") or {}, datos.get("tv") or {}
     meta = datos.get("meta") or {}                      # paso 1 (04): fecha de valoración y sector del analista
@@ -154,7 +154,7 @@ def leer(datos: Mapping, fecha_informe: date, paquete_propuesto: str = "general"
     if wacc.get("kd") is not None:
         p.kd = float(wacc["kd"]) / 100
     p.kd_fuente = wacc.get("kd_fuente", "")
-    marginal = float(por_defecto("wacc.tipo_marginal"))
+    marginal = float(por_defecto("wacc.tipo_marginal", mercado))
     p.tipo_marginal = float(wacc.get("tipo_marginal", marginal)) / 100
     if abs(p.tipo_marginal - marginal / 100) > 1e-9 and not wacc.get("tipo_marginal_justificacion"):
         faltas.append(f"wacc.tipo_marginal: distinto del {marginal:g} % exige justificación")

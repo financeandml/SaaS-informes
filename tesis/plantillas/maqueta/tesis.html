@@ -39,7 +39,7 @@
 {% endmacro %}
 {% macro texto_s(valor, motivo) %}{% if valor %}{{ valor }}{% else %}<span class="na">N/A — {{ motivo }}</span>{% endif %}{% endmacro %}
 {% macro pct(v) %}{{ v|pct_es }}{% endmacro %}
-{% macro usd(v) %}{{ v|numero(2) }} USD{% endmacro %}
+{% macro usd(v) %}{{ v|numero(2) }} {{ i.moneda }}{% endmacro %}
 
 {% if not i.emitido and i.bloqueos_qa %}<section class="hoja hoja-cero">
 <h2>BORRADOR — NO EMITIDO · Hoja 0: bloqueos de la puerta de calidad</h2>
@@ -90,7 +90,7 @@
     <div class="bloque"><span class="ante">Objetivos de la compañía vigentes</span>
       <ul class="compacta">{% for f in i.objetivos.filas %}<li>{{ f.rotulo }} {{ f.celdas[0].texto }}: <b>{{ f.celdas[1].texto }}</b> <span class="muted">(comunicado el {{ f.celdas[2].texto }})</span></li>{% else %}{% if i.objetivos.fuente.startswith('No aplica') %}<li class="no-aplica">{{ i.objetivos.fuente }}</li>{% else %}<li class="na">N/A — {{ i.objetivos.fuente }}</li>{% endif %}{% endfor %}</ul>
     </div>
-    {{ cuadro(i.cifras_resumen, rotulo="Cifras clave (mln USD) · cuadro " ~ i.cifras_resumen.numero ~ " del apartado " ~ i.numeros['2']) }}
+    {{ cuadro(i.cifras_resumen, rotulo="Cifras clave (mln " ~ i.moneda ~ ") · cuadro " ~ i.cifras_resumen.numero ~ " del apartado " ~ i.numeros['2']) }}
   </div>
 </div>
 </section>
@@ -114,7 +114,7 @@
 <div class="cuadro"><div class="rotulo">Ficha</div>
 <table class="texto-tabla"><thead><tr><th>Dato</th><th>Valor</th><th>Fuente</th></tr></thead><tbody>
 {% for d in i.ficha %}<tr><td>{{ d.rotulo }}</td><td class="{{ d.clase }}"{% if d.hecho %} data-hecho="{{ d.hecho }}"{% endif %}>{{ d.texto }}</td><td class="muted">{{ d.fuente }}</td></tr>{% endfor %}
-</tbody></table><div class="fuente">Identidad: SEC EDGAR (submissions). Cifras de portada y texto: 10-K adjunto, con página. El valor en manos de no afiliados es el de la portada del 10-K a su fecha; no es la capitalización. Recortes de las páginas citadas: apartado {{ i.numeros['40'] }}.</div></div>
+</tbody></table><div class="fuente">{% if i.emisor.mercado == 'bme' %}Identidad, acciones y cotización: BME (ficha del valor e histórico oficial). Auditor y constitución: cuentas anuales, con página.{% else %}Identidad: SEC EDGAR (submissions). Cifras de portada y texto: 10-K adjunto, con página. El valor en manos de no afiliados es el de la portada del 10-K a su fecha; no es la capitalización.{% endif %} Recortes de las páginas citadas: apartado {{ i.numeros['40'] }}.</div></div>
 
 <h3 id="ap-{{ i.numeros['2'] }}">{{ i.numeros['2'] }}. {{ i.titulos['2'] }}</h3>
 {% if i.parte_a %}{% set pa = i.parte_a %}
@@ -210,7 +210,7 @@
 <section class="hoja">
 <h2 id="parte-{{ i.indice[2].letra }}">{{ i.indice[2].letra }}. {{ i.indice[2].titulo }}</h2>
 <div class="dos">
-  <div class="grafico"><div class="rotulo">Ingresos y margen operativo</div>{{ i.grafico_ingresos|safe }}<div class="fuente">Fuente: SEC EDGAR y adjuntos, contrastados. Los mismos hechos que el cuadro {{ i.resultados.numero }}.</div></div>
+  <div class="grafico"><div class="rotulo">Ingresos y margen operativo</div>{{ i.grafico_ingresos|safe }}<div class="fuente">Fuente: {% if i.emisor.mercado == 'bme' %}cuentas publicadas en BME, contr{% else %}SEC EDGAR y adjuntos, contr{% endif %}astados. Los mismos hechos que el cuadro {{ i.resultados.numero }}.</div></div>
   <div class="grafico"><div class="rotulo">Deuda neta y deuda neta / EBITDA</div>{{ i.grafico_deuda|safe }}<div class="fuente">Fuente: cuadros {{ i.balance.numero }} y {{ i.resultados.numero }}.</div></div>
 </div>
 <h3 id="ap-{{ i.numeros['8'] }}">{{ i.numeros['8'] }}. {{ i.titulos['8'] }}</h3>
@@ -438,7 +438,7 @@
 {% if pi.cuadros.apis %}{{ cuadro(pi.cuadros.apis, True) }}{% endif %}
 <p class="muted">{{ pi.entradas }}.</p>
 <h3 id="ap-{{ i.numeros['39'] }}">{{ i.numeros['39'] }}. {{ i.titulos['39'] }}</h3>
-<p>Contraste de cada cifra de la sección C con la SEC: {{ i.resumen_contraste.get('confirmado', 0) }} confirmadas · {{ i.resumen_contraste.get('derivado', 0) }} calculadas con fórmula · {{ i.resumen_contraste.get('discrepante', 0) }} discrepantes · {{ i.resumen_contraste.get('solo_sec', 0) }} solo en la SEC · {{ i.resumen_contraste.get('hueco', 0) }} sin dato. El detalle de cada cifra, al pasar el ratón en el HTML; las listas completas, en la auditoría de la emisión.</p>
+<p>Contraste de cada cifra de la sección C {% if i.emisor.mercado == 'bme' %}entre los documentos del emisor (no presenta ante la SEC){% else %}con la SEC{% endif %}: {{ i.resumen_contraste.get('confirmado', 0) }} confirmadas · {{ i.resumen_contraste.get('derivado', 0) }} calculadas con fórmula · {{ i.resumen_contraste.get('discrepante', 0) }} discrepantes · {{ i.resumen_contraste.get('solo_sec', 0) }} solo en la SEC · {{ i.resumen_contraste.get('hueco', 0) }} sin dato. El detalle de cada cifra, al pasar el ratón en el HTML; las listas completas, en la auditoría de la emisión.</p>
 <h4>Discrepancias</h4>
 <ul class="compacta">{% for d in i.discrepancias %}<li>{{ d }}</li>{% else %}<li>Ninguna.</li>{% endfor %}</ul>
 <h4>Cuadres entre fuentes (regla «un hecho, una fuente»)</h4>

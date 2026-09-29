@@ -2,6 +2,7 @@
 horizonte; el libro del analista solo en la comparación."""
 
 from __future__ import annotations
+from . import lexico
 
 import statistics
 from dataclasses import dataclass, field
@@ -26,7 +27,7 @@ def _na(motivo: str) -> Celda:
 
 
 def _usd(v: Optional[float], dec: int = 2) -> str:
-    return "N/A" if v is None else f"{numero(v, dec)} USD"
+    return "N/A" if v is None else f"{numero(v, dec)} {lexico.moneda()}"
 
 
 def _mln(v: Optional[float]) -> str:
@@ -81,7 +82,7 @@ def construir(n, m, etiqueta, hechos=None, anuales=None, consenso=None, libro: O
     h = p.horizonte_meses
     d.horizonte_meses, d.po, d.precio, d.fecha_precio = h, v.po, v.precio, m.fecha_precio
     d.potencial, d.margen_seguridad, d.recorrido_riesgo, d.recomendacion_regla = v.potencial, v.margen_seguridad, v.recorrido_riesgo, v.recomendacion
-    precio_txt = f"cierre oficial de Nasdaq del {f_fecha(m.fecha_precio)}"
+    precio_txt = f"cierre oficial de {lexico.bolsa()} del {f_fecha(m.fecha_precio)}"
     # 12 · escenarios
     filas = []
     for nombre, r in v.resultados.items():
@@ -96,7 +97,7 @@ def construir(n, m, etiqueta, hechos=None, anuales=None, consenso=None, libro: O
                                      f"Fuente: motor de valoración (05) con las entradas del analista; precio: {precio_txt}.")
     # 12 · WACC
     br = w.beta_regresion
-    filas = [FilaCuadro("Tipo libre de riesgo (bono a 10 años)", [_c(_pct(w.rf, 2), capa="H"), _c(f"Tesoro de EE. UU., curva par del {f_fecha(w.rf_fecha)}")]),
+    filas = [FilaCuadro("Tipo libre de riesgo (bono a 10 años)", [_c(_pct(w.rf, 2), capa="H"), _c(f"{lexico.rf().replace(' a 10 años', '')} del {f_fecha(w.rf_fecha)}" if lexico.es_bme() else f"Tesoro de EE. UU., curva par del {f_fecha(w.rf_fecha)}")]),
              FilaCuadro("Beta", [_c(numero(w.beta, 2)), _c(w.beta_origen + (f"; bruta {numero(br.bruta, 2)}, R² {numero(br.r2, 2)}, "
                                                                            f"{br.n} semanas" if br else ""))])]
     if w.beta_mensual is not None:
@@ -108,10 +109,11 @@ def construir(n, m, etiqueta, hechos=None, anuales=None, consenso=None, libro: O
               FilaCuadro("Coste de la deuda (Kd)", [_c(_pct(w.kd, 2), capa="S"), _c(w.kd_origen)]),
               FilaCuadro("Tipo impositivo marginal", [_c(_pct(w.t, 1), capa="S"), _c("analista")]),
               FilaCuadro("Kd después de impuestos", [_c(_pct(w.kd_neto, 2)), _c("Kd × (1 − t)")]),
-              FilaCuadro("Peso de los fondos propios", [_c(_pct(w.peso_e, 1)), _c(f"E = precio × acciones = {_mln(w.e)} M USD")]),
-              FilaCuadro("Peso de la deuda", [_c(_pct(w.peso_d, 1)), _c(f"D = deuda financiera = {_mln(w.d)} M USD")]),
+              FilaCuadro("Peso de los fondos propios", [_c(_pct(w.peso_e, 1)), _c(f"E = precio × acciones = {_mln(w.e)} M {lexico.moneda()}")]),
+              FilaCuadro("Peso de la deuda", [_c(_pct(w.peso_d, 1)), _c(f"D = deuda financiera = {_mln(w.d)} M {lexico.moneda()}")]),
               FilaCuadro("WACC", [_c(_pct(w.wacc, 2)), _c("E/(D+E) × Ke + D/(D+E) × Kd × (1 − t)")], destacada=True)]
-    d.cuadros["wacc"] = Cuadro(n.siguiente(), "Construcción del WACC", ["Valor", "Origen"], filas, "Fuente: Tesoro de EE. UU., Nasdaq (cierres de la compañía y de SPY) y entradas del analista.")
+    d.cuadros["wacc"] = Cuadro(n.siguiente(), "Construcción del WACC", ["Valor", "Origen"], filas, f"Fuente: {lexico.rf()}; beta {lexico.mercado_beta()}; entradas del analista." if lexico.es_bme()
+                               else "Fuente: Tesoro de EE. UU., Nasdaq (cierres de la compañía y de SPY) y entradas del analista.")
     # 12 · puente (escenario base)
     b = v.base
     filas = [FilaCuadro("Valor de empresa (base)", [_c(_mln(b.ev)), _c("Σ VA de los FCFF + VA del valor terminal")], destacada=True)]
@@ -120,14 +122,15 @@ def construir(n, m, etiqueta, hechos=None, anuales=None, consenso=None, libro: O
     filas += [FilaCuadro("Fondos propios", [_c(_mln(b.fondos_propios)), _c("valor de empresa + ajustes del puente")], destacada=True),
               FilaCuadro("Acciones diluidas (millones)", [_c(numero(pte.acciones / 1e6, 1), capa="H", hecho="acciones_diluidas"), _c(pte.acciones_nota)]),
               FilaCuadro("Valor por acción hoy (V₀)", [_c(_usd(b.v0)), _c("fondos propios / acciones diluidas")], destacada=True)]
-    d.cuadros["puente"] = Cuadro(n.siguiente(), "Puente del valor de empresa al valor por acción (escenario base, mln USD)", ["Importe", "Origen"],
-                                 filas, f"Fuente: motor; deuda neta del puente {_mln(pte.deuda_neta)} M USD, los mismos importes del apartado 9.")
+    d.cuadros["puente"] = Cuadro(n.siguiente(), f"Puente del valor de empresa al valor por acción (escenario base, mln {lexico.moneda()})", ["Importe", "Origen"],
+                                 filas, f"Fuente: motor; deuda neta del puente {_mln(pte.deuda_neta)} M {lexico.moneda()}, los mismos importes del apartado 9.")
     # 12 · entradas frente al dato oficial
     filas = [FilaCuadro("Precio", [_c(_usd(v.precio), capa="H", hecho="precio"), _c(_usd(m.precio), capa="H", hecho="precio"), _c("✓")]),
              FilaCuadro(f"Ingresos del año base ({m.etiqueta_base})", [_c(_mln(m.ingresos_base), capa="H"), _c(_mln(m.ingresos_base), capa="H"), _c("✓")]),
              _fila_deuda_neta(pte, hechos)]
     d.cuadros["entradas"] = Cuadro(n.siguiente(), "Entradas del modelo frente al dato oficial", ["Motor", "Dato oficial", "Cuadre"], filas,
-                                   f"El motor lee los hechos verificados: precio ({precio_txt}), ingresos (SEC) y balance (SEC). Deben coincidir.")
+                                   f"El motor lee los hechos verificados: precio ({precio_txt}), ingresos ({'cuentas' if lexico.es_bme() else 'SEC'}) y "
+                                   f"balance ({'cuentas' if lexico.es_bme() else 'SEC'}). Deben coincidir.")
     # 12 · supuestos generales
     filas = [FilaCuadro(rot, [_c(val, capa="S"), _c(origen)]) for rot, val, origen in (
         ("Fecha de valoración", f_fecha(p.fecha_valoracion), "analista"),
@@ -145,7 +148,7 @@ def construir(n, m, etiqueta, hechos=None, anuales=None, consenso=None, libro: O
         comp = excel.comparar(libro, v)
         filas = []
         for rot, x_libro, x_motor, unidad in comp.filas:
-            fmt = (lambda x: _pct(x, 2)) if unidad == "%" else ((lambda x: numero(x)) if unidad in ("M", "M USD") else (lambda x: _usd(x)))
+            fmt = (lambda x: _pct(x, 2)) if unidad == "%" else ((lambda x: numero(x)) if unidad in ("M", "M USD", f"M {lexico.moneda()}") else (lambda x: _usd(x)))
             dif = (x_motor - x_libro) if isinstance(x_libro, (int, float)) else None
             filas.append(FilaCuadro(rot, [_c(fmt(x_libro) if x_libro is not None else "N/A", capa="S"), _c(fmt(x_motor)),
                                           _c((("+" if dif > 0 else "") + fmt(dif)) if dif is not None else "N/A")]))
@@ -172,11 +175,11 @@ def construir(n, m, etiqueta, hechos=None, anuales=None, consenso=None, libro: O
         tv = r.terminal
         notas = [f"Periodo parcial: el año 1 cuenta {_pct(pr.fraccion, 1)} (de la valoración al {f_fecha(pr.cierres[0])}); lo anterior ya está en el balance.",
                  f"Valor terminal ({ {'value_driver': 'value driver', 'gordon': 'Gordon', 'multiplo_salida': 'múltiplo'}[tv.metodo] }): "
-                 f"{_mln(tv.valor)} M USD, descontado en t = {numero(tv.momento, 2)}; contraste: "
+                 f"{_mln(tv.valor)} M {lexico.moneda()}, descontado en t = {numero(tv.momento, 2)}; contraste: "
                  + ", ".join(f"{ {'value_driver': 'value driver', 'gordon': 'Gordon', 'multiplo_salida': 'múltiplo'}[k] } {_mln(x)}" for k, x in tv.valores.items() if k != tv.metodo and x is not None) + ".",
-                 f"Valor de empresa {_mln(r.ev)} M USD (VT {_pct(r.peso_vt, 0)}) → fondos propios {_mln(r.fondos_propios)} M USD → "
+                 f"Valor de empresa {_mln(r.ev)} M {lexico.moneda()} (VT {_pct(r.peso_vt, 0)}) → fondos propios {_mln(r.fondos_propios)} M {lexico.moneda()} → "
                  f"V₀ {_usd(r.v0)} · V_h a {h} meses {_usd(r.vh)} · recorrido sobre el precio {_pct(r.vh / v.precio - 1)}."]
-        cuadro = Cuadro(n.siguiente(), f"Escenario {nombre}: drivers, FCFF y valoración (mln USD)", cols, filas,
+        cuadro = Cuadro(n.siguiente(), f"Escenario {nombre}: drivers, FCFF y valoración (mln {lexico.moneda()})", cols, filas,
                         f"Fuente: motor (05 §3–§7); WACC {_pct(r.wacc, 2)}, g {_pct(e.g, 2)}.", notas + [f"⚠ {a}" for a in r.avisos])
         d.escenarios.append((nombre, e.narrativa, cuadro))
     # 16 · sensibilidad
@@ -210,7 +213,7 @@ def construir(n, m, etiqueta, hechos=None, anuales=None, consenso=None, libro: O
         filas = [FilaCuadro("PER (BPA diluido de los 12 meses anteriores)", [_c(numero(min(valores), 1) + "x"), _c(numero(statistics.median(valores), 1) + "x"),
                                                                              _c(numero(max(valores), 1) + "x"), _c(str(len(valores)))])]
         d.cuadros["historico"] = Cuadro(n.siguiente(), "Histórico propio de 5 años", ["Mínimo", "Mediana", "Máximo", "Trimestres"], filas,
-                                        "Fuente: cierres oficiales de Nasdaq al final de cada trimestre y BPA diluido de la SEC; solo con BPA positivo.")
+                                        f"Fuente: cierres oficiales de {lexico.bolsa()} al final de cada periodo y BPA diluido {lexico.de_las_cuentas()}; solo con BPA positivo.")
     if m.comparables is not None:
         from ..motor.comparables import MULTIPLOS
         filas = []
@@ -234,7 +237,7 @@ def construir(n, m, etiqueta, hechos=None, anuales=None, consenso=None, libro: O
         implicitos = _implicitos(m, v)
         if implicitos:
             filas = [FilaCuadro(rot, [_c(_usd(x))]) for rot, x in implicitos.items()]
-            d.cuadros["implicito"] = Cuadro(n.siguiente(), "Valor implícito por acción según múltiplos (solo contraste)", ["USD/acción"], filas,
+            d.cuadros["implicito"] = Cuadro(n.siguiente(), "Valor implícito por acción según múltiplos (solo contraste)", [f"{lexico.moneda()}/acción"], filas,
                                             "Mediana de comparables × métrica propia NTM; no entra en el precio objetivo.")
             mediana = statistics.median(implicitos.values())
             if v.valor_razonable and abs(mediana / v.valor_razonable - 1) > 0.20:

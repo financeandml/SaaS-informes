@@ -7,6 +7,7 @@ Nasdaq, la lista de F3) y los datos de apoyo del foso: ROIC − WACC, estabilida
 """
 
 from __future__ import annotations
+from . import lexico
 
 import statistics
 from dataclasses import dataclass, field
@@ -23,7 +24,8 @@ FOSOS = {"efectos_de_red": "Efectos de red", "costes_de_cambio": "Costes de camb
          "escala_eficiente": "Escala eficiente", "ninguno": "Sin foso defensivo"}
 TENDENCIAS = {"se_amplia": "se amplía", "estable": "estable", "se_estrecha": "se estrecha"}
 # unidades monetarias admitidas para el SAM: con otra unidad (hogares, usuarios) no hay cuota en dinero
-ESCALAS = {"USD": 1.0, "miles USD": 1e3, "millones USD": 1e6, "miles de millones USD": 1e9, "billones USD": 1e12}
+ESCALAS = {"USD": 1.0, "miles USD": 1e3, "millones USD": 1e6, "miles de millones USD": 1e9, "billones USD": 1e12,
+           "EUR": 1.0, "miles EUR": 1e3, "millones EUR": 1e6, "miles de millones EUR": 1e9, "billones EUR": 1e12}
 
 
 @dataclass
@@ -99,20 +101,20 @@ def _mercado(d: ParteE, n, e: Entradas, textos, umbral, alias, ingresos, fy: str
     if not soms and ingresos is not None:
         d.som_por_defecto = True
         filas.append(FilaCuadro(f"Ingresos del ejercicio {fy} (SOM por defecto)", [
-            _c("SOM"), _c(fy), _c(_cifra(ingresos / 1e6, "millones USD", True), "hecho verificado de la sección C", capa="H"),
-            _c("ingresos verificados"), _c("SEC (companyfacts), sección C")], capa="H"))
+            _c("SOM"), _c(fy), _c(_cifra(ingresos / 1e6, f"millones {lexico.moneda()}", True), "hecho verificado de la sección C", capa="H"),
+            _c("ingresos verificados"), _c(f"{lexico.cuentas()}, sección C" if lexico.es_bme() else "SEC (companyfacts), sección C")], capa="H"))
     sams = [c for c, _ in cifras if c.get("clase") == "SAM" and cuota_implicita(1.0, c) is not None]
     # el SAM del año más cercano al de los ingresos
     sam = min(sams, key=lambda c: abs(int(c.get("anio") or 0) - anio)) if sams else None
     if sam is not None and ingresos is not None:
         d.cuota = cuota_implicita(ingresos, sam)
         filas.append(FilaCuadro("Cuota implícita (ingresos / SAM)", [
-            _c(""), _c(f"{fy} / {sam.get('anio')}"), _c(pct(d.cuota), f"{_cifra(ingresos / 1e6, 'millones USD')} / "
+            _c(""), _c(f"{fy} / {sam.get('anio')}"), _c(pct(d.cuota), f"{_cifra(ingresos / 1e6, 'millones ' + lexico.moneda())} / "
                                                        f"{_cifra(sam['valor'], sam.get('unidad', ''))}", capa="D"),
             _c("cálculo del sistema"), _c(f"ingresos {fy} (SEC) / SAM del analista")], capa="D", destacada=True,
             formula="Ingresos verificados del último ejercicio / SAM"))
     d.cuadros["mercado"] = Cuadro(n.siguiente(), "Tamaño de mercado: TAM, SAM y SOM", ["Clase", "Año", "Cifra", "Método", "Fuente"],
-                                  filas, "Fuente: analista, con cita verificada en el documento y la página; ingresos de la SEC.")
+                                  filas, f"Fuente: analista, con cita verificada en el documento y la página; ingresos {lexico.de_las_cuentas()}.")
     tam = next((c for c, _ in cifras if c.get("clase") == "TAM"), None)
     frases = []
     if tam is not None:
@@ -127,9 +129,9 @@ def _mercado(d: ParteE, n, e: Entradas, textos, umbral, alias, ingresos, fy: str
         texto += (f"Como mercado obtenible (SOM) toma «{s.get('etiqueta', '')}»: {_cifra(s['valor'], s.get('unidad', ''))} en "
                   f"{s.get('anio')} ({METODOS.get(s.get('metodo', ''), '')}). ")
     elif d.som_por_defecto:
-        texto += f"Sin SOM del analista, el SOM son los ingresos verificados del ejercicio {fy}, {_cifra(ingresos / 1e6, 'millones USD')}. "
+        texto += f"Sin SOM del analista, el SOM son los ingresos verificados del ejercicio {fy}, {_cifra(ingresos / 1e6, 'millones ' + lexico.moneda())}. "
     if d.cuota is not None:
-        texto += (f"Con unos ingresos de {_cifra(ingresos / 1e6, 'millones USD')} en el ejercicio {fy}, la cuota implícita sobre el SAM "
+        texto += (f"Con unos ingresos de {_cifra(ingresos / 1e6, 'millones ' + lexico.moneda())} en el ejercicio {fy}, la cuota implícita sobre el SAM "
                   f"es del {pct(d.cuota)}. ")
     d.texto_21 = texto + f"Cifras, métodos y citas, en el cuadro {d.cuadros['mercado'].numero}."
 
@@ -159,7 +161,7 @@ def _competidores(d: ParteE, n, e: Entradas, textos, umbral, alias) -> None:
     notas = [f"Evidencia: {v}" for v in distintas.values()]
     notas += [] if con_cuota else ["Sin cuotas de mercado: ninguna tiene una fuente del expediente que las publique."]
     d.cuadros["competidores"] = Cuadro(n.siguiente(), "Competidores", columnas, filas,
-                                       "Fuente: analista, con la evidencia del documento citado (Item 1 del 10-K).", notas)
+                                       f"Fuente: analista, con la evidencia del documento citado ({lexico.negocio()}).", notas)
 
 
 def _comparables(d: ParteE, n, motor, hechos, anuales, etiqueta, nombre: str, ticker: str) -> None:
@@ -263,7 +265,7 @@ def _apoyo(d: ParteE, n, hechos, anuales, etiqueta: Callable, wacc: Optional[flo
                           "sin gasto en I+D del ejercicio"))
     if filas:
         d.cuadros["apoyo"] = Cuadro(n.siguiente(), "Datos de apoyo del foso defensivo", [etiqueta(p) for p in periodos] + ["Cinco años"],
-                                    filas, "Fuente: SEC EDGAR, derivados de la sección C y WACC del motor de valoración.")
+                                    filas, f"Fuente: {lexico.cuentas()}, derivados de la sección C y WACC del motor de valoración.")
 
 
 def construir(n, e: Entradas, textos: Mapping[str, str], umbral: float, hechos, anuales, etiqueta: Callable,

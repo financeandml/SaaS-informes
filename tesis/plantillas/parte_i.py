@@ -4,6 +4,7 @@ completo va a `auditoria.json`.
 """
 
 from __future__ import annotations
+from . import lexico
 
 import hashlib
 import json
@@ -39,7 +40,12 @@ class ParteI:
 @lru_cache(maxsize=1)
 def _definiciones() -> List[str]:
     import yaml
-    return list(yaml.safe_load(_DEFINICIONES.read_text(encoding="utf-8")) or [])
+    salida = list(yaml.safe_load(_DEFINICIONES.read_text(encoding="utf-8")) or [])
+    if lexico.es_bme():
+        # la definición del precio es la de la bolsa del emisor; sin opciones cotizadas no hay volatilidad implícita
+        salida = [(f"Precio: cierre oficial de {lexico.bolsa()} de la fecha de valoración." if d.startswith("Precio:") else d)
+                  for d in salida]
+    return salida
 
 
 def _c(t: str, nota: str = "", capa: str = "S") -> Celda:
@@ -64,9 +70,9 @@ def _modelo(d: ParteI, n, motor, autor: str) -> None:
         ("Periodo explícito", numero(p.periodo), "años", "paso 7", autor),
         ("Convención de mitad de año", "sí" if p.mitad_de_anio else "no", "", "paso 7", autor),
         ("Retribución en acciones", p.sbc_politica.replace("_", " "), "", "paso 7", autor),
-        ("Paquete sectorial", p.paquete.replace("_", " "), "", "paso 1" if p.paquete_confirmado else "SIC de la SEC",
+        ("Paquete sectorial", p.paquete.replace("_", " "), "", "paso 1" if p.paquete_confirmado else ("sin propuesta: lo elige el analista" if lexico.es_bme() else "SIC de la SEC"),
          autor if p.paquete_confirmado else "sistema"),
-        ("Tipo sin riesgo", pct(w.rf, 2), "%", f"Tesoro de EE. UU., 10 años, {f_fecha(w.rf_fecha)}", "sistema"),
+        ("Tipo sin riesgo", pct(w.rf, 2), "%", f"{lexico.rf()}, {f_fecha(w.rf_fecha)}" if lexico.es_bme() else f"Tesoro de EE. UU., 10 años, {f_fecha(w.rf_fecha)}", "sistema"),
         ("Prima de riesgo de mercado", pct(p.erp), "%", p.erp_fuente or "paso 7", autor),
         ("Beta", numero(w.beta, 2), "", w.beta_origen, "sistema"),
         ("Coste de la deuda antes de impuestos", pct(w.kd, 2), "%", w.kd_origen, autor),
@@ -92,7 +98,7 @@ def _modelo(d: ParteI, n, motor, autor: str) -> None:
     filas.append(FilaCuadro("Factor de descuento", [_c(numero(x, 3), pr.formulas.get("factores", ""), "D") for x in pr.factores], capa="D"))
     filas.append(FilaCuadro("Valor actual", [_c(numero(x / 1e6), pr.formulas.get("valor_actual", ""), "D") for x in pr.valor_actual], capa="D",
                             destacada=True))
-    d.cuadros["proyeccion"] = Cuadro(n.siguiente(), "Proyección completa del escenario base (mln USD)", columnas, filas,
+    d.cuadros["proyeccion"] = Cuadro(n.siguiente(), f"Proyección completa del escenario base (mln {lexico.moneda()})", columnas, filas,
                                      f"Fuente: motor de valoración (05 §3); año 1 por la fracción {numero(pr.fraccion, 3)} del ejercicio en curso.",
                                      partible=True)
 

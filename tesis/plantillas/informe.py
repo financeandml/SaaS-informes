@@ -25,6 +25,7 @@ from pathlib import Path
 from typing import Dict, List, Optional, Sequence, Tuple, Set
 
 from ..datos import derivados as derivados_mod
+from . import lexico
 from ..datos.campos import CAMPOS, DERIVADOS, campo as campo_de, por_seccion
 from ..verificacion.contraste import Tablero
 from ..datos.expediente import Expediente, Tipo
@@ -214,6 +215,11 @@ class Informe:
     parte_g: Optional[object] = None                                 # F6 · parte_g.ParteG (tesis, lista, riesgo, seguimiento)
 
     @property
+    def moneda(self) -> str:
+        """La moneda de las cifras del informe: la de las cuentas del emisor (regla 13)."""
+        return getattr(self.tablero, "moneda", "") or getattr(self.emisor, "moneda", "") or "USD"
+
+    @property
     def parrafos(self) -> list:
         """06 §1: los párrafos de plantilla de esta generación (propuesta, huella y estado), para el paso 9."""
         return list(getattr(self.parte_a, "parrafos", None) or [])
@@ -261,7 +267,7 @@ def _fuente_tablero(tab: Tablero, claves: Sequence[str], periodos: Sequence[Peri
     for r in tab.resultados:
         if r.campo.clave in claves and r.evidencia is not None:
             docs.add(r.evidencia.documento)
-    partes = ["SEC EDGAR (10-K y 10-Q)"] + sorted(docs)
+    partes = ([] if _MONEDA.get("sin_sec") else ["SEC EDGAR (10-K y 10-Q)"]) + sorted(docs)
     return "Fuente: " + "; ".join(partes) + "."
 
 
@@ -321,8 +327,10 @@ def _cuadro_resultados(n: Cuadros, hechos, tab: Tablero, anuales, trimestres) ->
     filas = _filas_de_la_compania(filas, tab)
     notas = ["EBITDA = EBIT + amortización del inmovilizado material e intangible"
              + ("; la amortización de contenido es coste de los ingresos y no se devuelve." if "amortizacion_contenido" not in tab.no_aplican else "."),
-             "Trimestres fiscales de la compañía; el 4T es el ejercicio menos los nueve meses acumulados (la SEC no presenta el cuarto trimestre). "
-             "Las filas sin fuente directa (EBITDA, márgenes) se calculan de las anteriores; al pasar el ratón, la fórmula."]
+             ("Semestres del ejercicio de la compañía; el 2S es el ejercicio menos el primer semestre (nadie publica el segundo). "
+              if _MONEDA.get("sin_sec") else
+              "Trimestres fiscales de la compañía; el 4T es el ejercicio menos los nueve meses acumulados (la SEC no presenta el cuarto trimestre). ")
+             + "Las filas sin fuente directa (EBITDA, márgenes) se calculan de las anteriores; al pasar el ratón, la fórmula."]
     return Cuadro(n.siguiente(), f"Estado de resultados (mln {_m()})", columnas, filas,
                   _fuente_tablero(tab, [c.clave for c in por_seccion(8)], periodos), notas)
 
@@ -377,7 +385,8 @@ def _cuadro_flujo(n: Cuadros, hechos, tab: Tablero, anuales, trimestres) -> Cuad
     filas = _filas_de_la_compania(filas, tab)
     notas = ["FCF del informe = flujo operativo − capex. El flujo de caja libre que publique la compañía es no-GAAP y se imprime aparte, tal como ella lo define."]
     if any(r.campo.clave == "dividendos" and r.hecho.hay_dato and r.hecho.valor == 0 and r.hecho.nota for r in tab.resultados):
-        notas.append("Dividendos: cero declarado por la compañía en el 10-K (al pasar el ratón, su frase y página).")
+        notas.append("Dividendos: cero declarado por la compañía en " + ("sus cuentas" if _MONEDA.get("sin_sec") else "el 10-K")
+                     + " (al pasar el ratón, su frase y página).")
     return Cuadro(n.siguiente(), f"Flujo de caja (mln {_m()})", columnas, filas,
                   _fuente_tablero(tab, [c.clave for c in por_seccion(10)], periodos), notas)
 
@@ -399,9 +408,10 @@ def _cuadro_rentabilidad(n: Cuadros, hechos, tab: Tablero, anuales) -> Cuadro:
         _fila(hechos, "capex_ventas", "Capex / Ingresos", periodos, unidad="%"),
     ]
     notas = ["Rentabilidades sobre saldos medios (cierre y cierre anterior); requieren el balance del ejercicio anterior. Los formularios no publican ROE, ROA ni ROIC: "
-             "se calculan con las cifras de los cuadros anteriores y, el ROE, con la definición que el 10-K da para su plan de incentivos."]
+             + ("se calculan con las cifras de los cuadros anteriores." if _MONEDA.get("sin_sec") else
+                "se calculan con las cifras de los cuadros anteriores y, el ROE, con la definición que el 10-K da para su plan de incentivos.")]
     return Cuadro(n.siguiente(), "Rentabilidad y eficiencia", columnas, filas,
-                  "Fuente: cifras de la SEC contrastadas en los cuadros anteriores; al pasar el ratón, la fórmula de cada fila.", notas)
+                  f"Fuente: cifras {lexico.de_las_cuentas()} contrastadas en los cuadros anteriores; al pasar el ratón, la fórmula de cada fila.", notas)
 
 
 def _cuadro_cifras_resumen(n: Cuadros, hechos, anuales, trimestres) -> Cuadro:
@@ -639,7 +649,7 @@ def _cuadros_gobierno(n: Cuadros, g: Gobierno) -> Tuple[Cuadro, Cuadro, Cuadro, 
     o = g.origenes.get("retribucion")
     ancho = max((len(f.celdas) for f in filas), default=8)
     cab = g.cabecera_retribucion[:ancho] if g.cabecera_retribucion else ["Año", "Salario", "Bonus", "Acciones", "Opciones", "Incentivo no accionarial", "Otros", "Total"][:ancho]
-    retribucion = Cuadro(n.siguiente(), "Retribución de los ejecutivos nombrados (USD, último ejercicio de la Summary Compensation Table)", cab, filas,
+    retribucion = Cuadro(n.siguiente(), f"Retribución de los ejecutivos nombrados ({lexico.moneda()}, último ejercicio de la Summary Compensation Table)", cab, filas,
                          (_fuente(o, "Summary Compensation Table") + " Columnas tal como las publica la proxy; «—» es cero en la tabla.") if o else "Fuente: " + g.faltan.get("retribucion", "—"))
     return accionistas, filiales, ejecutivos, retribucion
 
@@ -767,6 +777,8 @@ def construir(ticker: str, hoy: date, emisor: Emisor, exp: Expediente, tab: Tabl
     _FISCAL.update(cierre=anuales[-1].fin if anuales else None, desfase=tab.desfase_fiscal)
     _MONEDA["m"] = getattr(tab, "moneda", "") or getattr(emisor, "moneda", "") or "USD"
     _MONEDA["sin_sec"] = getattr(emisor, "mercado", "sec") != "sec"
+    from . import lexico
+    lexico.fijar(emisor, motor)
     hechos = derivados_mod.calcular(tab.hechos(), anuales + trimestres, instantes)
     # 01: lo que la compañía no publica no se imprime: los ejercicios anteriores a sus primeras cuentas (salió a bolsa
     # hace dos años, o la bolsa no guarda las anteriores) no son columnas de N/A
@@ -983,7 +995,7 @@ def construir(ticker: str, hoy: date, emisor: Emisor, exp: Expediente, tab: Tabl
         from ..umbrales import umbral
         fv = motor.parametros.fecha_valoracion if motor is not None else hoy
         try:
-            sesiones = precio_mod.sesiones_nasdaq(ticker.upper(), precio_mod.desde_5a(fv), fv, limite=2000)
+            sesiones = precio_mod.sesiones(ticker.upper(), precio_mod.desde_5a(fv), fv, limite=2000)
         except Exception:
             sesiones = {}
         acc = ficha.citas.get("acciones_portada")

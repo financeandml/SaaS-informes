@@ -52,20 +52,24 @@ class Contexto:
 
     def emisor(self):
         if "emisor" not in self._cache:
-            from ..fuentes import sec
-            self._cache["emisor"] = sec.emisor(self.ticker)
+            from ..fuentes import emisores
+            self._cache["emisor"] = emisores.emisor(self.ticker)
         return self._cache["emisor"]
 
     def portada(self):
         """El último 10-K de EDGAR (texto y DEI): el mismo que lee la ficha del informe."""
         if "portada" not in self._cache:
             from ..fuentes import sec
+            if getattr(self.emisor(), "mercado", "sec") != "sec":
+                raise ValueError("sin 10-K: es un emisor de BME; lo aporta el analista con su cita")
             self._cache["portada"] = sec.portada_10k(self.emisor())
         return self._cache["portada"]
 
     def facts(self):
         if "facts" not in self._cache:
             from ..fuentes import sec
+            if getattr(self.emisor(), "mercado", "sec") != "sec":
+                raise ValueError("sin XBRL: las cifras de un emisor de BME salen de sus cuentas en PDF; lo aporta el analista")
             self._cache["facts"] = sec.companyfacts(self.emisor().cik)
         return self._cache["facts"]
 
@@ -74,7 +78,7 @@ class Contexto:
         motor y el paso 8 (`precio.desde_5a`), así que va a la misma caché y no se pide dos veces."""
         if "sesiones" not in self._cache:
             from ..fuentes import precio
-            self._cache["sesiones"] = precio.sesiones_nasdaq(self.ticker, precio.desde_5a(self.fecha), self.fecha, limite=2000)
+            self._cache["sesiones"] = precio.sesiones(self.ticker, precio.desde_5a(self.fecha), self.fecha, limite=2000)
         return self._cache["sesiones"]
 
     def valor(self, campo: str):
@@ -130,10 +134,17 @@ def en_bloque(campo: str) -> bool:
     return campo in (c.get("en_bloque") or []) and campo not in (c.get("nunca_en_bloque") or [])
 
 
-def por_defecto(campo: str):
+def por_defecto(campo: str, mercado: str = ""):
     """El valor de partida de `config/propuestas.yaml › valores`: el que propone el asistente y el que usa el motor si el
     analista no lo da. Sin él, error: un valor de partida escondido en código es lo que esta función evita."""
     valores = _config().get("valores") or {}
+    if mercado:
+        # lo que depende del mercado (el tipo marginal: 21 % federal en EE. UU., 25 % general del Impuesto sobre Sociedades
+        # en España) manda sobre el valor común (`config/mercados.yaml › <mercado>.valores`)
+        from ..fuentes.emisores import mercados
+        propios = (mercados().get(mercado) or {}).get("valores") or {}
+        if campo in propios:
+            return propios[campo]
     if campo not in valores:
         raise KeyError(f"falta «{campo}» en config/propuestas.yaml › valores")
     return valores[campo]
@@ -206,6 +217,8 @@ def _sector(ctx: Contexto):
     motor cuando el analista no lo ha confirmado."""
     from ..motor.datos import ingresos_anuales, paquete_por_sic, sectores
     em = ctx.emisor()
+    if getattr(em, "mercado", "sec") != "sec":
+        return SinPropuesta("sin código sectorial oficial con que proponer el paquete (BME no publica SIC): lo elige el analista")
     ingresos = None
     if any(a <= int(em.sic) <= b for a, b in (sectores().get("bloqueo_biotech") or {}).get("sic", [])):   # como el paso 1
         from ..fuentes import sec
@@ -231,7 +244,9 @@ def _tipo(ctx: Contexto):
 
 def _de_config(campo: str):
     def funcion(ctx: Contexto):
-        return Propuesta(por_defecto(campo), "config/propuestas.yaml", "valor de partida de la casa; el motor usa el mismo si no se da")
+        from ..fuentes.emisores import es_bme
+        mercado = "bme" if es_bme(ctx.ticker) else "sec"
+        return Propuesta(por_defecto(campo, mercado), "config/propuestas.yaml", "valor de partida de la casa; el motor usa el mismo si no se da")
     return funcion
 
 
@@ -246,16 +261,24 @@ def _fecha_valoracion(ctx: Contexto):
     hoy puede no haber cerrado todavía)."""
     hoy = date.today()
     validas = [d for d, s in ctx.sesiones().items() if s.cierre is not None and (d <= ctx.fecha if ctx.fecha < hoy else d < ctx.fecha)]
+    from ..fuentes.emisores import es_bme
+    bolsa = "BME" if es_bme(ctx.ticker) else "Nasdaq"
     if not validas:
-        return SinPropuesta("Nasdaq no devuelve ninguna sesión cerrada en las tres semanas anteriores a la fecha del informe")
+        return SinPropuesta(f"{bolsa} no devuelve ninguna sesión cerrada en las tres semanas anteriores a la fecha del informe")
     d = max(validas)
-    return Propuesta(d.isoformat(), f"Nasdaq, sesión del {d:%d/%m/%Y}", "último cierre oficial anterior a la fecha del informe")
+    return Propuesta(d.isoformat(), f"{bolsa}, sesión del {d:%d/%m/%Y}", "último cierre oficial anterior a la fecha del informe")
 
 
 @propone("meta.nombre_presentacion")
 def _nombre(ctx: Contexto):
     """El de la portada del último 10-K, con la misma función que la ficha del informe."""
     from ..datos.ficha import nombre_presentacion
+    em = ctx.emisor()
+    if getattr(em, "mercado", "sec") != "sec":
+        # la denominación de BME sin la forma societaria, como la ficha del informe (`ficha._construir_bme`)
+        import re as _re
+        nombre = _re.sub(r"(?i),?\s*S\.?\s?A\.?(?:U\.?)?$|,?\s*S\.?\s?L\.?(?:U\.?)?$", "", nombre_presentacion("", em.nombre)).strip()
+        return Propuesta(nombre, f"BME, denominación del emisor (ISIN {em.isin})", "sin la forma societaria ni mayúsculas de registro")
     portada = ctx.portada()
     if portada is None:
         return SinPropuesta("EDGAR no sirve el último 10-K del emisor")
@@ -450,7 +473,8 @@ def _fm(ctx: Contexto):
 @propone("esc.base.impuesto_caja")
 def _impuesto(ctx: Contexto):
     marginal = ctx.valor("wacc.tipo_marginal")
-    marginal = float(marginal if marginal is not None else por_defecto("wacc.tipo_marginal"))
+    from ..fuentes.emisores import es_bme
+    marginal = float(marginal if marginal is not None else por_defecto("wacc.tipo_marginal", "bme" if es_bme(ctx.ticker) else "sec"))
     return _de_serie(_historico(ctx)["impuesto_caja"], (marginal, "el tipo marginal"))
 
 

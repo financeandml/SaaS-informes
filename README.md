@@ -78,17 +78,35 @@ python -m tesis servir                                     # abre http://127.0.0
 ```
 
 1. **Antes de empezar.** La primera vez, la página pide tu nombre y tu correo: la SEC exige que quien consulta EDGAR se
-   identifique. Se guarda en `.env`, solo en tu ordenador, y solo se envía a la SEC. Sin eso no se puede buscar ninguna
-   empresa. (También vale copiar `.env.ejemplo` a `.env` y rellenar `WC_SEC_CONTACTO`.)
-2. **Expediente.** Escribe el ticker o el nombre (MSFT, «micro»…) y elige la empresa. «Traer de la SEC lo que falte» baja
-   el 10-K, los 10-Q, la proxy y la nota de resultados, los clasifica y contrasta cada cifra con la SEC. Si un documento
-   y la SEC no coinciden, la tarjeta «Contraste con la SEC» enseña las dos cifras con su página: tomas una y escribes por
-   qué (va al pie del informe). Mientras quede alguna sin decidir, el informe sale en borrador.
+   identifique. Se guarda en `.env`, solo en tu ordenador, y solo se envía a la SEC. Sin eso no se pueden buscar empresas
+   de EE. UU.; las españolas se buscan sin él. (También vale copiar `.env.ejemplo` a `.env` y rellenar `WC_SEC_CONTACTO`.)
+2. **Expediente.** Escribe el ticker o el nombre (MSFT, «micro», «redegal»…) y elige la empresa: el desplegable junta las
+   de la SEC (con su CIK) y las de BME (con su ISIN y su segmento). «Traer de la fuente oficial lo que falte» baja, en
+   EE. UU., el 10-K, los 10-Q, la proxy y la nota de resultados de EDGAR; en España, de la API oficial de BME, las cuentas
+   anuales auditadas, los semestrales, las participaciones significativas, las presentaciones y el documento de
+   incorporación. Los clasifica y contrasta cada cifra: con la SEC en EE. UU.; documento contra documento en España (la
+   comparativa de las cuentas del año siguiente, el balance comparativo del semestral). Si dos cifras no coinciden, la
+   tarjeta de contraste enseña las dos con su página: tomas una y escribes por qué (va al pie del informe). Mientras quede
+   alguna sin decidir, el informe sale en borrador.
 3. **DCF** (opcional). El libro Excel del analista, solo para compararlo con el motor.
 4. **Analista.** El asistente de 9 pasos. Muchos campos traen una propuesta del sistema con su fuente (◇): se confirma o
    se cambia. Lo que falta en cada paso se lista abajo.
 5. **Informe.** «Emitir informe» genera el HTML y el PDF (unos minutos). Con bloqueos sale «BORRADOR — NO EMITIDO» y la
    hoja 0 dice qué falta; con cero, «EMITIDO».
+
+**Empresas españolas (BME Growth, BME Scaleup y Mercado Continuo).** Clave `TICKER.MC` (p. ej. `RDG.MC`, `TRTK.MC`,
+`BYTE.MC`). Precio = cierre oficial de BME; tipo sin riesgo = curva AAA del BCE a 10 años; beta frente al índice de BME
+del segmento (`config/mercados.yaml`); cifras en EUR de las cuentas en PDF (modelo del PGC normal o normalizado, y
+NIIF), con su página y su recorte. Lo que el mercado español no publica (opciones, 13F, Form 4, consenso) sale «No aplica»
+con su motivo; lo que el sistema no puede leer con seguridad (ejecutivos, filiales, segmentos de la memoria) lo aporta el
+analista con su cita en el paso 4. Las del Mercado Continuo publican en la CNMV, que no responde a consultas automáticas:
+sus cuentas se adjuntan a mano (arrastrar el PDF). Contraste de la lectura: `tests/prueba_extraccion_es.py` compara lo
+leído con las cifras publicadas por tres informes de IEAF (Bytetravel, Treelogic, Redegal), que son solo un oráculo de
+prueba, nunca una fuente del informe.
+
+**Sistema por puntos.** Cada apartado del índice (`docs/spec/01_indice.yaml`) declara sus puntos; en cada emisión cada
+punto queda en «cumple», «no aplica» (lo que el mercado del emisor no publica, con su motivo) o «falta». La hoja 0 del
+borrador y `auditoria.json` agrupan los bloqueos por apartado y punto.
 
 **Datos de ejemplo.** `datos-tesis/` trae AAPL, NFLX, ORCL y QCOM: documentos, informes emitidos y, a 27/09/2026, unas
 entradas completas de ejemplo (analista «Ejemplo de analista senior»), para ver el recorrido entero sin teclear nada. Con

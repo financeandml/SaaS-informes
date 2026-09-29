@@ -178,8 +178,9 @@ def main(argv=None) -> int:
     excel_exportado = None
     if mot is not None and mot.precio is not None:
         from tesis.datos.hechos import Capa as _Capa, Origen as _Origen, Periodo as _Periodo, de_valor as _de_valor
-        pr = _de_valor("precio", _Periodo.instante(mot.fecha_precio), mot.precio, _Capa.SEC, _Origen(documento="Nasdaq"), unidad="USD/acción",
-                       nota=f"cierre oficial de Nasdaq del {mot.fecha_precio:%d/%m/%Y}")
+        bolsa = "BME" if emisor.mercado == "bme" else "Nasdaq"
+        pr = _de_valor("precio", _Periodo.instante(mot.fecha_precio), mot.precio, _Capa.SEC, _Origen(documento=bolsa),
+                       unidad=f"{mot.moneda}/acción", nota=f"cierre oficial de {bolsa} del {mot.fecha_precio:%d/%m/%Y}")
         mot.consenso = mer.consenso
         v = mot.valoracion
         print(f"  motor: precio {mot.precio:.2f} ({mot.fecha_precio:%d/%m/%Y}) · " + (f"WACC {v.wacc.wacc:.2%} · PO {v.po:.2f} a {v.parametros.horizonte_meses} meses · "
