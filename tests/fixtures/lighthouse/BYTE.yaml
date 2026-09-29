@@ -1,0 +1,23 @@
+# Oráculo de prueba (nunca fuente del informe, CLAUDE.md regla 6): cifras históricas PUBLICADAS del informe de IEAF
+# Lighthouse sobre Bytetravel (26/05/2026), en millones de EUR al redondeo que imprime IEAF (0,1). Solo las que IEAF
+# define igual que las cuentas; signo del SaaS: gastos e impuestos en positivo, ingresos por impuesto en negativo.
+# Fuera, con su motivo: EBITDA y FCF «recurrentes» (ajustes de IEAF); «Total activo» (IEAF lo da sin la caja, que
+# lleva a la deuda financiera neta).
+empresa: Bytetravel
+informe: "IEAF Lighthouse, 26/05/2026"
+cifras:
+  - {campo: ingresos, periodo: FY2024, valor: 11.2, pagina: 25}
+  - {campo: ingresos, periodo: FY2025, valor: 19.4, pagina: 25}
+  - {campo: coste_ingresos, periodo: FY2024, valor: 0.0, pagina: 25}
+  - {campo: coste_ingresos, periodo: FY2025, valor: 1.5, pagina: 25}
+  - {campo: gastos_personal, periodo: FY2024, valor: 1.7, pagina: 25}
+  - {campo: gastos_personal, periodo: FY2025, valor: 2.4, pagina: 25}
+  - {campo: bai, periodo: FY2024, valor: 3.4, pagina: 25}
+  - {campo: bai, periodo: FY2025, valor: 0.3, pagina: 25}
+  - {campo: impuestos, periodo: FY2024, valor: 0.8, pagina: 25}
+  - {campo: impuestos, periodo: FY2025, valor: 0.1, pagina: 25}
+  - {campo: beneficio_neto, periodo: FY2024, valor: 2.5, pagina: 25}
+  - {campo: beneficio_neto, periodo: FY2025, valor: 0.2, pagina: 25}
+  - {campo: patrimonio, periodo: "@2024-12-31", valor: 6.6, pagina: 25}
+  - {campo: patrimonio, periodo: "@2025-12-31", valor: 6.6, pagina: 25}
+  - {campo: caja, periodo: "@2025-12-31", valor: 4.5, pagina: 10}

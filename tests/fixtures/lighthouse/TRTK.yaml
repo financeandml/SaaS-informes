@@ -1,0 +1,19 @@
+# Oráculo de prueba (nunca fuente del informe): cifras históricas PUBLICADAS del informe de IEAF Lighthouse sobre
+# Treelogic, en millones de EUR al redondeo de IEAF (0,1); cuentas individuales (la sociedad no consolida).
+# Fuera: EBITDA (IEAF suma subvenciones y activaciones a su manera), «Total activo» y «Activo circulante» (IEAF los da
+# sin la caja: 8,42 − 1,48 = 6,94 frente a su 6,9).
+empresa: Treelogic
+informe: "IEAF Lighthouse, 2026"
+cifras:
+  - {campo: ingresos, periodo: FY2024, valor: 7.1, pagina: 32}
+  - {campo: ingresos, periodo: FY2025, valor: 7.2, pagina: 32}
+  - {campo: coste_ingresos, periodo: FY2024, valor: 1.3, pagina: 32}
+  - {campo: coste_ingresos, periodo: FY2025, valor: 1.1, pagina: 32}
+  - {campo: gastos_personal, periodo: FY2024, valor: 5.4, pagina: 32}
+  - {campo: gastos_personal, periodo: FY2025, valor: 5.9, pagina: 32}
+  - {campo: ebit, periodo: FY2024, valor: 0.6, pagina: 32}
+  - {campo: ebit, periodo: FY2025, valor: 0.5, pagina: 32}
+  - {campo: bai, periodo: FY2024, valor: 0.3, pagina: 32}
+  - {campo: bai, periodo: FY2025, valor: 0.3, pagina: 32}
+  - {campo: beneficio_neto, periodo: FY2024, valor: 0.3, pagina: 32}
+  - {campo: beneficio_neto, periodo: FY2025, valor: 0.3, pagina: 32}

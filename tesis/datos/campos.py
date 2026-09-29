@@ -89,18 +89,18 @@ CAMPOS: Tuple[Campo, ...] = (
           nota="En las cuentas españolas, los aprovisionamientos: el coste de ventas del modelo por naturaleza."),
     Campo("marketing", "Ventas y marketing", "Sales and marketing", 8, signo_informe=-1,
           conceptos=("SellingAndMarketingExpense", "MarketingExpense"),
-          filas=(r"^Sales and marketing$", r"^Marketing$")),
+          filas=(r"^Sales and marketing$", r"^Marketing$"), marcos=("sec",)),
     Campo("tecnologia", "Investigación y desarrollo", "Technology and development", 8, signo_informe=-1,
           conceptos=("ResearchAndDevelopmentExpense", "TechnologyAndDevelopmentExpense"),
-          filas=(r"^Technology and development$", r"^Research and development$")),
+          filas=(r"^Technology and development$", r"^Research and development$"), marcos=("sec",)),
     Campo("generales", "Generales y administrativos", "General and administrative", 8, signo_informe=-1,
           conceptos=("GeneralAndAdministrativeExpense",),
-          filas=(r"^General and administrative$",)),
+          filas=(r"^General and administrative$",), marcos=("sec",)),
     # Quien publica ventas, generales y administrativos en una sola línea (Qualcomm) no tiene «ventas y marketing»
     # ni «generales» sueltos: se imprime su línea, y las otras dos no salen vacías, sino que no salen.
     Campo("sga", "Ventas, generales y administrativos", "Selling, general and administrative", 8, signo_informe=-1,
           conceptos=("SellingGeneralAndAdministrativeExpense",),
-          filas=(r"^Selling, general and administrative$",)),
+          filas=(r"^Selling, general and administrative$",), marcos=("sec",)),
     # El modelo español presenta los gastos por naturaleza: el de personal es una línea propia de sus cuentas, y en
     # los estados de EE. UU. (por función) no existe, así que allí ni se pide ni cuenta como hueco.
     Campo("gastos_personal", "Gastos de personal", "Staff costs", 8, signo_informe=-1,
@@ -161,10 +161,10 @@ CAMPOS: Tuple[Campo, ...] = (
           nota="Sin la amortización de contenido: esa es coste de los ingresos y no se devuelve al EBITDA."),
     Campo("amortizacion_contenido", "Amortización de contenido", "Amortization of content assets", 8, signo_informe=-1,
           filas=(r"^Amortization of content assets$",), solo_documento=True,
-          nota="Netflix la declara con una extensión propia que companyfacts no sirve; sale del adjunto."),
+          nota="Netflix la declara con una extensión propia que companyfacts no sirve; sale del adjunto.", marcos=("sec",)),
     Campo("sbc", "Retribución en acciones", "Stock-based compensation", 8, signo_informe=-1,
           conceptos=("ShareBasedCompensation", "AllocatedShareBasedCompensationExpense"),
-          filas=(r"^Stock-based compensation expense$",)),
+          filas=(r"^Stock-based compensation expense$",), marcos=("sec",)),
     # ------------------------------------------------------------- 9. Balance
     Campo("caja", "Tesorería y equivalentes", "Cash and cash equivalents", 9, tipo=INSTANTE,
           conceptos=("CashAndCashEquivalentsAtCarryingValue",),
@@ -183,7 +183,7 @@ CAMPOS: Tuple[Campo, ...] = (
           conceptos=("AssetsCurrent",), filas=(r"^Total current assets$", r"^Activo corriente$", r"^Total activos? corrientes?$")),
     Campo("contenido", "Activos de contenido, neto", "Content assets, net", 9, tipo=INSTANTE,
           filas=(r"^Content assets, net$",), solo_documento=True,
-          nota="Extensión propia de Netflix; companyfacts no la sirve."),
+          nota="Extensión propia de Netflix; companyfacts no la sirve.", marcos=("sec",)),
     Campo("inmovilizado", "Inmovilizado material, neto", "Property and equipment, net", 9, tipo=INSTANTE,
           conceptos=("PropertyPlantAndEquipmentNet",), filas=(r"^Property and equipment, net$",)),
     Campo("fondo_comercio", "Fondo de comercio", "Goodwill", 9, tipo=INSTANTE,
@@ -204,7 +204,7 @@ CAMPOS: Tuple[Campo, ...] = (
     # A4 (fallo [7]): quien presenta el papel comercial en su propia línea —Apple: «Commercial paper» junto a «Term
     # debt»— lo deja fuera de `LongTermDebtCurrent`; la deuda bruta lo suma entonces (`derivados.incluye_papel_comercial`).
     Campo("papel_comercial", "Papel comercial", "Commercial paper", 9, tipo=INSTANTE,
-          conceptos=("CommercialPaper",), filas=(r"^Commercial paper$",)),
+          conceptos=("CommercialPaper",), filas=(r"^Commercial paper$",), marcos=("sec",)),
     Campo("deuda_lp", "Deuda a largo plazo", "Long-term debt", 9, tipo=INSTANTE,
           # el orden importa: `LongTermDebt` es el último porque algunos emisores solo lo usan en la nota de valor
           # razonable y lo dejan a cero en el balance (Oracle: un único hecho, 0, en 2022); su deuda no corriente
@@ -281,7 +281,7 @@ CAMPOS: Tuple[Campo, ...] = (
           filas=(r"^Repayments of debt$",)),
     Campo("fcf_compania", "Free cash flow (definición de la compañía)", "Free cash flow (company definition)", 10,
           filas=(r"^Free cash flow$",), solo_documento=True,
-          nota="No-GAAP, tal como lo define la compañía en su carta; el FCF del informe es CFO − capex."),
+          nota="No-GAAP, tal como lo define la compañía en su carta; el FCF del informe es CFO − capex.", marcos=("sec",)),
 )
 
 
@@ -296,6 +296,14 @@ CONTROLES: Tuple[Campo, ...] = (
           filas=(r"^Efectivo (?:o|y) (?:otros activos l[íi]quidos )?equivalentes al final (?:del )?(?:ejercicio|periodo)$",
                  r"^Efectivo y equivalentes al efectivo al final (?:del )?(?:ejercicio|periodo)$"),
           solo_documento=True, marcos=("es",)),
+    # el capex de un estado de flujos español: dos filas bajo «Pagos por inversiones», que se suman (derivado, con
+    # fórmula, en `contraste`); nunca las homónimas de «Cobros por desinversiones»
+    Campo("pagos_intangible", "Pagos por inversiones en inmovilizado intangible", "Payments for intangible assets", 10,
+          filas=(), filas_con_contexto=((r"^Inmovilizado intangible$", r"(?i)^pagos por inversiones"),),
+          solo_documento=True, marcos=("es",), signo_pgc=-1),
+    Campo("pagos_material", "Pagos por inversiones en inmovilizado material", "Payments for property and equipment", 10,
+          filas=(), filas_con_contexto=((r"^Inmovilizado material$", r"(?i)^pagos por inversiones"),),
+          solo_documento=True, marcos=("es",), signo_pgc=-1),
 )
 
 

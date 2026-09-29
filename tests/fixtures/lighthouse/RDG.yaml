@@ -1,0 +1,23 @@
+# Oráculo de prueba (nunca fuente del informe): cifras históricas PUBLICADAS del informe de IEAF Lighthouse sobre
+# Redegal (mayo de 2026), anexo 1, en millones de EUR al redondeo de IEAF (0,1); cuentas consolidadas.
+# Fuera: EBITDA («recurrente» y con gastos capitalizados de IEAF) y «Total activo» (sin la caja: 11,76 − 3,37 = 8,39
+# frente a su 8,4 en 2024).
+empresa: Redegal
+informe: "IEAF Lighthouse, mayo de 2026"
+cifras:
+  - {campo: ingresos, periodo: FY2024, valor: 13.8, pagina: 23}
+  - {campo: ingresos, periodo: FY2025, valor: 16.8, pagina: 23}
+  - {campo: coste_ingresos, periodo: FY2024, valor: 8.3, pagina: 23}
+  - {campo: coste_ingresos, periodo: FY2025, valor: 9.9, pagina: 23}
+  - {campo: gastos_personal, periodo: FY2024, valor: 5.1, pagina: 23}
+  - {campo: gastos_personal, periodo: FY2025, valor: 5.2, pagina: 23}
+  - {campo: ebit, periodo: FY2024, valor: -1.5, pagina: 23}
+  - {campo: ebit, periodo: FY2025, valor: -0.5, pagina: 23}
+  - {campo: bai, periodo: FY2024, valor: -1.9, pagina: 23}
+  - {campo: bai, periodo: FY2025, valor: -0.7, pagina: 23}
+  - {campo: impuestos, periodo: FY2024, valor: -0.1, pagina: 23}
+  - {campo: impuestos, periodo: FY2025, valor: 0.1, pagina: 23}
+  - {campo: beneficio_neto, periodo: FY2024, valor: -1.8, pagina: 23}
+  - {campo: beneficio_neto, periodo: FY2025, valor: -0.8, pagina: 23}
+  - {campo: patrimonio, periodo: "@2024-12-31", valor: 0.8, pagina: 23}
+  - {campo: patrimonio, periodo: "@2025-12-31", valor: -0.6, pagina: 23}

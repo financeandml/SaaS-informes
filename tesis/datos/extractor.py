@@ -661,7 +661,17 @@ _FORMULA_DEL = re.compile(r"\s*\((?:del|de la) \d+ al \d+\)\s*$", re.I)
 _CONTINUA = re.compile(r"(?i)\b(?:de|del|la|las|los|el|al|a|y|e|o|u|en|por|para|con|sobre|entre)$")
 # filas que abren una sección del balance aunque traigan su subtotal: el contexto de lo que va debajo
 _ENCABEZADO = re.compile(r"(?i)^(?:total )?(?:activos?|pasivos?) (?:no )?corrientes?$|^patrimonio neto$"
-                         r"|^deudas a (?:largo|corto) plazo$")
+                         r"|^deudas a (?:largo|corto) plazo$"
+                         # el estado de flujos: el padre trae su subtotal y las filas de debajo son sus partes
+                         # («Pagos por inversiones» → «Inmovilizado material»), que sin él no se distinguen de sus
+                         # homónimas de «Cobros por desinversiones»
+                         r"|^pagos por inversiones$|^cobros por desinversiones$|^ajustes del resultado$"
+                         r"|^cambios en el capital corriente$|^otros flujos de efectivo de las actividades de explotaci[óo]n$"
+                         r"|^cobros y pagos por instrumentos de (?:patrimonio|pasivo financiero)$|^emisi[óo]n$"
+                         r"|^devoluci[óo]n y amortizaci[óo]n(?: de)?$|^pagos por dividendos y remuneraciones de otros instrumentos de patrimonio$"
+                         r"|^flujos de efectivo de las actividades de (?:explotaci[óo]n|inversi[óo]n|financiaci[óo]n)$")
+# «(+)», «(-)», «(+/-)», «(-/+)» al final del rótulo del estado de flujos: el signo del modelo, no parte del nombre
+_SIGNO_MODELO = re.compile(r"\s*\((?:[+\-−](?:/[+\-−])?)\)\s*$")
 _TITULO_SECCION = re.compile(r"(?i)informe de auditor[íi]a (?:independiente )?de (?:las )?cuentas anuales"
                              r"|informe de revisi[óo]n limitada|estados financieros intermedios")
 _TITULO_CUENTAS = re.compile(r"(?i)cuentas anuales(?: consolidadas)? (?:al|a) \d{1,2} de ")
@@ -685,7 +695,7 @@ def limpiar_rotulo_es(r: str) -> str:
     """El nombre de la partida sin su prefijo del PGC ni su fórmula: «A.1) RESULTADO DE EXPLOTACIÓN (1+2+…+13)» es
     «RESULTADO DE EXPLOTACIÓN»."""
     r = _PREFIJO.sub("", r.strip())
-    r = _FORMULA_DEL.sub("", _FORMULA.sub("", r))
+    r = _SIGNO_MODELO.sub("", _FORMULA_DEL.sub("", _FORMULA.sub("", r)))
     return re.sub(r"\s+", " ", r).strip(" :")
 
 
@@ -919,8 +929,26 @@ def _leer_es(lineas: List[Linea], numero: int, documento: str, ancho: float, alt
             recien = True
         if _ENCABEZADO.match(limpiar_rotulo_es(rotulo)):
             contexto = rotulo
+    if estado == "flujos":
+        _completar_truncados(filas)
     return PaginaLeida(numero=numero, lineas=lineas, escala=escala, titulo=titulo, columnas=columnas, filas=filas,
                        ancho=ancho, alto=alto, estado=estado, consolidado=consolidado, anclas=list(anclas))
+
+
+_TRUNCADO = re.compile(r"(?i)^flujos de efectivo de las actividades de$")
+
+
+def _completar_truncados(filas: List[Fila]) -> None:
+    """Un rótulo de sección del estado de flujos cortado en el propio PDF («FLUJOS DE EFECTIVO DE LAS ACTIVIDADES DE», sin
+    la palabra final en ningún sitio de la página). El modelo del PGC fija el orden y el arranque de cada bloque: el de
+    explotación es el que empieza por «Resultado del ejercicio antes de impuestos». Solo ese caso se completa, y el
+    rótulo dice que es la lectura del modelo, no la del documento."""
+    for k, f in enumerate(filas[:-1]):
+        if _TRUNCADO.match(limpiar_rotulo_es(f.rotulo)) and re.match(r"(?i)resultado del ejercicio antes de impuestos",
+                                                                    limpiar_rotulo_es(filas[k + 1].rotulo)):
+            f.rotulo = f"{f.rotulo} explotación"
+            for cand in f.celdas.values():
+                cand.rotulo = f.rotulo
 
 
 # ---------------------------------------------------------------------------

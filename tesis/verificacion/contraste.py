@@ -358,7 +358,9 @@ def _candidatos_por_campo(exp: Expediente, paginas: Dict[str, List[PaginaLeida]]
                     if cand.periodo is None or cand.porcentaje:
                         continue
                     for c in CAMPOS + CONTROLES:
-                        if espanol and p.estado and _ESTADO_DE_SECCION.get(c.seccion) != p.estado:
+                        # solo los estados: una tabla de la memoria con el mismo rótulo («Aprovisionamientos 2025
+                        # 2024») no es la partida, y su cabecera se leería como cifras
+                        if espanol and _ESTADO_DE_SECCION.get(c.seccion) != p.estado:
                             continue
                         if _casa(c, cand):
                             salida[c.clave].append((a, cand))
@@ -418,7 +420,8 @@ def _normalizar(valor: float, c: Campo, espanol: bool = False) -> float:
     es un ingreso por impuesto. `abs()` lo convertiría en un gasto. Allí se le da la vuelta a lo que el modelo imprime
     en negativo (`Campo.signo_debe_haber`): el gasto queda en positivo, como en la SEC, y el ingreso en negativo."""
     if espanol:
-        return valor * c.signo_debe_haber
+        valor = valor * c.signo_debe_haber
+        return 0.0 if valor == 0 else valor              # un cero no lleva signo: «−0» no es una cifra
     return abs(valor) if c.signo_informe < 0 else valor
 
 
@@ -488,6 +491,21 @@ def _contrastar_celda(c: Campo, p: Periodo, hecho_sec: Optional[Hecho],
         # ¿los adjuntos coinciden entre sí? (cada uno con su tolerancia)
         distintos = [cand for _, cand in ordenados if abs(abs(cand.valor) - abs(ev.valor)) > max(_tolerancia(cand, c), _tolerancia(ev, c))]
         lecturas = "; ".join(f"{aa.nombre} pág. {cc.pagina} = {numero(cc.valor, 2)}" for aa, cc in ordenados[:4])
+        if distintos and decision is None and sin_sec:
+            # 03 §3: para cada periodo manda el documento más reciente, que es la reexpresión (las cuentas de 2025 traen
+            # el 2024 reexpresado, «31/12/2024*»); solo es discrepancia si el que manda dice él mismo dos cifras
+            reciente = max(ordenados, key=lambda x: (x[0].periodo_fin or date.min, -PRIORIDAD.get(x[0].tipo, 9)))
+            ar, er = reciente
+            propias = [cc for aa, cc in ordenados if aa.clave == ar.clave
+                       and abs(abs(cc.valor) - abs(er.valor)) > max(_tolerancia(cc, c), _tolerancia(er, c))]
+            if not propias:
+                antes = "; ".join(f"{aa.nombre} pág. {cc.pagina} = {numero(cc.valor, 2)}" for aa, cc in ordenados if aa.clave != ar.clave
+                                  and abs(abs(cc.valor) - abs(er.valor)) > max(_tolerancia(cc, c), _tolerancia(er, c)))
+                hecho = de_valor(c.clave, p, _normalizar(er.valor, c, espanol), Capa.DOCUMENTO, _origen_de(ar, er), unidad=_unidad(c, er, moneda),
+                                 certeza=Certeza.ALTA, motivo="el emisor no presenta ante la SEC; manda el documento más reciente",
+                                 nota=f"reexpresado en {ar.nombre} pág. {er.pagina}; antes: {antes}")
+                hecho = hecho.con(contraste=Contraste.SOLO_DOCUMENTO)
+                return Resultado(c, p, hecho, hecho_sec, cands, [er], er, nota=hecho.nota)
         if distintos and decision is None:
             hecho = Hecho(campo=c.clave, periodo=p, valor=_normalizar(ev.valor, c, espanol), estado=Estado.CERO if ev.valor == 0 else Estado.VALOR,
                           capa=Capa.DOCUMENTO, unidad=unidad, origen=_origen_de(a, ev), certeza=Certeza.BAJA,
@@ -613,15 +631,19 @@ def _contrastar_media_derivada(c: Campo, p: Periodo, q4: Hecho, pares: Sequence[
     return Resultado(c, p, hecho, q4, [cand for _, cand in pares], [cand for _, cand in ordenados], ev, nota=hecho.nota)
 
 
-def contrastar(exp: Expediente, facts: dict, obtenido_en: date, periodos: Dict[str, List[Periodo]],
+def contrastar(exp: Expediente, facts: Optional[dict], obtenido_en: Optional[date], periodos: Dict[str, List[Periodo]],
                decisiones: Optional[Path] = None, paginas: Optional[Dict[str, List[PaginaLeida]]] = None) -> Tablero:
+    """El contraste campo × periodo. `facts` None: el emisor no presenta ante la SEC (un emisor español); cada cifra
+    sale de los documentos y se contrasta documento contra documento (ver el docstring del módulo)."""
     paginas = paginas if paginas is not None else _leer_todo(exp)
     por_campo = _candidatos_por_campo(exp, paginas)
     decs = _cargar_decisiones(decisiones)
     resultados: List[Resultado] = []
     avisos: List[str] = []
     flujos = periodos["anuales"] + periodos["trimestres"]
-    ajustes = sec_mod.splits(facts)
+    sin_sec = facts is None
+    moneda = _moneda_de_los_documentos(exp) if sin_sec else ""
+    ajustes = sec_mod.splits(facts) if not sin_sec else []
     cierres_fy = {p.fin for p in periodos["anuales"]}
     por_campo_sec: Dict[str, Dict[Periodo, Hecho]] = {}
 
@@ -629,14 +651,20 @@ def contrastar(exp: Expediente, facts: dict, obtenido_en: date, periodos: Dict[s
         # los hechos de otro campo, con los mismos ajustes por split, para derivar el 4T por acción
         if clave not in por_campo_sec:
             cc = campo_de(clave)
-            hs = sec_mod.hechos_xbrl(facts, cc, obtenido_en) if cc.conceptos else {}
+            hs = sec_mod.hechos_xbrl(facts, cc, obtenido_en) if cc.conceptos and not sin_sec else {}
             if cc.unidad in ("USD/acción", "acciones") and ajustes:
                 hs = {q: sec_mod.ajustar_por_split(h, ajustes, cc.unidad == "USD/acción") for q, h in hs.items()}
             por_campo_sec[clave] = hs
         return por_campo_sec[clave]
     for c in CAMPOS:
         pedidos = periodos["instantes"] if c.tipo == "instante" else flujos
-        hechos_sec = sec_mod.hechos_xbrl(facts, c, obtenido_en) if c.conceptos else {}
+        if sin_sec and "es" not in c.marcos:
+            # partida del modelo de EE. UU. (gastos por función, retribución en acciones, contenidos…): el modelo de
+            # cuentas español no la presenta. No es un dato que falte (regla 10)
+            for p in pedidos:
+                resultados.append(Resultado(c, p, na(c.clave, p, _NO_ES_DEL_MODELO, unidad=_unidad(c, None, moneda)), None, [], [], None))
+            continue
+        hechos_sec = sec_mod.hechos_xbrl(facts, c, obtenido_en) if c.conceptos and not sin_sec else {}
         if c.unidad in ("USD/acción", "acciones") and ajustes:
             # Lo presentado antes de un split se reexpresa como derivado, con fórmula;
             # así la serie es homogénea y el 10-Q previo al split deja de «discrepar».
@@ -644,7 +672,7 @@ def contrastar(exp: Expediente, facts: dict, obtenido_en: date, periodos: Dict[s
         cands = por_campo[c.clave]
         for p in pedidos:
             h_sec = hechos_sec.get(p)
-            if h_sec is None and c.conceptos:
+            if h_sec is None and c.conceptos and not sin_sec:
                 h_sec = sec_mod.hechos_xbrl(facts, c, obtenido_en, [p])[p]
             # El documento rotula sus columnas «Three months ended June 28, 2026»: de ahí salen el cierre y la
             # duración, no el día en que empezó el periodo. Comparar el periodo entero dejaba fuera todo lo leído a
@@ -675,18 +703,23 @@ def contrastar(exp: Expediente, facts: dict, obtenido_en: date, periodos: Dict[s
                 if q4 is not None:
                     resultados.append(_contrastar_media_derivada(c, p, q4, pares, decs.get((c.clave, p.clave))))
                     continue
-            if (h_sec is None or not h_sec.hay_dato) and p.meses == 3 and c.conceptos and c.unidad == "USD":
+            if (h_sec is None or not h_sec.hay_dato) and p.meses == 3 and c.conceptos and c.unidad == "USD" and not sin_sec:
                 # el trimestre que no se publica suelto se saca de los acumulados, que sí se publican
                 por_acumulados = sec_mod.trimestre_por_acumulados(facts, c, hechos_sec, p)
                 if por_acumulados is not None:
                     h_sec = por_acumulados
-            r = _contrastar_celda(c, p, h_sec, pares, decs.get((c.clave, p.clave)))
+            r = _contrastar_celda(c, p, h_sec, pares, decs.get((c.clave, p.clave)), sin_sec=sin_sec, moneda=moneda)
             if r.hecho.contraste is Contraste.HUECO:
                 cero = _cero_declarado(c, p, exp)
                 if cero is not None:
                     r = Resultado(c, p, cero, h_sec, [], [], None, nota=cero.nota)
             resultados.append(r)
-    no_aplican = _no_los_tiene_la_compania(resultados, facts)
+    controles: Dict[Tuple[str, Periodo], Hecho] = {}
+    if sin_sec:
+        resultados = _derivados_espanoles(resultados, periodos, por_campo, decs, moneda, controles)
+        no_aplican = {c.clave: _NO_ES_DEL_MODELO for c in CAMPOS if "es" not in c.marcos}
+    else:
+        no_aplican = _no_los_tiene_la_compania(resultados, facts)
     for r in resultados:
         if r.campo.clave in no_aplican and r.hecho.contraste is Contraste.HUECO:
             r.hecho = r.hecho.con(motivo=no_aplican[r.campo.clave])
@@ -696,5 +729,88 @@ def contrastar(exp: Expediente, facts: dict, obtenido_en: date, periodos: Dict[s
         if clave == "hueco" and r.campo.clave in no_aplican:
             clave = "no_aplica"
         resumen[clave] = resumen.get(clave, 0) + 1
+    if sin_sec:
+        _, individuales = _ambito(exp, paginas)
+        if individuales:
+            avisos.append("Las cifras salen de las cuentas individuales de la sociedad: ningún documento del expediente trae "
+                          "cuentas consolidadas.")
     return Tablero(resultados=resultados, paginas=paginas, resumen=resumen, avisos=avisos, no_aplican=no_aplican,
-                   splits=[(fecha, razon) for fecha, razon, _ in ajustes], desfase_fiscal=sec_mod.desfase_fiscal(facts))
+                   splits=[(fecha, razon) for fecha, razon, _ in ajustes],
+                   desfase_fiscal=sec_mod.desfase_fiscal(facts) if not sin_sec else 0,
+                   controles=controles, moneda=moneda or "USD")
+
+
+_NO_ES_DEL_MODELO = ("el modelo de cuentas español no presenta esta partida (es del modelo de EE. UU.): no es una línea "
+                     "de sus cuentas, no un dato que falte.")
+
+
+def _moneda_de_los_documentos(exp: Expediente) -> str:
+    """La moneda que declaran las cuentas españolas del expediente; "" si ninguna lo dice (no se supone)."""
+    from ..datos.extractor import moneda_de
+    for a in exp.adjuntos:
+        if a.tipo in ESPANOLES:
+            m = moneda_de(a)
+            if m:
+                return m
+    return ""
+
+
+# lo que en unas cuentas españolas es la suma de dos filas del estado de flujos (derivado, con su fórmula)
+_SUMAS_ES = {"capex": (("pagos_intangible", "pagos_material"), "inmovilizado intangible + material (pagos por inversiones)")}
+
+
+def _derivados_espanoles(resultados: List[Resultado], periodos: Dict[str, List[Periodo]],
+                         por_campo: Dict[str, List[Tuple[Adjunto, Candidato]]], decs, moneda: str,
+                         controles: Dict[Tuple[str, Periodo], Hecho]) -> List[Resultado]:
+    """Lo que un emisor español no publica suelto y sí se deduce de lo publicado, marcado como derivado (∑):
+    - el capex, suma de las inversiones en inmovilizado intangible y material del estado de flujos;
+    - el segundo semestre de cada flujo, ejercicio menos primer semestre (nadie publica el 2S).
+    Y las cifras de control (`campos.CONTROLES`) para el auditor."""
+    flujos = periodos["anuales"] + periodos["trimestres"]
+    for c in CONTROLES:
+        pedidos = periodos["instantes"] if c.tipo == "instante" else flujos
+        for p in pedidos:
+            pares = [(a, cand) for a, cand in por_campo.get(c.clave, []) if _mismo_periodo(cand.periodo, p)]
+            r = _contrastar_celda(c, p, None, pares, decs.get((c.clave, p.clave)), sin_sec=True, moneda=moneda)
+            controles[(c.clave, p)] = r.hecho
+    por_clave = {(r.campo.clave, r.periodo): k for k, r in enumerate(resultados)}
+    for destino, (partes, texto) in _SUMAS_ES.items():
+        for p in flujos:
+            k = por_clave.get((destino, p))
+            if k is None or resultados[k].hecho.contraste is not Contraste.HUECO:
+                continue
+            entradas = {parte: controles.get((parte, p)) for parte in partes}
+            if any(h is None or not h.hay_dato for h in entradas.values()) and not any(h is not None and h.hay_dato for h in entradas.values()):
+                continue
+            # una de las dos filas en blanco en el documento (sin inversiones de ese tipo) no impide la suma: el modelo
+            # imprime «-» o nada, y eso es cero declarado solo si la otra existe en la misma página
+            h = derivar(destino, p, texto, {n: (x if x is not None else na(n, p, "no se lee", unidad=moneda)) for n, x in entradas.items()},
+                        lambda **v: sum(v.values()), unidad=_unidad(resultados[k].campo, None, moneda))
+            if not h.hay_dato:
+                vivos = {n: x for n, x in entradas.items() if x is not None and x.hay_dato}
+                h = derivar(destino, p, texto + ", con la otra fila sin importe en el documento", vivos,
+                            lambda **v: sum(v.values()), unidad=_unidad(resultados[k].campo, None, moneda))
+            if h.hay_dato:
+                r = resultados[k]
+                resultados[k] = Resultado(r.campo, p, h.con(contraste=Contraste.DERIVADO), r.sec, r.candidatos, [], None, nota=texto)
+    cierres = {p.fin: p for p in periodos["anuales"]}
+    for k, r in enumerate(list(resultados)):
+        p, c = r.periodo, r.campo
+        if (p.meses != 6 or p.fin not in cierres or c.tipo == "instante" or c.unidad not in ("USD",)
+                or r.hecho.contraste is not Contraste.HUECO):
+            continue
+        fy = resultados[por_clave[(c.clave, cierres[p.fin])]].hecho if (c.clave, cierres[p.fin]) in por_clave else None
+        fin_1s = p.inicio - timedelta(days=1)
+        s1 = next((resultados[j].hecho for (cl, q), j in por_clave.items() if cl == c.clave and q.fin == fin_1s and q.meses == 6), None)
+        if fy is None or s1 is None or not fy.hay_dato or not s1.hay_dato:
+            continue
+        h = derivar(c.clave, p, f"{fy.periodo.clave} − {s1.periodo.clave}", {"ejercicio": fy, "primer_semestre": s1},
+                    lambda ejercicio, primer_semestre: ejercicio - primer_semestre, unidad=fy.unidad)
+        nota = f"2S = {fy.periodo.clave} − {s1.periodo.clave}: nadie publica el segundo semestre"
+        if h.hay_dato and fy.valor * s1.valor > 0 and h.valor * fy.valor < 0:
+            # que el segundo semestre cambie de signo cuando el ejercicio y el primero no lo hacen dice que el semestral y
+            # las cuentas anuales no clasifican igual la partida: se dice, no se corrige
+            nota += (f"; sale con el signo contrario al del ejercicio y al del primer semestre: el semestral y las cuentas "
+                     f"anuales no clasifican igual esta partida")
+        resultados[k] = Resultado(c, p, h.con(contraste=Contraste.DERIVADO, nota=nota), r.sec, r.candidatos, [], None, nota=nota)
+    return resultados
