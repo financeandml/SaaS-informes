@@ -322,7 +322,6 @@ class Documentos(unittest.TestCase):
     def test_10_citables(self):
         self.assertFalse([b for b in bloqueos("QCOM") if "no disponible para verificar" in b])
 
-    @falla(25, "fichas de consejeros no reconocidas")
     def test_25_consejo(self):
         for t in ("AAPL", "QCOM", "ORCL"):
             self.assertFalse([b for b in bloqueos(t) if b.startswith("Gobierno · consejo")], t)
@@ -347,19 +346,15 @@ class Documentos(unittest.TestCase):
     def test_57_riesgo_1a_aceptado(self):
         self.assertFalse([b for b in bloqueos("ORCL") if "riesgo_1a" in b])
 
-    @falla(27, "fundación con cita del analista ignorada")
     def test_27_fundacion(self):
         self.assertEqual(inf("ORCL").celda("Ficha", "Fundación", "Valor"), "1977")
 
-    @falla(28, "guía en texto no reconocida")
     def test_28_guia_en_texto(self):
         self.assertFalse(inf("ORCL").cuadro("Objetivos vigentes")[1][0].startswith("N/A"))
 
-    @falla(70, "guía N/A que la propia puerta bloquea (AAPL)")
     def test_70_na_bloqueado_aapl(self):
         self.assertFalse([b for b in bloqueos("AAPL") if "donde no puede haberlo" in b or "Texto técnico" in b])
 
-    @falla(71, "guía N/A que la propia puerta bloquea (ORCL)")
     def test_71_na_bloqueado_orcl(self):
         self.assertFalse([b for b in bloqueos("ORCL") if "Apartado 2:" in b or "Apartado portada" in b])
 

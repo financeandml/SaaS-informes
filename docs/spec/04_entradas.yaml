@@ -16,10 +16,10 @@ pasos:
     campos:
       - {id: meta.analista, tipo: texto, oblig: true}
       - {id: meta.fecha_informe, tipo: fecha, oblig: true, prop: "hoy"}
-      - {id: meta.fecha_valoracion, tipo: fecha, oblig: true, prop: "último cierre hábil ≤ fecha_informe", val: "sesión con cierre oficial Nasdaq"}
+      - {id: meta.fecha_valoracion, tipo: fecha, oblig: true, prop: "último cierre hábil ≤ fecha_informe", val: "sesión con cierre oficial de la bolsa del emisor (Nasdaq o BME)"}
       - {id: meta.tipo, tipo: enum, valores: [inicio_cobertura, actualizacion], oblig: true}
-      - {id: meta.nombre_presentacion, tipo: texto, oblig: true, prop: "portada del 10-K normalizada", val: "sin sufijos de estado (/DE) ni «Common Stock»"}
-      - {id: meta.sector, tipo: enum, valores: "paquetes de 05 §2", oblig: true, prop: "SIC → paquete (config/sectores.yaml)", val: "financieras, REIT y biotech sin ingresos → bloqueo v1"}
+      - {id: meta.nombre_presentacion, tipo: texto, oblig: true, prop: "portada del 10-K o denominación en BME, normalizada", val: "sin sufijos de estado (/DE) ni «Common Stock»"}
+      - {id: meta.sector, tipo: enum, valores: "paquetes de 05 §2", oblig: true, prop: "SIC → paquete (config/sectores.yaml); en BME, sin propuesta (no publica SIC)", val: "financieras, REIT y biotech sin ingresos → bloqueo v1"}
 
   - paso: "2 · Documentos y verificación (03)"
     campos:
