@@ -157,7 +157,7 @@ def buscar(consulta: str, maximo: int = 12) -> List[dict]:
         return []
     errores = []
     try:
-        salida += [{"clave": t, "nombre": n, "mercado": "sec", "id": f"CIK {int(c)}"} for t, n, c in sec.buscar_tickers(q, maximo)]
+        salida += [{"clave": t, "nombre": n, "mercado": "sec", "id": f"CIK {int(c)}", "cik": c} for t, n, c in sec.buscar_tickers(q, maximo)]
     except sec.SinContacto as e:
         errores.append(str(e))
     try:

@@ -485,6 +485,8 @@ def construir(exp: Expediente, salida_fotos: Optional[Path] = None, emisor=None)
     """Con `emisor`, todo sale de EDGAR (HTML y XML); el PDF de la proxy, si está en el expediente, solo aporta retratos,
     trayectorias y consejo. Sin `emisor` (o sin contacto con la SEC), la lectura antigua de los PDF adjuntos."""
     g = Gobierno()
+    if emisor is not None and getattr(emisor, "mercado", "sec") == "bme":
+        return _de_bme(exp, g)
     proxy = max(exp.de_tipo(Tipo.DEF14A), key=lambda a: a.fecha or date.min, default=None)
     k10 = max(exp.de_tipo(Tipo.K10), key=lambda a: a.periodo_fin or date.min, default=None)
     if emisor is not None:
@@ -509,3 +511,95 @@ def construir(exp: Expediente, salida_fotos: Optional[Path] = None, emisor=None)
     else:
         _filiales(k10, g)
     return g
+
+
+# --------------------------------------------------------------------------- emisores de BME
+
+_PARTICIPACIONES = re.compile(r"(?i)(?:accionistas?|participaciones?)[^.]{0,80}?(?:igual(?:es)? o superior(?:es)?|superior) al 5\s?%"
+                              r"|participaciones significativas")
+_PCT = re.compile(r"(\d{1,3}(?:,\d{1,2})?)\s?%+")
+_ACCIONES_ES = re.compile(r"^\d{1,3}(?:\.\d{3})+$")
+_FIN_TABLA = re.compile(r"(?i)^(?:la (?:compañía|sociedad)|el consejo|de conformidad|en cumplimiento|atentamente|quedamos)")
+# la fecha de la posición, no la de la carta: «… superior al 5 % del capital social a 30 de junio de 2026»
+_FECHA_CORTE = re.compile(r"(?i)(?:5\s?%|capital social)[^.]{0,60}?\ba (\d{1,2} de \w+ de (?:19|20)\d{2})")
+_NOTA_AL_PIE = re.compile(r"^\*{0,3}\d{0,2}\.?\s*(?:propiedad|el consejero|representad|fondo de inversi)|^\*+\s*\S", re.I)
+
+
+def _de_bme(exp: Expediente, g: Gobierno) -> Gobierno:
+    """Gobierno de un emisor de BME. Accionistas: la última comunicación de participaciones significativas que el emisor
+    publica en la bolsa (≥ 5 %, con su fecha de corte), leída fila a fila. Lo demás no tiene una fuente que se pueda leer
+    con seguridad —el consejo y la dirección vienen en el documento de incorporación, la retribución agregada en la
+    memoria—: lo aporta el analista con su cita (regla 12), y el sistema por puntos lo dice."""
+    from .expediente import _fecha_es as _fecha_es_texto
+    candidatos = []
+    for a in exp.adjuntos:
+        for k, texto in enumerate(a.paginas, 1):
+            if _PARTICIPACIONES.search(" ".join(texto.split())) and _PCT.search(texto):
+                candidatos.append((a.fecha or date.min, a, k))
+                break
+    if not candidatos:
+        g.faltan["accionistas"] = ("sin comunicación de participaciones significativas en el expediente: tráela de BME "
+                                   "o aporta los accionistas con su cita")
+    else:
+        _, a, k = max(candidatos, key=lambda x: x[0])
+        filas = _filas_participaciones("\n".join(a.paginas[k - 1:]))
+        corte = _FECHA_CORTE.search(" ".join(a.paginas[k - 1].split()))
+        g.fecha_accionistas = _fecha_es_texto(corte.group(1)) if corte else None
+        fuente = f"{a.nombre} (participaciones ≥ 5 %{', a ' + g.fecha_accionistas.strftime('%d/%m/%Y') if g.fecha_accionistas else ''})"
+        for nombre, acciones, directa, indirecta, total in filas:
+            porcentaje = total if total is not None else (directa if directa is not None else indirecta)
+            partes = [f"directa {directa:.2f} %".replace(".", ",") if directa is not None else "",
+                      f"indirecta {indirecta:.2f} %".replace(".", ",") if indirecta is not None else ""]
+            g.accionistas.append(Accionista(nombre=nombre, acciones=acciones, porcentaje=porcentaje, direccion="", pagina=k,
+                                            nota=" · ".join(x for x in partes if x), fuente=fuente))
+        if g.accionistas:
+            g.origenes["accionistas"] = Origen(documento=a.nombre, formulario="participaciones significativas",
+                                               presentado=a.fecha, pagina=k)
+        else:
+            g.faltan["accionistas"] = f"{a.nombre} no trae una tabla de accionistas legible: aporta los accionistas con su cita"
+    g.faltan["ejecutivos"] = ("el consejo y la alta dirección de un emisor de BME están en su documento de incorporación "
+                              "y en su web: los aporta el analista con su cita (paso 4)")
+    g.faltan["filiales"] = ("las sociedades del grupo están en la memoria de las cuentas consolidadas: las aporta el analista "
+                            "con su cita (paso 4)")
+    return g
+
+
+def _filas_participaciones(texto: str):
+    """(nombre, acciones, % directo, % indirecto, % total) de cada fila de la tabla de participaciones. El orden de las
+    columnas lo dice la cabecera («directa · indirecta · total»); un nombre partido en varias líneas se junta, y «-» es
+    «sin participación de ese tipo», no un cero leído."""
+    lineas = [l.strip() for l in texto.splitlines() if l.strip()]
+    inicio = next((k for k, l in enumerate(lineas) if re.match(r"(?i)^accionistas?\b", l)), None)
+    if inicio is None:
+        return []
+    cabecera = " ".join(lineas[inicio:inicio + 4]).lower()
+    con_total = "total" in cabecera
+    con_acciones = bool(re.search(r"n[ºo°]\.? ?de acciones|acciones directas|n[úu]mero de acciones", cabecera))
+    salida, pendiente = [], []
+    for l in lineas[inicio + 1:]:
+        if _FIN_TABLA.match(l) or (salida and _NOTA_AL_PIE.match(l)):
+            break                                               # fin de la tabla: su texto o sus notas al pie
+        if re.match(r"(?i)^(?:directa|indirecta|total|\(?%\)?|participaci[óo]n|n[ºo°]? de acciones)", l) and not _PCT.search(l):
+            continue                                            # restos de la cabecera partida
+        tokens = l.split()
+        valores = [x for x in tokens if _PCT.fullmatch(x) or x in ("-", "–", "—") or _ACCIONES_ES.match(x)]
+        if not any(_PCT.fullmatch(x) for x in valores):
+            pendiente.append(l)
+            continue
+        primero = next(i for i, x in enumerate(tokens) if _PCT.fullmatch(x) or x in ("-", "–", "—") or _ACCIONES_ES.match(x))
+        nombre = " ".join(pendiente + tokens[:primero]).strip(" *")
+        nombre = re.sub(r"(?<=[A-Z.])\d$", "", nombre).strip()          # la llamada a la nota al pie («S.L.U.1»)
+        pendiente = []
+        celdas = [x for x in tokens[primero:] if _PCT.fullmatch(x) or x in ("-", "–", "—") or _ACCIONES_ES.match(x)]
+        acciones = None
+        if con_acciones and celdas and not _PCT.fullmatch(celdas[0]):
+            primera = celdas.pop(0)                               # la columna de acciones: un número o «-»
+            acciones = float(primera.replace(".", "")) if _ACCIONES_ES.match(primera) else None
+        pcts = [None if x in ("-", "–", "—") else float(_PCT.fullmatch(x).group(1).replace(",", "."))
+                for x in celdas if _PCT.fullmatch(x) or x in ("-", "–", "—")]
+        directa = pcts[0] if pcts else None
+        indirecta = pcts[1] if len(pcts) > 1 else None
+        total = pcts[2] if con_total and len(pcts) > 2 else None
+        if nombre and any(x is not None for x in (directa, indirecta, total)):
+            salida.append((re.sub(r"\s+", " ", nombre), acciones, directa, indirecta, total))
+    return salida

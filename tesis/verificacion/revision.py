@@ -66,7 +66,7 @@ def _texto_hecho(h, unidad: str) -> Optional[str]:
         return _miles(v * 100, 1) + " %"
     if u == "x":
         return _miles(v, 1) + "x"
-    if u == "USD/acción":
+    if u.endswith("/acción"):
         return _miles(v, 2)
     if u == "empleados":
         return _miles(v, 0)

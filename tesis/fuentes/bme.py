@@ -285,3 +285,55 @@ def descargar(doc: Documento, carpeta: Path) -> Path:
         raise ValueError(f"la bolsa no devolvió un PDF para «{doc.titulo}»")
     destino.write_bytes(cuerpo)
     return destino
+
+
+# Qué se trae de la bolsa para el expediente de un emisor de BME, con el mismo contrato que `edgar.traer`: cada documento
+# con su resultado («traído», «ya estaba», «error»), nunca un «ok» resumido. Las cuentas anuales de tres ejercicios (la
+# comparativa de cada una contrasta la anterior), los dos últimos semestrales, y de la información publicada en los
+# últimos 18 meses lo que alimenta el informe: participaciones significativas (5), documento de incorporación (4, 6, 24),
+# presentaciones (7, 21) y operaciones de directivos (34). Lo demás (avisos de la bolsa, convocatorias) no se trae.
+_OIR_UTILES = (
+    ("participaciones", r"(?i)participaciones? significativas?", 1),
+    ("incorporacion", r"(?i)documento informativo|doc\. informativo", 1),
+    ("presentacion", r"(?i)presentaci[óo]n", 2),
+    ("directivos", r"(?i)operaci[óo]n(?:es)? (?:realizada|de|con) (?:por )?(?:directivos|personas con responsabilidades)", 6),
+)
+
+
+def traer(emisor, carpeta: Path, anuales: int = 4, semestrales: int = 2, hoy: Optional[date] = None) -> list:
+    """Trae a `carpeta` los documentos oficiales del emisor de BME y deja su procedencia en `origen.json`."""
+    import json
+    import re as _re
+    from .edgar import Traido
+    carpeta = Path(carpeta)
+    carpeta.mkdir(parents=True, exist_ok=True)
+    hoy = hoy or date.today()
+    elegidos = []
+    financiera = informacion_financiera(emisor.clave_bolsa)
+    elegidos += [("cuentas anuales", d) for d in [d for d in financiera if d.periodo == "AN"][:anuales]]
+    elegidos += [("semestral", d) for d in [d for d in financiera if d.periodo != "AN"][:semestrales]]
+    publicados = documentos(emisor.clave_bolsa, hoy - timedelta(days=548), hoy)
+    for clave, patron, cuantos in _OIR_UTILES:
+        elegidos += [(clave, d) for d in [d for d in publicados if _re.search(patron, d.titulo)][:cuantos]]
+    ruta_origen = carpeta / "origen.json"
+    try:
+        origen = json.loads(ruta_origen.read_text(encoding="utf-8")) if ruta_origen.is_file() else {}
+    except (OSError, ValueError):
+        origen = {}
+    salida = []
+    for clave, d in elegidos:
+        sufijo = d.id or d.fecha.strftime("%Y%m%d")
+        previo = carpeta / f"bme_{d.ejercicio or d.fecha.year}_{d.periodo or d.clase}_{sufijo}.pdf".replace("/", "-")
+        estado = "ya estaba" if previo.exists() and previo.stat().st_size > 0 else "traído"
+        try:
+            ruta = descargar(d, carpeta)
+        except Exception as ex:           # un documento que no baja no tumba el resto: se dice cuál y por qué
+            salida.append(Traido(clave=clave, estado="error", url=d.url, formulario=d.tipo, presentado=d.fecha,
+                                 motivo=f"{d.titulo}: {ex.__class__.__name__}: {ex}"))
+            continue
+        origen[ruta.name] = {"fuente": "bme", "clave": clave, "url": d.url, "titulo": d.titulo, "publicado": d.fecha.isoformat(),
+                             "tipo_bme": d.tipo, "ejercicio": d.ejercicio, "periodo": d.periodo, "id": d.id}
+        salida.append(Traido(clave=clave, estado=estado, fichero=ruta.name, url=d.url, formulario=d.tipo, presentado=d.fecha,
+                             motivo=d.titulo))
+    ruta_origen.write_text(json.dumps(origen, ensure_ascii=False, indent=1), encoding="utf-8")
+    return salida

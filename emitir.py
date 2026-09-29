@@ -58,12 +58,17 @@ def main(argv=None) -> int:
     if not rutas:
         ap.error("hacen falta adjuntos (--adjuntos o --carpeta)")
 
-    print(f"[1/8] Emisor en EDGAR: {args.ticker}")
-    emisor = sec.emisor(args.ticker)
+    from tesis.fuentes import emisores
+    bme = emisores.es_bme(args.ticker)
+    print(f"[1/8] Emisor en {'BME' if bme else 'EDGAR'}: {args.ticker}")
+    emisor = emisores.emisor(args.ticker)
     if emisor is None:
-        print(f"  {args.ticker} no presenta ante la SEC: las empresas fuera de EE. UU. quedan fuera de esta versión.")
+        print(f"  {args.ticker} no está ni en la SEC ni en BME: sin emisor no hay informe.")
         return 2
-    print(f"  {emisor.nombre} · CIK {int(emisor.cik)} · {emisor.bolsa} · {len(emisor.depositos)} depósitos recientes")
+    if emisor.mercado == "bme":
+        print(f"  {emisor.nombre} · ISIN {emisor.isin} · {emisor.bolsa} · cifras en {emisor.moneda}")
+    else:
+        print(f"  {emisor.nombre} · CIK {int(emisor.cik)} · {emisor.bolsa} · {len(emisor.depositos)} depósitos recientes")
 
     print(f"[2/8] Expediente: {len(rutas)} ficheros")
     exp = expediente.cargar(args.ticker, rutas, emisor.depositos)
@@ -72,9 +77,18 @@ def main(argv=None) -> int:
     for av in exp.avisos:
         print(f"  [{av.gravedad}] {av.texto}")
 
-    print("[3/8] Hechos XBRL")
-    facts, obtenido = sec.companyfacts(emisor.cik)
-    periodos = contraste.periodos_del_informe(exp, facts=facts)
+    if emisor.mercado == "bme":
+        # sin SEC: las cifras salen de las cuentas en PDF y se contrastan documento contra documento
+        print("[3/8] Sin XBRL: emisor de BME, las cifras salen de las cuentas anuales y semestrales en PDF")
+        facts, obtenido = None, None
+    else:
+        print("[3/8] Hechos XBRL")
+        facts, obtenido = sec.companyfacts(emisor.cik)
+    try:
+        periodos = contraste.periodos_del_informe(exp, facts=facts)
+    except ValueError as e:
+        print(f"  {e}")
+        return 2
     print(f"  ejercicios {[p.clave for p in periodos['anuales']]} · trimestres {[p.clave for p in periodos['trimestres']]}")
 
     print("[4/8] Extracción y contraste")
@@ -93,7 +107,7 @@ def main(argv=None) -> int:
     print("[6/8] Ficha, gobierno (con retratos), objetivos, regiones, riesgos, historial, precio, DCF, posición")
     carpeta_recortes = salida / f"{nombre_base}_recortes"
     try:
-        portada = sec.portada_10k(emisor)
+        portada = sec.portada_10k(emisor) if emisor.mercado == "sec" else None
     except (sec.SinContacto, RuntimeError) as e:
         portada = None
         print(f"  sin el 10-K de EDGAR ({e}): auditor, nombre y propuestas salen del adjunto")
@@ -127,7 +141,7 @@ def main(argv=None) -> int:
     fecha_libro = dcf.fecha_precio_libro(modelo) if modelo is not None else None
     mer = precio.mercado(args.ticker, hoy, (fecha_libro,) if fecha_libro else ())
     pr = mer.precio
-    print(f"  precio: {'%.2f USD · ' % pr.valor + pr.nota if pr.hay_dato else 'N/A — ' + pr.motivo}")
+    print(f"  precio: {'%.2f %s · ' % (pr.valor, pr.unidad.split('/')[0]) + pr.nota if pr.hay_dato else 'N/A — ' + pr.motivo}")
     if mer.cotizacion is not None:
         c = mer.cotizacion
         print(f"  mercado: sesión {c.sesion or '?'} · cierre anterior {c.cierre_anterior} · cap. publicada {c.cap_mercado_fuente} · 52 s {c.rango_52s} · 1Y target {c.objetivo_consenso}"
@@ -138,7 +152,7 @@ def main(argv=None) -> int:
         print(f"  consenso de la bolsa: {mer.consenso.objetivo} USD · {mer.consenso.analistas} analistas · rango {mer.consenso.bajo}–{mer.consenso.alto}"
               + (f" · {mer.contraste_consenso[0].value} {mer.contraste_consenso[1]}" if mer.contraste_consenso else ""))
     # F interina: lo que publica la bolsa; la serie de short interest empieza tras el último split que la SEC registra
-    ultimo_split = max((f for f, _, _ in sec.splits(facts)), default=None)
+    ultimo_split = max((f for f, _, _ in sec.splits(facts)), default=None) if facts is not None else None
     posi = posicionamiento.construir(args.ticker, split_desde=ultimo_split)
     print("  sección F (bolsa): " + " · ".join(f"{k} {'✓' if getattr(posi, k) is not None else 'N/A'}" for k in ("cadena", "institucional", "insiders", "short"))
           + (f" · IV (Yahoo, excepción) ✓ {len(posi.iv.vencimientos)} vencimientos" if posi.iv is not None else ""))
@@ -150,14 +164,14 @@ def main(argv=None) -> int:
         posi.insiders.cruce = form4.cruzar(posi.insiders.ultimas, emisor.depositos)
         print(f"  Form 4: {sum(1 for c in posi.insiders.cruce if c.casado)} de {len(posi.insiders.cruce)} operaciones de directivos casadas con EDGAR")
     agr = None                     # regla 6: Yahoo solo para la volatilidad implícita (sin ROE, deuda ni múltiplos del agregador)
-    prox = calendario.proxima(args.ticker, agr, hoy)
+    prox = calendario.proxima(args.ticker, agr, hoy) if emisor.mercado == "sec" else None   # BME no publica calendario
     print("  próxima presentación: " + (f"{prox.fecha:%d/%m/%Y} {prox.momento} ({'esperada' if prox.esperada else 'anunciada'} según la bolsa) · {prox.contraste.value or '—'} {prox.nota_contraste}" if prox else "N/A"))
     acc_portada = f.citas.get("acciones_portada")
     # F3: el motor de valoración. Precio único = cierre oficial de Nasdaq en la fecha de valoración (nunca el intradía)
     ent = entradas.cargar(args.ticker, hoy, Path(args.entradas) if args.entradas else None)
     from tesis.motor import datos as motor_datos, excel as motor_excel
     from tesis.umbrales import _datos as umbrales_todos
-    dividendos_bolsa, _ = calendario.dividendos(args.ticker)
+    dividendos_bolsa, _ = calendario.dividendos(args.ticker) if emisor.mercado == "sec" else ([], None)
     mot = motor_datos.ejecutar(emisor, facts, hechos, periodos, ent.datos, hoy, acc_portada.valor if acc_portada is not None else None,
                                umbrales_todos(), tab.desfase_fiscal, dividendos_bolsa) if ent.datos.get("esc") else None
     libro_analista = None
@@ -189,7 +203,7 @@ def main(argv=None) -> int:
               + " · ".join(f"{c.rotulo_modelo[:28]} {c.contraste.value or '—'}" for c in cuadres))
         for k, v in modelo.faltan.items():
             print(f"    falta {k}: {v}")
-    pb = parte_b.construir(emisor, hoy, facts, portada, ent, g)
+    pb = parte_b.construir(emisor, hoy, facts, portada, ent, g, exp=exp)
     print(f"  parte B: entradas {'de PRUEBA ' if ent.de_prueba else ''}{ent.ruta or 'sin fichero'} · {len(pb.notas)} notas de resultados · "
           f"{sum(len(n.candidatos) for n in pb.notas)} candidatos de guía ({len(pb.confirmadas)} confirmados) · {len(pb.faltas)} faltas")
     for x in pb.faltas:

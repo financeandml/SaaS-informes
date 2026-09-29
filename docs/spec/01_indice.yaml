@@ -298,7 +298,7 @@ apartados:
     entradas: [historial.guia_manual, historial.causas]
     faltas: ["Parte F", Historial]
     puntos:
-      - {id: "26.1", faltas: [historial.guia_manual, Historial], texto: "Cuadro guía → real por periodo publicado (8 trimestres o sus semestres) con desvío"}
+      - {id: "26.1", requiere: [notas_resultados], faltas: [historial.guia_manual, Historial], texto: "Cuadro guía → real por periodo publicado (8 trimestres o sus semestres) con desvío"}
       - {id: "26.2", requiere: [consenso], texto: "Cuadro consenso frente a BPA publicado (Nasdaq)"}
       - {id: "26.3", obligatorio: false, texto: "Objetivos a largo plazo frente a real, si los hay"}
       - {id: "26.4", obligatorio: false, faltas: [historial.causas], texto: "Causas y aprendizajes (analista; obligatorio si hay fallos)"}
@@ -381,9 +381,9 @@ apartados:
     fuentes: [nasdaq, sec]
     faltas: ["Parte H · insiders"]
     puntos:
-      - {id: "34.1", comprueba: cuadro, faltas: ["Parte H · insiders"], texto: "Recuento de compras y ventas de directivos a 3 y 12 meses, con su fuente oficial"}
+      - {id: "34.1", requiere: [form4], comprueba: cuadro, faltas: ["Parte H · insiders"], texto: "Recuento de compras y ventas de directivos a 3 y 12 meses, con su fuente oficial"}
       - {id: "34.2", requiere: [form4], texto: "Últimas 15 operaciones cruzadas con el Form 4 de EDGAR (código, acciones, precio, plan 10b5-1)"}
-      - {id: "34.3", texto: "Participación de la dirección, con su fuente oficial"}
+      - {id: "34.3", requiere: [proxy], texto: "Participación de la dirección, con su fuente oficial"}
   35:
     parte: H
     titulo: "Posicionamiento en corto — Interés en corto y días para cubrir"

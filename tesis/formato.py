@@ -71,7 +71,7 @@ def celda(h: Optional[Hecho], unidad: Optional[str] = None) -> Celda:
         texto = pct(v)
     elif u == "x":
         texto = veces(v)
-    elif u == "USD/acción":
+    elif u.endswith("/acción"):                  # USD/acción, EUR/acción: cifra por acción, con dos decimales
         texto = numero(v, 2)
     elif u == "acciones":
         texto = mln(v)

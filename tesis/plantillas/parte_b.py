@@ -131,7 +131,9 @@ def cuadro_objetivos(n, vigentes: Sequence[guia_mod.Candidato], hay_candidatos: 
     elif hay_candidatos:
         fuente = "Pendiente: el analista no ha confirmado ninguno de los candidatos de guía de la última nota de resultados."
     else:
-        fuente = "La última nota de resultados no trae tabla de guía reconocible: el analista debe introducirla con cita."
+        # 01: lo que la compañía no publica no se imprime como N/A (AAPL y ORCL, fallos 70 y 71 de la auditoría)
+        fuente = ("No aplica: la compañía no publica una tabla de objetivos cuantitativos vigentes en su última "
+                  "comunicación de resultados.")
     return Cuadro(n.siguiente(), "Objetivos vigentes de la compañía", ["Periodo", "Rango", "Comunicado el", "Documento"], filas, fuente)
 
 
@@ -267,7 +269,8 @@ def textos(e: Entradas, alias: Optional[Dict[str, str]] = None) -> Textos:
                   citas_direccion=_con_alias(list(e.valor("direccion.citas") or []), alias), de_prueba=e.de_prueba)
 
 
-def construir(emisor, hoy: date, facts: dict, portada=None, entradas: Optional[Entradas] = None, gobierno=None) -> ParteB:
+def construir(emisor, hoy: date, facts: Optional[dict], portada=None, entradas: Optional[Entradas] = None, gobierno=None,
+              exp=None) -> ParteB:
     """Todo lo de la parte B que no es el gobierno corporativo: segmentos, guía, dividendos, clases de acciones y las
     faltas del paso 4 (entradas del analista verificadas contra el texto de los documentos)."""
     from ..fuentes import calendario, sec
@@ -275,6 +278,8 @@ def construir(emisor, hoy: date, facts: dict, portada=None, entradas: Optional[E
     from ..datos import guia, hechos as hechos_mod, item1a, segmentos as seg_mod, tablas_html
     from ..umbrales import umbral
     pb = ParteB(entradas=entradas or Entradas())
+    if getattr(emisor, "mercado", "sec") != "sec":
+        return _construir_documental(pb, emisor, hoy, exp)
     anuales = sec.calendario(facts, 12)
     cierre = anuales[-1].fin if anuales else None
     desfase = sec.desfase_fiscal(facts)
@@ -340,6 +345,27 @@ def construir(emisor, hoy: date, facts: dict, portada=None, entradas: Optional[E
     for nota in pb.notas:
         textos[f"8-K {nota.presentado.isoformat()}"] = nota.texto
         textos.update({f"8-K {nota.presentado.isoformat()}#{k}": v for k, v in nota.paginas.items()})
+    pb.textos = textos
+    pb.faltas += ent.comprobar_paso4(pb.entradas, textos, float(umbral("cita_similitud_min")), hoy)
+    if pb.entradas.de_prueba:
+        pb.faltas.append("entradas de PRUEBA (fixture), no del analista: no se puede emitir con ellas")
+    return pb
+
+
+def _construir_documental(pb: ParteB, emisor, hoy: date, exp) -> ParteB:
+    """La parte B de un emisor sin SEC (BME): no hay segmentos XBRL, notas de resultados del 8-K ni calendario de
+    Nasdaq; lo que el perfil del emisor no publica lo declara el sistema por puntos como «No aplica». Las citas del
+    analista se verifican contra el texto de los documentos oficiales del expediente, página a página
+    («<documento>#<página>»), con el mismo `comprobar_paso4` que en EE. UU."""
+    from .. import entradas as ent
+    from ..umbrales import umbral
+    textos: Dict[str, str] = {}
+    for a in (exp.adjuntos if exp is not None else []):
+        textos[a.nombre] = "\n".join(a.paginas)              # el documento entero, para citas sin página
+        for k, texto in enumerate(a.paginas, 1):
+            if texto.strip():
+                textos[f"{a.nombre}#{k}"] = texto
+        pb.alias[a.nombre] = f"{a.tipo.value} {a.periodo_fin:%d/%m/%Y}" if a.periodo_fin else a.tipo.value
     pb.textos = textos
     pb.faltas += ent.comprobar_paso4(pb.entradas, textos, float(umbral("cita_similitud_min")), hoy)
     if pb.entradas.de_prueba:

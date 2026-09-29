@@ -121,18 +121,27 @@ def arrancar_carga(ticker: str) -> dict:
 def preparar(ticker: str) -> None:
     """Hilo: emisor y hechos XBRL de la SEC; después, lo que ya hubiera en disco (adjuntos, libro) se clasifica y se resume."""
     e = estado(ticker)
-    e["carga"] = {"estado": "cargando", "mensaje": "emisor, depósitos y hechos XBRL de la SEC"}
+    from ..fuentes import emisores
+    bme = emisores.es_bme(ticker)
+    e["carga"] = {"estado": "cargando", "mensaje": "emisor y documentos de BME" if bme else "emisor, depósitos y hechos XBRL de la SEC"}
     try:
-        emisor = sec.emisor(ticker)
+        emisor = emisores.emisor(ticker)
         if emisor is None:
-            e["carga"] = {"estado": "error", "mensaje": f"{ticker} no presenta ante la SEC: las empresas fuera de EE. UU. quedan fuera de esta versión"}
+            e["carga"] = {"estado": "error", "mensaje": f"{ticker} no está ni en la SEC ni en BME"}
             return
-        facts, obtenido = sec.companyfacts(emisor.cik)
-        e["emisor"], e["facts"] = emisor, (facts, obtenido)
-        conceptos = len((facts.get("facts") or {}).get("us-gaap") or {})
-        e["carga"] = {"estado": "listo", "mensaje": f"{emisor.nombre} · CIK {int(emisor.cik)} · {emisor.bolsa} · {len(emisor.depositos)} depósitos recientes · "
-                                                    f"{conceptos} conceptos XBRL (companyfacts del {obtenido:%d/%m/%Y})",
-                      "nombre": emisor.nombre, "cik": emisor.cik, "bolsa": emisor.bolsa}
+        if emisor.mercado == "bme":
+            # sin XBRL: las cifras salen de las cuentas en PDF y se contrastan documento contra documento
+            e["emisor"], e["facts"] = emisor, (None, None)
+            e["carga"] = {"estado": "listo", "mensaje": f"{emisor.nombre} · ISIN {emisor.isin} · {emisor.bolsa} · cifras en {emisor.moneda}, "
+                                                        "de las cuentas anuales y semestrales que publica el emisor en BME",
+                          "nombre": emisor.nombre, "cik": "", "isin": emisor.isin, "bolsa": emisor.bolsa, "mercado": "bme"}
+        else:
+            facts, obtenido = sec.companyfacts(emisor.cik)
+            e["emisor"], e["facts"] = emisor, (facts, obtenido)
+            conceptos = len((facts.get("facts") or {}).get("us-gaap") or {})
+            e["carga"] = {"estado": "listo", "mensaje": f"{emisor.nombre} · CIK {int(emisor.cik)} · {emisor.bolsa} · {len(emisor.depositos)} depósitos recientes · "
+                                                        f"{conceptos} conceptos XBRL (companyfacts del {obtenido:%d/%m/%Y})",
+                          "nombre": emisor.nombre, "cik": emisor.cik, "bolsa": emisor.bolsa, "mercado": "sec"}
         e["adjuntos"] = clasificar(ticker)
         if e["adjuntos"]["adjuntos"]:
             contrastar(ticker)
@@ -208,9 +217,14 @@ def traer(ticker: str, claves: List[str]) -> None:
         e["traida"] = {"estado": "error", "mensaje": "primero hay que cargar el emisor (paso 1)", "lineas": []}
         return
     filas = (e["adjuntos"] or {}).get("adjuntos") or []
-    ya_estan = [d["clave"] for d in catalogo.estado(filas) if d["estado"] == "adjuntado"]
+    mercado = getattr(emisor, "mercado", "sec")
+    ya_estan = [d["clave"] for d in catalogo.estado(filas, mercado) if d["estado"] == "adjuntado"]
     try:
-        traidos = edgar.traer(emisor, claves, ADJUNTOS / ticker, ya_estan)
+        if mercado == "bme":
+            from ..fuentes import bme
+            traidos = bme.traer(emisor, ADJUNTOS / ticker)      # la bolsa sirve el expediente entero de una vez
+        else:
+            traidos = edgar.traer(emisor, claves, ADJUNTOS / ticker, ya_estan)
     except Exception as ex:
         e["traida"] = {"estado": "error", "mensaje": f"{ex.__class__.__name__}: {ex}", "lineas": []}
         return
@@ -219,8 +233,9 @@ def traer(ticker: str, claves: List[str]) -> None:
             declarar(ticker, t.fichero, t.clave if t.clave in catalogo.POR_CLAVE else "")
     e["adjuntos"] = clasificar(ticker)
     cuenta = sum(1 for t in traidos if t.estado == "traído")
+    fuente = "BME" if mercado == "bme" else "EDGAR"
     e["traida"] = {"estado": "listo", "lineas": [t.como_json() for t in traidos],
-                   "mensaje": f"{cuenta} documentos traídos de EDGAR" if cuenta else "no había nada nuevo que traer de EDGAR"}
+                   "mensaje": f"{cuenta} documentos traídos de {fuente}" if cuenta else f"no había nada nuevo que traer de {fuente}"}
     contrastar(ticker)
 
 
@@ -476,11 +491,17 @@ def resumen_ticker(ticker: str) -> dict:
     if not adj["adjuntos"] and _rutas(ticker) and e["carga"]["estado"] == "listo":
         adj = e["adjuntos"] = clasificar(ticker)
     filas = adj["adjuntos"]
-    return {"ticker": ticker, "carga": e["carga"], "adjuntos": adj, "contraste": e["contraste"],
-            "documentos": [dict(d, fuente=edgar.hay_fuente(d["clave"]), sin_fuente=edgar.FUENTES[d["clave"]].sin_fuente
-                                if d["clave"] in edgar.FUENTES else "") for d in catalogo.estado(filas)],
+    from ..fuentes import emisores
+    mercado = "bme" if emisores.es_bme(ticker) else "sec"
+    if mercado == "bme":
+        documentos = [dict(d, fuente=True, sin_fuente="") for d in catalogo.estado(filas, "bme")]
+    else:
+        documentos = [dict(d, fuente=edgar.hay_fuente(d["clave"]), sin_fuente=edgar.FUENTES[d["clave"]].sin_fuente
+                           if d["clave"] in edgar.FUENTES else "") for d in catalogo.estado(filas)]
+    return {"ticker": ticker, "mercado": mercado, "carga": e["carga"], "adjuntos": adj, "contraste": e["contraste"],
+            "documentos": documentos,
             "sueltos": catalogo.sueltos(filas), "traida": e.get("traida"),
-            "faltan_imprescindibles": [d.clave for d in catalogo.faltan(filas)],
+            "faltan_imprescindibles": [d.clave for d in catalogo.faltan(filas, mercado=mercado)],
             "dcf": e["dcf"] or {"existe": False},
             "posicion": {"existe": ruta_ent is not None, "fichero": ruta_ent.name if ruta_ent else "",
                          "fecha": ruta_ent.parent.name if ruta_ent else ""},
@@ -566,9 +587,12 @@ class _Manejador(BaseHTTPRequestHandler):
         if camino == "/api/tickers":
             q = (qs.get("q") or [""])[0]
             try:
-                self._json(200, [{"ticker": t, "nombre": n, "cik": c} for t, n, c in sec.buscar_tickers(q)])
+                # los dos mercados: EE. UU. (SEC, si hay contacto) y España (BME, sin identificación)
+                from ..fuentes import emisores
+                self._json(200, [{"ticker": c["clave"], "nombre": c["nombre"], "mercado": c["mercado"], "id": c["id"],
+                                  "cik": c.get("cik", ""), "bolsa": c.get("bolsa", "")} for c in emisores.buscar(q)])
             except Exception as ex:
-                self._json(502, {"error": f"no se pudo leer company_tickers.json de la SEC: {ex}"})
+                self._json(502, {"error": f"no se pudo buscar el emisor: {ex}"})
             return
         if camino == "/api/estado":
             t = self._ticker(qs)
@@ -709,7 +733,11 @@ class _Manejador(BaseHTTPRequestHandler):
                     self._tragar(); self._json(403, {"error": "solo desde la propia página"}); return
                 datos = json.loads(self._cuerpo().decode("utf-8") or "{}")
                 filas = (estado(t)["adjuntos"] or {}).get("adjuntos") or []
-                pedidas = datos.get("documentos") or [d["clave"] for d in catalogo.estado(filas) if d["estado"] == "falta"]
+                from ..fuentes import emisores as _emisores
+                mercado = "bme" if _emisores.es_bme(t) else "sec"
+                pedidas = datos.get("documentos") or [d["clave"] for d in catalogo.estado(filas, mercado) if d["estado"] == "falta"]
+                if mercado == "bme" and not pedidas:
+                    pedidas = ["CCAA"]                    # la bolsa sirve el expediente entero: se refresca igual
                 claves = [c for c in pedidas if c in catalogo.POR_CLAVE]
                 if not claves:
                     self._json(200, {"traida": {"estado": "listo", "mensaje": "no falta ningún documento de la lista", "lineas": []}}); return

@@ -224,6 +224,11 @@ class Informe:
 # ---------------------------------------------------------------------------
 
 _FISCAL = {"cierre": None, "desfase": 0}   # lo fija `construir` con el calendario de la compañía
+_MONEDA = {"m": "USD"}                     # la de las cuentas (regla 13: la cifra y su unidad, de la misma fuente); `construir`
+
+
+def _m() -> str:
+    return _MONEDA["m"]
 
 
 def _etiqueta(p: Periodo, anuales=None, tab: Optional[Tablero] = None) -> str:
@@ -309,8 +314,8 @@ def _cuadro_resultados(n: Cuadros, hechos, tab: Tablero, anuales, trimestres) ->
         _fila(hechos, "tipo_efectivo", "Tipo impositivo efectivo", periodos, unidad="%", sangria=True),
         _fila(hechos, "beneficio_neto", "Beneficio neto", periodos, destacada=True),
         _fila(hechos, "margen_neto", "Margen neto", periodos, unidad="%", sangria=True),
-        _fila(hechos, "bpa_basico", "BPA básico (USD)", periodos, unidad="USD/acción"),
-        _fila(hechos, "bpa_diluido", "BPA diluido (USD)", periodos, unidad="USD/acción"),
+        _fila(hechos, "bpa_basico", f"BPA básico ({_m()})", periodos, unidad=f"{_m()}/acción"),
+        _fila(hechos, "bpa_diluido", f"BPA diluido ({_m()})", periodos, unidad=f"{_m()}/acción"),
         _fila(hechos, "acciones_diluidas", "Acciones medias diluidas (mln)", periodos, unidad="acciones", sangria=True),
     ]
     filas = _filas_de_la_compania(filas, tab)
@@ -318,7 +323,7 @@ def _cuadro_resultados(n: Cuadros, hechos, tab: Tablero, anuales, trimestres) ->
              + ("; la amortización de contenido es coste de los ingresos y no se devuelve." if "amortizacion_contenido" not in tab.no_aplican else "."),
              "Trimestres fiscales de la compañía; el 4T es el ejercicio menos los nueve meses acumulados (la SEC no presenta el cuarto trimestre). "
              "Las filas sin fuente directa (EBITDA, márgenes) se calculan de las anteriores; al pasar el ratón, la fórmula."]
-    return Cuadro(n.siguiente(), "Estado de resultados (mln USD)", columnas, filas,
+    return Cuadro(n.siguiente(), f"Estado de resultados (mln {_m()})", columnas, filas,
                   _fuente_tablero(tab, [c.clave for c in por_seccion(8)], periodos), notas)
 
 
@@ -346,7 +351,7 @@ def _cuadro_balance(n: Cuadros, hechos, tab: Tablero, anuales, trimestres) -> Cu
     filas = _filas_de_la_compania(filas, tab)
     notas = ["Deuda neta sin pasivos por arrendamiento; se imprimen aparte.",
              "Acciones en circulación: las de la portada de cada formulario, a su fecha" + _nota_splits(tab, anuales) + "."]
-    return Cuadro(n.siguiente(), "Balance de situación (mln USD)", columnas, filas,
+    return Cuadro(n.siguiente(), f"Balance de situación (mln {_m()})", columnas, filas,
                   _fuente_tablero(tab, [c.clave for c in por_seccion(9)], periodos, True), notas)
 
 
@@ -373,7 +378,7 @@ def _cuadro_flujo(n: Cuadros, hechos, tab: Tablero, anuales, trimestres) -> Cuad
     notas = ["FCF del informe = flujo operativo − capex. El flujo de caja libre que publique la compañía es no-GAAP y se imprime aparte, tal como ella lo define."]
     if any(r.campo.clave == "dividendos" and r.hecho.hay_dato and r.hecho.valor == 0 and r.hecho.nota for r in tab.resultados):
         notas.append("Dividendos: cero declarado por la compañía en el 10-K (al pasar el ratón, su frase y página).")
-    return Cuadro(n.siguiente(), "Flujo de caja (mln USD)", columnas, filas,
+    return Cuadro(n.siguiente(), f"Flujo de caja (mln {_m()})", columnas, filas,
                   _fuente_tablero(tab, [c.clave for c in por_seccion(10)], periodos), notas)
 
 
@@ -408,13 +413,17 @@ def _cuadro_cifras_resumen(n: Cuadros, hechos, anuales, trimestres) -> Cuadro:
         _fila(hechos, "ebitda", "EBITDA", periodos),
         _fila(hechos, "margen_ebit", "Margen operativo", periodos, unidad="%"),
         _fila(hechos, "beneficio_neto", "Beneficio neto", periodos, destacada=True),
-        _fila(hechos, "bpa_diluido", "BPA diluido (USD)", periodos, unidad="USD/acción"),
+        _fila(hechos, "bpa_diluido", f"BPA diluido ({_m()})", periodos, unidad=f"{_m()}/acción"),
         _fila(hechos, "fcf", "FCF", periodos),
         _fila(hechos, "deuda_neta", "Deuda neta", periodos, instante=True),
         _fila(hechos, "dfn_ebitda", "Deuda neta / EBITDA", periodos, unidad="x"),
     ]
-    return Cuadro(n.siguiente(), "Cifras que sostienen el resumen (mln USD)", columnas, filas,
-                  "Fuente: SEC EDGAR y adjuntos, contrastados (sección C).")
+    if _MONEDA.get("sin_sec"):
+        # 01: lo que la compañía no publica no se imprime; el BPA no es una partida de las cuentas del PGC
+        filas = [f for f in filas if not (f.origen == "hecho:bpa_diluido" and all(c.clase == "na" for c in f.celdas))]
+    return Cuadro(n.siguiente(), f"Cifras que sostienen el resumen (mln {_m()})", columnas, filas,
+                  "Fuente: cuentas anuales y semestrales publicadas por el emisor en BME, contrastadas documento contra "
+                  "documento (sección C)." if _MONEDA.get("sin_sec") else "Fuente: SEC EDGAR y adjuntos, contrastados (sección C).")
 
 
 # ---------------------------------------------------------------------------
@@ -426,19 +435,25 @@ def _ficha(emisor: Emisor, f: Ficha, precio: Hecho, exp: Expediente, hechos, mer
     from ..motor.datos import sectores as sectores_cfg
     rotulos = sectores_cfg().get("rotulos") or {}
     confirmado = bool(nombre) and nombre != (f.nombre_presentacion or emisor.nombre)
+    bme = getattr(emisor, "mercado", "sec") == "bme"
+    fuente = "BME (ficha del valor y datos registrales)" if bme else "SEC EDGAR"
+    moneda = (precio.unidad or "USD").split("/")[0] if precio is not None else "USD"
     datos: List[Dato] = [
         Dato("Nombre", nombre or f.nombre_presentacion or emisor.nombre,
-             "analista (paso 1)" if confirmado else "portada del 10-K (propuesta; la confirma el analista en el paso 1)"),
-        Dato("Nombre registral", emisor.nombre, "SEC EDGAR (submissions)"),
-        Dato("Ticker · bolsa", f"{emisor.ticker} · {emisor.bolsa}", "SEC EDGAR"),
-        Dato("CIK · SIC", f"{int(emisor.cik)} · {emisor.sic}", "SEC EDGAR"),
+             "analista (paso 1)" if confirmado else ("denominación en BME" if bme else "portada del 10-K")
+             + " (propuesta; la confirma el analista en el paso 1)"),
+        Dato("Nombre registral", emisor.nombre, fuente if bme else "SEC EDGAR (submissions)"),
+        Dato("Ticker · bolsa", f"{emisor.ticker} · {emisor.bolsa}", fuente),
+        Dato("ISIN · código de emisor", f"{emisor.isin} · {emisor.clave_bolsa}", fuente) if bme
+        else Dato("CIK · SIC", f"{int(emisor.cik)} · {emisor.sic}", "SEC EDGAR"),
         Dato("Sector · paquete del DCF", rotulos.get(sector or propuesto, (sector or propuesto).replace("_", " ")),
-             ("analista (paso 1)" + (f"; el SIC {emisor.sic} proponía «{rotulos.get(propuesto, propuesto)}»" if sector != propuesto else "")
-              if sector else f"propuesta por el SIC {emisor.sic} (05 §2); la confirma el analista en el paso 1")),
-        Dato("Constitución", f.constitucion or emisor.estado_constitucion, "SEC EDGAR"),
-        Dato("Sede", f.sede or emisor.direccion.title(), "SEC EDGAR"),
+             ("analista (paso 1)" if bme else "analista (paso 1)" + (f"; el SIC {emisor.sic} proponía «{rotulos.get(propuesto, propuesto)}»" if sector != propuesto else ""))
+             if sector else ("sin código sectorial oficial con que proponerlo: lo elige el analista en el paso 1" if bme
+                             else f"propuesta por el SIC {emisor.sic} (05 §2); la confirma el analista en el paso 1")),
+        Dato("Constitución", f.constitucion or emisor.estado_constitucion, fuente),
+        Dato("Sede", f.sede or emisor.direccion.title(), fuente),
         Dato("Cierre fiscal", f.cierre_descrito or (f"{emisor.cierre_fiscal[2:]}/{emisor.cierre_fiscal[:2]}" if len(emisor.cierre_fiscal) == 4 else emisor.cierre_fiscal),
-             "SEC EDGAR (cierres de los cinco últimos ejercicios)"),
+             "cuentas anuales del expediente" if bme else "SEC EDGAR (cierres de los cinco últimos ejercicios)"),
     ]
     def cita(clave, rotulo, fmt):
         c = f.citas.get(clave)
@@ -452,32 +467,34 @@ def _ficha(emisor: Emisor, f: Ficha, precio: Hecho, exp: Expediente, hechos, mer
     cita("fundacion", "Fundación", lambda c: f"{int(c.valor)}")
     cita("empleados", "Empleados", lambda c: numero(c.valor))
     cita("auditor", "Auditor", lambda c: c.texto + (f" ({c.nota})" if c.nota else ""))
-    cita("acciones_portada", "Acciones en circulación", lambda c: f"{mln(c.valor)} mln")
-    cita("float_portada", "Valor en manos de no afiliados", lambda c: f"{mln(c.valor)} mln USD")
+    cita("acciones_portada", "Acciones admitidas a negociación" if bme else "Acciones en circulación", lambda c: f"{mln(c.valor)} mln")
+    if not bme:                                   # el public float es un dato de la portada del 10-K; en BME no existe
+        cita("float_portada", "Valor en manos de no afiliados", lambda c: f"{mln(c.valor)} mln USD")
     if precio.hay_dato:
-        datos.append(Dato("Precio", f"{numero(precio.valor, 2)} USD", precio.nota, "valor", "precio"))
+        datos.append(Dato("Precio", f"{numero(precio.valor, 2)} {moneda}", precio.nota, "valor", "precio"))
         c = mercado.cotizacion if mercado is not None else None
         if c is not None and c.cierre_anterior is not None:
             # el cierre anterior solo se imprime si la ficha de la bolsa y su histórico dicen lo mismo (regla 9)
             contraste = mercado.contraste_cierre
             if contraste is None or contraste[0] is Contraste.CONFIRMADO:
-                datos.append(Dato("Cierre anterior", f"{numero(c.cierre_anterior, 2)} USD",
+                datos.append(Dato("Cierre anterior", f"{numero(c.cierre_anterior, 2)} {moneda}",
                                   f"{c.fuente}" + (f" · {contraste[1]}" if contraste else " · histórico no contrastado"), "valor"))
             else:
                 datos.append(Dato("Cierre anterior", "N/A", contraste[1], "na"))
         acc = f.citas.get("acciones_portada")
         if acc is not None:
             capitalizacion = precio.valor * acc.valor
-            fuente = f"precio × {mln(acc.valor, 1)} mln acciones ({acc.origen.formulario}, portada, a {f_fecha(acc.fecha)})"
+            fuente = (f"precio × {mln(acc.valor, 1)} mln acciones ({acc.origen.formulario}"
+                      + ("" if bme else ", portada") + (f", a {f_fecha(acc.fecha)}" if acc.fecha else "") + ")")
             if c is not None and c.cap_mercado_fuente is not None:
                 dif = (capitalizacion - c.cap_mercado_fuente) / c.cap_mercado_fuente
-                fuente += f" · {c.fuente} publica {mln(c.cap_mercado_fuente)} mln USD (diferencia {numero(dif * 100, 2)} %)"
-            datos.append(Dato("Capitalización", f"{mln(capitalizacion)} mln USD", fuente, "valor", "capitalizacion"))
+                fuente += f" · {c.fuente} publica {mln(c.cap_mercado_fuente)} mln {moneda} (diferencia {numero(dif * 100, 2)} %)"
+            datos.append(Dato("Capitalización", f"{mln(capitalizacion)} mln {moneda}", fuente, "valor", "capitalizacion"))
         else:
             datos.append(Dato("Capitalización", "N/A", "sin acciones en circulación de portada con que multiplicar el precio", "na"))
         if c is not None:
             if c.rango_52s is not None:
-                datos.append(Dato("Rango 52 semanas", f"{numero(c.rango_52s[0], 2)} – {numero(c.rango_52s[1], 2)} USD", c.fuente, "valor"))
+                datos.append(Dato("Rango 52 semanas", f"{numero(c.rango_52s[0], 2)} – {numero(c.rango_52s[1], 2)} {moneda}", c.fuente, "valor"))
             else:
                 datos.append(Dato("Rango 52 semanas", "N/A", f"{c.fuente} no lo publica en la ficha", "na"))
             if c.volumen is not None:
@@ -489,8 +506,14 @@ def _ficha(emisor: Emisor, f: Ficha, precio: Hecho, exp: Expediente, hechos, mer
     else:
         datos.append(Dato("Precio", "N/A", precio.motivo, "na"))
         datos.append(Dato("Capitalización · rango 52 s · volumen", "N/A", "requieren cotización", "na"))
-    ultimo_k = emisor.ultimo("10-K"); ultimo_q = emisor.ultimo("10-Q")
-    datos.append(Dato("Última presentación", ", ".join(f"{d.formulario} {f_fecha(d.presentado)}" for d in (ultimo_k, ultimo_q) if d), "SEC EDGAR"))
+    if bme:
+        ultimas = [max(exp.de_tipo(t), key=lambda a: a.periodo_fin or date.min, default=None) for t in (Tipo.CCAA, Tipo.SEMESTRAL)]
+        datos.append(Dato("Última presentación", ", ".join(f"{a.tipo.value} a {f_fecha(a.periodo_fin)}" + (f" (publicado el {f_fecha(a.fecha)})" if a.fecha else "")
+                                                          for a in ultimas if a is not None and a.periodo_fin) or "N/A",
+                          "información publicada por el emisor en BME", "valor" if any(ultimas) else "na"))
+    else:
+        ultimo_k = emisor.ultimo("10-K"); ultimo_q = emisor.ultimo("10-Q")
+        datos.append(Dato("Última presentación", ", ".join(f"{d.formulario} {f_fecha(d.presentado)}" for d in (ultimo_k, ultimo_q) if d), "SEC EDGAR"))
     return datos
 
 
@@ -531,6 +554,38 @@ def _cuadro_regiones(n: Cuadros, r: Optional[Regiones], anuales, trimestres) -> 
     if ultimo is not None:
         svg, _ = graficos.tarta([(cod, r.hechos.get((cod, ultimo))) for cod, _, _ in REGIONES if r.hechos.get((cod, ultimo)) is not None])
     return Cuadro(n.siguiente(), f"Ingresos por región (mln USD){' · reparto ' + _etiqueta(ultimo) if ultimo else ''}", columnas, filas, fuente, r.cuadres), svg
+
+
+def _gobierno_del_analista(g: Gobierno, parte_b) -> None:
+    """Ejecutivos y filiales que el sistema no leyó de una fuente oficial y el analista aporta con su cita (04, paso 4;
+    regla 12). Solo rellenan lo que falta —nunca sustituyen lo leído— y solo con la cita verificada en la página que
+    dice: si no, la falta sigue en pie con el motivo."""
+    from ..datos.gobierno import Ejecutivo, Filial
+    from ..datos.hechos import Origen
+    from ..entradas import verificar_cita
+    from ..umbrales import umbral
+    ent = parte_b.entradas
+    for clave, lista in (("ejecutivos", ent.valor("gobierno.ejecutivos") or []), ("filiales", ent.valor("gobierno.filiales") or [])):
+        if getattr(g, clave) or not lista:
+            continue
+        malas, primera = [], None
+        for x in lista:
+            ev = (x.get("evidencia") or [None])[0] if isinstance(x.get("evidencia"), list) else x.get("evidencia")
+            ok, motivo = verificar_cita(ev, parte_b.textos, float(umbral("cita_similitud_min"))) if ev else (False, "sin cita")
+            if not ok:
+                malas.append(f"{x.get('nombre', '?')}: {motivo}")
+                continue
+            primera = primera or ev
+            if clave == "ejecutivos":
+                g.ejecutivos.append(Ejecutivo(nombre=str(x.get("nombre", "")), edad=None, cargo=str(x.get("cargo", "")), pagina=ev.get("pag")))
+            else:
+                g.filiales.append(Filial(nombre=str(x.get("nombre", "")), jurisdiccion=str(x.get("pais", "")),
+                                         porcentaje=x.get("participacion"), pagina=ev.get("pag")))
+        if malas:
+            g.faltan[clave] = "citas del analista sin verificar: " + "; ".join(malas)
+        elif primera is not None:
+            g.faltan.pop(clave, None)
+            g.origenes[clave] = Origen(documento=str(primera.get("doc", "")), formulario="analista (paso 4)", pagina=primera.get("pag"))
 
 
 def _cuadros_gobierno(n: Cuadros, g: Gobierno) -> Tuple[Cuadro, Cuadro, Cuadro, Cuadro]:
@@ -710,7 +765,15 @@ def construir(ticker: str, hoy: date, emisor: Emisor, exp: Expediente, tab: Tabl
     from . import parte_b as parte_b_mod
     anuales, trimestres, instantes = periodos["anuales"], periodos["trimestres"], periodos["instantes"]
     _FISCAL.update(cierre=anuales[-1].fin if anuales else None, desfase=tab.desfase_fiscal)
+    _MONEDA["m"] = getattr(tab, "moneda", "") or getattr(emisor, "moneda", "") or "USD"
+    _MONEDA["sin_sec"] = getattr(emisor, "mercado", "sec") != "sec"
     hechos = derivados_mod.calcular(tab.hechos(), anuales + trimestres, instantes)
+    # 01: lo que la compañía no publica no se imprime: los ejercicios anteriores a sus primeras cuentas (salió a bolsa
+    # hace dos años, o la bolsa no guarda las anteriores) no son columnas de N/A
+    con_dato = {p for (c, p), h in hechos.items() if h.hay_dato}
+    while len(anuales) > 1 and anuales[0] not in con_dato:
+        anuales = anuales[1:]
+    periodos = dict(periodos, anuales=anuales)
     narrativa_impresa = None    # sin IA: los textos los escribe el analista (docs/fases)
     n = Cuadros()
     cifras = _cuadro_cifras_resumen(n, hechos, anuales, trimestres)
@@ -728,9 +791,15 @@ def construir(ticker: str, hoy: date, emisor: Emisor, exp: Expediente, tab: Tabl
         segmentos_c, geografia_c, svg_mezcla, sin_traducir = parte_b_mod.cuadro_segmentos(n, parte_b.segmentos, lambda p: _etiqueta(p, anuales, tab))
         regiones_c, svg_regiones = geografia_c, ""
         parte_b.faltas += [f"rótulo sin traducir en el cuadro de segmentos: {m}" for m in sin_traducir]
+    elif parte_b is not None:
+        # sin segmentos no hay cuadro de regiones: se numeraría un cuadro que la plantilla no imprime (y la doble
+        # comprobación lo buscaría en vano); el apartado 4 dice por qué no hay desglose
+        regiones_c, svg_regiones = None, ""
     else:
         regiones_c, svg_regiones = _cuadro_regiones(n, regiones, anuales, trimestres)
     svg_ingresos, svg_deuda, avisos_graficos = _graficos_evolucion(hechos, anuales)
+    if parte_b is not None:
+        _gobierno_del_analista(gobierno, parte_b)
     accionistas, filiales, ejecutivos, retribucion = _cuadros_gobierno(n, gobierno)
     if parte_b is not None:
         publicado = parte_b.notas[-1].publicado if parte_b.notas else None
@@ -751,6 +820,18 @@ def construir(ticker: str, hoy: date, emisor: Emisor, exp: Expediente, tab: Tabl
     discrepancias = [f"{r.campo.rotulo} {r.periodo.clave}: {r.nota}" for r in tab.resultados if r.hecho.contraste is Contraste.DISCREPANTE]
     solo_sec = [f"{r.campo.rotulo} {r.periodo.clave}" for r in tab.resultados if r.hecho.contraste is Contraste.SOLO_SEC]
     huecos = [f"{r.campo.rotulo} {r.periodo.clave}: {r.hecho.motivo}" for r in tab.resultados if r.hecho.contraste is Contraste.HUECO]
+    if parte_b is not None:
+        # lo que el analista confirma en el paso 4 cubre lo que el sistema no leyó (regla 12): la ficha lo imprime con
+        # su autor, y deja de faltar
+        from ..datos.hechos import Origen as _Origen
+        for clave in ("empleados", "fundacion"):
+            v = parte_b.entradas.valor(f"perfil.{clave}")
+            if clave not in ficha.citas and isinstance(v, (int, float)) and not isinstance(v, bool):
+                ficha.citas[clave] = Cita(campo=clave, texto="dato del analista", valor=float(v),
+                                          origen=_Origen(documento="analista", formulario="paso 4 del asistente"))
+                ficha.faltan.pop(clave, None)
+        if (parte_b.entradas.valor("perfil.descripcion") or {}).get("texto"):
+            ficha.faltan.pop("descripcion", None)
     faltan = [f"Ficha · {k}: {v}" for k, v in ficha.faltan.items()] + [f"Gobierno · {k}: {v}" for k, v in gobierno.faltan.items()] \
         + ([] if parte_b is not None else [f"Objetivos · {k}: {v}" for k, v in guidance.faltan.items()]      # con parte B: Cuadro 2 y
            + [f"Regiones · {k}: {v}" for k, v in (regiones.faltan.items() if regiones is not None else ())])  # geografía de los segmentos
@@ -768,7 +849,11 @@ def construir(ticker: str, hoy: date, emisor: Emisor, exp: Expediente, tab: Tabl
                                                            bloqueo_v1 if motor is None else None)]
     fuentes = [f"{a.nombre} — {a.tipo.value}" + (f", periodo {f_fecha(a.periodo_fin)}" if a.periodo_fin else "") + (f", fecha {f_fecha(a.fecha)}" if a.fecha else "")
                + (" · verificado en EDGAR" if a.verificado_en_edgar else "") + f" · sha256 {a.huella[:12]}" for a in exp.adjuntos]
-    fuentes.append(f"SEC EDGAR companyfacts y submissions, CIK {int(emisor.cik)}, obtenidos el {f_fecha(emisor.obtenido_en)}")
+    if getattr(emisor, "mercado", "sec") == "bme":
+        fuentes.append(f"BME — ficha del valor, histórico oficial de cierres e información publicada por el emisor (ISIN "
+                       f"{emisor.isin}), consultados el {f_fecha(emisor.obtenido_en)}")
+    else:
+        fuentes.append(f"SEC EDGAR companyfacts y submissions, CIK {int(emisor.cik)}, obtenidos el {f_fecha(emisor.obtenido_en)}")
     faltan_mercado: List[str] = []
     if mercado is not None and mercado.cotizacion is not None:
         c = mercado.cotizacion
@@ -998,7 +1083,8 @@ def construir(ticker: str, hoy: date, emisor: Emisor, exp: Expediente, tab: Tabl
         # I · 36–39: modelo, fuentes con huella, notas en una página y documentación (numera sus cuadros al final)
         from . import parte_i as parte_i_mod
         parte_i = parte_i_mod.construir(n, motor, parte_b, emisor, _huecos_por_partida(tab, periodos.get("anuales")), excel,
-                                        cuadres=cuadres_apendice, ajenas=sorted({r.campo.rotulo for r in tab.resultados if r.campo.clave in tab.no_aplican}))
+                                        cuadres=cuadres_apendice, ajenas=sorted({r.campo.rotulo for r in tab.resultados if r.campo.clave in tab.no_aplican}),
+                                        exp=exp)
     if parte_g is not None:
         # «0 discrepancias y 0 bloqueos» se evalúa con la puerta de calidad ya completa (sin contar lo de la propia parte G)
         nuevas = parte_g.cerrar(len([f for f in faltan if not f.startswith("Parte G")]), len(tab.bloquea))

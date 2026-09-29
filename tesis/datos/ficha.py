@@ -174,6 +174,8 @@ def construir(emisor: Emisor, exp: Expediente, portada=None, facts: Optional[dic
     no hay adjunto con páginas, las propuestas de plantilla y fundación. `facts` da el free float y los cierres."""
     from ..fuentes import sec as sec_mod
     f = Ficha(emisor=emisor)
+    if getattr(emisor, "mercado", "sec") == "bme":
+        return _construir_bme(f, emisor, exp)
     dei = portada.dei if portada is not None else {}
     f.nombre_presentacion = nombre_presentacion(portada.nombre_portada if portada is not None else "", dei.get("EntityRegistrantName") or emisor.nombre)
     estado = dei.get("EntityIncorporationStateCountryCode") or _ESTADOS.get(emisor.estado_constitucion, emisor.estado_constitucion)
@@ -282,3 +284,72 @@ def _propuestas_de_texto(f: Ficha, portada) -> None:
         f.citas["fundacion"] = Cita(campo="fundacion", texto=fun[1], valor=float(fun[0]), origen=origen, nota="propuesta: la confirma el analista")
     else:
         f.faltan["fundacion"] = "el 10-K no fecha la constitución ni la fundación: la aporta el analista con su cita"
+
+
+_ROAC = re.compile(r"(?i)inscrit[ao] en el (?:ROAC|R\.O\.A\.C\.|Registro Oficial de Auditores de Cuentas)|N[ºo°]\.?\s?ROAC:?\s?S-?\d")
+_FIRMA = re.compile(r"(?i)\b(?:S\.?L\.?P?\.?U?|S\.?A\.?U?|Auditores)\s*,?\s*$")
+_CONSTITUCION = re.compile(r"(?i)(?:se constituy[óo]|fue constituida|constituida|se constituye)[^.]{0,120}?"
+                           r"(?:el|en)\s+(?:d[ií]a\s+)?(?:(\d{1,2}) de (\w+) de )?((?:19|20)\d{2})")
+
+
+def _construir_bme(f: Ficha, emisor: Emisor, exp: Expediente) -> Ficha:
+    """La ficha de un emisor de BME: identidad, acciones y capitalización de la bolsa (ficha del valor) y, de las cuentas
+    anuales más recientes, el auditor (la firma que firma el informe, con su inscripción en el ROAC), la fecha de
+    constitución (nota 1) y el cierre del ejercicio. Lo que no se lee con seguridad lo aporta el analista con su cita."""
+    from ..fuentes import bme
+    # sin la forma societaria («Bytetravel, S.A.» → «Bytetravel»), como se hace con «Inc.» en EE. UU.
+    f.nombre_presentacion = re.sub(r"(?i),?\s*S\.?\s?A\.?(?:U\.?)?$|,?\s*S\.?\s?L\.?(?:U\.?)?$", "",
+                                   nombre_presentacion("", emisor.nombre)).strip()
+    f.constitucion = "España"
+    f.sede = f"{emisor.direccion} (España)" if emisor.direccion else ""
+    cuentas = sorted(exp.de_tipo(Tipo.CCAA), key=lambda a: a.periodo_fin or date.min, reverse=True)
+    f.cierre_descrito = describir_cierre(sorted({a.periodo_fin for a in cuentas if a.periodo_fin})[-5:]) if cuentas else ""
+    try:
+        v = bme.valor(emisor.isin)
+    except Exception:                                         # sin red: la ficha dice por qué, no se inventa
+        v = None
+    if v is not None and v.acciones is not None:
+        f.citas["acciones_portada"] = Cita(campo="acciones_portada", texto="acciones admitidas a negociación", valor=v.acciones,
+                                           fecha=v.fecha_ultimo, origen=Origen(documento="BME", formulario="ficha del valor",
+                                                                             referencia=v.url),
+                                           nota="acciones admitidas a negociación que publica la bolsa (incluyen la autocartera)")
+    else:
+        f.faltan["acciones_portada"] = "BME no sirvió la ficha del valor con las acciones admitidas"
+    for a in cuentas:
+        for pag, texto in enumerate(a.paginas, 1):
+            lineas = [l.strip() for l in texto.splitlines() if l.strip()]
+            for k, linea in enumerate(lineas):
+                if _ROAC.search(linea) and k > 0 and _FIRMA.search(lineas[k - 1]):
+                    roac = re.search(r"S-?\s?\d{3,5}", linea)
+                    f.citas["auditor"] = _cita(a, pag, "auditor", lineas[k - 1].rstrip(" ,"),
+                                               nota=f"ROAC {roac.group(0)}" if roac else "")
+                    break
+            if "auditor" in f.citas:
+                break
+        if "auditor" in f.citas:
+            break
+    else:
+        f.faltan["auditor"] = "no se halló la firma del informe de auditoría (inscripción en el ROAC) en las cuentas anuales"
+    # la de la sociedad, no la de una filial («fue constituida en Reino Unido el 3 de junio de 2020»): la frase nombra a
+    # «la Sociedad» (o la dominante) o al propio emisor antes del verbo
+    quien = re.compile(r"(?i)\bsociedad\b|" + re.escape(emisor.nombre.split(",")[0].split()[0]))
+    for a in cuentas:
+        hallada = None
+        for pag, texto in enumerate(a.paginas, 1):
+            plano = " ".join(texto.split())
+            for m in _CONSTITUCION.finditer(plano):
+                if quien.search(plano[max(0, m.start() - 90):m.start()]):
+                    hallada = (pag, m)
+                    break
+            if hallada:
+                break
+        if hallada:
+            pag, m = hallada
+            f.citas["fundacion"] = _cita(a, pag, "fundacion", m.group(0), float(m.group(3)),
+                                         nota="propuesta: constitución de la sociedad según la memoria; la confirma el analista")
+            break
+    else:
+        f.faltan["fundacion"] = "las cuentas anuales no fechan la constitución: la aporta el analista con su cita"
+    f.faltan["empleados"] = "la plantilla media está en la memoria de las cuentas anuales: la aporta el analista con su cita"
+    f.faltan["descripcion"] = "la descripción del negocio la escribe el analista (paso 4) con las cuentas y el documento de incorporación"
+    return f

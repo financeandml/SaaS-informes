@@ -8,7 +8,7 @@ from __future__ import annotations
 import hashlib
 import json
 from dataclasses import dataclass, field
-from datetime import datetime
+from datetime import date, datetime
 from functools import lru_cache
 from pathlib import Path
 from typing import Dict, List, Mapping, Optional, Sequence, Tuple
@@ -128,7 +128,7 @@ def _citas(e, item) -> List[Tuple[str, str, str]]:
     return unicas
 
 
-def _fuentes(d: ParteI, n, emisor) -> None:
+def _fuentes(d: ParteI, n, emisor, exp=None) -> None:
     from ..fuentes import precio, sec, yahoo
     from .informe import Cuadro, FilaCuadro
     docs, apis = [], []
@@ -147,13 +147,27 @@ def _fuentes(d: ParteI, n, emisor) -> None:
         apis.append((url, hora.strftime("%d/%m/%Y %H:%M"), hashlib.sha256(cuerpo.encode("utf-8")).hexdigest()))
     for url, (cuerpo, hora) in sorted(yahoo.cliente().crudos.items()) if yahoo._CLIENTE is not None else []:
         apis.append((url, hora.strftime("%d/%m/%Y %H:%M"), hashlib.sha256(cuerpo.encode("utf-8")).hexdigest()))
+    if getattr(emisor, "mercado", "sec") == "bme" and exp is not None:
+        # sin EDGAR, los documentos son los PDF oficiales del expediente (traídos de BME o adjuntados), con su huella
+        from ..datos.expediente import origenes
+        for a in sorted(exp.adjuntos, key=lambda a: (a.fecha or a.periodo_fin or date.min), reverse=True):
+            o = origenes(a.ruta.parent).get(a.nombre, {})
+            docs.append(FilaCuadro(a.tipo.value, [_c(f_fecha(a.periodo_fin) if a.periodo_fin else "—"), _c(f_fecha(a.fecha) if a.fecha else "—"),
+                                                  _c(str(o.get("id") or "—")), _c("sí" if o.get("fuente") == "bme" else "adjunto del analista"),
+                                                  _c(a.huella[:12], f"sha256 {a.huella}" + (f" · {o.get('url')}" if o.get("url") else ""))], capa="H"))
     if docs:
-        d.cuadros["documentos"] = Cuadro(n.siguiente(), "Documentos de EDGAR", ["Periodo", "Presentado", "Nº de registro", "Verificado en EDGAR", "Huella"],
-                                         docs, "Fuente: SEC EDGAR; la huella es el sha256 de la copia guardada (completa, en el HTML).", partible=True)
+        bme = getattr(emisor, "mercado", "sec") == "bme"
+        d.cuadros["documentos"] = Cuadro(n.siguiente(), "Documentos del expediente" if bme else "Documentos de EDGAR", ["Periodo", "Presentado", "Nº de registro", "Verificado en EDGAR", "Huella"],
+                                         docs, ("Fuente: BME (información publicada por el emisor) y adjuntos del analista; la huella es el sha256 del PDF."
+                                                if bme else "Fuente: SEC EDGAR; la huella es el sha256 de la copia guardada (completa, en el HTML)."), partible=True)
+        if bme:
+            d.cuadros["documentos"].columnas = ["Periodo", "Publicado", "Nº de registro en BME", "Traído de BME", "Huella"]
     if apis:
         d.cuadros["apis"] = Cuadro(n.siguiente(), "Consultas a las fuentes de datos", ["Hora", "Huella"],
                                    [FilaCuadro(_corta(u), [_c(h, u), _c(x[:12], f"sha256 {x}")], capa="H") for u, h, x in apis],
-                                   "SEC EDGAR (API de datos), Nasdaq, Tesoro de EE. UU. y Yahoo Finance (solo volatilidad implícita); respuesta completa guardada en disco.",
+                                   ("BME (API oficial de la bolsa) y Banco Central Europeo; respuesta completa guardada en disco."
+                                    if getattr(emisor, "mercado", "sec") == "bme" else
+                                    "SEC EDGAR (API de datos), Nasdaq, Tesoro de EE. UU. y Yahoo Finance (solo volatilidad implícita); respuesta completa guardada en disco."),
                                    partible=True)
 
 
@@ -173,7 +187,7 @@ def _por_cuadro(cuadres: Sequence[str]) -> List[str]:
 
 
 def construir(n, motor, pb, emisor, huecos: Sequence[str], excel: Optional[Tuple[str, str]] = None,
-              cuadres: Sequence[str] = (), ajenas: Sequence[str] = ()) -> ParteI:
+              cuadres: Sequence[str] = (), ajenas: Sequence[str] = (), exp=None) -> ParteI:
     """`pb`: parte_b.ParteB (entradas, alias, Item 1A). `excel`: (nombre, sha256) del libro exportado por el motor, si lo hubo.
     `huecos`, ya agrupados por partida; `cuadres`, las notas de cuadre que salieron de los cuadros."""
     from .informe import Cuadro, FilaCuadro
@@ -195,7 +209,7 @@ def construir(n, motor, pb, emisor, huecos: Sequence[str], excel: Optional[Tuple
     if lista_c:
         d.entradas += (f" · {len(lista_c)} confirmado{'s' if len(lista_c) != 1 else ''} desde una propuesta del sistema: "
                        + "; ".join(f"{rotulo} ({fuente})" for rotulo, fuente in lista_c))
-    _fuentes(d, n, emisor)
+    _fuentes(d, n, emisor, exp)
     citas = _citas(e, getattr(pb, "item1a", None))
     if citas:
         d.cuadros["citas"] = Cuadro(n.siguiente(), "Citas literales de las evidencias, por apartado", ["Documento", "Texto original"],

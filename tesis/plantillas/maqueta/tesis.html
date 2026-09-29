@@ -22,7 +22,7 @@
         {% for ce in f.celdas %}{{ celda_td(ce) }}{% endfor %}
       </tr>
     {% endfor %}
-    {% if not c.filas %}<tr><td colspan="{{ c.columnas|length + 1 }}" class="na">N/A — {{ c.fuente }}</td></tr>{% endif %}
+    {% if not c.filas %}{% if c.fuente.startswith('No aplica') %}<tr><td colspan="{{ c.columnas|length + 1 }}" class="no-aplica">{{ c.fuente }}</td></tr>{% else %}<tr><td colspan="{{ c.columnas|length + 1 }}" class="na">N/A — {{ c.fuente }}</td></tr>{% endif %}{% endif %}
     </tbody>
   </table>
   <div class="fuente">{{ c.fuente }}</div>
@@ -88,7 +88,7 @@
       <div class="pendiente"><b>Resumen ejecutivo: pendiente de redacción.</b> Se redactará a partir de los adjuntos (carta, call, 10-K) con cita de página en cada frase y verificación de cada cifra contra los hechos contrastados.</div>
     {% endif %}
     <div class="bloque"><span class="ante">Objetivos de la compañía vigentes</span>
-      <ul class="compacta">{% for f in i.objetivos.filas %}<li>{{ f.rotulo }} {{ f.celdas[0].texto }}: <b>{{ f.celdas[1].texto }}</b> <span class="muted">(comunicado el {{ f.celdas[2].texto }})</span></li>{% else %}<li class="na">N/A — {{ i.objetivos.fuente }}</li>{% endfor %}</ul>
+      <ul class="compacta">{% for f in i.objetivos.filas %}<li>{{ f.rotulo }} {{ f.celdas[0].texto }}: <b>{{ f.celdas[1].texto }}</b> <span class="muted">(comunicado el {{ f.celdas[2].texto }})</span></li>{% else %}{% if i.objetivos.fuente.startswith('No aplica') %}<li class="no-aplica">{{ i.objetivos.fuente }}</li>{% else %}<li class="na">N/A — {{ i.objetivos.fuente }}</li>{% endif %}{% endfor %}</ul>
     </div>
     {{ cuadro(i.cifras_resumen, rotulo="Cifras clave (mln USD) · cuadro " ~ i.cifras_resumen.numero ~ " del apartado " ~ i.numeros['2']) }}
   </div>
@@ -148,12 +148,12 @@
 <h3 id="ap-{{ i.numeros['4'] }}">{{ i.numeros['4'] }}. {{ i.titulos['4'] }}</h3>
 {% set tb = i.textos_b %}
 {% if tb is not none %}
-{% if tb.descripcion %}<p>{{ tb.descripcion }}</p>{% else %}<div class="pendiente">Pendiente del analista: descripción del negocio en español (80–200 palabras), apoyada en las tarjetas del Item 1 del 10-K.</div>{% endif %}
+{% if tb.descripcion %}<p>{{ tb.descripcion }}</p>{% else %}<div class="pendiente">Pendiente del analista: descripción del negocio en español (80–200 palabras), apoyada en {% if i.emisor.mercado == 'bme' %}las cuentas anuales y el documento de incorporación{% else %}las tarjetas del Item 1 del 10-K{% endif %}.</div>{% endif %}
 {% if i.segmentos %}{{ cuadro(i.segmentos) }}
 <div class="dos">
   <div>{{ cuadro(i.geografia) }}</div>
   <div class="grafico"><div class="rotulo">Mezcla de ingresos · {{ i.segmentos.columnas[-1] }}</div>{% if i.grafico_mezcla %}{{ i.grafico_mezcla|safe }}{% else %}<p class="na">N/A — sin dos o más líneas con dato</p>{% endif %}<div class="fuente">Los mismos hechos que el cuadro {{ i.segmentos.numero }}.</div></div>
-</div>{% else %}<p class="na">N/A — el 10-K no etiqueta ingresos por segmento, producto ni geografía en XBRL inline.</p>{% endif %}
+</div>{% elif i.emisor.mercado == 'bme' %}<p class="na">N/A — la cifra de negocios por actividad y mercado geográfico está en la nota de la memoria de las cuentas anuales y no se tabula automáticamente.</p>{% else %}<p class="na">N/A — el 10-K no etiqueta ingresos por segmento, producto ni geografía en XBRL inline.</p>{% endif %}
 {% else %}
 {% if i.descripcion %}<p>{{ i.descripcion.texto }} <span class="muted">[{{ i.descripcion.origen.documento }}, pág. {{ i.descripcion.origen.pagina }}]</span></p>{% endif %}
 <div class="dos">
@@ -351,6 +351,7 @@
 {% if pf.cuadros.guias %}{{ cuadro(pf.cuadros.guias, True) }}{% endif %}
 {% if pf.cuadros.consenso %}{{ cuadro(pf.cuadros.consenso) }}{% endif %}
 {% if pf.causas %}<p><strong>Causas y aprendizajes.</strong> {{ pf.causas }}</p>{% elif pf.pendientes.get('causas') %}<div class="pendiente">{{ pf.pendientes['causas'] }}</div>{% elif pf.sin_fallos %}<p>{{ pf.sin_fallos }}</p>{% endif %}
+{% if not pf.cuadros.guias and not pf.cuadros.consenso and not pf.causas and not pf.pendientes.get('causas') and not pf.sin_fallos %}<p class="no-aplica">No aplica: la compañía no publica guía cuantitativa por periodo con que comparar lo real{% if i.emisor.mercado == 'bme' %}, y la bolsa no publica consenso de analistas{% endif %}.</p>{% endif %}
 {% else %}
 <h3 id="ap-{{ i.numeros['30'] }}">{{ i.numeros['30'] }}. {{ i.titulos['30'] }}</h3>
 {% if i.riesgos_cuadros %}

@@ -756,7 +756,17 @@ def _moneda_de_los_documentos(exp: Expediente) -> str:
 
 
 # lo que en unas cuentas españolas es la suma de dos filas del estado de flujos (derivado, con su fórmula)
-_SUMAS_ES = {"capex": (("pagos_intangible", "pagos_material"), "inmovilizado intangible + material (pagos por inversiones)")}
+# Cada destino con sus alternativas, en orden: se usa la primera cuyo primer componente trae dato (el subtotal del
+# modelo antes que la suma de sus partes)
+_SUMAS_ES = {
+    "capex": [(("pagos_intangible", "pagos_material"), "inmovilizado intangible + material (pagos por inversiones)")],
+    "deuda_cp": [(("deuda_sub_cp", "deuda_grupo_cp"), "deudas a corto plazo + deudas con empresas del grupo a corto plazo"),
+                 (("deuda_ec_cp", "deuda_otros_cp", "deuda_grupo_cp"),
+                  "deudas con entidades de crédito + otros pasivos financieros + deudas con empresas del grupo, a corto plazo")],
+    "deuda_lp": [(("deuda_sub_lp", "deuda_grupo_lp"), "deudas a largo plazo + deudas con empresas del grupo a largo plazo"),
+                 (("deuda_ec_lp", "deuda_otros_lp", "deuda_grupo_lp"),
+                  "deudas con entidades de crédito + otros pasivos financieros + deudas con empresas del grupo, a largo plazo")],
+}
 
 
 def _derivados_espanoles(resultados: List[Resultado], periodos: Dict[str, List[Periodo]],
@@ -774,11 +784,13 @@ def _derivados_espanoles(resultados: List[Resultado], periodos: Dict[str, List[P
             r = _contrastar_celda(c, p, None, pares, decs.get((c.clave, p.clave)), sin_sec=True, moneda=moneda)
             controles[(c.clave, p)] = r.hecho
     por_clave = {(r.campo.clave, r.periodo): k for k, r in enumerate(resultados)}
-    for destino, (partes, texto) in _SUMAS_ES.items():
-        for p in flujos:
+    for destino, alternativas in _SUMAS_ES.items():
+        for p in (periodos["instantes"] if campo_de(destino).tipo == "instante" else flujos):
             k = por_clave.get((destino, p))
             if k is None or resultados[k].hecho.contraste is not Contraste.HUECO:
                 continue
+            partes, texto = next(((ps, tx) for ps, tx in alternativas if (controles.get((ps[0], p)) is not None
+                                                                           and controles[(ps[0], p)].hay_dato)), alternativas[-1])
             entradas = {parte: controles.get((parte, p)) for parte in partes}
             if any(h is None or not h.hay_dato for h in entradas.values()) and not any(h is not None and h.hay_dato for h in entradas.values()):
                 continue

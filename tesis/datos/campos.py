@@ -173,7 +173,7 @@ CAMPOS: Tuple[Campo, ...] = (
           contexto_excluido=r"(?i)cash flows|beginning|end of period"),
     Campo("inversiones_cp", "Inversiones a corto plazo", "Short-term investments", 9, tipo=INSTANTE,
           conceptos=("ShortTermInvestments", "MarketableSecuritiesCurrent", "AvailableForSaleSecuritiesDebtSecuritiesCurrent"),
-          filas=(r"^Short-term investments$", r"^Marketable securities$")),
+          filas=(r"^Short-term investments$", r"^Marketable securities$", r"^Inversiones financieras a corto plazo$")),
     # A4: valores negociables a largo plazo. Solo títulos de deuda o negociables, no participaciones estratégicas
     # (`LongTermInvestments` mezcla ambas: Qualcomm guarda ahí QSI). Entran en el puente si el analista lo confirma
     # (val.inversiones_lp); sin filas de documento: el mismo rótulo que las de corto plazo emparejaba mal (fallo [4]).
@@ -199,8 +199,7 @@ CAMPOS: Tuple[Campo, ...] = (
           # primero el total —«Short-term debt» del balance— y luego sus partes: Qualcomm imprime 2.489 (1.991 de
           # vencimiento corriente del largo plazo más 498 de pagarés), y leer solo la parte discrepaba del documento
           conceptos=("DebtCurrent", "LongTermDebtCurrent", "ShortTermBorrowings", "NotesPayableCurrent"),
-          filas=(r"^Short-term debt$", r"^Current portion of long-term debt$", r"^Notes payable, current$"),
-          filas_con_contexto=((r"^Deudas? con entidades de cr[ée]dito$", r"(?i)(?<!no )corriente|corto plazo"),)),
+          filas=(r"^Short-term debt$", r"^Current portion of long-term debt$", r"^Notes payable, current$")),
     # A4 (fallo [7]): quien presenta el papel comercial en su propia línea —Apple: «Commercial paper» junto a «Term
     # debt»— lo deja fuera de `LongTermDebtCurrent`; la deuda bruta lo suma entonces (`derivados.incluye_papel_comercial`).
     Campo("papel_comercial", "Papel comercial", "Commercial paper", 9, tipo=INSTANTE,
@@ -211,8 +210,7 @@ CAMPOS: Tuple[Campo, ...] = (
           # viaja en «LongTermNotesPayable», que es la misma cifra que el balance imprime
           # y en sus trimestres cambia de nombre otra vez, a «LongTermNotesAndLoans»: es la misma línea del balance
           conceptos=("LongTermDebtNoncurrent", "LongTermNotesPayable", "LongTermNotesAndLoans", "LongTermDebt"),
-          filas=(r"^Long-term debt$", r"^Notes payable, non-current$"),
-          filas_con_contexto=((r"^Deudas? con entidades de cr[ée]dito$", r"(?i)no corriente|largo plazo"),)),
+          filas=(r"^Long-term debt$", r"^Notes payable, non-current$")),
     Campo("arrendamientos", "Pasivos por arrendamiento (no corrientes)", "Operating lease liabilities, non-current", 9, tipo=INSTANTE,
           conceptos=("OperatingLeaseLiabilityNoncurrent",), filas=(r"^Operating lease liabilities, non-current$",),
           # en las cuentas españolas, los acreedores por arrendamiento del pasivo no corriente: fuera de la deuda bruta,
@@ -296,6 +294,30 @@ CONTROLES: Tuple[Campo, ...] = (
           filas=(r"^Efectivo (?:o|y) (?:otros activos l[íi]quidos )?equivalentes al final (?:del )?(?:ejercicio|periodo)$",
                  r"^Efectivo y equivalentes al efectivo al final (?:del )?(?:ejercicio|periodo)$"),
           solo_documento=True, marcos=("es",)),
+    # la deuda financiera de unas cuentas españolas: sus partes publicadas, corrientes y no corrientes, que se suman
+    # (derivado, con fórmula, en `contraste`); los arrendamientos van aparte, como en EE. UU. (06 §5)
+    Campo("deuda_ec_cp", "Deudas con entidades de crédito a corto plazo", "Bank debt, current", 9, tipo=INSTANTE, filas=(),
+          filas_con_contexto=((r"^Deudas? con entidades de cr[ée]dito$", r"(?i)(?<!no )corriente|corto plazo"),),
+          solo_documento=True, marcos=("es",)),
+    Campo("deuda_ec_lp", "Deudas con entidades de crédito a largo plazo", "Bank debt, non-current", 9, tipo=INSTANTE, filas=(),
+          filas_con_contexto=((r"^Deudas? con entidades de cr[ée]dito$", r"(?i)no corriente|largo plazo"),),
+          solo_documento=True, marcos=("es",)),
+    Campo("deuda_otros_cp", "Otros pasivos financieros a corto plazo", "Other financial liabilities, current", 9, tipo=INSTANTE,
+          filas=(), filas_con_contexto=((r"^Otros pasivos financieros$", r"(?i)(?<!no )corriente|corto plazo"),),
+          solo_documento=True, marcos=("es",)),
+    Campo("deuda_otros_lp", "Otros pasivos financieros a largo plazo", "Other financial liabilities, non-current", 9, tipo=INSTANTE,
+          filas=(), filas_con_contexto=((r"^Otros pasivos financieros$", r"(?i)no corriente|largo plazo"),),
+          solo_documento=True, marcos=("es",)),
+    Campo("deuda_grupo_cp", "Deudas con empresas del grupo y asociadas a corto plazo", "Group debt, current", 9, tipo=INSTANTE,
+          filas=(r"^Deudas (?:con )?empresas (?:del )?grupo y asociadas a (?:corto plazo|C/P)$",), solo_documento=True, marcos=("es",)),
+    Campo("deuda_grupo_lp", "Deudas con empresas del grupo y asociadas a largo plazo", "Group debt, non-current", 9, tipo=INSTANTE,
+          filas=(r"^Deudas (?:con )?empresas (?:del )?grupo y asociadas a (?:largo plazo|L/P)$",), solo_documento=True, marcos=("es",)),
+    # el subtotal del modelo (II. «Deudas a largo plazo», III. «Deudas a corto plazo»): cuando se publica, manda sobre la
+    # suma de sus partes, que el modelo normalizado deja a menudo en blanco
+    Campo("deuda_sub_cp", "Deudas a corto plazo (subtotal)", "Current borrowings (subtotal)", 9, tipo=INSTANTE,
+          filas=(r"^Deudas a (?:corto plazo|C/P)$",), solo_documento=True, marcos=("es",)),
+    Campo("deuda_sub_lp", "Deudas a largo plazo (subtotal)", "Non-current borrowings (subtotal)", 9, tipo=INSTANTE,
+          filas=(r"^Deudas a (?:largo plazo|L/P)$",), solo_documento=True, marcos=("es",)),
     # el capex de un estado de flujos español: dos filas bajo «Pagos por inversiones», que se suman (derivado, con
     # fórmula, en `contraste`); nunca las homónimas de «Cobros por desinversiones»
     Campo("pagos_intangible", "Pagos por inversiones en inmovilizado intangible", "Payments for intangible assets", 10,

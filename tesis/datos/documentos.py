@@ -93,8 +93,29 @@ CATALOGO: Tuple[Documento, ...] = (
         donde="Web de relación con inversores («Financial data», .xlsx)", formatos=LIBRO),
 )
 
+# Emisores de BME (España): lo que publica la bolsa y trae `fuentes.bme.traer` de una vez
+CATALOGO_BME: Tuple[Documento, ...] = (
+    Documento(
+        clave="CCAA", tipo=Tipo.CCAA, titulo="Cuentas anuales auditadas", exigencia=IMPRESCINDIBLE,
+        aporta="C · cuentas anuales, balance y flujos (8–11) · 1 ficha (auditor, constitución) · 2 cuadro de cifras",
+        sin_el="Sin cuentas anuales no hay ejercicio base: el contraste no puede correr y el informe no se emite.",
+        donde="BME, información financiera del emisor (se trae con «Traer de BME»)", bloquea_emision=True),
+    Documento(
+        clave="SEMESTRAL", tipo=Tipo.SEMESTRAL, titulo="Informe financiero semestral", exigencia=IMPRESCINDIBLE,
+        aporta="C · primer semestre y segundo semestre derivado (8–11) · últimos doce meses del motor",
+        sin_el="Sin el semestral el informe solo tiene ejercicios cerrados: los semestres salen N/A.",
+        donde="BME, información financiera del emisor (se trae con «Traer de BME»)"),
+    Documento(
+        clave="SLIDES", tipo=Tipo.PRESENTACION, titulo="Presentación a inversores", exigencia=OPCIONAL,
+        aporta="7 lo que dijo la dirección · 21 tamaño de mercado (apoyo); las cifras se siguen tomando de las cuentas",
+        sin_el="Nada esencial: es material de apoyo.",
+        donde="BME, otra información relevante del emisor (se trae con «Traer de BME»)"),
+)
+
 POR_CLAVE: Dict[str, Documento] = {d.clave: d for d in CATALOGO}
+POR_CLAVE.update({d.clave: d for d in CATALOGO_BME if d.clave not in POR_CLAVE})
 POR_TIPO: Dict[Tipo, Documento] = {d.tipo: d for d in CATALOGO}
+POR_TIPO.update({d.tipo: d for d in CATALOGO_BME if d.tipo not in POR_TIPO})
 # «dónde va en el informe» de un tipo que no está en el catálogo (el desconocido) — no se inventa un destino
 SIN_DESTINO = "no se usa en el informe (ver motivo)"
 
@@ -114,13 +135,17 @@ def tipo_declarado(clave: str) -> Optional[Tipo]:
 def _clave_de_fila(fila: dict) -> str:
     """La casilla del catálogo a la que pertenece un adjunto ya clasificado: la de su tipo reconocido."""
     tipo = fila.get("tipo")
-    for d in CATALOGO:
+    for d in CATALOGO + CATALOGO_BME:
         if d.tipo.value == tipo:
             return d.clave
     return ""
 
 
-def estado(filas: Sequence[dict]) -> List[dict]:
+def catalogo(mercado: str = "sec") -> Tuple[Documento, ...]:
+    return CATALOGO_BME if mercado == "bme" else CATALOGO
+
+
+def estado(filas: Sequence[dict], mercado: str = "sec") -> List[dict]:
     """El catálogo con lo que el analista lleva adjuntado: una entrada por documento, con sus ficheros y su estado.
 
     `filas` son las de `saas.clasificar` (fichero, tipo, periodo…). Un documento está «adjuntado» cuando hay al menos
@@ -131,11 +156,11 @@ def estado(filas: Sequence[dict]) -> List[dict]:
         por_clave.setdefault(_clave_de_fila(f), []).append(f)
         # lo que trae dentro (la nota con los estados condensados) llena también esa casilla: es el mismo fichero
         for t in f.get("tambien") or ():
-            d = next((d for d in CATALOGO if d.tipo.value == t), None)
+            d = next((d for d in catalogo(mercado) if d.tipo.value == t), None)
             if d is not None and f not in por_clave.setdefault(d.clave, []):
                 por_clave[d.clave].append(f)
     salida = []
-    for d in CATALOGO:
+    for d in catalogo(mercado):
         suyos = por_clave.get(d.clave, [])
         salida.append({"clave": d.clave, "tipo": d.tipo.value, "titulo": d.titulo,
                        "exigencia": d.exigencia, "aporta": d.aporta,
@@ -145,7 +170,7 @@ def estado(filas: Sequence[dict]) -> List[dict]:
     return salida
 
 
-def faltan(filas: Sequence[dict], solo_bloqueantes: bool = False) -> List[Documento]:
+def faltan(filas: Sequence[dict], solo_bloqueantes: bool = False, mercado: str = "sec") -> List[Documento]:
     """Los documentos imprescindibles que todavía no están, en orden de catálogo.
 
     Con `solo_bloqueantes`, solo aquellos sin los cuales la emisión no puede ni empezar: sin 10-K no hay ejercicio
@@ -153,7 +178,7 @@ def faltan(filas: Sequence[dict], solo_bloqueantes: bool = False) -> List[Docume
     tiene que notarse: un aviso no es una puerta cerrada.
     """
     tipos = {f.get("tipo") for f in filas}
-    return [d for d in CATALOGO if d.exigencia == IMPRESCINDIBLE and d.tipo.value not in tipos
+    return [d for d in catalogo(mercado) if d.exigencia == IMPRESCINDIBLE and d.tipo.value not in tipos
             and (d.bloquea_emision or not solo_bloqueantes)]
 
 

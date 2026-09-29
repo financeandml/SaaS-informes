@@ -81,6 +81,7 @@ p, li { orphans: 3; widows: 3; }
 .cuadro tr.destacada td { font-weight: 700; border-top: 1px solid var(--gris-claro); }
 .cuadro tr.sangria td:first-child { padding-left: 4mm; color: var(--tinta-suave); }
 .cuadro td.na { color: var(--na); font-style: italic; }
+.no-aplica, .cuadro td.no-aplica { color: var(--na); }
 .cuadro td.negativo { color: var(--tinta); }
 .cuadro td.bajo { color: var(--acento); font-weight: bold; }
 .cuadro td.cero { color: var(--tinta-suave); }

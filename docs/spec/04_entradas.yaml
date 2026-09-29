@@ -73,6 +73,26 @@ pasos:
           - {id: probabilidad, tipo: pct}
           - {id: evidencia, tipo: evidencia, min: 1}
       - {id: direccion.citas, tipo: evidencia, min: 2, max: 5, oblig: "si hay call", prop: "tarjetas de la transcripción"}
+      # 29/09/2026 (fase B, y fallo 74 de la auditoría): lo que el parser no lee de una fuente oficial lo aporta el
+      # analista con su cita (regla 12); solo cuenta si el sistema no lo leyó, y entonces sale en el cuadro con su cita
+      - id: gobierno.ejecutivos
+        tipo: lista
+        oblig: "si el sistema no los lee (apartado 6)"
+        ayuda: "consejo y alta dirección con su cita: proxy, documento de incorporación, cuentas o web del emisor"
+        campos:
+          - {id: nombre, tipo: texto}
+          - {id: cargo, tipo: texto}
+          - {id: desde, tipo: numero, oblig: false}
+          - {id: evidencia, tipo: evidencia, min: 1}
+      - id: gobierno.filiales
+        tipo: lista
+        oblig: "si el sistema no las lee (apartado 5)"
+        ayuda: "sociedades del grupo con su cita: Exhibit 21 o memoria de las cuentas consolidadas"
+        campos:
+          - {id: nombre, tipo: texto}
+          - {id: pais, tipo: texto}
+          - {id: participacion, tipo: pct}
+          - {id: evidencia, tipo: evidencia, min: 1}
 
   - paso: "5 · Mercado, competencia y moat (21–23)"
     campos:

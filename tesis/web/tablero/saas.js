@@ -7,12 +7,12 @@
 const D = {
   es: {
     p_expediente: "Expediente", p_dcf: "DCF", p_analista: "Analista", p_informe: "Informe",
-    empresa: "Empresa", expediente: "Expediente en orden cronológico", contraste_t: "Contraste con la SEC",
+    empresa: "Empresa", expediente: "Expediente en orden cronológico", contraste_t: "Contraste de las cifras",
     fichero: "Fichero", tipo: "Tipo", periodo: "Periodo", fecha_doc: "Fecha", certeza: "Certeza",
     destino: "Dónde va en el informe", quitar: "Quitar", siguiente_dcf: "Siguiente: DCF →", siguiente_analista: "Siguiente: analista →",
     anterior_expediente: "← Expediente", anterior_analista: "← Analista", libro: "Modelo DCF del analista",
     opcional: "opcional: sin libro, la sección D sale N/A con su motivo", lectura: "Lo que se ha leído del libro",
-    escenario: "Escenario", valor_hoy: "Valor hoy (USD)", peso: "Peso", supuesto: "Supuesto", valor: "Valor",
+    escenario: "Escenario", valor_hoy: "Valor hoy", peso: "Peso", supuesto: "Supuesto", valor: "Valor",
     celda: "Celda", justificacion: "Justificación del analista", emision: "Emisión del informe",
     emitir: "Emitir informe", reemitir: "Volver a emitir", abrir_pdf: "Abrir el PDF", registro_t: "Registro de la emisión",
     vista_t: "Informe emitido", soltar: "Suelta aquí los ficheros o pulsa para elegirlos", formatos: "PDF · XLSX · DOCX — varios a la vez",
@@ -22,11 +22,12 @@ const D = {
     imprescindible: "imprescindible", recomendado: "recomendado", opcional_doc: "opcional",
     donde_t: "Dónde conseguirlo:", cuantos: "de", falta_bloquea: "sin esto no se puede emitir",
     otros_t: "Otros documentos que no están en la lista", sin_casilla: "fuera de la lista",
-    traer: "Traer de la SEC", traer_todo: "Traer de la SEC lo que falte", trayendo: "Pidiendo a EDGAR y imprimiendo el documento…",
-    sin_fuente_t: "No hay fuente oficial:", traido_t: "traído de EDGAR", registro_traida: "Lo que se ha traído",
-    buscando: "Buscando…", sin_resultados: "Ningún emisor de la SEC coincide", cargando: "Cargando", listo: "Listo", error: "Error",
+    traer: "Traer de la fuente oficial", traer_todo: "Traer de la fuente oficial lo que falte (EDGAR o BME)",
+    trayendo: "Pidiendo los documentos a la fuente oficial (EDGAR o BME)…",
+    sin_fuente_t: "No hay fuente oficial:", traido_t: "traído de la fuente oficial", registro_traida: "Lo que se ha traído",
+    buscando: "Buscando…", sin_resultados: "Ningún emisor de la SEC ni de BME coincide", cargando: "Cargando", listo: "Listo", error: "Error",
     subiendo: "Subiendo y clasificando…", subidos: "documentos en el expediente", rechazados: "sin admitir",
-    contraste_en_curso: "Leyendo los documentos y contrastando con la SEC…", bloquean: "discrepancias sin decidir",
+    contraste_en_curso: "Leyendo los documentos y contrastando las cifras…", bloquean: "discrepancias sin decidir",
     confirmado: "confirmadas con el documento", solo_sec: "solo de la SEC", derivado: "derivadas", solo_documento: "solo del documento",
     hueco: "sin dato", no_aplica: "no son partidas de esta empresa", discrepante: "en discrepancia", ejercicios: "Ejercicios", trimestres: "Trimestres",
     si: "sí", no: "no", na: "N/A", paginas: "páginas", hojas: "hojas", recalculado: "copia recalculada con Excel",
@@ -108,7 +109,9 @@ function pintarCabecera(d) {
   if (!emp) return;
   const nombre = d && d.carga && d.carga.nombre;
   emp.textContent = d && d.ticker ? (nombre ? `${d.ticker} · ${nombre}` : d.ticker) : "—";
-  if (cik) cik.textContent = d && d.carga && d.carga.cik ? `CIK ${Number(d.carga.cik)} · ${d.carga.bolsa || ""}` : "";
+  // EE. UU.: CIK; España: ISIN. La bolsa, en los dos
+  if (cik) cik.textContent = d && d.carga && d.carga.isin ? `ISIN ${d.carga.isin} · ${d.carga.bolsa || ""}`
+    : d && d.carga && d.carga.cik ? `CIK ${Number(d.carga.cik)} · ${d.carga.bolsa || ""}` : "";
 }
 
 function pintarRotulos() {
@@ -460,7 +463,8 @@ function buscador() {
         if (!candidatos.length) lista.appendChild(elemento("li", { class: "vacio" }, [t("sin_resultados")]));
         candidatos.forEach((c) => {
           const li = elemento("li", { role: "option", tabindex: "0" },
-            [elemento("strong", {}, [c.ticker]), elemento("span", {}, [c.nombre]), elemento("span", { class: "cik" }, [`CIK ${Number(c.cik)}`])]);
+            [elemento("strong", {}, [c.ticker]), elemento("span", {}, [c.nombre]),
+              elemento("span", { class: "cik" }, [c.id ? `${c.bolsa ? c.bolsa + " · " : ""}${c.id}` : `CIK ${Number(c.cik)}`])]);
           const elegir = () => { location.href = `/?ticker=${encodeURIComponent(c.ticker)}`; };
           li.addEventListener("click", elegir);
           li.addEventListener("keydown", (ev) => { if (ev.key === "Enter") elegir(); });
@@ -521,8 +525,9 @@ async function configuracion() {
   const aviso = elemento("p", { class: "ayuda", id: "aviso-contacto" }, []);
   const tarjeta = elemento("section", { class: "tarjeta", id: "tarjeta-configuracion" }, [
     elemento("h2", {}, [elemento("span", { class: "num" }, ["0"]), " Antes de empezar"]),
-    elemento("p", {}, ["La SEC exige que quien consulta EDGAR se identifique con su nombre y su correo. Sin eso no se puede "
-      + "buscar ninguna empresa. Se guarda solo en este ordenador (fichero .env) y solo se envía a la SEC."]),
+    elemento("p", {}, ["La SEC exige que quien consulta EDGAR se identifique con su nombre y su correo. Sin eso no se pueden "
+      + "buscar empresas de EE. UU.; las españolas (BME) se buscan sin él. Se guarda solo en este ordenador (fichero .env) "
+      + "y solo se envía a la SEC."]),
     elemento("div", { class: "acciones-fila" }, [campo, boton]), aviso]);
   const guardar = async () => {
     aviso.className = "ayuda";

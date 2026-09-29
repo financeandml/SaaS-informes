@@ -351,6 +351,17 @@ def construir(ticker: str, split_desde: Optional[date] = None, con_iv: bool = Tr
     """Los apartados que la bolsa publica y, como excepción, la IV del agregador; cada fallo de red deja su
     apartado en N/A con motivo."""
     p = Posicionamiento(obtenido=datetime.now())
+    from . import emisores
+    if emisores.es_bme(ticker):
+        # un emisor de BME: la bolsa no publica nada de esto; cada hueco dice por qué, con el motivo del perfil del
+        # emisor, y el sistema por puntos lo declara «No aplica» en 31–35 (no es un fallo de red ni un dato que falte)
+        perfil = emisores.perfil(emisores.Emisor(cik="", nombre="", ticker=ticker, bolsa="BME", sic="", descripcion_sic="",
+                                                estado_constitucion="", cierre_fiscal="", direccion="", telefono="", web="",
+                                                obtenido_en=datetime.now().date(), mercado="bme", moneda="EUR"))
+        for clave, capacidad in (("cadena", "opciones"), ("institucional", "trece_f"), ("insiders", "form4"),
+                                 ("short", "corto"), ("iv", "opciones")):
+            p.faltan[clave] = f"no aplica: {perfil.motivo(capacidad)}"
+        return p
     if precio_mod.variable("WC_PRECIO_FUENTE").lower() != "nasdaq":
         p.faltan["fuente"] = "la sección F interina lee la web de Nasdaq y WC_PRECIO_FUENTE no es «nasdaq»"
         return p

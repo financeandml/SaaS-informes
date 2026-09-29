@@ -518,6 +518,40 @@ def _fecha(valor) -> Optional[date]:
         return None
 
 
+def _de_bme(a: Adjunto, dato: dict) -> None:
+    """Lo que BME dice de un documento que trajo el sistema: título, fecha de publicación, número de registro y, en la
+    información financiera, el ejercicio y el periodo («AN», «1S»). La portada manda si reconoce el documento; si no
+    (un PDF de 262 páginas que abre con el informe de gestión), manda la bolsa, que sabe lo que publicó. La fecha de
+    cierre la dice el propio documento: se busca la del ejercicio que declara la bolsa, nunca se supone el 31/12."""
+    publicado = _fecha(dato.get("publicado"))
+    a.fecha = publicado or a.fecha              # la de publicación en la bolsa, no una fecha cualquiera del texto
+    periodo, ejercicio = str(dato.get("periodo") or ""), dato.get("ejercicio")
+    tipo = Tipo.CCAA if periodo == "AN" else Tipo.SEMESTRAL if periodo.endswith("S") else \
+        Tipo.PRESENTACION if dato.get("clave") == "presentacion" else None
+    if tipo is not None and a.tipo in (Tipo.DESCONOCIDO, tipo):
+        if a.tipo is Tipo.DESCONOCIDO:
+            a.certeza = Certeza.ALTA if tipo in (Tipo.CCAA, Tipo.SEMESTRAL) else Certeza.MEDIA
+        a.tipo, a.apartado = tipo, APARTADO_DE.get(tipo)
+    if a.tipo in (Tipo.CCAA, Tipo.SEMESTRAL) and a.periodo_fin is None and ejercicio:
+        a.periodo_fin = _cierre_en_texto(a, int(ejercicio), a.tipo is Tipo.SEMESTRAL)
+    a.motivo += (f" Traído de BME: «{dato.get('titulo', '')}», publicado el {publicado:%d/%m/%Y}"
+                 + (f" (registro {dato['id']})" if dato.get("id") else "") + "." if publicado else "")
+
+
+def _cierre_en_texto(a: Adjunto, ejercicio: int, semestral: bool) -> Optional[date]:
+    """La fecha de cierre más citada del ejercicio (o del semestre) en el propio documento, detrás de «terminado»,
+    «cerrado», «al» o «a»; None si el documento no la dice."""
+    from collections import Counter
+    patron = re.compile(r"(?:terminad[oa]|cerrad[oa]|finalizad[oa]|\bal|\ba)\s+(?:el\s+)?(" + _FECHA_ES + ")", re.I)
+    cuenta: Counter = Counter()
+    for texto in a.paginas:
+        for m in patron.finditer(" ".join(texto.split())):
+            dia = _fecha_es(m.group(1))
+            if dia is not None and dia.year == ejercicio and (not semestral or dia.month != 12):
+                cuenta[dia] += 1
+    return cuenta.most_common(1)[0][0] if cuenta else None
+
+
 def _de_edgar(a: Adjunto, dato: dict, avisos: List[Aviso]) -> None:
     """Le pone al adjunto lo que EDGAR dice de él: formulario, número de acceso y fechas del depósito."""
     formulario = str(dato.get("formulario") or "")
@@ -580,7 +614,9 @@ def cargar(ticker: str, rutas: Iterable[Path], depositos: Optional[Sequence] = N
             declarado[carpeta], traido[carpeta] = declaraciones(carpeta), origenes(carpeta)
         origen = traido[carpeta].get(a.nombre)
         clave = declarado[carpeta].get(a.nombre, "")
-        if origen:
+        if origen and origen.get("fuente") == "bme":
+            _de_bme(a, origen)                # traído de la bolsa española: su fecha de publicación y su registro
+        elif origen:
             _de_edgar(a, origen, avisos)      # lo que dice el depósito manda sobre la casilla del analista
         elif clave:
             _declarado(a, clave, avisos)
@@ -589,7 +625,8 @@ def cargar(ticker: str, rutas: Iterable[Path], depositos: Optional[Sequence] = N
             avisos.append(Aviso("aviso", f"{a.nombre} es una copia exacta de {vistos[a.huella].nombre}: se usa una sola vez."))
             continue
         vistos[a.huella] = a
-        if a.tipo is Tipo.DESCONOCIDO:
+        if a.tipo is Tipo.DESCONOCIDO and not (origen and origen.get("fuente") == "bme"):
+            # lo traído de BME sabe lo que es aunque su portada no lo diga (participaciones, documento de incorporación)
             avisos.append(Aviso("grave", f"{a.nombre}: {a.motivo}"))
     adjuntos = sorted(vistos.values(), key=lambda a: a.orden)
     exp = Expediente(ticker=ticker.upper(), adjuntos=adjuntos, avisos=avisos)
