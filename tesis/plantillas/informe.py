@@ -397,7 +397,7 @@ def _cuadro_rentabilidad(n: Cuadros, hechos, tab: Tablero, anuales) -> Cuadro:
     filas = [
         _fila(hechos, "roe", "ROE", periodos, unidad="%", formula="Beneficio neto / Patrimonio neto medio"),
         _fila(hechos, "roa", "ROA", periodos, unidad="%", formula="Beneficio neto / Total activo medio"),
-        _fila(hechos, "roic", "ROIC", periodos, unidad="%", formula="EBIT × (1 − tipo efectivo) / (Patrimonio + Deuda bruta − Tesorería), medios"),
+        _fila(hechos, "roic", "ROIC", periodos, unidad="%", formula=next(d.formula for d in DERIVADOS if d.clave == "roic")),
         _fila(hechos, "margen_bruto", "Margen bruto", periodos, unidad="%"),
         _fila(hechos, "margen_ebitda", "Margen EBITDA", periodos, unidad="%"),
         _fila(hechos, "margen_ebit", "Margen operativo", periodos, unidad="%"),
@@ -1066,6 +1066,12 @@ def construir(ticker: str, hoy: date, emisor: Emisor, exp: Expediente, tab: Tabl
                             f"({proxima.fecha:%d/%m/%Y}, {'esperada' if proxima.esperada else 'anunciada'}) y su cuadre con el agregador: {proxima.nota_contraste}")
     if multiplos is not None:
         faltan += [f"Múltiplos · {k}: {v}" for k, v in multiplos.faltan.items()]
+        # [23]: lo no recurrente de los doce meses que los múltiplos TTM llevan dentro (aviso, tramo 5)
+        from ..datos import no_recurrentes
+        ttm = sorted(periodos.get("trimestres") or [], key=lambda q: q.fin)[-4:]
+        ebit = [hechos.get(("ebit", q)) for q in ttm]
+        if ttm and all(h is not None and h.hay_dato for h in ebit):
+            avisos_extra += no_recurrentes.detectar(exp, ttm, sum(h.valor for h in ebit))
     if agregador is not None:
         fuentes.append(f"{agregador.fuente} — resumen del valor (rentabilidad, deuda total, EV/EBITDA, PEG, fecha de resultados), consultado el {f_fecha(hoy)} · {agregador.respuesta[0]}")
     if parte_b is not None and parte_b.notas:

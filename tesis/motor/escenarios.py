@@ -32,6 +32,7 @@ class Resultado:
     peso_vt: float
     avisos: List[str] = field(default_factory=list)
     bloqueos: List[str] = field(default_factory=list)
+    acciones: float = 0.0          # las del valor por acción: diluidas del puente (+ las que pagan la SBC, con «dilución»)
 
 
 @dataclass
@@ -58,23 +59,28 @@ class Valoracion:
 
 
 def valorar_escenario(e: Escenario, p: Parametros, wacc_base: float, ke: float, ingresos_base: float, cierre_base,
-                      pte: Puente, rf: Optional[float], umbrales: dict, dpa_horizonte: float = 0.0) -> Resultado:
+                      pte: Puente, rf: Optional[float], umbrales: dict, dpa_horizonte: float = 0.0,
+                      precio: Optional[float] = None) -> Resultado:
     w = wacc_base + e.wacc_ajuste
     pr = proyectar(ingresos_base, e, w, p.fecha_valoracion, cierre_base, p.mitad_de_anio, p.bin_inicial,
-                   p.sbc_politica == "coste_de_caja")
+                   p.sbc_politica == "coste_de_caja", p.cierres_publicados, pte.fecha_balance)
     ronic = e.ronic if e.ronic is not None else w + umbrales["ronic_defecto_pp"] / 100
     tv = terminal(pr.nopat[-1], pr.fcff[-1], pr.ebitda[-1], w, e.g, ronic, e.multiplo_salida, pr.fraccion, len(pr.fcff),
                   p.tv_metodo, rf, umbrales["g_max"], umbrales["wacc_menos_g_min_pp"] / 100, umbrales["ronic_max_x_wacc"],
                   umbrales["vt_contraste_aviso"])
     ev = pr.suma_valor_actual + tv.valor_actual
     fp = pte.fondos_propios(ev)
-    v0 = fp / pte.acciones
+    # «dilución» (05 §3): las acciones crecen en SBC / precio; sin precio no hay con qué convertirla y se dice
+    acciones = pte.acciones + (pr.sbc_en_acciones / precio if pr.sbc_en_acciones and precio else 0.0)
+    v0 = fp / acciones
     vh = v0 * (1 + ke) ** (p.horizonte_meses / 12) - dpa_horizonte
     peso = tv.valor_actual / ev if ev else 0.0
     avisos = list(tv.avisos)
+    if pr.sbc_en_acciones and not precio:
+        avisos.append("SBC con «dilución» sin precio con el que convertirla en acciones: el valor por acción no la descuenta")
     if peso > umbrales["peso_vt_aviso"]:
         avisos.append(f"el valor terminal pesa un {peso:.0%} del valor de empresa (aviso desde {umbrales['peso_vt_aviso']:.0%})")
-    return Resultado(e, w, pr, tv, ev, fp, v0, vh, peso, avisos, list(tv.bloqueos))
+    return Resultado(e, w, pr, tv, ev, fp, v0, vh, peso, avisos, list(tv.bloqueos), acciones)
 
 
 def recomendacion(potencial: float, recorrido_riesgo: Optional[float], regla: dict) -> str:
@@ -95,7 +101,7 @@ def valorar(p: Parametros, w: Wacc, pte: Puente, precio: float, ingresos_base: f
         e = p.escenarios.get(nombre)
         if e is None:
             continue
-        r = valorar_escenario(e, p, w.wacc, w.ke, ingresos_base, cierre_base, pte, w.rf, umbrales, dpa_horizonte)
+        r = valorar_escenario(e, p, w.wacc, w.ke, ingresos_base, cierre_base, pte, w.rf, umbrales, dpa_horizonte, precio)
         resultados[nombre] = r
         bloqueos += [f"{nombre}: {b}" for b in r.bloqueos]
         avisos += [f"{nombre}: {a}" for a in r.avisos]

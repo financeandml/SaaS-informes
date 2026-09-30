@@ -69,6 +69,12 @@ def _fila_deuda_neta(pte, hechos):
                                                 _c("✓" if cuadra else "≠")])
 
 
+def _rotulo_sbc(p) -> str:
+    """La fila de la SBC dice qué hace con ella la política del analista (decisión 1, 28/09): con «coste de caja» ya está
+    dentro del margen EBIT GAAP y no se resta del FCFF; con «dilución» se suma al EBIT y la pagan acciones nuevas."""
+    return "SBC (informativa: ya en el margen EBIT)" if p.sbc_politica == "coste_de_caja" else "(+) SBC sumada al EBIT (diluye acciones)"
+
+
 def construir(n, m, etiqueta, hechos=None, anuales=None, consenso=None, libro: Optional[dict] = None,
               recomendacion_analista: str = "", segmento_unico: bool = False, multiplos=None) -> ParteD:
     """`m`: motor.datos.Motor. `etiqueta(p)`: rótulo fiscal de un periodo. `libro`: {rango: valor} del Excel del analista."""
@@ -137,7 +143,9 @@ def construir(n, m, etiqueta, hechos=None, anuales=None, consenso=None, libro: O
         ("Año base", m.etiqueta_base, "último ejercicio" if p.anio_base == "ultimo_ejercicio" else "últimos doce meses"),
         ("Periodo explícito", f"{p.periodo} años", f"paquete {p.paquete}"),
         ("Convención de descuento", "mitad de año" if p.mitad_de_anio else "fin de año", "analista"),
-        ("Periodo parcial del año 1", _pct(b.proyeccion.fraccion, 1), f"días de la valoración al cierre del ejercicio ({f_fecha(b.proyeccion.cierres[0])})"),
+        ("Periodo parcial del año 1", _pct(b.proyeccion.fraccion_flujo, 1),
+         f"flujo del último balance ({f_fecha(b.proyeccion.desde or p.fecha_valoracion)}) al cierre del ejercicio ({f_fecha(b.proyeccion.cierres[0])}); "
+         f"descuento desde la valoración ({_pct(b.proyeccion.fraccion, 1)} del ejercicio)"),
         ("Horizonte del precio objetivo", f"{h} meses", "el único del informe (portada, 20 y G)"),
         ("Retribución en acciones", "coste de caja" if p.sbc_politica == "coste_de_caja" else "dilución", "analista"),
         ("Arrendamientos", "fuera de la deuda" if p.arrendamientos == "fuera_de_deuda" else "dentro de la deuda", "analista"),
@@ -168,15 +176,19 @@ def construir(n, m, etiqueta, hechos=None, anuales=None, consenso=None, libro: O
         filas += [mln_fila("Ingresos", pr.ingresos, pr.formulas["ingresos"]), mln_fila("EBIT", pr.ebit, pr.formulas["ebit"]),
                   mln_fila("(−) Impuestos", pr.impuestos, pr.formulas["impuestos"]), mln_fila("NOPAT", pr.nopat, pr.formulas["nopat"]),
                   mln_fila("(+) D&A", pr.da), mln_fila("(−) Capex", pr.capex), mln_fila("(−) Δ fondo de maniobra", pr.dfm),
-                  mln_fila("(−) SBC", pr.sbc)] + [mln_fila(f"(−) {k.replace('_', ' ')}", s) for k, s in pr.paquete.items()]
+                  mln_fila(_rotulo_sbc(p), pr.sbc, pr.formulas["sbc"])] + [mln_fila(f"(−) {k.replace('_', ' ')}", s) for k, s in pr.paquete.items()]
         filas += [mln_fila("FCFF", pr.fcff, pr.formulas["fcff"], True),
                   FilaCuadro("Factor de descuento", [_c(numero(x, 4)) for x in pr.factores], formula=pr.formulas["tiempos"]),
                   mln_fila("Valor actual", pr.valor_actual, pr.formulas["valor_actual"])]
         tv = r.terminal
-        notas = [f"Periodo parcial: el año 1 cuenta {_pct(pr.fraccion, 1)} (de la valoración al {f_fecha(pr.cierres[0])}); lo anterior ya está en el balance.",
+        notas = [f"Periodo parcial: el año 1 cuenta {_pct(pr.fraccion_flujo, 1)} (del último balance, {f_fecha(pr.desde or p.fecha_valoracion)}, al "
+                 f"{f_fecha(pr.cierres[0])}); lo anterior ya está en ese balance. Se descuenta desde la valoración.",
                  f"Valor terminal ({ {'value_driver': 'value driver', 'gordon': 'Gordon', 'multiplo_salida': 'múltiplo'}[tv.metodo] }): "
                  f"{_mln(tv.valor)} M {lexico.moneda()}, descontado en t = {numero(tv.momento, 2)}; contraste: "
                  + ", ".join(f"{ {'value_driver': 'value driver', 'gordon': 'Gordon', 'multiplo_salida': 'múltiplo'}[k] } {_mln(x)}" for k, x in tv.valores.items() if k != tv.metodo and x is not None) + ".",
+                 *([f"SBC con «dilución»: {_mln(pr.sbc_en_acciones)} M {lexico.moneda()} del periodo explícito se pagan con "
+                    f"{numero((r.acciones - pte.acciones) / 1e6, 1)} M de acciones nuevas al precio de hoy; el valor por acción "
+                    f"se reparte entre {numero(r.acciones / 1e6, 1)} M."] if pr.sbc_en_acciones else []),
                  f"Valor de empresa {_mln(r.ev)} M {lexico.moneda()} (VT {_pct(r.peso_vt, 0)}) → fondos propios {_mln(r.fondos_propios)} M {lexico.moneda()} → "
                  f"V₀ {_usd(r.v0)} · V_h a {h} meses {_usd(r.vh)} · recorrido sobre el precio {_pct(r.vh / v.precio - 1)}."]
         cuadro = Cuadro(n.siguiente(), f"Escenario {nombre}: drivers, FCFF y valoración (mln {lexico.moneda()})", cols, filas,
@@ -246,15 +258,18 @@ def construir(n, m, etiqueta, hechos=None, anuales=None, consenso=None, libro: O
     # 18 · inverso
     inv = m.inverso
     if inv is not None:
-        historico = None
-        if hechos is not None and anuales:
-            ing = [hechos.get(("ingresos", a)) for a in anuales]
-            ing = [x.valor for x in ing if x is not None and x.hay_dato]
-            if len(ing) >= 2 and ing[0] > 0:
-                historico = (ing[-1] / ing[0]) ** (1 / (len(ing) - 1)) - 1
-        fila = lambda rot, x, base, hist="": FilaCuadro(rot, [_c(_pct(x, 1) if x is not None else "sin solución en el rango"),  # noqa: E731
-                                                              _c(_pct(base, 1) if base is not None else "—"), _c(hist or "—")])
-        filas = [fila("CAGR de ingresos implícito (márgenes del base)", inv.cagr_ingresos, inv.base_cagr, _pct(historico, 1) if historico is not None else ""),
+        # cinco intervalos: del ejercicio de hace cinco años al último (fallos [15] y [44]); sin él, N/A con su motivo
+        historico, hist_motivo = None, "sin ejercicio de hace cinco años"
+        h5 = m.ingresos_hace_5
+        ult = hechos.get(("ingresos", anuales[-1])) if hechos is not None and anuales else None
+        if h5 is not None and not h5.hay_dato:
+            hist_motivo = h5.motivo
+        elif h5 is not None and ult is not None and ult.hay_dato and h5.valor > 0 and ult.valor > 0:
+            historico = (ult.valor / h5.valor) ** (1 / 5) - 1
+        fila = lambda rot, x, base, hist="", motivo="": FilaCuadro(rot, [_c(_pct(x, 1) if x is not None else "sin solución en el rango"),  # noqa: E731
+                                                                         _c(_pct(base, 1) if base is not None else "—"), _c(hist or "—", motivo)])
+        filas = [fila("CAGR de ingresos implícito (márgenes del base)", inv.cagr_ingresos, inv.base_cagr,
+                      _pct(historico, 1) if historico is not None else "—", "" if historico is not None else hist_motivo),
                  fila("Margen EBIT terminal implícito (crecimiento del base)", inv.margen_terminal, inv.base_margen),
                  fila("Crecimiento constante del FCFF implícito", inv.crecimiento_fcff, None)]
         d.cuadros["inverso"] = Cuadro(n.siguiente(), "DCF inverso: lo que descuenta el precio", ["Implícito", "Escenario base", "Histórico 5 años"], filas,

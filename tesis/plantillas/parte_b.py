@@ -93,14 +93,19 @@ def cuadro_segmentos(n, s: Segmentos, etiqueta: Callable) -> Tuple[object, objec
     segmentos = Cuadro(n.siguiente(), "Ingresos por segmento y línea de negocio (mln USD)", columnas, filas,
                        f"Fuente: SEC EDGAR, estados del {origen}; ejes de segmento, producto y conciliación.", notas)
     geo, padre = s.geografia()
-    filas_geo = [FilaCuadro(l.rotulo, [celda(l.valores.get(p), "M USD") for p in s.periodos], capa="H") for l in geo]
+    desgloses = s.desgloses_geograficos()
+    # dos ejes geográficos del mismo total, uno detrás de otro y dicho en la nota: no se suman entre sí [21]
+    filas_geo = [FilaCuadro(l.rotulo, [celda(l.valores.get(p), "M USD") for p in s.periodos], capa="H", sangria=i > 0)
+                 for i, d in enumerate(desgloses) for l in d]
+    notas_geo = ([f"Dos desgloses geográficos del mismo total, que no se suman entre sí: {', '.join(l.rotulo for l in desgloses[0])}; "
+                  f"y, en sangría, {', '.join(l.rotulo for l in desgloses[1])}."] if len(desgloses) > 1 else [])
     de_que = ""
     if padre is not None:
         linea_padre = next((l for l in s.lineas if l.miembro == padre or l.miembro.endswith("|" + padre)), None)
         de_que = f" de {linea_padre.rotulo}" if linea_padre is not None else ""
     geografia = Cuadro(n.siguiente(), f"Ingresos por geografía{de_que} (mln USD)", columnas, filas_geo,
                        f"Fuente: SEC EDGAR, estados del {origen}; eje geográfico. El 10-Q no suele desglosarlo: sin él, "
-                       "la columna de los últimos doce meses queda N/A.")
+                       "la columna de los últimos doce meses queda N/A.", notas_geo)
     # la mezcla, al nivel más fino que suma el total: las líneas de cada segmento que las desglosa, el segmento si no
     ultimo = s.periodos[-1] if s.periodos else None
     partes = []

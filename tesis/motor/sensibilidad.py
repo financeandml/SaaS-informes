@@ -30,7 +30,7 @@ def matriz(v: Valoracion, ingresos_base: float, cierre_base, umbrales: dict) -> 
         for g in gs:
             e = replace(b.escenario, g=g, wacc_ajuste=w - v.wacc.wacc)
             r = valorar_escenario(e, v.parametros, v.wacc.wacc, v.wacc.ke, ingresos_base, cierre_base, v.puente, None,
-                                  dict(umbrales, g_max=1.0), v.dpa_horizonte)
+                                  dict(umbrales, g_max=1.0), v.dpa_horizonte, v.precio)
             fila.append(None if w - g <= 0 else r.v0)
         valores.append(fila)
     return Matriz(waccs, gs, valores, (pasos_w.index(0.0), pasos_g.index(0.0)))
@@ -77,7 +77,7 @@ def inverso(v: Valoracion, ingresos_base: float, cierre_base, umbrales: dict) ->
 
     def valor(e) -> float:
         return valorar_escenario(e, p, v.wacc.wacc, v.wacc.ke, ingresos_base, cierre_base, v.puente, None,
-                                 dict(umbrales, g_max=1.0), v.dpa_horizonte).v0 - precio
+                                 dict(umbrales, g_max=1.0), v.dpa_horizonte, precio).v0 - precio
 
     cagr = biseccion(lambda x: valor(replace(b.escenario, crecimiento=[x] * n)), *rangos["cagr"])
     inicio = b.escenario.margen[0]
@@ -89,9 +89,9 @@ def inverso(v: Valoracion, ingresos_base: float, cierre_base, umbrales: dict) ->
 
     def por_fcff(x: float) -> float:
         flujos = [fcff1 * (1 + x) ** t for t in range(n)]
-        va = flujos[0] * pr.fraccion * pr.factores[0] + sum(fl * fa for fl, fa in zip(flujos[1:], pr.factores[1:]))
+        va = flujos[0] * pr.fraccion_flujo * pr.factores[0] + sum(fl * fa for fl, fa in zip(flujos[1:], pr.factores[1:]))
         vt = flujos[-1] * (1 + g) / (w - g) * (1 + w) ** -(pr.fraccion + n - 1)
-        return v.puente.por_accion(va + vt) - precio
+        return v.puente.fondos_propios(va + vt) / b.acciones - precio
 
     crec = biseccion(por_fcff, *rangos["fcff"])
     base_cagr = (b.proyeccion.ingresos[-1] / ingresos_base) ** (1 / n) - 1

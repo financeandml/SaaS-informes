@@ -366,13 +366,26 @@ DERIVADOS: Tuple[Derivado, ...] = (
     Derivado("capex_ventas", "Capex / Ingresos", "Capex / Revenues", 10, "Capex / Ingresos", ("capex", "ingresos"), "%"),
     Derivado("roe", "ROE", "ROE", 11, "Beneficio neto / Patrimonio neto medio", ("beneficio_neto", "patrimonio"), "%", medios=("patrimonio",)),
     Derivado("roa", "ROA", "ROA", 11, "Beneficio neto / Total activo medio", ("beneficio_neto", "total_activo"), "%", medios=("total_activo",)),
-    Derivado("roic", "ROIC", "ROIC", 11, "EBIT × (1 − tipo efectivo) / (Patrimonio neto + Deuda bruta − Tesorería), medios",
-             ("ebit", "tipo_efectivo", "patrimonio", "deuda_bruta", "caja"), "%", medios=("patrimonio", "deuda_bruta", "caja")),
+    # capital invertido = patrimonio + deuda neta, la del glosario (config/definiciones.yaml): una sola definición [14]
+    Derivado("roic", "ROIC", "ROIC", 11, "EBIT × (1 − tipo efectivo) / (Patrimonio neto + Deuda bruta − Tesorería − Inversiones a corto plazo), medios",
+             ("ebit", "tipo_efectivo", "patrimonio", "deuda_neta"), "%", medios=("patrimonio", "deuda_neta")),
     Derivado("cobertura_intereses", "Cobertura de intereses", "Interest coverage", 11, "EBIT / Gastos financieros", ("ebit", "intereses"), "x"),
     Derivado("payout", "Pay-out", "Pay-out", 11, "Dividendos pagados / Beneficio neto", ("dividendos", "beneficio_neto"), "%"),
 )
 
-_POR_CLAVE = {c.clave: c for c in CAMPOS + CONTROLES}
+# El numerador del BPA: el beneficio atribuible a los accionistas ordinarios, neto de dividendos preferentes. No es una
+# fila del informe; lo usa la derivación del BPA del 4T (`contraste._q4_por_accion`), que con el beneficio neto daba a
+# Oracle, con preferentes desde febrero de 2026, un 1,48 donde es 1,45 (auditoría del 27/09, fallo [19])
+BENEFICIO_ORDINARIOS: Tuple[Campo, ...] = (
+    Campo("beneficio_ordinarios_diluido", "Beneficio atribuible a los accionistas ordinarios (diluido)",
+          "Net income available to common stockholders, diluted", 8,
+          conceptos=("NetIncomeLossAvailableToCommonStockholdersDiluted",), solo_documento=False, marcos=("sec",)),
+    Campo("beneficio_ordinarios_basico", "Beneficio atribuible a los accionistas ordinarios (básico)",
+          "Net income available to common stockholders, basic", 8,
+          conceptos=("NetIncomeLossAvailableToCommonStockholdersBasic",), solo_documento=False, marcos=("sec",)),
+)
+
+_POR_CLAVE = {c.clave: c for c in CAMPOS + CONTROLES + BENEFICIO_ORDINARIOS}
 
 
 def campo(clave: str) -> Campo:

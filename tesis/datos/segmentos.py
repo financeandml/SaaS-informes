@@ -62,6 +62,43 @@ class Segmentos:
         padre = max(grupos, key=lambda k: (len(grupos[k]), k is None))
         return grupos[padre], padre
 
+    def desgloses_geograficos(self) -> List[List[Linea]]:
+        """Las líneas geográficas en desgloses que suman cada uno el mismo total (fallo [21]).
+
+        Un emisor puede publicar dos ejes geográficos a la vez —Oracle: regiones (América, EMEA, Asia-Pacífico) y países
+        (Estados Unidos, Reino Unido, Alemania…, otros países)— y sumados como uno daban el doble del consolidado. Si
+        todas juntas no suman el total, el primer desglose es el que lo suma con la línea mayor y el menor número de
+        líneas (las regiones); el resto es otro desglose del mismo total, que se cuadra aparte. Sin total o con más de
+        16 líneas (sin búsqueda exhaustiva razonable), un solo grupo, como siempre."""
+        geo, padre = self.geografia()
+        if len(geo) < 3 or len(geo) > 16:
+            return [geo] if geo else []
+        for p in reversed(self.periodos):
+            if padre is None:
+                ref = self.consolidado.get(p)
+            else:
+                linea_padre = next((l for l in self.lineas if l.miembro == padre or l.miembro.endswith("|" + padre)), None)
+                ref = linea_padre.valores.get(p) if linea_padre is not None else None
+            valores = [l.valores.get(p) for l in geo]
+            if ref is None or not ref.hay_dato or not all(v is not None and v.hay_dato for v in valores):
+                continue
+            tol = TOLERANCIA * abs(ref.valor)
+            if abs(sum(v.valor for v in valores) - ref.valor) <= tol:
+                return [geo]
+            orden = sorted(range(len(geo)), key=lambda i: -valores[i].valor)
+            mejor = None
+            for mascara in range(1, 2 ** len(geo)):
+                if not mascara & 1:                          # el desglose principal lleva la línea mayor
+                    continue
+                elegidas = [orden[i] for i in range(len(geo)) if mascara >> i & 1]
+                if abs(sum(valores[i].valor for i in elegidas) - ref.valor) <= tol and (mejor is None or len(elegidas) < len(mejor)):
+                    mejor = elegidas
+            if mejor is None:
+                return [geo]
+            primero = [geo[i] for i in sorted(mejor, key=lambda i: -valores[i].valor)]
+            return [primero, [l for l in geo if l not in primero]]
+        return [geo]
+
     @property
     def sin_traducir(self) -> List[str]:
         return [l.miembro for l in self.lineas if not l.traducido]
@@ -243,12 +280,16 @@ def _cuadrar(s: Segmentos, etiqueta) -> None:
         grupos = [("segmentos + conciliación", s.de_tipo("segmento") + s.de_tipo("conciliacion"), total, "del consolidado")] \
             if s.de_tipo("segmento") else []
         geo, padre = s.geografia()
-        if padre is None:
-            grupos.append(("geografías", geo, total, "del consolidado"))
-        else:
-            linea_padre = next((l for l in s.lineas if l.miembro == padre or l.miembro.endswith("|" + padre)), None)
-            if linea_padre is not None and linea_padre.valores.get(p) is not None:
-                grupos.append(("geografías", geo, linea_padre.valores[p], f"de {linea_padre.rotulo}"))
+        desgloses = s.desgloses_geograficos()
+        nombres = (["geografías"] if len(desgloses) == 1 else
+                   [f"geografías ({', '.join(l.rotulo for l in d)})" for d in desgloses])
+        for nombre, d in zip(nombres, desgloses):
+            if padre is None:
+                grupos.append((nombre, d, total, "del consolidado"))
+            else:
+                linea_padre = next((l for l in s.lineas if l.miembro == padre or l.miembro.endswith("|" + padre)), None)
+                if linea_padre is not None and linea_padre.valores.get(p) is not None:
+                    grupos.append((nombre, d, linea_padre.valores[p], f"de {linea_padre.rotulo}"))
         productos_sueltos = [l for l in s.de_tipo("producto") if l.padre is None]
         if productos_sueltos and not s.de_tipo("segmento"):
             grupos.append(("líneas de producto", productos_sueltos, total, "del consolidado"))

@@ -27,14 +27,18 @@ Construcción por segmentos (opcional en cualquier paquete): ingresos y margen E
 ## 3. FCFF por año t = 1…N (año base 0 = Hechos verificados)
 ```
 Ingresos_t  = Ingresos_t−1 × (1 + g_t)            [o Σ segmentos]
-EBIT_t      = Ingresos_t × m_t
+EBIT_t      = Ingresos_t × m_t  (+ SBC_t si val.sbc = dilucion)
 Impuestos_t = max(0, EBIT_t − BIN_t) × τ_t         (bases imponibles negativas acumuladas y consumidas)
 NOPAT_t     = EBIT_t − Impuestos_t
-FCFF_t      = NOPAT_t + D&A_t − Capex_t − ΔFM_t − SBC_t ± partidas del paquete
+FCFF_t      = NOPAT_t + D&A_t − Capex_t − ΔFM_t ± partidas del paquete
 D&A_t = Ingresos_t × da_t · Capex_t = Ingresos_t × cx_t · ΔFM_t = (Ingresos_t − Ingresos_t−1) × fm
-SBC_t = Ingresos_t × sbc_t   (0 si val.sbc = dilucion; entonces las acciones futuras crecen en SBC/precio)
+SBC_t = Ingresos_t × sbc_t
 ```
-**Periodo parcial (obligatorio).** Fecha de valoración d; f = días desde d hasta el cierre del ejercicio 1 / días del ejercicio. El flujo del año 1 cuenta × f: lo generado antes de d ya está en el balance del puente. Momentos: t₁ = f/2 (mitad de año) o f; t_k = f + (k − 1) − 0,5 (o f + k − 1). DF_k = (1 + WACC)^−t_k.
+**SBC (decisión 1 del analista, 28/09/2026).** m_t es el **margen EBIT GAAP**: el de las cuentas, que ya descuenta la
+retribución en acciones como gasto. Con `val.sbc = coste_de_caja` la SBC ya está dentro de m_t: el FCFF **no** la resta
+otra vez y su fila es informativa. Con `val.sbc = dilucion` se suma al EBIT (EBIT antes de SBC) y la pagan acciones
+nuevas: acciones del valor por acción = acciones diluidas + (SBC_1 × f_flujo + Σ_{t≥2} SBC_t) / precio.
+**Periodo parcial (obligatorio).** Fecha de valoración d y fecha B del balance del puente (el último publicado, entre el cierre base y d); f = días desde d hasta el cierre del ejercicio 1 / días del ejercicio, y f_flujo = días desde B hasta ese cierre / días del ejercicio. El flujo del año 1 cuenta × f_flujo: lo generado antes de B ya está en el balance del puente, y lo generado entre B y d no está en ninguno (auditoría del 27/09, fallo [16]). Momentos, desde d: t₁ = f − f_flujo/2 (mitad de año: el punto medio del tramo de B al cierre) o f; t_k = f + (k − 1) − 0,5 (o f + k − 1). DF_k = (1 + WACC)^−t_k. Con B = d, f_flujo = f y t₁ = f/2. Los cierres del ejercicio 1 y siguientes siguen la regla de los cierres publicados: fecha fija, o 52/53 semanas (último día de la semana del mes, o el más cercano a fin de mes), nunca «mismo día + 1 año» para quien cierra por semanas (fallos [18] y [60]).
 
 ## 4. Valor terminal
 - value_driver (por defecto): VT = NOPAT_N × (1 + g) × (1 − g / RONIC) / (WACC − g).

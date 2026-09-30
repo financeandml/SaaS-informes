@@ -587,7 +587,13 @@ def _q4_por_accion(clave: str, p: Periodo, serie) -> Optional[Hecho]:
         return derivar(clave, p, f"({d_fy} × {s_fy.periodo.clave} − {d_9m} × 9M) / {d_q4} días (acciones medias del 4T)",
                        {"fy": s_fy, "nueve_meses": s_9m},
                        lambda fy, nueve_meses: (d_fy * fy - d_9m * nueve_meses) / d_q4, unidad="acciones")
-    b_fy, b_9m = par("beneficio_neto")
+    # el numerador del BPA es el beneficio de los ordinarios (sin dividendos preferentes) si la compañía lo publica en
+    # los dos periodos; si no, el beneficio neto, que para quien no tiene preferentes es la misma cifra [19]
+    b_fy, b_9m = par(f"beneficio_ordinarios_{'diluido' if tipo == 'diluidas' else 'basico'}")
+    rotulo_b = "beneficio de los ordinarios"
+    if b_fy is None or b_9m is None:
+        b_fy, b_9m = par("beneficio_neto")
+        rotulo_b = "beneficio"
     if b_fy is None or b_9m is None:
         return None
     if tipo == "diluidas" and b_fy.valor - b_9m.valor < 0:
@@ -595,7 +601,7 @@ def _q4_por_accion(clave: str, p: Periodo, serie) -> Optional[Hecho]:
         s_fy, s_9m = par("acciones_basicas")
         if s_fy is None or s_9m is None:
             return None
-    return derivar(clave, p, f"(beneficio {b_fy.periodo.clave} − 9M) / (({d_fy} × acciones {s_fy.periodo.clave} − {d_9m} × 9M) / {d_q4})",
+    return derivar(clave, p, f"({rotulo_b} {b_fy.periodo.clave} − 9M) / (({d_fy} × acciones {s_fy.periodo.clave} − {d_9m} × 9M) / {d_q4})",
                    {"b_fy": b_fy, "b_9m": b_9m, "s_fy": s_fy, "s_9m": s_9m},
                    lambda b_fy, b_9m, s_fy, s_9m: (b_fy - b_9m) / ((d_fy * s_fy - d_9m * s_9m) / d_q4), unidad="USD/acción")
 

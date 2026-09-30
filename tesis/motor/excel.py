@@ -55,6 +55,8 @@ def exportar(v: Valoracion, ingresos_base: float, ruta: Path, umbrales: dict) ->
         ("acciones_diluidas", "Acciones diluidas", pte.acciones, pte.acciones_nota),
         ("ingresos_base", "Ingresos del año base (USD)", ingresos_base, "SEC (hechos verificados)"),
         ("fraccion", "Fracción del ejercicio 1 que queda (f)", base.proyeccion.fraccion, "días hasta el cierre / días del ejercicio"),
+        ("fraccion_flujo", "Parte del FCFF del año 1 que entra (f_flujo)", base.proyeccion.fraccion_flujo,
+         "días del último balance al cierre / días del ejercicio"),
         ("mitad_de_anio", "Convención de mitad de año (1 sí, 0 no)", 1 if p.mitad_de_anio else 0, "entradas del analista"),
         ("bin_inicial", "Bases imponibles negativas iniciales (USD)", p.bin_inicial, "entradas del analista"),
         ("ke", "Coste de los fondos propios (Ke)", w.ke, "rf + β × ERP + prima"),
@@ -117,7 +119,7 @@ def exportar(v: Valoracion, ingresos_base: float, ruta: Path, umbrales: dict) ->
             prev = _col(2 + t)
             ref = lambda k: f"{col}{F[k]}"                                         # noqa: E731
             ws[ref("ingresos")] = f"=ingresos_base*(1+{col}10)" if t == 0 else f"={prev}{F['ingresos']}*(1+{col}10)"
-            ws[ref("ebit")] = f"={ref('ingresos')}*{col}11"
+            ws[ref("ebit")] = f"={ref('ingresos')}*{col}11+(1-sbc_coste)*{ref('sbc')}"   # «dilución»: SBC sumada al EBIT
             ws[ref("bin")] = "=bin_inicial" if t == 0 else f"=MAX(0,{prev}{F['bin']}-MAX({prev}{F['ebit']},0))+MAX(-{prev}{F['ebit']},0)"
             ws[ref("impuestos")] = f"=MAX(0,{ref('ebit')}-{ref('bin')})*{col}12"
             ws[ref("nopat")] = f"={ref('ebit')}-{ref('impuestos')}"
@@ -125,13 +127,13 @@ def exportar(v: Valoracion, ingresos_base: float, ruta: Path, umbrales: dict) ->
             ws[ref("capex")] = f"={ref('ingresos')}*{col}14"
             ws[ref("dfm")] = (f"=({ref('ingresos')}-ingresos_base)*fm_{c}" if t == 0
                              else f"=({ref('ingresos')}-{prev}{F['ingresos']})*fm_{c}")
-            ws[ref("sbc")] = f"={ref('ingresos')}*{col}15*sbc_coste"
+            ws[ref("sbc")] = f"={ref('ingresos')}*{col}15"                            # informativa con «coste de caja»
             ws[ref("paquete")] = ("=" + "+".join(f"{ref('ingresos')}*{col}{f}" for f in paquete_filas)) if paquete_filas else 0
-            ws[ref("fcff")] = f"={ref('nopat')}+{ref('da')}-{ref('capex')}-{ref('dfm')}-{ref('sbc')}-{ref('paquete')}"
+            ws[ref("fcff")] = f"={ref('nopat')}+{ref('da')}-{ref('capex')}-{ref('dfm')}-{ref('paquete')}"
             ws[ref("ebitda")] = f"={ref('ebit')}+{ref('da')}"
-            ws[ref("t")] = ("=IF(mitad_de_anio=1,fraccion/2,fraccion)" if t == 0 else f"=fraccion+{t}-IF(mitad_de_anio=1,0.5,0)")
+            ws[ref("t")] = ("=IF(mitad_de_anio=1,fraccion-fraccion_flujo/2,fraccion)" if t == 0 else f"=fraccion+{t}-IF(mitad_de_anio=1,0.5,0)")
             ws[ref("df")] = f"=(1+wacc_{c})^(-{ref('t')})"
-            ws[ref("peso_anio")] = "=fraccion" if t == 0 else 1
+            ws[ref("peso_anio")] = "=fraccion_flujo" if t == 0 else 1
             ws[ref("va")] = f"={ref('fcff')}*{ref('df')}*{ref('peso_anio')}"
         fin = F["va"] + 2
         ult = f"{ultima}"
@@ -143,8 +145,10 @@ def exportar(v: Valoracion, ingresos_base: float, ruta: Path, umbrales: dict) ->
                    ("va_vt", "Valor actual del valor terminal", f"=C{fin + 1}*(1+wacc_{c})^(-(fraccion+{n}-1))"),
                    ("ev", "Valor de empresa", f"=C{fin}+C{fin + 2}"),
                    ("fondos_propios", "Fondos propios", f"=C{fin + 3}+ajuste_puente"),
-                   ("valor_accion", "Valor por acción hoy (V₀)", f"=C{fin + 4}/acciones_diluidas"),
-                   ("valor_h", "Valor por acción en el horizonte (V_h)", f"=C{fin + 5}*(1+ke)^(horizonte_meses/12)-dpa_horizonte")]
+                   ("acciones_valor", "Acciones del valor por acción (+ las que pagan la SBC con «dilución»)",
+                    f"=acciones_diluidas+(1-sbc_coste)*SUMPRODUCT(C{F['sbc']}:{ult}{F['sbc']},C{F['peso_anio']}:{ult}{F['peso_anio']})/precio"),
+                   ("valor_accion", "Valor por acción hoy (V₀)", f"=C{fin + 4}/C{fin + 5}"),
+                   ("valor_h", "Valor por acción en el horizonte (V_h)", f"=C{fin + 6}*(1+ke)^(horizonte_meses/12)-dpa_horizonte")]
         for i, (k, rot, formula) in enumerate(resumen):
             ws[f"A{fin + i}"], ws[f"B{fin + i}"], ws[f"C{fin + i}"] = f"{k}_{c}", rot, formula
             ws[f"B{fin + i}"].font = negrita
@@ -187,7 +191,7 @@ def exportar(v: Valoracion, ingresos_base: float, ruta: Path, umbrales: dict) ->
                   "gordon": f"Base!${ultima}${F['fcff']}*(1+{gc})/({wc}-{gc})",
                   "multiplo_salida": f"Base!${ultima}${F['ebitda']}*multiplo_base"}[b.terminal.metodo]
             se.cell(3 + i, 2 + j, f"=IF({wc}-{gc}<=0,\"\",(SUMPRODUCT({rng('fcff')},{rng('peso_anio')},(1+{wc})^(-{rng('t')}))"
-                                  f"+{vt}*(1+{wc})^(-(fraccion+{n}-1))+ajuste_puente)/acciones_diluidas)")
+                                  f"+{vt}*(1+{wc})^(-(fraccion+{n}-1))+ajuste_puente)/acciones_valor_base)")
     rv = wb.create_sheet("Reverse DCF")
     rv["A1"] = "DCF inverso (motor): qué hay que creer para que V₀ del base sea el precio"
     wb.save(ruta)

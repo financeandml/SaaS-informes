@@ -102,6 +102,7 @@ class Parametros:
     mult_objetivos: List[dict] = field(default_factory=list)
     sotp: dict = field(default_factory=dict)
     faltas: List[str] = field(default_factory=list)       # lo que falta o no valida: bloqueos del paso 7
+    cierres_publicados: List[date] = field(default_factory=list)   # no es entrada: los cierres de ejercicio de los hechos (52/53)
 
 
 def leer(datos: Mapping, fecha_informe: date, paquete_propuesto: str = "general", mercado: str = "") -> Parametros:

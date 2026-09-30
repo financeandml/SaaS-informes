@@ -19,7 +19,9 @@ RAIZ = Path(__file__).resolve().parents[1]
 def _docx(texto: str) -> bytes:
     """Un .docx mínimo con la biblioteca estándar: dos párrafos separados por un salto de página."""
     ns = 'xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"'
-    cuerpo = "".join(f"<w:p>{'<w:r><w:br w:type=\"page\"/></w:r>' if i else ''}<w:r><w:t>{p}</w:t></w:r></w:p>" for i, p in enumerate(texto.split("|")))
+    # El salto va fuera del f-string: Python 3.11 no admite barras invertidas dentro de sus expresiones.
+    salto = '<w:r><w:br w:type="page"/></w:r>'
+    cuerpo = "".join(f"<w:p>{salto if i else ''}<w:r><w:t>{p}</w:t></w:r></w:p>" for i, p in enumerate(texto.split("|")))
     b = io.BytesIO()
     with zipfile.ZipFile(b, "w") as z:
         z.writestr("[Content_Types].xml", '<?xml version="1.0"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"/>')

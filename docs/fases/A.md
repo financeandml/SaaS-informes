@@ -33,3 +33,15 @@ Protocolo: el de siempre (`00_protocolo.md`); cada parte se cierra con resumen b
 
 Aceptación final: `pytest -m auditoria` 78 de 78; los cuatro informes sin bloqueos del programa; una auditoría nueva no
 reproduce ninguno; batería completa y regresiones en verde.
+
+## Estado (30/09/2026)
+- A0, A1 y A4 ☑ (antes del 29/09).
+- A5 ☑ motor (+ F12, `docs/fases/F12.md`): saldo anterior del ejercicio en ROE/ROA [13, 43]; ROIC con la definición del
+  glosario [14]; CAGR de cinco intervalos [15, 44]; FCFF desde el balance del puente [16]; SBC según la decisión 1, con
+  «dilución» implementada (05 §3) [17, 75]; cierres de 52/53 semanas [18, 60]; BPA del 4T sin dividendo preferente [19, 53];
+  «otros ingresos» que cuadran [20]; dos ejes geográficos sin sumar [21]; ratios con base negativa N/A [22]; aviso de
+  partidas no recurrentes en el TTM (`datos/no_recurrentes.py`, `config/no_recurrentes.yaml`) [23].
+  Contador: `pytest -m auditoria` 34 de 78 sin marca (44 abiertos). Informe de control QCOM: cambian 11–18, 20, 23, 25,
+  28 y 36 (ROIC, SBC, periodo parcial, CAGR).
+- Siguiente: A2 (extracción y contraste: 3, 4, 5, 49).
+

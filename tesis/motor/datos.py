@@ -18,7 +18,7 @@ from dataclasses import dataclass, field
 from datetime import date, timedelta
 from typing import Dict, List, Mapping, Optional, Tuple
 
-from ..datos.hechos import Periodo, etiqueta_fiscal
+from ..datos.hechos import Hecho, Periodo, etiqueta_fiscal, na
 from ..rotulos import fallo
 from . import comparables as comparables_mod, multiplos as multiplos_mod
 from .escenarios import Valoracion, valorar
@@ -72,6 +72,30 @@ class Motor:
     fuente_beta: str = ""
     fuente_rf: str = ""
     dpa_motivo: str = ""
+    # los ingresos del ejercicio de hace cinco años: el «histórico 5 años» del DCF inverso son cinco intervalos, seis
+    # ejercicios; con los cinco del informe salía un CAGR de cuatro con el rótulo de cinco (fallos [15] y [44])
+    ingresos_hace_5: Optional[Hecho] = None
+
+
+def _ingresos_hace_5(hechos, anuales: List[Periodo], facts: Optional[dict], fecha: date) -> Optional[Hecho]:
+    """De los hechos si están; si no, de la SEC con el mismo mapeo del cuadro de resultados. Sin cifra publicada, N/A
+    con motivo: nunca un CAGR de otro número de años."""
+    if not anuales:
+        return None
+    ult = anuales[-1].fin
+    objetivo = date(ult.year - 5, ult.month, min(ult.day, 28))
+    cerca = lambda q: q.meses == 12 and abs((q.fin - objetivo).days) <= 10          # noqa: E731  (52/53 semanas)
+    for (c, q), h in hechos.items():
+        if c == "ingresos" and cerca(q) and h.hay_dato:
+            return h
+    if facts:
+        from ..datos.campos import campo
+        from ..fuentes import sec
+        for q, h in sorted(sec.hechos_xbrl(facts, campo("ingresos"), fecha).items(), key=lambda x: x[0].fin):
+            if cerca(q) and h.hay_dato:
+                return h
+    return na("ingresos", Periodo.anual(objetivo), f"no hay ingresos publicados del ejercicio cerrado hacia el {objetivo:%d/%m/%Y} "
+              f"(hacen falta seis ejercicios para un crecimiento de cinco años)")
 
 
 def sectores() -> dict:
@@ -416,6 +440,8 @@ def ejecutar(emisor, facts: dict, hechos, periodos: Dict[str, List[Periodo]], da
         v, a = _ultimo(hechos, "ingresos", anuales)
         m.ingresos_base, m.etiqueta_base = v, (etq(a) if a else "")
     m.cierre_base = max((a.fin for a in anuales if a.fin < fv), default=None)
+    p.cierres_publicados = sorted(a.fin for a in anuales if a.fin < fv)
+    m.ingresos_hace_5 = _ingresos_hace_5(hechos, anuales, facts, fv)
     if m.ingresos_base is None or m.cierre_base is None:
         m.bloqueos.append("año base: sin ingresos verificados o sin cierre de ejercicio anterior a la valoración")
         return m
@@ -488,7 +514,7 @@ def _ntm(v: Valoracion, m: Motor, hechos, trimestres: List[Periodo], p: Parametr
         intereses = intereses_udm
     elif valores and all(x is not None and x.hay_dato for x in valores):
         intereses = abs(sum(x.valor for x in valores))
-    acciones = v.puente.acciones
+    acciones = v.base.acciones or v.puente.acciones          # con «dilución», también las que pagan la SBC
     bpa_serie = [(n - intereses * (1 - p.tipo_marginal)) / acciones for n in b.nopat]
     ingresos, ebitda, bpa = mezcla(b.ingresos), mezcla(b.ebitda), mezcla(bpa_serie)
     fcf = mezcla([x - intereses * (1 - p.tipo_marginal) for x in b.fcff])

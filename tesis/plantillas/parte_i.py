@@ -91,15 +91,19 @@ def _modelo(d: ParteI, n, motor, autor: str) -> None:
                                    "Fuente: entradas del paso 7 y cálculos del motor de valoración (05).", partible=True)
     pr = v.base.proyeccion
     columnas = [str(c.year) for c in pr.cierres]
-    lineas = (("Ingresos", pr.ingresos, 0), ("EBIT", pr.ebit, 0), ("Impuestos", pr.impuestos, 0), ("NOPAT", pr.nopat, 0), ("D&A", pr.da, 0),
-              ("Capex", pr.capex, 0), ("Δ fondo de maniobra", pr.dfm, 0), ("SBC", pr.sbc, 0), ("FCFF", pr.fcff, 0))
-    filas = [FilaCuadro(r, [_c(numero(x / 1e6), pr.formulas.get(r.lower(), ""), "D") for x in serie], capa="D", destacada=r == "FCFF")
-             for r, serie, _ in lineas]
+    from .parte_d import _rotulo_sbc
+    # todas las filas que forman el FCFF, también las del paquete del sector, para que la proyección sume [38]
+    lineas = (("Ingresos", pr.ingresos, "ingresos"), ("EBIT", pr.ebit, "ebit"), ("Impuestos", pr.impuestos, "impuestos"),
+              ("NOPAT", pr.nopat, "nopat"), ("D&A", pr.da, ""), ("Capex", pr.capex, ""), ("Δ fondo de maniobra", pr.dfm, ""),
+              *((k.replace("_", " ").capitalize(), s, "") for k, s in pr.paquete.items()),
+              (_rotulo_sbc(p), pr.sbc, "sbc"), ("FCFF", pr.fcff, "fcff"))
+    filas = [FilaCuadro(r, [_c(numero(x / 1e6), pr.formulas.get(clave, ""), "D") for x in serie], capa="D", destacada=r == "FCFF")
+             for r, serie, clave in lineas]
     filas.append(FilaCuadro("Factor de descuento", [_c(numero(x, 3), pr.formulas.get("factores", ""), "D") for x in pr.factores], capa="D"))
     filas.append(FilaCuadro("Valor actual", [_c(numero(x / 1e6), pr.formulas.get("valor_actual", ""), "D") for x in pr.valor_actual], capa="D",
                             destacada=True))
     d.cuadros["proyeccion"] = Cuadro(n.siguiente(), f"Proyección completa del escenario base (mln {lexico.moneda()})", columnas, filas,
-                                     f"Fuente: motor de valoración (05 §3); año 1 por la fracción {numero(pr.fraccion, 3)} del ejercicio en curso.",
+                                     f"Fuente: motor de valoración (05 §3); año 1 por la fracción {numero(pr.fraccion_flujo, 3)} del ejercicio en curso (desde el último balance).",
                                      partible=True)
 
 

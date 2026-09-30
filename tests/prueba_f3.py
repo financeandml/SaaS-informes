@@ -157,10 +157,14 @@ class Netflix(_Informes):
 
     @pytest.mark.regresion("R27")
     def test_periodo_parcial(self):
-        """R27. El libro contaba 2026 entero con la caja de junio ya en el balance (doble cómputo). Ahora ≈ 105/365."""
+        """R27. El libro contaba 2026 entero con la caja de junio ya en el balance (doble cómputo). Se descuenta desde la
+        valoración (≈ 105/365) y el flujo cuenta desde el balance del puente, 30/06/2026 (≈ 184/365): contar solo desde
+        la valoración perdía el FCFF de julio a septiembre, que no está en ningún balance (auditoría, fallo [16])."""
         r = self.motor.valoracion.base
         self.assertAlmostEqual(r.proyeccion.fraccion, 105 / 365, places=4)
-        self.assertAlmostEqual(r.proyeccion.valor_actual[0], r.proyeccion.fcff[0] * r.proyeccion.fraccion * r.proyeccion.factores[0], places=2)
+        self.assertAlmostEqual(r.proyeccion.fraccion_flujo, 184 / 365, places=4)
+        self.assertEqual(r.proyeccion.desde, date(2026, 6, 30))
+        self.assertAlmostEqual(r.proyeccion.valor_actual[0], r.proyeccion.fcff[0] * r.proyeccion.fraccion_flujo * r.proyeccion.factores[0], places=2)
 
     @pytest.mark.regresion("R26")
     def test_un_solo_precio_objetivo(self):
@@ -169,8 +173,10 @@ class Netflix(_Informes):
         self.assertAlmostEqual(v.po, sum(r.escenario.probabilidad * r.vh for r in v.resultados.values()), places=9)
         self.assertEqual(self.inf.objetivo_portada[1], v.po)
         # 88,71 hasta A4: las acciones del valor por acción eran las diluidas medias del trimestre; ahora son las básicas
-        # de la portada más el efecto dilutivo que publica la compañía (auditoría del 27/09/2026, fallo [8])
-        self.assertIn("89,17 USD", self._portada())
+        # de la portada más el efecto dilutivo que publica la compañía (auditoría del 27/09/2026, fallo [8]); 89,17 hasta
+        # A5: el FCFF del 30/06 al 17/09/2026 (entre el balance del puente y la valoración) no contaba en ningún sitio [16];
+        # 89,74 hasta la decisión 1 (SBC con «coste de caja»: ya está en el margen EBIT GAAP y no se resta otra vez [17])
+        self.assertIn("94,78 USD", self._portada())
         self.assertNotIn("90,00 USD", self._portada())
         self.assertIsNotNone(self.inf.parte_d.cuadros.get("consenso"))
 

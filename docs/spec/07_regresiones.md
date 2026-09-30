@@ -41,7 +41,7 @@ QCOM (informe 23/09/2026; ejercicio al último domingo de septiembre) y NFLX (17
 | R24 | F3 | NFLX deuda neta | Puente con 5.181 M USD (14.309 − 9.128 a 30/06/2026; arrendamientos fuera); los 7.527 del libro solo en la comparación |
 | R25 | F3 | NFLX precio | 75,31 (cierre 17/09/2026) en todo el informe; los 80,32 del libro solo en la comparación |
 | R26 | F3 | NFLX objetivo | Un solo PO (motor); el consenso no entra en ninguna media |
-| R27 | F3 | NFLX periodo parcial | FY2026 cuenta ≈ 105/365 desde el 17/09/2026 (el libro cuenta el año entero con caja a 30/06: doble cómputo) |
+| R27 | F3 | NFLX periodo parcial | FY2026 se descuenta desde el 17/09/2026 (f ≈ 105/365) y su flujo cuenta desde el balance del puente, 30/06/2026 (f_flujo ≈ 184/365): el libro contaba el año entero con caja a 30/06 (doble cómputo) y contar solo desde la valoración perdía el FCFF de julio a septiembre |
 | R28 | F1 | NFLX split | Split 10:1 de noviembre de 2025 detectado desde los datos; histórico reexpresado; nota generada |
 | R29 | F7 | NFLX cuadres | Formato es-ES en 38 (33.640 frente a 33.723 M USD) |
 | R30 | F6 | Parte G vacía | Sin entradas de posición → no se emite; nunca «N/A — el analista no ha adjuntado…» |

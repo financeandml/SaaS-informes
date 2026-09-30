@@ -42,10 +42,15 @@ def _cierre_anterior(clave: str, p: Periodo, hechos: Hechos) -> Periodo:
     26/09/2021 y el 25/09/2022, y Apple o Cisco igual. Restarle un año a la fecha de cierre pedía un saldo de un día
     que no existe, así que el patrimonio medio salía N/A **en todos los ejercicios** y con él el ROE, el ROA y el
     ROIC del informe entero. El saldo anterior no se deduce: se busca entre los que hay.
+
+    Y se busca **el del periodo anterior**, no el último publicado: entre el cierre de un ejercicio y el del anterior
+    están los balances de los tres trimestres, y quedarse con el más reciente medía el patrimonio del FY25 con el del
+    3T FY25 (auditoría del 27/09, fallos [13] y [43]). Vale el cierre publicado más cercano al calculado, a una semana
+    como mucho (52/53 semanas); si no hay ninguno, el calculado, que saldrá N/A con su motivo.
     """
-    fin = _instante(p).fin
-    anteriores = [q for (c, q) in hechos if c == clave and q.es_instante and q.fin < fin]
-    return max(anteriores, key=lambda q: q.fin, default=_instante_anterior(p))
+    objetivo = _instante_anterior(p).fin
+    anteriores = [q for (c, q) in hechos if c == clave and q.es_instante and abs((q.fin - objetivo).days) <= 7]
+    return min(anteriores, key=lambda q: abs((q.fin - objetivo).days), default=_instante_anterior(p))
 
 
 def _media(clave: str, p: Periodo, hechos: Hechos) -> Hecho:
@@ -87,13 +92,18 @@ FORMULAS = {
     "capex_ventas": lambda capex, ingresos: capex / ingresos if ingresos else None,
     "roe": lambda beneficio_neto, patrimonio: beneficio_neto / patrimonio if patrimonio else None,
     "roa": lambda beneficio_neto, total_activo: beneficio_neto / total_activo if total_activo else None,
-    "roic": lambda ebit, tipo_efectivo, patrimonio, deuda_bruta, caja: (ebit * (1 - tipo_efectivo)) / (patrimonio + deuda_bruta - caja)
-    if (patrimonio + deuda_bruta - caja) else None,
+    "roic": lambda ebit, tipo_efectivo, patrimonio, deuda_neta: (ebit * (1 - tipo_efectivo)) / (patrimonio + deuda_neta)
+    if (patrimonio + deuda_neta) else None,
     "cobertura_intereses": lambda ebit, intereses: ebit / intereses if intereses else None,
     "payout": lambda dividendos, beneficio_neto: dividendos / beneficio_neto if beneficio_neto else None,
 }
 
 SOLO_ANUALES = {"roe", "roa", "roic"}
+
+# Ratios cuyo denominador tiene que ser positivo para significar algo: con un FCF negativo, «retribución / FCF» de
+# −24,8 % no dice nada (fallo [22]). Sale N/A con el motivo; el cero y el hueco siguen siendo lo que eran.
+BASE_POSITIVA = {"retribucion_sobre_fcf": ("fcf", "el FCF"), "payout": ("beneficio_neto", "el beneficio neto"),
+                 "dfn_ebitda": ("ebitda", "el EBITDA"), "roe": ("patrimonio", "el patrimonio neto medio")}
 SOBRE_INSTANTES = {"deuda_bruta", "deuda_neta", "fondo_maniobra"}
 
 # `deuda_cp` con estos conceptos es solo el vencimiento corriente del largo plazo: el papel comercial va aparte
@@ -113,9 +123,36 @@ def incluye_papel_comercial(deuda_cp: Optional[Hecho], papel_comercial: Optional
     return concepto.split(":")[-1] in _SOLO_VENCIMIENTO_CORRIENTE
 
 
+def _otros_que_cuadran(salida: Hechos, flujos: List[Periodo]) -> None:
+    """«Otros ingresos y gastos» de un emisor de la SEC: lo que lleva del EBIT al resultado antes de impuestos.
+
+    Quien no etiqueta el total no operativo publica sus partes (Oracle: intereses cobrados, plusvalías de inversiones,
+    otros), y el primer concepto de la lista era solo una de ellas: EBIT − gastos financieros + otros no daba el
+    resultado antes de impuestos (fallo [20]). Si lo publicado cuadra (con los gastos financieros aparte o dentro), se
+    queda; si no, la fila es el resto, derivado y con su fórmula, y la nota dice qué publica la SEC.
+    Las cuentas españolas no pasan por aquí: su «resultado financiero» ya es el total.
+    """
+    if not any(h.capa is Capa.SEC for h in salida.values()):
+        return
+    for p in flujos:
+        bai, ebit, gf = (salida.get((c, p)) for c in ("bai", "ebit", "intereses"))
+        if not all(h is not None and h.hay_dato for h in (bai, ebit, gf)):
+            continue
+        otros = salida.get(("otros_financieros", p))
+        resto = bai.valor - ebit.valor + gf.valor
+        if otros is not None and otros.hay_dato and min(abs(otros.valor - resto), abs(otros.valor - (bai.valor - ebit.valor))) <= 1e6:
+            continue
+        h = derivar("otros_financieros", p, "Resultado antes de impuestos − EBIT + Gastos financieros",
+                    {"bai": bai, "ebit": ebit, "intereses": gf}, lambda bai, ebit, intereses: bai - ebit + intereses, unidad=bai.unidad)
+        publicado = (f"la SEC publica {otros.valor / 1e6:,.0f} M en «{(otros.origen.concepto if otros.origen else '') or 'otros'}», solo una parte"
+                     .replace(",", ".") if otros is not None and otros.hay_dato else "la compañía no publica la partida total")
+        salida[("otros_financieros", p)] = h.con(nota=f"{publicado}: la fila es el resto, para que el cuadro sume")
+
+
 def calcular(hechos: Hechos, flujos: List[Periodo], instantes: List[Periodo]) -> Hechos:
     """Añade los derivados del catálogo a `hechos` (copia) y devuelve el conjunto."""
     salida: Hechos = dict(hechos)
+    _otros_que_cuadran(salida, flujos)
     for d in DERIVADOS:
         periodos = instantes if d.clave in SOBRE_INSTANTES else flujos
         for p in periodos:
@@ -133,7 +170,12 @@ def calcular(hechos: Hechos, flujos: List[Periodo], instantes: List[Periodo]) ->
                                                    lambda deuda_cp, deuda_lp, papel_comercial: deuda_cp + deuda_lp + papel_comercial,
                                                    unidad=d.unidad)
                     continue
-            salida[(d.clave, p)] = derivar(d.clave, p, d.formula, entradas, FORMULAS[d.clave], unidad=d.unidad)
+            h = derivar(d.clave, p, d.formula, entradas, FORMULAS[d.clave], unidad=d.unidad)
+            base = BASE_POSITIVA.get(d.clave)
+            if base is not None and h.hay_dato and entradas[base[0]].valor < 0:
+                h = derivar(d.clave, p, d.formula, entradas, lambda **_: None, unidad=d.unidad).con(
+                    motivo=f"no significativo: {base[1]} es negativo ({entradas[base[0]].valor / 1e6:,.0f} M)".replace(",", "."))
+            salida[(d.clave, p)] = h
     return salida
 
 

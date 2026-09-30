@@ -1,0 +1,40 @@
+# no_recurrentes.yaml · Frases que señalan una partida no recurrente con importe en los 10-Q / 10-K (y cuentas españolas)
+# cuyo periodo cae dentro de los doce meses de los múltiplos TTM (auditoría del 27/09/2026, fallo [23]).
+# Solo avisan (tramo 5): el analista decide si la aísla. El umbral de importe está en umbrales.yaml
+# (no_recurrente_min_ebit_ttm). Una frase casa si lleva una de las `claves` y un importe de `importes` en la misma oración.
+claves:
+  - "accrual of a loss"
+  - "loss contingenc"
+  - "impairment"
+  - "restructuring"
+  - "litigation settlement"
+  - "legal settlement"
+  - "one-time"
+  - "non-?recurring"
+  - "gain on (?:the )?sale of"
+  - "loss on (?:the )?sale of"
+  - "loss on extinguishment"
+  - "deterioro"
+  - "no recurrente"
+  - "extraordinari[oa]"
+  - "reestructuraci[óo]n"
+  - "resultado por enajenaci[óo]n"
+# importe: número y escala. «$ 619 million», «$1.2 billion», «619 millones de euros», «1.234 miles de euros»
+importes:
+  - {patron: "\\$\\s?([\\d,]+(?:\\.\\d+)?)\\s?million", escala: 1.0e6, decimal: "."}
+  - {patron: "\\$\\s?([\\d,]+(?:\\.\\d+)?)\\s?billion", escala: 1.0e9, decimal: "."}
+  - {patron: "([\\d.]+(?:,\\d+)?)\\s?millones de euros", escala: 1.0e6, decimal: ","}
+  - {patron: "([\\d.]+(?:,\\d+)?)\\s?miles de euros", escala: 1.0e3, decimal: ","}
+# frases que no son un cargo o una ganancia del periodo: saldos de balance, planes futuros, términos del oficio
+excluir:
+  - "\\bas of\\b"
+  - "\\btotaled\\b"
+  - "carrying amounts?"
+  - "table presents"
+  - "\\bup to\\b"
+  - "\\bexpects?\\b"
+  - "\\bcumulative\\b"
+  - "non-?recurring engineering"
+  - "\\b(?:were|was) \\$[\\d.,]+ (?:million|billion)(?: and \\$[\\d.,]+ (?:million|billion))? (?:at|as of)\\b"
+  - "\\bal cierre de\\b"
+  - "\\bsaldo\\b"

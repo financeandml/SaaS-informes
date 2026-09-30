@@ -230,17 +230,14 @@ class DeudaYAcciones(unittest.TestCase):
 class Motor(unittest.TestCase):
     ROE = {"AAPL": "171,4 %", "NFLX": "42,8 %", "ORCL": "54,3 %", "QCOM": "23,3 %"}
 
-    @falla(13, "ROE del último ejercicio con el balance del 3T anterior")
     def test_13_roe(self):
         for t, v in self.ROE.items():
             self.assertEqual(ultima(t, "Rentabilidad y eficiencia", "ROE"), v, t)
 
-    @falla(43, "ROA del último ejercicio con el balance del 3T anterior")
     def test_43_roa(self):
         self.assertEqual(ultima("AAPL", "Rentabilidad y eficiencia", "ROA"), "30,9 %")
         self.assertEqual(ultima("ORCL", "Rentabilidad y eficiencia", "ROA"), "7,9 %")
 
-    @falla(14, "dos definiciones de ROIC (glosario y fórmula)")
     def test_14_roic_una_definicion(self):
         for t in TICKERS:
             titulos = inf(t)._titulos
@@ -249,23 +246,19 @@ class Motor(unittest.TestCase):
                     fila = next(f for f, c in zip(filas, inf(t).cuadros[rotulo]) if c and c[0] == "ROIC")
                     self.assertTrue(all("inversiones a corto plazo" in x.lower() for x in fila), t)
 
-    @falla(15, "«Histórico 5 años» es un CAGR de 4")
     def test_15_cagr_cinco_anios(self):
         for t, v in {"AAPL": "8,7 %", "QCOM": "13,5 %"}.items():
             self.assertEqual(inf(t).celda("DCF inverso", "CAGR de ingresos implícito", "Histórico 5 años"), v, t)
 
-    @falla(44, "«Histórico 5 años» es un CAGR de 4 (NFLX, ORCL)")
     def test_44_cagr_cinco_anios(self):
         for t, v in {"NFLX": "12,6 %", "ORCL": "10,7 %"}.items():
             self.assertEqual(inf(t).celda("DCF inverso", "CAGR de ingresos implícito", "Histórico 5 años"), v, t)
 
-    @falla(16, "el FCFF entre el último balance y la valoración no está en ningún sitio")
     def test_16_trimestre_de_caja(self):
         for t in TICKERS:
             balance = re.search(r"balance a (\d\d/\d\d/\d{4})", inf(t).fila("Puente", "(−) Deuda financiera")[1]).group(1)
             self.assertIn(balance, inf(t).fila("Supuestos generales", "Periodo parcial")[1], t)
 
-    @falla(17, "la SBC se resta del FCFF con un margen EBIT GAAP (decisión 1: no se resta)")
     def test_17_sbc_no_se_resta(self):
         for t in TICKERS:
             i = inf(t)
@@ -275,43 +268,35 @@ class Motor(unittest.TestCase):
             self.assertAlmostEqual(col("FCFF"), col("NOPAT") + col("(+) D&A") - col("(−) Capex") - col("(−) Δ fondo") - paquete,
                                    delta=2, msg=t)
 
-    @falla(75, "la spec 05 §3 no dice qué margen EBIT lleva la SBC")
     def test_75_spec_sbc(self):
         texto = (RAIZ / "docs" / "spec" / "05_motor_dcf.md").read_text(encoding="utf-8")
         seccion = texto[texto.index("## 3."):texto.index("## 4.")]
         self.assertIn("GAAP", seccion)
 
-    @falla(18, "el cierre del ejercicio de 52/53 semanas se calcula como «mismo día + 1 año»")
     def test_18_cierre_52_53(self):
         self.assertIn("26/09/2026", inf("AAPL").fila("Supuestos generales", "Periodo parcial")[1])
 
-    @falla(60, "cierre del FY26 de QCOM el 28/09 (es el 27/09)")
     def test_60_cierre_qcom(self):
         self.assertIn("27/09/2026", inf("QCOM").fila("Supuestos generales", "Periodo parcial")[1])
 
-    @falla(19, "BPA derivado del 4T sin descontar el dividendo preferente")
     def test_19_bpa_preferentes(self):
         self.assertEqual(inf("ORCL").celda("Estado de resultados", "BPA diluido", "4T FY26"), "1,45")
 
-    @falla(53, "PER TTM de ORCL sobre el BPA con preferentes")
     def test_53_per_orcl(self):
         self.assertEqual(inf("ORCL").fila("Múltiplos sobre", "PER (TTM)")[0], "21,5x")
 
-    @falla(20, "«Otros ingresos» sin intereses ni plusvalías: las filas no suman")
     def test_20_otros_ingresos(self):
         i, col = inf("ORCL"), "2026"
         v = lambda r: num(i.celda("Estado de resultados", r, col))              # noqa: E731
-        self.assertAlmostEqual(v("EBIT") + v("Gastos financieros") + v("Otros ingresos"), v("Resultado antes"), delta=1)
+        # «EBIT (»: la fila se busca por prefijo y «EBIT» a secas casaba con la del EBITDA, que va antes
+        self.assertAlmostEqual(v("EBIT (") + v("Gastos financieros") + v("Otros ingresos"), v("Resultado antes"), delta=1)
 
-    @falla(21, "geografías de dos ejes sumadas como uno")
     def test_21_geografias(self):
         self.assertNotIn("geografías suman", inf("ORCL").texto)
 
-    @falla(22, "ratios con base negativa impresos como cifra")
     def test_22_ratios_no_significativos(self):
         self.assertNotIn("−24,8 %", inf("ORCL").fila("Flujo de caja", "Retribución / FCF"))
 
-    @falla(23, "múltiplos TTM con partidas no recurrentes sin aislar ni avisar")
     def test_23_no_recurrentes(self):
         self.assertTrue(any("no recurrente" in a for a in avisos("NFLX")))
 
@@ -419,7 +404,6 @@ class Esquema(unittest.TestCase):
         self.assertTrue(all((c["estado"] == "si") == hecho for c in sotp))
         self.assertTrue(hecho)
 
-    @falla(77, "F12 sin su documento de cierre dentro de A5")
     def test_77_f12_cerrada(self):
         self.assertTrue((RAIZ / "docs" / "fases" / "F12.md").exists())
 
