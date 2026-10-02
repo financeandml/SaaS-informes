@@ -75,6 +75,8 @@ class Motor:
     # los ingresos del ejercicio de hace cinco años: el «histórico 5 años» del DCF inverso son cinco intervalos, seis
     # ejercicios; con los cinco del informe salía un CAGR de cuatro con el rótulo de cinco (fallos [15] y [44])
     ingresos_hace_5: Optional[Hecho] = None
+    politica_dividendo: object = None          # fuentes.calendario.Politica: paga · no_paga · sin_dato
+    dpa_fuente: str = ""
 
 
 def _ingresos_hace_5(hechos, anuales: List[Periodo], facts: Optional[dict], fecha: date) -> Optional[Hecho]:
@@ -446,9 +448,13 @@ def ejecutar(emisor, facts: dict, hechos, periodos: Dict[str, List[Periodo]], da
         m.bloqueos.append("año base: sin ingresos verificados o sin cierre de ejercicio anterior a la valoración")
         return m
     if de_la_sec:
-        # dividendos: los últimos cuatro pagos de la bolsa, llevados al horizonte
-        pagos = sorted((d for d in (dividendos or []) if d.ex and d.ex <= fv and d.importe), key=lambda d: d.ex)[-4:]
-        m.dpa_anual = sum(d.importe for d in pagos)
+        # dividendos: el DPA vigente en tres estados (bolsa, SEC o el cero que declara el 10-K), llevado al horizonte
+        from ..fuentes.calendario import politica_dividendo
+        m.politica_dividendo = politica_dividendo(dividendos or [], facts, hechos, fv)
+        pol = m.politica_dividendo
+        m.dpa_anual, m.dpa_motivo, m.dpa_fuente = pol.dpa, pol.detalle, pol.fuente
+        if m.dpa_anual is None:
+            m.avisos.append(f"DPA N/A: {m.dpa_motivo}; el valor a {p.horizonte_meses} meses no descuenta dividendos")
     else:
         m.dpa_anual, m.dpa_motivo = _dpa_12_meses(dividendos, fv)
         if m.dpa_anual is None:

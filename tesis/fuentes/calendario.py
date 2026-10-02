@@ -12,7 +12,7 @@ from __future__ import annotations
 import re
 from dataclasses import dataclass
 from datetime import date, datetime
-from typing import List, Optional, Tuple
+from typing import List, Optional, Sequence, Tuple
 
 from ..datos.hechos import Contraste
 
@@ -114,6 +114,54 @@ def dividendos(ticker: str) -> Tuple[List[Dividendo], str]:
                                 declarado=_fecha_us(f.get("declarationDate")), importe=float(importe) if importe else None,
                                 texto=" · ".join(f"{k}: {v}" for k, v in f.items())))
     return salida, url
+
+
+@dataclass
+class Politica:
+    """El dividendo del emisor en tres estados (regla 10): «paga» (con el DPA anual vigente), «no_paga» (cero declarado por
+    la compañía) o «sin_dato» (nadie lo publica). Una bolsa sin filas no es un «no paga»: Nasdaq no cubre los valores de
+    NYSE y Oracle salía como si no pagara (fallos [6] y [52])."""
+    estado: str
+    dpa: Optional[float]
+    fuente: str
+    detalle: str
+
+
+_DPS = ("CommonStockDividendsPerShareDeclared", "CommonStockDividendsPerShareCashPaid")
+
+
+def politica_dividendo(dividendos: Sequence[Dividendo], facts: Optional[dict], hechos: Optional[dict], fv: date) -> Politica:
+    """Por orden: el calendario de la bolsa (último pago × pagos de los doce meses: el vigente, no la suma de los cuatro
+    últimos, que mezcla importes de antes de una subida, fallo [24]); el dividendo por acción del último trimestre en la
+    SEC × 4; el cero que la compañía declara en su 10-K; y si nada de eso, «sin dato» con su motivo."""
+    from datetime import timedelta
+    pagos = sorted((d for d in dividendos if d.ex and d.ex <= fv and d.importe), key=lambda d: d.ex)
+    if pagos:
+        n12 = sum(1 for d in pagos if d.ex > fv - timedelta(days=365))
+        if n12:
+            u = pagos[-1]
+            return Politica("paga", u.importe * n12, "Nasdaq",
+                            f"último pago {u.importe:.2f} (ex-dividendo {u.ex:%d/%m/%Y}) × {n12} pagos en los doce meses")
+    if facts:
+        from . import sec
+        for concepto in _DPS:
+            _, filas = sec._filas_concepto(facts, concepto)
+            trimestrales = [f for f in filas if f.get("start") and f["form"] in ("10-Q", "10-K")
+                            and 80 <= (date.fromisoformat(f["end"]) - date.fromisoformat(f["start"])).days <= 100
+                            and date.fromisoformat(f["end"]) <= fv]
+            if trimestrales:
+                f = max(trimestrales, key=lambda f: (f["end"], f["filed"]))
+                fin = date.fromisoformat(f["end"])
+                if (fv - fin).days <= 200:
+                    if not f["val"]:
+                        return Politica("no_paga", 0.0, f"SEC EDGAR · {f['form']} del {date.fromisoformat(f['filed']):%d/%m/%Y}",
+                                        f"dividendo por acción del trimestre al {fin:%d/%m/%Y} = 0")
+                    return Politica("paga", float(f["val"]) * 4, f"SEC EDGAR · {f['form']} del {date.fromisoformat(f['filed']):%d/%m/%Y}",
+                                    f"dividendo por acción del trimestre al {fin:%d/%m/%Y} ({float(f['val']):.2f}) × 4")
+    for (campo, _), h in sorted((hechos or {}).items(), key=lambda x: x[0][1].fin, reverse=True):
+        if campo == "dividendos" and h.hay_dato and h.valor == 0 and h.origen is not None and h.origen.formulario == "10-K":
+            return Politica("no_paga", 0.0, f"10-K · {h.origen.documento}" + (f" pág. {h.origen.pagina}" if h.origen.pagina else ""), h.nota)
+    return Politica("sin_dato", None, "", "la bolsa no publica dividendos de este valor y la SEC no publica dividendo por acción del último trimestre")
 
 
 _MESES_EN = {m: k for k, m in enumerate(("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"), 1)}

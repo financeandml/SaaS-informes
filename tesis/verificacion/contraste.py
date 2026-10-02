@@ -620,8 +620,12 @@ def _cero_declarado(c: Campo, p: Periodo, exp: Expediente) -> Optional[Hecho]:
     patron = DECLARACIONES_CERO.get(c.clave)
     if not patron:
         return None
-    for a in exp.de_tipo(Tipo.K10):
-        if a.periodo_fin and p.fin > a.periodo_fin:
+    # un trimestre posterior al 10-K vale si lo cubre un 10-Q del expediente: si la compañía hubiera pagado, su estado de
+    # flujos lo traería y no habría hueco (Netflix: N/A en los 1T y 2T FY26 con la política declarada, fallo [48])
+    cubiertos = max((q.periodo_fin for q in exp.de_tipo(Tipo.Q10) if q.periodo_fin), default=None)
+    for a in sorted(exp.de_tipo(Tipo.K10), key=lambda k: k.periodo_fin or date.min, reverse=True):
+        posterior = bool(a.periodo_fin and p.fin > a.periodo_fin)
+        if posterior and (cubiertos is None or p.fin > cubiertos):
             continue
         for i, texto in enumerate(a.paginas, 1):
             m = patron.search(texto)
@@ -630,7 +634,8 @@ def _cero_declarado(c: Campo, p: Periodo, exp: Expediente) -> Optional[Hecho]:
                 origen = Origen(documento=a.nombre, formulario=a.tipo.value, presentado=a.fecha, pagina=i)
                 return Hecho(campo=c.clave, periodo=p, valor=0.0, estado=Estado.CERO, capa=Capa.SEC, unidad=c.unidad,
                              origen=origen, contraste=Contraste.CONFIRMADO,
-                             nota=f"cero declarado en {a.nombre} pág. {i}: «…{frase}…»")
+                             nota=f"cero declarado en {a.nombre} pág. {i}: «…{frase}…»"
+                                  + ("; los 10-Q posteriores no publican pago" if posterior else ""))
     return None
 
 

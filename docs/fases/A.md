@@ -48,5 +48,13 @@ reproduce ninguno; batería completa y regresiones en verde.
   us-gaap [4]; lo leído en un documento anterior a un split, reexpresado antes de contrastar [5]; guía y real en la base
   de acciones de hoy [49]. AAPL pasa de 79 a 9 bloqueos. Contador: 38 de 78 sin marca (40 abiertos). Informe de control
   QCOM: sin cambios de cifras (solo la hora de consulta en 31 y 33–35).
-- Siguiente: A3 (tres estados: 6, 24, 48, 52, 56, 59, 67).
+- A3 ☑ salvo [56] (02/10): política de dividendo en tres estados (`calendario.politica_dividendo`: bolsa → SEC → cero
+  declarado del 10-K → sin dato) [6, 52]; DPA vigente = último pago × pagos en doce meses [24]; cero declarado también
+  en los trimestres que cubre un 10-Q [48]; `RepaymentsOfOtherLongTermDebt` en la amortización de deuda [59]; el motivo
+  de la bolsa cuando no cubre el valor, en español [67]. Y, de A7, la lista de comprobación cuenta los bloqueos de la
+  puerta ya calculada [29]. Bloqueos: AAPL 6, NFLX 3, ORCL 13, QCOM 4. Contador: 45 de 78 sin marca (33 abiertos).
+  Informe de control QCOM: 10 (amortización de deuda), V_h −0,06 USD por el DPA vigente (12–15, 20, 25, 28) y 38.
+- [56] abierto: el interés en corto de FINRA (decisión 2) necesita su API, que la red de la sesión del 02/10 no
+  alcanza (`api.finra.org` denegado por el proxy); sin una respuesta real que congelar no se escribe el cliente a ciegas.
+- Siguiente: A6 (reconocimiento documental: 10, 25–28, 46, 50, 57, 68, 70, 71, 74).
 

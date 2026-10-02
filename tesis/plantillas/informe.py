@@ -815,8 +815,11 @@ def construir(ticker: str, hoy: date, emisor: Emisor, exp: Expediente, tab: Tabl
     accionistas, filiales, ejecutivos, retribucion = _cuadros_gobierno(n, gobierno)
     if parte_b is not None:
         publicado = parte_b.notas[-1].publicado if parte_b.notas else None
+        from ..fuentes.calendario import politica_dividendo
+        politica = getattr(motor, "politica_dividendo", None) or politica_dividendo(parte_b.dividendos, None, hechos, hoy)
         fechas_c = parte_b_mod.cuadro_fechas(n, hoy, proxima, parte_b.dividendos, getattr(gobierno, "junta", None),
-                                             gobierno.origenes.get("junta"), parte_b_mod.siguiente_trimestre(publicado), parte_b.dividendos_url)
+                                             gobierno.origenes.get("junta"), parte_b_mod.siguiente_trimestre(publicado), parte_b.dividendos_url,
+                                             politica)
         catalizadores_c = parte_b_mod.cuadro_catalizadores(n, parte_b.entradas)
     resultados = _cuadro_resultados(n, hechos, tab, anuales, trimestres)
     balance = _cuadro_balance(n, hechos, tab, anuales, trimestres)

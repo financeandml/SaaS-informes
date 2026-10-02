@@ -168,25 +168,20 @@ class Extraccion(unittest.TestCase):
 
 @unittest.skipUnless(HAY, "sin fixtures de la auditoría o sin los adjuntos del analista")
 class TresEstados(unittest.TestCase):
-    @falla(6, "un «no disponible» de la fuente se imprime como «no paga dividendo»")
     def test_06_no_disponible_no_es_cero(self):
         self.assertNotIn("no paga dividendo", inf("ORCL").fila("Fechas clave", "Dividendo")[0])
 
-    @falla(48, "dividendos de NFLX: N/A donde hay un cero declarado; fuente Nasdaq para una política del 10-K")
     def test_48_dividendos_nflx(self):
         fila = inf("NFLX").fila("Flujo de caja", "Dividendos pagados")
         self.assertNotIn("N/A", fila)
         self.assertIn("10-K", inf("NFLX").fila("Fechas clave", "Dividendo")[1])
 
-    @falla(52, "ORCL valorada sin dividendo (DPA 0)")
     def test_52_dpa_orcl(self):
         self.assertAlmostEqual(definido(_E["base"]["ORCL"].with_suffix(".motor.xlsx"), "dpa_horizonte"), 2.00, delta=0.01)
 
-    @falla(24, "DPA del horizonte = suma de los cuatro últimos pagos, no el vigente")
     def test_24_dpa_vigente(self):
         self.assertAlmostEqual(definido(_E["base"]["QCOM"].with_suffix(".motor.xlsx"), "dpa_horizonte"), 3.68, delta=0.01)
 
-    @falla(59, "amortización de deuda N/A con conceptos XBRL publicados")
     def test_59_amortizacion_de_deuda_qcom(self):
         fila = inf("QCOM").fila("Flujo de caja", "Amortización de deuda")
         cab = inf("QCOM").cabecera("Flujo de caja")
@@ -196,7 +191,6 @@ class TresEstados(unittest.TestCase):
     def test_56_corto_orcl(self):
         self.assertNotIn("sin dato", " ".join(inf("ORCL").fila("Lista de comprobación", "Interés en corto")))
 
-    @falla(67, "«pendiente de la API» cuando la fuente dice que no cubre el valor")
     def test_67_motivo_de_la_fuente(self):
         for t in TICKERS:
             self.assertNotIn("pendiente de la API", inf(t).texto, t)
@@ -424,7 +418,6 @@ class Esquema(unittest.TestCase):
 
 @unittest.skipUnless(HAY, "sin fixtures de la auditoría o sin los adjuntos del analista")
 class Puerta(unittest.TestCase):
-    @falla(29, "bloqueos duplicados y recuentos distintos en checklist, Hoja 0 y log")
     def test_29_recuentos(self):
         for t in TICKERS:
             self.assertEqual(len(bloqueos(t)), len(set(bloqueos(t))), t)

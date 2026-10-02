@@ -144,7 +144,7 @@ def cuadro_objetivos(n, vigentes: Sequence[guia_mod.Candidato], hay_candidatos: 
 
 
 def cuadro_fechas(n, hoy: date, proxima, dividendos: Sequence, junta: Optional[date], origen_junta, trimestre: Optional[str],
-                  url_dividendos: str = ""):
+                  url_dividendos: str = "", politica=None):
     """Próximos resultados (siempre ≥ fecha del informe), dividendo y junta."""
     from .informe import Cuadro, FilaCuadro
     filas = []
@@ -177,8 +177,17 @@ def cuadro_fechas(n, hoy: date, proxima, dividendos: Sequence, junta: Optional[d
         # apartado 10) y lo que anuncie el emisor
         filas.append(FilaCuadro("Dividendo", [Celda("sin anunciar", "", "", "valor", "BME no publica calendario de dividendos; los pagados, en el apartado 10"),
                                               Celda("comunicaciones del emisor en BME", "", "", "valor", "")]))
+    elif politica is not None and politica.estado == "paga":
+        # la bolsa no publica el calendario de este valor (Nasdaq no cubre NYSE): el dividendo vigente, de la SEC
+        filas.append(FilaCuadro("Dividendo", [Celda(f"{numero(politica.dpa, 2)} USD por acción al año; fechas sin publicar en la bolsa", "", "H", "valor",
+                                                    politica.detalle), Celda(politica.fuente, "", "", "valor", "")]))
+    elif politica is not None and politica.estado == "no_paga":
+        filas.append(FilaCuadro("Dividendo", [Celda("no paga dividendo", "", "H", "cero", politica.detalle),
+                                              Celda(politica.fuente, "", "", "valor", "")]))
     else:
-        filas.append(FilaCuadro("Dividendo", [Celda("no paga dividendo", "", "H", "cero", "la bolsa no registra dividendos"),
+        # tres estados (fallo [6]): que la bolsa no registre dividendos no dice que la compañía no los pague
+        filas.append(FilaCuadro("Dividendo", [Celda("N/A", "", "", "na", politica.detalle if politica is not None else
+                                                    "la bolsa no publica dividendos de este valor"),
                                               Celda("Nasdaq", "", "", "valor", url_dividendos)]))
     if junta is not None and junta >= hoy:
         filas.append(FilaCuadro("Junta de accionistas", [Celda(f_fecha(junta), "", "H", "valor", ""), Celda("DEF 14A", "", "", "valor", "")]))

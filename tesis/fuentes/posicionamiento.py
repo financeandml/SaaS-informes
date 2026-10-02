@@ -253,6 +253,24 @@ def _insiders(ticker: str) -> Insiders:
     return s
 
 
+def _no_cubre(obj) -> str:
+    """El motivo, en español, cuando la bolsa responde sin datos y dice por qué (fallo [67]): «Short interest is only
+    supported for Nasdaq Listed stocks» no es un dato pendiente, es una fuente que no cubre el valor. El literal inglés
+    queda en la respuesta guardada (39); el cuerpo del informe lo dice en español."""
+    r = getattr(obj, "respuesta", None)
+    try:
+        j = json.loads(r.cuerpo) if r is not None and r.cuerpo else {}
+    except (ValueError, TypeError):
+        return ""
+    if not isinstance(j, dict) or j.get("data") or not j.get("message"):
+        return ""
+    mensaje = str(j["message"])
+    if re.search(r"(?i)only supported for nasdaq listed", mensaje):
+        return ("Nasdaq solo publica este dato de los valores que cotizan en Nasdaq y este no cotiza allí"
+                + ("; su fuente oficial fuera de Nasdaq es FINRA (decisión del 28/09/2026), aún sin conectar" if isinstance(obj, ShortInterest) else ""))
+    return "Nasdaq responde sin datos para este valor (su mensaje literal, en la respuesta guardada del apartado 39)"
+
+
 def _short(ticker: str, desde: Optional[date]) -> ShortInterest:
     url = f"https://api.nasdaq.com/api/quote/{ticker}/short-interest?assetclass=stocks"
     datos, resp = _pedir(url)
@@ -371,6 +389,10 @@ def construir(ticker: str, split_desde: Optional[date] = None, con_iv: bool = Tr
             setattr(p, clave, fn())
         except (HTTPError, URLError, ValueError, TypeError, KeyError, json.JSONDecodeError) as e:
             p.faltan[clave] = f"Nasdaq no sirvió {_QUE[clave]}: {fallo(e)}"
+            continue
+        motivo = _no_cubre(getattr(p, clave))
+        if motivo:
+            p.faltan[clave] = motivo
     if con_iv:
         try:
             p.iv = _iv_yahoo(ticker, p.cadena)

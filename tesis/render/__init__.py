@@ -123,6 +123,17 @@ def a_pdf(html: str, salida_pdf: Path, salida_html: Optional[Path] = None, infor
     return huella
 
 
+def _cerrar_lista(informe: Informe, bloqueos) -> None:
+    """El criterio «0 discrepancias y 0 bloqueos» de la lista de comprobación (28) con los de la puerta ya calculada: al
+    construir el informe aún no estaban los que la puerta encuentra en el HTML (apartados pendientes, «N/A» donde no
+    puede haberlo) y la lista, la hoja 0 y el log contaban cifras distintas (fallo [29])."""
+    pg = getattr(informe, "parte_g", None)
+    if pg is None:
+        return
+    discrepancias = sum(1 for b in bloqueos if b.startswith("Discrepancia abierta"))
+    pg.cerrar(len(bloqueos) - discrepancias, discrepancias)
+
+
 def emitir(informe: Informe, salida_pdf: Path, hoy=None, casa: str = "Warrants & Co.", pasadas: int = 2, prueba: bool = False):
     """La emisión de 06 §3–§4: puerta de calidad sobre el HTML, «EMITIDO dd/mm/aaaa» solo con 0 bloqueos (y nunca con
     entradas de prueba), hoja 0 con los bloqueos en el borrador y PDF paginado: si una página queda por debajo de
@@ -135,6 +146,7 @@ def emitir(informe: Informe, salida_pdf: Path, hoy=None, casa: str = "Warrants &
     from ..umbrales import umbral
     html = a_html(informe, casa)
     puerta = qa.revisar(informe, html, hoy)
+    _cerrar_lista(informe, puerta.bloqueos)
     informe.bloqueos_qa = list(puerta.bloqueos)
     informe.puntos_qa = puntos.resumen(puerta.puntos)              # hoja 0 y web: el estado de cada apartado, punto a punto
     informe.emitido = (hoy or informe.fecha_emision) if puerta.emitible and not prueba else None
@@ -169,6 +181,7 @@ def emitir(informe: Informe, salida_pdf: Path, hoy=None, casa: str = "Warrants &
         # la cabecera, la hoja 0 y la puerta dicen lo mismo (regla 13): un PDF con un bloqueo no puede decir «EMITIDO»
         informe.bloqueos_qa = list(puerta.bloqueos)
         informe.emitido = None
+        _cerrar_lista(informe, puerta.bloqueos)
         html = a_html(informe, casa)
         huella = a_pdf(html, salida_pdf, informe=informe, casa=casa)
         medidas = qa.relleno(Path(salida_pdf))

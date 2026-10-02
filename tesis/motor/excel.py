@@ -61,7 +61,7 @@ def exportar(v: Valoracion, ingresos_base: float, ruta: Path, umbrales: dict) ->
         ("bin_inicial", "Bases imponibles negativas iniciales (USD)", p.bin_inicial, "entradas del analista"),
         ("ke", "Coste de los fondos propios (Ke)", w.ke, "rf + β × ERP + prima"),
         ("horizonte_meses", "Horizonte (meses)", p.horizonte_meses, "entradas del analista"),
-        ("dpa_horizonte", "Dividendos por acción esperados en el horizonte (USD)", v.dpa_horizonte, "Nasdaq (últimos cuatro pagos)"),
+        ("dpa_horizonte", "Dividendos por acción esperados en el horizonte (USD)", v.dpa_horizonte, "DPA anual vigente × horizonte / 12: bolsa, SEC o el cero que declara el 10-K (fuente en el informe)"),
         ("ajuste_puente", "Ajuste del puente: − deuda + caja + inversiones ± ajustes (USD)", pte.ajuste, "último balance publicado"),
         ("deuda_neta", "Deuda neta (USD)", pte.deuda_neta, "último balance publicado"),
         ("wacc_calculado", "WACC calculado (antes del ajuste por escenario)", w.wacc, "E/(D+E) × Ke + D/(D+E) × Kd × (1 − t)"),

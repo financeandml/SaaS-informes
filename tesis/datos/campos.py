@@ -275,7 +275,9 @@ CAMPOS: Tuple[Campo, ...] = (
           conceptos=("ProceedsFromIssuanceOfLongTermDebt", "ProceedsFromIssuanceOfDebt", "ProceedsFromIssuanceOfSeniorLongTermDebt"),
           filas=(r"^Proceeds from issuance of (?:senior )?notes and other borrowings, net$", r"^Proceeds from issuance of debt$")),
     Campo("amortizacion_deuda", "Amortización de deuda", "Repayments of debt", 10, signo_informe=-1,
-          conceptos=("RepaymentsOfLongTermDebt", "RepaymentsOfDebt"),
+          # Qualcomm pasa de «RepaymentsOfLongTermDebt» a «RepaymentsOfOtherLongTermDebt» en el FY23: con solo el primero,
+          # N/A desde 2023 con la cifra publicada (fallo [59]). El papel comercial va aparte, como en su estado de flujos
+          conceptos=("RepaymentsOfLongTermDebt", "RepaymentsOfOtherLongTermDebt", "RepaymentsOfDebt"),
           filas=(r"^Repayments of debt$",)),
     Campo("fcf_compania", "Free cash flow (definición de la compañía)", "Free cash flow (company definition)", 10,
           filas=(r"^Free cash flow$",), solo_documento=True,
