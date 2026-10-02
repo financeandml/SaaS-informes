@@ -135,7 +135,7 @@ function lineaFichero(f) {
                    f.edgar === true ? t("edgar_si") : f.edgar === false ? t("edgar_no") : "", f.certeza]
     .filter(Boolean).join(" · ");
   return elemento("div", { class: "adj" }, [
-    elemento("span", { class: "nombre", title: f.motivo }, [f.fichero]),
+    elemento("span", { class: "nombre", title: `${f.fichero} · ${f.motivo}` }, [f.rotulo || f.fichero]),
     elemento("span", { class: `etiqueta ${f.certeza}`, title: f.motivo }, [detalle]),
     quitar,
   ]);
@@ -225,7 +225,7 @@ function pintarAdjuntos(datos) {
     quitar.addEventListener("click", () => quitarFichero(f.fichero));
     const edgar = f.edgar === null ? "—" : f.edgar ? t("edgar_si") : t("edgar_no");
     cuerpo.appendChild(elemento("tr", {}, [
-      elemento("td", { class: "fichero", title: `${f.paginas} ${t("paginas")} · ${f.clave}` }, [f.fichero]),
+      elemento("td", { class: "fichero", title: `${f.fichero} · ${f.paginas} ${t("paginas")} · ${f.clave}` }, [f.rotulo || f.fichero]),
       elemento("td", {}, [f.tipo]),
       elemento("td", {}, [fecha(f.periodo_fin)]),
       elemento("td", {}, [fecha(f.fecha)]),

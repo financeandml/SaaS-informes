@@ -155,8 +155,9 @@ def leer_retribucion(html: str, conocidos: Sequence[str] = ()) -> Tuple[List[Ret
             anio_i = 1
         else:
             continue
-        # «(5)» suelto en una columna de cifras es una llamada a nota, no un −5
-        cifras = [tablas_html.numero(c) for c in f[anio_i + 1:] if not re.fullmatch(r"\(\d{1,2}\)", c)]
+        # «(5)» o «(3)(4)» sueltos en una columna de cifras son llamadas a nota, no un −5: con la doble, la fila del último
+        # ejercicio de Apple quedaba desalineada y se imprimía la retribución del anterior (fallo [46])
+        cifras = [tablas_html.numero(c) for c in f[anio_i + 1:] if not re.fullmatch(r"(?:\(\d{1,2}\))+", c.replace(" ", ""))]
         if len(cifras) != len(columnas) or not actual[0]:
             continue            # fila sin datos de ese año (no era ejecutivo nombrado) o desalineada
         total = cifras[-1] if columnas and columnas[-1] == "Total" else None

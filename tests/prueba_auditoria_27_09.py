@@ -302,7 +302,6 @@ class Motor(unittest.TestCase):
 
 @unittest.skipUnless(HAY, "sin fixtures de la auditoría o sin los adjuntos del analista")
 class Documentos(unittest.TestCase):
-    @falla(10, "presentaciones y transcripciones no citables")
     def test_10_citables(self):
         self.assertFalse([b for b in bloqueos("QCOM") if "no disponible para verificar" in b])
 
@@ -310,23 +309,19 @@ class Documentos(unittest.TestCase):
         for t in ("AAPL", "QCOM", "ORCL"):
             self.assertFalse([b for b in bloqueos(t) if b.startswith("Gobierno · consejo")], t)
 
-    @falla(46, "retribución de AAPL del ejercicio anterior")
     def test_46_retribucion_ultimo_anio(self):
         fila = inf("AAPL").fila("Retribución de los ejecutivos", "Tim Cook")
         self.assertEqual((fila[0], fila[-1]), ("2025", "74.294.811"))
 
-    @falla(50, "biografías mezcladas y cargos con restos de maquetación")
     def test_50_biografias(self):
         self.assertNotIn("Director Logo", inf("NFLX").html)
         sarandos = inf("NFLX").texto[inf("NFLX").texto.find("Ted Sarandos"):][:1500]
         self.assertNotIn("Microsoft", sarandos)
 
-    @falla(26, "Item 1A de ORCL con un solo epígrafe")
     def test_26_item_1a(self):
         rotulo = next(k for k in inf("ORCL").cuadros if "Riesgos del Item 1A" in k)
         self.assertGreaterEqual(int(re.search(r"\((\d+) epígrafes", rotulo).group(1)), 20)
 
-    @falla(57, "entradas válidas del analista descartadas (Item 1A de los pilares)")
     def test_57_riesgo_1a_aceptado(self):
         self.assertFalse([b for b in bloqueos("ORCL") if "riesgo_1a" in b])
 
@@ -342,7 +337,6 @@ class Documentos(unittest.TestCase):
     def test_71_na_bloqueado_orcl(self):
         self.assertFalse([b for b in bloqueos("ORCL") if "Apartado 2:" in b or "Apartado portada" in b])
 
-    @falla(68, "los PDF con nombre UUID se muestran por su nombre de fichero")
     def test_68_rotulo_de_adjunto(self):
         from tesis.web import saas
         filas = saas.clasificar("ORCL")["adjuntos"]
@@ -424,7 +418,6 @@ class Puerta(unittest.TestCase):
         otros = len([b for b in bloqueos("ORCL") if not b.startswith("Discrepancia abierta")])
         self.assertIn(f"{otros} bloqueos", " ".join(inf("ORCL").fila("Lista de comprobación", "0 discrepancias")))
 
-    @falla(61, "QCOM cuenta 4 bloqueos siendo 3 distintos")
     def test_61_recuento_qcom(self):
         self.assertIn("3 bloqueos", " ".join(inf("QCOM").fila("Lista de comprobación", "0 discrepancias")))
 

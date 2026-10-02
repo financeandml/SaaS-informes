@@ -56,5 +56,10 @@ reproduce ninguno; batería completa y regresiones en verde.
   Informe de control QCOM: 10 (amortización de deuda), V_h −0,06 USD por el DPA vigente (12–15, 20, 25, 28) y 38.
 - [56] abierto: el interés en corto de FINRA (decisión 2) necesita su API, que la red de la sesión del 02/10 no
   alcanza (`api.finra.org` denegado por el proxy); sin una respuesta real que congelar no se escribe el cliente a ciegas.
-- Siguiente: A6 (reconocimiento documental: 10, 25–28, 46, 50, 57, 68, 70, 71, 74).
+- A6 ☑ (02/10; 25, 27, 28, 70, 71 y 74 ya estaban): presentaciones y transcripciones de resultados del emisor citables
+  por su trimestre [10]; epígrafes del Item 1A en negrita dentro de un párrafo redondo (ORCL: 1 → 34) [26, 57];
+  llamadas a nota «(3)(4)» en la Summary Compensation Table (AAPL 2025) [46]; el texto alternativo «LOGO» de las imágenes
+  de la proxy fuera de cargos y fichas [50]; rótulo legible de los adjuntos en la web [68]. Y, de A7, el recuento de QCOM
+  [61]. Contador: 52 de 78 sin marca (26 abiertos). Informe de control QCOM: sin cambios de cifras.
+- Siguiente: A8 (periodos fiscales y folios: 11, 12, 47).
 

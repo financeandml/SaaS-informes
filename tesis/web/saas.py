@@ -156,6 +156,13 @@ def _rutas(ticker: str) -> List[Path]:
     return sorted(p for p in carpeta.iterdir() if p.suffix.lower() in ADMITIDOS) if carpeta.exists() else []
 
 
+def _rotulo(a) -> str:
+    """Cómo se ve el adjunto en la lista: lo que es y de cuándo («10-K 31/05/2026»), no el nombre del fichero; EDGAR sirve
+    muchos PDF con un UUID por nombre y «0723dfa7-….pdf» no dice qué documento es (fallo [68])."""
+    cuando = a.periodo_fin or a.fecha
+    return f"{a.tipo.value} {cuando:%d/%m/%Y}" if cuando else a.tipo.value
+
+
 def clasificar(ticker: str) -> dict:
     """Los adjuntos del ticker clasificados por `expediente.cargar`, en orden cronológico, con su destino en el informe."""
     rutas = _rutas(ticker)
@@ -170,7 +177,7 @@ def clasificar(ticker: str) -> dict:
     filas = []
     for a in exp.adjuntos:
         orden = a.fecha or a.periodo_fin
-        filas.append({"fichero": a.ruta.name, "clave": a.clave, "tipo": a.tipo.value, "periodo_fin": a.periodo_fin, "fecha": a.fecha,
+        filas.append({"fichero": a.ruta.name, "rotulo": _rotulo(a), "clave": a.clave, "tipo": a.tipo.value, "periodo_fin": a.periodo_fin, "fecha": a.fecha,
                       "orden": orden.isoformat() if orden else "", "certeza": a.certeza.value, "motivo": a.motivo, "edgar": a.verificado_en_edgar,
                       "accession": a.accession, "paginas": len(a.paginas), "destino": catalogo.destino(a.tipo),
                       "tambien": [t.value for t in a.tambien],

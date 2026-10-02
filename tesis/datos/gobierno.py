@@ -247,6 +247,16 @@ _EDAD = re.compile(r"AGE:\s*(\d{2})")
 _DESDE = re.compile(r"SINCE:\s*(\d{4})")
 
 
+# el texto alternativo de una imagen sin cargar («<img alt="LOGO">») se imprime en el PDF de la proxy pegado al nombre o
+# al cargo: «Brad Smith LOGO» dejaba de ser cabecera de ficha y su trayectoria caía en la de Sarandos, y los cargos salían
+# «Independent Director Logo» (fallo [50])
+_ALT_IMAGEN = re.compile(r"\s*\b(?:LOGO|IMAGE|PHOTO|PICTURE|GRAPHIC)\b\s*")
+
+
+def _texto_linea(l) -> str:
+    return _ALT_IMAGEN.sub(" ", l.texto).strip()
+
+
 def _fichas_de(lineas) -> List[dict]:
     """Las fichas biográficas de una página: nombre, cargo, edad, «since», línea de cabecera y su altura.
 
@@ -254,7 +264,7 @@ def _fichas_de(lineas) -> List[dict]:
     seis líneas de después. Sin la edad no es una ficha: evita tomar por ficha una cita.
     """
     fichas = []
-    textos = [l.texto.strip() for l in lineas]
+    textos = [_texto_linea(l) for l in lineas]
     for i, t in enumerate(textos):
         m = _CABECERA_FICHA.match(t)
         if not m:
@@ -318,7 +328,7 @@ def _fichas_y_retratos(proxy: Adjunto, g: Gobierno, salida_fotos: Optional[Path]
         if not fichas:
             continue
         limites = retratos(proxy, numero)
-        textos = [l.texto.strip() for l in lineas]
+        textos = [_texto_linea(l) for l in lineas]
         for k, f in enumerate(fichas):
             # el bloque de la ficha va de su cabecera a la siguiente; el retrato cuyo centro cae dentro es el suyo
             tope = f["y"] + 20

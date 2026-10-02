@@ -371,11 +371,37 @@ def construir(emisor, hoy: date, facts: Optional[dict], portada=None, entradas: 
     for nota in pb.notas:
         textos[f"8-K {nota.presentado.isoformat()}"] = nota.texto
         textos.update({f"8-K {nota.presentado.isoformat()}#{k}": v for k, v in nota.paginas.items()})
+    _presentaciones_citables(textos, pb.alias, exp, emisor, etiqueta)
     pb.textos = textos
     pb.faltas += ent.comprobar_paso4(pb.entradas, textos, float(umbral("cita_similitud_min")), hoy)
     if pb.entradas.de_prueba:
         pb.faltas.append("entradas de PRUEBA (fixture), no del analista: no se puede emitir con ellas")
     return pb
+
+
+def _presentaciones_citables(textos: Dict[str, str], alias: Dict[str, str], exp, emisor, etiqueta) -> None:
+    """Las presentaciones y transcripciones de resultados del propio emisor (regla 6) que el analista adjuntó, citables
+    como «Presentación de resultados 3T FY26» (fallo [10]): no se depositan en EDGAR y solo se citaba lo depositado.
+    No declaran cierre: el trimestre es el último cierre de un 10-Q o 10-K anterior a su fecha, a 100 días como mucho."""
+    from datetime import timedelta
+    from ..datos.expediente import Tipo
+    from ..datos import hechos as hechos_mod
+    if exp is None:
+        return
+    cierres = sorted({d.periodo for d in (getattr(emisor, "depositos", None) or []) if d.formulario in ("10-Q", "10-K") and d.periodo}
+                     | {a.periodo_fin for a in exp.adjuntos if a.tipo in (Tipo.Q10, Tipo.K10) and a.periodo_fin})
+    for a in exp.adjuntos:
+        if a.tipo not in (Tipo.PRESENTACION, Tipo.CALL) or a.fecha is None:
+            continue
+        fin = max((c for c in cierres if c < a.fecha and (a.fecha - c).days <= 100), default=a.periodo_fin)
+        if fin is None:
+            continue
+        clave = f"{a.tipo.value} {etiqueta(hechos_mod.Periodo(fin=fin, inicio=fin - timedelta(days=90)))}"
+        textos[clave] = "\n".join(a.paginas)
+        for k, texto in enumerate(a.paginas, 1):
+            if texto.strip():
+                textos[f"{clave}#{k}"] = texto
+        alias.setdefault(clave, clave)
 
 
 def _construir_documental(pb: ParteB, emisor, hoy: date, exp) -> ParteB:

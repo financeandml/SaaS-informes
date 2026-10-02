@@ -37,6 +37,10 @@ class Bloque:
     texto: str
     estilo: str          # «b», «i», «bi» (uniforme), «» (redonda) o «mixto»
     fisica: int          # página física (índice desde 1, como `tablas_html.paginas`)
+    # el tramo inicial con estilo propio de un párrafo «mixto» y su estilo: Oracle escribe el epígrafe en negrita y su
+    # desarrollo en redonda dentro del mismo párrafo, y con solo los párrafos uniformes salía un epígrafe (fallo [26])
+    inicio: str = ""
+    estilo_inicio: str = ""
 
 
 @dataclass
@@ -79,7 +83,17 @@ class _Lector(HTMLParser):
         if texto:
             con_letra = [(n, c) for t, n, c in self._trozos if t.strip()]
             estilos = {("b" if n else "") + ("i" if c else "") for n, c in con_letra}
-            self.bloques.append(Bloque(texto, estilos.pop() if len(estilos) == 1 else "mixto", self._pagina))
+            inicio, estilo_inicio = "", ""
+            if len(estilos) > 1 and con_letra:
+                primero = ("b" if con_letra[0][0] else "") + ("i" if con_letra[0][1] else "")
+                tramo = []
+                for t_, n, c in self._trozos:
+                    if t_.strip() and ("b" if n else "") + ("i" if c else "") != primero:
+                        break
+                    tramo.append(t_)
+                if primero:
+                    inicio, estilo_inicio = tablas_html.limpiar("".join(tramo)), primero
+            self.bloques.append(Bloque(texto, estilos.pop() if len(estilos) == 1 else "mixto", self._pagina, inicio, estilo_inicio))
         self._trozos = []
 
     def handle_starttag(self, tag, attrs):
@@ -175,7 +189,9 @@ def leer(html: str, correcciones: Sequence[Mapping] = ()) -> Item1A:
         return salida
     ini = inicios[-1] if len(inicios) > 1 and not any(_FIN.match(b.texto) for b in bloques[inicios[0]:inicios[-1]]) else inicios[0]
     fin = next((k for k in range(ini + 1, len(bloques)) if _FIN.match(bloques[k].texto) and "b" in bloques[k].estilo), len(bloques))
-    tramo = bloques[ini + 1:fin]
+    # cada párrafo, como (texto del epígrafe, su estilo): el párrafo entero si es uniforme; su tramo inicial si es mixto
+    tramo = [b if b.estilo != "mixto" or not b.inicio else Bloque(b.inicio, b.estilo_inicio, b.fisica)
+             for b in bloques[ini + 1:fin]]
     candidatos = [b for b in tramo if b.estilo in ("b", "i", "bi") and len(b.texto) >= 40 and b.texto.rstrip().endswith((".", ";"))
                   and not _es_cabecera(b)]
     cuenta = Counter(b.estilo for b in candidatos)
