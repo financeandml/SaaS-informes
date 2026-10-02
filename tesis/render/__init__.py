@@ -57,7 +57,21 @@ def a_html(informe: Informe, casa: str = "Warrants & Co.") -> str:
         incrustar(r.ruta)
     if informe.historial_recorte is not None:
         incrustar(informe.historial_recorte.ruta)
-    return plantilla.render(i=informe, casa=casa, css=css, recortes_datos=recortes_datos)
+    html = plantilla.render(i=informe, casa=casa, css=css, recortes_datos=recortes_datos)
+    if getattr(informe.emisor, "mercado", "sec") != "sec":
+        html = rotular_documentos(html, informe.expediente)
+    return html
+
+
+def rotular_documentos(html: str, exp) -> str:
+    """Cada documento del expediente por lo que es y de cuándo («Cuentas anuales 31/12/2025»), no por el nombre del
+    fichero que le da la bolsa («bme_2025_AN_118335.pdf»): un lector no sabe qué es lo segundo (fallo [68])."""
+    import html as _html
+    for a in sorted(getattr(exp, "adjuntos", []) or [], key=lambda a: -len(a.nombre)):
+        cuando = a.periodo_fin or a.fecha
+        rotulo = f"{a.tipo.value} {cuando:%d/%m/%Y}" if cuando else a.tipo.value
+        html = html.replace(a.nombre, _html.escape(rotulo))
+    return html
 
 
 def _cabecera_pie(informe: Informe, casa: str) -> tuple:

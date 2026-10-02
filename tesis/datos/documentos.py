@@ -120,6 +120,11 @@ CATALOGO_BME: Tuple[Documento, ...] = (
         aporta="4 y 6 apoyo para las citas del analista (negocio, consejo y dirección); no se toman cifras de él",
         sin_el="Nada automático: el analista cita la web del emisor o la memoria de las cuentas.",
         donde="BME, documentos de incorporación del emisor (se trae con «Traer de BME»)"),
+    Documento(
+        clave="COMUNICACION", tipo=Tipo.COMUNICACION, titulo="Comunicaciones al mercado", exigencia=OPCIONAL,
+        aporta="citas del analista (avances, juntas, ampliaciones, consejo y operaciones de directivos); no se toman cifras de ellas",
+        sin_el="Nada automático: el analista cita las cuentas o la presentación.",
+        donde="BME, otra información relevante del emisor (se adjunta el PDF)"),
 )
 
 POR_CLAVE: Dict[str, Documento] = {d.clave: d for d in CATALOGO}

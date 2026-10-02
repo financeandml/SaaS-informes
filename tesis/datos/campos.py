@@ -267,7 +267,8 @@ CAMPOS: Tuple[Campo, ...] = (
           nota="Si el 10-K declara que nunca se han pagado, es un cero con cita; si no lo dice, N/A."),
     Campo("recompras", "Recompra de acciones", "Repurchases of common stock", 10, signo_informe=-1,
           conceptos=("PaymentsForRepurchaseOfCommonStock",),
-          filas=(r"^Repurchases of common stock$",)),
+          # PGC: la autocartera comprada en el ejercicio, en el flujo de financiación
+          filas=(r"^Repurchases of common stock$", r"^Adquisici[óo]n de instrumentos de patrimonio propio$")),
     Campo("adquisiciones", "Adquisiciones (caja)", "Acquisitions, net of cash acquired", 10, signo_informe=-1,
           conceptos=("PaymentsToAcquireBusinessesNetOfCashAcquired",),
           filas=(r"^Acquisitions?, net of cash acquired$",)),

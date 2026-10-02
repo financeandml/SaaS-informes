@@ -15,7 +15,7 @@ from datetime import timedelta
 from typing import Callable, Dict, List, Mapping, Optional, Sequence, Tuple
 
 from ..entradas import Entradas, comprobar_paso3, verificar_cita
-from ..formato import numero, pct
+from ..formato import mln, numero, pct
 from .frases import frase, posicion, verbo
 from ..entradas.propuestas import Parrafo, aplicar
 
@@ -59,7 +59,7 @@ def _cita(h) -> str:
 
 
 def _mln(v: float) -> str:
-    return f"{numero(v / 1e6)} mln {lexico.moneda()}"
+    return f"{mln(v)} mln {lexico.moneda()}"
 
 
 def _dato(hechos, clave: str, p):
@@ -75,7 +75,7 @@ def _factual(hechos, periodos: Mapping, etiqueta: Callable, vigentes: Sequence, 
         c, r = x.candidato, x.real
         clave = "dentro" if c.bajo <= r.valor <= c.alto else ("encima" if r.valor > c.alto else "debajo")
         salida.append((frase("2", "trimestre_guia", {"trimestre": c.trimestre, "valor": _mln(r.valor), "posicion": posicion(clave),
-                                                     "bajo": numero(c.bajo / 1e6), "alto": _mln(c.alto)}), f"8-K {r.presentado:%d/%m/%Y}, Ex. 99.1"))
+                                                     "bajo": mln(c.bajo), "alto": _mln(c.alto)}), f"8-K {r.presentado:%d/%m/%Y}, Ex. 99.1"))
     # los trimestres de los hechos (no solo los del cuadro): el mismo trimestre del año anterior también cuenta
     trimestres = sorted({p for (c, p) in hechos if c == "ingresos" and p.meses == 3 and not p.es_instante}, key=lambda p: p.fin)
     anuales = sorted(periodos.get("anuales", []), key=lambda p: p.fin)
@@ -100,7 +100,7 @@ def _factual(hechos, periodos: Mapping, etiqueta: Callable, vigentes: Sequence, 
     if g is not None:
         cita = f"8-K {g.presentado:%d/%m/%Y}, Ex. 99.1"
         if g.bajo != g.alto:
-            salida.append((frase("2", "guia", {"trimestre": g.trimestre, "bajo": f"{numero(g.bajo / 1e6)}", "alto": _mln(g.alto)}), cita))
+            salida.append((frase("2", "guia", {"trimestre": g.trimestre, "bajo": mln(g.bajo), "alto": _mln(g.alto)}), cita))
         else:
             salida.append((frase("2", "guia_punto", {"trimestre": g.trimestre, "valor": _mln(g.bajo)}), cita))
     i = next((p for p in reversed(instantes) if _dato(hechos, "deuda_neta", p)), None)
@@ -125,7 +125,7 @@ def _factual(hechos, periodos: Mapping, etiqueta: Callable, vigentes: Sequence, 
 
 def construir(e: Entradas, textos: Mapping[str, str], umbral: float, item, alias: Optional[Dict[str, str]], hechos, periodos: Mapping,
               etiqueta: Callable, vigentes: Sequence, comparaciones: Sequence = ()) -> ParteA:
-    from ..datos.item1a import buscar
+    from ..datos.item1a import buscar, referencia
     from .parte_b import alias_doc
     d = ParteA(resumen=_texto(e.valor("tesis.resumen")), por_que_ahora=_texto(e.valor("tesis.por_que_ahora")),
                vision=_texto(e.valor("tesis.vision_vs_mercado")))
@@ -143,7 +143,8 @@ def construir(e: Entradas, textos: Mapping[str, str], umbral: float, item, alias
                 evs.append((f"«{ev['texto_es']}» [{ref}]", ev.get("texto", "")))
         ep = buscar(item, p.get("riesgo_1a", "")) if item is not None and p.get("riesgo_1a") else None
         d.pilares.append(Pilar(k, p.get("titulo", ""), _texto(p.get("argumento")), evs, str(p.get("kpi") or ""), p.get("riesgo_es", ""),
-                               f"{alias_doc('10-K', alias)}, Item 1A, pág. {ep.pagina}" if ep is not None else "",
+                               (f"{alias_doc('10-K', alias)}, Item 1A, pág. {ep.pagina}" if not ep.documento else referencia(ep, alias))
+                               if ep is not None else "",
                                ep.texto if ep is not None else ""))
     if not d.pilares:
         d.pendientes["pilares"] = ("Pendiente del analista: los cinco pilares, cada uno con su argumento, dos evidencias verificadas, "

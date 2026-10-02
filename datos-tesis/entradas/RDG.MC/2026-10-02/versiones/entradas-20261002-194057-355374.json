@@ -1,0 +1,1063 @@
+{
+ "meta": {
+  "analista": "Sergio",
+  "fecha_informe": "2026-10-02",
+  "fecha_valoracion": "2026-09-25",
+  "tipo": "inicio_cobertura",
+  "nombre_presentacion": "Redegal",
+  "sector": "general"
+ },
+ "tesis": {
+  "resumen": {
+   "texto": "Redegal es una consultora digital gallega que crece con fuerza y ya roza el equilibrio operativo, pero lo hace sobre un balance que el auditor considera en duda. El patrimonio consolidado es negativo, el flujo de explotación fue negativo en 2025 y la compañía se financia en parte aplazando impuestos, con recargos que se repiten cada año y que la dirección excluye de su EBITDA ajustado. A la cotización actual, el mercado descuenta casi entero el plan de 2028. Nuestro escenario central lo cumple solo en parte y, con un coste de capital propio de un valor ilíquido, queda por debajo del precio. Iniciamos cobertura con recomendación de vender."
+  },
+  "por_que_ahora": {
+   "texto": "Las ventas del primer semestre de 2026 crecieron con fuerza, pero el informe semestral auditado, con márgenes, caja y deuda fiscal, se publica antes de que acabe octubre y es la primera prueba de que el crecimiento genera caja."
+  },
+  "vision_vs_mercado": {
+   "texto": "El DCF inverso muestra que el precio exige que la compañía convierta su crecimiento en márgenes cercanos a los de su plan de 2028. Nosotros damos por bueno el crecimiento, pero no la conversión: los recargos fiscales, el capital circulante y la concentración de clientes nos llevan a márgenes y a una generación de caja muy inferiores."
+  }
+ },
+ "pilares": [
+  {
+   "titulo": "Crecimiento real, financiado con capital circulante",
+   "argumento": {
+    "texto": "La cifra de negocios crece a doble dígito desde hace cinco ejercicios y el primer semestre de 2026 mantiene el ritmo. Pero el flujo de explotación de 2025 fue negativo: el crecimiento consume circulante y la compañía ha cubierto el hueco con ampliaciones de capital, préstamos de sus accionistas y aplazamientos fiscales. Mientras el crecimiento no se convierta en caja, cada punto de crecimiento adicional exige financiación externa."
+   },
+   "evidencias": [
+    {
+     "doc": "bme_2026_OtherRelevantInformation_119956.pdf",
+     "pag": "1",
+     "texto": "que alcanza los 8,94 millones de euros (un 18,5% superior frente a los 7,55 millones de euros del mismo periodo",
+     "texto_es": "La facturación consolidada preliminar del primer semestre de 2026 alcanzó 8,94 millones de euros, un 18,5 % más que un año antes."
+    },
+    {
+     "doc": "bme_2025_AN_118335.pdf",
+     "pag": "38",
+     "texto": "Total Flujos de efectivo de las actividades de explotación (662.595,22) 1.152.553,85 c.s.",
+     "texto_es": "Los flujos de efectivo de explotación de 2025 fueron negativos en 662.595 euros, frente a 1.152.554 euros positivos en 2024."
+    }
+   ],
+   "kpi": "Flujo de caja de explotación",
+   "riesgo_1a": "Riesgo por la potencial falta o limitada financiación para acometer el crecimiento futuro",
+   "riesgo_es": "Que el crecimiento siga consumiendo caja y obligue a nuevas ampliaciones de capital con descuento o a más deuda."
+  },
+  {
+   "titulo": "El EBITDA ajustado excluye costes que se repiten",
+   "argumento": {
+    "texto": "La dirección presenta un EBITDA y un EBIT ajustados que excluyen los recargos y sanciones por presentar y pagar impuestos fuera de plazo. No son extraordinarios: aparecen en 2024 y en 2025 por importes parecidos, y la provisión por recargos sigue abierta. Mientras la compañía se financie aplazando impuestos, tratamos ese coste como recurrente, lo que deja el margen operativo real muy por debajo del ajustado."
+   },
+   "evidencias": [
+    {
+     "doc": "bme_2025_AN_118335.pdf",
+     "pag": "236",
+     "texto": "Gastos extraordinarios (851.260,06) (1.007.754,93)",
+     "texto_es": "Los gastos extraordinarios sumaron 851.260 euros en 2025 y 1.007.755 euros en 2024."
+    },
+    {
+     "doc": "bme_2025_AN_118335.pdf",
+     "pag": "35",
+     "texto": "que incluyen principalmente gastos por recargos y sanciones por presentaciones extemporáneas de liquidaciones tributarias",
+     "texto_es": "Esos importes corresponden principalmente a recargos y sanciones por presentar fuera de plazo liquidaciones tributarias."
+    }
+   ],
+   "kpi": "Margen EBITDA ajustado",
+   "riesgo_1a": "Riesgo de carácter tributario y laboral.",
+   "riesgo_es": "Que los aplazamientos fiscales sigan generando recargos y sanciones o que la Administración endurezca sus condiciones."
+  },
+  {
+   "titulo": "Balance frágil: patrimonio negativo y deuda fiscal",
+   "argumento": {
+    "texto": "El auditor mantiene una incertidumbre material sobre la continuidad del grupo por su patrimonio negativo y su fondo de maniobra negativo. La deuda con las administraciones públicas, sobre todo IVA aplazado, es de una magnitud comparable a la deuda bancaria. Las ampliaciones de 2026 alivian el patrimonio, pero la dineraria solo cubrió una parte de lo ofrecido, señal de que el acceso al capital es limitado."
+   },
+   "evidencias": [
+    {
+     "doc": "bme_2025_AN_118335.pdf",
+     "pag": "166",
+     "texto": "una incertidumbre material que puede generar dudas significativas sobre la capacidad del grupo",
+     "texto_es": "El auditor señala una incertidumbre material que puede generar dudas significativas sobre la capacidad del grupo para continuar."
+    },
+    {
+     "doc": "bme_2025_AN_118335.pdf",
+     "pag": "228",
+     "texto": "En el ejercicio 2025 y 2024 se han solicitado aplazamientos de los diferentes impuestos presentados.",
+     "texto_es": "En 2025 y 2024 la compañía solicitó aplazamientos de los distintos impuestos presentados."
+    },
+    {
+     "doc": "bme_2026_OtherRelevantInformation_117880.pdf",
+     "pag": "1",
+     "texto": "Finalizado el periodo de suscripción previsto la ampliación quedó parcialmente suscrita.",
+     "texto_es": "La ampliación de capital dineraria de 2026 quedó suscrita solo en parte."
+    }
+   ],
+   "kpi": "Deuda con las administraciones públicas",
+   "riesgo_1a": "Riesgo consecuencia de la incertidumbre material relacionada con la empresa en",
+   "riesgo_es": "Que la compañía no logre reequilibrar su patrimonio y su circulante y dependa del apoyo de sus accionistas para seguir operando."
+  },
+  {
+   "titulo": "Concentración extrema de clientes y de propiedad",
+   "argumento": {
+    "texto": "El primer cliente supuso cerca de la mitad de la facturación de 2024 y los diez primeros, más de cuatro quintas partes. La propiedad está igual de concentrada: los vehículos del presidente y de un consejero dominical y un fondo de capital riesgo controlan casi todo el capital. Para un fondo, eso significa un valor sin liquidez y una dependencia comercial que puede cambiar el resultado de un año a otro."
+   },
+   "evidencias": [
+    {
+     "doc": "bme_2025_Prospectuses_112753.pdf",
+     "pag": "55",
+     "texto": "CLIENTE 1 5.807.761,16 42,40%",
+     "texto_es": "El primer cliente facturó 5.807.761 euros en 2024, el 42,40 % de la cifra de negocios."
+    },
+    {
+     "doc": "bme_2025_Prospectuses_112753.pdf",
+     "pag": "12",
+     "texto": "Los 4 primeros clientes del Grupo representaron un 70,04% y los 10 primeros clientes",
+     "texto_es": "Los cuatro primeros clientes representaron el 70,04 % de la cifra de negocios y los diez primeros, el 81,10 %."
+    }
+   ],
+   "kpi": "Crecimiento de la cifra de negocios",
+   "riesgo_1a": "Riesgo por la concentración de clientes.",
+   "riesgo_es": "Que el primer cliente reduzca o reparta su presupuesto digital y la facturación caiga sin margen para reemplazarlo."
+  },
+  {
+   "titulo": "Product es la opción de valor, aún pequeña",
+   "argumento": {
+    "texto": "Las soluciones propias, Binnacle Data y Boostic, han pasado de una cifra testimonial a una línea con clientes en varios países, y la dirección espera multiplicarla por cinco hasta 2028 con márgenes de software. Es lo único que puede cambiar el perfil de márgenes del grupo, pero hoy pesa poco. Además, la compañía da cifras de partida distintas en la memoria y en el informe de gestión, y su valor contable depende de ese plan."
+   },
+   "evidencias": [
+    {
+     "doc": "bme_2025_AN_118335.pdf",
+     "pag": "234",
+     "texto": "Ingresos Product 664.119,00 0,00 11.952,85 676.071,85",
+     "texto_es": "La memoria auditada atribuye a Product 676.072 euros de cifra de negocios en 2025."
+    },
+    {
+     "doc": "bme_2025_AN_118335.pdf",
+     "pag": "62",
+     "texto": "Product: 3,8 millones de euros.",
+     "texto_es": "La previsión de la compañía para Product en 2028 es de 3,8 millones de euros de cifra de negocios."
+    },
+    {
+     "doc": "bme_2025_AN_118335.pdf",
+     "pag": "79",
+     "texto": "Recuperabilidad de los gastos de desarrollo",
+     "texto_es": "El auditor trata como aspecto más relevante la recuperabilidad de los gastos de desarrollo activados de Binnacle y Boostic."
+    }
+   ],
+   "kpi": "Ingresos de Product",
+   "riesgo_1a": "Riesgo asociado a los proyectos y el software que desarrolla el Grupo.",
+   "riesgo_es": "Que Binnacle y Boostic no alcancen escala y haya que deteriorar el desarrollo activado, que es casi todo el activo no corriente."
+  }
+ ],
+ "perfil": {
+  "descripcion": {
+   "texto": "Redegal es un grupo de consultoría digital con sede en Ourense, fundado en 2004, que cotiza en BME Growth desde julio de 2025 tras su paso por BME Scaleup. Se organiza en tres líneas: Digital Business, la mayor, agrupa marketing de resultados, analítica, SEO, redes sociales y gestión de campañas, e incluye en sus ingresos la compra de medios que intermedia para sus clientes. Tech desarrolla comercio electrónico y plataformas a medida sobre Adobe Commerce, Salesforce y Shopify. Product comercializa software propio de datos y conversión, Binnacle Data y Boostic. España concentra casi toda la facturación; la filial mexicana arrastra pérdidas y Portugal y Centroeuropa empiezan a contribuir. Los clientes son grandes marcas de banca, distribución y moda, con una concentración elevada.",
+   "evidencias": [
+    {
+     "doc": "bme_2025_AN_118335.pdf",
+     "pag": "18",
+     "texto": "Redegal, S.A. y Sociedades Dependientes (en adelante, el “Grupo”",
+     "texto_es": "Redegal y sus sociedades dependientes forman un grupo dedicado a la consultoría digital a través de tres unidades de negocio."
+    }
+   ]
+  },
+  "segmentos_ok": true,
+  "segmentos_cifras": [
+   {
+    "linea": "Digital Business",
+    "tipo": "segmento",
+    "valores": {
+     "FY2025": 12614292.34,
+     "FY2024": 10366254.94
+    },
+    "evidencia": [
+     {
+      "doc": "bme_2025_AN_118335.pdf",
+      "pag": "234",
+      "texto": "Ingresos Digital Business 12.246.341,18 260.348,19 107.602,97 12.614.292,34",
+      "texto_es": "Digital Business facturó 12.614.292,34 euros en 2025."
+     },
+     {
+      "doc": "bme_2025_AN_118335.pdf",
+      "pag": "234",
+      "texto": "Ingresos Digital Business 9.936.530,42 188.374,71 241.349,81 10.366.254,94",
+      "texto_es": "Digital Business facturó 10.366.254,94 euros en 2024."
+     }
+    ]
+   },
+   {
+    "linea": "Tech",
+    "tipo": "segmento",
+    "valores": {
+     "FY2025": 3531686.13,
+     "FY2024": 3348386.94
+    },
+    "evidencia": [
+     {
+      "doc": "bme_2025_AN_118335.pdf",
+      "pag": "234",
+      "texto": "Ingresos Tech 2.920.352,07 453.250,70 158.083,36 3.531.686,13",
+      "texto_es": "Tech facturó 3.531.686,13 euros en 2025."
+     },
+     {
+      "doc": "bme_2025_AN_118335.pdf",
+      "pag": "234",
+      "texto": "Ingresos Tech 2.696.984,83 521.463,99 129.938,12 3.348.386,94",
+      "texto_es": "Tech facturó 3.348.386,94 euros en 2024."
+     }
+    ]
+   },
+   {
+    "linea": "Product",
+    "tipo": "segmento",
+    "valores": {
+     "FY2025": 676071.85,
+     "FY2024": 36473.33
+    },
+    "evidencia": [
+     {
+      "doc": "bme_2025_AN_118335.pdf",
+      "pag": "234",
+      "texto": "Ingresos Product 664.119,00 0,00 11.952,85 676.071,85",
+      "texto_es": "Product facturó 676.071,85 euros en 2025."
+     },
+     {
+      "doc": "bme_2025_AN_118335.pdf",
+      "pag": "141",
+      "texto": "Ingresos Product 36.473,33 0,00 0,00 36.473,33",
+      "texto_es": "Product facturó 36.473,33 euros en 2024."
+     }
+    ]
+   },
+   {
+    "linea": "Otros ingresos",
+    "tipo": "segmento",
+    "valores": {
+     "FY2025": 11995.98,
+     "FY2024": 4521.74
+    },
+    "evidencia": [
+     {
+      "doc": "bme_2025_AN_118335.pdf",
+      "pag": "140",
+      "texto": "Otros ingresos 5.725,98 6.270,00 0,00 11.995,98",
+      "texto_es": "Otros ingresos sumaron 11.995,98 euros en 2025."
+     },
+     {
+      "doc": "bme_2025_AN_118335.pdf",
+      "pag": "141",
+      "texto": "Otros ingresos 4.521,74 0,00 0,00 4.521,74",
+      "texto_es": "Otros ingresos sumaron 4.521,74 euros en 2024."
+     }
+    ]
+   },
+   {
+    "linea": "España",
+    "tipo": "geografia",
+    "valores": {
+     "FY2025": 15836538.23,
+     "FY2024": 12674510.32
+    },
+    "evidencia": [
+     {
+      "doc": "bme_2025_AN_118335.pdf",
+      "pag": "234",
+      "texto": "15.836.538,23 719.868,89 277.639,18 16.834.046,30",
+      "texto_es": "En 2025, España facturó 15.836.538,23 euros; el resto de Europa, 719.868,89; y el resto del mundo, 277.639,18."
+     },
+     {
+      "doc": "bme_2025_AN_118335.pdf",
+      "pag": "234",
+      "texto": "12.674.510,32 709.838,70 371.287,93 13.755.636,95",
+      "texto_es": "En 2024, España facturó 12.674.510,32 euros; el resto de Europa, 709.838,70; y el resto del mundo, 371.287,93."
+     }
+    ]
+   },
+   {
+    "linea": "Resto de Europa",
+    "tipo": "geografia",
+    "valores": {
+     "FY2025": 719868.89,
+     "FY2024": 709838.7
+    },
+    "evidencia": [
+     {
+      "doc": "bme_2025_AN_118335.pdf",
+      "pag": "234",
+      "texto": "15.836.538,23 719.868,89 277.639,18 16.834.046,30",
+      "texto_es": "En 2025, el resto de Europa facturó 719.868,89 euros."
+     },
+     {
+      "doc": "bme_2025_AN_118335.pdf",
+      "pag": "234",
+      "texto": "12.674.510,32 709.838,70 371.287,93 13.755.636,95",
+      "texto_es": "En 2024, el resto de Europa facturó 709.838,70 euros."
+     }
+    ]
+   },
+   {
+    "linea": "Resto del mundo",
+    "tipo": "geografia",
+    "valores": {
+     "FY2025": 277639.18,
+     "FY2024": 371287.93
+    },
+    "evidencia": [
+     {
+      "doc": "bme_2025_AN_118335.pdf",
+      "pag": "234",
+      "texto": "15.836.538,23 719.868,89 277.639,18 16.834.046,30",
+      "texto_es": "En 2025, el resto del mundo facturó 277.639,18 euros."
+     },
+     {
+      "doc": "bme_2025_AN_118335.pdf",
+      "pag": "234",
+      "texto": "12.674.510,32 709.838,70 371.287,93 13.755.636,95",
+      "texto_es": "En 2024, el resto del mundo facturó 371.287,93 euros."
+     }
+    ]
+   }
+  ],
+  "fundacion": 2004,
+  "empleados": 123
+ },
+ "gobierno": {
+  "ejecutivos": [
+   {
+    "nombre": "Jorge Vázquez González",
+    "cargo": "Presidente y consejero delegado; socio fundador",
+    "desde": 2004,
+    "evidencia": [
+     {
+      "doc": "bme_2025_Prospectuses_112753.pdf",
+      "pag": "96",
+      "texto": "El Sr. Vázquez es socio fundador en 2004 de REDEGAL.",
+      "texto_es": "Jorge Vázquez es socio fundador de Redegal desde 2004."
+     }
+    ]
+   },
+   {
+    "nombre": "Francisco Javier Castiñeiras González",
+    "cargo": "Consejero ejecutivo y director digital",
+    "desde": 2014,
+    "evidencia": [
+     {
+      "doc": "bme_2025_Prospectuses_112753.pdf",
+      "pag": "97",
+      "texto": "El Sr. Castiñeiras es desde 2014 Chief Digital Officer de REDEGAL.",
+      "texto_es": "Javier Castiñeiras es director digital de Redegal desde 2014."
+     }
+    ]
+   },
+   {
+    "nombre": "Sergio Paz Miño",
+    "cargo": "Director financiero",
+    "evidencia": [
+     {
+      "doc": "bme_2025_Prospectuses_112753.pdf",
+      "pag": "23",
+      "texto": "D. Sergio Paz Miño. Director Financiero",
+      "texto_es": "Sergio Paz Miño es el director financiero de la compañía."
+     }
+    ]
+   },
+   {
+    "nombre": "Isabel Carballo Vázquez",
+    "cargo": "Directora corporativa",
+    "desde": 2025,
+    "evidencia": [
+     {
+      "doc": "bme_2025_Prospectuses_112753.pdf",
+      "pag": "99",
+      "texto": "Es Directora Corporativa de Redegal desde 2025",
+      "texto_es": "Isabel Carballo es directora corporativa de Redegal desde 2025."
+     }
+    ]
+   },
+   {
+    "nombre": "Lino de Prado Sampedro",
+    "cargo": "Consejero dominical",
+    "evidencia": [
+     {
+      "doc": "bme_2026_OtherRelevantInformation_119593.pdf",
+      "pag": "1",
+      "texto": "Propiedad en un 100% de D. Lino de Prado Sampedro (Consejero de la Sociedad).",
+      "texto_es": "Liprasa 2015 pertenece al cien por cien al consejero Lino de Prado."
+     }
+    ]
+   },
+   {
+    "nombre": "Severino Fernández Cascudo",
+    "cargo": "Consejero independiente, miembro de la Comisión de Auditoría",
+    "desde": 2026,
+    "evidencia": [
+     {
+      "doc": "bme_2026_OtherRelevantInformation_119974.pdf",
+      "pag": "1",
+      "texto": "El nuevo Consejero _ene la condición de independiente y ha sido designado, además, como",
+      "texto_es": "El nuevo consejero, Severino Fernández, es independiente y miembro de la Comisión de Auditoría."
+     }
+    ]
+   }
+  ],
+  "filiales": [
+   {
+    "nombre": "Redegal TI México, S.A. de C.V.",
+    "pais": "México",
+    "participacion": 99,
+    "evidencia": [
+     {
+      "doc": "bme_2025_AN_118335.pdf",
+      "pag": "64",
+      "texto": "Redegal Ti México SA de CV 99% Integración global",
+      "texto_es": "Redegal TI México, participada al 99 %, se consolida por integración global."
+     }
+    ]
+   }
+  ]
+ },
+ "equipo": {
+  "track_record": [
+   {
+    "persona": "Jorge Vázquez González",
+    "juicio": "mixto",
+    "texto": "Fundador y primer ejecutivo desde el origen. Ha llevado a la compañía de agencia local a grupo cotizado que crece a doble dígito, pero bajo su gestión se acumularon aplazamientos fiscales con recargos recurrentes y préstamos cruzados con sociedades de los accionistas.",
+    "evidencias": [
+     {
+      "doc": "bme_2025_AN_118335.pdf",
+      "pag": "144",
+      "texto": "La compañía cuenta a su vez con los avales de Axouxere D Inversiones,",
+      "texto_es": "La compañía cuenta con los avales de Axouxere D Inversiones, Lago Diecinueve Invest y Jorge Vázquez en su financiación bancaria."
+     }
+    ]
+   },
+   {
+    "persona": "Sergio Paz Miño",
+    "juicio": "mixto",
+    "texto": "Director financiero con experiencia en planificación financiera e internacionalización. Ha cerrado ampliaciones y nueva financiación bancaria, pero el circulante sigue en negativo, la deuda fiscal no baja y las cuentas de 2024 se reexpresaron por errores contables.",
+    "evidencias": [
+     {
+      "doc": "bme_2025_AN_118335.pdf",
+      "pag": "39",
+      "texto": "Durante 2025 se formalizó nueva financiación estructural por valor de 800.000 euros.",
+      "texto_es": "Durante 2025 se formalizó nueva financiación estructural por 800.000 euros."
+     }
+    ]
+   }
+  ],
+  "asignacion_capital": {
+   "texto": "La compañía no reparte dividendos y ha dedicado su capital a desarrollar software propio y a sostener la filial mexicana. En 2025 compró acciones propias mientras aplazaba impuestos y mantenía créditos a sociedades de sus accionistas, una prioridad difícil de justificar con el balance en negativo. Las adquisiciones anunciadas añadirían riesgo de dilución.",
+   "evidencias": [
+    {
+     "doc": "bme_2025_AN_118335.pdf",
+     "pag": "64",
+     "texto": "Saldo a 31/12/2025 66.993 557.116,82",
+     "texto_es": "A 31/12/2025 la autocartera sumaba 66.993 acciones por 557.117 euros."
+    }
+   ]
+  }
+ },
+ "catalizadores": [
+  {
+   "fecha": "2026-10-31",
+   "evento": "Informe financiero semestral de 2026 con márgenes, caja y deuda fiscal",
+   "tipo": "resultados",
+   "pilar": "1",
+   "impacto": "negativo",
+   "probabilidad": 60,
+   "evidencia": [
+    {
+     "doc": "bme_2026_OtherRelevantInformation_119956.pdf",
+     "pag": "1",
+     "texto": "su previsión de facturación consolidada, preliminar y no auditada, del primer semestre de 2026",
+     "texto_es": "El avance del primer semestre de 2026 da solo la facturación consolidada, preliminar y no auditada."
+    }
+   ]
+  },
+  {
+   "fecha": "2027-04-30",
+   "evento": "Cuentas anuales de 2026: si el auditor retira la incertidumbre sobre la continuidad",
+   "tipo": "resultados",
+   "pilar": "3",
+   "impacto": "positivo",
+   "probabilidad": 40,
+   "evidencia": [
+    {
+     "doc": "bme_2025_AN_118335.pdf",
+     "pag": "166",
+     "texto": "una incertidumbre material que puede generar dudas significativas sobre la capacidad del grupo",
+     "texto_es": "El auditor mantiene en 2025 la incertidumbre material sobre la continuidad del grupo."
+    }
+   ]
+  },
+  {
+   "fecha": "2027-T2",
+   "evento": "Primera adquisición del plan inorgánico, probablemente pagada en parte con acciones",
+   "tipo": "corporativo",
+   "pilar": "1",
+   "impacto": "negativo",
+   "probabilidad": 45,
+   "evidencia": [
+    {
+     "doc": "bme_2025_AN_118335.pdf",
+     "pag": "6",
+     "texto": "En el frente inorgánico, 2026 abre un nuevo capítulo.",
+     "texto_es": "La compañía anuncia que 2026 abre un nuevo capítulo en el crecimiento por adquisiciones."
+    }
+   ]
+  },
+  {
+   "fecha": "2028-T4",
+   "evento": "Cierre del plan 2028: prueba de ingresos y EBITDA ajustado prometidos",
+   "tipo": "resultados",
+   "pilar": "5",
+   "impacto": "positivo",
+   "probabilidad": 25,
+   "evidencia": [
+    {
+     "doc": "bme_2025_AN_118335.pdf",
+     "pag": "62",
+     "texto": "• EBITDA Ajustado1 4,4 millones de euros.",
+     "texto_es": "La previsión del consejo para 2028 es un EBITDA ajustado de 4,4 millones de euros."
+    }
+   ]
+  }
+ ],
+ "direccion": {
+  "citas": [
+   {
+    "doc": "bme_2026_OtherRelevantInformation_120328.pdf",
+    "pag": "29",
+    "texto": "los 16,8 M€ (+22,4%) y el margen EBITDA Ajustado",
+    "texto_es": "Los resultados de 2025 confirman que el Plan funciona: la cifra de negocios consolidada alcanzó los 16,8 millones de euros (+22,4 %)."
+   },
+   {
+    "doc": "bme_2025_AN_118335.pdf",
+    "pag": "6",
+    "texto": "En los próximos 36 meses el foco será convertir cada euro de",
+    "texto_es": "En los próximos 36 meses el foco será convertir cada euro de ingreso adicional en una proporción creciente de EBITDA y de caja operativa."
+   }
+  ]
+ },
+ "mercado": {
+  "cifras": [
+   {
+    "etiqueta": "Inversión en publicidad digital en España",
+    "clase": "TAM",
+    "valor": 6211.2,
+    "unidad": "millones EUR",
+    "anio": 2025,
+    "metodo": "top_down",
+    "evidencia": [
+     {
+      "doc": "bme_2025_AN_118335.pdf",
+      "pag": "13",
+      "texto": "La inversión en publicidad digital alcanzó los 6.211,2 millones de euros en 2025",
+      "texto_es": "La inversión en publicidad digital en España alcanzó 6.211,2 millones de euros en 2025, según IAB Spain citado por la compañía."
+     }
+    ]
+   }
+  ]
+ },
+ "competencia": {
+  "competidores": [
+   {
+    "nombre": "Making Science",
+    "por_que": "Consultora de comercio electrónico y aceleración digital cotizada en BME Growth, con más escala y presencia internacional.",
+    "evidencia": [
+     {
+      "doc": "bme_2025_Prospectuses_112753.pdf",
+      "pag": "47",
+      "texto": "Making Science (https://www.makingscience.com): compañía española",
+      "texto_es": "Making Science es una compañía española especializada en comercio electrónico y aceleración digital."
+     }
+    ]
+   },
+   {
+    "nombre": "MioGroup",
+    "por_que": "Grupo español de marketing y transformación digital cotizado en BME Growth, de tamaño parecido.",
+    "evidencia": [
+     {
+      "doc": "bme_2025_Prospectuses_112753.pdf",
+      "pag": "47",
+      "texto": "MioGroup (www.mio.es): compañía española especializada en servicios de",
+      "texto_es": "MioGroup es una compañía española especializada en marketing y transformación digital."
+     }
+    ]
+   },
+   {
+    "nombre": "Knowmad mood",
+    "por_que": "Consultora tecnológica cotizada con más escala en desarrollo y transformación digital.",
+    "evidencia": [
+     {
+      "doc": "bme_2025_Prospectuses_112753.pdf",
+      "pag": "48",
+      "texto": "Knowmad mood (www.knowmadmood.com): compañía española",
+      "texto_es": "Knowmad mood es una compañía española de tecnología y transformación digital."
+     }
+    ]
+   },
+   {
+    "nombre": "The Cocktail",
+    "por_que": "Consultora de negocio digital de Madrid que compite en tecnología, datos y diseño por las mismas cuentas.",
+    "evidencia": [
+     {
+      "doc": "bme_2025_Prospectuses_112753.pdf",
+      "pag": "49",
+      "texto": "The Cocktail (www.the-cocktail.com): compañía española especializada en el",
+      "texto_es": "The Cocktail es una compañía española especializada en negocio digital."
+     }
+    ]
+   },
+   {
+    "nombre": "Labelium",
+    "por_que": "Grupo internacional de marketing digital respaldado por capital riesgo, presente en España y México.",
+    "evidencia": [
+     {
+      "doc": "bme_2025_Prospectuses_112753.pdf",
+      "pag": "48",
+      "texto": "Labelium (www.labelium.com): consultora de marketing digital perteneciente",
+      "texto_es": "Labelium es una consultora de marketing digital de un grupo internacional."
+     }
+    ]
+   }
+  ]
+ },
+ "comparables": [
+  {
+   "ticker": "EPAM",
+   "justificacion": "Ingeniería de software y consultoría digital a medida; referencia de márgenes del desarrollo para grandes cuentas.",
+   "usar_en_multiplos": true
+  },
+  {
+   "ticker": "CTSH",
+   "justificacion": "Servicios de tecnología y transformación digital con grandes clientes de banca y distribución.",
+   "usar_en_multiplos": true
+  },
+  {
+   "ticker": "ACN",
+   "justificacion": "Consultoría y marketing digital integrado; el modelo de servicio completo al que aspira la compañía.",
+   "usar_en_multiplos": true
+  },
+  {
+   "ticker": "STGW",
+   "justificacion": "Grupo de marketing digital y medios con ingresos de agencia; referencia para Digital Business.",
+   "usar_en_multiplos": true
+  },
+  {
+   "ticker": "GDYN",
+   "justificacion": "Ingeniería digital, datos e inteligencia artificial para comercio y distribución; escala menor que el resto.",
+   "usar_en_multiplos": true
+  }
+ ],
+ "moat": {
+  "fuentes": [
+   {
+    "tipo": "costes_de_cambio",
+    "durabilidad_anios": 3,
+    "tendencia": "estable",
+    "evidencias": [
+     {
+      "doc": "bme_2025_AN_118335.pdf",
+      "pag": "31",
+      "texto": "La métrica de ingresos recurrentes (ARR) proyectada para 2026 se sitúa en el 92%",
+      "texto_es": "La compañía sitúa sus ingresos recurrentes proyectados para 2026 en el 92 %."
+     }
+    ]
+   },
+   {
+    "tipo": "intangibles",
+    "durabilidad_anios": 2,
+    "tendencia": "se_estrecha",
+    "evidencias": [
+     {
+      "doc": "bme_2025_AN_118335.pdf",
+      "pag": "148",
+      "texto": "Redegal obtuvo por quinto año consecutivo la certificación",
+      "texto_es": "Redegal obtuvo por quinto año consecutivo la certificación Google Partner Premier."
+     }
+    ]
+   }
+  ],
+  "amenazas": {
+   "texto": "El sector está muy fragmentado y las barreras de entrada son bajas. Los grandes clientes pueden internalizar su marketing o repartirlo entre agencias, las plataformas automatizan con inteligencia artificial parte del trabajo de campañas y los competidores cotizados tienen más escala para comprar empresas y retener talento."
+  }
+ },
+ "riesgos": {
+  "top": [
+   {
+    "origen": {
+     "epigrafe": "Riesgo consecuencia de la incertidumbre material relacionada con la empresa en"
+    },
+    "texto_es": "El patrimonio consolidado negativo y el fondo de maniobra negativo mantienen la duda del auditor sobre la continuidad del grupo.",
+    "familia": "financiero",
+    "probabilidad": 3,
+    "impacto": 5,
+    "mitigante": "Ampliaciones de capital de 2026, capitalización de préstamos de accionistas y nuevo préstamo a largo plazo.",
+    "senal": "Flujo de caja de explotación"
+   },
+   {
+    "origen": {
+     "epigrafe": "Riesgo de carácter tributario y laboral."
+    },
+    "texto_es": "Los impuestos aplazados con la Administración generan recargos recurrentes y podrían exigirse de golpe si se incumplen los calendarios.",
+    "familia": "regulatorio",
+    "probabilidad": 4,
+    "impacto": 4,
+    "mitigante": "Aplazamientos concedidos y provisión dotada por los recargos e intereses de demora.",
+    "senal": "Deuda con las administraciones públicas"
+   },
+   {
+    "origen": {
+     "epigrafe": "Riesgo por la concentración de clientes."
+    },
+    "texto_es": "Un solo cliente supone una parte decisiva de la facturación y su pérdida no se podría reponer a corto plazo.",
+    "familia": "ejecucion",
+    "probabilidad": 3,
+    "impacto": 4,
+    "mitigante": "Nuevas cuentas de primer nivel en 2025 y una retención media de clientes elevada.",
+    "senal": "Crecimiento de la cifra de negocios"
+   },
+   {
+    "origen": {
+     "epigrafe": "Riesgo relacionado con la influencia de los accionistas significativos"
+    },
+    "texto_es": "Los accionistas de control prestan a la compañía y reciben créditos de ella, con intereses que pueden no coincidir con los del minoritario.",
+    "familia": "ejecucion",
+    "probabilidad": 3,
+    "impacto": 3,
+    "mitigante": "Consejeros independientes en la Comisión de Auditoría y operaciones vinculadas a precio de mercado según la memoria.",
+    "senal": "Deuda con las administraciones públicas"
+   },
+   {
+    "origen": {
+     "epigrafe": "Riesgo de falta de liquidez de las acciones."
+    },
+    "texto_es": "La acción apenas negocia y el capital flotante es pequeño: una posición relevante no se puede deshacer sin mover el precio.",
+    "familia": "financiero",
+    "probabilidad": 5,
+    "impacto": 3,
+    "mitigante": "Proveedor de liquidez contratado y compras periódicas de autocartera y de sociedades del presidente.",
+    "senal": "Crecimiento de la cifra de negocios"
+   }
+  ]
+ },
+ "bear": {
+  "disparadores": [
+   {
+    "descripcion": "El crecimiento de las ventas se frena en el segundo semestre de 2026.",
+    "metrica": "cifra de negocios del ejercicio, interanual",
+    "umbral": 8,
+    "unidad": "%",
+    "plazo": "ejercicio 2026",
+    "driver": "esc.pesimista.crecimiento_ingresos"
+   },
+   {
+    "descripcion": "El margen no mejora porque los recargos fiscales y la estructura absorben el crecimiento.",
+    "metrica": "margen EBITDA ajustado del ejercicio",
+    "umbral": 8,
+    "unidad": "%",
+    "plazo": "ejercicio 2026",
+    "driver": "esc.pesimista.margen_ebit"
+   },
+   {
+    "descripcion": "El circulante sigue consumiendo caja y el flujo de explotación vuelve a ser negativo.",
+    "metrica": "flujo de caja de explotación del ejercicio",
+    "umbral": 0,
+    "unidad": "millones EUR",
+    "plazo": "ejercicio 2026",
+    "driver": "esc.pesimista.fm_pct_incremental"
+   }
+  ]
+ },
+ "val": {
+  "anio_base": "ultimo_ejercicio",
+  "anio_base_justificacion": "El último periodo auditado es el ejercicio 2025; el semestral de 2026 aún no se ha publicado.",
+  "periodo_explicito": 10,
+  "mitad_de_anio": true,
+  "horizonte_meses": 12,
+  "sbc": "coste_de_caja",
+  "arrendamientos": "fuera_de_deuda",
+  "ajustes_puente": [
+   {
+    "concepto": "otros",
+    "importe": 0.761,
+    "signo": 1,
+    "evidencia": [
+     {
+      "doc": "bme_2026_OtherRelevantInformation_117880.pdf",
+      "pag": "1",
+      "texto": "sesenta y un mil cuatrocientos cincuenta y un euros con sesenta cénbmos (761.451,60 €)",
+      "texto_es": "La ampliación dineraria posterior al cierre aportó 761.451,60 euros de caja."
+     }
+    ]
+   },
+   {
+    "concepto": "otros",
+    "importe": 0.809,
+    "signo": 1,
+    "evidencia": [
+     {
+      "doc": "bme_2025_AN_118335.pdf",
+      "pag": "92",
+      "texto": "por importe de 809.321,77 euros, queda sujeta a la aprobación de la Junta General de",
+      "texto_es": "La ampliación por compensación de créditos de 809.321,77 euros convierte en capital préstamos de accionistas."
+     }
+    ]
+   },
+   {
+    "concepto": "litigios",
+    "importe": 0.641,
+    "evidencia": [
+     {
+      "doc": "bme_2025_AN_118335.pdf",
+      "pag": "138",
+      "texto": "provisión por recargos e intereses de demora por presentación y pagos",
+      "texto_es": "La provisión de 641.279 euros cubre recargos e intereses de demora por presentar y pagar impuestos fuera de plazo."
+     }
+    ]
+   }
+  ]
+ },
+ "wacc": {
+  "erp": 5.69,
+  "erp_fuente": "Damodaran (NYU Stern): prima implícita de un mercado maduro del 4,14 % a 01/09/2026, referencia de la casa, más la prima de riesgo país de España por su rating A3 (1,55 %) de la tabla de primas por país actualizada en enero de 2026",
+  "beta_metodo": "bottom_up",
+  "beta_desapalancada": 0.77,
+  "beta_fuente": "Damodaran (NYU Stern), betas de Europa actualizadas el 05/01/2026: desapalancadas y corregidas por caja, publicidad 0,72 y servicios informáticos 0,90, ponderadas por la cifra de negocios de 2025 (Digital Business 75 %, Tech y Product 25 %). La regresión frente al índice de BME Growth da un R² de 0,01 por la escasa negociación y no sirve",
+  "prima": 3.0,
+  "prima_justificacion": "Prima por tamaño e iliquidez: capitalización inferior a 20 millones de euros, capital flotante reducido y negociación diaria de unos pocos miles de euros, que impiden a un inversor institucional entrar o salir sin mover el precio.",
+  "kd_metodo": "rendimiento_bonos",
+  "kd": 6.5,
+  "kd_fuente": "Cuentas anuales consolidadas de 2025: gastos financieros con terceros de 196.748 euros sobre una deuda bancaria media cercana a tres millones, más el recargo implícito de los aplazamientos fiscales; sin bonos cotizados.",
+  "tipo_marginal": 25
+ },
+ "tv": {
+  "metodo": "value_driver"
+ },
+ "sotp": {
+  "aplica": false
+ },
+ "esc": {
+  "pesimista": {
+   "probabilidad": 30,
+   "narrativa": "El crecimiento se frena por la concentración de clientes y la competencia, los recargos fiscales persisten y el margen operativo apenas despega; el circulante sigue consumiendo caja.",
+   "crecimiento_ingresos": {
+    "1": 12.0,
+    "2": 6.0,
+    "3": 4.0,
+    "5": 3.0,
+    "N": 1.5
+   },
+   "margen_ebit": {
+    "1": -1.0,
+    "2": 1.0,
+    "3": 2.5,
+    "5": 4.0,
+    "N": 5.0
+   },
+   "impuesto_caja": {
+    "1": 0,
+    "3": 15,
+    "N": 25
+   },
+   "da_pct": 4.0,
+   "capex_pct": {
+    "1": 3.5,
+    "N": 3.0
+   },
+   "fm_pct_incremental": 12.0,
+   "sbc_pct": 0,
+   "g": 1.5,
+   "ronic": 10
+  },
+  "base": {
+   "probabilidad": 50,
+   "narrativa": "Las ventas siguen creciendo a doble dígito unos años, Product gana peso y los recargos desaparecen poco a poco, pero el margen operativo se queda a mitad de camino del plan de 2028.",
+   "crecimiento_ingresos": {
+    "1": 16.0,
+    "2": 13.0,
+    "3": 11.0,
+    "5": 8.0,
+    "N": 2.0
+   },
+   "margen_ebit": {
+    "1": 1.5,
+    "2": 3.5,
+    "3": 5.5,
+    "5": 7.0,
+    "N": 8.0
+   },
+   "impuesto_caja": {
+    "1": 5,
+    "3": 20,
+    "N": 25
+   },
+   "da_pct": 4.0,
+   "capex_pct": {
+    "1": 3.5,
+    "N": 3.0
+   },
+   "fm_pct_incremental": 8.0,
+   "sbc_pct": 0,
+   "g": 2.0,
+   "ronic": 12
+  },
+  "optimista": {
+   "probabilidad": 20,
+   "narrativa": "Se cumple el plan de 2028: Product escala con márgenes de software, la deuda fiscal se regulariza y el margen operativo converge al de las consultoras digitales cotizadas más rentables.",
+   "crecimiento_ingresos": {
+    "1": 18.0,
+    "2": 16.0,
+    "3": 14.0,
+    "5": 10.0,
+    "N": 2.5
+   },
+   "margen_ebit": {
+    "1": 3.0,
+    "2": 7.0,
+    "3": 11.0,
+    "5": 13.0,
+    "N": 13.0
+   },
+   "impuesto_caja": {
+    "1": 10,
+    "3": 22,
+    "N": 25
+   },
+   "da_pct": 4.0,
+   "capex_pct": {
+    "1": 3.5,
+    "N": 3.0
+   },
+   "fm_pct_incremental": 5.0,
+   "sbc_pct": 0,
+   "g": 2.5,
+   "ronic": 15
+  }
+ },
+ "pos": {
+  "recomendacion": "Vender",
+  "precio_entrada": 0.83,
+  "fecha_entrada": "2026-09-25",
+  "tamano_pct": 0.5,
+  "drawdown_tolerado": 50,
+  "tamano_porque": {
+   "texto": "Tamaño mínimo y solo a modo de seguimiento: la liquidez diaria no permite a un fondo construir ni deshacer una posición relevante y el balance admite pérdidas grandes."
+  },
+  "argumento": {
+   "texto": "Redegal crece y su línea de software propio es prometedora, pero el valor no compensa los riesgos de su balance. El auditor duda de la continuidad, el patrimonio consolidado es negativo y la compañía se financia aplazando impuestos con recargos que se repiten y que su EBITDA ajustado excluye. El precio descuenta buena parte del plan de 2028, mientras nuestro escenario central, con un coste de capital propio de un valor ilíquido y concentrado, vale menos que la cotización. Recomendamos vender y no abrir posición hasta que el semestral confirme caja positiva y la deuda fiscal empiece a bajar."
+  },
+  "asunciones": [
+   {
+    "texto": "Las ventas crecen a doble dígito en 2026 y 2027 y después convergen hacia el crecimiento del sector.",
+    "driver": "esc.base.crecimiento_ingresos",
+    "umbral_invalidacion": "crecimiento de la cifra de negocios de 2026 ≥ 20 % con flujo de explotación positivo"
+   },
+   {
+    "texto": "Los recargos fiscales se reducen poco a poco y el margen operativo no llega al del plan de 2028.",
+    "driver": "esc.base.margen_ebit",
+    "umbral_invalidacion": "margen EBITDA ajustado de 2026 ≥ 12 % sin recargos fiscales"
+   },
+   {
+    "texto": "El crecimiento sigue consumiendo circulante hasta que se regularice la deuda con las administraciones públicas.",
+    "driver": "esc.base.fm_pct_incremental",
+    "umbral_invalidacion": "deuda con las administraciones públicas a cierre de 2026 inferior a la de 2025"
+   },
+   {
+    "texto": "El coste de capital incorpora una prima por tamaño e iliquidez que el mercado mantiene mientras el capital flotante sea pequeño.",
+    "driver": "wacc.prima",
+    "umbral_invalidacion": "capital flotante superior al 25 % o negociación diaria media superior a 50.000 euros"
+   }
+  ],
+  "checklist": [
+   {
+    "id": "variante",
+    "criterio": "Visión propia distinta de lo que descuenta el precio (reverse DCF), en dos frases",
+    "tipo": "manual",
+    "cumplido": "si",
+    "evidencia": "El DCF inverso exige márgenes cercanos a los del plan de 2028. Nosotros aceptamos el crecimiento, pero no la conversión en margen y caja mientras persistan los recargos fiscales y el consumo de circulante.",
+    "eliminatorio": true
+   },
+   {
+    "id": "gobierno",
+    "criterio": "Sin créditos de la compañía a sociedades de sus accionistas de control mientras aplaza impuestos",
+    "tipo": "manual",
+    "cumplido": "no",
+    "evidencia": "A cierre de 2025 la compañía mantenía créditos con sociedades vinculadas al presidente y aplazamientos fiscales.",
+    "eliminatorio": false
+   }
+  ],
+  "invalidacion": [
+   {
+    "metrica": "flujo de caja de explotación del ejercicio",
+    "umbral": "positivo y superior a la inversión en desarrollo",
+    "plazo": "ejercicio 2026"
+   },
+   {
+    "metrica": "deuda con las administraciones públicas",
+    "umbral": "inferior a la de cierre de 2025",
+    "plazo": "cierre de 2026"
+   },
+   {
+    "metrica": "opinión del auditor",
+    "umbral": "sin incertidumbre material sobre la continuidad",
+    "plazo": "cuentas anuales de 2026"
+   }
+  ],
+  "stop": {
+   "texto": "Stop de tesis: se revisa la recomendación si se cumple cualquiera de las invalidaciones o si el semestral confirma caja positiva con la deuda fiscal a la baja."
+  },
+  "kpis": [
+   {
+    "kpi": "Crecimiento de la cifra de negocios",
+    "actual": "+22,4 % en 2025; +18,5 % en el primer semestre de 2026 (avance)",
+    "verde": "≥ +15 % interanual",
+    "rojo": "< +8 % interanual",
+    "fuente": "avance y semestral (BME)",
+    "frecuencia": "evento"
+   },
+   {
+    "kpi": "Margen EBITDA ajustado",
+    "actual": "9,2 % en 2025 (6,6 % sin ajustes)",
+    "verde": "≥ 11 %",
+    "rojo": "< 8 %",
+    "fuente": "cuentas anuales y semestral (BME)",
+    "frecuencia": "evento"
+   },
+   {
+    "kpi": "Deuda con las administraciones públicas",
+    "actual": "2,93 mln EUR a 31/12/2025 (3,03 mln EUR un año antes)",
+    "verde": "baja frente al cierre anterior",
+    "rojo": "sube frente al cierre anterior",
+    "fuente": "memoria de las cuentas anuales, situación fiscal",
+    "frecuencia": "anual"
+   },
+   {
+    "kpi": "Flujo de caja de explotación",
+    "actual": "−0,66 mln EUR en 2025",
+    "verde": "positivo",
+    "rojo": "negativo",
+    "fuente": "estado de flujos de efectivo (BME)",
+    "frecuencia": "evento"
+   },
+   {
+    "kpi": "Ingresos de Product",
+    "actual": "0,68 mln EUR en 2025",
+    "verde": "≥ +50 % interanual",
+    "rojo": "< +20 % interanual",
+    "fuente": "cuentas anuales, ingresos por línea de negocio",
+    "frecuencia": "anual"
+   }
+  ],
+  "fechas_revision": [
+   "2026-10-31",
+   "2027-04-30",
+   "2027-09-25"
+  ],
+  "salida": [
+   "Objetivo alcanzado: se revalúa la tesis con el motor.",
+   "Tesis invalidada por cualquiera de las invalidaciones.",
+   "Horizonte vencido sin catalizador.",
+   "Una oportunidad mejor con el mismo riesgo."
+  ]
+ }
+}

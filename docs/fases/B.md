@@ -59,6 +59,17 @@ Growth) para contrastar datos.
 - B6 ☑ plantillas con el léxico del mercado (`plantillas/lexico.py`): moneda, bolsa, cuentas, rf y beta; sin columnas
   ni filas de lo que la compañía no publica; «No aplica» con motivo en 2 (Cuadro 2), 26 y 31–35.
 - B7 ☑ web: buscador de los dos mercados, «Traer de la fuente oficial» (EDGAR o BME), catálogo de documentos de BME.
-- Pendiente: B8 entradas de ejemplo de las tres empresas españolas; B9 los fallos de la auditoría del 27/09 que siguen
-  abiertos (plan A); segmentos por actividad de la memoria, operaciones de directivos de BME como cuadro, comparables de
-  BME en el apartado 22, documentos del Mercado Continuo (CNMV no responde: se adjuntan).
+- B10 ☑ (02/10/2026) primera emisión real de un emisor de BME (Redegal, RDG.MC) desde un clon limpio, EMITIDO con 0
+  bloqueos. Lo que destapó, corregido con su prueba: comunicaciones al mercado como tipo propio (`Tipo.COMUNICACION`,
+  el avance de un semestre ya no pasa por informe semestral) y traídas de BME (avances, juntas, ampliaciones, consejo,
+  directivos); factores de riesgo del documento de incorporación como Item 1A (`item1a.leer_documento`); segmentos y
+  geografía de la memoria aportados por el analista con su cita (`perfil.segmentos_cifras`, `segmentos.del_analista`);
+  operaciones de directivos de las notificaciones MAR (`datos/directivos_bme.py`, apartado 34); millones con decimales
+  según el tamaño del emisor (`umbrales.mln_decimales`); «n. s.» en ratios sin sentido (ROE con patrimonio negativo,
+  deuda neta / EBITDA negativo); rótulo partido en dos líneas en los estados del PGC y rótulo truncado con la capa de
+  texto entrelazada; recompra del PGC; deuda neta / EBITDA vigente del ejercicio en emisores semestrales; «Emitir» con el
+  catálogo del mercado del emisor; precio de entrada y tipo marginal con la bolsa y el mercado del emisor; documentos
+  rotulados por lo que son en el HTML; hitos de BME en el apartado 2; cuadros de gobierno sin columnas de EE. UU.
+- Pendiente: B8 entradas de ejemplo de Bytetravel y Treelogic (las de Redegal, en `datos-tesis/entradas/RDG.MC/`); B9 los
+  fallos de la auditoría del 27/09 que siguen abiertos (plan A); comparables de BME en el apartado 22 (hoy solo emisores
+  de la SEC, que exigen el contacto de EDGAR); documentos del Mercado Continuo (CNMV no responde: se adjuntan).

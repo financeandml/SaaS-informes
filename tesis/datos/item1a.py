@@ -22,7 +22,7 @@ from . import tablas_html
 from ..entradas import normalizar
 from ..rutas import CONFIG
 
-__all__ = ["Epigrafe", "Item1A", "leer", "FAMILIAS", "buscar"]
+__all__ = ["Epigrafe", "Item1A", "leer", "leer_documento", "FAMILIAS", "buscar", "referencia"]
 
 FAMILIAS = ("regulatorio", "financiero", "competitivo", "ejecucion")
 _RUTA = CONFIG / "riesgos.yaml"
@@ -51,6 +51,9 @@ class Epigrafe:
     familia: str
     motivo: str
     certeza: str         # alta · media · baja
+    # el documento del que sale, si no es el 10-K: la sección «Factores de riesgo» del documento de incorporación de un
+    # emisor de BME, que es lo que en España hace las veces del Item 1A
+    documento: str = ""
 
 
 @dataclass
@@ -225,3 +228,58 @@ def buscar(item: Item1A, comienzo: str) -> Optional[Epigrafe]:
     """El epígrafe que empieza por `comienzo` (normalizado): así cita el analista un riesgo del Item 1A."""
     n = normalizar(comienzo)
     return next((e for e in item.epigrafes if n and normalizar(e.texto).startswith(n)), None)
+
+
+def referencia(ep: Epigrafe, alias: Optional[Mapping[str, str]] = None) -> str:
+    """Cómo se cita el epígrafe en el cuerpo: «Item 1A, pág. 18» en un 10-K; «Documento de incorporación 28/07/2025,
+    Factores de riesgo, pág. 107» si sale de otro documento."""
+    if not ep.documento:
+        return f"Item\xa01A, pág.\xa0{ep.pagina}"
+    return f"{(alias or {}).get(ep.documento, ep.documento)}, Factores de riesgo, pág.\xa0{ep.pagina}"
+
+
+def leer_documento(nombre: str, paginas: Sequence[str], correcciones: Sequence[Mapping] = ()) -> Item1A:
+    """Los epígrafes de la sección «Factores de riesgo» de un documento en PDF (el documento de incorporación de un emisor
+    de BME). Cada riesgo empieza en su propia línea por «Riesgo…» y acaba en punto (puede ocupar varias líneas); las
+    cabeceras son los subapartados numerados de la sección. La página es la física, la misma de las citas del PDF."""
+    reglas = _reglas().get("documental") or {}
+    titulo = re.compile(r"^\s*(?P<num>\d+(?:\.\d+)*)\.?\s+" + (reglas.get("seccion") or "factores de riesgo") + r"\s*$", re.I)
+    inicio_epigrafe = re.compile(reglas.get("epigrafe") or r"^Riesgos?\b")
+    max_lineas, max_largo = int(reglas.get("epigrafe_max_lineas") or 3), int(reglas.get("epigrafe_max_caracteres") or 300)
+    salida = Item1A(estilo="documental")
+    lineas = [(k, l.strip()) for k, texto in enumerate(paginas, 1) for l in texto.splitlines() if l.strip()]
+    comienzo = next(((i, m.group("num")) for i, (_, l) in enumerate(lineas) for m in [titulo.match(l)] if m and "...." not in l), None)
+    if comienzo is None:
+        salida.faltan["item_1a"] = f"«{nombre}» no tiene una sección «Factores de riesgo» reconocible"
+        return salida
+    i0, num = comienzo
+    numerada = re.compile(r"^\s*(\d+(?:\.\d+)+)\.?\s+(\S.*)$")
+    corr = [(normalizar(c.get("epigrafe", ""))[:80], c.get("familia")) for c in correcciones if c.get("epigrafe") and c.get("familia") in FAMILIAS]
+    cabecera, i = "", i0 + 1
+    while i < len(lineas):
+        pag, l = lineas[i]
+        m = numerada.match(l)
+        if m and "...." not in l:
+            if not (m.group(1) + ".").startswith(num + "."):
+                break                                            # el siguiente apartado del documento: fin de la sección
+            cabecera, i = m.group(2).strip(), i + 1
+            continue
+        if inicio_epigrafe.match(l):
+            partes, j = [l], i
+            while not partes[-1].endswith(".") and j + 1 < len(lineas) and len(partes) < max_lineas:
+                j += 1
+                partes.append(lineas[j][1])
+            texto = " ".join(partes)
+            if texto.endswith(".") and len(texto) <= max_largo:
+                familia, motivo, certeza = _familia(cabecera, texto)
+                n = normalizar(texto)
+                for prefijo, fam in corr:
+                    if n.startswith(prefijo):
+                        familia, motivo, certeza = fam, "corregida por el analista", "alta"
+                salida.epigrafes.append(Epigrafe(texto, cabecera, str(pag), familia, motivo, certeza, documento=nombre))
+                i = j + 1
+                continue
+        i += 1
+    if not salida.epigrafes:
+        salida.faltan["epigrafes"] = f"la sección «Factores de riesgo» de «{nombre}» no tiene epígrafes reconocibles"
+    return salida

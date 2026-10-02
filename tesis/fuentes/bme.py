@@ -296,7 +296,9 @@ _OIR_UTILES = (
     ("participaciones", r"(?i)participaciones? significativas?", 1),
     ("incorporacion", r"(?i)documento informativo|doc\. informativo", 1),
     ("presentacion", r"(?i)presentaci[óo]n", 2),
-    ("directivos", r"(?i)operaci[óo]n(?:es)? (?:realizada|de|con) (?:por )?(?:directivos|personas con responsabilidades)", 6),
+    ("directivos", r"(?i)(?:operaci[óo]n(?:es)?|compras?|ventas?) (?:realizadas?|de|con) (?:por )?(?:directivos|personas con responsabilidades)", 6),
+    # lo que un analista cita de la vida corporativa: avances, juntas, ampliaciones y cambios en el consejo
+    ("comunicacion", r"(?i)avance de resultados|acuerdos de la junta|ampliaci[óo]n de capital|nombramiento|dimisi[óo]n", 8),
 )
 
 
@@ -314,7 +316,8 @@ def traer(emisor, carpeta: Path, anuales: int = 4, semestrales: int = 2, hoy: Op
     elegidos += [("semestral", d) for d in [d for d in financiera if d.periodo != "AN"][:semestrales]]
     publicados = documentos(emisor.clave_bolsa, hoy - timedelta(days=548), hoy)
     for clave, patron, cuantos in _OIR_UTILES:
-        elegidos += [(clave, d) for d in [d for d in publicados if _re.search(patron, d.titulo)][:cuantos]]
+        # la categoría de BME («Operaciones realizadas por directivos») dice más que un título como «Compras realizadas…»
+        elegidos += [(clave, d) for d in [d for d in publicados if _re.search(patron, f"{d.tipo} {d.titulo}")][:cuantos]]
     ruta_origen = carpeta / "origen.json"
     try:
         origen = json.loads(ruta_origen.read_text(encoding="utf-8")) if ruta_origen.is_file() else {}

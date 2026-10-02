@@ -114,6 +114,21 @@ function editorSerie(c, valor, cambio) {
     return el("label", {}, [`año ${k}`, campo]);
   }));
 }
+// cifras por ejercicio («FY2025 = 12614292.34», una por línea): las de la memoria que el analista copia con su cita
+function editorTabla(c, valor, cambio) {
+  const v = valor && typeof valor === "object" && !Array.isArray(valor) ? valor : {};
+  const t = el("textarea", { rows: 3 });
+  t.value = Object.entries(v).map(([k, x]) => `${k} = ${x}`).join("\n");
+  t.addEventListener("change", () => {
+    const salida = {};
+    t.value.split("\n").forEach((linea) => {
+      const m = linea.match(/^\s*([A-Za-z0-9]+)\s*=\s*(-?[\d.]+)\s*$/);
+      if (m) salida[m[1]] = Number(m[2]);
+    });
+    cambio(Object.keys(salida).length ? salida : undefined);
+  });
+  return el("div", {}, [el("span", { class: "pista" }, ["una por línea: FY2025 = 12614292.34"]), t]);
+}
 const CITA = [{ id: "doc", tipo: "texto" }, { id: "pag", tipo: "texto" }, { id: "texto", tipo: "texto", palabras: "1-400" }, { id: "texto_es", tipo: "texto", palabras: "1-400" }];
 function editorLista(c, valor, cambio, campos) {
   const lista = Array.isArray(valor) ? valor.map((x) => (x && typeof x === "object" ? { ...x } : x)) : [];
@@ -212,6 +227,7 @@ function editor(c, valor, cambio, anidado) {
     case "enum": return editorEnum(c, valor, cambio);
     case "bool": return editorBool(c, valor, cambio);
     case "serie": return editorSerie(c, valor, cambio);
+    case "tabla": return editorTabla(c, valor, cambio);
     case "evidencia": return editorLista(c, valor, cambio, CITA);
     case "lista": return editorLista(c, valor, cambio, c.campos);
     case "escenarios": return editorEscenarios(c);

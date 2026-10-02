@@ -26,7 +26,7 @@ from datetime import date, datetime
 from ..heredado.dcf import Cuadre, Modelo
 from ..datos.expediente import Adjunto, Expediente, Tipo
 from .. import rotulos
-from ..formato import Celda, fecha as f_fecha, numero, pct, veces
+from ..formato import Celda, fecha as f_fecha, mln, numero, pct, veces
 from ..datos.gobierno import Gobierno
 from ..datos.hechos import Contraste
 from ..heredado.historial import Historial
@@ -320,14 +320,16 @@ def cuadros_dcf(n: Cuadros, m: Optional[Modelo], cuadres: List[Cuadre], precio_o
 
 
 def _linea_multiplo(l) -> FilaCuadro:
-    if l.valor is None:
+    if l.valor is None and (l.motivo or "").startswith("no significativo"):
+        valor = Celda("n. s.", "", "D", "na", l.motivo)
+    elif l.valor is None:
         valor = _na(l.motivo or "sin dato")
     elif l.unidad == "%":
         valor = Celda(pct(l.valor, 1), "∑", "D", "valor", l.formula)
     elif l.unidad == "x":
         valor = Celda(veces(l.valor, 1), "∑", "D", "valor", l.formula)
     elif l.unidad == "musd":
-        valor = Celda(numero(l.valor / 1e6), "∑", "D", "valor", l.formula)
+        valor = Celda(mln(l.valor), "∑", "D", "valor", l.formula)
     else:
         valor = Celda(numero(l.valor, 2), "∑", "D", "valor", l.formula)
     # sin columna del agregador: Yahoo solo para la volatilidad implícita (regla 6)
@@ -350,13 +352,13 @@ def cuadro_multiplos_sec(n: Cuadros, m) -> Cuadro:
 
 def cuadro_rentabilidad_ttm(n: Cuadros, m) -> Optional[Cuadro]:
     """Apartado 11: ROE y ROA de los últimos doce meses con la definición del 10-K (sobre cifras de la SEC)."""
-    lineas = [l for l in m.lineas if l.rotulo.startswith("RO")]
+    lineas = [l for l in m.lineas if l.rotulo.startswith("RO") and (l.valor is not None or (l.motivo or "").startswith("no significativo"))]
     if not lineas:
         return None
     filas = [_linea_multiplo(l) for l in lineas]
     notas = []
-    notas.append("Los formularios de la compañía no publican ROE, ROA ni ROIC como cifras; el 10-K define el ROE (beneficio después de impuestos / patrimonio medio) para su plan de "
-                 "incentivos y esa es la definición que se aplica. El ROIC no lo publica ninguna fuente: solo la fórmula del cuadro anterior.")
+    notas.append("Los documentos de la compañía no publican ROE, ROA ni ROIC como cifras: se calculan como beneficio después de impuestos sobre el saldo "
+                 "medio (cierre y cierre de hace un año). El ROIC, solo con la fórmula del cuadro anterior.")
     return Cuadro(n.siguiente(), f"Rentabilidad de los últimos doce meses ({m.trimestres[0]}–{m.fin})", ["Valor", "Cálculo"], filas,
                   f"Fuente: beneficio neto {'de los últimos doce meses' if lexico.es_bme() else 'TTM'} y saldos medios {lexico.de_las_cuentas()} (sección C).", notas)
 
@@ -577,7 +579,20 @@ def cuadros_f(n: Cuadros, p, acciones_circulacion: Optional[float] = None, maxim
                  for nombre, fecha, acciones, variacion, v_pct in i.mayores[:maximo_filas + 3]]
         salida["mayores"] = Cuadro(n.siguiente(), "Mayores tenedores institucionales (13F)", ["Fecha del 13F", "Acciones", "Variación (acciones)", "Variación"], filas,
                                    base + " Los accionistas de más del 5 % según la proxy están en el cuadro de estructura corporativa: fechas distintas, no se comparan.", partible=True)
-    if p.insiders is not None and (p.insiders.operaciones or p.insiders.ultimas):
+    if p.insiders is not None and p.insiders.fuente == "bme" and p.insiders.ultimas:
+        s = p.insiders
+        moneda = lexico.moneda()
+        base_bme = ("Fuente: notificaciones de operaciones de directivos y personas vinculadas (modelo del Reglamento (UE) 596/2014) que el "
+                    f"emisor publica en BME; {len(s.documentos)} documentos del expediente. Volumen y precio tal como los notifica el titular.")
+        filas = [FilaCuadro(rotulo, [_n(m3), _n(m12)], capa="Hd") for rotulo, m3, m12 in s.operaciones + s.acciones]
+        salida["insiders"] = Cuadro(n.siguiente(), "Operaciones de directivos comunicadas a BME: recuento y acciones", ["3 meses", "12 meses"], filas,
+                                    base_bme + f" {s.total_operaciones} operaciones en total.")
+        filas = [FilaCuadro(f"{titular} · {cargo}" if cargo else titular,
+                            [_hd(f_fecha(fecha)), _hd(tipo), _n(acciones), _n(precio, 2)], capa="Hd")
+                 for titular, cargo, fecha, tipo, acciones, precio in s.ultimas[:maximo_filas + 3]]
+        salida["insiders_ultimas"] = Cuadro(n.siguiente(), "Últimas operaciones de directivos", ["Fecha", "Tipo", "Acciones", f"Precio ({moneda})"],
+                                            filas, base_bme, partible=True)
+    elif p.insiders is not None and (p.insiders.operaciones or p.insiders.ultimas):
         s = p.insiders
         filas = [FilaCuadro(rotulos.bolsa(rotulo), [_n(m3), _n(m12)], capa="Hd") for rotulo, m3, m12 in s.operaciones]
         filas += [FilaCuadro(rotulos.bolsa(rotulo), [Celda(numero(m3), "", "Hd", "negativo" if (m3 or 0) < 0 else "valor", "") if m3 is not None else _na("—"),

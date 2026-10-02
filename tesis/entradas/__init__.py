@@ -321,7 +321,8 @@ def comprobar_paso1(e: Entradas, fecha_informe: date, paquetes: Sequence[str], b
 
 def comprobar_paso8(e: Entradas, fecha_informe: date, rango_sesion, regla: Optional[str] = None, potencial: Optional[float] = None,
                     recorrido_riesgo: Optional[float] = None, escala: Sequence[str] = ("Comprar", "Mantener", "Vender"),
-                    tamano_max: float = 0.10, riesgo_max: float = 0.01) -> Tuple[List[str], List[str]]:
+                    tamano_max: float = 0.10, riesgo_max: float = 0.01, bolsa: str = "Nasdaq",
+                    moneda: str = "USD") -> Tuple[List[str], List[str]]:
     """(faltas, avisos) del paso 8 (apartados 27–30). `rango_sesion(fecha)` → (mínimo, máximo) de esa sesión de Nasdaq o
     None; `regla`: la recomendación que sugiere la regla de `umbrales.recomendacion` con el potencial y el recorrido/riesgo
     del motor. Tamaño y horizonte se piden una sola vez: el horizonte es el de la valoración (`val.horizonte_meses`)."""
@@ -344,7 +345,7 @@ def comprobar_paso8(e: Entradas, fecha_informe: date, rango_sesion, regla: Optio
     except ValueError:
         dia = None
     if not isinstance(precio, (int, float)) or precio <= 0:
-        faltas.append("pos.precio_entrada: obligatorio, en USD")
+        faltas.append(f"pos.precio_entrada: obligatorio, en {moneda}")
     if dia is None:
         faltas.append("pos.fecha_entrada: obligatoria (AAAA-MM-DD)")
     elif dia > fecha_informe:
@@ -352,9 +353,9 @@ def comprobar_paso8(e: Entradas, fecha_informe: date, rango_sesion, regla: Optio
     elif isinstance(precio, (int, float)):
         rango = rango_sesion(dia)
         if rango is None:
-            faltas.append(f"pos.fecha_entrada: no hay sesión de Nasdaq el {dia:%d/%m/%Y}")
+            faltas.append(f"pos.fecha_entrada: no hay sesión de {bolsa} el {dia:%d/%m/%Y}")
         elif not rango[0] <= precio <= rango[1]:
-            faltas.append(f"pos.precio_entrada: {_es(precio)} USD fuera del rango de la sesión del {dia:%d/%m/%Y} "
+            faltas.append(f"pos.precio_entrada: {_es(precio)} {moneda} fuera del rango de la sesión del {dia:%d/%m/%Y} "
                           f"({_es(rango[0])}–{_es(rango[1])})")
         if dia < fecha_informe:
             avisos.append("pos.fecha_entrada: posición ya abierta; la lista de comprobación se evalúa a posteriori")

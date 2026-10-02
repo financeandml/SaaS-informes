@@ -8,7 +8,7 @@ import statistics
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional
 
-from ..formato import Celda, fecha as f_fecha, numero
+from ..formato import Celda, fecha as f_fecha, mln, numero
 
 __all__ = ["ParteD", "construir"]
 
@@ -31,7 +31,7 @@ def _usd(v: Optional[float], dec: int = 2) -> str:
 
 
 def _mln(v: Optional[float]) -> str:
-    return "N/A" if v is None else numero(v / 1e6)
+    return "N/A" if v is None else mln(v)
 
 
 def _pct(v: Optional[float], dec: int = 1) -> str:

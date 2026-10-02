@@ -138,7 +138,9 @@ def _automatico(cid: str, cfg: dict, ctx: dict) -> Tuple[str, str]:
         x = ctx.get("mercado", {}).get("liquidez")
         if x is None:
             return "sin_dato", "sin volumen de la bolsa"
-        return ("si" if x >= cfg["umbral"] else "no"), f"{numero(x / 1e6)} M {lexico.moneda()} diarios (3 meses, {lexico.bolsa()})"
+        # por debajo del millón, en unidades: «0 M EUR» diarios no dice cuánto se negocia
+        cifra = f"{numero(x / 1e6)} M" if x >= 1e6 else numero(x)
+        return ("si" if x >= cfg["umbral"] else "no"), f"{cifra} {lexico.moneda()} diarios (3 meses, {lexico.bolsa()})"
     if cid == "evento":
         prox, hoy = ctx.get("proxima"), ctx["fecha_informe"]
         if prox is None:

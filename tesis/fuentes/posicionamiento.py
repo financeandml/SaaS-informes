@@ -104,6 +104,9 @@ class Insiders:
     cruce: List = field(default_factory=list)       # form4.Cruce por operación de `ultimas`, en el mismo orden (vacío: sin cruzar)
     total_operaciones: Optional[int] = None
     respuesta: Optional[Respuesta] = None
+    # «bme»: leídas de las notificaciones de directivos que el emisor publica en BME (no hay Form 4), y en qué documentos
+    fuente: str = ""
+    documentos: List[str] = field(default_factory=list)
 
 
 @dataclass

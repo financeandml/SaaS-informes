@@ -159,11 +159,19 @@ def main(argv=None) -> int:
     # F interina: lo que publica la bolsa; la serie de short interest empieza tras el último split que la SEC registra
     ultimo_split = max((f for f, _, _ in sec.splits(facts)), default=None) if facts is not None else None
     posi = posicionamiento.construir(args.ticker, split_desde=ultimo_split)
+    if getattr(emisor, "mercado", "sec") == "bme":
+        # sin Form 4: las notificaciones de directivos que el propio emisor publica en BME (comunicaciones del expediente)
+        from tesis.datos import directivos_bme
+        from tesis.datos.expediente import Tipo
+        ins = directivos_bme.insiders([(a.nombre, "\n".join(a.paginas)) for a in exp.adjuntos if a.tipo is Tipo.COMUNICACION], hoy)
+        if ins is not None:
+            posi.insiders = ins
+            posi.faltan.pop("insiders", None)
     print("  sección F (bolsa): " + " · ".join(f"{k} {'✓' if getattr(posi, k) is not None else 'N/A'}" for k in ("cadena", "institucional", "insiders", "short"))
           + (f" · IV (Yahoo, excepción) ✓ {len(posi.iv.vencimientos)} vencimientos" if posi.iv is not None else ""))
     for k, v in posi.faltan.items():
         print(f"    pendiente {k}: {v}")
-    if posi.insiders is not None and posi.insiders.ultimas:
+    if posi.insiders is not None and posi.insiders.ultimas and posi.insiders.fuente != "bme":
         # F9: cada operación de directivos de la bolsa, casada con su Form 4 de EDGAR (o el porqué de que no case)
         from tesis.fuentes import form4
         posi.insiders.cruce = form4.cruzar(posi.insiders.ultimas, emisor.depositos)

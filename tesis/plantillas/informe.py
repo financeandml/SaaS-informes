@@ -20,7 +20,7 @@ Nunca un texto de relleno.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from datetime import date
+from datetime import date, timedelta
 from pathlib import Path
 from typing import Dict, List, Optional, Sequence, Tuple, Set
 
@@ -210,6 +210,7 @@ class Informe:
     partir: Set[int] = field(default_factory=set)                    # cuadros que el render deja partir entre páginas (06 §4)
     emitido: Optional[date] = None                                   # fecha de emisión: solo con 0 bloqueos (06 §4)
     bloqueos_qa: List[str] = field(default_factory=list)             # hoja 0 del borrador (06 §4)
+    decimales_mln: int = 0                                            # los de los millones según el tamaño (formato.fijar_escala)
     parte_e: Optional[object] = None                                 # F4 · parte_e.ParteE (mercado, competencia, foso)
     parte_f: Optional[object] = None                                 # F5 · parte_f.ParteF (riesgos, caso bajista, historial)
     parte_g: Optional[object] = None                                 # F6 · parte_g.ParteG (tesis, lista, riesgo, seguimiento)
@@ -408,8 +409,7 @@ def _cuadro_rentabilidad(n: Cuadros, hechos, tab: Tablero, anuales) -> Cuadro:
         _fila(hechos, "capex_ventas", "Capex / Ingresos", periodos, unidad="%"),
     ]
     notas = ["Rentabilidades sobre saldos medios (cierre y cierre anterior); requieren el balance del ejercicio anterior. Los formularios no publican ROE, ROA ni ROIC: "
-             + ("se calculan con las cifras de los cuadros anteriores." if _MONEDA.get("sin_sec") else
-                "se calculan con las cifras de los cuadros anteriores y, el ROE, con la definición que el 10-K da para su plan de incentivos.")]
+             + "se calculan con las cifras de los cuadros anteriores (beneficio después de impuestos sobre el saldo medio)."]
     return Cuadro(n.siguiente(), "Rentabilidad y eficiencia", columnas, filas,
                   f"Fuente: cifras {lexico.de_las_cuentas()} contrastadas en los cuadros anteriores; al pasar el ratón, la fórmula de cada fila.", notas)
 
@@ -566,6 +566,26 @@ def _cuadro_regiones(n: Cuadros, r: Optional[Regiones], anuales, trimestres) -> 
     return Cuadro(n.siguiente(), f"Ingresos por región (mln USD){' · reparto ' + _etiqueta(ultimo) if ultimo else ''}", columnas, filas, fuente, r.cuadres), svg
 
 
+def _hitos_bme(emisor, exp: Expediente, hoy: date) -> List:
+    """Los hitos de un emisor de BME: sus comunicaciones al mercado de los últimos doce meses que trae el expediente, con
+    el título que les da la bolsa (no hay 8-K)."""
+    if getattr(emisor, "mercado", "sec") != "bme":
+        return []
+    from ..datos.expediente import Tipo, origenes
+    from ..datos.guidance import Hito
+    salida = []
+    for a in exp.adjuntos:
+        if a.tipo not in (Tipo.COMUNICACION, Tipo.PARTICIPACIONES, Tipo.PRESENTACION) or a.fecha is None:
+            continue
+        if not timedelta(0) <= hoy - a.fecha <= timedelta(days=365):
+            continue
+        o = origenes(a.ruta.parent).get(a.nombre) or {}
+        titulo = str(o.get("titulo") or "").strip() or a.tipo.value
+        salida.append(Hito(fecha=a.fecha, formulario=a.tipo.value, epigrafes=str(o.get("tipo_bme") or a.tipo.value),
+                           descripcion=titulo, url=str(o.get("url") or "")))
+    return sorted(salida, key=lambda h: h.fecha, reverse=True)
+
+
 def _gobierno_del_analista(g: Gobierno, parte_b) -> None:
     """Ejecutivos y filiales que el sistema no leyó de una fuente oficial y el analista aporta con su cita (04, paso 4;
     regla 12). Solo rellenan lo que falta —nunca sustituyen lo leído— y solo con la cita verificada en la página que
@@ -575,6 +595,11 @@ def _gobierno_del_analista(g: Gobierno, parte_b) -> None:
     from ..entradas import verificar_cita
     from ..umbrales import umbral
     ent = parte_b.entradas
+
+    def pagina(cita) -> Optional[int]:
+        # la página de una cita de PDF es la física («96»): el recorte la pide como número
+        v = str(cita.get("pag") or "").strip()
+        return int(v) if v.isdigit() else None
     for clave, lista in (("ejecutivos", ent.valor("gobierno.ejecutivos") or []), ("filiales", ent.valor("gobierno.filiales") or [])):
         if getattr(g, clave) or not lista:
             continue
@@ -587,15 +612,15 @@ def _gobierno_del_analista(g: Gobierno, parte_b) -> None:
                 continue
             primera = primera or ev
             if clave == "ejecutivos":
-                g.ejecutivos.append(Ejecutivo(nombre=str(x.get("nombre", "")), edad=None, cargo=str(x.get("cargo", "")), pagina=ev.get("pag")))
+                g.ejecutivos.append(Ejecutivo(nombre=str(x.get("nombre", "")), edad=None, cargo=str(x.get("cargo", "")), pagina=pagina(ev)))
             else:
                 g.filiales.append(Filial(nombre=str(x.get("nombre", "")), jurisdiccion=str(x.get("pais", "")),
-                                         porcentaje=x.get("participacion"), pagina=ev.get("pag")))
+                                         porcentaje=x.get("participacion"), pagina=pagina(ev)))
         if malas:
             g.faltan[clave] = "citas del analista sin verificar: " + "; ".join(malas)
         elif primera is not None:
             g.faltan.pop(clave, None)
-            g.origenes[clave] = Origen(documento=str(primera.get("doc", "")), formulario="analista (paso 4)", pagina=primera.get("pag"))
+            g.origenes[clave] = Origen(documento=str(primera.get("doc", "")), formulario="analista (paso 4)", pagina=pagina(primera))
 
 
 def _cuadros_gobierno(n: Cuadros, g: Gobierno) -> Tuple[Cuadro, Cuadro, Cuadro, Cuadro]:
@@ -612,7 +637,11 @@ def _cuadros_gobierno(n: Cuadros, g: Gobierno) -> Tuple[Cuadro, Cuadro, Cuadro, 
         if o.pagina:
             return f"Fuente: {o.documento}, pág. {o.pagina} ({seccion})."
         return f"Fuente: SEC EDGAR, {o.documento}{' del ' + f_fecha(o.presentado) if o.presentado else ''} ({seccion})."
+    bme = lexico.es_bme()
     edgar = any(a.fuente for a in g.accionistas)
+    # sin número de acciones en ninguna fila (las participaciones significativas de BME dan solo el porcentaje), la
+    # columna sería entera «N/A»: no se imprime
+    con_acciones = any(a.acciones is not None for a in g.accionistas)
     def _acciones(a) -> Celda:
         # tres estados: sin dato, cero («—» en la proxy: no posee acciones) y valor
         if a.acciones is None:
@@ -620,26 +649,29 @@ def _cuadros_gobierno(n: Cuadros, g: Gobierno) -> Tuple[Cuadro, Cuadro, Cuadro, 
         if a.acciones == 0:
             return Celda(numero(0), "", "H", "cero", "«—» en la proxy: no posee acciones")
         return Celda(numero(a.acciones), "", "H", "valor", "")
-    filas = [FilaCuadro(a.nombre, [_acciones(a),
+    filas = [FilaCuadro(a.nombre, ([_acciones(a)] if con_acciones else []) + [
                                    _pct_accionista(a),
                                    Celda((a.fuente or a.direccion or "c/o la compañía").replace("SCHEDULE ", "").replace("SC ", ""), "", "", "valor", "")],
                         destacada=a.nombre.startswith("Consejeros y directivos")) for a in g.accionistas]
     o = g.origenes.get("accionistas")
     accionistas = Cuadro(n.siguiente(), "Accionistas con 5 % o más, y consejeros y directivos uno a uno y en conjunto" if edgar else
                          f"Principales accionistas, consejeros y directivos{' a ' + f_fecha(g.fecha_accionistas) if g.fecha_accionistas else ''}",
-                         ["Acciones", "% del capital", "Fuente y fecha" if edgar else "Dirección"], filas,
-                         (_fuente(o, "tabla de propiedad") + (" Participaciones posteriores: Schedule 13G/13D en XML de EDGAR; la última declaración de cada declarante manda." if edgar else ""))
+                         (["Acciones"] if con_acciones else []) + ["% del capital", "Fuente y fecha" if edgar else "Dirección"], filas,
+                         (_fuente(o, "tabla de propiedad") + (" Participaciones posteriores: Schedule 13G/13D en XML de EDGAR; la última declaración de cada declarante manda." if edgar and not bme else ""))
                          if o else "Fuente: " + g.faltan.get("accionistas", "—"))
     con_pct = any(x.porcentaje is not None for x in g.filiales)
     filas = [FilaCuadro(x.nombre, [Celda(x.jurisdiccion, "", "H", "valor", "")] +
                         ([Celda(f"{numero(x.porcentaje)} %" if x.porcentaje is not None else "N/A", "", "H", "valor" if x.porcentaje is not None else "na", "")] if con_pct else []))
              for x in g.filiales]
     o = g.origenes.get("filiales")
-    filiales = Cuadro(n.siguiente(), "Filiales significativas (Exhibit 21)", ["Jurisdicción"] + (["% participación"] if con_pct else []), filas,
+    filiales = Cuadro(n.siguiente(), "Sociedades del grupo (memoria de las cuentas consolidadas)" if bme else "Filiales significativas (Exhibit 21)", ["Jurisdicción"] + (["% participación"] if con_pct else []), filas,
                       (_fuente(o, "lista de filiales") if o else "Fuente: " + g.faltan.get("filiales", "—")), [g.nota_filiales] if g.nota_filiales else [])
-    filas = [FilaCuadro(e.nombre, [Celda(str(e.edad) if e.edad else "N/A", "", "H", "valor" if e.edad else "na", ""), Celda(e.cargo, "", "H", "valor", "")]) for e in g.ejecutivos]
+    # la edad la publica la proxy de EE. UU.; si ninguna fila la trae (BME), la columna no se imprime
+    con_edad = any(e.edad for e in g.ejecutivos) or not bme
+    filas = [FilaCuadro(e.nombre, ([Celda(str(e.edad) if e.edad else "N/A", "", "H", "valor" if e.edad else "na", "")] if con_edad else [])
+                        + [Celda(e.cargo, "", "H", "valor", "")]) for e in g.ejecutivos]
     o = g.origenes.get("ejecutivos")
-    ejecutivos = Cuadro(n.siguiente(), f"Ejecutivos{' (edad a ' + f_fecha(g.fecha_ejecutivos) + ')' if g.fecha_ejecutivos else ''}", ["Edad", "Cargo"], filas,
+    ejecutivos = Cuadro(n.siguiente(), f"Ejecutivos{' (edad a ' + f_fecha(g.fecha_ejecutivos) + ')' if g.fecha_ejecutivos else ''}", (["Edad"] if con_edad else []) + ["Cargo"], filas,
                         _fuente(o, "ejecutivos") if o else "Fuente: " + g.faltan.get("ejecutivos", "—"))
     filas = []
     for r in g.retribucion:
@@ -649,8 +681,13 @@ def _cuadros_gobierno(n: Cuadros, g: Gobierno) -> Tuple[Cuadro, Cuadro, Cuadro, 
     o = g.origenes.get("retribucion")
     ancho = max((len(f.celdas) for f in filas), default=8)
     cab = g.cabecera_retribucion[:ancho] if g.cabecera_retribucion else ["Año", "Salario", "Bonus", "Acciones", "Opciones", "Incentivo no accionarial", "Otros", "Total"][:ancho]
-    retribucion = Cuadro(n.siguiente(), f"Retribución de los ejecutivos nombrados ({lexico.moneda()}, último ejercicio de la Summary Compensation Table)", cab, filas,
-                         (_fuente(o, "Summary Compensation Table") + " Columnas tal como las publica la proxy; «—» es cero en la tabla.") if o else "Fuente: " + g.faltan.get("retribucion", "—"))
+    if bme and not filas:
+        retribucion = Cuadro(n.siguiente(), f"Retribución de la dirección ({lexico.moneda()})", ["Importe"], [],
+                             "No aplica: un emisor de BME no publica la retribución individual de sus directivos; la memoria de las cuentas da la del "
+                             "consejo y la alta dirección en conjunto.")
+    else:
+        retribucion = Cuadro(n.siguiente(), f"Retribución de los ejecutivos nombrados ({lexico.moneda()}, último ejercicio de la Summary Compensation Table)", cab, filas,
+                             (_fuente(o, "Summary Compensation Table") + " Columnas tal como las publica la proxy; «—» es cero en la tabla.") if o else "Fuente: " + g.faltan.get("retribucion", "—"))
     return accionistas, filiales, ejecutivos, retribucion
 
 
@@ -786,6 +823,10 @@ def construir(ticker: str, hoy: date, emisor: Emisor, exp: Expediente, tab: Tabl
     while len(anuales) > 1 and anuales[0] not in con_dato:
         anuales = anuales[1:]
     periodos = dict(periodos, anuales=anuales)
+    # los decimales de los millones, por el tamaño del emisor: los ingresos del último ejercicio con dato
+    from ..formato import fijar_escala
+    ultimos = [hechos[("ingresos", p)].valor for p in anuales if ("ingresos", p) in hechos and hechos[("ingresos", p)].hay_dato]
+    decimales_mln = fijar_escala(ultimos[-1] if ultimos else None)
     narrativa_impresa = None    # sin IA: los textos los escribe el analista (docs/fases)
     n = Cuadros()
     cifras = _cuadro_cifras_resumen(n, hechos, anuales, trimestres)
@@ -799,8 +840,21 @@ def construir(ticker: str, hoy: date, emisor: Emisor, exp: Expediente, tab: Tabl
         objetivos = _cuadro_objetivos(n, guidance)
     parte_a = None
     avisos_estilo: List[str] = []                                     # 02: frases y párrafos largos (avisan, no bloquean)
+    fuente_segmentos = ""
+    if parte_b is not None and parte_b.segmentos is None and getattr(emisor, "mercado", "sec") != "sec":
+        # sin XBRL (BME): las líneas de negocio y la geografía de la memoria, copiadas por el analista con su cita (paso 4)
+        from ..datos import segmentos as seg_mod
+        from ..umbrales import umbral as _umbral
+        parte_b.segmentos = seg_mod.del_analista(parte_b.entradas.valor("perfil.segmentos_cifras") or [], anuales,
+                                                 {p: hechos[("ingresos", p)] for p in anuales if ("ingresos", p) in hechos},
+                                                 parte_b.textos, float(_umbral("cita_similitud_min")), tab.moneda or "EUR")
+        parte_b.faltas += [f"segmentos · {k}: {v}" for k, v in parte_b.segmentos.faltan.items()]
+        docs = sorted({parte_b.alias.get(d, d) for d in parte_b.segmentos.origenes})
+        fuente_segmentos = (f"Fuente: memoria de las cuentas anuales ({', '.join(docs)}), cifras copiadas por el analista con su cita "
+                            "verificada en la página; la suma de las líneas se cuadra con la cifra de negocios consolidada.")
     if parte_b is not None and parte_b.segmentos is not None and parte_b.segmentos.periodos:
-        segmentos_c, geografia_c, svg_mezcla, sin_traducir = parte_b_mod.cuadro_segmentos(n, parte_b.segmentos, lambda p: _etiqueta(p, anuales, tab))
+        segmentos_c, geografia_c, svg_mezcla, sin_traducir = parte_b_mod.cuadro_segmentos(n, parte_b.segmentos, lambda p: _etiqueta(p, anuales, tab),
+                                                                                          tab.moneda or "USD", fuente_segmentos)
         regiones_c, svg_regiones = geografia_c, ""
         parte_b.faltas += [f"rótulo sin traducir en el cuadro de segmentos: {m}" for m in sin_traducir]
     elif parte_b is not None:
@@ -1013,7 +1067,9 @@ def construir(ticker: str, hoy: date, emisor: Emisor, exp: Expediente, tab: Tabl
         cl = parte_g_mod.checklist()
         f8, a8 = entradas_mod.comprobar_paso8(parte_b.entradas, hoy, rango, v.recomendacion if v is not None else None,
                                               v.potencial if v is not None else None, v.recorrido_riesgo if v is not None else None,
-                                              umbral("recomendacion")["escala"], cl["tamano_max"], cl["riesgo_max_posicion"])
+                                              umbral("recomendacion")["escala"], cl["tamano_max"], cl["riesgo_max_posicion"],
+                                              "BME" if getattr(emisor, "mercado", "sec") == "bme" else "Nasdaq",
+                                              motor.moneda if motor is not None else "USD")
         parte_g.faltas += f8
         parte_g.avisos += a8
         faltan += [f"Parte G · {x}" for x in parte_g.faltas]
@@ -1110,10 +1166,10 @@ def construir(ticker: str, hoy: date, emisor: Emisor, exp: Expediente, tab: Tabl
         # «0 discrepancias y 0 bloqueos» se evalúa con la puerta de calidad ya completa (sin contar lo de la propia parte G)
         nuevas = parte_g.cerrar(len([f for f in faltan if not f.startswith("Parte G")]), len(tab.bloquea))
         faltan += [f"Parte G · {x}" for x in nuevas]
-    return Informe(
+    return Informe(decimales_mln=decimales_mln,
         ticker=ticker.upper(), nombre=nombre, fecha_emision=hoy, emisor=emisor, expediente=exp, tablero=tab,
         hechos=hechos, ficha=_ficha(emisor, ficha, precio, exp, hechos, mercado, nombre, sector, propuesto), precio=precio, cifras_resumen=cifras, objetivos=objetivos,
-        hitos=guidance.hitos, narrativa=narrativa_impresa, descripcion=ficha.citas.get("descripcion"),
+        hitos=guidance.hitos or _hitos_bme(emisor, exp, hoy), narrativa=narrativa_impresa, descripcion=ficha.citas.get("descripcion"),
         regiones=regiones_c, grafico_regiones=svg_regiones, grafico_ingresos=svg_ingresos, grafico_deuda=svg_deuda,
         accionistas=accionistas, filiales=filiales, ejecutivos=ejecutivos, retribucion=retribucion,
         citas_call=guidance.citas_call, proxima_presentacion=guidance.proxima_presentacion,

@@ -75,6 +75,15 @@ pasos:
       - {id: direccion.citas, tipo: evidencia, min: 2, max: 5, oblig: "si hay call", prop: "tarjetas de la transcripción"}
       # 29/09/2026 (fase B, y fallo 74 de la auditoría): lo que el parser no lee de una fuente oficial lo aporta el
       # analista con su cita (regla 12); solo cuenta si el sistema no lo leyó, y entonces sale en el cuadro con su cita
+      - id: perfil.segmentos_cifras
+        tipo: lista
+        oblig: "si el sistema no lee los segmentos (apartado 4; BME, sin XBRL)"
+        ayuda: "ingresos por línea de negocio y por geografía de la memoria de las cuentas, con la línea de la tabla citada"
+        campos:
+          - {id: linea, tipo: texto}
+          - {id: tipo, tipo: enum, valores: [segmento, geografia]}
+          - {id: valores, tipo: tabla, ayuda: "cifra por ejercicio: {FY2025: 12614292.34, FY2024: …}, cada una en el literal citado"}
+          - {id: evidencia, tipo: evidencia, min: 1}
       - id: gobierno.ejecutivos
         tipo: lista
         oblig: "si el sistema no los lee (apartado 6)"

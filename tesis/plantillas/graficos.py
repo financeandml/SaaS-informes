@@ -65,7 +65,8 @@ def _svg(fig) -> str:
 
 
 def _millones(v: float) -> str:
-    return f"{v / 1e6:,.0f}".replace(",", ".")
+    from ..formato import mln
+    return mln(v)
 
 
 def barras_con_linea(barras: Sequence[Hecho], linea: Sequence[Optional[Hecho]], rotulo_barras: str, rotulo_linea: str,
@@ -110,7 +111,8 @@ def barras_con_linea(barras: Sequence[Hecho], linea: Sequence[Optional[Hecho]], 
             ax.text(x, 0, "N/A", ha="center", va="bottom", fontsize=6.5, color=GRIS)
             avisos.append(f"{rotulo_barras} {h.periodo.clave}: {h.motivo}")
     ax.set_xticks(xs, etiquetas)
-    ax.set_ylabel("mln USD")
+    from . import lexico
+    ax.set_ylabel(f"mln {lexico.moneda()}")
     ax.tick_params(axis="y", labelsize=6.5)
     ax.yaxis.grid(True, color=GRIS_CLARO, linewidth=0.4)
     ax.set_axisbelow(True)

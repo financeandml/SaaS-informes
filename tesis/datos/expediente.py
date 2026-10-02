@@ -51,6 +51,8 @@ class Tipo(str, Enum):
     # otras comunicaciones de BME que el sistema trae y usa sin leer cifras de ellas
     PARTICIPACIONES = "Participaciones significativas"
     INCORPORACION = "Documento de incorporación"
+    # «otra información relevante» o «información privilegiada»: citable por el analista, nunca fuente de cifras
+    COMUNICACION = "Comunicación al mercado"
     DESCONOCIDO = "desconocido"
 
 
@@ -65,14 +67,14 @@ APARTADO_DE = {
     Tipo.Q10: Apartado.TRIMESTRALES, Tipo.FINWEB: Apartado.TRIMESTRALES, Tipo.XLSX: Apartado.TRIMESTRALES,
     Tipo.CARTA: Apartado.GUIDANCE, Tipo.CALL: Apartado.GUIDANCE,
     Tipo.NOTA: Apartado.GUIDANCE, Tipo.PRESENTACION: Apartado.GUIDANCE, Tipo.TABLAS: Apartado.TRIMESTRALES,
-    Tipo.CCAA: Apartado.ANUALES, Tipo.SEMESTRAL: Apartado.TRIMESTRALES,
+    Tipo.CCAA: Apartado.ANUALES, Tipo.SEMESTRAL: Apartado.TRIMESTRALES, Tipo.COMUNICACION: Apartado.GUIDANCE,
 }
 
 # la clave con la que cada tipo se nombra en el expediente y en la lista de documentos del paso 1 (`documentos.py`)
 CLAVE_DE = {Tipo.K10: "10K", Tipo.Q10: "10Q", Tipo.DEF14A: "PROXY", Tipo.CARTA: "CARTA",
             Tipo.CALL: "CALL", Tipo.FINWEB: "FINWEB", Tipo.XLSX: "XLSX", Tipo.NOTA: "NOTA",
             Tipo.TABLAS: "TABLAS", Tipo.PRESENTACION: "SLIDES", Tipo.CCAA: "CCAA", Tipo.SEMESTRAL: "SEMESTRAL",
-            Tipo.PARTICIPACIONES: "PARTICIPACIONES", Tipo.INCORPORACION: "INCORPORACION"}
+            Tipo.PARTICIPACIONES: "PARTICIPACIONES", Tipo.INCORPORACION: "INCORPORACION", Tipo.COMUNICACION: "COMUNICACION"}
 TIPO_DE_CLAVE = {v: k for k, v in CLAVE_DE.items()}
 
 MESES = {m: i for i, m in enumerate(
@@ -185,8 +187,9 @@ class Expediente:
 # Clasificación
 # ---------------------------------------------------------------------------
 
-def clasificar(p1: str, titulo_pdf: str, primeras: str) -> dict:
-    """Qué documento es, por lo que dice de sí mismo. Devuelve tipo, periodo, fecha, certeza, motivo."""
+def clasificar(p1: str, titulo_pdf: str, primeras: str, n_paginas: Optional[int] = None) -> dict:
+    """Qué documento es, por lo que dice de sí mismo. Devuelve tipo, periodo, fecha, certeza, motivo. `n_paginas`: el
+    largo del documento, lo único que separa la carta con que un emisor español remite sus cuentas de una comunicación."""
     accession = titulo_pdf.strip() if re.fullmatch(r"\d{10}-\d{2}-\d{6}", titulo_pdf.strip()) else ""
     if "FORM 10-K" in p1:
         m = re.search(r"fiscal year ended\s+(\w+ \d{1,2}, \d{4})", p1)
@@ -223,7 +226,7 @@ def clasificar(p1: str, titulo_pdf: str, primeras: str) -> dict:
                     accession=accession, certeza=Certeza.ALTA,
                     motivo="La carátula dice «FORM 8-K · CURRENT REPORT»: es el hecho relevante. Las cifras van en sus "
                            "anexos (99.1), no en la carátula.")
-    es = _clasificar_es(p1, primeras)
+    es = _clasificar_es(p1, primeras, n_paginas)
     if es is not None:
         es["accession"] = accession
         return es
@@ -307,9 +310,20 @@ _CIERRE_SEMESTRAL = (r"seis meses (?:terminado|cerrado|finalizado) (?:el|a|al|en
                      r"estados financieros intermedios[^.]{0,80}?\b(?:a|al) (" + _FECHA_ES + ")")
 
 
-def _clasificar_es(p1: str, primeras: str) -> Optional[dict]:
-    """Las cuentas anuales o el semestral de un emisor español, por lo que dicen de sí mismos; None si no lo son."""
+_ES_COMUNICACION = r"otra informaci[óo]n relevante|informaci[óo]n privilegiada"
+
+
+def _clasificar_es(p1: str, primeras: str, n_paginas: Optional[int] = None) -> Optional[dict]:
+    """Las cuentas anuales, el semestral o una comunicación de un emisor español, por lo que dicen de sí mismos; None si
+    no son ninguna. Cuentas y semestral llegan a BME con la misma carta que una comunicación: lo que las separa es el
+    largo (unos estados financieros no caben en `umbrales.comunicacion_bme_paginas_max` páginas)."""
     t1, tp = " ".join(p1.split()), " ".join(primeras.split())
+    if n_paginas is not None and re.search(_ES_COMUNICACION, t1[:300], re.I):
+        from ..umbrales import umbral
+        if n_paginas <= int(umbral("comunicacion_bme_paginas_max")):
+            return dict(tipo=Tipo.COMUNICACION, periodo_fin=None, fecha=_fecha_es(t1[:200]), certeza=Certeza.ALTA,
+                        motivo=f"La primera página es una comunicación al mercado («{re.search(_ES_COMUNICACION, t1, re.I).group(0)}») "
+                               f"de {n_paginas} página{'s' if n_paginas != 1 else ''}: se cita, pero no se toman cifras de ella.")
     tipo = None
     for texto, semestral, anual in ((t1, _ES_SEMESTRAL, _ES_CCAA), (tp, _ES_SEMESTRAL_FUERTE, _ES_CCAA_FUERTE)):
         s, a = re.search(semestral, texto, re.I), re.search(anual, texto, re.I)
@@ -457,7 +471,7 @@ def cargar_adjunto(ruta: Path) -> Adjunto:
         return Adjunto(ruta=ruta, huella=huella, paginas=paginas, tipo=Tipo.DESCONOCIDO, apartado=None,
                        certeza=Certeza.BAJA, motivo="sin texto: pide las cifras al analista. El PDF no tiene capa de texto "
                                                     "(está escaneado) y no se lee con OCR.")
-    c = clasificar(paginas[0], titulo, "\n".join(paginas[:8]))
+    c = clasificar(paginas[0], titulo, "\n".join(paginas[:8]), len(paginas))
     fecha = c.get("fecha")
     if fecha is None and c["tipo"] in (Tipo.K10, Tipo.Q10):
         for t in reversed(paginas):
@@ -532,9 +546,11 @@ def _de_bme(a: Adjunto, dato: dict) -> None:
     periodo, ejercicio = str(dato.get("periodo") or ""), dato.get("ejercicio")
     tipo = Tipo.CCAA if periodo == "AN" else Tipo.SEMESTRAL if periodo.endswith("S") else \
         {"presentacion": Tipo.PRESENTACION, "participaciones": Tipo.PARTICIPACIONES,
-         "incorporacion": Tipo.INCORPORACION}.get(dato.get("clave"))
-    if tipo is not None and a.tipo in (Tipo.DESCONOCIDO, tipo):
-        if a.tipo is Tipo.DESCONOCIDO:
+         "incorporacion": Tipo.INCORPORACION, "directivos": Tipo.COMUNICACION,
+         "comunicacion": Tipo.COMUNICACION}.get(dato.get("clave"))
+    # una comunicación es solo el sobre: lo que la bolsa dice que publicó (participaciones, presentación) es más preciso
+    if tipo is not None and a.tipo in (Tipo.DESCONOCIDO, Tipo.COMUNICACION, tipo):
+        if a.tipo in (Tipo.DESCONOCIDO, Tipo.COMUNICACION):
             a.certeza = Certeza.ALTA if tipo in (Tipo.CCAA, Tipo.SEMESTRAL) else Certeza.MEDIA
         a.tipo, a.apartado = tipo, APARTADO_DE.get(tipo)
     if a.tipo in (Tipo.CCAA, Tipo.SEMESTRAL) and a.periodo_fin is None and ejercicio:

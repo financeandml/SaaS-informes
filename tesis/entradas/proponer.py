@@ -42,6 +42,11 @@ class SinPropuesta:
     motivo: str
 
 
+class SinFuente(Exception):
+    """El mercado del emisor no publica lo que la propuesta necesita (un 10-K, XBRL): su mensaje es el motivo que se
+    enseña, no un fallo de red ni de formato."""
+
+
 @dataclass
 class Contexto:
     """Lo que una propuesta necesita saber; lo caro (el emisor de EDGAR) se pide una vez y solo si alguien lo usa."""
@@ -61,7 +66,7 @@ class Contexto:
         if "portada" not in self._cache:
             from ..fuentes import sec
             if getattr(self.emisor(), "mercado", "sec") != "sec":
-                raise ValueError("sin 10-K: es un emisor de BME; lo aporta el analista con su cita")
+                raise SinFuente("emisor de BME, sin 10-K: lo aporta el analista con su cita de las cuentas anuales")
             self._cache["portada"] = sec.portada_10k(self.emisor())
         return self._cache["portada"]
 
@@ -69,12 +74,13 @@ class Contexto:
         if "facts" not in self._cache:
             from ..fuentes import sec
             if getattr(self.emisor(), "mercado", "sec") != "sec":
-                raise ValueError("sin XBRL: las cifras de un emisor de BME salen de sus cuentas en PDF; lo aporta el analista")
+                raise SinFuente("emisor de BME, sin XBRL: el histórico de este supuesto lo calcula el analista con las cuentas "
+                                "en PDF (apartados 8–11 del informe)")
             self._cache["facts"] = sec.companyfacts(self.emisor().cik)
         return self._cache["facts"]
 
     def sesiones(self):
-        """Las sesiones de Nasdaq hasta la fecha del informe (cierre oficial): la misma petición de cinco años que usan el
+        """Las sesiones de la bolsa del emisor (Nasdaq o BME) hasta la fecha del informe (cierre oficial): la misma petición de cinco años que usan el
         motor y el paso 8 (`precio.desde_5a`), así que va a la misma caché y no se pide dos veces."""
         if "sesiones" not in self._cache:
             from ..fuentes import precio
@@ -116,6 +122,8 @@ def proponer(ticker: str, fecha: date, datos: dict, campos: Optional[List[str]] 
             continue
         try:
             salida[campo] = funcion(ctx)
+        except SinFuente as e:
+            salida[campo] = SinPropuesta(str(e))
         except Exception as e:                        # sin EDGAR o sin configuración: se dice, no se inventa
             from ..rotulos import fallo
             salida[campo] = SinPropuesta(f"no se pudo calcular ({fallo(e)})")
@@ -333,8 +341,21 @@ propone("perfil.fundacion")(_del_10k(_fundacion, "el año de constitución o fun
 @propone("val.anio_base")
 def _anio_base(ctx: Contexto):
     """Últimos 12 meses si, a la fecha del informe, hay al menos dos 10-Q presentados después del último 10-K; si no, el
-    último ejercicio (04, paso 7)."""
-    dep = [d for d in ctx.emisor().depositos if d.presentado <= ctx.fecha]
+    último ejercicio (04, paso 7). En BME, que publica por semestres: últimos 12 meses si hay un semestral publicado
+    después de las últimas cuentas anuales."""
+    em = ctx.emisor()
+    if getattr(em, "mercado", "sec") == "bme":
+        from ..fuentes import bme
+        publicados = [d for d in bme.informacion_financiera(em.clave_bolsa) if d.fecha <= ctx.fecha and d.ejercicio]
+        anual = max((d for d in publicados if d.periodo == "AN"), key=lambda d: int(d.ejercicio), default=None)
+        if anual is None:
+            return SinPropuesta("BME no publica cuentas anuales del emisor anteriores a la fecha del informe")
+        posteriores = [d for d in publicados if d.periodo != "AN" and int(d.ejercicio) > int(anual.ejercicio)]
+        motivo = f"BME: cuentas anuales de {anual.ejercicio} y {len(posteriores)} semestral(es) posterior(es)"
+        if posteriores:
+            return Propuesta("ultimos_12_meses", motivo, "hay un semestre publicado desde el cierre")
+        return Propuesta("ultimo_ejercicio", motivo, "ningún semestre publicado desde el cierre")
+    dep = [d for d in em.depositos if d.presentado <= ctx.fecha]
     k = max((d for d in dep if d.formulario == "10-K" and d.periodo), key=lambda d: d.periodo, default=None)
     if k is None:
         return SinPropuesta("sin 10-K en EDGAR anterior a la fecha del informe")
@@ -372,11 +393,13 @@ def _fecha_entrada(ctx: Contexto):
 
 @propone("pos.precio_entrada")
 def _precio_entrada(ctx: Contexto):
+    from ..fuentes.emisores import es_bme
+    bolsa = "BME" if es_bme(ctx.ticker) else "Nasdaq"
     fv = ctx.fecha_valoracion()
     s = ctx.sesiones().get(fv) if fv else None
     if s is None or s.cierre is None:
-        return SinPropuesta("Nasdaq no da el cierre de la fecha de valoración")
-    return Propuesta(round(float(s.cierre), 2), f"Nasdaq, cierre oficial del {fv:%d/%m/%Y}", "el precio único del informe (regla 4)")
+        return SinPropuesta(f"{bolsa} no da el cierre de la fecha de valoración")
+    return Propuesta(round(float(s.cierre), 2), f"{bolsa}, cierre oficial del {fv:%d/%m/%Y}", "el precio único del informe (regla 4)")
 
 
 def _mas_meses(d: date, meses: int) -> date:
@@ -398,7 +421,8 @@ def _fechas_revision(ctx: Contexto):
     prox = calendario.proxima(ctx.ticker, None, ctx.fecha)
     if prox is not None and prox.fecha > ctx.fecha:
         fechas.append(prox.fecha.isoformat())
-        fuentes.append(f"próximos resultados según Nasdaq ({'esperada' if prox.esperada else 'anunciada'})")
+        bolsa = "BME" if getattr(ctx.emisor(), "mercado", "sec") == "bme" else "Nasdaq"
+        fuentes.append(f"próximos resultados según {bolsa} ({'esperada' if prox.esperada else 'anunciada'})")
     fechas.append(_mas_meses(fv, meses).isoformat())
     fuentes.append(f"fin del horizonte de {meses} meses")
     return Propuesta(fechas, " · ".join(fuentes), "fechas publicadas y el fin del horizonte")

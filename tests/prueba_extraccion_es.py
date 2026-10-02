@@ -148,3 +148,46 @@ class Lectura(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class RotuloEnVariasLineas(unittest.TestCase):
+    """Un rótulo de dos líneas con sus cifras en una tercera: «FLUJOS DE EFECTIVO DE LAS ACTIVIDADES DE» / «EXPLOTACIÓN» /
+    «313.340,73 (2.310.057,82)» (cuentas de 2024 de un emisor de BME Growth)."""
+
+    def test_las_cifras_sin_rotulo_toman_el_de_las_lineas_de_encima(self):
+        """Falla si la línea de cifras se descarta por no traer rótulo: el flujo de explotación del ejercicio anterior
+        quedaba N/A y salía «N/A» en el cuadro 1 del resumen, donde no puede haberlo."""
+        from datetime import date
+        from tesis.datos.extractor import Linea, Token, _leer_es
+        def linea(y, *trozos):
+            return Linea([Token(t, x, y, x + 10 * len(t), y + 8) for x, t in trozos])
+        lineas = [linea(100, (60, "Nota"), (400, "31/12/2024"), (500, "31/12/2023*")),
+                  linea(120, (60, "FLUJOS DE EFECTIVO DE LAS ACTIVIDADES DE")),
+                  linea(131, (60, "EXPLOTACIÓN")),
+                  linea(142, (400, "313.340,73"), (500, "(2.310.057,82)")),
+                  linea(160, (60, "Resultado del ejercicio antes de impuestos"), (400, "(1.764.500,92)"), (500, "(48.064,59)"))]
+        p = _leer_es(lineas, 150, "ccaa.pdf", 600, 800, date(2024, 12, 31), 12, "EUR")
+        filas = {f.rotulo: f for f in p.filas}
+        self.assertIn("FLUJOS DE EFECTIVO DE LAS ACTIVIDADES DE EXPLOTACIÓN", filas)
+        valores = sorted(c.valor for c in filas["FLUJOS DE EFECTIVO DE LAS ACTIVIDADES DE EXPLOTACIÓN"].celdas.values())
+        self.assertEqual(valores, [-2310057.82, 313340.73])
+        self.assertIn("Resultado del ejercicio antes de impuestos", filas)
+
+    def test_el_rotulo_truncado_se_completa_aunque_la_capa_de_texto_entrelace_la_linea_siguiente(self):
+        """Falla si «FLUJOS DE EFECTIVO DE LAS ACTIVIDADES DE» no se completa como explotación cuando la capa de texto mezcla
+        «EXPLOTACIÓN» con la fila siguiente («EX RPeLsOuTltAadCoIÓ dNel ejercicio antes de impuestos», cuentas de 2024)."""
+        from tesis.datos.extractor import Fila, _completar_truncados
+        filas = [Fila("FLUJOS DE EFECTIVO DE LAS ACTIVIDADES DE", "", {}, (0, 0, 1, 1)),
+                 Fila("EX RPeLsOuTltAadCoIÓ dNel ejercicio antes de impuestos", "", {}, (0, 0, 1, 1))]
+        _completar_truncados(filas)
+        self.assertEqual(filas[0].rotulo, "FLUJOS DE EFECTIVO DE LAS ACTIVIDADES DE explotación")
+
+
+class RecompraDelModeloEspanol(unittest.TestCase):
+    def test_la_adquisicion_de_acciones_propias_es_la_recompra(self):
+        """Falla si «Adquisición de instrumentos de patrimonio propio» del estado de flujos del PGC no se lee como recompra:
+        el apartado 10 imprimía N/A para los 557.117 euros que Redegal dedicó a autocartera en 2025."""
+        h = hecho("RDG", "recompras", "FY2025")
+        self.assertIsNotNone(h)
+        self.assertTrue(h.hay_dato, h.motivo)
+        self.assertAlmostEqual(abs(h.valor), 557116.82, places=2)

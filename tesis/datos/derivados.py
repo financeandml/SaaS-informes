@@ -175,6 +175,10 @@ def calcular(hechos: Hechos, flujos: List[Periodo], instantes: List[Periodo]) ->
             if base is not None and h.hay_dato and entradas[base[0]].valor < 0:
                 h = derivar(d.clave, p, d.formula, entradas, lambda **_: None, unidad=d.unidad).con(
                     motivo=f"no significativo: {base[1]} es negativo ({entradas[base[0]].valor / 1e6:,.0f} M)".replace(",", "."))
+            elif d.clave == "roe" and h.hay_dato and any(e.hay_dato and e.valor <= 0 for e in entradas["patrimonio"].entradas):
+                # el medio puede ser positivo y diminuto con un cierre en negativo: la ratio saldría de cientos por cien
+                h = derivar(d.clave, p, d.formula, entradas, lambda **_: None, unidad=d.unidad).con(
+                    motivo="no significativo: el patrimonio neto es negativo en uno de los dos cierres")
             salida[(d.clave, p)] = h
     return salida
 
@@ -191,7 +195,13 @@ def deuda_neta_ebitda_vigente(hechos: Hechos) -> Optional[Tuple[float, Hecho, fl
     trimestres = sorted((p for (c, p), h in hechos.items() if c == "ebitda" and p.meses == 3 and p.fin <= fecha and h.hay_dato),
                         key=lambda p: p.fin)[-4:]
     if len(trimestres) < 4 or (trimestres[-1].fin - trimestres[0].inicio).days > 380 or (fecha - trimestres[-1].fin).days > 10:
-        return None
+        # quien publica por semestres (BME) no tiene trimestres: el ejercicio que cierra en la fecha del balance
+        ejercicio = next((p for (c, p), h in hechos.items() if c == "ebitda" and p.meses == 12 and h.hay_dato
+                          and abs((fecha - p.fin).days) <= 10), None)
+        if ejercicio is None or not hechos[("ebitda", ejercicio)].valor:
+            return None
+        dn = hechos[("deuda_neta", deudas[-1])]
+        return dn.valor / hechos[("ebitda", ejercicio)].valor, dn, hechos[("ebitda", ejercicio)].valor, ejercicio
     ebitda = sum(hechos[("ebitda", q)].valor for q in trimestres)
     if not ebitda:
         return None
