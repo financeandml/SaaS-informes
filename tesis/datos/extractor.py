@@ -316,12 +316,12 @@ def _escala_de(lineas: Sequence[Linea], hasta: Optional[int] = None, espanol: bo
     def escala_en(t: str) -> int:
         corta = len(t) <= 80
         t = t.lower().replace(" ", "")
-        if "inthousands" in t:
-            return 1_000
-        if "inmillions" in t:
-            return 1_000_000
-        if "inbillions" in t:
-            return 1_000_000_000
+        # la escala de la tabla es la que se declara primero: en «In millions, except number of shares, which are
+        # reflected in thousands» los miles son solo de las acciones (`_escala_acciones`), no de la tabla (fallo [3])
+        posiciones = [(t.find(k), e) for k, e in (("inthousands", 1_000), ("inmillions", 1_000_000), ("inbillions", 1_000_000_000))
+                      if k in t]
+        if posiciones:
+            return min(posiciones)[1]
         if espanol and corta:
             if re.search(r"milesdeeuros|enmiles\b|\(miles\)|milesde€|miles€|k€", t):
                 return 1_000
@@ -338,6 +338,22 @@ def _escala_de(lineas: Sequence[Linea], hasta: Optional[int] = None, espanol: bo
         if previas:
             return previas[-1]
     return declaraciones[0][1]
+
+
+_RECUENTO_ACCIONES = re.compile(r"(?i)shares used|weighted[- ]average (?:number of )?(?:common )?shares|shares outstanding|number of shares")
+
+
+def _escala_acciones(lineas: Sequence[Linea], hasta: Optional[int], escala: int) -> int:
+    """La escala de los recuentos de acciones cuando la cabecera la exceptúa de la de la tabla: «In millions, except number
+    of shares, which are reflected in thousands» (Apple). Sin excepción, la de la tabla."""
+    for k, l in enumerate(lineas):
+        if hasta is not None and k >= hasta:
+            break
+        t = l.texto.lower().replace(" ", "")
+        m = re.search(r"except[^)]*shares[^)]*?in(thousands|millions|billions)", t)
+        if m:
+            return {"thousands": 1_000, "millions": 1_000_000, "billions": 1_000_000_000}[m.group(1)]
+    return escala
 
 
 _TITULO_ES = re.compile(r"(?i)\bbalance\b|situaci[óo]n financiera|p[ée]rdidas y ganancias|cuenta de (?:resultados|explotaci[óo]n)"
@@ -419,7 +435,8 @@ def _columnas_de(lineas: Sequence[Linea]) -> Tuple[List[Columna], int]:
         # cualquier emisor que ponga las unidades en esa misma línea.
         k0 = next((k for k, tok in enumerate(l.tokens) if re.fullmatch(r"(?:19|20)\d{2}", tok.texto.strip())), None)
         resto_cabecera = k0 is not None and all(
-            re.fullmatch(r"(?:19|20)\d{2}|" + _MES + r"\s+\d{1,2},?|As of|Ended|and", tok.texto.strip()) for tok in l.tokens[k0:])
+            re.fullmatch(r"(?:19|20)\d{2}|" + _MES + r"\s+\d{1,2},?|As of|Ended|and|%? ?Change|Variaci[óo]n", tok.texto.strip())
+            for tok in l.tokens[k0:])                    # «2025 2024 Change»: la tabla del MD&A con su variación
         rotulo = " ".join(tok.texto for tok in l.tokens[:k0]) if k0 else ""
         # el rótulo no puede traer importes: «Vencimientos 1,250 2026 2027» es una fila, no una cabecera
         rotulo_limpio = not re.search(r"\d{1,3}(?:,\d{3})+|\d+\.\d", rotulo)
@@ -536,16 +553,36 @@ def leer_pagina(page, numero: int, documento: str, espanol: bool = False, cierre
     titulo = _titulo_de(lineas)
     columnas, idx = _columnas_de(lineas)
     escala = _escala_de(lineas, idx if idx >= 0 else None)
+    escala_acciones = _escala_acciones(lineas, idx if idx >= 0 else None, escala)
+    # Una página puede llevar varias tablas con sus columnas en sitios distintos (el MD&A de Apple: margen bruto arriba,
+    # gastos operativos debajo). Cada fila se lee con la cabecera más cercana por encima: con la primera de la página,
+    # el 8.268 del año anterior caía en la columna del trimestre en curso (fallo [4])
+    cabeceras: Dict[int, List[Columna]] = {}
+    if idx >= 0:
+        cabeceras[idx] = columnas
+        inicio = idx + 1
+        while inicio < len(lineas):
+            otras, i = _columnas_de(lineas[inicio:])
+            if i < 0 or not otras:
+                break
+            cabeceras[inicio + i] = otras
+            inicio += i + 1
     # Un balance sin «As of» en la cabecera (el 10-K lo lleva; la web del emisor no):
     # el título de la página dice que son instantes.
-    if columnas and re.search(r"(?i)balance sheet", titulo):
-        for c in columnas:
-            if c.periodo is None and c.fin is not None:
-                c.periodo = Periodo.instante(c.fin)
+    if re.search(r"(?i)balance sheet", titulo):
+        for cols in cabeceras.values():
+            for c in cols:
+                if c.periodo is None and c.fin is not None:
+                    c.periodo = Periodo.instante(c.fin)
     locale_es = _locale_es(lineas)
     filas: List[Fila] = []
     contexto = ""
-    for l in lineas[idx + 1:] if idx >= 0 else []:
+    for k, l in enumerate(lineas):
+        if idx < 0 or k <= idx:
+            continue
+        if k in cabeceras:                      # la línea de años de otra tabla: cambia las columnas, no es una fila
+            columnas, contexto = cabeceras[k], ""
+            continue
         toks = l.tokens
         numericos = [t for t in toks if _es_numero(t.texto) and t.texto.strip() not in ("$",)]
         etiqueta = [t for t in toks if t not in numericos and t.texto.strip() != "$"]
@@ -557,6 +594,7 @@ def leer_pagina(page, numero: int, documento: str, espanol: bool = False, cierre
         if not rotulo:
             continue
         es_por_accion = _es_por_accion(contexto + " " + rotulo)
+        escala_fila = escala_acciones if _RECUENTO_ACCIONES.search(contexto + " " + rotulo) else escala
         celdas: Dict[int, Candidato] = {}
         for t in numericos:
             v, guion, pct = _valor_de(t.texto, locale_es)
@@ -566,10 +604,10 @@ def leer_pagina(page, numero: int, documento: str, espanol: bool = False, cierre
             if j is None:
                 continue
             col = columnas[j]
-            valor = v if (es_por_accion or pct) else v * escala
+            valor = v if (es_por_accion or pct) else v * escala_fila
             celdas[j] = Candidato(documento=documento, pagina=numero, rotulo=rotulo, contexto=contexto,
                                   periodo=col.periodo, etiqueta_columna=col.etiqueta, valor=valor, crudo=t.texto,
-                                  escala=escala, por_accion=es_por_accion, guion=guion, porcentaje=pct,
+                                  escala=escala_fila, por_accion=es_por_accion, guion=guion, porcentaje=pct,
                                   rect=(t.x0, t.y0, t.x1, t.y1), rect_fila=(l.x0, l.y0, l.x1, l.y1))
         if celdas:
             filas.append(Fila(rotulo=rotulo, contexto=contexto, celdas=celdas, rect=(l.x0, l.y0, l.x1, l.y1)))

@@ -43,5 +43,10 @@ reproduce ninguno; batería completa y regresiones en verde.
   partidas no recurrentes en el TTM (`datos/no_recurrentes.py`, `config/no_recurrentes.yaml`) [23].
   Contador: `pytest -m auditoria` 34 de 78 sin marca (44 abiertos). Informe de control QCOM: cambian 11–18, 20, 23, 25,
   28 y 36 (ROIC, SBC, periodo parcial, CAGR).
-- Siguiente: A2 (extracción y contraste: 3, 4, 5, 49).
+- A2 ☑ (02/10): escala por fila cuando la cabecera exceptúa las acciones [3]; cada tabla de una página con su cabecera
+  de columnas y la línea de un estado con concepto propio de la compañía (XBRL del depósito) como otro alcance del
+  us-gaap [4]; lo leído en un documento anterior a un split, reexpresado antes de contrastar [5]; guía y real en la base
+  de acciones de hoy [49]. AAPL pasa de 79 a 9 bloqueos. Contador: 38 de 78 sin marca (40 abiertos). Informe de control
+  QCOM: sin cambios de cifras (solo la hora de consulta en 31 y 33–35).
+- Siguiente: A3 (tres estados: 6, 24, 48, 52, 56, 59, 67).
 

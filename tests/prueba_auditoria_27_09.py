@@ -138,24 +138,29 @@ class Mercado(unittest.TestCase):
 
 @unittest.skipUnless(HAY, "sin fixtures de la auditoría o sin los adjuntos del analista")
 class Extraccion(unittest.TestCase):
-    @falla(3, "«In millions, except shares in thousands» se aplica a toda la tabla")
     def test_03_escala_por_fila(self):
         for b in bloqueos("AAPL"):
             m = re.search(r"SEC ([\d.,]+) frente a .*? = ([\d.,]+)", b)
             if m and num(m.group(2)):
                 self.assertNotAlmostEqual(num(m.group(1)) / num(m.group(2)), 1000, delta=1, msg=b)
 
-    @falla(4, "columna del año anterior e intangibles de distinto alcance emparejados")
     def test_04_emparejamientos(self):
         texto = " ".join(bloqueos("AAPL"))
         for malo in ("8.268.000.000", "84.118", "Intangibles"):
             self.assertNotIn(malo, texto)
 
-    @falla(5, "el split detectado sigue bloqueando")
+    def test_04_columnas_de_cada_tabla(self):
+        """Dos tablas en una página con las columnas en sitios distintos (MD&A de Apple, pág. 19 del 10-Q del 1T FY26):
+        cada fila se lee con su cabecera; con la primera de la página, el 8.268 del 4T24 caía en el 4T25."""
+        from tesis.datos import expediente, extractor
+        ruta = _adjuntos("AAPL") / "SEC_10-Q_2025-12-27_0000320193-26-000006.pdf"
+        a = expediente.cargar("AAPL", [ruta], []).adjuntos[0]
+        fila = next(f for f in extractor.extraer_pdf(a, [19])[0].filas if f.rotulo == "Research and development")
+        self.assertEqual({c.periodo.clave: c.valor for c in fila.celdas.values()}, {"4T25": 10_887e6, "4T24": 8_268e6})
+
     def test_05_split_no_bloquea(self):
         self.assertFalse([b for b in bloqueos("NFLX") if b.startswith("Discrepancia abierta")])
 
-    @falla(49, "guía anterior al split sin reexpresar")
     def test_49_guia_reexpresada(self):
         fila = inf("NFLX").fila("Guía de la compañía", "3T FY24 · BPA diluido")
         self.assertEqual(fila[:2], ["0,51", "0,54"])

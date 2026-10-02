@@ -304,10 +304,18 @@ def frente_a_real(notas: Sequence[Nota], confirmadas: Iterable[str], xbrl: Optio
                 continue                                      # aún no publicado: es guía vigente, no historial
             ajuste = ""
             if c.unidad == "USD/acción":
+                # guía y real en la base de acciones de hoy, cada uno con los splits posteriores a su nota: el informe
+                # imprime el BPA reexpresado y una guía del 3T FY24 de Netflix en 5,10 junto a un 0,5 no se comparaba
+                # con nada (fallo [49])
+                partes = []
                 for fecha, factor in splits:
-                    if factor and c.presentado < fecha <= r.presentado:
+                    if factor and c.presentado < fecha:
                         c = replace(c, bajo=c.bajo / factor, alto=c.alto / factor)
-                        ajuste = f"guía dividida por el split {factor:g}:1 del {fecha:%d/%m/%Y}, posterior a la nota que la dio"
+                        partes.append(f"la guía, por el split {factor:g}:1 del {fecha:%d/%m/%Y}")
+                    if factor and r.presentado < fecha:
+                        r = replace(r, valor=r.valor / factor)
+                        partes.append(f"el real, por el split {factor:g}:1 del {fecha:%d/%m/%Y}")
+                ajuste = ("reexpresados en la base de acciones de hoy: " + "; ".join(partes)) if partes else ""
             comp = Comparacion(c, r, nota=ajuste)
             if xbrl and (c.metrica, c.trimestre) in xbrl:
                 comp.xbrl = xbrl[(c.metrica, c.trimestre)]

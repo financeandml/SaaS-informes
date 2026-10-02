@@ -409,6 +409,25 @@ def _pista(valor_sec: float, cand: Candidato, c: Campo) -> str:
     return ""
 
 
+def _reexpresar_por_split(a: Adjunto, cand: Candidato, ajustes, por_accion: bool) -> Candidato:
+    """Lo leído en un documento presentado antes de un split, en la base de después (fallo [5]): el 10-Q de Netflix del
+    3T de 2025 imprime un BPA de 6,00 y la SEC, ya reexpresada tras el split 10:1, 0,60. Es el mismo dato: el documento
+    se reexpresa como la SEC (BPA ÷ razón, acciones × razón) y la nota de la evidencia lo dice. Sin fecha del documento
+    no se sabe si es anterior: se deja como está."""
+    if a.fecha is None or cand.porcentaje:
+        return cand
+    aplicables = [(fecha, razon) for fecha, razon, _ in ajustes if fecha > a.fecha]
+    if not aplicables:
+        return cand
+    from dataclasses import replace
+    factor = 1.0
+    for _, razon in aplicables:
+        factor *= razon
+    descripcion = " y ".join(f"split {razon:g}:1 del {fecha:%d/%m/%Y}" for fecha, razon in aplicables)
+    return replace(cand, valor=cand.valor / factor if por_accion else cand.valor * factor,
+                   referencia=(cand.referencia + "; " if cand.referencia else "") + f"reexpresado por el {descripcion}: el documento imprime {cand.crudo}")
+
+
 def _ordenar_evidencia(pares: Sequence[Tuple[Adjunto, Candidato]]) -> List[Tuple[Adjunto, Candidato]]:
     return sorted(pares, key=lambda ac: (PRIORIDAD.get(ac[0].tipo, 9), ac[1].pagina))
 
@@ -453,6 +472,51 @@ def _cargar_decisiones(ruta: Optional[Path]) -> Dict[Tuple[str, str], Decision]:
     return salida
 
 
+_IXBRL: Dict[str, object] = {}
+
+
+def _ixbrl_del_adjunto(a: Adjunto):
+    """El XBRL inline del mismo depósito que el PDF (`adjuntos/<T>/.sec/<mismo nombre>.html`), si se trajo de EDGAR."""
+    ruta = Path(a.ruta)
+    html = ruta.parent / ".sec" / (ruta.stem + ".html")
+    if str(html) not in _IXBRL:
+        from ..datos import ixbrl
+        try:
+            _IXBRL[str(html)] = ixbrl.leer(html.read_text(encoding="utf-8", errors="ignore"), str(html)) if html.exists() else None
+        except (OSError, ValueError):
+            _IXBRL[str(html)] = None
+    return _IXBRL[str(html)]
+
+
+def _concepto_propio(c: Campo, p: Periodo, hecho_sec: Hecho, pares: Sequence[Tuple[Adjunto, Candidato]]):
+    """(adjunto, candidato, hecho iXBRL) si la línea del estado lleva un concepto propio de la compañía que es la misma
+    partida con otro alcance: su nombre contiene el concepto us-gaap y su valor es el que imprime el documento.
+
+    Apple etiqueta «Intangible assets, net» del balance como `aapl:IntangibleAssetsNetExcludingGoodwillNoncurrent`
+    (11.093 M: la parte no corriente) y `us-gaap:IntangibleAssetsNetExcludingGoodwill` (13.301 M) incluye la corriente.
+    `companyfacts` no sirve los conceptos propios: sin mirar el depósito, una diferencia de alcance era una discrepancia
+    abierta (fallo [4]).
+    """
+    concepto = ((hecho_sec.origen.concepto if hecho_sec.origen is not None else "") or "").split(":")[-1]
+    if not concepto:
+        return None
+    for a, cand in _ordenar_evidencia(pares):
+        doc = _ixbrl_del_adjunto(a)
+        if doc is None:
+            continue
+        for h in doc.hechos:
+            prefijo, _, local = h.concepto.partition(":")
+            if prefijo in ("us-gaap", "dei", "srt") or local == concepto or concepto not in local or h.contexto.dims:
+                continue
+            if h.contexto.fin != p.fin or h.contexto.instante != p.es_instante:
+                continue
+            if not p.es_instante and (h.contexto.inicio is None or abs((h.contexto.inicio - p.inicio).days) > 7):
+                continue
+            if _coincide(h.valor, cand, c):
+                return a, cand, h
+    return None
+
+
 def _contrastar_celda(c: Campo, p: Periodo, hecho_sec: Optional[Hecho],
                       pares: Sequence[Tuple[Adjunto, Candidato]],
                       decision: Optional[Decision], sin_sec: bool = False, moneda: str = "") -> Resultado:
@@ -464,7 +528,8 @@ def _contrastar_celda(c: Campo, p: Periodo, hecho_sec: Optional[Hecho],
         if coinciden:
             a, ev = _ordenar_evidencia(coinciden)[0]
             hecho = hecho_sec.con(contraste=Contraste.CONFIRMADO,
-                                  nota=(hecho_sec.nota + " · " if hecho_sec.nota else "") + f"contrastado con {a.nombre} pág. {ev.pagina}")
+                                  nota=(hecho_sec.nota + " · " if hecho_sec.nota else "") + f"contrastado con {a.nombre} pág. {ev.pagina}"
+                                  + (f" ({ev.referencia})" if "split" in ev.referencia else ""))
             return Resultado(c, p, hecho, hecho_sec, cands, [cand for _, cand in coinciden], ev)
         if pares:
             a, ev = _ordenar_evidencia(pares)[0]
@@ -477,6 +542,17 @@ def _contrastar_celda(c: Campo, p: Periodo, hecho_sec: Optional[Hecho],
                                  nota=f"discrepancia SEC {numero(hecho_sec.valor, 2)} / documento {numero(ev.valor, 2)} resuelta por {decision.analista} el {decision.fecha}: {decision.motivo}")
                 hecho = hecho.con(contraste=Contraste.CONFIRMADO)
                 return Resultado(c, p, hecho, hecho_sec, cands, [], ev, nota=hecho.nota)
+            propio = _concepto_propio(c, p, hecho_sec, pares)
+            if propio is not None:
+                ap, evp, hp = propio
+                origen = Origen(documento="SEC EDGAR", formulario={Tipo.K10: "10-K", Tipo.Q10: "10-Q"}.get(ap.tipo, ""),
+                                presentado=ap.fecha, concepto=hp.concepto, referencia=ap.nombre)
+                hecho = de_valor(c.clave, p, _normalizar(hp.valor, c), Capa.SEC, origen, unidad=c.unidad,
+                                 nota=f"la línea del estado es el concepto propio «{hp.concepto}» del XBRL del depósito; "
+                                      f"«{hecho_sec.origen.concepto}» da {numero(hecho_sec.valor / 1e6)} M con otro alcance · "
+                                      f"contrastado con {ap.nombre} pág. {evp.pagina}")
+                hecho = hecho.con(contraste=Contraste.CONFIRMADO)
+                return Resultado(c, p, hecho, hecho_sec, cands, [evp], evp, nota=hecho.nota)
             hecho = hecho_sec.con(contraste=Contraste.DISCREPANTE,
                                   nota=f"SEC {numero(hecho_sec.valor, 2)} frente a {lecturas}" + (f" · {pista}" if pista else ""))
             return Resultado(c, p, hecho, hecho_sec, cands, [], ev, nota=hecho.nota)
@@ -684,6 +760,8 @@ def contrastar(exp: Expediente, facts: Optional[dict], obtenido_en: Optional[dat
             # duración, no el día en que empezó el periodo. Comparar el periodo entero dejaba fuera todo lo leído a
             # una empresa de cierres por semanas, porque el comienzo calculado nunca es el que declara la SEC.
             pares = [(a, cand) for a, cand in cands if _mismo_periodo(cand.periodo, p)]
+            if ajustes and c.unidad in ("USD/acción", "acciones"):
+                pares = [(a, _reexpresar_por_split(a, cand, ajustes, c.unidad == "USD/acción")) for a, cand in pares]
             # El 4T no existe en la SEC: se deriva FY − 9M y se contrasta como derivado.
             # Solo para magnitudes aditivas: un BPA o una media de acciones no se
             # restan (y el 9M de 2025 está además sin reexpresar por el split).
