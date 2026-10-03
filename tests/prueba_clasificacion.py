@@ -123,6 +123,38 @@ class Clasificacion(unittest.TestCase):
         self.assertEqual(len(claves), 3, claves)
 
 
+class ComunicacionesDeBME(unittest.TestCase):
+    """Las comunicaciones cortas de un emisor español («Otra información relevante», «Información privilegiada»): el
+    avance de ventas de un semestre no son los estados del semestre, y una comunicación no es un documento desconocido."""
+    CARTA = ("www.emisor.com\nOTRA INFORMACIÓN RELEVANTE\nOurense, 30 de julio de 2026\nEmisor, S.A., en virtud de lo previsto en "
+             "el artículo 17 del Reglamento (UE) nº 596/2014 sobre abuso de mercado, pone en conocimiento la siguiente información.\n")
+
+    def test_el_avance_del_semestre_no_es_el_informe_semestral(self):
+        """Falla si una comunicación de una página que menciona «primer semestre» se toma por el informe semestral (las
+        cifras del semestre saldrían de un avance de ventas sin estados)."""
+        p1 = self.CARTA + "EMISOR ELEVA SU FACTURACIÓN UN 18,5% EN EL PRIMER SEMESTRE DE 2026, preliminar y no auditada."
+        c = clasificar(p1, "", p1, n_paginas=1)
+        self.assertIs(c["tipo"], Tipo.COMUNICACION, c)
+        self.assertEqual(c["fecha"], date(2026, 7, 30))
+        self.assertIsNone(c.get("periodo_fin"))
+
+    def test_la_comunicacion_sin_pistas_ya_no_es_desconocida(self):
+        """Falla si un acuerdo de junta o una operación de directivos comunicados a BME quedan «desconocidos» (aviso grave y
+        sin poder citarse)."""
+        p1 = self.CARTA + "Acuerdos de la Junta General Ordinaria de Accionistas celebrada el 22 de junio de 2026."
+        c = clasificar(p1, "", p1, n_paginas=3)
+        self.assertIs(c["tipo"], Tipo.COMUNICACION, c)
+        self.assertIn(Tipo.COMUNICACION, APARTADO_DE)
+        self.assertNotEqual(documentos.destino(Tipo.COMUNICACION), documentos.SIN_DESTINO)
+
+    def test_las_cuentas_remitidas_con_su_carta_siguen_siendo_cuentas(self):
+        """Falla si la regla nueva se queda con las cuentas anuales que el emisor remite a BME con la misma carta."""
+        p1 = self.CARTA + "- Cuentas anuales consolidadas del ejercicio 2025 junto con el informe de auditoría."
+        self.assertIs(clasificar(p1, "", p1, n_paginas=262)["tipo"], Tipo.CCAA)
+        p1 = self.CARTA + "- Información financiera del primer semestre de 2025."
+        self.assertIs(clasificar(p1, "", p1, n_paginas=128)["tipo"], Tipo.SEMESTRAL)
+
+
 class Tablas(unittest.TestCase):
     """Qué tabla de un documento son las cuentas y cuál no: una conciliación o un desglose tienen las mismas filas."""
 

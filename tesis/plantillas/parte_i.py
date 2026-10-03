@@ -14,7 +14,7 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Dict, List, Mapping, Optional, Sequence, Tuple
 
-from ..formato import Celda, fecha as f_fecha, numero, pct
+from ..formato import Celda, fecha as f_fecha, mln, numero, pct
 from ..rutas import CONFIG
 
 __all__ = ["ParteI", "construir", "HUECOS_MAX"]
@@ -97,17 +97,17 @@ def _modelo(d: ParteI, n, motor, autor: str) -> None:
               ("NOPAT", pr.nopat, "nopat"), ("D&A", pr.da, ""), ("Capex", pr.capex, ""), ("Δ fondo de maniobra", pr.dfm, ""),
               *((k.replace("_", " ").capitalize(), s, "") for k, s in pr.paquete.items()),
               (_rotulo_sbc(p), pr.sbc, "sbc"), ("FCFF", pr.fcff, "fcff"))
-    filas = [FilaCuadro(r, [_c(numero(x / 1e6), pr.formulas.get(clave, ""), "D") for x in serie], capa="D", destacada=r == "FCFF")
+    filas = [FilaCuadro(r, [_c(mln(x), pr.formulas.get(clave, ""), "D") for x in serie], capa="D", destacada=r == "FCFF")
              for r, serie, clave in lineas]
     filas.append(FilaCuadro("Factor de descuento", [_c(numero(x, 3), pr.formulas.get("factores", ""), "D") for x in pr.factores], capa="D"))
-    filas.append(FilaCuadro("Valor actual", [_c(numero(x / 1e6), pr.formulas.get("valor_actual", ""), "D") for x in pr.valor_actual], capa="D",
+    filas.append(FilaCuadro("Valor actual", [_c(mln(x), pr.formulas.get("valor_actual", ""), "D") for x in pr.valor_actual], capa="D",
                             destacada=True))
     d.cuadros["proyeccion"] = Cuadro(n.siguiente(), f"Proyección completa del escenario base (mln {lexico.moneda()})", columnas, filas,
                                      f"Fuente: motor de valoración (05 §3); año 1 por la fracción {numero(pr.fraccion_flujo, 3)} del ejercicio en curso (desde el último balance).",
                                      partible=True)
 
 
-def _citas(e, item) -> List[Tuple[str, str, str]]:
+def _citas(e, item, alias=None) -> List[Tuple[str, str, str]]:
     """(apartado, documento y página, texto original) de cada evidencia del analista: el literal solo va aquí y en el HTML."""
     salida: List[Tuple[str, str, str]] = []
 
@@ -124,11 +124,11 @@ def _citas(e, item) -> List[Tuple[str, str, str]]:
     for clave, apartado in _APARTADO.items():
         recorrer(e.datos.get(clave), apartado)
     if item is not None:
-        from ..datos.item1a import buscar
+        from ..datos.item1a import buscar, referencia
         for r in (e.valor("riesgos.top") or []):
             ep = buscar(item, (r.get("origen") or {}).get("epigrafe", "")) if (r.get("origen") or {}).get("epigrafe") else None
             if ep is not None:
-                salida.append(("24", f"10-K, Item 1A, pág. {ep.pagina}", ep.texto))
+                salida.append(("24", f"10-K, Item 1A, pág. {ep.pagina}" if not ep.documento else referencia(ep, alias), ep.texto))
     orden = {a: k for k, a in enumerate(["3", "4", "6", "7", "21", "22", "23", "24", "26"])}
     vistas, unicas = set(), []
     for fila in sorted(salida, key=lambda x: orden.get(x[0], 99)):
@@ -220,7 +220,7 @@ def construir(n, motor, pb, emisor, huecos: Sequence[str], excel: Optional[Tuple
         d.entradas += (f" · {len(lista_c)} confirmado{'s' if len(lista_c) != 1 else ''} desde una propuesta del sistema: "
                        + "; ".join(f"{rotulo} ({fuente})" for rotulo, fuente in lista_c))
     _fuentes(d, n, emisor, exp)
-    citas = _citas(e, getattr(pb, "item1a", None))
+    citas = _citas(e, getattr(pb, "item1a", None), getattr(pb, "alias", None))
     if citas:
         d.cuadros["citas"] = Cuadro(n.siguiente(), "Citas literales de las evidencias, por apartado", ["Documento", "Texto original"],
                                     [FilaCuadro(f"Apartado {a}", [_c(doc), _c(t)], capa="S") for a, doc, t in citas],

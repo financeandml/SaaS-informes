@@ -75,6 +75,15 @@ pasos:
       - {id: direccion.citas, tipo: evidencia, min: 2, max: 5, oblig: "si hay call", prop: "tarjetas de la transcripción"}
       # 29/09/2026 (fase B, y fallo 74 de la auditoría): lo que el parser no lee de una fuente oficial lo aporta el
       # analista con su cita (regla 12); solo cuenta si el sistema no lo leyó, y entonces sale en el cuadro con su cita
+      - id: perfil.segmentos_cifras
+        tipo: lista
+        oblig: "si el sistema no lee los segmentos (apartado 4; BME, sin XBRL)"
+        ayuda: "ingresos por línea de negocio y por geografía de la memoria de las cuentas, con la línea de la tabla citada"
+        campos:
+          - {id: linea, tipo: texto}
+          - {id: tipo, tipo: enum, valores: [segmento, geografia]}
+          - {id: valores, tipo: tabla, ayuda: "cifra por ejercicio: {FY2025: 12614292.34, FY2024: …}, cada una en el literal citado"}
+          - {id: evidencia, tipo: evidencia, min: 1}
       - id: gobierno.ejecutivos
         tipo: lista
         oblig: "si el sistema no los lee (apartado 6)"
@@ -240,6 +249,14 @@ pasos:
           - {id: metrica, tipo: enum, valores: [ebit, ebitda, ingresos]}
           - {id: multiplo, tipo: numero}
           - {id: justificacion, tipo: texto, palabras: "10-40"}
+          # 03/10/2026 (fallo 40): la métrica que el informe no tiene por segmento (EBIT o EBITDA de quien solo desglosa
+          # ingresos) la da el analista con su cita verificable (regla 12); sin ella, el segmento queda fuera con su motivo
+          - {id: valor, tipo: numero, oblig: "si la métrica no está en los segmentos del apartado 4"}
+          - {id: periodo, tipo: texto, oblig: false}
+          - {id: evidencia, tipo: evidencia, oblig: "si valor"}
+      - {id: sotp.costes_corporativos.valor, tipo: numero, oblig: false, nota: "costes anuales no repartidos entre segmentos"}
+      - {id: sotp.costes_corporativos.multiplo, tipo: numero, oblig: "si sotp.costes_corporativos.valor"}
+      - {id: sotp.costes_corporativos.evidencia, tipo: evidencia, oblig: "si sotp.costes_corporativos.valor"}
       - id: mult.objetivos
         tipo: lista
         oblig: false

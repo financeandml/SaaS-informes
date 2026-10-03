@@ -350,14 +350,12 @@ class Esquema(unittest.TestCase):
         texto = (RAIZ / "docs" / "spec" / "04_entradas.yaml").read_text(encoding="utf-8")
         self.assertIn("gobierno.manual", texto)
 
-    @falla(11, "el folio impreso «Apple Inc. | 2025 Form 10-K | 8» no se reconoce")
     def test_11_folio_de_pie_con_separadores(self):
         from tesis.datos import tablas_html
         # el folio impreso empieza en 3 (portada e índice sin él): si no se lee, sale el índice físico 1…8
         paginas = [f"texto de la página\nApple Inc. | 2025 Form 10-K | {k}" for k in range(3, 11)]
         self.assertEqual(tablas_html.folios_por_pagina(paginas), [str(k) for k in range(3, 11)])
 
-    @falla(36, "una referencia a un grupo del escenario pasa el paso 6 y rompe la plantilla")
     def test_36_driver_de_grupo(self):
         from tesis.entradas import Entradas, comprobar_paso6
         e = Entradas({"esc": {"pesimista": {"paquete": {"desfase_contenido": {"1": 3}}}},
@@ -366,7 +364,6 @@ class Esquema(unittest.TestCase):
         faltas = comprobar_paso6(e, {}, 0.9, lambda c: True)
         self.assertTrue(any("esc.pesimista.paquete" in f for f in faltas))
 
-    @falla(35, "la fila SOM por defecto lleva texto técnico")
     def test_35_som_por_defecto(self):
         from tesis.entradas import Entradas
         from tesis.plantillas import parte_e
@@ -386,7 +383,6 @@ class Esquema(unittest.TestCase):
         p = proponer._REGISTRO["wacc.erp"](proponer.Contexto("QCOM", date(2026, 9, 27), {}))
         self.assertEqual(getattr(p, "valor", None), 4.14)
 
-    @falla(76, "la rúbrica da por hechas cosas que no lo están (SOTP, hoja «Reverse DCF»)")
     def test_76_rubrica(self):
         import importlib.util
         import yaml
@@ -405,7 +401,6 @@ class Esquema(unittest.TestCase):
         import conftest
         self.assertIn("CLAUDE.md", conftest._foto_raiz())
 
-    @falla(40, "SOTP sin implementar (decisión 5: se implementa)")
     def test_40_sotp(self):
         from tesis.motor import sotp                                                 # noqa: F401
 
@@ -421,50 +416,41 @@ class Puerta(unittest.TestCase):
     def test_61_recuento_qcom(self):
         self.assertIn("3 bloqueos", " ".join(inf("QCOM").fila("Lista de comprobación", "0 discrepancias")))
 
-    @falla(30, "«Discrepancias: Ninguna» con una identidad que no cuadra")
     def test_30_identidades(self):
         for t in ("QCOM", "ORCL"):
             self.assertNotIn("Discrepancias\nNinguna.", inf(t).texto, t)
 
-    @falla(31, "catalizadores «2026-T4» no cuentan como fechados")
     def test_31_catalizadores(self):
         self.assertFalse(" ".join(inf("ORCL").fila("Lista de comprobación", "Al menos un catalizador")).count("0 catalizadores"))
         self.assertIn("3 catalizadores", " ".join(inf("QCOM").fila("Lista de comprobación", "Al menos un catalizador")))
 
-    @falla(32, "decisiones atribuidas al analista que no tomó")
     def test_32_atribuciones(self):
         self.assertNotIn("por decisión del analista (entradas, sotp.aplica", inf("ORCL").texto)
 
-    @falla(33, "lo confirmado sigue rotulado «propuesta»")
     def test_33_confirmado(self):
         for t in TICKERS:
             self.assertNotIn("propuesta: la confirma el analista", inf(t).fila("Ficha", "Empleados")[1], t)
 
-    @falla(34, "columna «Actual» de los KPI vacía teniendo el dato")
     def test_34_kpi_actual(self):
         for t in TICKERS:
             filas = inf(t).cuadro("Indicadores que se vigilan")[1:]
             self.assertTrue(any(f[1] not in ("—", "") for f in filas if len(f) > 1), t)
 
-    @falla(37, "el párrafo factual habla de dividendos a quien no los paga")
     def test_37_parrafo_factual(self):
         self.assertNotIn("entre dividendos y recompras", inf("NFLX").texto)
 
-    @falla(38, "RONIC sin publicar y la proyección completa no suma")
     def test_38_supuestos_visibles(self):
         for t in TICKERS:
             self.assertIn("RONIC", " ".join(" ".join(f) for f in inf(t).cuadro("Escenarios y valor razonable")), t)
         filas = [f[0].lower() for f in inf("NFLX").cuadro("Proyección completa") if f]
         self.assertTrue(any("contenido" in f for f in filas))
 
-    @falla(39, "Excel sin hoja «Reverse DCF» con fórmulas ni tercer valor terminal")
     def test_39_excel(self):
         from openpyxl import load_workbook
         wb = load_workbook(_E["base"]["QCOM"].with_suffix(".motor.xlsx"))
         formulas = [c for fila in wb["Reverse DCF"].iter_rows() for c in fila if isinstance(c.value, str) and c.value.startswith("=")]
         self.assertTrue(formulas)
 
-    @falla(41, "emitir.py devuelve 1 en borrador (decisión 4: 2)")
     def test_41_borrador_devuelve_2(self):
         for t in TICKERS:
             self.assertEqual(_E["codigo"][t], 2, t)
@@ -472,12 +458,10 @@ class Puerta(unittest.TestCase):
 
 @unittest.skipUnless(HAY, "sin fixtures de la auditoría o sin los adjuntos del analista")
 class Periodos(unittest.TestCase):
-    @falla(12, "etiquetas de trimestre de calendario («3T25») junto a las fiscales")
     def test_12_trimestres_fiscales(self):
         for t in TICKERS:
             self.assertFalse(re.findall(r"\b[1-4]T\d{2}\b", inf(t).texto), t)
 
-    @falla(47, "AAPL: marcas mal capitalizadas y RSU como «ejercicio de opciones»")
     def test_47_texto_aapl(self):
         self.assertNotIn("IPhone", inf("AAPL").texto)
         self.assertNotIn("Ejercicio de opciones", inf("AAPL").texto)

@@ -200,13 +200,22 @@ def declarar(ticker: str, fichero: str, clave: str) -> None:
     ruta.write_text(json.dumps(datos, ensure_ascii=False, indent=1), encoding="utf-8")
 
 
+def imprescindibles(ticker: str, filas: List[dict]) -> list:
+    """Los documentos sin los que la emisión no puede empezar, del catálogo del mercado del emisor (un emisor de BME no
+    tiene 10-K: lo suyo son las cuentas anuales)."""
+    from ..fuentes.emisores import es_bme
+    return catalogo.faltan(filas, solo_bloqueantes=True, mercado="bme" if es_bme(ticker) else "sec") if filas else []
+
+
 def arrancar_traida(ticker: str, claves: List[str]) -> dict:
     """Marca la traída en marcha y lanza el hilo que baja de EDGAR lo que falte. Una sola a la vez por ticker."""
     e = estado(ticker)
     with _CERROJO:
         if e.get("traida") and e["traida"]["estado"] == "trayendo":
             return e["traida"]
-        e["traida"] = {"estado": "trayendo", "mensaje": "pidiendo a EDGAR los documentos que faltan", "lineas": []}
+        from ..fuentes.emisores import es_bme
+        fuente = "la bolsa (BME)" if es_bme(ticker) else "EDGAR"
+        e["traida"] = {"estado": "trayendo", "mensaje": f"pidiendo a {fuente} los documentos que faltan", "lineas": []}
     threading.Thread(target=traer, args=(ticker, claves), daemon=True).start()
     return e["traida"]
 
@@ -483,7 +492,7 @@ def estado_emision(ticker: str) -> Optional[dict]:
     return {"estado": estado_actual, "codigo": codigo,
             "empezado": em["empezado"].strftime("%d/%m/%Y %H:%M:%S"), "registro": lineas[-80:], "orden": " ".join(Path(x).name if os.sep in x else x for x in em["orden"] if x != "-u"),
             "pdf": f"/informes/{ticker}/{pdf.name}" if pdf else None, "html": f"/informes/{ticker}/{pdf.with_suffix('.html').name}" if pdf and pdf.with_suffix(".html").exists() else None,
-            "borrador": codigo == 1 and pdf is not None}
+            "borrador": codigo == 2 and pdf is not None}     # emitir.py: 0 emitido · 2 borrador · 1 error
 
 
 def resumen_ticker(ticker: str) -> dict:
@@ -787,11 +796,11 @@ class _Manejador(BaseHTTPRequestHandler):
                 if not _rutas(t):
                     self._tragar(); self._json(400, {"error": "sin adjuntos: el informe necesita al menos el 10-K"}); return
                 filas = (estado(t)["adjuntos"] or {}).get("adjuntos") or []
-                imprescindibles = catalogo.faltan(filas, solo_bloqueantes=True) if filas else []
-                if imprescindibles:
+                faltan = imprescindibles(t, filas)
+                if faltan:
                     self._tragar()
-                    self._json(400, {"error": "falta " + " y ".join(f"«{d.titulo}»" for d in imprescindibles)
-                                              + ": " + " ".join(d.sin_el for d in imprescindibles)})
+                    self._json(400, {"error": "falta " + " y ".join(f"«{d.titulo}»" for d in faltan)
+                                              + ": " + " ".join(d.sin_el for d in faltan)})
                     return
                 self._json(200, emitir(t))
                 return

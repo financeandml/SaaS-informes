@@ -61,5 +61,16 @@ reproduce ninguno; batería completa y regresiones en verde.
   llamadas a nota «(3)(4)» en la Summary Compensation Table (AAPL 2025) [46]; el texto alternativo «LOGO» de las imágenes
   de la proxy fuera de cargos y fichas [50]; rótulo legible de los adjuntos en la web [68]. Y, de A7, el recuento de QCOM
   [61]. Contador: 52 de 78 sin marca (26 abiertos). Informe de control QCOM: sin cambios de cifras.
-- Siguiente: A8 (periodos fiscales y folios: 11, 12, 47).
+- A8 ☑ (03/10): folio impreso en un pie con separadores («Apple Inc. | 2025 Form 10-K | 8») [11]; los doce meses de
+  rentabilidad y múltiplos con el trimestre fiscal («2T FY26»), también en las identidades que no cuadran [12]; marcas que
+  empiezan en minúscula («iPhone») y el código M del Form 4 como «Ejercicio o conversión de derivados» (RSU) [47].
+- A7 ☑ salvo lo de A9–A11 (03/10): identidades contables que no cuadran listadas en el apartado 39, sin bloquear [30];
+  catalizadores «AAAA-Tn» fechados al cierre de su trimestre natural [31]; SOTP sin casilla del analista no se le
+  atribuye [32]; propuesta confirmada sin «propuesta» [33]; columna «Actual» de los KPI desde su hecho
+  (`checklist.kpi_hechos`) [34]; SOM por defecto sin texto técnico [35]; un grupo del escenario no es un disparador [36];
+  frase de retribución sin dividendos para quien no los paga [37]; RONIC en el cuadro de escenarios [38]; hoja «Reverse
+  DCF» con fórmulas y los tres valores terminales en cada escenario [39]; SOTP (`motor/sotp.py`, apartado 19) [40];
+  `emitir.py` 0 emitido · 2 borrador · 1 error [41]; rúbrica coherente con el SOTP [76]. Contador: 68 de 78 sin marca
+  (10 abiertos: 9, 51, 55, 56, 62, 63, 64, 65, 73, 74).
+- Siguiente: A9 (mercado secundario: 9, 51, 55, 62), A11 (avisos de las entradas: 63, 64, 65, 73) y [74] gobierno manual.
 

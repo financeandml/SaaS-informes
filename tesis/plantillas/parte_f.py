@@ -13,6 +13,7 @@ from . import lexico
 from dataclasses import dataclass, field
 from typing import Callable, Dict, List, Sequence
 
+from ..datos.item1a import referencia
 from ..entradas import Entradas, comprobar_paso6, verificar_cita
 from ..formato import Celda, fecha as f_fecha, numero, pct
 
@@ -39,6 +40,11 @@ class ParteF:
 
 def _c(texto: str, nota: str = "", clase: str = "valor", capa: str = "S") -> Celda:
     return Celda(texto, "", capa, clase, nota)
+
+
+def _origen_riesgos() -> str:
+    """De dónde salen los epígrafes de riesgo: el Item 1A en EE. UU.; en BME, el documento de incorporación."""
+    return "los factores de riesgo del documento de incorporación" if lexico.es_bme() else "el Item 1A del 10-K"
 
 
 def _alias(doc: str, alias) -> str:
@@ -95,7 +101,7 @@ def _riesgos(d: ParteF, n, e: Entradas, textos, umbral, item, alias) -> None:
         origen = r.get("origen") or {}
         ep = buscar(item, origen["epigrafe"]) if item is not None and origen.get("epigrafe") else None
         if ep is not None:
-            ref, literal = f"Item\xa01A, pág.\xa0{ep.pagina}", ep.texto
+            ref, literal = referencia(ep, alias), ep.texto
         else:
             evs = [ev for ev in origen.get("evidencia") or [] if verificar_cita(ev, textos, umbral)[0]]
             if not evs:
@@ -115,7 +121,7 @@ def _riesgos(d: ParteF, n, e: Entradas, textos, umbral, item, alias) -> None:
         filas.sort(key=lambda x: -x[0])
         d.cuadros["top"] = Cuadro(n.siguiente(), "Los cinco riesgos principales", ["Familia", "Prob.", "Impacto", "P\xa0×\xa0I", "Mitigante",
                                   "Señal temprana", "Origen"], [f for _, f in filas],
-                                  "Fuente: analista (probabilidad e impacto de 1 a 5); origen en el Item 1A del 10-K o en la evidencia citada.")
+                                  "Fuente: analista (probabilidad e impacto de 1 a 5); origen en " + _origen_riesgos() + " o en la evidencia citada.")
         d.grafico_matriz = graficos.matriz_riesgos(puntos)
     else:
         d.pendientes["top"] = "Pendiente del analista: los cinco riesgos principales con probabilidad, impacto, mitigante y señal (paso 6)."
@@ -141,11 +147,15 @@ def _riesgos(d: ParteF, n, e: Entradas, textos, umbral, item, alias) -> None:
     nota = (f"Clasificación del sistema por reglas: {certezas['alta']} por la cabecera del 10-K o por el analista, {certezas['media']} por una "
             f"palabra del epígrafe y {certezas['baja']} sin palabra clave (ejecución); corregible por el analista"
             + (f" ({corregidas} corregidas)." if corregidas else "."))
-    d.cuadros["familias"] = Cuadro(n.siguiente(), f"Riesgos del Item 1A por familia ({numero(total)} epígrafes)", ["Epígrafes", "Peso", "Páginas"],
-                                   filas, "Fuente: SEC EDGAR, Item 1A del 10-K; los epígrafes literales, en el HTML.", [nota])
+    documental = item.epigrafes[0].documento
+    nota = nota.replace("la cabecera del 10-K", "la cabecera del documento") if documental else nota
+    d.cuadros["familias"] = Cuadro(n.siguiente(), (f"Factores de riesgo por familia ({numero(total)} epígrafes)" if documental else
+                                                   f"Riesgos del Item 1A por familia ({numero(total)} epígrafes)"), ["Epígrafes", "Peso", "Páginas"],
+                                   filas, (f"Fuente: {_alias(documental, alias)}, sección «Factores de riesgo»; los epígrafes literales, en el PDF."
+                                           if documental else "Fuente: SEC EDGAR, Item 1A del 10-K; los epígrafes literales, en el HTML."), [nota])
 
 
-def _bajista(d: ParteF, n, e: Entradas, item, motor) -> None:
+def _bajista(d: ParteF, n, e: Entradas, item, motor, alias=None) -> None:
     from .informe import Cuadro, FilaCuadro
     from ..datos.item1a import buscar
     filas = []
@@ -168,11 +178,11 @@ def _bajista(d: ParteF, n, e: Entradas, item, motor) -> None:
         ep = buscar(item, p.get("riesgo_1a", "")) if item is not None else None
         if ep is None:                                  # la falta la da el paso 3 (entradas.comprobar_paso3)
             continue
-        filas.append(FilaCuadro(f"Pilar {k} · {p.get('titulo', '')}", [_c(p["riesgo_es"]), _c(f"Item\xa01A, pág.\xa0{ep.pagina}", ep.texto)],
+        filas.append(FilaCuadro(f"Pilar {k} · {p.get('titulo', '')}", [_c(p["riesgo_es"]), _c(referencia(ep, alias), ep.texto)],
                                 capa="S", formula=ep.texto))
     if filas:
         d.cuadros["pilares"] = Cuadro(n.siguiente(), "Riesgo de cada pilar", ["Riesgo", "Origen"], filas,
-                                      "Fuente: analista (apartado 3), con el epígrafe del Item 1A al que remite.")
+                                      "Fuente: analista (apartado 3), con el epígrafe de " + _origen_riesgos() + " al que remite.")
     else:
         d.pendientes["pilares"] = "Pendiente del analista: el riesgo de cada pilar del apartado 3, con su epígrafe del Item 1A."
     v = getattr(motor, "valoracion", None)
@@ -226,7 +236,7 @@ def construir(n, pb, motor, comparaciones: Sequence, hechos, trimestres: Sequenc
     d = ParteF()
     e, item = pb.entradas, getattr(pb, "item1a", None)
     _riesgos(d, n, e, pb.textos, umbral_cita, item, pb.alias)
-    _bajista(d, n, e, item, motor)
+    _bajista(d, n, e, item, motor, pb.alias)
     _historial(d, n, e, comparaciones, getattr(pb, "sorpresas", []), hechos, trimestres, etiqueta, umbral_fallo)
     from ..datos.item1a import buscar
     existe = (lambda t: item is not None and buscar(item, t) is not None)       # noqa: E731

@@ -261,6 +261,52 @@ class Qualcomm(_Informes):
         for corto, nombre in (("pes", "pesimista"), ("base", "base"), ("opt", "optimista")):
             self.assertAlmostEqual(x[f"valor_accion_{corto}"], v.resultados[nombre].v0, delta=0.01)
         self.assertAlmostEqual(x["po"], v.po, delta=0.01)
+        # [39] la hoja «Reverse DCF» calcula con fórmulas el crecimiento implícito del FCFF que da el motor (rejilla de 1 pp)
+        inv = self.motor.inverso
+        if inv is not None and inv.crecimiento_fcff is not None:
+            self.assertAlmostEqual(x["fcff_implicito"], inv.crecimiento_fcff, delta=0.005)
+
+
+class SumaDePartes(unittest.TestCase):
+    """[40] SOTP (05 §8, decisión 5 del analista): VE por segmento − costes corporativos capitalizados + puente."""
+
+    def _segmentos(self):
+        from tesis.datos.hechos import Capa, Origen, Periodo, de_valor
+        from tesis.datos.segmentos import Linea, Segmentos
+        fy = Periodo.anual(date(2025, 12, 31))
+        h = lambda v: de_valor("ingresos", fy, v, Capa.SEC, Origen(documento="10-K"))  # noqa: E731
+        return Segmentos(lineas=[Linea("segmento", "x:AMember", "Chips", True, valores={fy: h(30e9)}),
+                                 Linea("segmento", "x:BMember", "Licencias", True, valores={fy: h(6e9)})], periodos=[fy])
+
+    def test_valor_por_accion_y_frente_al_dcf(self):
+        """Falla si el SOTP no suma métrica × múltiplo por segmento, no resta los costes capitalizados o no usa el
+        puente y las acciones del DCF; o si toma una cifra del analista cuya cita no se encuentra."""
+        from types import SimpleNamespace
+        from tesis.motor import sotp
+        puente = SimpleNamespace(ajuste=-5e9, acciones=1e9)
+        cita = {"doc": "10-K", "pag": "80", "texto": "corporate costs"}
+        entradas = {"aplica": True, "segmentos": [
+            {"segmento": "Chips", "metrica": "ingresos", "multiplo": 3.0, "justificacion": "x"},
+            {"segmento": "Licencias", "metrica": "ebit", "multiplo": 12.0, "valor": 4e9, "evidencia": [cita], "justificacion": "y"}],
+            "costes_corporativos": {"valor": 1e9, "multiplo": 8.0, "evidencia": [cita]}}
+        s = sotp.calcular(entradas, self._segmentos(), puente, 100.0, lambda c: c is cita)
+        self.assertEqual(s.faltan, [])
+        self.assertAlmostEqual(s.ve, 30e9 * 3 + 4e9 * 12 - 1e9 * 8)
+        self.assertAlmostEqual(s.por_accion, (s.ve - 5e9) / 1e9)
+        self.assertAlmostEqual(s.frente_al_dcf, s.por_accion / 100.0 - 1)
+        # sin cita encontrada, la cifra del analista no vale y el segmento sale con su motivo
+        s = sotp.calcular(entradas, self._segmentos(), puente, 100.0, lambda c: False)
+        self.assertIsNone(s.por_accion)
+        self.assertTrue(any("Licencias" in f and "cita" in f for f in s.faltan), s.faltan)
+
+    def test_metrica_que_el_informe_no_tiene(self):
+        """Falla si el EBIT de un segmento que el informe solo desglosa por ingresos se inventa en vez de pedirse."""
+        from types import SimpleNamespace
+        from tesis.motor import sotp
+        s = sotp.calcular({"segmentos": [{"segmento": "Chips", "metrica": "ebit", "multiplo": 10.0}]}, self._segmentos(),
+                          SimpleNamespace(ajuste=0.0, acciones=1.0), None, lambda c: True)
+        self.assertIsNone(s.partes[0].ve)
+        self.assertIn("lo aporta el analista", s.partes[0].motivo)
 
 
 if __name__ == "__main__":

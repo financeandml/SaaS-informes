@@ -24,6 +24,8 @@ bme_cierre_ventana_dias: 21     # la última sesión con negociación ≤ fecha 
 biotech_ingresos_min_meur: 50   # regla 7 para emisores en EUR (BME 03/05): la misma cifra que la de USD, sin convertir (por confirmar por el analista)
 atipicos_iqr: 3
 comparables_antiguedad_max_meses: 15
+# un comparable de BME cuyas cuentas anuales son en su mayoría páginas sin capa de texto (escaneadas): sin OCR no se leen
+comparables_paginas_sin_texto_max: 0.5
 tolerancia_oi_yahoo_nasdaq: 0.02
 reexpresion_nota: 0.005
 form4_dias_presentacion_max: 10       # 28: un Form 4 se presenta en 2 días hábiles; con retrasos, hasta este margen
@@ -31,6 +33,8 @@ acciones_4t_derivadas_tolerancia: 0.001   # 03: 4T de acciones medias derivado d
 no_recurrente_min_ebit_ttm: 0.02        # A5 [23]: una partida no recurrente de los doce meses avisa desde este peso sobre el EBIT TTM
 pdf_vs_edgar_similitud_min: 0.98
 cita_similitud_min: 0.90
+# una comunicación a BME («otra información relevante») de hasta estas páginas no son unas cuentas ni un semestral
+comunicacion_bme_paginas_max: 10
 biotech_ingresos_min_musd: 50     # 05 §2: SIC 2834–2836 y 8731 por debajo de estos ingresos (mln USD) → bloqueo v1
 # 05 §2: comprobaciones de los paquetes sectoriales (avisos del motor; no bloquean)
 sector:
@@ -48,7 +52,14 @@ paginas_max: 150               # un PDF más largo es una maquetación desbordad
 # motor (05 §8)
 sensibilidad: {wacc_pp: [-1.0, -0.5, 0.0, 0.5, 1.0], g_pp: [-0.5, -0.25, 0.0, 0.25, 0.5]}
 reverse_rangos: {cagr: [-0.50, 1.00], margen: [-0.50, 0.95], fcff: [-0.50, 1.00]}
+# filas de la rejilla de la hoja «Reverse DCF» del Excel (el crecimiento implícito se interpola entre dos filas: 150 → 1 pp)
+reverse_excel_pasos: 150
 frase_variacion_estable: 0.005   # |variación| menor: «se mantuvieron» (06 §1)
 linter_tolerancia: 0.01          # 06 §2: una cifra del analista casa con un Hecho dentro de su redondeo impreso; si es redonda («15.000»), también dentro del 1 %
 frase_palabras_aviso: 40         # 02 › Estilo: frases ≤ 35 palabras; desde 40, aviso en la página interna de QA (no bloquea)
 parrafo_frases_max: 6            # 02 › Estilo: párrafos ≤ 6 frases; más, aviso (no bloquea)
+# decimales de las cifras en millones según los ingresos del último ejercicio del emisor (el primer tramo que cumple):
+# un emisor de 17 millones impreso sin decimales no se puede leer
+mln_decimales:
+  - {hasta: 100000000, decimales: 2}
+  - {hasta: 1000000000, decimales: 1}

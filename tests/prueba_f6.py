@@ -76,6 +76,14 @@ class Posicion(_Datos):
         del e.datos["pos"]["recomendacion_justificacion"]
         self.assertFalse(any(f.startswith("pos.recomendacion") for f in comprobar_paso8(e, HOY, rango, "Mantener", 0.10, 2.0)[0]))
 
+    def test_el_tipo_marginal_de_referencia_es_el_del_mercado_del_emisor(self):
+        """Falla si el asistente pide justificar el 25 % de un emisor español (el general del Impuesto sobre Sociedades) como
+        si la referencia fuera el 21 % federal de EE. UU.: la validación tiene que leer los supuestos con el mercado del emisor."""
+        datos = {"wacc": {"tipo_marginal": 25}, "esc": {"base": {"probabilidad": 100}}}
+        pide = lambda t: any(f.startswith("wacc.tipo_marginal") for f in asistente.validar(t, HOY, datos)[0][7])   # noqa: E731
+        self.assertFalse(pide("RDG.MC"))
+        self.assertTrue(pide("QCOM"))
+
     def test_tamano_frente_al_drawdown(self):
         e = Entradas({"pos": {"tamano_pct": 3, "drawdown_tolerado": 50}})
         faltas = " | ".join(comprobar_paso8(e, HOY, lambda d: None)[0])

@@ -52,12 +52,13 @@ def _miles(v: float, decimales: int) -> str:
     return ("−" if v < 0 and texto.strip("0.,") else "") + texto          # signo menos tipográfico (02)
 
 
-def _texto_hecho(h, unidad: str) -> Optional[str]:
-    """Lo que debería imprimirse para un hecho, según su estado y su unidad; None si no hay hecho."""
+def _texto_hecho(h, unidad: str, decimales_mln: int = 0) -> Optional[str]:
+    """Lo que debería imprimirse para un hecho, según su estado y su unidad; None si no hay hecho. `decimales_mln`: los
+    que el informe declara para sus millones (los de un emisor pequeño, `formato.fijar_escala`)."""
     if h is None:
         return "N/A"
     if h.estado is Estado.NA:
-        return "N/A"
+        return "n. s." if (h.motivo or "").startswith("no significativo") else "N/A"
     u = unidad or h.unidad
     if h.estado is Estado.CERO:
         return "0" if u not in ("%", "x") else ("0,0 %" if u == "%" else "0,0x")
@@ -70,7 +71,7 @@ def _texto_hecho(h, unidad: str) -> Optional[str]:
         return _miles(v, 2)
     if u == "empleados":
         return _miles(v, 0)
-    return _miles(v / 1e6, 0)
+    return _miles(v / 1e6, decimales_mln)
 
 
 def _texto_libro(valor, unidad: str, formato: str = "") -> Optional[str]:
@@ -179,7 +180,7 @@ def comprobar(inf, html: str, modelo=None) -> Revision:
             for celda, periodo in zip(f.celdas, f.periodos):
                 p = next((pp for (cc, pp) in inf.hechos if cc == clave and pp.clave == periodo), None)
                 h = inf.hechos.get((clave, p)) if p is not None else None
-                esperado = _texto_hecho(h, f.unidad)
+                esperado = _texto_hecho(h, f.unidad, getattr(inf, "decimales_mln", 0))
                 rev.comprobadas += 1
                 rev.por_cuadro[c.numero] = rev.por_cuadro.get(c.numero, 0) + 1
                 if esperado != celda.texto:
@@ -231,6 +232,11 @@ def comprobar(inf, html: str, modelo=None) -> Revision:
             rev.desacuerdos.append(f"cuadro {c.numero} «{c.titulo}» no aparece en el HTML")
             continue
         esperadas = [[f.rotulo] + [ce.texto for ce in f.celdas] for f in c.filas]
+        if getattr(getattr(inf, "emisor", None), "mercado", "sec") != "sec":
+            # el HTML de un emisor de BME nombra cada documento por su rótulo, no por su fichero (`render.rotular_documentos`)
+            from ..render import rotular_documentos
+            import html as _html
+            esperadas = [[_html.unescape(rotular_documentos(x, inf.expediente)) for x in fila] for fila in esperadas]
         if not c.filas:
             continue
         # el cuadro 1 sale dos veces (portada y apartado 2): el HTML trae las filas dos veces seguidas

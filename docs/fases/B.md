@@ -59,6 +59,26 @@ Growth) para contrastar datos.
 - B6 ☑ plantillas con el léxico del mercado (`plantillas/lexico.py`): moneda, bolsa, cuentas, rf y beta; sin columnas
   ni filas de lo que la compañía no publica; «No aplica» con motivo en 2 (Cuadro 2), 26 y 31–35.
 - B7 ☑ web: buscador de los dos mercados, «Traer de la fuente oficial» (EDGAR o BME), catálogo de documentos de BME.
-- Pendiente: B8 entradas de ejemplo de las tres empresas españolas; B9 los fallos de la auditoría del 27/09 que siguen
-  abiertos (plan A); segmentos por actividad de la memoria, operaciones de directivos de BME como cuadro, comparables de
-  BME en el apartado 22, documentos del Mercado Continuo (CNMV no responde: se adjuntan).
+- B10 ☑ (02/10/2026) primera emisión real de un emisor de BME (Redegal, RDG.MC) desde un clon limpio, EMITIDO con 0
+  bloqueos. Lo que destapó, corregido con su prueba: comunicaciones al mercado como tipo propio (`Tipo.COMUNICACION`,
+  el avance de un semestre ya no pasa por informe semestral) y traídas de BME (avances, juntas, ampliaciones, consejo,
+  directivos); factores de riesgo del documento de incorporación como Item 1A (`item1a.leer_documento`); segmentos y
+  geografía de la memoria aportados por el analista con su cita (`perfil.segmentos_cifras`, `segmentos.del_analista`);
+  operaciones de directivos de las notificaciones MAR (`datos/directivos_bme.py`, apartado 34); millones con decimales
+  según el tamaño del emisor (`umbrales.mln_decimales`); «n. s.» en ratios sin sentido (ROE con patrimonio negativo,
+  deuda neta / EBITDA negativo); rótulo partido en dos líneas en los estados del PGC y rótulo truncado con la capa de
+  texto entrelazada; recompra del PGC; deuda neta / EBITDA vigente del ejercicio en emisores semestrales; «Emitir» con el
+  catálogo del mercado del emisor; precio de entrada y tipo marginal con la bolsa y el mercado del emisor; documentos
+  rotulados por lo que son en el HTML; hitos de BME en el apartado 2; cuadros de gobierno sin columnas de EE. UU.
+- B10 (03/10/2026) cierre de Redegal: comparables de BME en los apartados 20 y 22 (`motor/comparables._uno_bme`: cuentas
+  oficiales de la bolsa contrastadas como las del emisor y cierre oficial de BME; fuera de medianas, con su motivo, quien
+  publica cuentas escaneadas sin capa de texto, solo individuales o sin cifras legibles recientes); cuadro 22 en la moneda
+  del informe; `bme.traer` cuenta ejercicios distintos y nada posterior a la fecha del informe; partidas del PGC que salían
+  N/A teniéndolas el documento (inmovilizado material e intangible, autocartera, emisión y devolución de deudas como suma de
+  sus filas, fondo de comercio, BPA de unas NIIF en castellano); lo que ningún estado imprime es «no es una línea de sus
+  cuentas» y sale del cuadro, solo si el lector vio ese estado; lo que la auditoría de datos despeja (total del pasivo)
+  llega al cuadro; balance sin columnas de fechas sin balance ni repetidas; PER de quien no publica BPA.
+- Límite conocido: las cuentas escaneadas (Making Science, Altia, el 2025 de Seresco) no se leen sin OCR, que es una
+  dependencia nueva (regla 15): hoy esos comparables salen excluidos con su motivo y Redegal queda sin medianas de BME.
+- Pendiente: B8 entradas de ejemplo de Bytetravel y Treelogic (las de Redegal, en `datos-tesis/entradas/RDG.MC/`); B9 los
+  fallos de la auditoría del 27/09 que siguen abiertos (plan A); OCR de las cuentas escaneadas de BME (pide dependencia); documentos del Mercado Continuo (CNMV no responde: se adjuntan).

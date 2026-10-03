@@ -101,8 +101,9 @@ def _mercado(d: ParteE, n, e: Entradas, textos, umbral, alias, ingresos, fy: str
     if not soms and ingresos is not None:
         d.som_por_defecto = True
         filas.append(FilaCuadro(f"Ingresos del ejercicio {fy} (SOM por defecto)", [
-            _c("SOM"), _c(fy), _c(_cifra(ingresos / 1e6, f"millones {lexico.moneda()}", True), "hecho verificado de la sección C", capa="H"),
-            _c("ingresos verificados"), _c(f"{lexico.cuentas()}, sección C" if lexico.es_bme() else "SEC (companyfacts), sección C")], capa="H"))
+            # sin texto técnico en el cuerpo (fallo [35]): de dónde salen los ingresos, dicho como lo dice el apartado 8
+            _c("SOM"), _c(fy), _c(_cifra(ingresos / 1e6, f"millones {lexico.moneda()}", True), "ingresos del estado de resultados (apartado 8)", capa="H"),
+            _c("ingresos publicados"), _c(f"estado de resultados del ejercicio {fy} (apartado 8)")], capa="H"))
     sams = [c for c, _ in cifras if c.get("clase") == "SAM" and cuota_implicita(1.0, c) is not None]
     # el SAM del año más cercano al de los ingresos
     sam = min(sams, key=lambda c: abs(int(c.get("anio") or 0) - anio)) if sams else None
@@ -111,7 +112,7 @@ def _mercado(d: ParteE, n, e: Entradas, textos, umbral, alias, ingresos, fy: str
         filas.append(FilaCuadro("Cuota implícita (ingresos / SAM)", [
             _c(""), _c(f"{fy} / {sam.get('anio')}"), _c(pct(d.cuota), f"{_cifra(ingresos / 1e6, 'millones ' + lexico.moneda())} / "
                                                        f"{_cifra(sam['valor'], sam.get('unidad', ''))}", capa="D"),
-            _c("cálculo del sistema"), _c(f"ingresos {fy} (SEC) / SAM del analista")], capa="D", destacada=True,
+            _c("cálculo del sistema"), _c(f"ingresos {fy} (apartado 8) / SAM del analista")], capa="D", destacada=True,
             formula="Ingresos verificados del último ejercicio / SAM"))
     d.cuadros["mercado"] = Cuadro(n.siguiente(), "Tamaño de mercado: TAM, SAM y SOM", ["Clase", "Año", "Cifra", "Método", "Fuente"],
                                   filas, f"Fuente: analista, con cita verificada en el documento y la página; ingresos {lexico.de_las_cuentas()}.")
@@ -184,27 +185,34 @@ def _comparables(d: ParteE, n, motor, hechos, anuales, etiqueta, nombre: str, ti
         def celda(v, fmt, motivo):
             return _c(fmt(v), nota, capa="H") if v is not None else Celda("N/A", "", "", "na", motivo)
         return FilaCuadro(rot, [_c(ej, nota, capa="H"), celda(cap, lambda x: numero(x / 1e6), "sin precio o acciones"),
-                                celda(ing_, lambda x: numero(x / 1e6), "sin ingresos anuales en la SEC"),
-                                celda(crec, pct, "sin dos ejercicios de ingresos"), celda(margen, pct, "sin EBIT anual en la SEC")],
+                                celda(ing_, lambda x: numero(x / 1e6), "sin ingresos anuales publicados"),
+                                celda(crec, pct, "sin dos ejercicios de ingresos"), celda(margen, pct, "sin EBIT anual publicado")],
                           capa="H", destacada=destacada)
     fp = getattr(motor, "fecha_precio", None)
+    # una sola moneda por columna, la del informe: sin tipo de cambio, sumar tamaños en dos monedas sería inventarlos
+    moneda = lexico.moneda()
     filas = [fila(f"{nombre} ({ticker})", propia["cap"], propia["ej"], propia["ing"], propia["crec"], propia["margen"],
-                  f"SEC (companyfacts); cierre oficial de Nasdaq del {f_fecha(fp)}", destacada=True)]
+                  f"{lexico.de_las_cuentas()}; cierre oficial de {lexico.bolsa()} del {f_fecha(fp)}", destacada=True)]
     puntos = [(ticker, propia["crec"], propia["margen"], True)] if propia["crec"] is not None and propia["margen"] is not None else []
-    fuera = []
+    fuera, fuentes = [], []
     for c in comps:
-        if c.moneda and c.moneda != "USD":
+        if c.moneda and c.moneda != moneda:
             fuera.append(f"{c.ticker} ({c.moneda})")
             continue
+        fuente_c = getattr(c, "fuente", "") or "SEC (companyfacts); cierre oficial de Nasdaq"
+        fuentes.append(fuente_c)
         filas.append(fila(f"{nombre_presentacion('', c.nombre)} ({c.ticker})" if c.nombre else c.ticker, c.capitalizacion, c.ejercicio, c.ingresos,
-                          c.crecimiento, c.margen_ebit, f"SEC (companyfacts); cierre de Nasdaq del {f_fecha(c.fecha_precio)}"))
+                          c.crecimiento, c.margen_ebit, f"{fuente_c} del {f_fecha(c.fecha_precio)}" if c.fecha_precio else fuente_c))
         if c.crecimiento is not None and c.margen_ebit is not None:
             puntos.append((c.ticker, c.crecimiento, c.margen_ebit, False))
-    notas = [f"Fuera del cuadro por presentar en otra moneda (v1: solo USD): {', '.join(fuera)}."] if fuera else []
+    notas = [f"Fuera del cuadro por presentar en otra moneda que la del informe ({moneda}; sin tipo de cambio no se comparan "
+             f"tamaños): {', '.join(fuera)}."] if fuera else []
+    origen = ("SEC EDGAR (10-K y 10-Q de cada emisor) y cierres oficiales de Nasdaq" if not fuentes or all(f.startswith("SEC") for f in fuentes)
+              else "cuentas oficiales de cada emisor publicadas en su bolsa y cierres oficiales de esa bolsa")
     d.cuadros["comparables"] = Cuadro(
         n.siguiente(), "Comparables: tamaño, crecimiento y margen del último ejercicio",
-        ["Cierre del ejercicio", "Capitalización (mill. USD)", "Ingresos (mill. USD)", "Crecimiento de ingresos", "Margen EBIT"],
-        filas, "Fuente: SEC EDGAR (10-K y 10-Q de cada emisor) y cierres oficiales de Nasdaq; lista de comparables del analista.", notas)
+        ["Cierre del ejercicio", f"Capitalización (mill. {moneda})", f"Ingresos (mill. {moneda})", "Crecimiento de ingresos", "Margen EBIT"],
+        filas, f"Fuente: {origen}; lista de comparables del analista.", notas)
     d.grafico = graficos.dispersion(puntos, "Crecimiento de ingresos (último ejercicio)", "Margen EBIT")
     d.grafico_fuente = f"Los mismos datos que el cuadro {d.cuadros['comparables'].numero}."
 

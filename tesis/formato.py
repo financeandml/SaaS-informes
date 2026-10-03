@@ -30,8 +30,26 @@ def numero(v: float, decimales: int = 0) -> str:
     return s
 
 
-def mln(v: float, decimales: int = 0) -> str:
-    return numero(v / 1e6, decimales)
+# decimales de las cifras en millones del informe en curso: los del tamaño del emisor (`fijar_escala`)
+_DECIMALES_MLN = 0
+
+
+def fijar_escala(ingresos: Optional[float]) -> int:
+    """Los decimales con que se imprimen los millones según los ingresos del último ejercicio del emisor
+    (`config/umbrales.yaml › mln_decimales`): en uno de 17 millones, «10,31» y no «10». None vuelve a cero."""
+    global _DECIMALES_MLN
+    _DECIMALES_MLN = 0
+    if ingresos is not None:
+        from .umbrales import umbral
+        for tramo in umbral("mln_decimales") or []:
+            if abs(ingresos) < float(tramo["hasta"]):
+                _DECIMALES_MLN = int(tramo["decimales"])
+                break
+    return _DECIMALES_MLN
+
+
+def mln(v: float, decimales: Optional[int] = None) -> str:
+    return numero(v / 1e6, _DECIMALES_MLN if decimales is None else decimales)
 
 
 def pct(v: float, decimales: int = 1) -> str:
@@ -61,7 +79,9 @@ def celda(h: Optional[Hecho], unidad: Optional[str] = None) -> Celda:
     if h is None:
         return Celda("N/A", "", "", "na", "sin hecho para esta celda")
     if h.estado is Estado.NA:
-        return Celda("N/A", h.contraste.value if h.contraste is not Contraste.SIN_CONTRASTAR else "", h.capa.value, "na", h.motivo)
+        # hay dato, pero la ratio no significa nada (un denominador negativo): «n. s.», no un hueco
+        texto = "n. s." if h.motivo.startswith("no significativo") else "N/A"
+        return Celda(texto, h.contraste.value if h.contraste is not Contraste.SIN_CONTRASTAR else "", h.capa.value, "na", h.motivo)
     u = unidad or h.unidad
     v = h.valor * _SIGNO.get(h.campo, 1)
     if h.estado is Estado.CERO:

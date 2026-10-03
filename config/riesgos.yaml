@@ -1,6 +1,6 @@
 # Familias de los riesgos del Item 1A (01 › 24): reglas del sistema, corregibles por el analista (`riesgos.familias`).
 # Primero la cabecera del 10-K («Risks Related to …»); si es genérica, la primera palabra del epígrafe que case, en el
-# orden de abajo. Palabras en inglés, como los documentos; sin nombres de emisores (CLAUDE.md, regla 3). Nada de
+# orden de abajo. Palabras en el idioma de los documentos (inglés en EDGAR, español en BME); sin nombres de emisores (CLAUDE.md, regla 3). Nada de
 # «financial condition» o «results of operations»: casi todos los epígrafes los dicen.
 por_cabecera:
   regulat: regulatorio
@@ -18,8 +18,21 @@ por_cabecera:
   common stock: financiero
   our stock: financiero
   securities: financiero
+  financiaci: financiero
+  acciones: financiero
+  normativ: regulatorio
+  regulaci: regulatorio
+  fiscal: regulatorio
+  tributari: regulatorio
+  competenci: competitivo
 por_palabra:
-  regulatorio: [regulat, law, legal, litigation, government, tax, privacy, sanction, export control, antitrust, investigation, tariff, trade polic, compliance]
-  financiero: [indebtedness, debt, liquidity, stock price, price of our common stock, dilution, interest rate, foreign currency, exchange rate, impairment, credit rating, dividend, capital return]
-  competitivo: [compet, market share, pricing, vertically integrat, consolidation, substitute, alternative technolog, new entrant]
+  regulatorio: [regulat, law, legal, litigation, government, tax, privacy, sanction, export control, antitrust, investigation, tariff, trade polic, compliance, normativ, tributari, fiscal, laboral, judicial, protección de datos]
+  financiero: [indebtedness, debt, liquidity, stock price, price of our common stock, dilution, interest rate, foreign currency, exchange rate, impairment, credit rating, dividend, capital return, financiaci, endeudamiento, tipos de interés, tipo de cambio, avales, liquidez, empresa en funcionamiento, crédito]
+  competitivo: [compet, market share, pricing, vertically integrat, consolidation, substitute, alternative technolog, new entrant, fortalezas competitivas]
 defecto: ejecucion
+# BME: la sección del documento de incorporación que hace las veces del Item 1A (`item1a.leer_documento`)
+documental:
+  seccion: "factores de riesgo"
+  epigrafe: "^Riesgos?\\b"
+  epigrafe_max_lineas: 3
+  epigrafe_max_caracteres: 300

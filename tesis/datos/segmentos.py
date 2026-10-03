@@ -18,7 +18,7 @@ from . import ixbrl
 from .. import rotulos
 from .hechos import Capa, Hecho, Origen, Periodo, de_valor, derivar, na
 
-__all__ = ["Linea", "Segmentos", "construir", "desde_documentos"]
+__all__ = ["Linea", "Segmentos", "construir", "desde_documentos", "del_analista"]
 
 INGRESOS = ("RevenueFromContractWithCustomerExcludingAssessedTax", "Revenues", "RevenueFromContractWithCustomerIncludingAssessedTax")
 SEGMENTO, PRODUCTO, GEOGRAFIA, CONSOLIDACION = ("StatementBusinessSegmentsAxis", "ProductOrServiceAxis",
@@ -346,3 +346,70 @@ def _etiquetas_del_deposito(d) -> Dict[str, str]:
         return ixbrl.etiquetas(sec.descargar_texto(f"{base}/{nombre}")[0])
     except (RuntimeError, sec.SinContacto, KeyError):
         return {}
+
+
+def del_analista(lista, anuales, consolidado: Mapping[Periodo, Hecho], textos: Mapping[str, str], umbral: float,
+                 moneda: str) -> Segmentos:
+    """Ingresos por línea de negocio y geografía que el analista copia de la memoria de las cuentas de un emisor sin XBRL
+    (BME), con su cita (regla 12: mejor pedir que inventar). Cada línea vale solo si su cita se verifica en la página que
+    dice y cada cifra está en el literal citado; `valores` va por clave de ejercicio («FY2025»). Se cuadra como el XBRL:
+    las líneas de cada tipo suman la cifra de negocios consolidada."""
+    import re
+    from ..entradas import verificar_cita
+    from .hechos import Certeza
+    s = Segmentos()
+    por_clave = {p.clave: p for p in anuales}
+    usados = set()
+    for k, x in enumerate(lista or [], 1):
+        nombre, tipo = str(x.get("linea") or "").strip(), x.get("tipo")
+        evs = x.get("evidencia") or []
+        if not nombre or tipo not in ("segmento", "geografia") or not evs:
+            s.faltan[f"línea {k}"] = "nombre, tipo (segmento o geografía) y cita obligatorios"
+            continue
+        # una cita por fila de la tabla (un ejercicio cada una, si la memoria los da en filas distintas): vale la que se verifica
+        buenas = []
+        for ev in evs:
+            ok, motivo = verificar_cita(ev, textos, umbral)
+            if ok:
+                buenas.append(ev)
+            else:
+                s.faltan[f"{nombre} · cita"] = f"cita sin verificar: {motivo}"
+        if not buenas:
+            continue
+
+        def origen_de(ev) -> Origen:
+            pagina = int(str(ev.get("pag"))) if str(ev.get("pag") or "").isdigit() else None
+            return Origen(documento=str(ev.get("doc", "")), formulario="memoria de las cuentas (analista, paso 4)", pagina=pagina)
+        linea = Linea(tipo=tipo, miembro=nombre, rotulo=nombre, traducido=True)
+        for clave, valor in (x.get("valores") or {}).items():
+            p = por_clave.get(clave)
+            if p is None or not isinstance(valor, (int, float)):
+                s.faltan[f"{nombre} {clave}"] = "ejercicio fuera del informe o cifra no numérica"
+                continue
+            buscadas = {re.sub(r"\D", "", f"{float(valor):.2f}"), re.sub(r"\D", "", f"{round(valor):d}")}
+            ev = next((e for e in buenas if any(b in re.sub(r"\D", "", str(e.get("texto", ""))) for b in buscadas)), None)
+            if ev is None:
+                s.faltan[f"{nombre} {clave}"] = "la cifra no está en el literal citado"
+                continue
+            origen = origen_de(ev)
+            linea.valores[p] = de_valor("ingresos", p, float(valor), Capa.DOCUMENTO, origen, unidad=moneda,
+                                        certeza=Certeza.ALTA, nota="cifra de la memoria aportada por el analista con su cita")
+            usados.add(p)
+        if linea.valores:
+            s.lineas.append(linea)
+            s.origenes.setdefault(origen.documento, origen)
+    s.periodos = sorted(usados)
+    s.consolidado = {p: consolidado[p] for p in s.periodos if p in consolidado}
+    for tipo, rotulo in (("segmento", "las líneas de negocio"), ("geografia", "las geografías")):
+        lineas = s.de_tipo(tipo)
+        for p in s.periodos:
+            total = s.consolidado.get(p)
+            partes = [l.valores[p].valor for l in lineas if p in l.valores]
+            if not lineas or total is None or not total.hay_dato or len(partes) < len(lineas):
+                continue
+            dif = sum(partes) - total.valor
+            s.cuadres.append(f"{p.clave}: {rotulo} suman la cifra de negocios" if abs(dif) <= TOLERANCIA * abs(total.valor)
+                             else f"{p.clave}: {rotulo} no suman la cifra de negocios (diferencia {dif:,.0f} {moneda})".replace(",", "."))
+    if not s.lineas:
+        s.faltan.setdefault("segmentos", "el analista no ha aportado los ingresos por línea de negocio con su cita (paso 4)")
+    return s

@@ -26,7 +26,7 @@ partes:
   E: {titulo: "Mercado objetivo y posicionamiento competitivo"}
   F: {titulo: "Riesgos y diligencia debida"}
   G: {titulo: "Tesis de inversión y gestión de la posición", subtitulo: "lo rellena el analista (formulario de posición)"}
-  H: {titulo: "Opciones, derivados y posicionamiento institucional", subtitulo: "bolsa (Nasdaq) y, para la volatilidad implícita, Yahoo Finance"}
+  H: {titulo: "Opciones, derivados y posicionamiento institucional", subtitulo: "bolsa del emisor y, para la volatilidad implícita, Yahoo Finance"}
   I: {titulo: "Apéndices y herramientas"}
 
 portada:
