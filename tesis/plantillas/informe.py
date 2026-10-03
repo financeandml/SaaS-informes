@@ -19,7 +19,7 @@ Nunca un texto de relleno.
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from datetime import date, timedelta
 from pathlib import Path
 from typing import Dict, List, Optional, Sequence, Tuple, Set
@@ -166,6 +166,7 @@ class Informe:
     periodos_trimestres: List[Periodo]
     # secciones D–I y evidencia visual (17/09/2026)
     indice: List[Seccion] = field(default_factory=list)
+    identidades: List[str] = field(default_factory=list)          # identidades contables que no cuadran (no bloquean)
     numeros: Dict[str, int] = field(default_factory=dict)          # clave del apartado («30») → número impreso
     titulos: Dict[str, str] = field(default_factory=dict)          # clave del apartado → título de `01_indice.yaml`
     evidencias: Dict[str, List[Recorte]] = field(default_factory=dict)   # por apartado (ficha, gobierno, guidance, regiones…)
@@ -803,6 +804,19 @@ def _titulo(indice: List[Seccion], numero: int) -> str:
     return next(nombre for s in indice for n, nombre in s.apartados if n == numero)
 
 
+def _sotp(motor, parte_b, etiqueta):
+    """La suma de partes del motor (apartado 19) si el analista la plantea; None si no."""
+    v = getattr(motor, "valoracion", None)
+    if v is None or parte_b is None or not v.parametros.sotp.get("aplica"):
+        return None
+    from ..entradas import verificar_cita
+    from ..motor import sotp as sotp_mod
+    from ..umbrales import umbral as _umbral
+    umbral = float(_umbral("cita_similitud_min"))
+    return sotp_mod.calcular(v.parametros.sotp, parte_b.segmentos, v.puente, v.base.v0,
+                             lambda cita: verificar_cita(cita, parte_b.textos, umbral)[0], etiqueta)
+
+
 def _segmento_unico(exp: Expediente) -> Optional[Cita]:
     """El 10-K dice cuántos segmentos operativos hay; con uno solo, la SOTP no aplica y se cita por qué."""
     import re
@@ -905,6 +919,16 @@ def construir(ticker: str, hoy: date, emisor: Emisor, exp: Expediente, tab: Tabl
             if patron in titulo.upper():
                 cuadro.recortes.append(rec)
     discrepancias = [f"{r.campo.rotulo} {r.periodo.clave}: {r.nota}" for r in tab.resultados if r.hecho.contraste is Contraste.DISCREPANTE]
+    # las identidades contables que no cuadran entre cifras publicadas se dicen junto a las discrepancias (fallo [30]):
+    # cada cifra coincide con su fuente y aun así el estado no cierra. No bloquean (la cifra está publicada tal cual; la
+    # diferencia suele ser una partida que el informe no lleva, como las operaciones interrumpidas), pero no son «Ninguna»
+    por_clave = {p.clave: p for p in list(anuales) + list(trimestres) + list(instantes)}
+
+    def _rotular(c):
+        # el periodo por su rótulo del informe («2T FY26»), nunca por la clave interna (fallo [12])
+        p = por_clave.get(c.periodo)
+        return c.linea[2:].replace(f" · {c.periodo} · ", f" · {_etiqueta(p, anuales, tab)} · ", 1) if p is not None else c.linea[2:]
+    identidades = [f"Identidad que no cuadra: {_rotular(c)}" for c in aud.contradicciones]
     solo_sec = [f"{r.campo.rotulo} {r.periodo.clave}" for r in tab.resultados if r.hecho.contraste is Contraste.SOLO_SEC]
     huecos = [f"{r.campo.rotulo} {r.periodo.clave}: {r.hecho.motivo}" for r in tab.resultados if r.hecho.contraste is Contraste.HUECO]
     if parte_b is not None:
@@ -913,10 +937,15 @@ def construir(ticker: str, hoy: date, emisor: Emisor, exp: Expediente, tab: Tabl
         from ..datos.hechos import Origen as _Origen
         for clave in ("empleados", "fundacion"):
             v = parte_b.entradas.valor(f"perfil.{clave}")
-            if clave not in ficha.citas and isinstance(v, (int, float)) and not isinstance(v, bool):
+            if not isinstance(v, (int, float)) or isinstance(v, bool):
+                continue
+            if clave not in ficha.citas:
                 ficha.citas[clave] = Cita(campo=clave, texto="dato del analista", valor=float(v),
                                           origen=_Origen(documento="analista", formulario="paso 4 del asistente"))
                 ficha.faltan.pop(clave, None)
+            elif ficha.citas[clave].nota.startswith("propuesta") and abs(float(v) - (ficha.citas[clave].valor or 0)) < 0.5:
+                # la propuesta que el analista confirmó con el mismo valor ya no es una propuesta (fallo [33])
+                ficha.citas[clave] = replace(ficha.citas[clave], nota="confirmada por el analista (paso 4)")
         if (parte_b.entradas.valor("perfil.descripcion") or {}).get("texto"):
             ficha.faltan.pop("descripcion", None)
     faltan = [f"Ficha · {k}: {v}" for k, v in ficha.faltan.items()] + [f"Gobierno · {k}: {v}" for k, v in gobierno.faltan.items()] \
@@ -1004,7 +1033,8 @@ def construir(ticker: str, hoy: date, emisor: Emisor, exp: Expediente, tab: Tabl
         parte_d = parte_d_mod.construir(n, motor, lambda p: _etiqueta(p, anuales, tab), hechos, anuales,
                                         consenso=getattr(mercado, "consenso", None) if mercado is not None else getattr(motor, "consenso", None),
                                         libro=libro, recomendacion_analista=(str(parte_b.entradas.valor("pos.recomendacion") or "") if parte_b is not None else ""),
-                                        segmento_unico=_segmento_unico(exp) is not None, multiplos=multiplos)
+                                        segmento_unico=_segmento_unico(exp) is not None, multiplos=multiplos,
+                                        sotp=_sotp(motor, parte_b, lambda p: _etiqueta(p, anuales, tab)))
         if parte_d.cuadros.get("multiplos_sec") is not None:
             cuadros_dcf["multiplos_sec"] = parte_d.cuadros["multiplos_sec"]
     else:
@@ -1192,7 +1222,7 @@ def construir(ticker: str, hoy: date, emisor: Emisor, exp: Expediente, tab: Tabl
         accionistas=accionistas, filiales=filiales, ejecutivos=ejecutivos, retribucion=retribucion,
         citas_call=guidance.citas_call, proxima_presentacion=guidance.proxima_presentacion,
         resultados=resultados, balance=balance, flujo=flujo, rentabilidad=rentabilidad,
-        resumen_contraste=tab.resumen, discrepancias=discrepancias, solo_sec=solo_sec, huecos=huecos,
+        resumen_contraste=tab.resumen, discrepancias=discrepancias, identidades=identidades, solo_sec=solo_sec, huecos=huecos,
         avisos=[a.texto for a in exp.avisos] + tab.avisos + avisos_graficos + avisos_extra + avisos_mercado + avisos_estilo, fuentes=fuentes, faltan=faltan,
         periodos_anuales=anuales, periodos_trimestres=trimestres,
         indice=indice, numeros=numeros, titulos={clave: _titulo(indice, numero) for clave, numero in numeros.items()}, evidencias=evidencias, fotos_ejecutivos=fotos_ejecutivos, fotos_consejo=fotos_consejo,

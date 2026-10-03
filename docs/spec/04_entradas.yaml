@@ -249,6 +249,14 @@ pasos:
           - {id: metrica, tipo: enum, valores: [ebit, ebitda, ingresos]}
           - {id: multiplo, tipo: numero}
           - {id: justificacion, tipo: texto, palabras: "10-40"}
+          # 03/10/2026 (fallo 40): la métrica que el informe no tiene por segmento (EBIT o EBITDA de quien solo desglosa
+          # ingresos) la da el analista con su cita verificable (regla 12); sin ella, el segmento queda fuera con su motivo
+          - {id: valor, tipo: numero, oblig: "si la métrica no está en los segmentos del apartado 4"}
+          - {id: periodo, tipo: texto, oblig: false}
+          - {id: evidencia, tipo: evidencia, oblig: "si valor"}
+      - {id: sotp.costes_corporativos.valor, tipo: numero, oblig: false, nota: "costes anuales no repartidos entre segmentos"}
+      - {id: sotp.costes_corporativos.multiplo, tipo: numero, oblig: "si sotp.costes_corporativos.valor"}
+      - {id: sotp.costes_corporativos.evidencia, tipo: evidencia, oblig: "si sotp.costes_corporativos.valor"}
       - id: mult.objetivos
         tipo: lista
         oblig: false

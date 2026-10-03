@@ -34,3 +34,9 @@ caja_neta:
 retribucion:
   - "En el ejercicio {ejercicio} devolvió al accionista {importe} entre dividendos y recompras, el {pct_fcf} de su flujo de caja libre."
   - "La retribución al accionista del ejercicio {ejercicio}, entre dividendos y recompras, sumó {importe}: el {pct_fcf} del flujo de caja libre."
+retribucion_recompras:     # sin dividendo pagado en el ejercicio (cero publicado): no se habla de dividendos (fallo [37])
+  - "En el ejercicio {ejercicio} recompró acciones por {importe}, el {pct_fcf} de su flujo de caja libre, sin pagar dividendo."
+  - "Las recompras de acciones del ejercicio {ejercicio} sumaron {importe}, el {pct_fcf} del flujo de caja libre; no pagó dividendo."
+retribucion_dividendos:    # sin recompras en el ejercicio
+  - "En el ejercicio {ejercicio} pagó {importe} en dividendos, el {pct_fcf} de su flujo de caja libre, sin recomprar acciones."
+  - "Los dividendos del ejercicio {ejercicio} sumaron {importe}, el {pct_fcf} del flujo de caja libre; no recompró acciones."

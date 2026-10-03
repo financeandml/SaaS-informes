@@ -119,7 +119,11 @@ def _factual(hechos, periodos: Mapping, etiqueta: Callable, vigentes: Sequence, 
     if anuales:
         r, rf = _dato(hechos, "retribucion", anuales[-1]), _dato(hechos, "retribucion_sobre_fcf", anuales[-1])
         if r is not None and rf is not None:
-            salida.append((frase("2", "retribucion", {"ejercicio": etiqueta(anuales[-1]), "importe": _mln(r.valor), "pct_fcf": pct(rf.valor, 0)}), _cita(r)))
+            # si una de las dos vías es un cero publicado, la frase solo habla de la otra (fallo [37])
+            div, rec = _dato(hechos, "dividendos", anuales[-1]), _dato(hechos, "recompras", anuales[-1])
+            clave = ("retribucion_recompras" if div is not None and div.valor == 0 and rec is not None and rec.valor else
+                     "retribucion_dividendos" if rec is not None and rec.valor == 0 and div is not None and div.valor else "retribucion")
+            salida.append((frase("2", clave, {"ejercicio": etiqueta(anuales[-1]), "importe": _mln(r.valor), "pct_fcf": pct(rf.valor, 0)}), _cita(r)))
     return salida
 
 

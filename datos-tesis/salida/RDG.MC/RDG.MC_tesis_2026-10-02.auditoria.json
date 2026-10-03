@@ -2,7 +2,7 @@
  "ticker": "RDG.MC",
  "fecha": "2026-10-02",
  "emitido": "2026-10-02",
- "pdf_sha256": "84d3a9c35483d915609337d9a8d09d07fc8d26c254ea2a80f189d376e1b622e8",
+ "pdf_sha256": "239a499479113f80be578ed0d37435dba33abf363b513d6fb6ffb0d9c4937f0b",
  "entradas": {
   "fichero": "/home/user/SaaS-informes-limpio/datos-tesis/entradas/RDG.MC/2026-10-02/entradas.json",
   "prueba": false
@@ -399,7 +399,7 @@
   },
   {
    "pagina": 19,
-   "ocupado": 0.933,
+   "ocupado": 0.961,
    "fin_de_parte": true
   },
   {

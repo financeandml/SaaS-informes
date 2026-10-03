@@ -75,8 +75,11 @@ def _rotulo_sbc(p) -> str:
     return "SBC (informativa: ya en el margen EBIT)" if p.sbc_politica == "coste_de_caja" else "(+) SBC sumada al EBIT (diluye acciones)"
 
 
+METRICAS_SOTP = {"ingresos": "Ingresos", "ebit": "EBIT", "ebitda": "EBITDA"}
+
+
 def construir(n, m, etiqueta, hechos=None, anuales=None, consenso=None, libro: Optional[dict] = None,
-              recomendacion_analista: str = "", segmento_unico: bool = False, multiplos=None) -> ParteD:
+              recomendacion_analista: str = "", segmento_unico: bool = False, multiplos=None, sotp=None) -> ParteD:
     """`m`: motor.datos.Motor. `etiqueta(p)`: rótulo fiscal de un periodo. `libro`: {rango: valor} del Excel del analista."""
     from .informe import Cuadro, FilaCuadro
     from ..motor import excel
@@ -94,11 +97,16 @@ def construir(n, m, etiqueta, hechos=None, anuales=None, consenso=None, libro: O
     for nombre, r in v.resultados.items():
         filas.append(FilaCuadro(nombre.capitalize(), [
             _c(_pct(r.escenario.probabilidad, 0), capa="S"), _c(_pct(r.wacc, 2), "WACC + ajuste del escenario"),
-            _c(_pct(r.escenario.g, 2), capa="S"), _c(_usd(r.v0), "fondos propios / acciones diluidas"),
+            _c(_pct(r.escenario.g, 2), capa="S"),
+            # el RONIC del valor terminal es un supuesto visible (fallo [38]): el del analista o el de partida, y se dice
+            _c(_pct(r.ronic, 2) if r.ronic is not None else "—",
+               "WACC del escenario + diferencial de partida (umbrales)" if r.ronic_por_defecto else "analista (paso 7)",
+               capa="D" if r.ronic_por_defecto else "S"),
+            _c(_usd(r.v0), "fondos propios / acciones diluidas"),
             _c(_usd(r.vh), f"V₀ × (1 + Ke)^({h}/12) − dividendos esperados"), _c(_pct(r.peso_vt, 0), "valor actual del VT / EV")], capa="D"))
-    filas.append(FilaCuadro("Valor razonable ponderado", [_c("100 %"), _c(""), _c(""), _c(_usd(v.valor_razonable), "Σ p · V₀"),
+    filas.append(FilaCuadro("Valor razonable ponderado", [_c("100 %"), _c(""), _c(""), _c(""), _c(_usd(v.valor_razonable), "Σ p · V₀"),
                                                          _c(_usd(v.po), "Σ p · V_h = precio objetivo"), _c("")], capa="D", destacada=True))
-    d.cuadros["escenarios"] = Cuadro(n.siguiente(), "Escenarios y valor razonable", ["Probabilidad", "WACC", "g", "Valor hoy",
+    d.cuadros["escenarios"] = Cuadro(n.siguiente(), "Escenarios y valor razonable", ["Probabilidad", "WACC", "g", "RONIC", "Valor hoy",
                                      f"Valor a {h} meses", "Peso del VT"], filas,
                                      f"Fuente: motor de valoración (05) con las entradas del analista; precio: {precio_txt}.")
     # 12 · WACC
@@ -276,8 +284,32 @@ def construir(n, m, etiqueta, hechos=None, anuales=None, consenso=None, libro: O
                                       f"Fuente: motor (bisección en los rangos de la configuración de umbrales); precio: {precio_txt}.")
     # 19 · SOTP
     if not p.sotp.get("aplica"):
+        # solo es una decisión del analista si la tomó (fallo [32]): sin la casilla, no se le atribuye nada
         d.sotp = ("No aplica: la compañía declara un único segmento operativo." if segmento_unico else
-                  "No aplica por decisión del analista (entradas, sotp.aplica = no); el DCF consolidado rige.")
+                  "No aplica por decisión del analista (entradas, sotp.aplica = no); el DCF consolidado rige." if "aplica" in p.sotp else
+                  "No se calcula: el analista no ha planteado una suma de partes (paso 7, sotp.aplica sin rellenar); el DCF "
+                  "consolidado rige.")
+    elif sotp is not None and sotp.por_accion is not None:
+        from ..formato import mln
+        m_ = lexico.moneda()
+        filas = [FilaCuadro(x.segmento, [_c(f"{METRICAS_SOTP[x.metrica]} {x.periodo}".strip(), x.origen, capa="H"),
+                                         _c(f"{mln(x.valor_metrica)} M {m_}", x.origen, capa="H"),
+                                         _c(f"{numero(x.multiplo, 1)}x", x.justificacion, capa="S"),
+                                         _c(f"{mln(x.ve)} M {m_}", "métrica × múltiplo")], capa="S") for x in sotp.partes]
+        if sotp.costes_corporativos is not None and sotp.multiplo_costes is not None:
+            filas.append(FilaCuadro("Costes corporativos capitalizados", [
+                _c("costes no repartidos", sotp.costes_origen, capa="S"), _c(f"−{mln(sotp.costes_corporativos)} M {m_}", sotp.costes_origen, capa="S"),
+                _c(f"{numero(sotp.multiplo_costes, 1)}x", "analista", capa="S"), _c(f"−{mln(sotp.costes_capitalizados)} M {m_}", "costes × múltiplo")], capa="S"))
+        filas += [FilaCuadro("Valor de empresa (suma de partes)", [_c(""), _c(""), _c(""), _c(f"{mln(sotp.ve)} M {m_}", "Σ segmentos − costes corporativos")], destacada=True),
+                  FilaCuadro("Puente a los fondos propios", [_c(""), _c(""), _c(""), _c(f"{mln(sotp.ajuste_puente)} M {m_}", "el mismo puente que el DCF (cuadro del puente)")]),
+                  FilaCuadro("Valor por acción (SOTP)", [_c(""), _c(""), _c(""), _c(_usd(sotp.por_accion), "fondos propios / acciones diluidas del puente")], destacada=True),
+                  FilaCuadro("Frente al valor hoy del DCF (base)", [_c(""), _c(""), _c(""), _c(_pct(sotp.frente_al_dcf), f"SOTP / {_usd(sotp.dcf_v0)} − 1")])]
+        d.cuadros["sotp"] = Cuadro(n.siguiente(), "Suma de partes (SOTP)", ["Métrica", "Valor", "Múltiplo", "Valor de empresa"], filas,
+                                   "Fuente: segmentos del apartado 4 o cifras del analista con su cita; múltiplos y justificación del analista "
+                                   "(paso 7); puente y acciones del motor. El SOTP contrasta el DCF; el precio objetivo sigue siendo el del DCF.")
+    else:
+        d.sotp = "No se calcula: " + ("; ".join(sotp.faltan) if sotp is not None and sotp.faltan else "sin segmentos valorables") + \
+                 ". El DCF consolidado rige."
     # 20 · PO y margen de seguridad
     unicos = {f"Precio objetivo a {h} meses": "po", "Precio (cierre oficial)": "precio"}          # 06 §3.3
     filas = [FilaCuadro(rot, [_c(val, formula, hecho=unicos.get(rot, ""))], destacada=dest) for rot, val, formula, dest in (

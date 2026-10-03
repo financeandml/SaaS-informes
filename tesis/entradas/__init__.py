@@ -15,12 +15,12 @@ import json
 import re
 import unicodedata
 from dataclasses import dataclass, field
-from datetime import date
+from datetime import date, timedelta
 from difflib import SequenceMatcher
 from pathlib import Path
 from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
 
-__all__ = ["Entradas", "cargar", "normalizar", "verificar_cita", "comprobar_paso1", "comprobar_paso3", "comprobar_paso4", "comprobar_paso5", "comprobar_paso6", "comprobar_paso8", "palabras"]
+__all__ = ["Entradas", "cargar", "normalizar", "verificar_cita", "comprobar_paso1", "comprobar_paso3", "comprobar_paso4", "comprobar_paso5", "comprobar_paso6", "comprobar_paso8", "palabras", "fecha_catalizador"]
 
 
 @dataclass
@@ -56,6 +56,21 @@ def normalizar(texto: str) -> str:
     t = unicodedata.normalize("NFKC", texto)
     t = t.translate(str.maketrans({"“": '"', "”": '"', "‘": "'", "’": "'", "–": "-", "—": "-", " ": " ", "​": ""}))
     return " ".join(t.lower().split())
+
+
+def fecha_catalizador(texto) -> Optional[date]:
+    """La fecha de un catalizador: «AAAA-MM-DD» tal cual; «AAAA-Tn», el último día de ese trimestre natural (lo más tarde
+    que puede ocurrir: así cuenta como fechado sin adelantarlo, fallo [31]). Otra cosa, None."""
+    t = str(texto or "").strip()
+    try:
+        return date.fromisoformat(t)
+    except ValueError:
+        pass
+    m = re.fullmatch(r"(\d{4})-T([1-4])", t)
+    if not m:
+        return None
+    anio, trimestre = int(m.group(1)), int(m.group(2))
+    return date(anio, 12, 31) if trimestre == 4 else date(anio, 3 * trimestre + 1, 1) - timedelta(days=1)
 
 
 def palabras(texto: str) -> int:
@@ -269,8 +284,14 @@ def comprobar_paso6(e: Entradas, textos: Mapping[str, str], umbral: float, es_ep
         if not d.get("metrica") or not isinstance(d.get("umbral"), (int, float)) or not d.get("plazo"):
             faltas.append(f"{id_}: métrica, umbral numérico y plazo son obligatorios")
         driver = str(d.get("driver", ""))
-        if not driver.startswith("esc.pesimista.") or e.valor(driver) is None:
+        valor = e.valor(driver)
+        if not driver.startswith("esc.pesimista.") or valor is None:
             faltas.append(f"{id_}.driver: «{driver}» no es un supuesto del escenario pesimista")
+        elif isinstance(valor, dict) and not (valor and all(isinstance(k, str) and (k.isdigit() or k == "N") for k in valor)):
+            # un grupo («esc.pesimista.paquete») no es un supuesto: la plantilla no tiene una cifra que imprimir (fallo [36]).
+            # Una serie por año ({"1": …, "N": …}) sí lo es
+            faltas.append(f"{id_}.driver: «{driver}» es un grupo de supuestos; elige uno de ellos "
+                          f"({', '.join(driver + '.' + str(k) for k in list(valor)[:3])})")
     for i, g in enumerate(e.valor("historial.guia_manual") or [], 1):
         _citas(f"historial.guia_manual[{i}]", g.get("evidencia"), textos, umbral, faltas)
     causas = e.valor("historial.causas")

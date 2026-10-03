@@ -152,11 +152,23 @@ def paginas(html: str) -> List[str]:
     return salida
 
 
+def _folio_de(linea: str) -> Optional[str]:
+    """El folio de una línea de pie: la línea entera («28», «F-12») o el último tramo de un pie con separadores
+    («Apple Inc. | 2025 Form 10-K | 8»), que lleva delante el nombre del emisor y del documento."""
+    linea = linea.strip()
+    if _FOLIO.fullmatch(linea):
+        return linea
+    tramos = [x.strip() for x in linea.split("|")]
+    if len(tramos) >= 2 and all(tramos[:-1]) and _FOLIO.fullmatch(tramos[-1]):
+        return tramos[-1]
+    return None
+
+
 def folios_por_pagina(lista: List[str]) -> List[Optional[str]]:
     """La página que ve el lector de cada página física: el folio impreso al pie (una de las tres últimas líneas: «28»,
     «F-12», «ii») o None si no lo lleva. Si lo lleva menos de la mitad de las páginas o los folios no crecen, el índice
     físico («1», «2»…)."""
-    hallados = [next((l for l in reversed(t.split("\n")[-3:]) if _FOLIO.fullmatch(l)), None) for t in lista]
+    hallados = [next((f for f in (_folio_de(l) for l in reversed(t.split("\n")[-3:])) if f), None) for t in lista]
     numeros = [int(f) for f in hallados if f and f.isdigit()]
     if sum(1 for f in hallados if f) * 2 < len(lista) or numeros != sorted(numeros):
         return [str(k) for k in range(1, len(lista) + 1)]

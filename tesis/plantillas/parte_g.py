@@ -17,7 +17,7 @@ from functools import lru_cache
 from typing import Dict, List, Mapping, Optional, Sequence, Tuple
 
 from ..datos.derivados import deuda_neta_ebitda_vigente
-from ..entradas import Entradas, palabras
+from ..entradas import Entradas, fecha_catalizador, palabras
 from ..formato import Celda, fecha as f_fecha, numero, pct
 from ..rutas import CONFIG
 
@@ -168,6 +168,35 @@ def _automatico(cid: str, cfg: dict, ctx: dict) -> Tuple[str, str]:
     return "sin_dato", ""
 
 
+def _actual_kpi(k: Mapping, hechos, anuales, etiqueta) -> Celda:
+    """La columna «Actual» de un indicador (spec 04: referencia a un Hecho si existe). Lo que escribe el analista manda;
+    si no escribe nada y el indicador es un hecho del informe —por su clave, por el rótulo de un campo o por
+    `checklist.kpi_hechos`—, el último ejercicio con dato, con la asociación dicha en la nota (regla 11; fallo [34])."""
+    import re as _re
+    from ..datos.campos import CAMPOS, DERIVADOS
+    escrito = str(k.get("actual") or "").strip()
+    rotulos = {c.clave: c for c in list(CAMPOS) + list(DERIVADOS)}
+    clave = escrito if escrito in rotulos else ""
+    if escrito and not clave:
+        return _c(escrito)
+    if not clave:
+        nombre = " ".join(_re.sub(r"\(.*?\)", "", str(k.get("kpi", ""))).lower().split())
+        alias = {str(a).lower(): b for a, b in (checklist().get("kpi_hechos") or {}).items()}
+        clave = alias.get(nombre) or next((c.clave for c in rotulos.values()
+                                           if " ".join(_re.sub(r"\(.*?\)", "", c.rotulo).lower().split()) == nombre), "")
+    if not clave or not anuales:
+        return _c("—")
+    for p in sorted(anuales, key=lambda a: a.fin, reverse=True):
+        h = hechos.get((clave, p))
+        if h is None or not h.hay_dato:
+            continue
+        unidad = getattr(rotulos[clave], "unidad", "")
+        valor = pct(h.valor) if unidad == "%" else f"{numero(h.valor, 1)}x" if unidad == "x" else f"{numero(h.valor / 1e6)} M {lexico.moneda()}"
+        return _c(f"{valor} ({etiqueta(p)})", f"{rotulos[clave].rotulo} del último ejercicio con dato; el sistema lo asocia al indicador "
+                                               f"{'por la clave que da el analista' if escrito else 'por su nombre'}", capa="H")
+    return _c("—")
+
+
 def construir(n, e: Entradas, motor, hechos, anuales, etiqueta, sesiones: Mapping, proxima: Optional[date] = None,
               cortos: Optional[Tuple[date, float]] = None, acciones: Optional[float] = None, fecha_informe: Optional[date] = None,
               escala: Sequence[str] = ("Comprar", "Mantener", "Vender")) -> ParteG:
@@ -195,12 +224,7 @@ def construir(n, e: Entradas, motor, hechos, anuales, etiqueta, sesiones: Mappin
     dn = deuda_neta_ebitda_vigente(hechos)
     fv = v.parametros.fecha_valoracion if v is not None else hoy
     mercado = _mercado(sesiones, fv) if sesiones else {}
-    catalizadores = []
-    for c in e.valor("catalizadores") or []:
-        try:
-            catalizadores.append(date.fromisoformat(str(c.get("fecha", ""))))
-        except ValueError:
-            pass
+    catalizadores = [f for f in (fecha_catalizador(c.get("fecha")) for c in e.valor("catalizadores") or []) if f is not None]
     tam, dd = e.valor("pos.tamano_pct"), e.valor("pos.drawdown_tolerado")
     invalidaciones = [x for x in e.valor("pos.invalidacion") or [] if x.get("metrica") and x.get("umbral") and x.get("plazo")]
     ctx = {"valoracion": v, "roic_5a": statistics.median(roics) if roics else None, "wacc": v.wacc.wacc if v is not None else None,
@@ -265,7 +289,7 @@ def construir(n, e: Entradas, motor, hechos, anuales, etiqueta, sesiones: Mappin
     if ctx["tamano"] is None:
         g.pendientes["tamano"] = "Pendiente del analista: tamaño de la posición y drawdown tolerado (paso 8)."
     # 30 · seguimiento
-    filas = [FilaCuadro(k.get("kpi", ""), [_c(str(k.get("actual") or "—")), _c(str(k.get("verde", ""))), _c(str(k.get("rojo", ""))),
+    filas = [FilaCuadro(k.get("kpi", ""), [_actual_kpi(k, hechos, anuales, etiqueta), _c(str(k.get("verde", ""))), _c(str(k.get("rojo", ""))),
                                            _c(str(k.get("fuente", ""))), _c(str(k.get("frecuencia", "")))], capa="S")
              for k in e.valor("pos.kpis") or []]
     if filas:

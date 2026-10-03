@@ -232,7 +232,7 @@ def _moneda_de(hechos: Mapping) -> str:
 def construir(hechos: Dict[Tuple[str, Periodo], Hecho], trimestres: List[Periodo], anuales: List[Periodo], precio: Optional[Hecho],
               acciones: Optional[float], agregador=None, facts: Optional[dict] = None, obtenido: Optional[date] = None,
               no_aplican: Optional[Dict[str, str]] = None, moneda: Optional[str] = None, semestres: Optional[Sequence[Periodo]] = None,
-              fuente: str = "la SEC") -> Multiplos:
+              fuente: str = "la SEC", desfase: int = 0) -> Multiplos:
     """Los múltiplos y rentabilidades TTM; cada línea con su fórmula, sus componentes y su contraste.
 
     `moneda` es la del emisor (rótulos «M EUR»); sin ella, la unidad de los propios ingresos (la cifra y su rótulo, de la
@@ -264,8 +264,9 @@ def construir(hechos: Dict[Tuple[str, Periodo], Hecho], trimestres: List[Periodo
     else:
         ultimos = sorted(trimestres, key=lambda p: p.fin)[-4:]
         fin = ultimos[-1] if ultimos else None
-        m = Multiplos(fin=fin.clave if fin else "", trimestres=[p.clave for p in ultimos], cierre=fin.fin if fin else None,
-                      precio=precio_valor, acciones=acciones, moneda=moneda)
+        # los trimestres, por su número en el ejercicio fiscal de la compañía («4T FY25»), como en los cuadros (fallo [12])
+        m = Multiplos(fin=etiqueta(fin, anuales, desfase) if fin else "", trimestres=[etiqueta(p, anuales, desfase) for p in ultimos],
+                      cierre=fin.fin if fin else None, precio=precio_valor, acciones=acciones, moneda=moneda)
         if len(ultimos) < 4:
             m.faltan["ttm"] = f"solo {len(ultimos)} trimestres contrastados: no hay TTM"
             return m
@@ -280,7 +281,7 @@ def construir(hechos: Dict[Tuple[str, Periodo], Hecho], trimestres: List[Periodo
                     m.por_acumulados[c] = f"ejercicio + acumulado del año − el del año anterior ({motivo or 'el trimestre suelto no se publica'})"
                 else:
                     sumas[c] = (None, f"{motivo}; {motivo_ac}")
-        rango = f"{ultimos[0].clave}–{fin.clave}"
+        rango = f"{m.trimestres[0]}–{m.fin}"
     if m.precio is None:
         m.faltan["precio"] = "sin cotización oficial (apartado 1): los múltiplos sobre precio quedan N/A"
     if acciones is None:

@@ -64,7 +64,7 @@ class EmisionCompleta(unittest.TestCase):
         el arnés de las pruebas no ve (el que salió: la ficha del día de la bolsa bloqueaba aunque el precio del informe
         es el cierre oficial del motor)."""
         self.assertEqual([t.estado for t in self.traidos][:2], ["traído", "traído"])
-        self.assertEqual(self.codigo, 1)                                  # borrador: nunca «EMITIDO» con entradas de prueba
+        self.assertEqual(self.codigo, 2)                                  # borrador: nunca «EMITIDO» con entradas de prueba
         self.assertEqual(self.auditoria["bloqueos"], [PRUEBA])
         self.assertIsNone(self.auditoria["emitido"])
         self.assertTrue(self.pdf.exists() and self.pdf.stat().st_size > 100_000)

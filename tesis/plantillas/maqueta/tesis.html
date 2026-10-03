@@ -442,7 +442,7 @@
 <h3 id="ap-{{ i.numeros['39'] }}">{{ i.numeros['39'] }}. {{ i.titulos['39'] }}</h3>
 <p>Contraste de cada cifra de la sección C {% if i.emisor.mercado == 'bme' %}entre los documentos del emisor (no presenta ante la SEC){% else %}con la SEC{% endif %}: {{ i.resumen_contraste.get('confirmado', 0) }} confirmadas · {{ i.resumen_contraste.get('derivado', 0) }} calculadas con fórmula · {{ i.resumen_contraste.get('discrepante', 0) }} discrepantes · {{ i.resumen_contraste.get('solo_sec', 0) }} solo en la SEC · {{ i.resumen_contraste.get('hueco', 0) }} sin dato. El detalle de cada cifra, al pasar el ratón en el HTML; las listas completas, en la auditoría de la emisión.</p>
 <h4>Discrepancias</h4>
-<ul class="compacta">{% for d in i.discrepancias %}<li>{{ d }}</li>{% else %}<li>Ninguna.</li>{% endfor %}</ul>
+<ul class="compacta">{% for d in i.discrepancias + i.identidades %}<li>{{ d }}</li>{% else %}<li>Ninguna.</li>{% endfor %}</ul>
 <h4>Cuadres entre fuentes (regla «un hecho, una fuente»)</h4>
 <ul class="compacta">{% for c in pi.cuadres %}<li>{{ c }}</li>{% else %}<li>Ninguno que anotar.</li>{% endfor %}</ul>
 <h4>Huecos materiales</h4>
@@ -468,6 +468,7 @@
 <p>Contraste de cada cifra de la sección C entre los adjuntos y la SEC: {{ i.resumen_contraste.get('confirmado', 0) }} confirmadas · {{ i.resumen_contraste.get('derivado', 0) }} calculadas con fórmula · {{ i.resumen_contraste.get('discrepante', 0) }} discrepantes · {{ i.resumen_contraste.get('solo_sec', 0) }} solo en la SEC · {{ i.resumen_contraste.get('solo_documento', 0) }} solo en los adjuntos · {{ i.resumen_contraste.get('hueco', 0) }} sin dato. En el HTML, cada celda muestra al pasar el ratón su contraste, su fuente o su fórmula.</p>
 <h4>Discrepancias (bloquean la emisión hasta que el analista decida)</h4>
 <ul class="compacta">{% for d in i.discrepancias %}<li>{{ d }}</li>{% else %}<li>Ninguna.</li>{% endfor %}</ul>
+{% if i.identidades %}<ul class="compacta">{% for d in i.identidades %}<li>{{ d }}</li>{% endfor %}</ul>{% endif %}
 <h4>Cuadres entre fuentes (regla «un hecho, una fuente»)</h4>
 <ul class="compacta">{% for c in i.cuadres_apendice %}<li>{{ c }}</li>{% else %}<li>Ninguno que anotar.</li>{% endfor %}</ul>
 <h4>Solo SEC (sin contraste documental; exigen reconocimiento del analista)</h4>

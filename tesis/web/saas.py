@@ -492,7 +492,7 @@ def estado_emision(ticker: str) -> Optional[dict]:
     return {"estado": estado_actual, "codigo": codigo,
             "empezado": em["empezado"].strftime("%d/%m/%Y %H:%M:%S"), "registro": lineas[-80:], "orden": " ".join(Path(x).name if os.sep in x else x for x in em["orden"] if x != "-u"),
             "pdf": f"/informes/{ticker}/{pdf.name}" if pdf else None, "html": f"/informes/{ticker}/{pdf.with_suffix('.html').name}" if pdf and pdf.with_suffix(".html").exists() else None,
-            "borrador": codigo == 1 and pdf is not None}
+            "borrador": codigo == 2 and pdf is not None}     # emitir.py: 0 emitido · 2 borrador · 1 error
 
 
 def resumen_ticker(ticker: str) -> dict:

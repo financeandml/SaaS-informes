@@ -101,8 +101,9 @@ def _mercado(d: ParteE, n, e: Entradas, textos, umbral, alias, ingresos, fy: str
     if not soms and ingresos is not None:
         d.som_por_defecto = True
         filas.append(FilaCuadro(f"Ingresos del ejercicio {fy} (SOM por defecto)", [
-            _c("SOM"), _c(fy), _c(_cifra(ingresos / 1e6, f"millones {lexico.moneda()}", True), "hecho verificado de la sección C", capa="H"),
-            _c("ingresos verificados"), _c(f"{lexico.cuentas()}, sección C" if lexico.es_bme() else "SEC (companyfacts), sección C")], capa="H"))
+            # sin texto técnico en el cuerpo (fallo [35]): de dónde salen los ingresos, dicho como lo dice el apartado 8
+            _c("SOM"), _c(fy), _c(_cifra(ingresos / 1e6, f"millones {lexico.moneda()}", True), "ingresos del estado de resultados (apartado 8)", capa="H"),
+            _c("ingresos publicados"), _c(f"estado de resultados del ejercicio {fy} (apartado 8)")], capa="H"))
     sams = [c for c, _ in cifras if c.get("clase") == "SAM" and cuota_implicita(1.0, c) is not None]
     # el SAM del año más cercano al de los ingresos
     sam = min(sams, key=lambda c: abs(int(c.get("anio") or 0) - anio)) if sams else None
@@ -111,7 +112,7 @@ def _mercado(d: ParteE, n, e: Entradas, textos, umbral, alias, ingresos, fy: str
         filas.append(FilaCuadro("Cuota implícita (ingresos / SAM)", [
             _c(""), _c(f"{fy} / {sam.get('anio')}"), _c(pct(d.cuota), f"{_cifra(ingresos / 1e6, 'millones ' + lexico.moneda())} / "
                                                        f"{_cifra(sam['valor'], sam.get('unidad', ''))}", capa="D"),
-            _c("cálculo del sistema"), _c(f"ingresos {fy} (SEC) / SAM del analista")], capa="D", destacada=True,
+            _c("cálculo del sistema"), _c(f"ingresos {fy} (apartado 8) / SAM del analista")], capa="D", destacada=True,
             formula="Ingresos verificados del último ejercicio / SAM"))
     d.cuadros["mercado"] = Cuadro(n.siguiente(), "Tamaño de mercado: TAM, SAM y SOM", ["Clase", "Año", "Cifra", "Método", "Fuente"],
                                   filas, f"Fuente: analista, con cita verificada en el documento y la página; ingresos {lexico.de_las_cuentas()}.")

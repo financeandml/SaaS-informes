@@ -299,5 +299,6 @@ bolsa:   # rótulos literales de la web de Nasdaq (13F, Form 4, relaciones y tip
   buy: Compra
   disposition (non open market): Transmisión fuera de mercado
   acquisition (non open market): Adquisición fuera de mercado
-  option execute: Ejercicio de opciones
+  # código M del Form 4: ejercicio de opciones o conversión de RSU en acciones; la bolsa lo llama igual (fallo [47])
+  option execute: Ejercicio o conversión de derivados
   gift: Donación

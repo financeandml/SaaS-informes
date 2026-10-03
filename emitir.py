@@ -38,6 +38,10 @@ from tesis.motor import multiplos  # noqa: E402
 from tesis.datos.hechos import Contraste  # noqa: E402
 
 
+# código de salida (decisión 4 del analista, 28/09/2026): 0 emitido · 2 borrador con bloqueos · 1 error
+EMITIDO, ERROR, BORRADOR = 0, 1, 2
+
+
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description="Tesis de inversión desde el expediente del analista y la SEC.")
     ap.add_argument("ticker")
@@ -68,7 +72,7 @@ def main(argv=None) -> int:
     emisor = emisores.emisor(args.ticker)
     if emisor is None:
         print(f"  {args.ticker} no está ni en la SEC ni en BME: sin emisor no hay informe.")
-        return 2
+        return ERROR
     if emisor.mercado == "bme":
         print(f"  {emisor.nombre} · ISIN {emisor.isin} · {emisor.bolsa} · cifras en {emisor.moneda}")
     else:
@@ -92,7 +96,7 @@ def main(argv=None) -> int:
         periodos = contraste.periodos_del_informe(exp, facts=facts)
     except ValueError as e:
         print(f"  {e}")
-        return 2
+        return ERROR
     print(f"  ejercicios {[p.clave for p in periodos['anuales']]} · trimestres {[p.clave for p in periodos['trimestres']]}")
 
     print("[4/8] Extracción y contraste")
@@ -209,7 +213,7 @@ def main(argv=None) -> int:
     elif mot is not None:
         print(f"  motor: {'; '.join(mot.bloqueos)}")
     mult = multiplos.construir(hechos, periodos["trimestres"], periodos["anuales"], pr, acc_portada.valor if acc_portada is not None else None, agr, facts, obtenido,
-                               no_aplican=tab.no_aplican)
+                               no_aplican=tab.no_aplican, desfase=tab.desfase_fiscal)
     print("  múltiplos TTM: " + " · ".join(f"{l.rotulo.split(' (')[0]} {l.valor:.2f}{l.contraste.value}" if l.valor is not None else f"{l.rotulo.split(' (')[0]} N/A" for l in mult.lineas if l.unidad == "x"))
     if modelo is not None:
         cuadres = dcf.cuadrar(modelo, hechos, cierres=mer.cierres, agregador=agr)
@@ -244,7 +248,7 @@ def main(argv=None) -> int:
         print(f"    ≠ {d}")
     if rev.desacuerdos:
         print("  EMISIÓN DETENIDA: hay cifras impresas que no coinciden con su fuente al releerlas.")
-        return 3
+        return ERROR
     # puerta de calidad (06 §3), «EMITIDO» solo con 0 bloqueos y sin entradas de prueba, y PDF paginado (06 §4)
     puerta, huella, html, medidas = render.emitir(inf, salida / f"{nombre_base}.pdf", hoy, casa=args.casa, prueba=ent.de_prueba)
     import json as _json
@@ -276,11 +280,11 @@ def main(argv=None) -> int:
         print(f"\nBORRADOR: {len(bloqueos)} discrepancias sin decidir bloquean la emisión:")
         for r in bloqueos:
             print(f"  ≠ {r.campo.rotulo} {r.periodo.clave}: {r.nota}")
-        return 1
+        return BORRADOR
     if not inf.emitido:
         print(f"\nBORRADOR: {len(puerta.bloqueos)} bloqueos de la puerta de calidad (hoja 0 del PDF y {nombre_base}.auditoria.json)")
-        return 1
-    return 0
+        return BORRADOR
+    return EMITIDO
 
 
 if __name__ == "__main__":
