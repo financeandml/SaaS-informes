@@ -7,6 +7,7 @@ from __future__ import annotations
 import statistics
 from dataclasses import dataclass, field
 from datetime import date, timedelta
+from pathlib import Path
 from typing import Dict, List, Optional
 
 __all__ = ["Comparable", "Comparables", "construir", "MULTIPLOS"]
@@ -34,6 +35,8 @@ class Comparable:
     crecimiento: Optional[float] = None
     margen_ebit: Optional[float] = None
     atipicos: List[str] = field(default_factory=list)
+    mercado: str = "sec"
+    fuente: str = ""                         # de dónde salen sus cuentas y su precio, para el cuadro del apartado 22
 
 
 @dataclass
@@ -52,13 +55,16 @@ def _monedas(facts: dict) -> set:
 
 
 def _uno(ticker: str, fecha: date, umbrales: dict) -> Comparable:
+    from ..fuentes import emisores
+    if emisores.es_bme(ticker):
+        return _uno_bme(ticker, fecha, umbrales)
     from ..verificacion import contraste
     from ..datos import derivados
     from . import multiplos
     from ..fuentes import precio as precio_mod, sec
     from ..datos.expediente import Expediente
     from ..datos.hechos import Capa, Origen, Periodo, de_valor
-    c = Comparable(ticker.upper())
+    c = Comparable(ticker.upper(), fuente="SEC (companyfacts); cierre oficial de Nasdaq")
     try:
         e = sec.emisor(ticker)
     except (RuntimeError, sec.SinContacto) as ex:
@@ -128,6 +134,122 @@ def _uno(ticker: str, fecha: date, umbrales: dict) -> Comparable:
         if linea is not None and linea.valor is None:
             c.motivos[clave] = linea.motivo
     return c
+
+
+# las cuentas de los comparables de BME: fuera de la copia de trabajo, como la caché de la bolsa (no son adjuntos de
+# ningún informe; `adjuntos/` es del emisor del informe)
+CACHE_DOCUMENTOS: Optional[Path] = None
+
+
+def _uno_bme(ticker: str, fecha: date, umbrales: dict) -> Comparable:
+    """Un comparable de BME con el mismo código que el emisor del informe: sus cuentas oficiales de la bolsa (las anuales
+    de los dos últimos ejercicios y el último semestral publicados hasta `fecha`), contrastadas documento contra documento,
+    y el cierre oficial de BME. Precio y cuentas en la misma moneda: sus múltiplos entran en las medianas."""
+    from .. import entorno
+    from ..datos import derivados, expediente
+    from ..fuentes import bme, emisores, precio as precio_mod
+    from ..verificacion import contraste
+    from . import multiplos
+    c = Comparable(ticker.upper(), mercado="bme")
+    try:
+        e = emisores.emisor_bme(ticker)
+    except Exception as ex:                          # la bolsa no respondió: el comparable se dice excluido, no se inventa
+        c.excluido = f"BME no respondió: {ex.__class__.__name__}"
+        return c
+    if e is None:
+        c.excluido = "BME no lo encuentra entre sus emisores"
+        return c
+    c.nombre, c.moneda = e.nombre, e.moneda or "EUR"
+    c.fuente = f"cuentas oficiales publicadas en BME; cierre oficial de {e.bolsa}"
+    carpeta = (CACHE_DOCUMENTOS or Path(entorno.RAIZ) / "cache_bolsa" / "comparables") / c.ticker
+    try:
+        bme.traer(e, carpeta, anuales=2, semestrales=1, hoy=fecha, comunicaciones=False)
+    except Exception as ex:
+        c.excluido = f"BME no sirvió sus cuentas: {ex.__class__.__name__}"
+        return c
+    rutas = sorted(carpeta.glob("*.pdf"))
+    if not rutas:
+        c.excluido = "sin cuentas publicadas en BME"
+        return c
+    exp = expediente.cargar(c.ticker, rutas, None)
+    try:
+        per = contraste.periodos_del_informe(exp, facts=None, hasta=fecha)
+    except ValueError:
+        per = {"trimestres": [], "anuales": [], "instantes": []}
+    if not per["trimestres"] and not per["anuales"]:
+        c.excluido = "sin estados financieros legibles en sus cuentas de BME"
+        return c
+    mer = precio_mod.mercado(c.ticker, fecha, emisor=e)
+    if not mer.precio.hay_dato:
+        c.excluido = c.excluido or f"sin cierre oficial de BME: {mer.precio.motivo}"
+        return c
+    c.precio, c.fecha_precio = mer.precio.valor, mer.precio.periodo.fin
+    tab = contraste.contrastar(exp, None, None, per, None)
+    hechos = derivados.calcular(tab.hechos(), per["anuales"] + per["trimestres"], per["instantes"])
+    try:
+        ficha = bme.valor(e.isin)
+    except Exception:
+        ficha = None
+    acciones = ficha.acciones if ficha is not None else None
+    if acciones:
+        c.capitalizacion = c.precio * acciones
+    else:
+        c.motivos["acciones"] = "la ficha del valor de BME no publica las acciones admitidas"
+    # lo que no se puede leer se dice, y el comparable no entra en las medianas con cifras a medias
+    anuales_doc = [a for a in exp.adjuntos if a.tipo is expediente.Tipo.CCAA]
+    leidas = {clave for clave, ps in tab.paginas.items() if any(p.estado and p.filas for p in ps)}
+    escaneadas = [a for a in anuales_doc if a.clave not in leidas and a.paginas
+                  and sum(1 for t in a.paginas if len(t.strip()) < 50) / len(a.paginas) > umbrales["comparables_paginas_sin_texto_max"]]
+    if escaneadas:
+        c.excluido = c.excluido or (f"{len(escaneadas)} de sus {len(anuales_doc)} cuentas anuales en BME son imágenes escaneadas, "
+                                    "sin capa de texto: sin OCR no se leen sus cifras")
+    _, individuales = contraste._ambito(exp, tab.paginas)
+    if individuales:
+        c.excluido = c.excluido or ("solo se leen las cuentas individuales de la sociedad, no las del grupo: sus cifras no "
+                                    "son comparables con unas consolidadas")
+    if escaneadas or individuales:
+        # sin sus cuentas legibles, ninguna cifra suya se imprime: la capitalización es de la bolsa y sí vale
+        return c
+    # la antigüedad, la del último periodo con ingresos leídos: unas cuentas recientes que no se leen no hacen recientes
+    # las cifras de las anteriores
+    con_ingresos = [p for p in per["trimestres"] + per["anuales"]
+                    if hechos.get(("ingresos", p)) is not None and hechos[("ingresos", p)].hay_dato]
+    if not con_ingresos:
+        c.excluido = c.excluido or "sin ingresos legibles en sus cuentas de BME"
+        return c
+    ultimo = max(con_ingresos, key=lambda p: p.fin)
+    c.cierre_ltm = ultimo.fin
+    meses = (fecha.year - ultimo.fin.year) * 12 + fecha.month - ultimo.fin.month
+    if meses > umbrales["comparables_antiguedad_max_meses"]:
+        mas_recientes = max(p.fin for p in per["trimestres"] + per["anuales"])
+        c.excluido = c.excluido or (f"último periodo con cifras legibles: {ultimo.fin:%m/%Y} (más de {umbrales['comparables_antiguedad_max_meses']} "
+                                    "meses)" + (f"; sus cuentas hasta {mas_recientes:%m/%Y} no traen estados que el lector reconozca"
+                                                if mas_recientes > ultimo.fin else "") + ": fuera de medianas")
+    m = multiplos.construir(hechos, per["trimestres"], per["anuales"], mer.precio, acciones, None, None, None, no_aplican=tab.no_aplican)
+    _cifras_del_ejercicio(c, hechos, per["anuales"])
+    for clave, rotulo in MULTIPLOS:
+        linea = m.linea(rotulo)
+        c.valores[clave] = linea.valor if linea is not None else None
+        if linea is not None and linea.valor is None:
+            c.motivos[clave] = linea.motivo
+    return c
+
+
+def _cifras_del_ejercicio(c: Comparable, hechos, anuales) -> None:
+    """Ingresos, crecimiento y margen EBIT del último ejercicio (apartado 22)."""
+    anuales = sorted(anuales, key=lambda a: a.fin)
+    con_ingresos = [a for a in anuales if hechos.get(("ingresos", a)) is not None and hechos[("ingresos", a)].hay_dato]
+    if not con_ingresos:
+        return
+    u = con_ingresos[-1]
+    ing, eb = hechos[("ingresos", u)], hechos.get(("ebit", u))
+    c.ejercicio = u.fin.strftime("%m/%Y")
+    c.ingresos = ing.valor
+    if eb is not None and eb.hay_dato and ing.valor:
+        c.margen_ebit = eb.valor / ing.valor
+    previos = [a for a in con_ingresos if a.fin < u.fin]
+    if previos and hechos[("ingresos", previos[-1])].valor:
+        c.crecimiento = ing.valor / hechos[("ingresos", previos[-1])].valor - 1
 
 
 def construir(lista: List[dict], fecha: date, umbrales: dict) -> Comparables:

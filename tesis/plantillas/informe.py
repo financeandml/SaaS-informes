@@ -282,7 +282,9 @@ def _filas_de_la_compania(filas: List[FilaCuadro], tab: Tablero) -> List[FilaCua
     for f in filas:
         clave = f.origen.split(":", 1)[1] if f.origen.startswith("hecho:") else ""
         vacia = all(c.clase == "na" for c in f.celdas)
-        if clave in tab.no_aplican or (vacia and clave in solo_documento):
+        # vacía: lo que la auditoría de datos despeja de sus identidades (el total del pasivo) se imprime aunque ningún
+        # estado lo traiga suelto
+        if (clave in tab.no_aplican and vacia) or (vacia and clave in solo_documento):
             continue
         salida.append(f)
     return salida
@@ -337,7 +339,12 @@ def _cuadro_resultados(n: Cuadros, hechos, tab: Tablero, anuales, trimestres) ->
 
 
 def _cuadro_balance(n: Cuadros, hechos, tab: Tablero, anuales, trimestres) -> Cuadro:
-    periodos = list(anuales) + [t for t in trimestres if t.fin != anuales[-1].fin]
+    # un balance es una fecha: el cierre de un periodo intermedio que coincide con el de un ejercicio es la misma columna,
+    # y una fecha a la que ningún documento publica balance (el semestre de hace dos años, que el semestral de hoy compara
+    # con el cierre anterior) no es una columna de N/A
+    cierres = {a.fin for a in anuales}
+    con_balance = {p.fin for (c, p), h in hechos.items() if p.es_instante and h.hay_dato and c in ("total_activo", "caja", "patrimonio")}
+    periodos = list(anuales) + [t for t in trimestres if t.fin not in cierres and t.fin in con_balance]
     columnas = [_etiqueta(p, anuales, tab) for p in periodos]
     filas = [
         _fila(hechos, "caja", "Tesorería y equivalentes", periodos, instante=True),
@@ -358,8 +365,11 @@ def _cuadro_balance(n: Cuadros, hechos, tab: Tablero, anuales, trimestres) -> Cu
         _fila(hechos, "acciones_circulacion", "Acciones en circulación (mln)", periodos, instante=True, unidad="acciones"),
     ]
     filas = _filas_de_la_compania(filas, tab)
-    notas = ["Deuda neta sin pasivos por arrendamiento; se imprimen aparte.",
-             "Acciones en circulación: las de la portada de cada formulario, a su fecha" + _nota_splits(tab, anuales) + "."]
+    # la nota de una fila que no se imprime no dice nada
+    quedan = {f.origen for f in filas}
+    notas = (["Deuda neta sin pasivos por arrendamiento; se imprimen aparte."] if "hecho:arrendamientos" in quedan else []) + \
+            (["Acciones en circulación: las de la portada de cada formulario, a su fecha" + _nota_splits(tab, anuales) + "."]
+             if "hecho:acciones_circulacion" in quedan else [])
     return Cuadro(n.siguiente(), f"Balance de situación (mln {_m()})", columnas, filas,
                   _fuente_tablero(tab, [c.clave for c in por_seccion(9)], periodos, True), notas)
 
@@ -384,7 +394,9 @@ def _cuadro_flujo(n: Cuadros, hechos, tab: Tablero, anuales, trimestres) -> Cuad
         _fila(hechos, "amortizacion_deuda", "Amortización de deuda", periodos, sangria=True),
     ]
     filas = _filas_de_la_compania(filas, tab)
-    notas = ["FCF del informe = flujo operativo − capex. El flujo de caja libre que publique la compañía es no-GAAP y se imprime aparte, tal como ella lo define."]
+    notas = ["FCF del informe = flujo operativo − capex. El flujo de caja libre que publique la compañía es "
+             + ("una medida alternativa del rendimiento" if _MONEDA.get("sin_sec") else "no-GAAP")
+             + " y se imprime aparte, tal como ella lo define."]
     if any(r.campo.clave == "dividendos" and r.hecho.hay_dato and r.hecho.valor == 0 and r.hecho.nota for r in tab.resultados):
         notas.append("Dividendos: cero declarado por la compañía en " + ("sus cuentas" if _MONEDA.get("sin_sec") else "el 10-K")
                      + " (al pasar el ratón, su frase y página).")
@@ -817,6 +829,12 @@ def construir(ticker: str, hoy: date, emisor: Emisor, exp: Expediente, tab: Tabl
     from . import lexico
     lexico.fijar(emisor, motor)
     hechos = derivados_mod.calcular(tab.hechos(), anuales + trimestres, instantes)
+    # lo que la auditoría de datos despeja de sus identidades (el total del pasivo de quien solo imprime sus dos mitades)
+    # entra marcado como derivado, igual que en la emisión: sin esto la auditoría lo da por despejado y el cuadro, N/A
+    from ..verificacion import auditor as auditor_mod
+    aud = auditor_mod.auditar({**getattr(tab, "controles", {}), **hechos}, anuales + trimestres, instantes)
+    if aud.derivadas:
+        hechos = derivados_mod.calcular(auditor_mod.aplicar(hechos, aud), anuales + trimestres, instantes)
     # 01: lo que la compañía no publica no se imprime: los ejercicios anteriores a sus primeras cuentas (salió a bolsa
     # hace dos años, o la bolsa no guarda las anteriores) no son columnas de N/A
     con_dato = {p for (c, p), h in hechos.items() if h.hay_dato}

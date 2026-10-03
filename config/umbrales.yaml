@@ -24,6 +24,8 @@ bme_cierre_ventana_dias: 21     # la última sesión con negociación ≤ fecha 
 biotech_ingresos_min_meur: 50   # regla 7 para emisores en EUR (BME 03/05): la misma cifra que la de USD, sin convertir (por confirmar por el analista)
 atipicos_iqr: 3
 comparables_antiguedad_max_meses: 15
+# un comparable de BME cuyas cuentas anuales son en su mayoría páginas sin capa de texto (escaneadas): sin OCR no se leen
+comparables_paginas_sin_texto_max: 0.5
 tolerancia_oi_yahoo_nasdaq: 0.02
 reexpresion_nota: 0.005
 form4_dias_presentacion_max: 10       # 28: un Form 4 se presenta en 2 días hábiles; con retrasos, hasta este margen

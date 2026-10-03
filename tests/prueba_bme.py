@@ -396,6 +396,53 @@ class MultiplosSemestrales(unittest.TestCase):
         self.assertEqual((m.periodicidad, m.moneda, m.faltan["ttm"]), ("trimestral", "USD", "solo 2 trimestres contrastados: no hay TTM"))
 
 
+class PerSinBpaPublicado(unittest.TestCase):
+    FY24, FY25, S25, S26 = MultiplosSemestrales.FY24, MultiplosSemestrales.FY25, MultiplosSemestrales.S25, MultiplosSemestrales.S26
+    _hechos, _precio = MultiplosSemestrales._hechos, MultiplosSemestrales._precio
+
+    def test_quien_no_publica_bpa_tiene_per_con_su_beneficio_y_sus_acciones(self):
+        """Falla si el PER de quien no imprime BPA en ningún estado (el PGC no lo pide) queda N/A teniendo beneficio de
+        doce meses y acciones de la capitalización: la fórmula lo dice."""
+        hechos = self._hechos()
+        del hechos[("acciones_diluidas", self.S26)]
+        m = multiplos.construir(hechos, [], [self.FY24, self.FY25], self._precio(), 30.0e6, moneda="EUR",
+                                semestres=[self.S25, self.S26], no_aplican={"bpa_diluido": "no la imprime"})
+        per = m.linea("PER (TTM)")
+        self.assertAlmostEqual(per.valor, 4.0 / ((1.5e6 + 0.9e6 - 0.6e6) / 30.0e6))
+        self.assertIn("no publica BPA", per.formula)
+        # quien sí publica BPA y falta, sigue N/A: el atajo es solo para la partida que no existe
+        sin = multiplos.construir(hechos, [], [self.FY24, self.FY25], self._precio(), 30.0e6, moneda="EUR", semestres=[self.S25, self.S26])
+        self.assertIsNone(sin.linea("PER (TTM)").valor)
+
+
+class ComparablesDeBME(unittest.TestCase):
+    def tearDown(self):
+        from tesis.plantillas import lexico
+        lexico.fijar()
+
+    def test_el_cuadro_22_va_en_la_moneda_del_informe(self):
+        """Falla si el cuadro de comparables de un informe en EUR rotula «mill. USD», deja fuera a los comparables de BME
+        por no ser USD o mezcla en una columna tamaños en dos monedas."""
+        from types import SimpleNamespace
+        from tesis.motor.comparables import Comparable
+        from tesis.plantillas import informe, lexico, parte_e
+        lexico.fijar(SimpleNamespace(mercado="bme", moneda="EUR"))
+        bme_c = Comparable("PEER.MC", nombre="PEER", moneda="EUR", capitalizacion=50e6, ejercicio="12/2025", ingresos=30e6,
+                           crecimiento=0.1, margen_ebit=0.08, mercado="bme", fuente="cuentas oficiales publicadas en BME; cierre oficial de BME Growth",
+                           fecha_precio=date(2026, 10, 2))
+        usd_c = Comparable("EPAM", nombre="EPAM", moneda="USD", capitalizacion=5e9, ejercicio="12/2025", ingresos=4e9)
+        motor = SimpleNamespace(comparables=SimpleNamespace(filas=[bme_c, usd_c]), cap_mercado=20e6, fecha_precio=date(2026, 10, 2))
+        d = parte_e.ParteE()
+        parte_e._comparables(d, informe.Cuadros(), motor, {}, [], lambda p: str(p.fin.year), "Emisora", "EMI.MC")
+        cuadro = d.cuadros["comparables"]
+        self.assertIn("Capitalización (mill. EUR)", cuadro.columnas)
+        rotulos = [f.rotulo for f in cuadro.filas]
+        self.assertTrue(any("PEER.MC" in r for r in rotulos), rotulos)
+        self.assertFalse(any("EPAM" in r for r in rotulos), rotulos)
+        self.assertIn("EPAM (USD)", " ".join(cuadro.notas))
+        self.assertNotIn("SEC", cuadro.fuente)
+
+
 if __name__ == "__main__":
     unittest.main()
 
@@ -418,6 +465,22 @@ class ComunicacionesQueSeTraen(unittest.TestCase):
         self.assertIn("directivos", self._elegidas([compras]))
         self.assertIn("comunicacion", self._elegidas([avance]))
         self.assertIn("comunicacion", self._elegidas([junta]))
+
+    def test_dos_registros_del_mismo_ejercicio_no_quitan_el_sitio_al_anterior(self):
+        """Falla si la bolsa registra dos documentos de las cuentas de 2025 y con ellos se agota el cupo de ejercicios
+        (el de 2024 se quedaba fuera), o si se trae lo publicado después de la fecha del informe."""
+        import tempfile
+        from types import SimpleNamespace
+        doc = lambda i, ej, per, f: bme.Documento(id=i, tipo="", clase="", titulo=f"{ej} {per}", fecha=f, hora="", ruta=f"/{i}.pdf",  # noqa: E731
+                                                  ejercicio=ej, periodo=per, tamano="")
+        financiera = [doc("4", 2026, "1S", date(2026, 10, 30)), doc("3", 2025, "AN", date(2026, 4, 24)), doc("2", 2025, "AN", date(2026, 4, 24)),
+                      doc("1", 2024, "AN", date(2025, 4, 30)), doc("0", 2023, "AN", date(2024, 4, 30))]
+        traidos = []
+        with tempfile.TemporaryDirectory() as tmp, \
+                mock.patch.object(bme, "informacion_financiera", return_value=financiera), \
+                mock.patch.object(bme, "descargar", side_effect=lambda d, c: traidos.append(d.id) or Path(c) / f"{d.id}.pdf"):
+            bme.traer(SimpleNamespace(clave_bolsa="X"), Path(tmp), anuales=2, semestrales=1, hoy=date(2026, 10, 2), comunicaciones=False)
+        self.assertEqual(sorted(traidos), ["1", "2", "3"])
 
 
 class SegmentosDelAnalista(unittest.TestCase):

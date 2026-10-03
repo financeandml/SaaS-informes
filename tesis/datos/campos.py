@@ -141,11 +141,13 @@ CAMPOS: Tuple[Campo, ...] = (
     Campo("bpa_basico", "BPA básico", "EPS, basic", 8, unidad="USD/acción",
           conceptos=("EarningsPerShareBasic",),
           filas=(r"^Basic$", r"^Net income$"), contexto=r"(?i)per share",
-          contexto_excluido=r"(?i)shares used|^diluted"),
+          contexto_excluido=r"(?i)shares used|^diluted",
+          filas_con_contexto=((r"(?i)^(?:beneficios?|ganancias?|resultados?)(?: \(p[ée]rdidas?\))? b[áa]sic[oa]s? por acci[óo]n", r""),)),
     Campo("bpa_diluido", "BPA diluido", "EPS, diluted", 8, unidad="USD/acción",
           conceptos=("EarningsPerShareDiluted",),
           filas=(r"^Diluted$", r"^Net income$"), contexto=r"(?i)per share",
-          contexto_excluido=r"(?i)shares used|^basic\b(?! and)"),
+          contexto_excluido=r"(?i)shares used|^basic\b(?! and)",
+          filas_con_contexto=((r"(?i)^(?:beneficios?|ganancias?|resultados?)(?: \(p[ée]rdidas?\))? diluid[oa]s? por acci[óo]n", r""),)),
     Campo("acciones_basicas", "Acciones medias básicas", "Weighted-average shares, basic", 8, unidad="acciones",
           conceptos=("WeightedAverageNumberOfSharesOutstandingBasic",),
           filas=(r"^Basic$",), contexto=r"(?i)weighted|shares"),
@@ -185,12 +187,16 @@ CAMPOS: Tuple[Campo, ...] = (
           filas=(r"^Content assets, net$",), solo_documento=True,
           nota="Extensión propia de Netflix; companyfacts no la sirve.", marcos=("sec",)),
     Campo("inmovilizado", "Inmovilizado material, neto", "Property and equipment, net", 9, tipo=INSTANTE,
-          conceptos=("PropertyPlantAndEquipmentNet",), filas=(r"^Property and equipment, net$",)),
+          conceptos=("PropertyPlantAndEquipmentNet",), filas=(r"^Property and equipment, net$",),
+          # PGC: la del activo no corriente, nunca la homónima de los pagos por inversiones del estado de flujos
+          filas_con_contexto=((r"^Inmovilizado material$", r"(?i)activos? no corrientes?"),)),
     Campo("fondo_comercio", "Fondo de comercio", "Goodwill", 9, tipo=INSTANTE,
-          conceptos=("Goodwill",), filas=(r"^Goodwill$",)),
+          conceptos=("Goodwill",), filas=(r"^Goodwill$", r"^Fondo de comercio(?: de (?:consolidaci[óo]n|sociedades consolidadas))?$")),
     Campo("intangibles", "Intangibles", "Intangible assets, net", 9, tipo=INSTANTE,
           conceptos=("IntangibleAssetsNetExcludingGoodwill", "FiniteLivedIntangibleAssetsNet"),
-          filas=(r"^Intangible assets, net$",)),
+          filas=(r"^Intangible assets, net$",),
+          # PGC: el del activo no corriente (el del estado de flujos es un pago por inversiones)
+          filas_con_contexto=((r"^Inmovilizado intangible$", r"(?i)activos? no corrientes?"),)),
     Campo("total_activo", "Total activo", "Total assets", 9, tipo=INSTANTE,
           conceptos=("Assets",), filas=(r"^Total assets$", r"^Total activos?$")),
     Campo("pasivo_corriente", "Pasivo corriente", "Total current liabilities", 9, tipo=INSTANTE,
@@ -234,7 +240,8 @@ CAMPOS: Tuple[Campo, ...] = (
           filas=(r"^Total (?!liabilities\b)[\w .,'’&-]{2,40}? stockholders['’] equity$", r"^Total stockholders['’] equity$",
                 r"^(?:Total )?patrimonio neto atribuid[oa] a (?:la )?sociedad dominante$", r"^(?:Total )?patrimonio neto$")),
     Campo("autocartera", "Autocartera", "Treasury stock", 9, tipo=INSTANTE, signo_informe=-1,
-          conceptos=("TreasuryStockValue", "TreasuryStockCommonValue"), filas=(r"^Treasury stock",)),
+          conceptos=("TreasuryStockValue", "TreasuryStockCommonValue"),
+          filas=(r"^Treasury stock", r"^\(?Acciones (?:y participaciones en patrimonio )?propias\)?$")),
     Campo("acciones_circulacion", "Acciones en circulación", "Shares outstanding", 9, tipo=INSTANTE, unidad="acciones",
           conceptos=("dei:EntityCommonStockSharesOutstanding", "CommonStockSharesOutstanding"),
           filas=(r"^Common stock, shares outstanding",)),
@@ -271,7 +278,9 @@ CAMPOS: Tuple[Campo, ...] = (
           filas=(r"^Repurchases of common stock$", r"^Adquisici[óo]n de instrumentos de patrimonio propio$")),
     Campo("adquisiciones", "Adquisiciones (caja)", "Acquisitions, net of cash acquired", 10, signo_informe=-1,
           conceptos=("PaymentsToAcquireBusinessesNetOfCashAcquired",),
-          filas=(r"^Acquisitions?, net of cash acquired$",)),
+          filas=(r"^Acquisitions?, net of cash acquired$",),
+          # PGC: la compra de un negocio entre los pagos por inversiones (la de desinversiones es una venta)
+          filas_con_contexto=((r"^Unidad de negocio$", r"(?i)^pagos por inversiones"),)),
     Campo("emision_deuda", "Emisión de deuda", "Proceeds from issuance of debt", 10,
           conceptos=("ProceedsFromIssuanceOfLongTermDebt", "ProceedsFromIssuanceOfDebt", "ProceedsFromIssuanceOfSeniorLongTermDebt"),
           filas=(r"^Proceeds from issuance of (?:senior )?notes and other borrowings, net$", r"^Proceeds from issuance of debt$")),
@@ -283,6 +292,17 @@ CAMPOS: Tuple[Campo, ...] = (
     Campo("fcf_compania", "Free cash flow (definición de la compañía)", "Free cash flow (company definition)", 10,
           filas=(r"^Free cash flow$",), solo_documento=True,
           nota="No-GAAP, tal como lo define la compañía en su carta; el FCF del informe es CFO − capex.", marcos=("sec",)),
+)
+
+
+# las filas del flujo de financiación del PGC bajo «Emisión» y «Devolución y amortización de»: el modelo no imprime su
+# total; la emisión y la amortización de deuda del informe son su suma (derivado, con fórmula, en `contraste`)
+_PARTES_DEUDA_PGC = (
+    ("obligaciones", "Obligaciones y valores similares", r"^Obligaciones y (?:otros )?valores (?:similares|negociables)$"),
+    ("especiales", "Deudas con características especiales", r"^Deudas con caracter[íi]sticas especiales$"),
+    ("entidades", "Deudas con entidades de crédito", r"^Deudas? con entidades de cr[ée]dito$"),
+    ("grupo", "Deudas con empresas del grupo y asociadas", r"^Deudas? con empresas del grupo y asociadas$"),
+    ("otras", "Otras deudas", r"^Otras deudas$"),
 )
 
 
@@ -332,6 +352,12 @@ CONTROLES: Tuple[Campo, ...] = (
           filas=(r"^Resultado (?:del (?:ejercicio|periodo) )?atribuid[oa] a (?:los )?(?:socios externos|intereses minoritarios|participaciones no dominantes)$",
                  r"^Resultado atribuible a (?:los )?(?:socios externos|intereses minoritarios|participaciones no dominantes)$"),
           solo_documento=True, marcos=("es",)),
+    *(Campo(f"{prefijo}_{clave}", f"{titulo}: {rotulo.lower()}", f"{titulo_en}: {clave}", 10, filas=(),
+            filas_con_contexto=((patron, bloque),), solo_documento=True, marcos=("es",), signo_pgc=signo)
+      for prefijo, titulo, titulo_en, bloque, signo in (
+          ("emision", "Emisión de deudas", "Debt issued", r"(?i)^emisi[óo]n$", 1),
+          ("devolucion", "Devolución y amortización de deudas", "Debt repaid", r"(?i)^devoluci[óo]n y amortizaci[óo]n", -1))
+      for clave, rotulo, patron in _PARTES_DEUDA_PGC),
     Campo("pagos_material", "Pagos por inversiones en inmovilizado material", "Payments for property and equipment", 10,
           filas=(), filas_con_contexto=((r"^Inmovilizado material$", r"(?i)^pagos por inversiones"),),
           solo_documento=True, marcos=("es",), signo_pgc=-1),

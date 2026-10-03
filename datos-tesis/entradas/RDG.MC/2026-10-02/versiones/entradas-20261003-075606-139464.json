@@ -623,23 +623,28 @@
  },
  "comparables": [
   {
-   "ticker": "MAKS.MC",
-   "justificacion": "Consultora española de marketing digital, datos y tecnología para comercio electrónico; el par más directo de la compañía en BME Growth.",
+   "ticker": "EPAM",
+   "justificacion": "Ingeniería de software y consultoría digital a medida; referencia de márgenes del desarrollo para grandes cuentas.",
    "usar_en_multiplos": true
   },
   {
-   "ticker": "SCO.MC",
-   "justificacion": "Servicios de tecnología y desarrollo de software a medida en España, con tamaño y modelo de proyecto comparables.",
+   "ticker": "CTSH",
+   "justificacion": "Servicios de tecnología y transformación digital con grandes clientes de banca y distribución.",
    "usar_en_multiplos": true
   },
   {
-   "ticker": "ALC.MC",
-   "justificacion": "Consultoría tecnológica y transformación digital para empresa y Administración; referencia de márgenes del sector en España.",
+   "ticker": "ACN",
+   "justificacion": "Consultoría y marketing digital integrado; el modelo de servicio completo al que aspira la compañía.",
    "usar_en_multiplos": true
   },
   {
-   "ticker": "IZER.MC",
-   "justificacion": "Consultoría de transformación digital española que creció por adquisiciones; referencia de escala y de valoración.",
+   "ticker": "STGW",
+   "justificacion": "Grupo de marketing digital y medios con ingresos de agencia; referencia para Digital Business.",
+   "usar_en_multiplos": true
+  },
+  {
+   "ticker": "GDYN",
+   "justificacion": "Ingeniería digital, datos e inteligencia artificial para comercio y distribución; escala menor que el resto.",
    "usar_en_multiplos": true
   }
  ],

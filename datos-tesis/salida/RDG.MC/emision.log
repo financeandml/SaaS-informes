@@ -28,7 +28,7 @@
 [3/8] Sin XBRL: emisor de BME, las cifras salen de las cuentas anuales y semestrales en PDF
   ejercicios ['FY2021', 'FY2022', 'FY2023', 'FY2024', 'FY2025'] · trimestres ['1S24', '2S24', '1S25', '2S25']
 [4/8] Extracción y contraste
-  hueco 198 · solo_documento 101 · derivado 44 · no_aplica 79
+  hueco 89 · solo_documento 111 · derivado 58 · no_aplica 164
     no aplica · marketing: el modelo de cuentas español no presenta esta partida (es del modelo de EE. UU.): no es una línea de sus cuentas, no un dato que falte.
     no aplica · tecnologia: el modelo de cuentas español no presenta esta partida (es del modelo de EE. UU.): no es una línea de sus cuentas, no un dato que falte.
     no aplica · generales: el modelo de cuentas español no presenta esta partida (es del modelo de EE. UU.): no es una línea de sus cuentas, no un dato que falte.
@@ -38,6 +38,16 @@
     no aplica · contenido: el modelo de cuentas español no presenta esta partida (es del modelo de EE. UU.): no es una línea de sus cuentas, no un dato que falte.
     no aplica · papel_comercial: el modelo de cuentas español no presenta esta partida (es del modelo de EE. UU.): no es una línea de sus cuentas, no un dato que falte.
     no aplica · fcf_compania: el modelo de cuentas español no presenta esta partida (es del modelo de EE. UU.): no es una línea de sus cuentas, no un dato que falte.
+    no aplica · bpa_basico: ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+    no aplica · bpa_diluido: ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+    no aplica · acciones_basicas: ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+    no aplica · acciones_diluidas: ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+    no aplica · inversiones_lp: ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+    no aplica · fondo_comercio: ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+    no aplica · arrendamientos: ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+    no aplica · pasivo_total: ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+    no aplica · acciones_circulacion: ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+    no aplica · adquisiciones: ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
 [5/8] Recortes de evidencia
   12 recortes: CCAA_20241231_39f44888 p145, CCAA_20241231_39f44888 p146, CCAA_20241231_39f44888 p147, CCAA_20241231_39f44888 p150, CCAA_20251231_0a65991f p171, CCAA_20251231_0a65991f p172, CCAA_20251231_0a65991f p173, CCAA_20251231_0a65991f p175, SEMESTRAL_20250630_e988e43b p55, SEMESTRAL_20250630_e988e43b p56, SEMESTRAL_20250630_e988e43b p57, SEMESTRAL_20250630_e988e43b p59
 [6/8] Ficha, gobierno (con retratos), objetivos, regiones, riesgos, historial, precio, DCF, posición
@@ -61,7 +71,7 @@
   párrafos de plantilla: Párrafo factual del resumen ejecutivo (editado)
   documentación complementaria: 5 piezas en 2 apartados · 12 recortes de estados junto a sus cuadros · 0 retratos
 [8/8] Doble comprobación, HTML y PDF
-  doble comprobación: 820 cifras releídas · 0 desacuerdos
+  doble comprobación: 688 cifras releídas · 0 desacuerdos
   puerta de calidad: 0 bloqueos · 12 avisos · EMITIDO 02/10/2026
-  /home/user/SaaS-informes-limpio/datos-tesis/salida/RDG.MC/RDG.MC_tesis_2026-10-02.pdf · sha256 e6f15b0caf604dff
+  /home/user/SaaS-informes-limpio/datos-tesis/salida/RDG.MC/RDG.MC_tesis_2026-10-02.pdf · sha256 84d3a9c35483d915
   /home/user/SaaS-informes-limpio/datos-tesis/salida/RDG.MC/RDG.MC_tesis_2026-10-02.contraste.txt

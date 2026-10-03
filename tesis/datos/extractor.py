@@ -953,8 +953,9 @@ def _leer_es(lineas: List[Linea], numero: int, documento: str, ancho: float, alt
                     cand.rotulo = f.rotulo
                 if _ENCABEZADO.match(limpiar_rotulo_es(f.rotulo)):
                     contexto = f.rotulo
-            elif rotulo and not _PREFIJO.match(rotulo):
-                # una partida sin importe del modelo normalizado («2. Deudas con entidades de crédito») no es un epígrafe
+            elif rotulo and not _PREFIJO.match(rotulo) and not _SIGNO_MODELO.search(rotulo):
+                # una partida sin importe del modelo normalizado («2. Deudas con entidades de crédito», «Obligaciones y
+                # valores similares (-)») no es un epígrafe: lo de debajo sigue en el bloque de antes
                 contexto = rotulo
             continue
         if not rotulo:

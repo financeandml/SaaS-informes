@@ -191,3 +191,62 @@ class RecompraDelModeloEspanol(unittest.TestCase):
         self.assertIsNotNone(h)
         self.assertTrue(h.hay_dato, h.motivo)
         self.assertAlmostEqual(abs(h.valor), 557116.82, places=2)
+
+
+class PartidasDelPGC(unittest.TestCase):
+    """Partidas del balance y del estado de flujos del PGC que el informe imprimía N/A teniéndolas el documento
+    (cuentas de 2025 de un emisor de BME Growth, 02/10/2026)."""
+
+    def _valor(self, campo, clave):
+        h = hecho("RDG", campo, clave)
+        self.assertIsNotNone(h)
+        self.assertTrue(h.hay_dato, f"{campo} {clave}: {h.motivo}")
+        return h.valor
+
+    def test_el_inmovilizado_material_del_balance(self):
+        """Falla si «Inmovilizado material» del activo no corriente no se lee (y nunca la fila homónima de los pagos
+        por inversiones del estado de flujos, que es otra partida)."""
+        self.assertAlmostEqual(self._valor("inmovilizado", "@2025-12-31"), 54168.13, places=2)
+        self.assertAlmostEqual(self._valor("inmovilizado", "@2024-12-31"), 59052.78, places=2)
+
+    def test_la_emision_y_la_amortizacion_de_deuda_suman_sus_partes(self):
+        """Falla si la emisión y la devolución de deudas del flujo de financiación no se suman de sus partes publicadas:
+        el modelo no imprime su total, solo las filas de debajo (entidades de crédito, grupo, otras deudas…)."""
+        self.assertAlmostEqual(self._valor("emision_deuda", "FY2025"), 990321.77, places=2)
+        self.assertAlmostEqual(abs(self._valor("amortizacion_deuda", "FY2025")), 136213.70 + 853572.22, places=2)
+        self.assertAlmostEqual(abs(self._valor("amortizacion_deuda", "FY2024")), 971658.51 + 723016.42 + 658640.98, places=2)
+
+    def test_una_partida_sin_importe_con_el_signo_del_modelo_no_es_un_epigrafe(self):
+        """Falla si «Obligaciones y valores similares (-)», sin cifras, se toma por la cabecera de lo que va debajo: las
+        deudas devueltas de debajo perdían su bloque («Devolución y amortización de») y no se leían."""
+        from datetime import date
+        from tesis.datos.extractor import Linea, Token, _leer_es
+        def linea(y, *trozos):
+            return Linea([Token(t, x, y, x + 10 * len(t), y + 8) for x, t in trozos])
+        lineas = [linea(100, (60, "Nota"), (400, "31/12/2025"), (500, "31/12/2024*")),
+                  linea(120, (60, "Devolución y amortización de:")),
+                  linea(140, (60, "Obligaciones y valores similares (-)")),
+                  linea(160, (60, "Deudas con entidades de crédito (-)"), (400, "(136.213,70)"), (500, "(971.658,51)"))]
+        p = _leer_es(lineas, 175, "ccaa.pdf", 600, 800, date(2025, 12, 31), 12, "EUR")
+        fila = next(f for f in p.filas if f.rotulo.startswith("Deudas con entidades"))
+        self.assertTrue(fila.contexto.startswith("Devolución y amortización"), fila.contexto)
+
+    def test_lo_que_sus_estados_no_imprimen_no_es_un_hueco(self):
+        """Falla si el BPA de quien no lo imprime en ningún estado (el PGC no lo pide) cuenta como dato que falta: es
+        «no es una línea de sus cuentas» (regla 10) y la fila sale del cuadro, no una de N/A."""
+        _, _, tab = tablero("RDG")
+        for clave in ("bpa_basico", "bpa_diluido", "acciones_diluidas"):
+            self.assertIn(clave, tab.no_aplican)
+        # la compra de negocios: «Unidad de negocio» solo está entre los cobros por desinversiones, que es otra partida
+        self.assertIn("adquisiciones", tab.no_aplican)
+        # lo que sí imprime y se lee no se declara ajeno
+        self.assertNotIn("inmovilizado", tab.no_aplican)
+
+    def test_sin_estados_leidos_nada_se_declara_ajeno(self):
+        """Falla si, con unas cuentas de las que el lector no reconoce ningún estado (escaneadas, otro modelo), las partidas
+        se dan por «no es una línea de sus cuentas»: el hueco es del lector y tiene que verse como N/A."""
+        from tesis.verificacion.contraste import _no_lo_imprimen_sus_estados
+        _, _, tab = tablero("RDG")
+        huecos = [r for r in tab.resultados if r.campo.clave == "ingresos"]
+        vacios = [type(r)(r.campo, r.periodo, r.hecho.con(contraste=Contraste.HUECO), r.sec, [], [], None) for r in huecos]
+        self.assertEqual(_no_lo_imprimen_sus_estados(vacios, {}, {}), {})

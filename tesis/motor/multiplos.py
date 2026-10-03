@@ -322,6 +322,11 @@ def construir(hechos: Dict[Tuple[str, Periodo], Hecho], trimestres: List[Periodo
         if acc_diluidas is not None and acc_diluidas.hay_dato and acc_diluidas.valor:
             bpa = v["beneficio_neto"] / acc_diluidas.valor
             formula_per = f"cotización oficial / (beneficio neto TTM / acciones medias diluidas del {m.fin})"
+        elif no_aplican and "bpa_diluido" in no_aplican and acciones:
+            # quien no publica BPA en ningún estado (el PGC no lo pide): el beneficio de los doce meses entre las acciones
+            # con que se calcula la capitalización, y la fórmula lo dice
+            bpa = v["beneficio_neto"] / acciones
+            formula_per = "cotización oficial / (beneficio neto TTM / acciones de la capitalización): la compañía no publica BPA"
     per = m.precio / bpa if m.precio is not None and bpa and bpa > 0 else None   # con BPA negativo no hay PER, como en comparables
     linea("PER (TTM)", per, "x", formula_per, f"{dos(m.precio)} / {dos(bpa)}" if per is not None else "",
           m.faltan.get("precio") or ("" if bpa is not None else sumas["bpa_diluido"][1]) or ("BPA TTM negativo: PER no definido" if bpa else "BPA TTM nulo"))

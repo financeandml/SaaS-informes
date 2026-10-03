@@ -302,8 +302,12 @@ _OIR_UTILES = (
 )
 
 
-def traer(emisor, carpeta: Path, anuales: int = 4, semestrales: int = 2, hoy: Optional[date] = None) -> list:
-    """Trae a `carpeta` los documentos oficiales del emisor de BME y deja su procedencia en `origen.json`."""
+def traer(emisor, carpeta: Path, anuales: int = 4, semestrales: int = 2, hoy: Optional[date] = None,
+          comunicaciones: bool = True) -> list:
+    """Trae a `carpeta` los documentos oficiales del emisor de BME publicados hasta `hoy` y deja su procedencia en
+    `origen.json`. `anuales` y `semestrales` cuentan ejercicios y semestres distintos: la bolsa registra a veces dos
+    documentos del mismo ejercicio (las cuentas individuales y las consolidadas, o el mismo PDF dos veces), y los dos
+    entran sin quitarle el sitio al ejercicio anterior. Sin `comunicaciones`, solo las cuentas (un comparable)."""
     import json
     import re as _re
     from .edgar import Traido
@@ -311,10 +315,17 @@ def traer(emisor, carpeta: Path, anuales: int = 4, semestrales: int = 2, hoy: Op
     carpeta.mkdir(parents=True, exist_ok=True)
     hoy = hoy or date.today()
     elegidos = []
-    financiera = informacion_financiera(emisor.clave_bolsa)
-    elegidos += [("cuentas anuales", d) for d in [d for d in financiera if d.periodo == "AN"][:anuales]]
-    elegidos += [("semestral", d) for d in [d for d in financiera if d.periodo != "AN"][:semestrales]]
-    publicados = documentos(emisor.clave_bolsa, hoy - timedelta(days=548), hoy)
+    financiera = [d for d in informacion_financiera(emisor.clave_bolsa) if d.fecha is None or d.fecha <= hoy]
+
+    def primeros(docs, cuantos):
+        periodos = []
+        for d in docs:
+            if (d.ejercicio, d.periodo) not in periodos:
+                periodos.append((d.ejercicio, d.periodo))
+        return [d for d in docs if (d.ejercicio, d.periodo) in periodos[:cuantos]]
+    elegidos += [("cuentas anuales", d) for d in primeros([d for d in financiera if d.periodo == "AN"], anuales)]
+    elegidos += [("semestral", d) for d in primeros([d for d in financiera if d.periodo != "AN"], semestrales)]
+    publicados = documentos(emisor.clave_bolsa, hoy - timedelta(days=548), hoy) if comunicaciones else []
     for clave, patron, cuantos in _OIR_UTILES:
         # la categoría de BME («Operaciones realizadas por directivos») dice más que un título como «Compras realizadas…»
         elegidos += [(clave, d) for d in [d for d in publicados if _re.search(patron, f"{d.tipo} {d.titulo}")][:cuantos]]
