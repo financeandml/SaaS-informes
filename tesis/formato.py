@@ -10,7 +10,9 @@ SEC (positivo), y el signo se decide aquí, en un solo sitio.
 
 from __future__ import annotations
 
+import math
 from dataclasses import dataclass
+from decimal import ROUND_HALF_UP, Decimal
 from datetime import date
 from typing import Optional
 
@@ -24,6 +26,10 @@ _SIGNO = {c.clave: c.signo_informe for c in CAMPOS}
 
 def numero(v: float, decimales: int = 0) -> str:
     """es-ES (02): miles con punto, decimales con coma y signo menos tipográfico («−3.117»); sin «−0»."""
+    # redondeo comercial (la mitad, hacia arriba) sobre el decimal que se lee, no sobre el binario: 9,95 ÷ 10 es en coma
+    # flotante 0,99499…, y el BPA reexpresado de 0,995 se imprime 1,00, como lo redondea cualquiera (fallo [51])
+    if math.isfinite(float(v)):
+        v = Decimal(repr(round(float(v), 10))).quantize(Decimal(1).scaleb(-decimales), rounding=ROUND_HALF_UP)
     s = f"{v:,.{decimales}f}".replace(",", " ").replace(".", ",").replace(" ", ".")
     if s.startswith("-"):
         return "−" + s[1:] if s.strip("-0.,") else s[1:]

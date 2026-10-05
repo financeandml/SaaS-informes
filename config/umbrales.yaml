@@ -24,6 +24,10 @@ bme_cierre_ventana_dias: 21     # la última sesión con negociación ≤ fecha 
 biotech_ingresos_min_meur: 50   # regla 7 para emisores en EUR (BME 03/05): la misma cifra que la de USD, sin convertir (por confirmar por el analista)
 atipicos_iqr: 3
 comparables_antiguedad_max_meses: 15
+# días que pueden tener los hechos XBRL de la caché de EDGAR respecto a la fecha del informe antes de pedirlos de nuevo (fallo [9])
+sec_cache_dias_max: 1
+# diferencia relativa entre el real de una nota de resultados y su hecho XBRL que es redondeo de acumulados, no discrepancia (fallo [62])
+guia_redondeo_relativo: 0.001
 # un comparable de BME cuyas cuentas anuales son en su mayoría páginas sin capa de texto (escaneadas): sin OCR no se leen
 comparables_paginas_sin_texto_max: 0.5
 tolerancia_oi_yahoo_nasdaq: 0.02

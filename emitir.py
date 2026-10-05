@@ -42,6 +42,18 @@ from tesis.datos.hechos import Contraste  # noqa: E402
 EMITIDO, ERROR, BORRADOR = 0, 1, 2
 
 
+def _cache_al_dia(hoy, obtenido) -> str:
+    """El aviso de unos hechos XBRL de la caché de EDGAR más viejos que `umbrales.sec_cache_dias_max` respecto a la fecha
+    del informe (fallo [9]): lo depositado después no está en el informe y hay que decirlo. No se refrescan aquí: la
+    emisión no escribe en la caché (las pruebas la apuntan a sus fixtures); se refresca al traer los documentos."""
+    from tesis.umbrales import umbral
+    dias = (hoy - obtenido).days if obtenido else 0
+    if dias <= int(umbral("sec_cache_dias_max")):
+        return ""
+    return (f"Hechos XBRL de la caché de EDGAR del {obtenido:%d/%m/%Y}, {dias} días antes de la fecha del informe: lo que la "
+            f"compañía haya depositado después no está en el informe (se refrescan al traer los documentos).")
+
+
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description="Tesis de inversión desde el expediente del analista y la SEC.")
     ap.add_argument("ticker")
@@ -92,6 +104,9 @@ def main(argv=None) -> int:
     else:
         print("[3/8] Hechos XBRL")
         facts, obtenido = sec.companyfacts(emisor.cik)
+        aviso_cache = _cache_al_dia(hoy, obtenido)
+        if aviso_cache:
+            print(f"  [aviso] {aviso_cache}")
     try:
         periodos = contraste.periodos_del_informe(exp, facts=facts)
     except ValueError as e:
@@ -101,6 +116,8 @@ def main(argv=None) -> int:
 
     print("[4/8] Extracción y contraste")
     tab = contraste.contrastar(exp, facts, obtenido, periodos, Path(args.decisiones) if args.decisiones else None)
+    if emisor.mercado != "bme" and aviso_cache:
+        tab.avisos.append(aviso_cache)
     print("  " + " · ".join(f"{k} {v}" for k, v in tab.resumen.items()))
     for clave, motivo in tab.no_aplican.items():
         print(f"    no aplica · {clave}: {motivo}")

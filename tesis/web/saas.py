@@ -241,6 +241,11 @@ def traer(ticker: str, claves: List[str]) -> None:
             traidos = bme.traer(emisor, ADJUNTOS / ticker)      # la bolsa sirve el expediente entero de una vez
         else:
             traidos = edgar.traer(emisor, claves, ADJUNTOS / ticker, ya_estan)
+            # con los documentos nuevos, los hechos XBRL de hoy: la emisión avisa si los de la caché se quedan viejos [9]
+            try:
+                e["facts"] = sec.companyfacts(emisor.cik, refrescar=True)
+            except (RuntimeError, sec.SinContacto):
+                pass
     except Exception as ex:
         e["traida"] = {"estado": "error", "mensaje": f"{ex.__class__.__name__}: {ex}", "lineas": []}
         return

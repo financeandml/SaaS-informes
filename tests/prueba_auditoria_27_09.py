@@ -469,7 +469,6 @@ class Periodos(unittest.TestCase):
 
 @unittest.skipUnless(HAY, "sin fixtures de la auditoría o sin los adjuntos del analista")
 class MercadoSecundario(unittest.TestCase):
-    @falla(9, "caché de EDGAR de días anteriores sin refrescar ni avisar")
     def test_09_cache_edgar(self):
         for t in ("QCOM", "ORCL"):
             self.assertTrue(any("caché" in a and "días" in a for a in avisos(t)), t)
@@ -484,7 +483,6 @@ class MercadoSecundario(unittest.TestCase):
         fila = next(f for f in inf("NFLX").cuadro("Accionistas con 5 %") if "BlackRock" in f[0])
         self.assertIn("2023", fila[-1])
 
-    @falla(62, "el mismo hecho con dos valores (ingresos 4T FY25; consenso)")
     def test_62_un_hecho_un_valor(self):
         fila = inf("QCOM").fila("Guía de la compañía", "4T FY25 · Ingresos")
         self.assertEqual(num(fila[1]), num(inf("QCOM").celda("Estado de resultados", "Ingresos", "4T FY25")))
