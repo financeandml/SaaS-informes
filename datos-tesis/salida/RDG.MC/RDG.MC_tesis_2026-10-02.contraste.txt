@@ -1,0 +1,424 @@
+Contraste RDG.MC 2026-10-02 · resumen {'hueco': 89, 'solo_documento': 111, 'derivado': 58, 'no_aplica': 164}
+
+—  ingresos               FY2021                          N/A  el emisor no presenta ante la SEC y ningún documento del expediente lo trae
+—  ingresos               FY2022                          N/A  el emisor no presenta ante la SEC y ningún documento del expediente lo trae
+◑  ingresos               FY2023                10,070,815.08  el emisor no presenta ante la SEC; leído en 1 documento(s)
+◑  ingresos               FY2024                13,755,636.94  el emisor no presenta ante la SEC; leído en 3 documento(s)
+◑  ingresos               FY2025                16,834,046.30  el emisor no presenta ante la SEC; leído en 2 documento(s)
+◑  ingresos               1S24                   6,467,514.81  el emisor no presenta ante la SEC; leído en 1 documento(s)
+∑  ingresos               2S24                   7,288,122.13  2S = FY2024 − 1S24: nadie publica el segundo semestre
+◑  ingresos               1S25                   7,547,204.50  el emisor no presenta ante la SEC; leído en 1 documento(s)
+∑  ingresos               2S25                   9,286,841.80  2S = FY2025 − 1S25: nadie publica el segundo semestre
+—  coste_ingresos         FY2021                          N/A  el emisor no presenta ante la SEC y ningún documento del expediente lo trae
+—  coste_ingresos         FY2022                          N/A  el emisor no presenta ante la SEC y ningún documento del expediente lo trae
+◑  coste_ingresos         FY2023                 3,299,030.81  el emisor no presenta ante la SEC; leído en 1 documento(s)
+◑  coste_ingresos         FY2024                 8,285,217.11  el emisor no presenta ante la SEC; leído en 3 documento(s)
+◑  coste_ingresos         FY2025                 9,860,349.87  el emisor no presenta ante la SEC; leído en 2 documento(s)
+◑  coste_ingresos         1S24                   3,452,177.40  el emisor no presenta ante la SEC; leído en 1 documento(s)
+∑  coste_ingresos         2S24                   4,833,039.71  2S = FY2024 − 1S24: nadie publica el segundo semestre
+◑  coste_ingresos         1S25                   4,724,405.13  el emisor no presenta ante la SEC; leído en 1 documento(s)
+∑  coste_ingresos         2S25                   5,135,944.74  2S = FY2025 − 1S25: nadie publica el segundo semestre
+—  marketing              FY2021                          N/A  el modelo de cuentas español no presenta esta partida (es del modelo de EE. UU.): no es una línea de sus cuentas, no un dato que falte.
+—  marketing              FY2022                          N/A  el modelo de cuentas español no presenta esta partida (es del modelo de EE. UU.): no es una línea de sus cuentas, no un dato que falte.
+—  marketing              FY2023                          N/A  el modelo de cuentas español no presenta esta partida (es del modelo de EE. UU.): no es una línea de sus cuentas, no un dato que falte.
+—  marketing              FY2024                          N/A  el modelo de cuentas español no presenta esta partida (es del modelo de EE. UU.): no es una línea de sus cuentas, no un dato que falte.
+—  marketing              FY2025                          N/A  el modelo de cuentas español no presenta esta partida (es del modelo de EE. UU.): no es una línea de sus cuentas, no un dato que falte.
+—  marketing              1S24                            N/A  el modelo de cuentas español no presenta esta partida (es del modelo de EE. UU.): no es una línea de sus cuentas, no un dato que falte.
+—  marketing              2S24                            N/A  el modelo de cuentas español no presenta esta partida (es del modelo de EE. UU.): no es una línea de sus cuentas, no un dato que falte.
+—  marketing              1S25                            N/A  el modelo de cuentas español no presenta esta partida (es del modelo de EE. UU.): no es una línea de sus cuentas, no un dato que falte.
+—  marketing              2S25                            N/A  el modelo de cuentas español no presenta esta partida (es del modelo de EE. UU.): no es una línea de sus cuentas, no un dato que falte.
+—  tecnologia             FY2021                          N/A  el modelo de cuentas español no presenta esta partida (es del modelo de EE. UU.): no es una línea de sus cuentas, no un dato que falte.
+—  tecnologia             FY2022                          N/A  el modelo de cuentas español no presenta esta partida (es del modelo de EE. UU.): no es una línea de sus cuentas, no un dato que falte.
+—  tecnologia             FY2023                          N/A  el modelo de cuentas español no presenta esta partida (es del modelo de EE. UU.): no es una línea de sus cuentas, no un dato que falte.
+—  tecnologia             FY2024                          N/A  el modelo de cuentas español no presenta esta partida (es del modelo de EE. UU.): no es una línea de sus cuentas, no un dato que falte.
+—  tecnologia             FY2025                          N/A  el modelo de cuentas español no presenta esta partida (es del modelo de EE. UU.): no es una línea de sus cuentas, no un dato que falte.
+—  tecnologia             1S24                            N/A  el modelo de cuentas español no presenta esta partida (es del modelo de EE. UU.): no es una línea de sus cuentas, no un dato que falte.
+—  tecnologia             2S24                            N/A  el modelo de cuentas español no presenta esta partida (es del modelo de EE. UU.): no es una línea de sus cuentas, no un dato que falte.
+—  tecnologia             1S25                            N/A  el modelo de cuentas español no presenta esta partida (es del modelo de EE. UU.): no es una línea de sus cuentas, no un dato que falte.
+—  tecnologia             2S25                            N/A  el modelo de cuentas español no presenta esta partida (es del modelo de EE. UU.): no es una línea de sus cuentas, no un dato que falte.
+—  generales              FY2021                          N/A  el modelo de cuentas español no presenta esta partida (es del modelo de EE. UU.): no es una línea de sus cuentas, no un dato que falte.
+—  generales              FY2022                          N/A  el modelo de cuentas español no presenta esta partida (es del modelo de EE. UU.): no es una línea de sus cuentas, no un dato que falte.
+—  generales              FY2023                          N/A  el modelo de cuentas español no presenta esta partida (es del modelo de EE. UU.): no es una línea de sus cuentas, no un dato que falte.
+—  generales              FY2024                          N/A  el modelo de cuentas español no presenta esta partida (es del modelo de EE. UU.): no es una línea de sus cuentas, no un dato que falte.
+—  generales              FY2025                          N/A  el modelo de cuentas español no presenta esta partida (es del modelo de EE. UU.): no es una línea de sus cuentas, no un dato que falte.
+—  generales              1S24                            N/A  el modelo de cuentas español no presenta esta partida (es del modelo de EE. UU.): no es una línea de sus cuentas, no un dato que falte.
+—  generales              2S24                            N/A  el modelo de cuentas español no presenta esta partida (es del modelo de EE. UU.): no es una línea de sus cuentas, no un dato que falte.
+—  generales              1S25                            N/A  el modelo de cuentas español no presenta esta partida (es del modelo de EE. UU.): no es una línea de sus cuentas, no un dato que falte.
+—  generales              2S25                            N/A  el modelo de cuentas español no presenta esta partida (es del modelo de EE. UU.): no es una línea de sus cuentas, no un dato que falte.
+—  sga                    FY2021                          N/A  el modelo de cuentas español no presenta esta partida (es del modelo de EE. UU.): no es una línea de sus cuentas, no un dato que falte.
+—  sga                    FY2022                          N/A  el modelo de cuentas español no presenta esta partida (es del modelo de EE. UU.): no es una línea de sus cuentas, no un dato que falte.
+—  sga                    FY2023                          N/A  el modelo de cuentas español no presenta esta partida (es del modelo de EE. UU.): no es una línea de sus cuentas, no un dato que falte.
+—  sga                    FY2024                          N/A  el modelo de cuentas español no presenta esta partida (es del modelo de EE. UU.): no es una línea de sus cuentas, no un dato que falte.
+—  sga                    FY2025                          N/A  el modelo de cuentas español no presenta esta partida (es del modelo de EE. UU.): no es una línea de sus cuentas, no un dato que falte.
+—  sga                    1S24                            N/A  el modelo de cuentas español no presenta esta partida (es del modelo de EE. UU.): no es una línea de sus cuentas, no un dato que falte.
+—  sga                    2S24                            N/A  el modelo de cuentas español no presenta esta partida (es del modelo de EE. UU.): no es una línea de sus cuentas, no un dato que falte.
+—  sga                    1S25                            N/A  el modelo de cuentas español no presenta esta partida (es del modelo de EE. UU.): no es una línea de sus cuentas, no un dato que falte.
+—  sga                    2S25                            N/A  el modelo de cuentas español no presenta esta partida (es del modelo de EE. UU.): no es una línea de sus cuentas, no un dato que falte.
+—  gastos_personal        FY2021                          N/A  el emisor no presenta ante la SEC y ningún documento del expediente lo trae
+—  gastos_personal        FY2022                          N/A  el emisor no presenta ante la SEC y ningún documento del expediente lo trae
+◑  gastos_personal        FY2023                 5,606,963.44  el emisor no presenta ante la SEC; leído en 1 documento(s)
+◑  gastos_personal        FY2024                 5,103,865.16  reexpresado en bme_2025_AN_118333.pdf pág. 173; antes: bme_2024_AN_109947.pdf pág. 147 = −4.996.032,73
+◑  gastos_personal        FY2025                 5,207,195.56  el emisor no presenta ante la SEC; leído en 2 documento(s)
+◑  gastos_personal        1S24                   2,557,331.84  el emisor no presenta ante la SEC; leído en 1 documento(s)
+∑  gastos_personal        2S24                   2,546,533.32  2S = FY2024 − 1S24: nadie publica el segundo semestre
+◑  gastos_personal        1S25                   2,529,080.14  el emisor no presenta ante la SEC; leído en 1 documento(s)
+∑  gastos_personal        2S25                   2,678,115.42  2S = FY2025 − 1S25: nadie publica el segundo semestre
+—  ebit                   FY2021                          N/A  el emisor no presenta ante la SEC y ningún documento del expediente lo trae
+—  ebit                   FY2022                          N/A  el emisor no presenta ante la SEC y ningún documento del expediente lo trae
+◑  ebit                   FY2023                   108,269.47  el emisor no presenta ante la SEC; leído en 1 documento(s)
+◑  ebit                   FY2024                -1,515,747.45  reexpresado en bme_2025_AN_118333.pdf pág. 173; antes: bme_2024_AN_109947.pdf pág. 147 = −1.378.066,03
+◑  ebit                   FY2025                  -484,194.29  el emisor no presenta ante la SEC; leído en 2 documento(s)
+◑  ebit                   1S24                      54,204.12  el emisor no presenta ante la SEC; leído en 1 documento(s)
+∑  ebit                   2S24                  -1,569,951.57  2S = FY2024 − 1S24: nadie publica el segundo semestre
+◑  ebit                   1S25                    -589,609.81  el emisor no presenta ante la SEC; leído en 1 documento(s)
+∑  ebit                   2S25                     105,415.52  2S = FY2025 − 1S25: nadie publica el segundo semestre; sale con el signo contrario al del ejercicio y al del primer semestre: el semestral y las cuentas anuales no clasifican igual esta partida
+—  intereses              FY2021                          N/A  el emisor no presenta ante la SEC y ningún documento del expediente lo trae
+—  intereses              FY2022                          N/A  el emisor no presenta ante la SEC y ningún documento del expediente lo trae
+◑  intereses              FY2023                   349,636.02  el emisor no presenta ante la SEC; leído en 1 documento(s)
+◑  intereses              FY2024                   281,400.83  el emisor no presenta ante la SEC; leído en 3 documento(s)
+◑  intereses              FY2025                   234,002.17  el emisor no presenta ante la SEC; leído en 2 documento(s)
+◑  intereses              1S24                     100,065.95  el emisor no presenta ante la SEC; leído en 1 documento(s)
+∑  intereses              2S24                     181,334.88  2S = FY2024 − 1S24: nadie publica el segundo semestre
+◑  intereses              1S25                     111,535.92  el emisor no presenta ante la SEC; leído en 1 documento(s)
+∑  intereses              2S25                     122,466.25  2S = FY2025 − 1S25: nadie publica el segundo semestre
+—  otros_financieros      FY2021                          N/A  el emisor no presenta ante la SEC y ningún documento del expediente lo trae
+—  otros_financieros      FY2022                          N/A  el emisor no presenta ante la SEC y ningún documento del expediente lo trae
+◑  otros_financieros      FY2023                  -156,334.06  el emisor no presenta ante la SEC; leído en 1 documento(s)
+◑  otros_financieros      FY2024                  -386,434.89  el emisor no presenta ante la SEC; leído en 3 documento(s)
+◑  otros_financieros      FY2025                  -176,388.01  el emisor no presenta ante la SEC; leído en 2 documento(s)
+◑  otros_financieros      1S24                    -131,389.24  el emisor no presenta ante la SEC; leído en 1 documento(s)
+∑  otros_financieros      2S24                    -255,045.65  2S = FY2024 − 1S24: nadie publica el segundo semestre
+◑  otros_financieros      1S25                    -134,702.27  el emisor no presenta ante la SEC; leído en 1 documento(s)
+∑  otros_financieros      2S25                     -41,685.74  2S = FY2025 − 1S25: nadie publica el segundo semestre
+—  bai                    FY2021                          N/A  el emisor no presenta ante la SEC y ningún documento del expediente lo trae
+—  bai                    FY2022                          N/A  el emisor no presenta ante la SEC y ningún documento del expediente lo trae
+◑  bai                    FY2023                   -48,064.59  el emisor no presenta ante la SEC; leído en 1 documento(s)
+◑  bai                    FY2024                -1,902,182.34  reexpresado en bme_2025_AN_118333.pdf pág. 173; antes: bme_2024_AN_109947.pdf pág. 147 = −1.764.500,92
+◑  bai                    FY2025                  -660,582.30  el emisor no presenta ante la SEC; leído en 2 documento(s)
+◑  bai                    1S24                     -77,185.12  el emisor no presenta ante la SEC; leído en 1 documento(s)
+∑  bai                    2S24                  -1,824,997.22  2S = FY2024 − 1S24: nadie publica el segundo semestre
+◑  bai                    1S25                    -724,312.08  el emisor no presenta ante la SEC; leído en 1 documento(s)
+∑  bai                    2S25                      63,729.78  2S = FY2025 − 1S25: nadie publica el segundo semestre; sale con el signo contrario al del ejercicio y al del primer semestre: el semestral y las cuentas anuales no clasifican igual esta partida
+—  impuestos              FY2021                          N/A  el emisor no presenta ante la SEC y ningún documento del expediente lo trae
+—  impuestos              FY2022                          N/A  el emisor no presenta ante la SEC y ningún documento del expediente lo trae
+◑  impuestos              FY2023                    63,486.08  el emisor no presenta ante la SEC; leído en 1 documento(s)
+◑  impuestos              FY2024                  -121,145.36  el emisor no presenta ante la SEC; leído en 3 documento(s)
+◑  impuestos              FY2025                   131,552.23  el emisor no presenta ante la SEC; leído en 2 documento(s)
+—  impuestos              1S24                            N/A  el emisor no presenta ante la SEC y ningún documento del expediente lo trae
+—  impuestos              2S24                            N/A  el emisor no presenta ante la SEC y ningún documento del expediente lo trae
+◑  impuestos              1S25                    -113,832.40  el emisor no presenta ante la SEC; leído en 1 documento(s)
+∑  impuestos              2S25                     245,384.63  2S = FY2025 − 1S25: nadie publica el segundo semestre
+—  beneficio_neto         FY2021                          N/A  el emisor no presenta ante la SEC y ningún documento del expediente lo trae
+—  beneficio_neto         FY2022                          N/A  el emisor no presenta ante la SEC y ningún documento del expediente lo trae
+◑  beneficio_neto         FY2023                  -113,254.30  el emisor no presenta ante la SEC; leído en 1 documento(s)
+◑  beneficio_neto         FY2024                -1,772,663.49  reexpresado en bme_2025_AN_118333.pdf pág. 173; antes: bme_2024_AN_109947.pdf pág. 147 = −1.634.982,07
+◑  beneficio_neto         FY2025                  -787,921.85  el emisor no presenta ante la SEC; leído en 2 documento(s)
+◑  beneficio_neto         1S24                     -75,389.08  el emisor no presenta ante la SEC; leído en 1 documento(s)
+∑  beneficio_neto         2S24                  -1,697,274.41  2S = FY2024 − 1S24: nadie publica el segundo semestre
+◑  beneficio_neto         1S25                    -608,533.74  el emisor no presenta ante la SEC; leído en 1 documento(s)
+∑  beneficio_neto         2S25                    -179,388.11  2S = FY2025 − 1S25: nadie publica el segundo semestre
+—  bpa_basico             FY2021                          N/A  ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+—  bpa_basico             FY2022                          N/A  ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+—  bpa_basico             FY2023                          N/A  ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+—  bpa_basico             FY2024                          N/A  ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+—  bpa_basico             FY2025                          N/A  ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+—  bpa_basico             1S24                            N/A  ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+—  bpa_basico             2S24                            N/A  ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+—  bpa_basico             1S25                            N/A  ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+—  bpa_basico             2S25                            N/A  ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+—  bpa_diluido            FY2021                          N/A  ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+—  bpa_diluido            FY2022                          N/A  ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+—  bpa_diluido            FY2023                          N/A  ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+—  bpa_diluido            FY2024                          N/A  ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+—  bpa_diluido            FY2025                          N/A  ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+—  bpa_diluido            1S24                            N/A  ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+—  bpa_diluido            2S24                            N/A  ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+—  bpa_diluido            1S25                            N/A  ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+—  bpa_diluido            2S25                            N/A  ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+—  acciones_basicas       FY2021                          N/A  ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+—  acciones_basicas       FY2022                          N/A  ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+—  acciones_basicas       FY2023                          N/A  ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+—  acciones_basicas       FY2024                          N/A  ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+—  acciones_basicas       FY2025                          N/A  ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+—  acciones_basicas       1S24                            N/A  ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+—  acciones_basicas       2S24                            N/A  ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+—  acciones_basicas       1S25                            N/A  ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+—  acciones_basicas       2S25                            N/A  ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+—  acciones_diluidas      FY2021                          N/A  ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+—  acciones_diluidas      FY2022                          N/A  ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+—  acciones_diluidas      FY2023                          N/A  ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+—  acciones_diluidas      FY2024                          N/A  ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+—  acciones_diluidas      FY2025                          N/A  ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+—  acciones_diluidas      1S24                            N/A  ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+—  acciones_diluidas      2S24                            N/A  ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+—  acciones_diluidas      1S25                            N/A  ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+—  acciones_diluidas      2S25                            N/A  ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+—  amortizacion           FY2021                          N/A  el emisor no presenta ante la SEC y ningún documento del expediente lo trae
+—  amortizacion           FY2022                          N/A  el emisor no presenta ante la SEC y ningún documento del expediente lo trae
+◑  amortizacion           FY2023                   310,022.11  el emisor no presenta ante la SEC; leído en 1 documento(s)
+◑  amortizacion           FY2024                   797,839.44  el emisor no presenta ante la SEC; leído en 3 documento(s)
+◑  amortizacion           FY2025                   743,491.88  el emisor no presenta ante la SEC; leído en 2 documento(s)
+◑  amortizacion           1S24                     257,505.55  el emisor no presenta ante la SEC; leído en 1 documento(s)
+∑  amortizacion           2S24                     540,333.89  2S = FY2024 − 1S24: nadie publica el segundo semestre
+◑  amortizacion           1S25                     367,204.84  el emisor no presenta ante la SEC; leído en 1 documento(s)
+∑  amortizacion           2S25                     376,287.04  2S = FY2025 − 1S25: nadie publica el segundo semestre
+—  amortizacion_contenido FY2021                          N/A  el modelo de cuentas español no presenta esta partida (es del modelo de EE. UU.): no es una línea de sus cuentas, no un dato que falte.
+—  amortizacion_contenido FY2022                          N/A  el modelo de cuentas español no presenta esta partida (es del modelo de EE. UU.): no es una línea de sus cuentas, no un dato que falte.
+—  amortizacion_contenido FY2023                          N/A  el modelo de cuentas español no presenta esta partida (es del modelo de EE. UU.): no es una línea de sus cuentas, no un dato que falte.
+—  amortizacion_contenido FY2024                          N/A  el modelo de cuentas español no presenta esta partida (es del modelo de EE. UU.): no es una línea de sus cuentas, no un dato que falte.
+—  amortizacion_contenido FY2025                          N/A  el modelo de cuentas español no presenta esta partida (es del modelo de EE. UU.): no es una línea de sus cuentas, no un dato que falte.
+—  amortizacion_contenido 1S24                            N/A  el modelo de cuentas español no presenta esta partida (es del modelo de EE. UU.): no es una línea de sus cuentas, no un dato que falte.
+—  amortizacion_contenido 2S24                            N/A  el modelo de cuentas español no presenta esta partida (es del modelo de EE. UU.): no es una línea de sus cuentas, no un dato que falte.
+—  amortizacion_contenido 1S25                            N/A  el modelo de cuentas español no presenta esta partida (es del modelo de EE. UU.): no es una línea de sus cuentas, no un dato que falte.
+—  amortizacion_contenido 2S25                            N/A  el modelo de cuentas español no presenta esta partida (es del modelo de EE. UU.): no es una línea de sus cuentas, no un dato que falte.
+—  sbc                    FY2021                          N/A  el modelo de cuentas español no presenta esta partida (es del modelo de EE. UU.): no es una línea de sus cuentas, no un dato que falte.
+—  sbc                    FY2022                          N/A  el modelo de cuentas español no presenta esta partida (es del modelo de EE. UU.): no es una línea de sus cuentas, no un dato que falte.
+—  sbc                    FY2023                          N/A  el modelo de cuentas español no presenta esta partida (es del modelo de EE. UU.): no es una línea de sus cuentas, no un dato que falte.
+—  sbc                    FY2024                          N/A  el modelo de cuentas español no presenta esta partida (es del modelo de EE. UU.): no es una línea de sus cuentas, no un dato que falte.
+—  sbc                    FY2025                          N/A  el modelo de cuentas español no presenta esta partida (es del modelo de EE. UU.): no es una línea de sus cuentas, no un dato que falte.
+—  sbc                    1S24                            N/A  el modelo de cuentas español no presenta esta partida (es del modelo de EE. UU.): no es una línea de sus cuentas, no un dato que falte.
+—  sbc                    2S24                            N/A  el modelo de cuentas español no presenta esta partida (es del modelo de EE. UU.): no es una línea de sus cuentas, no un dato que falte.
+—  sbc                    1S25                            N/A  el modelo de cuentas español no presenta esta partida (es del modelo de EE. UU.): no es una línea de sus cuentas, no un dato que falte.
+—  sbc                    2S25                            N/A  el modelo de cuentas español no presenta esta partida (es del modelo de EE. UU.): no es una línea de sus cuentas, no un dato que falte.
+—  caja                   @2020-12-31                     N/A  el emisor no presenta ante la SEC y ningún documento del expediente lo trae
+—  caja                   @2021-12-31                     N/A  el emisor no presenta ante la SEC y ningún documento del expediente lo trae
+—  caja                   @2022-12-31                     N/A  el emisor no presenta ante la SEC y ningún documento del expediente lo trae
+◑  caja                   @2023-12-31              288,045.42  el emisor no presenta ante la SEC; leído en 1 documento(s)
+—  caja                   @2024-06-30                     N/A  el emisor no presenta ante la SEC y ningún documento del expediente lo trae
+◑  caja                   @2024-12-31            3,367,759.15  el emisor no presenta ante la SEC; leído en 4 documento(s)
+◑  caja                   @2025-06-30              166,043.48  el emisor no presenta ante la SEC; leído en 1 documento(s)
+◑  caja                   @2025-12-31            1,087,001.78  el emisor no presenta ante la SEC; leído en 2 documento(s)
+—  inversiones_cp         @2020-12-31                     N/A  el emisor no presenta ante la SEC y ningún documento del expediente lo trae
+—  inversiones_cp         @2021-12-31                     N/A  el emisor no presenta ante la SEC y ningún documento del expediente lo trae
+—  inversiones_cp         @2022-12-31                     N/A  el emisor no presenta ante la SEC y ningún documento del expediente lo trae
+◑  inversiones_cp         @2023-12-31               39,386.55  el emisor no presenta ante la SEC; leído en 1 documento(s)
+—  inversiones_cp         @2024-06-30                     N/A  el emisor no presenta ante la SEC y ningún documento del expediente lo trae
+◑  inversiones_cp         @2024-12-31                2,319.04  el emisor no presenta ante la SEC; leído en 4 documento(s)
+◑  inversiones_cp         @2025-06-30               40,195.41  el emisor no presenta ante la SEC; leído en 1 documento(s)
+◑  inversiones_cp         @2025-12-31               68,372.62  el emisor no presenta ante la SEC; leído en 2 documento(s)
+—  inversiones_lp         @2020-12-31                     N/A  ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+—  inversiones_lp         @2021-12-31                     N/A  ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+—  inversiones_lp         @2022-12-31                     N/A  ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+—  inversiones_lp         @2023-12-31                     N/A  ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+—  inversiones_lp         @2024-06-30                     N/A  ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+—  inversiones_lp         @2024-12-31                     N/A  ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+—  inversiones_lp         @2025-06-30                     N/A  ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+—  inversiones_lp         @2025-12-31                     N/A  ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+—  activo_corriente       @2020-12-31                     N/A  el emisor no presenta ante la SEC y ningún documento del expediente lo trae
+—  activo_corriente       @2021-12-31                     N/A  el emisor no presenta ante la SEC y ningún documento del expediente lo trae
+—  activo_corriente       @2022-12-31                     N/A  el emisor no presenta ante la SEC y ningún documento del expediente lo trae
+◑  activo_corriente       @2023-12-31            4,084,902.71  el emisor no presenta ante la SEC; leído en 1 documento(s)
+—  activo_corriente       @2024-06-30                     N/A  el emisor no presenta ante la SEC y ningún documento del expediente lo trae
+◑  activo_corriente       @2024-12-31            7,159,388.87  el emisor no presenta ante la SEC; leído en 4 documento(s)
+◑  activo_corriente       @2025-06-30            4,633,391.73  el emisor no presenta ante la SEC; leído en 1 documento(s)
+◑  activo_corriente       @2025-12-31            6,266,331.27  el emisor no presenta ante la SEC; leído en 2 documento(s)
+—  contenido              @2020-12-31                     N/A  el modelo de cuentas español no presenta esta partida (es del modelo de EE. UU.): no es una línea de sus cuentas, no un dato que falte.
+—  contenido              @2021-12-31                     N/A  el modelo de cuentas español no presenta esta partida (es del modelo de EE. UU.): no es una línea de sus cuentas, no un dato que falte.
+—  contenido              @2022-12-31                     N/A  el modelo de cuentas español no presenta esta partida (es del modelo de EE. UU.): no es una línea de sus cuentas, no un dato que falte.
+—  contenido              @2023-12-31                     N/A  el modelo de cuentas español no presenta esta partida (es del modelo de EE. UU.): no es una línea de sus cuentas, no un dato que falte.
+—  contenido              @2024-06-30                     N/A  el modelo de cuentas español no presenta esta partida (es del modelo de EE. UU.): no es una línea de sus cuentas, no un dato que falte.
+—  contenido              @2024-12-31                     N/A  el modelo de cuentas español no presenta esta partida (es del modelo de EE. UU.): no es una línea de sus cuentas, no un dato que falte.
+—  contenido              @2025-06-30                     N/A  el modelo de cuentas español no presenta esta partida (es del modelo de EE. UU.): no es una línea de sus cuentas, no un dato que falte.
+—  contenido              @2025-12-31                     N/A  el modelo de cuentas español no presenta esta partida (es del modelo de EE. UU.): no es una línea de sus cuentas, no un dato que falte.
+—  inmovilizado           @2020-12-31                     N/A  el emisor no presenta ante la SEC y ningún documento del expediente lo trae
+—  inmovilizado           @2021-12-31                     N/A  el emisor no presenta ante la SEC y ningún documento del expediente lo trae
+—  inmovilizado           @2022-12-31                     N/A  el emisor no presenta ante la SEC y ningún documento del expediente lo trae
+◑  inmovilizado           @2023-12-31               75,940.29  el emisor no presenta ante la SEC; leído en 1 documento(s)
+—  inmovilizado           @2024-06-30                     N/A  el emisor no presenta ante la SEC y ningún documento del expediente lo trae
+◑  inmovilizado           @2024-12-31               59,052.78  el emisor no presenta ante la SEC; leído en 4 documento(s)
+◑  inmovilizado           @2025-06-30               58,732.13  el emisor no presenta ante la SEC; leído en 1 documento(s)
+◑  inmovilizado           @2025-12-31               54,168.13  el emisor no presenta ante la SEC; leído en 2 documento(s)
+—  fondo_comercio         @2020-12-31                     N/A  ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+—  fondo_comercio         @2021-12-31                     N/A  ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+—  fondo_comercio         @2022-12-31                     N/A  ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+—  fondo_comercio         @2023-12-31                     N/A  ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+—  fondo_comercio         @2024-06-30                     N/A  ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+—  fondo_comercio         @2024-12-31                     N/A  ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+—  fondo_comercio         @2025-06-30                     N/A  ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+—  fondo_comercio         @2025-12-31                     N/A  ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+—  intangibles            @2020-12-31                     N/A  el emisor no presenta ante la SEC y ningún documento del expediente lo trae
+—  intangibles            @2021-12-31                     N/A  el emisor no presenta ante la SEC y ningún documento del expediente lo trae
+—  intangibles            @2022-12-31                     N/A  el emisor no presenta ante la SEC y ningún documento del expediente lo trae
+◑  intangibles            @2023-12-31            3,288,807.81  el emisor no presenta ante la SEC; leído en 1 documento(s)
+—  intangibles            @2024-06-30                     N/A  el emisor no presenta ante la SEC y ningún documento del expediente lo trae
+◑  intangibles            @2024-12-31            3,352,292.56  el emisor no presenta ante la SEC; leído en 4 documento(s)
+◑  intangibles            @2025-06-30            3,399,258.55  el emisor no presenta ante la SEC; leído en 1 documento(s)
+◑  intangibles            @2025-12-31            3,177,665.03  el emisor no presenta ante la SEC; leído en 2 documento(s)
+—  total_activo           @2020-12-31                     N/A  el emisor no presenta ante la SEC y ningún documento del expediente lo trae
+—  total_activo           @2021-12-31                     N/A  el emisor no presenta ante la SEC y ningún documento del expediente lo trae
+—  total_activo           @2022-12-31                     N/A  el emisor no presenta ante la SEC y ningún documento del expediente lo trae
+◑  total_activo           @2023-12-31            7,960,668.17  el emisor no presenta ante la SEC; leído en 1 documento(s)
+—  total_activo           @2024-06-30                     N/A  el emisor no presenta ante la SEC y ningún documento del expediente lo trae
+◑  total_activo           @2024-12-31           11,763,690.19  reexpresado en bme_2025_AN_118333.pdf pág. 171; antes: bme_2024_AN_109947.pdf pág. 145 = 11.818.718,02
+◑  total_activo           @2025-06-30            9,398,165.94  el emisor no presenta ante la SEC; leído en 1 documento(s)
+◑  total_activo           @2025-12-31           10,314,343.63  el emisor no presenta ante la SEC; leído en 2 documento(s)
+—  pasivo_corriente       @2020-12-31                     N/A  el emisor no presenta ante la SEC y ningún documento del expediente lo trae
+—  pasivo_corriente       @2021-12-31                     N/A  el emisor no presenta ante la SEC y ningún documento del expediente lo trae
+—  pasivo_corriente       @2022-12-31                     N/A  el emisor no presenta ante la SEC y ningún documento del expediente lo trae
+◑  pasivo_corriente       @2023-12-31            7,339,184.36  el emisor no presenta ante la SEC; leído en 1 documento(s)
+—  pasivo_corriente       @2024-06-30                     N/A  el emisor no presenta ante la SEC y ningún documento del expediente lo trae
+◑  pasivo_corriente       @2024-12-31            8,495,558.36  reexpresado en bme_2025_AN_118333.pdf pág. 172; antes: bme_2024_AN_109947.pdf pág. 146 = 8.357.876,94; bme_2025_1S_114695.pdf pág. 56 = 8.424.019,90
+◑  pasivo_corriente       @2025-06-30            7,335,456.06  el emisor no presenta ante la SEC; leído en 1 documento(s)
+◑  pasivo_corriente       @2025-12-31            9,024,672.35  el emisor no presenta ante la SEC; leído en 2 documento(s)
+—  deuda_cp               @2020-12-31                     N/A  el emisor no presenta ante la SEC y ningún documento del expediente lo trae
+—  deuda_cp               @2021-12-31                     N/A  el emisor no presenta ante la SEC y ningún documento del expediente lo trae
+—  deuda_cp               @2022-12-31                     N/A  el emisor no presenta ante la SEC y ningún documento del expediente lo trae
+∑  deuda_cp               @2023-12-31            4,053,186.90  deudas a corto plazo + deudas con empresas del grupo a corto plazo
+—  deuda_cp               @2024-06-30                     N/A  el emisor no presenta ante la SEC y ningún documento del expediente lo trae
+∑  deuda_cp               @2024-12-31            2,321,413.04  deudas a corto plazo + deudas con empresas del grupo a corto plazo
+∑  deuda_cp               @2025-06-30            2,500,761.98  deudas a corto plazo + deudas con empresas del grupo a corto plazo
+∑  deuda_cp               @2025-12-31            2,836,716.27  deudas a corto plazo + deudas con empresas del grupo a corto plazo
+—  papel_comercial        @2020-12-31                     N/A  el modelo de cuentas español no presenta esta partida (es del modelo de EE. UU.): no es una línea de sus cuentas, no un dato que falte.
+—  papel_comercial        @2021-12-31                     N/A  el modelo de cuentas español no presenta esta partida (es del modelo de EE. UU.): no es una línea de sus cuentas, no un dato que falte.
+—  papel_comercial        @2022-12-31                     N/A  el modelo de cuentas español no presenta esta partida (es del modelo de EE. UU.): no es una línea de sus cuentas, no un dato que falte.
+—  papel_comercial        @2023-12-31                     N/A  el modelo de cuentas español no presenta esta partida (es del modelo de EE. UU.): no es una línea de sus cuentas, no un dato que falte.
+—  papel_comercial        @2024-06-30                     N/A  el modelo de cuentas español no presenta esta partida (es del modelo de EE. UU.): no es una línea de sus cuentas, no un dato que falte.
+—  papel_comercial        @2024-12-31                     N/A  el modelo de cuentas español no presenta esta partida (es del modelo de EE. UU.): no es una línea de sus cuentas, no un dato que falte.
+—  papel_comercial        @2025-06-30                     N/A  el modelo de cuentas español no presenta esta partida (es del modelo de EE. UU.): no es una línea de sus cuentas, no un dato que falte.
+—  papel_comercial        @2025-12-31                     N/A  el modelo de cuentas español no presenta esta partida (es del modelo de EE. UU.): no es una línea de sus cuentas, no un dato que falte.
+—  deuda_lp               @2020-12-31                     N/A  el emisor no presenta ante la SEC y ningún documento del expediente lo trae
+—  deuda_lp               @2021-12-31                     N/A  el emisor no presenta ante la SEC y ningún documento del expediente lo trae
+—  deuda_lp               @2022-12-31                     N/A  el emisor no presenta ante la SEC y ningún documento del expediente lo trae
+∑  deuda_lp               @2023-12-31            2,979,109.23  deudas a largo plazo + deudas con empresas del grupo a largo plazo
+—  deuda_lp               @2024-06-30                     N/A  el emisor no presenta ante la SEC y ningún documento del expediente lo trae
+∑  deuda_lp               @2024-12-31            2,357,567.19  deudas a largo plazo + deudas con empresas del grupo a largo plazo
+∑  deuda_lp               @2025-06-30            1,980,035.85  deudas a largo plazo + deudas con empresas del grupo a largo plazo
+∑  deuda_lp               @2025-12-31            1,842,799.81  deudas con entidades de crédito + otros pasivos financieros + deudas con empresas del grupo, a largo plazo
+—  arrendamientos         @2020-12-31                     N/A  ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+—  arrendamientos         @2021-12-31                     N/A  ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+—  arrendamientos         @2022-12-31                     N/A  ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+—  arrendamientos         @2023-12-31                     N/A  ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+—  arrendamientos         @2024-06-30                     N/A  ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+—  arrendamientos         @2024-12-31                     N/A  ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+—  arrendamientos         @2025-06-30                     N/A  ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+—  arrendamientos         @2025-12-31                     N/A  ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+—  pasivo_no_corriente    @2020-12-31                     N/A  el emisor no presenta ante la SEC y ningún documento del expediente lo trae
+—  pasivo_no_corriente    @2021-12-31                     N/A  el emisor no presenta ante la SEC y ningún documento del expediente lo trae
+—  pasivo_no_corriente    @2022-12-31                     N/A  el emisor no presenta ante la SEC y ningún documento del expediente lo trae
+◑  pasivo_no_corriente    @2023-12-31            3,076,716.18  el emisor no presenta ante la SEC; leído en 1 documento(s)
+—  pasivo_no_corriente    @2024-06-30                     N/A  el emisor no presenta ante la SEC y ningún documento del expediente lo trae
+◑  pasivo_no_corriente    @2024-12-31            2,450,233.69  el emisor no presenta ante la SEC; leído en 4 documento(s)
+◑  pasivo_no_corriente    @2025-06-30            2,061,581.83  el emisor no presenta ante la SEC; leído en 1 documento(s)
+◑  pasivo_no_corriente    @2025-12-31            1,912,760.23  el emisor no presenta ante la SEC; leído en 2 documento(s)
+—  pasivo_total           @2020-12-31                     N/A  ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+—  pasivo_total           @2021-12-31                     N/A  ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+—  pasivo_total           @2022-12-31                     N/A  ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+—  pasivo_total           @2023-12-31                     N/A  ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+—  pasivo_total           @2024-06-30                     N/A  ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+—  pasivo_total           @2024-12-31                     N/A  ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+—  pasivo_total           @2025-06-30                     N/A  ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+—  pasivo_total           @2025-12-31                     N/A  ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+—  patrimonio             @2020-12-31                     N/A  el emisor no presenta ante la SEC y ningún documento del expediente lo trae
+—  patrimonio             @2021-12-31                     N/A  el emisor no presenta ante la SEC y ningún documento del expediente lo trae
+—  patrimonio             @2022-12-31                     N/A  el emisor no presenta ante la SEC y ningún documento del expediente lo trae
+◑  patrimonio             @2023-12-31           -2,455,232.37  el emisor no presenta ante la SEC; leído en 1 documento(s)
+—  patrimonio             @2024-06-30                     N/A  el emisor no presenta ante la SEC y ningún documento del expediente lo trae
+◑  patrimonio             @2024-12-31              817,898.14  reexpresado en bme_2025_AN_118333.pdf pág. 172; antes: bme_2024_AN_109947.pdf pág. 146 = 1.010.607,39; bme_2025_1S_114695.pdf pág. 56 = 889.436,60
+◑  patrimonio             @2025-06-30                1,128.04  el emisor no presenta ante la SEC; leído en 1 documento(s)
+◑  patrimonio             @2025-12-31             -623,088.95  el emisor no presenta ante la SEC; leído en 2 documento(s)
+—  autocartera            @2020-12-31                     N/A  el emisor no presenta ante la SEC y ningún documento del expediente lo trae
+—  autocartera            @2021-12-31                     N/A  el emisor no presenta ante la SEC y ningún documento del expediente lo trae
+—  autocartera            @2022-12-31                     N/A  el emisor no presenta ante la SEC y ningún documento del expediente lo trae
+—  autocartera            @2023-12-31                     N/A  el emisor no presenta ante la SEC y ningún documento del expediente lo trae
+—  autocartera            @2024-06-30                     N/A  el emisor no presenta ante la SEC y ningún documento del expediente lo trae
+—  autocartera            @2024-12-31                     N/A  el emisor no presenta ante la SEC y ningún documento del expediente lo trae
+◑  autocartera            @2025-06-30              307,609.24  el emisor no presenta ante la SEC; leído en 1 documento(s)
+◑  autocartera            @2025-12-31              557,116.82  el emisor no presenta ante la SEC; leído en 2 documento(s)
+—  acciones_circulacion   @2020-12-31                     N/A  ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+—  acciones_circulacion   @2021-12-31                     N/A  ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+—  acciones_circulacion   @2022-12-31                     N/A  ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+—  acciones_circulacion   @2023-12-31                     N/A  ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+—  acciones_circulacion   @2024-06-30                     N/A  ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+—  acciones_circulacion   @2024-12-31                     N/A  ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+—  acciones_circulacion   @2025-06-30                     N/A  ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+—  acciones_circulacion   @2025-12-31                     N/A  ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+—  cfo                    FY2021                          N/A  el emisor no presenta ante la SEC y ningún documento del expediente lo trae
+—  cfo                    FY2022                          N/A  el emisor no presenta ante la SEC y ningún documento del expediente lo trae
+◑  cfo                    FY2023                -2,310,057.82  el emisor no presenta ante la SEC; leído en 1 documento(s)
+◑  cfo                    FY2024                 1,152,553.85  reexpresado en bme_2025_AN_118333.pdf pág. 175; antes: bme_2024_AN_109947.pdf pág. 150 = 313.340,73
+◑  cfo                    FY2025                  -662,595.23  el emisor no presenta ante la SEC; leído en 2 documento(s)
+◑  cfo                    1S24                     -61,383.42  el emisor no presenta ante la SEC; leído en 1 documento(s)
+∑  cfo                    2S24                   1,213,937.27  2S = FY2024 − 1S24: nadie publica el segundo semestre
+◑  cfo                    1S25                  -2,019,974.75  el emisor no presenta ante la SEC; leído en 1 documento(s)
+∑  cfo                    2S25                   1,357,379.52  2S = FY2025 − 1S25: nadie publica el segundo semestre; sale con el signo contrario al del ejercicio y al del primer semestre: el semestral y las cuentas anuales no clasifican igual esta partida
+—  capex                  FY2021                          N/A  el emisor no presenta ante la SEC y ningún documento del expediente lo trae
+—  capex                  FY2022                          N/A  el emisor no presenta ante la SEC y ningún documento del expediente lo trae
+∑  capex                  FY2023                     2,056.52  inmovilizado intangible + material (pagos por inversiones)
+∑  capex                  FY2024                   844,436.68  inmovilizado intangible + material (pagos por inversiones)
+∑  capex                  FY2025                   563,979.70  inmovilizado intangible + material (pagos por inversiones)
+∑  capex                  1S24                       3,293.49  inmovilizado intangible + material (pagos por inversiones)
+∑  capex                  2S24                     841,143.19  2S = FY2024 − 1S24: nadie publica el segundo semestre
+∑  capex                  1S25                     413,850.18  inmovilizado intangible + material (pagos por inversiones)
+∑  capex                  2S25                     150,129.52  2S = FY2025 − 1S25: nadie publica el segundo semestre
+—  cfi                    FY2021                          N/A  el emisor no presenta ante la SEC y ningún documento del expediente lo trae
+—  cfi                    FY2022                          N/A  el emisor no presenta ante la SEC y ningún documento del expediente lo trae
+◑  cfi                    FY2023                   309,673.94  el emisor no presenta ante la SEC; leído en 1 documento(s)
+◑  cfi                    FY2024                -1,086,266.19  reexpresado en bme_2025_AN_118333.pdf pág. 175; antes: bme_2024_AN_109947.pdf pág. 150 = −247.053,07
+◑  cfi                    FY2025                  -960,207.21  el emisor no presenta ante la SEC; leído en 2 documento(s)
+◑  cfi                    1S24                      59,710.33  el emisor no presenta ante la SEC; leído en 1 documento(s)
+∑  cfi                    2S24                  -1,145,976.52  2S = FY2024 − 1S24: nadie publica el segundo semestre
+◑  cfi                    1S25                    -646,856.06  el emisor no presenta ante la SEC; leído en 1 documento(s)
+∑  cfi                    2S25                    -313,351.15  2S = FY2025 − 1S25: nadie publica el segundo semestre
+—  cff                    FY2021                          N/A  el emisor no presenta ante la SEC y ningún documento del expediente lo trae
+—  cff                    FY2022                          N/A  el emisor no presenta ante la SEC y ningún documento del expediente lo trae
+◑  cff                    FY2023                 1,926,095.64  el emisor no presenta ante la SEC; leído en 1 documento(s)
+◑  cff                    FY2024                 3,118,460.13  el emisor no presenta ante la SEC; leído en 3 documento(s)
+◑  cff                    FY2025                  -626,319.56  el emisor no presenta ante la SEC; leído en 2 documento(s)
+◑  cff                    1S24                    -148,212.24  el emisor no presenta ante la SEC; leído en 1 documento(s)
+∑  cff                    2S24                   3,266,672.37  2S = FY2024 − 1S24: nadie publica el segundo semestre
+◑  cff                    1S25                    -473,561.68  el emisor no presenta ante la SEC; leído en 1 documento(s)
+∑  cff                    2S25                    -152,757.88  2S = FY2025 − 1S25: nadie publica el segundo semestre
+—  dividendos             FY2021                          N/A  el emisor no presenta ante la SEC y ningún documento del expediente lo trae
+—  dividendos             FY2022                          N/A  el emisor no presenta ante la SEC y ningún documento del expediente lo trae
+—  dividendos             FY2023                          N/A  el emisor no presenta ante la SEC y ningún documento del expediente lo trae
+◑  dividendos             FY2024                         0.00  el emisor no presenta ante la SEC; leído en 2 documento(s)
+◑  dividendos             FY2025                         0.00  el emisor no presenta ante la SEC; leído en 2 documento(s)
+◑  dividendos             1S24                           0.00  el emisor no presenta ante la SEC; leído en 1 documento(s)
+∑  dividendos             2S24                           0.00  2S = FY2024 − 1S24: nadie publica el segundo semestre
+◑  dividendos             1S25                           0.00  el emisor no presenta ante la SEC; leído en 1 documento(s)
+∑  dividendos             2S25                           0.00  2S = FY2025 − 1S25: nadie publica el segundo semestre
+—  recompras              FY2021                          N/A  el emisor no presenta ante la SEC y ningún documento del expediente lo trae
+—  recompras              FY2022                          N/A  el emisor no presenta ante la SEC y ningún documento del expediente lo trae
+◑  recompras              FY2023                         0.00  el emisor no presenta ante la SEC; leído en 1 documento(s)
+◑  recompras              FY2024                         0.00  el emisor no presenta ante la SEC; leído en 3 documento(s)
+◑  recompras              FY2025                   557,116.82  el emisor no presenta ante la SEC; leído en 2 documento(s)
+◑  recompras              1S24                           0.00  el emisor no presenta ante la SEC; leído en 1 documento(s)
+∑  recompras              2S24                           0.00  2S = FY2024 − 1S24: nadie publica el segundo semestre
+◑  recompras              1S25                     307,609.24  el emisor no presenta ante la SEC; leído en 1 documento(s)
+∑  recompras              2S25                     249,507.58  2S = FY2025 − 1S25: nadie publica el segundo semestre
+—  adquisiciones          FY2021                          N/A  ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+—  adquisiciones          FY2022                          N/A  ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+—  adquisiciones          FY2023                          N/A  ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+—  adquisiciones          FY2024                          N/A  ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+—  adquisiciones          FY2025                          N/A  ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+—  adquisiciones          1S24                            N/A  ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+—  adquisiciones          2S24                            N/A  ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+—  adquisiciones          1S25                            N/A  ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+—  adquisiciones          2S25                            N/A  ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+—  emision_deuda          FY2021                          N/A  el emisor no presenta ante la SEC y ningún documento del expediente lo trae
+—  emision_deuda          FY2022                          N/A  el emisor no presenta ante la SEC y ningún documento del expediente lo trae
+∑  emision_deuda          FY2023                 2,594,061.15  suma de las filas de «Emisión» del flujo de financiación (obligaciones y valores similares, deudas con características especiales, deudas con entidades de crédito, deudas con empresas del grupo y asociadas, otras deudas)
+∑  emision_deuda          FY2024                         0.00  suma de las filas de «Emisión» del flujo de financiación (obligaciones y valores similares, deudas con características especiales, deudas con entidades de crédito, deudas con empresas del grupo y asociadas, otras deudas)
+∑  emision_deuda          FY2025                   990,321.77  suma de las filas de «Emisión» del flujo de financiación (obligaciones y valores similares, deudas con características especiales, deudas con entidades de crédito, deudas con empresas del grupo y asociadas, otras deudas)
+∑  emision_deuda          1S24                     442,362.23  suma de las filas de «Emisión» del flujo de financiación (obligaciones y valores similares, deudas con características especiales, deudas con entidades de crédito, deudas con empresas del grupo y asociadas, otras deudas)
+∑  emision_deuda          2S24                    -442,362.23  2S = FY2024 − 1S24: nadie publica el segundo semestre
+∑  emision_deuda          1S25                     181,000.00  suma de las filas de «Emisión» del flujo de financiación (obligaciones y valores similares, deudas con características especiales, deudas con entidades de crédito, deudas con empresas del grupo y asociadas, otras deudas)
+∑  emision_deuda          2S25                     809,321.77  2S = FY2025 − 1S25: nadie publica el segundo semestre
+—  amortizacion_deuda     FY2021                          N/A  el emisor no presenta ante la SEC y ningún documento del expediente lo trae
+—  amortizacion_deuda     FY2022                          N/A  el emisor no presenta ante la SEC y ningún documento del expediente lo trae
+∑  amortizacion_deuda     FY2023                   749,354.28  suma de las filas de «Devolución y amortización de» del flujo de financiación (obligaciones y valores similares, deudas con características especiales, deudas con entidades de crédito, deudas con empresas del grupo y asociadas, otras deudas)
+∑  amortizacion_deuda     FY2024                 2,353,315.91  suma de las filas de «Devolución y amortización de» del flujo de financiación (obligaciones y valores similares, deudas con características especiales, deudas con entidades de crédito, deudas con empresas del grupo y asociadas, otras deudas)
+∑  amortizacion_deuda     FY2025                   989,785.92  suma de las filas de «Devolución y amortización de» del flujo de financiación (obligaciones y valores similares, deudas con características especiales, deudas con entidades de crédito, deudas con empresas del grupo y asociadas, otras deudas)
+∑  amortizacion_deuda     1S24                     634,675.80  suma de las filas de «Devolución y amortización de» del flujo de financiación (obligaciones y valores similares, deudas con características especiales, deudas con entidades de crédito, deudas con empresas del grupo y asociadas, otras deudas)
+∑  amortizacion_deuda     2S24                   1,718,640.11  2S = FY2024 − 1S24: nadie publica el segundo semestre
+∑  amortizacion_deuda     1S25                     379,182.40  suma de las filas de «Devolución y amortización de» del flujo de financiación (obligaciones y valores similares, deudas con características especiales, deudas con entidades de crédito, deudas con empresas del grupo y asociadas, otras deudas)
+∑  amortizacion_deuda     2S25                     610,603.52  2S = FY2025 − 1S25: nadie publica el segundo semestre
+—  fcf_compania           FY2021                          N/A  el modelo de cuentas español no presenta esta partida (es del modelo de EE. UU.): no es una línea de sus cuentas, no un dato que falte.
+—  fcf_compania           FY2022                          N/A  el modelo de cuentas español no presenta esta partida (es del modelo de EE. UU.): no es una línea de sus cuentas, no un dato que falte.
+—  fcf_compania           FY2023                          N/A  el modelo de cuentas español no presenta esta partida (es del modelo de EE. UU.): no es una línea de sus cuentas, no un dato que falte.
+—  fcf_compania           FY2024                          N/A  el modelo de cuentas español no presenta esta partida (es del modelo de EE. UU.): no es una línea de sus cuentas, no un dato que falte.
+—  fcf_compania           FY2025                          N/A  el modelo de cuentas español no presenta esta partida (es del modelo de EE. UU.): no es una línea de sus cuentas, no un dato que falte.
+—  fcf_compania           1S24                            N/A  el modelo de cuentas español no presenta esta partida (es del modelo de EE. UU.): no es una línea de sus cuentas, no un dato que falte.
+—  fcf_compania           2S24                            N/A  el modelo de cuentas español no presenta esta partida (es del modelo de EE. UU.): no es una línea de sus cuentas, no un dato que falte.
+—  fcf_compania           1S25                            N/A  el modelo de cuentas español no presenta esta partida (es del modelo de EE. UU.): no es una línea de sus cuentas, no un dato que falte.
+—  fcf_compania           2S25                            N/A  el modelo de cuentas español no presenta esta partida (es del modelo de EE. UU.): no es una línea de sus cuentas, no un dato que falte.

@@ -232,7 +232,7 @@ def _moneda_de(hechos: Mapping) -> str:
 def construir(hechos: Dict[Tuple[str, Periodo], Hecho], trimestres: List[Periodo], anuales: List[Periodo], precio: Optional[Hecho],
               acciones: Optional[float], agregador=None, facts: Optional[dict] = None, obtenido: Optional[date] = None,
               no_aplican: Optional[Dict[str, str]] = None, moneda: Optional[str] = None, semestres: Optional[Sequence[Periodo]] = None,
-              fuente: str = "la SEC") -> Multiplos:
+              fuente: str = "la SEC", desfase: int = 0) -> Multiplos:
     """Los múltiplos y rentabilidades TTM; cada línea con su fórmula, sus componentes y su contraste.
 
     `moneda` es la del emisor (rótulos «M EUR»); sin ella, la unidad de los propios ingresos (la cifra y su rótulo, de la
@@ -264,8 +264,9 @@ def construir(hechos: Dict[Tuple[str, Periodo], Hecho], trimestres: List[Periodo
     else:
         ultimos = sorted(trimestres, key=lambda p: p.fin)[-4:]
         fin = ultimos[-1] if ultimos else None
-        m = Multiplos(fin=fin.clave if fin else "", trimestres=[p.clave for p in ultimos], cierre=fin.fin if fin else None,
-                      precio=precio_valor, acciones=acciones, moneda=moneda)
+        # los trimestres, por su número en el ejercicio fiscal de la compañía («4T FY25»), como en los cuadros (fallo [12])
+        m = Multiplos(fin=etiqueta(fin, anuales, desfase) if fin else "", trimestres=[etiqueta(p, anuales, desfase) for p in ultimos],
+                      cierre=fin.fin if fin else None, precio=precio_valor, acciones=acciones, moneda=moneda)
         if len(ultimos) < 4:
             m.faltan["ttm"] = f"solo {len(ultimos)} trimestres contrastados: no hay TTM"
             return m
@@ -280,7 +281,7 @@ def construir(hechos: Dict[Tuple[str, Periodo], Hecho], trimestres: List[Periodo
                     m.por_acumulados[c] = f"ejercicio + acumulado del año − el del año anterior ({motivo or 'el trimestre suelto no se publica'})"
                 else:
                     sumas[c] = (None, f"{motivo}; {motivo_ac}")
-        rango = f"{ultimos[0].clave}–{fin.clave}"
+        rango = f"{m.trimestres[0]}–{m.fin}"
     if m.precio is None:
         m.faltan["precio"] = "sin cotización oficial (apartado 1): los múltiplos sobre precio quedan N/A"
     if acciones is None:
@@ -297,8 +298,9 @@ def construir(hechos: Dict[Tuple[str, Periodo], Hecho], trimestres: List[Periodo
     fcf = v["cfo"] - v["capex"] if v["cfo"] is not None and v["capex"] is not None else None
     cap = m.precio * acciones if m.precio is not None and acciones else None
     ev = cap + deuda - caja - inv if None not in (cap, deuda, caja, inv) else None   # sin inversiones contrastadas no hay EV: un None no es un cero
-    from ..formato import numero as _numero
-    mln = lambda x: _numero(x / 1e6)
+    from ..formato import fijar_escala, mln as _mln, numero as _numero
+    fijar_escala(v["ingresos"])                          # las cifras de los cálculos, con los decimales del tamaño del emisor
+    mln = lambda x: _mln(x)                              # noqa: E731
     dos = lambda x: _numero(x, 2)
     unod = lambda x: _numero(x, 1)
 
@@ -321,6 +323,11 @@ def construir(hechos: Dict[Tuple[str, Periodo], Hecho], trimestres: List[Periodo
         if acc_diluidas is not None and acc_diluidas.hay_dato and acc_diluidas.valor:
             bpa = v["beneficio_neto"] / acc_diluidas.valor
             formula_per = f"cotización oficial / (beneficio neto TTM / acciones medias diluidas del {m.fin})"
+        elif no_aplican and "bpa_diluido" in no_aplican and acciones:
+            # quien no publica BPA en ningún estado (el PGC no lo pide): el beneficio de los doce meses entre las acciones
+            # con que se calcula la capitalización, y la fórmula lo dice
+            bpa = v["beneficio_neto"] / acciones
+            formula_per = "cotización oficial / (beneficio neto TTM / acciones de la capitalización): la compañía no publica BPA"
     per = m.precio / bpa if m.precio is not None and bpa and bpa > 0 else None   # con BPA negativo no hay PER, como en comparables
     linea("PER (TTM)", per, "x", formula_per, f"{dos(m.precio)} / {dos(bpa)}" if per is not None else "",
           m.faltan.get("precio") or ("" if bpa is not None else sumas["bpa_diluido"][1]) or ("BPA TTM negativo: PER no definido" if bpa else "BPA TTM nulo"))
@@ -346,12 +353,17 @@ def construir(hechos: Dict[Tuple[str, Periodo], Hecho], trimestres: List[Periodo
     if agregador is not None and agregador.peg is not None:
         l.agregador = agregador.peg
         l.nota_contraste = "el agregador publica su PEG sobre el crecimiento esperado a cinco años: otra definición, no se cuadra"
-    # ROE y ROA TTM, con la definición del 10-K (beneficio después de impuestos / patrimonio medio)
+    # ROE y ROA TTM: beneficio después de impuestos / saldo medio. Con el patrimonio negativo en uno de los dos cierres, el
+    # ROE no significa nada (−809 % sobre un patrimonio medio que roza el cero): «no significativo», no una cifra
     hace_un_anio = Periodo.instante(_cierre_de_hace_un_anio(facts, fin))
     for rotulo, campo, que in (("ROE (TTM)", "patrimonio", "ROE"), ("ROA (TTM)", "total_activo", "ROA")):
         ahora = _instante(hechos, campo, cierre)
         antes = _instante(hechos, campo, hace_un_anio) or _xbrl(facts, obtenido or date.today(), campo, hace_un_anio)
         valor = v["beneficio_neto"] / ((ahora + antes) / 2) if v["beneficio_neto"] is not None and ahora and antes else None
+        if valor is not None and que == "ROE" and (ahora <= 0 or antes <= 0):
+            linea(rotulo, None, "%", "beneficio neto TTM / patrimonio medio", "",
+                  f"no significativo: el patrimonio neto es negativo en uno de los dos cierres ({mln(antes)} y {mln(ahora)} M)")
+            continue
         l = linea(rotulo, valor, "%", f"beneficio neto TTM / {campos_mod.campo(campo).rotulo.lower()} medio ({hace_un_anio.fin:%d/%m/%Y} y {cierre.fin:%d/%m/%Y})",
                   f"{mln(v['beneficio_neto'])} / (({mln(antes)} + {mln(ahora)}) / 2)" if valor is not None else "",
                   sumas["beneficio_neto"][1] or f"sin {campos_mod.campo(campo).rotulo.lower()} a {hace_un_anio.fin:%d/%m/%Y} en {fuente}")

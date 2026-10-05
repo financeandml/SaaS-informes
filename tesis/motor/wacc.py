@@ -104,7 +104,7 @@ def calcular(rf: float, rf_fecha: date, beta: float, beta_origen: str, erp: floa
     peso_e = e / (e + d) if e + d else 1.0
     peso_d = 1 - peso_e
     w = peso_e * ke + peso_d * kd_neto
-    if beta_reg is not None and beta_reg.r2 < r2_min:
+    if beta_reg is not None and beta_reg.r2 < r2_min and not beta_origen.startswith("bottom-up"):   # ya se usa la otra
         avisos.append(f"R² de la regresión {beta_reg.r2:.2f} < {r2_min:.2f}: conviene la beta bottom-up")
     if w <= 0:
         bloqueos.append("WACC ≤ 0")

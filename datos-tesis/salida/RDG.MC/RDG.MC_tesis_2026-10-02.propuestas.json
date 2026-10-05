@@ -1,0 +1,20 @@
+{
+ "parrafos": [
+  {
+   "id": "resumen_factual",
+   "titulo": "Párrafo factual del resumen ejecutivo",
+   "frases": [
+    [
+     "En el ejercicio 2025, la compañía facturó 16,83 mln EUR con un margen operativo del −2,9 % (+8,1 p. p. frente al ejercicio anterior).",
+     "Cuentas anuales 24/04/2026"
+    ],
+    [
+     "Al cierre del 2025, la deuda neta era de 3,52 mln EUR, 13,6 veces el EBITDA de los últimos doce meses.",
+     "Cuentas anuales 24/04/2026"
+    ]
+   ],
+   "huella": "d90ed0cf4787de4a",
+   "estado": "editado"
+  }
+ ]
+}

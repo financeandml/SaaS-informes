@@ -153,6 +153,16 @@ def exportar(v: Valoracion, ingresos_base: float, ruta: Path, umbrales: dict) ->
             ws[f"A{fin + i}"], ws[f"B{fin + i}"], ws[f"C{fin + i}"] = f"{k}_{c}", rot, formula
             ws[f"B{fin + i}"].font = negrita
             nombre(f"{k}_{c}", titulo, f"C{fin + i}")
+        # los tres valores terminales, para contrastar el elegido (05 §6): el que no tiene su dato (sin múltiplo) queda vacío
+        otros = fin + len(resumen) + 1
+        ws[f"B{otros}"] = "Contraste del valor terminal por los tres métodos"
+        ws[f"B{otros}"].font = negrita
+        for i, (k, rot, formula) in enumerate((
+                ("vt_value_driver", "Value driver: NOPAT × (1 + g) × (1 − g / RONIC) / (WACC − g)",
+                 f"={ult}{F['nopat']}*(1+g_{c})*(1-g_{c}/ronic_{c})/(wacc_{c}-g_{c})"),
+                ("vt_gordon", "Gordon: FCFF × (1 + g) / (WACC − g)", f"={ult}{F['fcff']}*(1+g_{c})/(wacc_{c}-g_{c})"),
+                ("vt_multiplo", "Múltiplo de salida: EBITDA × múltiplo", f'=IF(ISNUMBER(multiplo_{c}),{ult}{F["ebitda"]}*multiplo_{c},"")')), 1):
+            ws[f"A{otros + i}"], ws[f"B{otros + i}"], ws[f"C{otros + i}"] = f"{k}_{c}", rot, formula
         ws["A1"] = f"Escenario {clave_esc}: fórmulas vivas del motor (05 §3–§7)"
         # para la sensibilidad: filas que se reutilizan
         if clave_esc == "base":
@@ -192,8 +202,31 @@ def exportar(v: Valoracion, ingresos_base: float, ruta: Path, umbrales: dict) ->
                   "multiplo_salida": f"Base!${ultima}${F['ebitda']}*multiplo_base"}[b.terminal.metodo]
             se.cell(3 + i, 2 + j, f"=IF({wc}-{gc}<=0,\"\",(SUMPRODUCT({rng('fcff')},{rng('peso_anio')},(1+{wc})^(-{rng('t')}))"
                                   f"+{vt}*(1+{wc})^(-(fraccion+{n}-1))+ajuste_puente)/acciones_valor_base)")
+    # DCF inverso con fórmulas vivas (fallo [39]): el crecimiento constante del FCFF desde el del año 1 que hace V₀ del
+    # base igual al precio, con la misma descuento y el mismo valor terminal de Gordon que el motor (`sensibilidad.inverso`)
     rv = wb.create_sheet("Reverse DCF")
-    rv["A1"] = "DCF inverso (motor): qué hay que creer para que V₀ del base sea el precio"
+    rv["A1"] = "DCF inverso: qué crecimiento constante del FCFF hace que V₀ del escenario base sea el precio"
+    bajo, alto = umbrales["reverse_rangos"]["fcff"]
+    pasos = int(umbrales["reverse_excel_pasos"])
+    rv["A3"], rv["B3"] = "Crecimiento del FCFF", "V₀ (base)"
+    for t in range(n):
+        rv.cell(3, 3 + t, f"FCFF año {t + 1}")
+    for i in range(pasos + 1):
+        fila = 4 + i
+        rv.cell(fila, 1, bajo + (alto - bajo) * i / pasos)
+        for t in range(n):
+            rv.cell(fila, 3 + t, f"=Base!$C${F['fcff']}*(1+$A{fila})^{t}")
+        flujos = f"C{fila}:{_col(2 + n)}{fila}"
+        vt = f"{_col(2 + n)}{fila}*(1+g_base)/(wacc_base-g_base)*(1+wacc_base)^(-(fraccion+{n}-1))"
+        rv.cell(fila, 2, f"=(SUMPRODUCT({flujos},Base!$C${F['df']}:${ultima}${F['df']},Base!$C${F['peso_anio']}:${ultima}${F['peso_anio']})"
+                          f"+{vt}+ajuste_puente)/acciones_valor_base")
+    ultima_fila = 4 + pasos
+    xs, vs = f"$A$4:$A${ultima_fila}", f"$B$4:$B${ultima_fila}"
+    k = f"MATCH(precio,{vs},1)"
+    rv["E1"], rv["F1"] = "Crecimiento constante del FCFF implícito", (
+        f'=IFERROR(INDEX({xs},{k})+(precio-INDEX({vs},{k}))*(INDEX({xs},{k}+1)-INDEX({xs},{k}))/(INDEX({vs},{k}+1)-INDEX({vs},{k})),'
+        f'"fuera del rango")')
+    nombre("fcff_implicito", "Reverse DCF", "F1")
     wb.save(ruta)
     return Path(ruta)
 

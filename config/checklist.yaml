@@ -17,3 +17,16 @@ criterios:
   - {id: variante, texto: "Visión propia distinta de lo que descuenta el precio (reverse DCF), en dos frases", tipo: manual, eliminatorio: true}
 riesgo_max_posicion: 0.01   # 1 % de la cartera
 tamano_max: 0.10            # 10 % de la cartera
+# apartado 30: el nombre de un indicador del analista → el hecho del informe con que se rellena su columna «Actual» cuando
+# el analista no la escribe (fallo [34]). Además de estos, el rótulo exacto de cualquier campo o derivado del informe
+kpi_hechos:
+  margen ebit: margen_ebit
+  margen operativo: margen_ebit
+  margen bruto: margen_bruto
+  margen ebitda: margen_ebitda
+  margen neto: margen_neto
+  flujo de caja libre: fcf
+  fcf: fcf
+  ingresos: ingresos
+  deuda neta / ebitda: dfn_ebitda
+  roic: roic

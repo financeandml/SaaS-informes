@@ -25,7 +25,7 @@
     {% if not c.filas %}{% if c.fuente.startswith('No aplica') %}<tr><td colspan="{{ c.columnas|length + 1 }}" class="no-aplica">{{ c.fuente }}</td></tr>{% else %}<tr><td colspan="{{ c.columnas|length + 1 }}" class="na">N/A — {{ c.fuente }}</td></tr>{% endif %}{% endif %}
     </tbody>
   </table>
-  <div class="fuente">{{ c.fuente }}</div>
+  {% if c.filas %}<div class="fuente">{{ c.fuente }}</div>{% endif %}{# sin filas, la fuente ya va en la única fila: no se repite #}
   {% if c.notas %}<ul class="notas">{% for n in c.notas %}<li>{{ n }}</li>{% endfor %}</ul>{% endif %}
 </div>
 {% for r in c.recortes %}
@@ -126,8 +126,10 @@
 <div class="pendiente">Texto pendiente de redacción por el sistema a partir de los adjuntos. Debajo, las evidencias con las que se redactará: la caja de cifras (los mismos objetos que la sección C), los objetivos vigentes de la compañía y los últimos hitos.</div>{% endif %}
 {{ cuadro(i.cifras_resumen) }}
 {{ cuadro(i.objetivos, True) }}
-<h4>Contexto: últimos hitos (8-K de los últimos doce meses)</h4>
-<ul class="compacta">{% for h in i.hitos %}<li>{{ h.fecha.strftime("%d/%m/%Y") }} · 8-K · {{ h.descripcion }} <span class="muted">({{ h.epigrafes }})</span></li>{% else %}<li class="na">Ningún 8-K en los últimos doce meses.</li>{% endfor %}</ul>
+{% if i.emisor.mercado == 'bme' %}<h4>Contexto: últimos hitos (comunicaciones al mercado en BME de los últimos doce meses)</h4>
+<ul class="compacta">{% for h in i.hitos %}<li>{{ h.fecha.strftime("%d/%m/%Y") }} · {{ h.descripcion }} <span class="muted">({{ h.epigrafes }})</span></li>{% else %}<li class="na">Ninguna comunicación al mercado en el expediente de los últimos doce meses.</li>{% endfor %}</ul>
+{% else %}<h4>Contexto: últimos hitos (8-K de los últimos doce meses)</h4>
+<ul class="compacta">{% for h in i.hitos %}<li>{{ h.fecha.strftime("%d/%m/%Y") }} · 8-K · {{ h.descripcion }} <span class="muted">({{ h.epigrafes }})</span></li>{% else %}<li class="na">Ningún 8-K en los últimos doce meses.</li>{% endfor %}</ul>{% endif %}
 
 <h3 id="ap-{{ i.numeros['3'] }}">{{ i.numeros['3'] }}. {{ i.titulos['3'] }}</h3>
 {% if i.parte_a %}
@@ -405,7 +407,7 @@
 <section class="hoja">
 <h2 id="parte-{{ i.indice[7].letra }}">{{ i.indice[7].letra }}. {{ i.indice[7].titulo }}</h2>
 {% if i.f_cuadros %}
-<p class="muted" style="font-size:7.5pt">Fuente: la bolsa de cotización (Nasdaq), la misma que la cotización del apartado {{ i.numeros['1'] }}; para la volatilidad implícita, que la bolsa no publica, Yahoo Finance como excepción autorizada{% if i.f_cuadros.get('iv') %}, con su interés abierto cuadrado con el de la bolsa{% else %} (en este informe queda N/A: {{ i.f_faltan.get('iv', 'sin cadena del agregador') }}){% endif %}. Las respuestas literales de cada fuente están en el apartado {{ i.numeros['40'] }}.</p>
+<p class="muted" style="font-size:7.5pt">Fuente: la bolsa de cotización ({{ 'BME' if i.emisor.mercado == 'bme' else 'Nasdaq' }}), la misma que la cotización del apartado {{ i.numeros['1'] }}; para la volatilidad implícita, que la bolsa no publica, Yahoo Finance como excepción autorizada{% if i.f_cuadros.get('iv') %}, con su interés abierto cuadrado con el de la bolsa{% else %} (en este informe queda N/A: {{ i.f_faltan.get('iv', 'sin cadena del agregador') }}){% endif %}. Las respuestas literales de cada fuente están en el apartado {{ i.numeros['40'] }}.</p>
 {% else %}
 <div class="pendiente"><b>Sin datos de la bolsa para esta parte.</b> {{ i.f_faltan.values()|join('; ') }}</div>
 {% endif %}
@@ -420,7 +422,7 @@
 </section>
 <section class="sigue">
 <h3 id="ap-{{ i.numeros['28'] }}">{{ i.numeros['28'] }}. {{ i.titulos['28'] }}</h3>
-{% if i.f_cuadros.get('insiders') %}{{ cuadro(i.f_cuadros['insiders']) }}{{ cuadro(i.f_cuadros['insiders_ultimas']) }}<p class="muted" style="font-size:7.5pt">La participación del management según la proxy (acciones de cada consejero y ejecutivo a la fecha de la proxy) está en el apartado {{ i.numeros['5'] }}.</p>{% else %}<p class="na">N/A — {{ i.f_faltan.get('insiders', i.f_faltan.get('fuente', 'pendiente de la API')) }}</p>{% endif %}
+{% if i.f_cuadros.get('insiders') %}{{ cuadro(i.f_cuadros['insiders']) }}{{ cuadro(i.f_cuadros['insiders_ultimas']) }}<p class="muted" style="font-size:7.5pt">{% if i.emisor.mercado == 'bme' %}La participación de los consejeros y de sus sociedades, según las participaciones significativas que publica el emisor, está en el apartado {{ i.numeros['5'] }}.{% else %}La participación del management según la proxy (acciones de cada consejero y ejecutivo a la fecha de la proxy) está en el apartado {{ i.numeros['5'] }}.{% endif %}</p>{% else %}<p class="na">N/A — {{ i.f_faltan.get('insiders', i.f_faltan.get('fuente', 'pendiente de la API')) }}</p>{% endif %}
 <h3 id="ap-{{ i.numeros['29'] }}">{{ i.numeros['29'] }}. {{ i.titulos['29'] }}</h3>
 {% if i.f_cuadros.get('short') %}{{ cuadro(i.f_cuadros['short']) }}{% else %}<p class="na">N/A — {{ i.f_faltan.get('short', i.f_faltan.get('fuente', 'pendiente de la API')) }}</p>{% endif %}
 </section>
@@ -440,7 +442,7 @@
 <h3 id="ap-{{ i.numeros['39'] }}">{{ i.numeros['39'] }}. {{ i.titulos['39'] }}</h3>
 <p>Contraste de cada cifra de la sección C {% if i.emisor.mercado == 'bme' %}entre los documentos del emisor (no presenta ante la SEC){% else %}con la SEC{% endif %}: {{ i.resumen_contraste.get('confirmado', 0) }} confirmadas · {{ i.resumen_contraste.get('derivado', 0) }} calculadas con fórmula · {{ i.resumen_contraste.get('discrepante', 0) }} discrepantes · {{ i.resumen_contraste.get('solo_sec', 0) }} solo en la SEC · {{ i.resumen_contraste.get('hueco', 0) }} sin dato. El detalle de cada cifra, al pasar el ratón en el HTML; las listas completas, en la auditoría de la emisión.</p>
 <h4>Discrepancias</h4>
-<ul class="compacta">{% for d in i.discrepancias %}<li>{{ d }}</li>{% else %}<li>Ninguna.</li>{% endfor %}</ul>
+<ul class="compacta">{% for d in i.discrepancias + i.identidades %}<li>{{ d }}</li>{% else %}<li>Ninguna.</li>{% endfor %}</ul>
 <h4>Cuadres entre fuentes (regla «un hecho, una fuente»)</h4>
 <ul class="compacta">{% for c in pi.cuadres %}<li>{{ c }}</li>{% else %}<li>Ninguno que anotar.</li>{% endfor %}</ul>
 <h4>Huecos materiales</h4>
@@ -466,6 +468,7 @@
 <p>Contraste de cada cifra de la sección C entre los adjuntos y la SEC: {{ i.resumen_contraste.get('confirmado', 0) }} confirmadas · {{ i.resumen_contraste.get('derivado', 0) }} calculadas con fórmula · {{ i.resumen_contraste.get('discrepante', 0) }} discrepantes · {{ i.resumen_contraste.get('solo_sec', 0) }} solo en la SEC · {{ i.resumen_contraste.get('solo_documento', 0) }} solo en los adjuntos · {{ i.resumen_contraste.get('hueco', 0) }} sin dato. En el HTML, cada celda muestra al pasar el ratón su contraste, su fuente o su fórmula.</p>
 <h4>Discrepancias (bloquean la emisión hasta que el analista decida)</h4>
 <ul class="compacta">{% for d in i.discrepancias %}<li>{{ d }}</li>{% else %}<li>Ninguna.</li>{% endfor %}</ul>
+{% if i.identidades %}<ul class="compacta">{% for d in i.identidades %}<li>{{ d }}</li>{% endfor %}</ul>{% endif %}
 <h4>Cuadres entre fuentes (regla «un hecho, una fuente»)</h4>
 <ul class="compacta">{% for c in i.cuadres_apendice %}<li>{{ c }}</li>{% else %}<li>Ninguno que anotar.</li>{% endfor %}</ul>
 <h4>Solo SEC (sin contraste documental; exigen reconocimiento del analista)</h4>

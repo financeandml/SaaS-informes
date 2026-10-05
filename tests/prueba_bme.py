@@ -396,5 +396,212 @@ class MultiplosSemestrales(unittest.TestCase):
         self.assertEqual((m.periodicidad, m.moneda, m.faltan["ttm"]), ("trimestral", "USD", "solo 2 trimestres contrastados: no hay TTM"))
 
 
+class PerSinBpaPublicado(unittest.TestCase):
+    FY24, FY25, S25, S26 = MultiplosSemestrales.FY24, MultiplosSemestrales.FY25, MultiplosSemestrales.S25, MultiplosSemestrales.S26
+    _hechos, _precio = MultiplosSemestrales._hechos, MultiplosSemestrales._precio
+
+    def test_quien_no_publica_bpa_tiene_per_con_su_beneficio_y_sus_acciones(self):
+        """Falla si el PER de quien no imprime BPA en ningún estado (el PGC no lo pide) queda N/A teniendo beneficio de
+        doce meses y acciones de la capitalización: la fórmula lo dice."""
+        hechos = self._hechos()
+        del hechos[("acciones_diluidas", self.S26)]
+        m = multiplos.construir(hechos, [], [self.FY24, self.FY25], self._precio(), 30.0e6, moneda="EUR",
+                                semestres=[self.S25, self.S26], no_aplican={"bpa_diluido": "no la imprime"})
+        per = m.linea("PER (TTM)")
+        self.assertAlmostEqual(per.valor, 4.0 / ((1.5e6 + 0.9e6 - 0.6e6) / 30.0e6))
+        self.assertIn("no publica BPA", per.formula)
+        # quien sí publica BPA y falta, sigue N/A: el atajo es solo para la partida que no existe
+        sin = multiplos.construir(hechos, [], [self.FY24, self.FY25], self._precio(), 30.0e6, moneda="EUR", semestres=[self.S25, self.S26])
+        self.assertIsNone(sin.linea("PER (TTM)").valor)
+
+
+class ComparablesDeBME(unittest.TestCase):
+    def tearDown(self):
+        from tesis.plantillas import lexico
+        lexico.fijar()
+
+    def test_el_cuadro_22_va_en_la_moneda_del_informe(self):
+        """Falla si el cuadro de comparables de un informe en EUR rotula «mill. USD», deja fuera a los comparables de BME
+        por no ser USD o mezcla en una columna tamaños en dos monedas."""
+        from types import SimpleNamespace
+        from tesis.motor.comparables import Comparable
+        from tesis.plantillas import informe, lexico, parte_e
+        lexico.fijar(SimpleNamespace(mercado="bme", moneda="EUR"))
+        bme_c = Comparable("PEER.MC", nombre="PEER", moneda="EUR", capitalizacion=50e6, ejercicio="12/2025", ingresos=30e6,
+                           crecimiento=0.1, margen_ebit=0.08, mercado="bme", fuente="cuentas oficiales publicadas en BME; cierre oficial de BME Growth",
+                           fecha_precio=date(2026, 10, 2))
+        usd_c = Comparable("EPAM", nombre="EPAM", moneda="USD", capitalizacion=5e9, ejercicio="12/2025", ingresos=4e9)
+        motor = SimpleNamespace(comparables=SimpleNamespace(filas=[bme_c, usd_c]), cap_mercado=20e6, fecha_precio=date(2026, 10, 2))
+        d = parte_e.ParteE()
+        parte_e._comparables(d, informe.Cuadros(), motor, {}, [], lambda p: str(p.fin.year), "Emisora", "EMI.MC")
+        cuadro = d.cuadros["comparables"]
+        self.assertIn("Capitalización (mill. EUR)", cuadro.columnas)
+        rotulos = [f.rotulo for f in cuadro.filas]
+        self.assertTrue(any("PEER.MC" in r for r in rotulos), rotulos)
+        self.assertFalse(any("EPAM" in r for r in rotulos), rotulos)
+        self.assertIn("EPAM (USD)", " ".join(cuadro.notas))
+        self.assertNotIn("SEC", cuadro.fuente)
+
+
 if __name__ == "__main__":
     unittest.main()
+
+
+class ComunicacionesQueSeTraen(unittest.TestCase):
+    """Lo que trae «Traer de BME» además de las cuentas: las comunicaciones que un analista cita."""
+
+    def _elegidas(self, publicados):
+        import re as _re
+        return [clave for clave, patron, _ in bme._OIR_UTILES for d in publicados if _re.search(patron, f"{d.tipo} {d.titulo}")]
+
+    def test_las_compras_de_directivos_y_los_avances_se_traen(self):
+        """Falla si una compra de directivos titulada «Compras realizadas por…» o el avance de resultados de un semestre
+        se quedan en la bolsa: son las comunicaciones que el analista cita en los apartados 6, 10 y 27."""
+        doc = lambda tipo, titulo: bme.Documento(id="1", tipo=tipo, clase="OtherRelevantInformation", titulo=titulo,  # noqa: E731
+                                                fecha=date(2026, 7, 30), hora="0800", ruta="/x.pdf", ejercicio=None, periodo="", tamano="")
+        compras = doc("Operaciones realizadas por directivos", "Compras realizadas por directivos y personas vinculadas")
+        avance = doc("Otra información relevante", "Avance de resultados del primer semestre")
+        junta = doc("Otra información relevante", "Acuerdos de la Junta Ordinaria de Accionistas")
+        self.assertIn("directivos", self._elegidas([compras]))
+        self.assertIn("comunicacion", self._elegidas([avance]))
+        self.assertIn("comunicacion", self._elegidas([junta]))
+
+    def test_dos_registros_del_mismo_ejercicio_no_quitan_el_sitio_al_anterior(self):
+        """Falla si la bolsa registra dos documentos de las cuentas de 2025 y con ellos se agota el cupo de ejercicios
+        (el de 2024 se quedaba fuera), o si se trae lo publicado después de la fecha del informe."""
+        import tempfile
+        from types import SimpleNamespace
+        doc = lambda i, ej, per, f: bme.Documento(id=i, tipo="", clase="", titulo=f"{ej} {per}", fecha=f, hora="", ruta=f"/{i}.pdf",  # noqa: E731
+                                                  ejercicio=ej, periodo=per, tamano="")
+        financiera = [doc("4", 2026, "1S", date(2026, 10, 30)), doc("3", 2025, "AN", date(2026, 4, 24)), doc("2", 2025, "AN", date(2026, 4, 24)),
+                      doc("1", 2024, "AN", date(2025, 4, 30)), doc("0", 2023, "AN", date(2024, 4, 30))]
+        traidos = []
+        with tempfile.TemporaryDirectory() as tmp, \
+                mock.patch.object(bme, "informacion_financiera", return_value=financiera), \
+                mock.patch.object(bme, "descargar", side_effect=lambda d, c: traidos.append(d.id) or Path(c) / f"{d.id}.pdf"):
+            bme.traer(SimpleNamespace(clave_bolsa="X"), Path(tmp), anuales=2, semestrales=1, hoy=date(2026, 10, 2), comunicaciones=False)
+        self.assertEqual(sorted(traidos), ["1", "2", "3"])
+
+
+class SegmentosDelAnalista(unittest.TestCase):
+    """Apartado 4 de un emisor sin XBRL: las líneas de negocio de la memoria, copiadas por el analista con su cita."""
+
+    def test_lineas_verificadas_y_cuadradas_con_la_cifra_de_negocios(self):
+        """Falla si un emisor de BME no puede tener cuadro de segmentos (el 4.2 bloquearía siempre), si se acepta una cifra
+        que no está en la línea citada o si no se cuadra la suma con la cifra de negocios consolidada."""
+        from tesis.datos import segmentos
+        fy = Periodo(fin=date(2025, 12, 31), inicio=date(2025, 1, 1))
+        pagina = ("20. Ingresos y gastos\nIngresos Digital Business 12.246.341,18 260.348,19 107.602,97 12.614.292,34\n"
+                  "Ingresos Tech 2.920.352,07 453.250,70 158.083,36 3.531.686,13\n")
+        textos = {"ccaa.pdf": pagina, "ccaa.pdf#7": pagina}
+        cita = lambda t: [{"doc": "ccaa.pdf", "pag": "7", "texto": t}]                       # noqa: E731
+        lista = [{"linea": "Digital Business", "tipo": "segmento", "valores": {fy.clave: 12614292.34},
+                  "evidencia": cita("Ingresos Digital Business 12.246.341,18 260.348,19 107.602,97 12.614.292,34")},
+                 {"linea": "Tech", "tipo": "segmento", "valores": {fy.clave: 9999999.0},
+                  "evidencia": cita("Ingresos Tech 2.920.352,07 453.250,70 158.083,36 3.531.686,13")}]
+        total = {fy: de_valor("ingresos", fy, 16834046.30, Capa.DOCUMENTO, None, unidad="EUR", certeza=Certeza.ALTA)}
+        s = segmentos.del_analista(lista, [fy], total, textos, 0.9, "EUR")
+        self.assertEqual([l.rotulo for l in s.lineas], ["Digital Business"])
+        self.assertAlmostEqual(s.lineas[0].valores[fy].valor, 12614292.34)
+        self.assertEqual(s.lineas[0].valores[fy].origen.pagina, 7)
+        self.assertIn("la cifra no está en el literal citado", s.faltan[f"Tech {fy.clave}"])
+        self.assertEqual(s.periodos, [fy])
+        lista[1]["valores"] = {fy.clave: 3531686.13}
+        s = segmentos.del_analista(lista, [fy], total, textos, 0.9, "EUR")
+        self.assertTrue(any("no suman" in c for c in s.cuadres), s.cuadres)      # 12,6 + 3,5 ≠ 16,8 (falta Product): se dice la diferencia
+
+
+class EscalaDeLasCifras(unittest.TestCase):
+    """Un emisor de 17 millones de ingresos no se puede leer en millones sin decimales («Total activo 8 12 10»)."""
+
+    def tearDown(self):
+        from tesis import formato
+        formato.fijar_escala(None)
+
+    def test_los_millones_llevan_decimales_en_un_emisor_pequeno(self):
+        """Falla si las cifras en millones de un emisor pequeño salen sin decimales, o si los de uno grande cambian."""
+        from tesis import formato
+        formato.fijar_escala(16_834_046.30)
+        self.assertEqual(formato.mln(12_614_292.34), "12,61")
+        self.assertEqual(formato.celda(de_valor("ingresos", Periodo(fin=date(2025, 12, 31), inicio=date(2025, 1, 1)), 10_314_343.63,
+                                                Capa.DOCUMENTO, None, unidad="EUR", certeza=Certeza.ALTA)).texto, "10,31")
+        formato.fijar_escala(44_284_000_000)
+        self.assertEqual(formato.mln(12_614_292_340), "12.614")
+        self.assertEqual(formato.mln(12_614_292.34, 1), "12,6")              # quien pide sus decimales los conserva
+
+
+class NoSignificativo(unittest.TestCase):
+    def test_una_ratio_sin_sentido_se_imprime_ns_y_no_na(self):
+        """Falla si «deuda neta / EBITDA» con el EBITDA negativo se imprime «N/A»: hay dato y la ratio no significa nada
+        («n. s.», con el motivo), y un «N/A» en el resumen o en la portada bloquea la emisión."""
+        from tesis import formato
+        from tesis.datos.hechos import na
+        h = na("dfn_ebitda", Periodo(fin=date(2024, 12, 31), inicio=date(2024, 1, 1)), "no significativo: el EBITDA es negativo (−1 M)")
+        c = formato.celda(h, "x")
+        self.assertEqual(c.texto, "n. s.")
+        self.assertIn("EBITDA es negativo", c.nota)
+        self.assertEqual(formato.celda(na("fcf", Periodo(fin=date(2023, 12, 31), inicio=date(2023, 1, 1)), "sin dato")).texto, "N/A")
+
+
+class AvisoDeBeta(unittest.TestCase):
+    def test_el_r2_bajo_no_avisa_si_ya_se_usa_la_beta_bottom_up(self):
+        """Falla si con la beta bottom-up elegida el informe sigue avisando de que «conviene la beta bottom-up»."""
+        from tesis.motor.wacc import Beta, calcular
+        reg = Beta(0.5, 0.67, 0.01, 0.2, 100, date(2024, 9, 25), date(2026, 9, 25), "semanal")
+        aviso = lambda origen: [a for a in calcular(0.03, date(2026, 9, 25), 0.9, origen, 0.05, 0.03, 0.065, "", 0.25, 20.0, 4.0,
+                                                    reg).avisos if "bottom-up" in a]                              # noqa: E731
+        self.assertEqual(aviso("bottom-up: β desapalancada 0.77 reapalancada"), [])
+        self.assertEqual(len(aviso("regresión semanal de 2 años")), 1)
+
+
+class RoeConPatrimonioNegativo(unittest.TestCase):
+    def test_la_roe_no_significa_nada_si_el_patrimonio_es_negativo_en_un_cierre(self):
+        """Falla si la ROE de un ejercicio con el patrimonio negativo en uno de sus dos cierres sale como cifra (−809 % sobre
+        un patrimonio medio que roza el cero) en vez de «no significativo» con su motivo."""
+        from tesis.datos import derivados
+        fy = Periodo(fin=date(2025, 12, 31), inicio=date(2025, 1, 1))
+        h = lambda c, p, v: de_valor(c, p, v, Capa.DOCUMENTO, None, unidad="EUR", certeza=Certeza.ALTA)      # noqa: E731
+        hechos = {("beneficio_neto", fy): h("beneficio_neto", fy, -787_922.0),
+                  ("patrimonio", Periodo.instante(date(2025, 12, 31))): h("patrimonio", Periodo.instante(date(2025, 12, 31)), -623_089.0),
+                  ("patrimonio", Periodo.instante(date(2024, 12, 31))): h("patrimonio", Periodo.instante(date(2024, 12, 31)), 817_898.0)}
+        roe = derivados.calcular(hechos, [fy], [Periodo.instante(date(2025, 12, 31)), Periodo.instante(date(2024, 12, 31))])[("roe", fy)]
+        self.assertFalse(roe.hay_dato)
+        self.assertTrue(roe.motivo.startswith("no significativo"), roe.motivo)
+
+
+class ApalancamientoSemestral(unittest.TestCase):
+    def test_deuda_neta_ebitda_vigente_con_el_ejercicio_de_un_emisor_semestral(self):
+        """Falla si la deuda neta / EBITDA vigente de un emisor que publica por semestres sale «sin dato» (solo se buscaban
+        cuatro trimestres): la lista de comprobación decía «sin deuda neta o sin EBITDA» con 13,6x en el cuadro 1."""
+        from tesis.datos import derivados
+        fy = Periodo(fin=date(2025, 12, 31), inicio=date(2025, 1, 1))
+        cierre = Periodo.instante(date(2025, 12, 31))
+        h = lambda c, p, v: de_valor(c, p, v, Capa.DOCUMENTO, None, unidad="EUR", certeza=Certeza.ALTA)      # noqa: E731
+        r = derivados.deuda_neta_ebitda_vigente({("deuda_neta", cierre): h("deuda_neta", cierre, 3_520_000.0),
+                                                 ("ebitda", fy): h("ebitda", fy, 259_000.0)})
+        self.assertIsNotNone(r)
+        self.assertAlmostEqual(r[0], 3_520_000 / 259_000)
+        self.assertEqual(r[3], fy)
+
+
+class DirectivosDeBME(unittest.TestCase):
+    """Apartado 34 de un emisor de BME: las notificaciones del modelo de abuso de mercado que publica el propio emisor."""
+    NOTIFICACION = ("FORMULARIO DE NOTIFICACIÓN DE LAS OPERACIONES DE LAS PERSONAS CON RESPONSABILIDADES DE DIRECCIÓN\n"
+                    "a) Nombre y apellidos - Razón social  |  Name and surname - Company name\nSOCIEDAD DEL CONSEJERO, S.L.\n"
+                    "a) Cargo - posición  |  Job title\nConsejero Delegado\n"
+                    "ES0105857033 Acción Compra 09/09/2026 GROW 150,00 0,87 EUR\n150,00 0,87\n"
+                    "ES0105857033 Acción Compra 08/09/2026 GROW 1.300,00 0,86 EUR\n"
+                    "ES0105857033 Acción Otros 05/06/2026 XOFF 20000,00 7,55 EUR\n")
+
+    def test_las_operaciones_se_leen_de_la_notificacion(self):
+        """Falla si las compras de directivos que el emisor publica en BME no llegan al apartado 34 (salía «no aplica: no hay
+        Form 4» con una docena de notificaciones en el expediente), o si se leen mal el titular, el volumen o el precio."""
+        from tesis.datos import directivos_bme
+        ins = directivos_bme.insiders([("notificacion.pdf", self.NOTIFICACION)], date(2026, 10, 2))
+        self.assertIsNotNone(ins)
+        self.assertEqual(ins.fuente, "bme")
+        self.assertEqual(ins.ultimas[0], ("SOCIEDAD DEL CONSEJERO, S.L.", "Consejero Delegado", date(2026, 9, 9), "Compra", 150.0, 0.87))
+        self.assertEqual(ins.ultimas[1][4], 1300.0)
+        self.assertEqual(dict((r, (a, b)) for r, a, b in ins.operaciones)["Compras"], (2, 2))
+        self.assertEqual(dict((r, (a, b)) for r, a, b in ins.acciones)["Acciones compradas"], (1450.0, 1450.0))
+        self.assertIsNone(directivos_bme.insiders([("otra.pdf", "Acuerdos de la Junta General")], date(2026, 10, 2)))

@@ -68,7 +68,7 @@ class Emision(unittest.TestCase):
         self.assertEqual(orden[orden.index("--entradas") + 1], str(ruta))
 
     def test_una_emision_que_revienta_no_pasa_por_borrador(self):
-        """Falla si un código 1 sin PDF (traceback del proceso) se enseña como «terminado · borrador»: son cosas
+        """Falla si un código de error sin PDF (traceback del proceso) se enseña como «terminado · borrador»: son cosas
         distintas, y el analista se creería que tiene informe. El PDF manda, no el código."""
         registro = saas.SALIDA / "PRUEBA" / "emision.log"
         registro.parent.mkdir(parents=True, exist_ok=True)
@@ -77,9 +77,11 @@ class Emision(unittest.TestCase):
                                             "orden": ["emitir.py"], "fichero": registro.open("a", encoding="utf-8")}
         e = saas.estado_emision("PRUEBA")
         self.assertEqual((e["estado"], e["borrador"], e["pdf"]), ("error", False, None))
-        # el mismo código 1 con PDF sí es un borrador: hay informe, con discrepancias sin decidir
+        # el código 2 con PDF sí es un borrador (decisión 4 del analista: 0 emitido · 2 borrador · 1 error): hay informe,
+        # con bloqueos sin resolver
         (saas.SALIDA / "PRUEBA" / "PRUEBA_tesis_2026-09-22.pdf").write_bytes(b"%PDF-1.4")
         (saas.SALIDA / "PRUEBA" / "PRUEBA_tesis_2026-09-22.html").write_text("<html></html>", encoding="utf-8")
+        saas.estado("PRUEBA")["emision"]["proceso"] = _Proceso(2)
         e = saas.estado_emision("PRUEBA")
         self.assertEqual((e["estado"], e["borrador"]), ("terminado", True))
         self.assertEqual(e["pdf"], "/informes/PRUEBA/PRUEBA_tesis_2026-09-22.pdf")

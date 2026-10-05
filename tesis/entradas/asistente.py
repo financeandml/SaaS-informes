@@ -272,12 +272,13 @@ def validar(ticker: str, fecha: date, datos: dict, regla: Optional[Tuple[str, fl
     for falta in (caducadas(datos, proponer(ticker, fecha, datos, ya)) if ya else []):
         salida.setdefault(paso_de.get(falta.split(":")[0], 9), []).append(falta)
     if e.valor("esc"):
-        salida[7] += leer(datos, fecha).faltas
+        from ..fuentes.emisores import es_bme
+        salida[7] += leer(datos, fecha, mercado="bme" if es_bme(ticker) else "sec").faltas     # el tipo marginal de su mercado
     salida[9] = salida.get(9, []) + _paso9(ticker, fecha, e)
     val = e.valor("meta.fecha_valoracion")
     fv = date.fromisoformat(str(val)) if val else fecha
     try:
-        sesiones = precio.sesiones_nasdaq(ticker.upper(), precio.desde_5a(fv), fv, limite=2000)
+        sesiones = precio.sesiones(ticker.upper(), precio.desde_5a(fv), fv, limite=2000)     # la bolsa del emisor
     except Exception:
         sesiones = {}
 
@@ -286,9 +287,15 @@ def validar(ticker: str, fecha: date, datos: dict, regla: Optional[Tuple[str, fl
         return (s.minimo, s.maximo) if s is not None and s.minimo is not None and s.maximo is not None else None
     cl = checklist()
     f8, avisos = comprobar_paso8(e, fecha, rango, *(regla or (None, None, None)), escala=umbral("recomendacion")["escala"],
-                                 tamano_max=cl["tamano_max"], riesgo_max=cl["riesgo_max_posicion"])
+                                 tamano_max=cl["tamano_max"], riesgo_max=cl["riesgo_max_posicion"], **_bolsa_y_moneda(ticker))
     # las del esquema que la comprobación del paso 8 dice mejor (con su motivo) no se repiten
     propias = {x.split(":")[0].split("[")[0] for x in f8}
     salida[8] = [x for x in salida[8] if x.split(":")[0].split("[")[0] not in propias] + f8
     from ..qa.linter import avisos_entradas                  # 02: frases y párrafos largos, mientras escribe (avisan, no bloquean)
     return salida, avisos + avisos_entradas(e)
+
+
+def _bolsa_y_moneda(ticker: str) -> dict:
+    """Con qué bolsa y en qué moneda se comprueba el precio de entrada: la del emisor, no siempre Nasdaq y USD."""
+    from ..fuentes.emisores import es_bme
+    return {"bolsa": "BME", "moneda": "EUR"} if es_bme(ticker) else {"bolsa": "Nasdaq", "moneda": "USD"}

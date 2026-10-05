@@ -283,6 +283,11 @@ class Comparacion:
         return self.candidato.bajo <= self.real.valor <= self.candidato.alto
 
 
+def _redondeo_relativo() -> float:
+    from ..umbrales import umbral
+    return float(umbral("guia_redondeo_relativo"))
+
+
 def frente_a_real(notas: Sequence[Nota], confirmadas: Iterable[str], xbrl: Optional[Mapping[Tuple[str, str], float]] = None,
                   trimestres: int = 8, splits: Sequence[Tuple[date, float]] = ()) -> List[Comparacion]:
     """Guía confirmada frente a lo publicado después, para los últimos `trimestres` trimestres ya publicados.
@@ -320,8 +325,17 @@ def frente_a_real(notas: Sequence[Nota], confirmadas: Iterable[str], xbrl: Optio
             if xbrl and (c.metrica, c.trimestre) in xbrl:
                 comp.xbrl = xbrl[(c.metrica, c.trimestre)]
                 tol = 0.005 if c.unidad == "USD/acción" else 0.5e6
-                cuadre = ("✓ el real de la nota coincide con el hecho XBRL" if abs(comp.xbrl - r.valor) <= tol
-                          else f"≠ la nota dice {r.valor:g} y el hecho XBRL {comp.xbrl:g}")
+                diferencia = abs(comp.xbrl - r.valor)
+                if diferencia <= tol:
+                    cuadre = "✓ el real de la nota coincide con el hecho XBRL"
+                elif c.unidad != "USD/acción" and diferencia <= _redondeo_relativo() * abs(comp.xbrl):
+                    # un hecho, un valor (fallo [62]): el 4T que la SEC no publica sale de restar acumulados redondeados y
+                    # difiere de la nota en el último millón; el informe imprime el del estado de resultados y lo dice
+                    cuadre = (f"✓ se imprime el hecho del estado de resultados ({comp.xbrl:g}); la nota de resultados dice "
+                              f"{r.valor:g}, la diferencia del redondeo de los acumulados")
+                    comp.real = r = replace(r, valor=comp.xbrl)
+                else:
+                    cuadre = f"≠ la nota dice {r.valor:g} y el hecho XBRL {comp.xbrl:g}"
                 comp.nota = "; ".join(x for x in (comp.nota, cuadre) if x)
             salida.append(comp)
     ultimos = sorted({x.candidato.trimestre for x in salida}, key=_orden)[-trimestres:]

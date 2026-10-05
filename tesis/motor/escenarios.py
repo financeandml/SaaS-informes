@@ -33,6 +33,8 @@ class Resultado:
     avisos: List[str] = field(default_factory=list)
     bloqueos: List[str] = field(default_factory=list)
     acciones: float = 0.0          # las del valor por acción: diluidas del puente (+ las que pagan la SBC, con «dilución»)
+    ronic: Optional[float] = None  # el del valor terminal: el del analista o, sin él, WACC + `umbrales.ronic_defecto_pp`
+    ronic_por_defecto: bool = False
 
 
 @dataclass
@@ -80,7 +82,7 @@ def valorar_escenario(e: Escenario, p: Parametros, wacc_base: float, ke: float, 
         avisos.append("SBC con «dilución» sin precio con el que convertirla en acciones: el valor por acción no la descuenta")
     if peso > umbrales["peso_vt_aviso"]:
         avisos.append(f"el valor terminal pesa un {peso:.0%} del valor de empresa (aviso desde {umbrales['peso_vt_aviso']:.0%})")
-    return Resultado(e, w, pr, tv, ev, fp, v0, vh, peso, avisos, list(tv.bloqueos), acciones)
+    return Resultado(e, w, pr, tv, ev, fp, v0, vh, peso, avisos, list(tv.bloqueos), acciones, ronic, e.ronic is None)
 
 
 def recomendacion(potencial: float, recorrido_riesgo: Optional[float], regla: dict) -> str:

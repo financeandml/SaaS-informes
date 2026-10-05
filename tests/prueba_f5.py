@@ -186,3 +186,34 @@ def _comparaciones(caso):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class FactoresDeRiesgoDocumentales(unittest.TestCase):
+    """B: un emisor de BME no tiene Item 1A; sus «Factores de riesgo» están en el documento de incorporación."""
+    PAGINAS = [
+        "ÍNDICE\n2.23. Factores de riesgo....................................103\n",
+        "2.23. Factores de riesgo\nAntes de adoptar la decisión de invertir, los inversores deberán valorar los riesgos.\n"
+        "2.23.1. Riesgos relacionados con la financiación del Grupo\n"
+        "Riesgo consecuencia de la incertidumbre material relacionada con la empresa en\nfuncionamiento.\n"
+        "El Grupo presenta un patrimonio neto negativo. Riesgos que se describen a continuación\n",
+        "2.23.2. Riesgos relacionados con la actividad del Grupo.\nRiesgo por la concentración de clientes.\n"
+        "Los diez primeros clientes concentran una parte relevante de los ingresos.\n"
+        "Riesgo relacionado con la competencia.\nEl sector está muy fragmentado.\n"
+        "2.24. Otras informaciones\nRiesgo que no es de la sección.\n",
+    ]
+
+    def test_los_epigrafes_del_documento_de_incorporacion(self):
+        """Falla si los factores de riesgo de un documento de incorporación no se leen como epígrafes (con su página física,
+        su cabecera y su familia): sin ellos, todo pilar y todo riesgo de un emisor de BME queda bloqueado por no ser «un
+        epígrafe del Item 1A»."""
+        from tesis.datos import item1a
+        it = item1a.leer_documento("diim.pdf", self.PAGINAS)
+        textos = [e.texto for e in it.epigrafes]
+        self.assertEqual(textos, ["Riesgo consecuencia de la incertidumbre material relacionada con la empresa en funcionamiento.",
+                                  "Riesgo por la concentración de clientes.", "Riesgo relacionado con la competencia."])
+        self.assertEqual([e.pagina for e in it.epigrafes], ["2", "3", "3"])
+        self.assertEqual(it.epigrafes[0].familia, "financiero")
+        self.assertEqual(it.epigrafes[2].familia, "competitivo")
+        self.assertIsNotNone(item1a.buscar(it, "Riesgo por la concentración de clientes"))
+        self.assertEqual(item1a.referencia(it.epigrafes[1], {"diim.pdf": "Documento de incorporación 28/07/2025"}),
+                         "Documento de incorporación 28/07/2025, Factores de riesgo, pág.\xa03")

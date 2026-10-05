@@ -13,7 +13,7 @@ from typing import Callable, Dict, List, Optional, Sequence, Set, Tuple
 
 from ..datos import guia as guia_mod
 from ..entradas import Entradas
-from ..formato import Celda, celda, fecha as f_fecha, numero
+from ..formato import Celda, celda, fecha as f_fecha, mln, numero
 from ..rotulos import fallo
 from ..datos.segmentos import Segmentos
 
@@ -67,35 +67,36 @@ def siguiente_trimestre(t: Optional[str]) -> Optional[str]:
 
 
 def _mln(v: Optional[float]) -> str:
-    return numero(v / 1e6) if v is not None else "N/A"
+    return mln(v) if v is not None else "N/A"
 
 
-def cuadro_segmentos(n, s: Segmentos, etiqueta: Callable) -> Tuple[object, object, str, List[str]]:
-    """(cuadro de segmentos y líneas, cuadro de geografía, gráfico de mezcla, rótulos sin traducir)."""
+def cuadro_segmentos(n, s: Segmentos, etiqueta: Callable, moneda: str = "USD", fuente: str = "") -> Tuple[object, object, str, List[str]]:
+    """(cuadro de segmentos y líneas, cuadro de geografía, gráfico de mezcla, rótulos sin traducir). `fuente`: la de las
+    cifras si no son del XBRL de EDGAR (las de la memoria que aporta el analista en un emisor de BME)."""
     from . import graficos
     from .informe import Cuadro, FilaCuadro
     columnas = [s.etiqueta_udm if p == s.udm else etiqueta(p) for p in s.periodos]
     filas = []
     origen = ", ".join(f"{o.formulario} del {f_fecha(o.presentado)}" if o.presentado else o.formulario for o in s.origenes.values())
     for seg in s.de_tipo("segmento"):
-        filas.append(FilaCuadro(seg.rotulo, [celda(seg.valores.get(p), "M USD") for p in s.periodos], capa="H", destacada=True))
+        filas.append(FilaCuadro(seg.rotulo, [celda(seg.valores.get(p), f"M {moneda}") for p in s.periodos], capa="H", destacada=True))
         for linea in [l for l in s.de_tipo("producto") if l.padre == seg.miembro]:
-            filas.append(FilaCuadro(linea.rotulo, [celda(linea.valores.get(p), "M USD") for p in s.periodos], capa="H", sangria=True))
+            filas.append(FilaCuadro(linea.rotulo, [celda(linea.valores.get(p), f"M {moneda}") for p in s.periodos], capa="H", sangria=True))
     for linea in [l for l in s.de_tipo("producto") if l.padre is None]:
-        filas.append(FilaCuadro(linea.rotulo, [celda(linea.valores.get(p), "M USD") for p in s.periodos], capa="H"))
+        filas.append(FilaCuadro(linea.rotulo, [celda(linea.valores.get(p), f"M {moneda}") for p in s.periodos], capa="H"))
     for linea in s.de_tipo("conciliacion"):
-        filas.append(FilaCuadro(linea.rotulo, [celda(linea.valores.get(p), "M USD") for p in s.periodos], capa="H", sangria=True))
+        filas.append(FilaCuadro(linea.rotulo, [celda(linea.valores.get(p), f"M {moneda}") for p in s.periodos], capa="H", sangria=True))
     if filas:
-        filas.append(FilaCuadro("Ingresos consolidados", [celda(s.consolidado.get(p), "M USD") for p in s.periodos], capa="H", destacada=True))
+        filas.append(FilaCuadro("Ingresos consolidados", [celda(s.consolidado.get(p), f"M {moneda}") for p in s.periodos], capa="H", destacada=True))
     notas = list(s.cuadres)
     if s.udm is not None:
         notas.append(f"{s.etiqueta_udm}: ejercicio + acumulado del año en curso − acumulado del año anterior (10-Q).")
-    segmentos = Cuadro(n.siguiente(), "Ingresos por segmento y línea de negocio (mln USD)", columnas, filas,
-                       f"Fuente: SEC EDGAR, estados del {origen}; ejes de segmento, producto y conciliación.", notas)
+    segmentos = Cuadro(n.siguiente(), f"Ingresos por segmento y línea de negocio (mln {moneda})", columnas, filas,
+                       fuente or f"Fuente: SEC EDGAR, estados del {origen}; ejes de segmento, producto y conciliación.", notas)
     geo, padre = s.geografia()
     desgloses = s.desgloses_geograficos()
     # dos ejes geográficos del mismo total, uno detrás de otro y dicho en la nota: no se suman entre sí [21]
-    filas_geo = [FilaCuadro(l.rotulo, [celda(l.valores.get(p), "M USD") for p in s.periodos], capa="H", sangria=i > 0)
+    filas_geo = [FilaCuadro(l.rotulo, [celda(l.valores.get(p), f"M {moneda}") for p in s.periodos], capa="H", sangria=i > 0)
                  for i, d in enumerate(desgloses) for l in d]
     notas_geo = ([f"Dos desgloses geográficos del mismo total, que no se suman entre sí: {', '.join(l.rotulo for l in desgloses[0])}; "
                   f"y, en sangría, {', '.join(l.rotulo for l in desgloses[1])}."] if len(desgloses) > 1 else [])
@@ -103,9 +104,9 @@ def cuadro_segmentos(n, s: Segmentos, etiqueta: Callable) -> Tuple[object, objec
     if padre is not None:
         linea_padre = next((l for l in s.lineas if l.miembro == padre or l.miembro.endswith("|" + padre)), None)
         de_que = f" de {linea_padre.rotulo}" if linea_padre is not None else ""
-    geografia = Cuadro(n.siguiente(), f"Ingresos por geografía{de_que} (mln USD)", columnas, filas_geo,
-                       f"Fuente: SEC EDGAR, estados del {origen}; eje geográfico. El 10-Q no suele desglosarlo: sin él, "
-                       "la columna de los últimos doce meses queda N/A.", notas_geo)
+    geografia = Cuadro(n.siguiente(), f"Ingresos por geografía{de_que} (mln {moneda})", columnas, filas_geo,
+                       fuente or (f"Fuente: SEC EDGAR, estados del {origen}; eje geográfico. El 10-Q no suele desglosarlo: sin él, "
+                                  "la columna de los últimos doce meses queda N/A."), notas_geo)
     # la mezcla, al nivel más fino que suma el total: las líneas de cada segmento que las desglosa, el segmento si no
     ultimo = s.periodos[-1] if s.periodos else None
     partes = []
@@ -373,6 +374,14 @@ def construir(emisor, hoy: date, facts: Optional[dict], portada=None, entradas: 
         textos.update({f"8-K {nota.presentado.isoformat()}#{k}": v for k, v in nota.paginas.items()})
     _presentaciones_citables(textos, pb.alias, exp, emisor, etiqueta)
     pb.textos = textos
+    # lo que en España hace las veces del Item 1A: los «Factores de riesgo» del documento de incorporación más reciente
+    from ..datos import item1a
+    from ..datos.expediente import Tipo
+    incorporaciones = sorted((a for a in (exp.adjuntos if exp is not None else []) if a.tipo is Tipo.INCORPORACION),
+                             key=lambda a: a.fecha or date.min)
+    if incorporaciones:
+        pb.item1a = item1a.leer_documento(incorporaciones[-1].nombre, incorporaciones[-1].paginas,
+                                          pb.entradas.valor("riesgos.familias") or [])
     pb.faltas += ent.comprobar_paso4(pb.entradas, textos, float(umbral("cita_similitud_min")), hoy)
     if pb.entradas.de_prueba:
         pb.faltas.append("entradas de PRUEBA (fixture), no del analista: no se puede emitir con ellas")
@@ -419,6 +428,14 @@ def _construir_documental(pb: ParteB, emisor, hoy: date, exp) -> ParteB:
                 textos[f"{a.nombre}#{k}"] = texto
         pb.alias[a.nombre] = f"{a.tipo.value} {a.periodo_fin:%d/%m/%Y}" if a.periodo_fin else a.tipo.value
     pb.textos = textos
+    # lo que en España hace las veces del Item 1A: los «Factores de riesgo» del documento de incorporación más reciente
+    from ..datos import item1a
+    from ..datos.expediente import Tipo
+    incorporaciones = sorted((a for a in (exp.adjuntos if exp is not None else []) if a.tipo is Tipo.INCORPORACION),
+                             key=lambda a: a.fecha or date.min)
+    if incorporaciones:
+        pb.item1a = item1a.leer_documento(incorporaciones[-1].nombre, incorporaciones[-1].paginas,
+                                          pb.entradas.valor("riesgos.familias") or [])
     pb.faltas += ent.comprobar_paso4(pb.entradas, textos, float(umbral("cita_similitud_min")), hoy)
     if pb.entradas.de_prueba:
         pb.faltas.append("entradas de PRUEBA (fixture), no del analista: no se puede emitir con ellas")

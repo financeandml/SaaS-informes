@@ -927,9 +927,23 @@ def _leer_es(lineas: List[Linea], numero: int, documento: str, ancho: float, alt
     filas: List[Fila] = []
     contexto = ""
     recien = False           # la línea anterior acaba de dar una fila: la siguiente puede ser el resto de su rótulo
+    # las líneas sin cifras justo encima (y el contexto de antes de ellas): un rótulo partido en dos líneas con sus cifras
+    # en una tercera («FLUJOS DE EFECTIVO DE LAS ACTIVIDADES DE» / «EXPLOTACIÓN» / «313.340,73 (2.310.057,82)»)
+    pendiente: List[Linea] = []
+    contexto_previo = ""
     for l in _fundir(_sin_notas(cuerpo, columnas, anclas)):
         numericos = [t for t in l.tokens if _es_numero(t.texto)]
         rotulo = " ".join(t.texto for t in l.tokens if t not in numericos).strip(" :")
+        if not numericos and rotulo:
+            if not pendiente:
+                contexto_previo = contexto
+            pendiente = (pendiente + [l])[-3:]
+        elif numericos and not rotulo and pendiente and l.y0 - pendiente[-1].y1 < max(l.y1 - l.y0, 1) * 1.5:
+            rotulo = " ".join(x.texto for x in pendiente).strip(" :")
+            contexto = contexto_previo
+            pendiente = []
+        else:
+            pendiente = []
         sigue, recien = recien, False
         if not numericos:
             if rotulo and sigue and _CONTINUA.search(filas[-1].rotulo) and filas[-1].rect[1] - l.y1 < max(l.y1 - l.y0, 1):
@@ -939,8 +953,9 @@ def _leer_es(lineas: List[Linea], numero: int, documento: str, ancho: float, alt
                     cand.rotulo = f.rotulo
                 if _ENCABEZADO.match(limpiar_rotulo_es(f.rotulo)):
                     contexto = f.rotulo
-            elif rotulo and not _PREFIJO.match(rotulo):
-                # una partida sin importe del modelo normalizado («2. Deudas con entidades de crédito») no es un epígrafe
+            elif rotulo and not _PREFIJO.match(rotulo) and not _SIGNO_MODELO.search(rotulo):
+                # una partida sin importe del modelo normalizado («2. Deudas con entidades de crédito», «Obligaciones y
+                # valores similares (-)») no es un epígrafe: lo de debajo sigue en el bloque de antes
                 contexto = rotulo
             continue
         if not rotulo:
@@ -982,8 +997,10 @@ def _completar_truncados(filas: List[Fila]) -> None:
     explotación es el que empieza por «Resultado del ejercicio antes de impuestos». Solo ese caso se completa, y el
     rótulo dice que es la lectura del modelo, no la del documento."""
     for k, f in enumerate(filas[:-1]):
-        if _TRUNCADO.match(limpiar_rotulo_es(f.rotulo)) and re.match(r"(?i)resultado del ejercicio antes de impuestos",
-                                                                    limpiar_rotulo_es(filas[k + 1].rotulo)):
+        # el final basta: la capa de texto de algunos PDF entrelaza la palabra que falta con el comienzo de la fila
+        # siguiente («EX RPeLsOuTltAadCoIÓ dNel ejercicio antes de impuestos»)
+        if _TRUNCADO.match(limpiar_rotulo_es(f.rotulo)) and re.search(r"(?i)ejercicio antes de impuestos$",
+                                                                     limpiar_rotulo_es(filas[k + 1].rotulo)):
             f.rotulo = f"{f.rotulo} explotación"
             for cand in f.celdas.values():
                 cand.rotulo = f.rotulo

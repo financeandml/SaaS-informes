@@ -1,0 +1,77 @@
+[1/8] Emisor en BME: RDG.MC
+  REDEGAL · ISIN ES0105857033 · BME Growth · cifras en EUR
+[2/8] Expediente: 24 ficheros
+  CCAA_20241231_39f44888 Cuentas anuales                          periodo=2024-12-31 fecha=2025-04-30 edgar=None (alta)
+  SEMESTRAL_20250630_e988e43b Informe financiero semestral             periodo=2025-06-30 fecha=2025-10-29 edgar=None (alta)
+  SEMESTRAL_20250630_4cbc8210 Informe financiero semestral             periodo=2025-06-30 fecha=2025-10-30 edgar=None (media)
+  INCORPORACION_f54292ca Documento de incorporación               periodo=None fecha=2025-07-28 edgar=None (media)
+  CCAA_20251231_0a65991f Cuentas anuales                          periodo=2025-12-31 fecha=2026-04-24 edgar=None (alta)
+  CCAA_20251231_60100cae Cuentas anuales                          periodo=2025-12-31 fecha=2026-04-24 edgar=None (alta)
+  COMUNICACION_7b70e5eb Comunicación al mercado                  periodo=None fecha=2026-01-27 edgar=None (media)
+  COMUNICACION_7e515a00 Comunicación al mercado                  periodo=None fecha=2026-03-30 edgar=None (media)
+  COMUNICACION_54784cff Comunicación al mercado                  periodo=None fecha=2026-04-29 edgar=None (media)
+  COMUNICACION_9ba2148f Comunicación al mercado                  periodo=None fecha=2026-05-07 edgar=None (media)
+  COMUNICACION_cc05e42a Comunicación al mercado                  periodo=None fecha=2026-05-25 edgar=None (media)
+  SLIDES_b319bed7  Presentación de resultados               periodo=None fecha=2026-05-27 edgar=None (media)
+  COMUNICACION_136d3109 Comunicación al mercado                  periodo=None fecha=2026-06-10 edgar=None (alta)
+  COMUNICACION_f8d025f5 Comunicación al mercado                  periodo=None fecha=2026-06-18 edgar=None (media)
+  COMUNICACION_2143f0ff Comunicación al mercado                  periodo=None fecha=2026-06-22 edgar=None (media)
+  COMUNICACION_1a20b36e Comunicación al mercado                  periodo=None fecha=2026-06-23 edgar=None (media)
+  COMUNICACION_736928e8 Comunicación al mercado                  periodo=None fecha=2026-06-29 edgar=None (media)
+  COMUNICACION_064dfe5e Comunicación al mercado                  periodo=None fecha=2026-07-01 edgar=None (media)
+  PARTICIPACIONES_fd8fdfad Participaciones significativas           periodo=None fecha=2026-07-03 edgar=None (media)
+  COMUNICACION_13b2c8e3 Comunicación al mercado                  periodo=None fecha=2026-07-30 edgar=None (media)
+  COMUNICACION_3cc9109d Comunicación al mercado                  periodo=None fecha=2026-07-31 edgar=None (media)
+  COMUNICACION_f9c06166 Comunicación al mercado                  periodo=None fecha=2026-08-24 edgar=None (media)
+  COMUNICACION_5f8f7018 Comunicación al mercado                  periodo=None fecha=2026-09-15 edgar=None (media)
+  SLIDES_0a574b11  Presentación de resultados               periodo=None fecha=2026-09-21 edgar=None (media)
+[3/8] Sin XBRL: emisor de BME, las cifras salen de las cuentas anuales y semestrales en PDF
+  ejercicios ['FY2021', 'FY2022', 'FY2023', 'FY2024', 'FY2025'] · trimestres ['1S24', '2S24', '1S25', '2S25']
+[4/8] Extracción y contraste
+  hueco 89 · solo_documento 111 · derivado 58 · no_aplica 164
+    no aplica · marketing: el modelo de cuentas español no presenta esta partida (es del modelo de EE. UU.): no es una línea de sus cuentas, no un dato que falte.
+    no aplica · tecnologia: el modelo de cuentas español no presenta esta partida (es del modelo de EE. UU.): no es una línea de sus cuentas, no un dato que falte.
+    no aplica · generales: el modelo de cuentas español no presenta esta partida (es del modelo de EE. UU.): no es una línea de sus cuentas, no un dato que falte.
+    no aplica · sga: el modelo de cuentas español no presenta esta partida (es del modelo de EE. UU.): no es una línea de sus cuentas, no un dato que falte.
+    no aplica · amortizacion_contenido: el modelo de cuentas español no presenta esta partida (es del modelo de EE. UU.): no es una línea de sus cuentas, no un dato que falte.
+    no aplica · sbc: el modelo de cuentas español no presenta esta partida (es del modelo de EE. UU.): no es una línea de sus cuentas, no un dato que falte.
+    no aplica · contenido: el modelo de cuentas español no presenta esta partida (es del modelo de EE. UU.): no es una línea de sus cuentas, no un dato que falte.
+    no aplica · papel_comercial: el modelo de cuentas español no presenta esta partida (es del modelo de EE. UU.): no es una línea de sus cuentas, no un dato que falte.
+    no aplica · fcf_compania: el modelo de cuentas español no presenta esta partida (es del modelo de EE. UU.): no es una línea de sus cuentas, no un dato que falte.
+    no aplica · bpa_basico: ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+    no aplica · bpa_diluido: ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+    no aplica · acciones_basicas: ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+    no aplica · acciones_diluidas: ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+    no aplica · inversiones_lp: ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+    no aplica · fondo_comercio: ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+    no aplica · arrendamientos: ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+    no aplica · pasivo_total: ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+    no aplica · acciones_circulacion: ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+    no aplica · adquisiciones: ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): no es una línea de sus cuentas, no un dato que falte.
+[5/8] Recortes de evidencia
+  12 recortes: CCAA_20241231_39f44888 p145, CCAA_20241231_39f44888 p146, CCAA_20241231_39f44888 p147, CCAA_20241231_39f44888 p150, CCAA_20251231_0a65991f p171, CCAA_20251231_0a65991f p172, CCAA_20251231_0a65991f p173, CCAA_20251231_0a65991f p175, SEMESTRAL_20250630_e988e43b p55, SEMESTRAL_20250630_e988e43b p56, SEMESTRAL_20250630_e988e43b p57, SEMESTRAL_20250630_e988e43b p59
+[6/8] Ficha, gobierno (con retratos), objetivos, regiones, riesgos, historial, precio, DCF, posición
+    gobierno · falta ejecutivos: el consejo y la alta dirección de un emisor de BME están en su documento de incorporación y en su web: los aporta el analista con su cita (paso 4)
+    gobierno · falta filiales: las sociedades del grupo están en la memoria de las cuentas consolidadas: las aporta el analista con su cita (paso 4)
+  retratos: 0 de 0 ejecutivos · 0 de 0 consejeros
+  auditoría de datos: 27 identidades cuadran · 0 no cuadran · 6 despejadas de su identidad · 27 sin datos suficientes
+  precio: 0.83 EUR · BME (histórico oficial de cierres), cierre del 25/09/2026, última sesión con negociación hasta el 02/10/2026
+  mercado: sesión ? · cierre anterior 0.85 · cap. publicada None · 52 s (0.645, 0.92) · 1Y target None · cierres pedidos 3 · ✓ el cierre anterior de la sesión (0,85) coincide con el histórico del 22/09/2026
+  sección F (bolsa): cadena N/A · institucional N/A · insiders ✓ · short N/A
+    pendiente cadena: no aplica: la acción no tiene opciones cotizadas
+    pendiente institucional: no aplica: el régimen 13F es de EE. UU.: no existe para un emisor español
+    pendiente short: no aplica: BME no publica el interés en corto; la CNMV publica solo las posiciones cortas netas ≥ 0,5 % y no responde a consultas automáticas
+    pendiente iv: no aplica: la acción no tiene opciones cotizadas
+  próxima presentación: N/A
+  motor: precio 0.83 (25/09/2026) · WACC 10.45% · PO 0.74 a 12 meses · Vender
+  motor: libro con fórmulas vivas en RDG.MC_tesis_2026-10-02.motor.xlsx
+  múltiplos TTM: PER N/A · EV / EBITDA 89.75 · EV / Ventas 1.38 · P / FCF -16.10 · PEG N/A
+  parte B: entradas /home/user/SaaS-informes-limpio/datos-tesis/entradas/RDG.MC/2026-10-02/entradas.json · 0 notas de resultados · 0 candidatos de guía (0 confirmados) · 0 faltas
+[7/8] Informe
+  párrafos de plantilla: Párrafo factual del resumen ejecutivo (editado)
+  documentación complementaria: 5 piezas en 2 apartados · 12 recortes de estados junto a sus cuadros · 0 retratos
+[8/8] Doble comprobación, HTML y PDF
+  doble comprobación: 688 cifras releídas · 0 desacuerdos
+  puerta de calidad: 0 bloqueos · 12 avisos · EMITIDO 02/10/2026
+  /home/user/SaaS-informes-limpio/datos-tesis/salida/RDG.MC/RDG.MC_tesis_2026-10-02.pdf · sha256 239a499479113f80
+  /home/user/SaaS-informes-limpio/datos-tesis/salida/RDG.MC/RDG.MC_tesis_2026-10-02.contraste.txt

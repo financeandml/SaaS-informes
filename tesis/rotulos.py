@@ -64,6 +64,12 @@ def miembro(qname: str, propios: Optional[Mapping[str, str]] = None,
         sigla = re.match(r"^([A-Z][A-Za-z0-9&]{1,5})\s*\(", etiqueta_en)
         if sigla:
             candidatos.append(sigla.group(1))
+    # una marca que empieza en minúscula («iPhone», «eBay») viaja tal cual; el nombre del miembro no puede empezar en
+    # minúscula y la escribe «IPhone», que no es una sigla (fallo [47])
+    if etiqueta_en and re.fullmatch(r"[a-z][A-Z][A-Za-z0-9]{1,12}", etiqueta_en):
+        return etiqueta_en, True
+    if re.fullmatch(r"I[A-Z][a-z]{2,}", nombre):
+        return "i" + nombre[1:], True
     candidatos += [nombre, _palabras(nombre)]
     for c in candidatos:
         if es_acronimo(c):

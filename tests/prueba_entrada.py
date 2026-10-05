@@ -66,7 +66,7 @@ class LasTresOrdenes(unittest.TestCase):
             (Path(tmp) / "RDG.MC" / "bme_2025_AN_1.pdf").write_bytes(b"%PDF-1.4")
             with mock.patch.object(entorno, "carpeta", lambda nombre: Path(tmp)), \
                     mock.patch.object(emisores, "emisor", lambda ticker: None):
-                self.assertEqual(emitir.main(["RDG.MC", "--fecha", "2026-09-29"]), 2)   # llega al emisor
+                self.assertEqual(emitir.main(["RDG.MC", "--fecha", "2026-09-29"]), 1)   # llega al emisor (sin emisor: error)
                 with self.assertRaises(SystemExit):                                     # sin expediente, sí se niega
                     emitir.main(["BYTE.MC", "--fecha", "2026-09-29"])
 

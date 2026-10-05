@@ -146,6 +146,13 @@ class Saas(unittest.TestCase):
         self.assertEqual(estado, 400)
         self.assertIn("Informe anual", json.loads(resp)["error"])            # no se emite sin 10-K, y se dice cuál falta
 
+    def test_un_emisor_de_bme_se_emite_con_sus_cuentas_anuales(self):
+        """Falla si «Emitir» exige el 10-K a un emisor español que ya tiene sus cuentas anuales: el catálogo de lo
+        imprescindible es el de su mercado, no siempre el de EE. UU."""
+        filas = [{"fichero": "bme_2025_AN_1.pdf", "tipo": "Cuentas anuales"}]
+        self.assertEqual(saas.imprescindibles("RDG.MC", filas), [])
+        self.assertEqual([d.clave for d in saas.imprescindibles("QCOM", filas)], ["10K"])
+
     def test_una_web_ajena_no_puede_escribir_ni_leer_fuera_de_salida(self):
         """Falla si un POST sin la cabecera propia o desde otro origen escribe, si un ticker con barras pasa, o si /informes sale de salida/<TICKER>."""
         cuerpo, tipo = _multipart([("x.pdf", b"%PDF-1.4")])

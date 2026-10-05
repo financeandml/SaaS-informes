@@ -54,11 +54,12 @@ from pathlib import Path
 from typing import Dict, Iterable, List, Optional, Sequence, Set, Tuple
 
 from ..fuentes import sec as sec_mod
-from ..datos.campos import CAMPOS, CONTROLES, Campo, campo as campo_de
+from ..datos.campos import _PARTES_DEUDA_PGC, CAMPOS, CONTROLES, Campo, campo as campo_de
 
 _POR_CLAVE = {c.clave: c for c in CAMPOS + CONTROLES}
 from ..datos.expediente import Adjunto, Expediente, Tipo
 from ..datos.extractor import Candidato, PaginaLeida, extraer_pdf, extraer_xlsx, limpiar_rotulo_es
+from ..datos.extractor import _es_numero as _es_cifra
 from ..formato import numero
 from ..datos.hechos import Capa, Certeza, Contraste, Estado, Hecho, Origen, Periodo, de_valor, derivar, na
 
@@ -176,6 +177,47 @@ def _no_los_tiene_la_compania(resultados: List[Resultado], facts: dict) -> Dict[
                          else "la compañía no declara esta partida en ningún 10-K ni 10-Q") + \
                         ", y tampoco la imprime en los documentos del expediente: no es una línea de sus cuentas, " \
                         "no un dato que falte."
+    return salida
+
+
+_NO_LO_IMPRIME = ("ningún estado financiero de las cuentas del expediente imprime esta partida (el modelo español no la exige): "
+                  "no es una línea de sus cuentas, no un dato que falte.")
+
+
+def _no_lo_imprimen_sus_estados(resultados: List[Resultado], paginas: Dict[str, List[PaginaLeida]],
+                                ya: Dict[str, str]) -> Dict[str, str]:
+    """Lo que unas cuentas españolas no imprimen en ningún estado: el BPA de quien sigue el PGC, que no lo pide. Como en
+    `_no_los_tiene_la_compania`, sin dato ni candidato en ningún periodo; y, en vez de la SEC como testigo, que ninguna
+    línea de las páginas de los estados lleve su rótulo: si el rótulo está y no se leyó, el hueco es del lector y se ve."""
+    # cada partida, contra las páginas de su estado: sin un estado leído, el lector no ha visto nada y no puede decir que
+    # una partida no esté (cuentas escaneadas, un modelo que no reconoce): entonces todo sigue siendo un hueco
+    estado_de = {8: "resultados", 9: "balance", 10: "flujos"}
+    rotulos: Dict[str, List[str]] = {}
+    en_bloque: Dict[str, List[Tuple[str, str]]] = {}
+    for ps in paginas.values():
+        for pg in ps:
+            if pg.estado not in estado_de.values() or not pg.filas:
+                continue
+            for l in pg.lineas:
+                texto = " ".join(t.texto for t in l.tokens if not _es_cifra(t.texto))
+                if texto.strip():
+                    rotulos.setdefault(pg.estado, []).append(_limpiar_rotulo(texto))
+            # la homónima de otro bloque («Unidad de negocio» de los cobros por desinversiones) no es la partida
+            en_bloque.setdefault(pg.estado, []).extend((_limpiar_rotulo(f.rotulo), _limpiar_rotulo(f.contexto)) for f in pg.filas)
+    por_campo: Dict[str, List[Resultado]] = {}
+    for r in resultados:
+        por_campo.setdefault(r.campo.clave, []).append(r)
+    salida: Dict[str, str] = {}
+    for clave, rs in por_campo.items():
+        if clave in ya or any(r.hecho.contraste is not Contraste.HUECO or r.candidatos for r in rs):
+            continue
+        c = rs[0].campo
+        estado = estado_de.get(c.seccion)
+        if estado not in rotulos:
+            continue
+        if not (any(re.search(p, x, re.I) for p in c.filas for x in rotulos[estado])
+                or any(re.search(p, r, re.I) and re.search(ctx, k) for p, ctx in c.filas_con_contexto for r, k in en_bloque[estado])):
+            salida[clave] = _NO_LO_IMPRIME
     return salida
 
 
@@ -299,11 +341,12 @@ def _indice_fila(c: Campo, cand: Candidato) -> Optional[int]:
 
 
 def _casa(c: Campo, cand: Candidato) -> bool:
-    rotulo = _limpiar_rotulo(cand.rotulo)
-    if _indice_fila(c, cand) is None:
+    i = _indice_fila(c, cand)
+    if i is None:
         return False
     contexto = _limpiar_rotulo(cand.contexto)
-    if c.contexto and not re.search(c.contexto, contexto):
+    # un patrón de `filas_con_contexto` trae su propio bloque: el del campo es el de sus filas de EE. UU.
+    if c.contexto and i < len(c.filas) and not re.search(c.contexto, contexto):
         return False
     if c.contexto_excluido and re.search(c.contexto_excluido, contexto):
         return False
@@ -807,6 +850,7 @@ def contrastar(exp: Expediente, facts: Optional[dict], obtenido_en: Optional[dat
     if sin_sec:
         resultados = _derivados_espanoles(resultados, periodos, por_campo, decs, moneda, controles)
         no_aplican = {c.clave: _NO_ES_DEL_MODELO for c in CAMPOS if "es" not in c.marcos}
+        no_aplican.update(_no_lo_imprimen_sus_estados(resultados, paginas, no_aplican))
     else:
         no_aplican = _no_los_tiene_la_compania(resultados, facts)
     for r in resultados:
@@ -849,6 +893,12 @@ def _moneda_de_los_documentos(exp: Expediente) -> str:
 # modelo antes que la suma de sus partes)
 _SUMAS_ES = {
     "capex": [(("pagos_intangible", "pagos_material"), "inmovilizado intangible + material (pagos por inversiones)")],
+    # el modelo no imprime el total de la emisión ni de la devolución de deudas, solo sus filas: se suman las publicadas
+    "emision_deuda": [(tuple(f"emision_{k}" for k, _, _ in _PARTES_DEUDA_PGC),
+                       "suma de las filas de «Emisión» del flujo de financiación (" + ", ".join(r.lower() for _, r, _ in _PARTES_DEUDA_PGC) + ")")],
+    "amortizacion_deuda": [(tuple(f"devolucion_{k}" for k, _, _ in _PARTES_DEUDA_PGC),
+                            "suma de las filas de «Devolución y amortización de» del flujo de financiación ("
+                            + ", ".join(r.lower() for _, r, _ in _PARTES_DEUDA_PGC) + ")")],
     "deuda_cp": [(("deuda_sub_cp", "deuda_grupo_cp"), "deudas a corto plazo + deudas con empresas del grupo a corto plazo"),
                  (("deuda_ec_cp", "deuda_otros_cp", "deuda_grupo_cp"),
                   "deudas con entidades de crédito + otros pasivos financieros + deudas con empresas del grupo, a corto plazo")],
